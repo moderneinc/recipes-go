@@ -36,3 +36,12 @@ jobs:
           fi
           # Report packages that failed to list (missing upstream deps)
           go list ./... 2>&1 | grep -i "no required module" && echo "::warning::Some packages have unresolved imports (upstream deps not yet published)" || true
+
+      # TODO: Uncomment once pkg/template and pkg/matcher are available in openrewrite/rewrite
+      # - name: Build
+      #   working-directory: recipes-code-quality
+      #   run: go build ./...
+      #
+      # - name: Test
+      #   working-directory: recipes-code-quality
+      #   run: go test ./... -count=1
