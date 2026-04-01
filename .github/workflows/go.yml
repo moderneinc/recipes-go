@@ -9,24 +9,31 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: recipes-code-quality
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/checkout@v4
+        with:
+          repository: openrewrite/rewrite
+          path: openrewrite/rewrite
 
       - uses: actions/setup-go@v5
         with:
           go-version: '1.23'
+          cache-dependency-path: recipes-code-quality/go.sum
 
-      - name: Drop local replace directive
-        run: go mod edit -dropreplace=github.com/openrewrite/rewrite
+      - name: Update replace directive for CI layout
+        working-directory: recipes-code-quality
+        run: go mod edit -replace=github.com/openrewrite/rewrite=../openrewrite/rewrite/rewrite-go/rewrite
 
-      - name: Tidy modules
-        run: go mod tidy
+      - name: Download dependencies
+        working-directory: recipes-code-quality
+        run: go mod download
 
       - name: Build
+        working-directory: recipes-code-quality
         run: go build ./...
 
       - name: Test
+        working-directory: recipes-code-quality
         run: go test ./... -count=1
