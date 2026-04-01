@@ -29,10 +29,6 @@ This project implements a [Rewrite module](https://github.com/openrewrite/rewrit
 
 For help getting started with the Moderne CLI, check out our [getting started guide](https://docs.moderne.io/user-documentation/moderne-cli/getting-started/cli-intro). Or, if you'd like to try running these recipes in the Moderne Platform, check out the [Moderne Platform quickstart guide](https://docs.moderne.io/user-documentation/moderne-platform/getting-started/running-your-first-recipe).
 
-## Contributing
-
-We appreciate all types of contributions. See the [contributing guide](https://github.com/openrewrite/.github/blob/main/CONTRIBUTING.md) for detailed instructions on how to get started.
-
 ## Licensing
 
 This project is licensed under the Moderne Proprietary License. Only for use by Moderne customers under the terms of a commercial contract.
