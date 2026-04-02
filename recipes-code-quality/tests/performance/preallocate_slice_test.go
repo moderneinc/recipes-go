@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/moderneinc/recipes-go/code-quality/recipes/performance"
-	"github.com/openrewrite/rewrite/pkg/test"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/test"
 )
 
 func TestPreallocateSliceAppendInForLoop(t *testing.T) {

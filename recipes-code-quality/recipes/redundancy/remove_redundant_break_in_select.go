@@ -5,9 +5,9 @@
 package redundancy
 
 import (
-	"github.com/openrewrite/rewrite/pkg/recipe"
-	"github.com/openrewrite/rewrite/pkg/tree"
-	"github.com/openrewrite/rewrite/pkg/visitor"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
 // RemoveRedundantBreakInSelect removes trailing `break` statements at the end

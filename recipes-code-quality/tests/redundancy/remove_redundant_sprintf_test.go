@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/moderneinc/recipes-go/code-quality/recipes/redundancy"
-	"github.com/openrewrite/rewrite/pkg/test"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/test"
 )
 
 func TestRemoveRedundantSprintfSimple(t *testing.T) {

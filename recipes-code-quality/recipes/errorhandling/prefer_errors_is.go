@@ -5,9 +5,9 @@
 package errorhandling
 
 import (
-	"github.com/openrewrite/rewrite/pkg/recipe"
-	"github.com/openrewrite/rewrite/pkg/tree"
-	"github.com/openrewrite/rewrite/pkg/visitor"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
 // PreferErrorsIsOverEquality replaces `err == ErrFoo` with `errors.Is(err, ErrFoo)`.

@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/moderneinc/recipes-go/code-quality/recipes/errorhandling"
-	"github.com/openrewrite/rewrite/pkg/test"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/test"
 )
 
 func TestWrapErrorWithContextBareReturn(t *testing.T) {
@@ -20,6 +20,15 @@ func TestWrapErrorWithContextBareReturn(t *testing.T) {
 			func f() error {
 				err := doSomething()
 				return err
+			}
+
+			func doSomething() error { return nil }
+		`, `
+			package main
+
+			func f() error {
+				err := doSomething()
+				return fmt.Errorf("f: %w", err)
 			}
 
 			func doSomething() error { return nil }

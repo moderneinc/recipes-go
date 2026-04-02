@@ -4,7 +4,7 @@
 
 package simplification
 
-import "github.com/openrewrite/rewrite/pkg/tree"
+import "github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
 
 // leadingPrefix returns the effective leading prefix of a binary expression,
 // which is on its left child (since Binary.Prefix is typically empty in Go LST).

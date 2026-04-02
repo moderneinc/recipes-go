@@ -6,9 +6,9 @@ package redundancy
 
 import (
 	"github.com/moderneinc/recipes-go/code-quality/diagnostic"
-	"github.com/openrewrite/rewrite/pkg/recipe"
-	"github.com/openrewrite/rewrite/pkg/tree"
-	"github.com/openrewrite/rewrite/pkg/visitor"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
 // RemoveRedundantTypeConversion is a search-only recipe that finds
@@ -71,7 +71,7 @@ func (v *removeRedundantTypeConversionVisitor) VisitMethodInvocation(mi *tree.Me
 
 	// Mark as a potential redundant conversion (search only).
 	// Full accuracy requires type attribution to confirm the arg type matches.
-	mi = mi.WithMarkers(tree.FoundSearchResult(mi.Markers, "potentially redundant type conversion"))
+	mi = mi.WithMarkers(tree.MarkupInfo(mi.Markers, "potentially redundant type conversion"))
 	return mi
 }
 

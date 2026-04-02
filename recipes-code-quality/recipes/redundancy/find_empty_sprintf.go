@@ -5,8 +5,8 @@
 package redundancy
 
 import (
-	"github.com/openrewrite/rewrite/pkg/recipe"
-	"github.com/openrewrite/rewrite/pkg/template"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 )
 
 // FindEmptyFmtSprintf replaces `fmt.Sprintf("")` calls where the format string is

@@ -7,8 +7,8 @@ package style
 import (
 	"fmt"
 
-	"github.com/openrewrite/rewrite/pkg/recipe"
-	"github.com/openrewrite/rewrite/pkg/template"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 )
 
 var regexpPattern = template.Expr("p")

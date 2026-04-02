@@ -8,8 +8,8 @@ import (
 	"fmt"
 
 	"github.com/moderneinc/recipes-go/code-quality/diagnostic"
-	"github.com/openrewrite/rewrite/pkg/recipe"
-	"github.com/openrewrite/rewrite/pkg/template"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 )
 
 var esS = template.Expr("esS")

@@ -8,32 +8,26 @@ import (
 	"testing"
 
 	"github.com/moderneinc/recipes-go/code-quality/recipes/style"
-	"github.com/openrewrite/rewrite/pkg/test"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/test"
 )
 
 func TestPreferRawStringRegexCompile(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&style.PreferRawStringForRegex{})
 	spec.RewriteRun(t,
-		test.Golang(`
-			package main
-
-			import "regexp"
-
-			var r = regexp.Compile("\\d+")
-		`),
+		test.Golang(
+			"package main\n\nimport \"regexp\"\n\nvar r = regexp.Compile(\"\\\\d+\")\n",
+			"package main\n\nimport \"regexp\"\n\nvar r = regexp.Compile(`\\d+`)\n",
+		),
 	)
 }
 
 func TestPreferRawStringRegexMustCompile(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&style.PreferRawStringForRegex{})
 	spec.RewriteRun(t,
-		test.Golang(`
-			package main
-
-			import "regexp"
-
-			var r = regexp.MustCompile("\\d+")
-		`),
+		test.Golang(
+			"package main\n\nimport \"regexp\"\n\nvar r = regexp.MustCompile(\"\\\\d+\")\n",
+			"package main\n\nimport \"regexp\"\n\nvar r = regexp.MustCompile(`\\d+`)\n",
+		),
 	)
 }
 

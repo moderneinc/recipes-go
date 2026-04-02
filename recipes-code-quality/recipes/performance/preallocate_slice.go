@@ -6,9 +6,9 @@ package performance
 
 import (
 	"github.com/moderneinc/recipes-go/code-quality/diagnostic"
-	"github.com/openrewrite/rewrite/pkg/recipe"
-	"github.com/openrewrite/rewrite/pkg/tree"
-	"github.com/openrewrite/rewrite/pkg/visitor"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
 // PreallocateSlice finds `append()` calls inside for/range loops where the
@@ -69,6 +69,6 @@ func (v *preallocateSliceVisitor) VisitMethodInvocation(mi *tree.MethodInvocatio
 	}
 
 	// Mark the append call with a search result.
-	mi = mi.WithMarkers(tree.FoundSearchResult(mi.Markers, "consider preallocating slice"))
+	mi = mi.WithMarkers(tree.MarkupInfo(mi.Markers, "consider preallocating slice"))
 	return mi
 }

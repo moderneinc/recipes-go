@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/moderneinc/recipes-go/code-quality/recipes/simplification"
-	"github.com/openrewrite/rewrite/pkg/test"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/test"
 )
 
 func TestPreferStringsContainsAnyNotEqNeg1(t *testing.T) {

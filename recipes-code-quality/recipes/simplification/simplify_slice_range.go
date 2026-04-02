@@ -6,9 +6,9 @@ package simplification
 
 import (
 	"github.com/moderneinc/recipes-go/code-quality/diagnostic"
-	"github.com/openrewrite/rewrite/pkg/recipe"
-	"github.com/openrewrite/rewrite/pkg/tree"
-	"github.com/openrewrite/rewrite/pkg/visitor"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
 // SimplifySliceRange replaces `s[0:len(s)]` with `s[:]`.

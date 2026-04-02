@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/moderneinc/recipes-go/code-quality/recipes/errorhandling"
-	"github.com/openrewrite/rewrite/pkg/test"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/test"
 )
 
 func TestPreferErrorsIsNetClosedEqual(t *testing.T) {

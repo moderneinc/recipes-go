@@ -5,12 +5,13 @@
 package style
 
 import (
+	"strconv"
 	"strings"
 
-	"github.com/openrewrite/rewrite/pkg/matcher"
-	"github.com/openrewrite/rewrite/pkg/recipe"
-	"github.com/openrewrite/rewrite/pkg/tree"
-	"github.com/openrewrite/rewrite/pkg/visitor"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
 var (
@@ -18,10 +19,10 @@ var (
 	regexpMustCompileMatcher = matcher.NewMethodMatcher("regexp MustCompile(..)")
 )
 
-// PreferRawStringForRegex finds calls to `regexp.Compile` or
-// `regexp.MustCompile` where the pattern argument is a interpreted string
-// literal containing backslash escapes. Raw string literals (backtick-quoted)
-// are preferred for regex patterns as they avoid double-escaping.
+// PreferRawStringForRegex replaces interpreted string literals containing
+// backslash escapes with raw string literals in calls to `regexp.Compile` or
+// `regexp.MustCompile`. Raw string literals (backtick-quoted) are preferred
+// for regex patterns as they avoid double-escaping.
 type PreferRawStringForRegex struct {
 	recipe.Base
 }
@@ -33,7 +34,7 @@ func (r *PreferRawStringForRegex) DisplayName() string {
 	return "Prefer raw string literals for regex patterns"
 }
 func (r *PreferRawStringForRegex) Description() string {
-	return "Find `regexp.Compile` or `regexp.MustCompile` calls where the pattern uses an interpreted string with backslash escapes instead of a raw string literal."
+	return "Replace interpreted string literals containing backslash escapes with raw string literals in `regexp.Compile` or `regexp.MustCompile` calls."
 }
 func (r *PreferRawStringForRegex) Tags() []string { return []string{"style"} }
 
@@ -75,6 +76,28 @@ func (v *preferRawStringRegexVisitor) VisitMethodInvocation(mi *tree.MethodInvoc
 		return mi
 	}
 
-	mi = mi.WithMarkers(tree.FoundSearchResult(mi.Markers, "prefer raw string literal for regex pattern"))
-	return mi
+	// Unquote the interpreted string to get the actual regex value,
+	// then wrap it in backticks for a raw string literal.
+	unquoted, err := strconv.Unquote(lit.Source)
+	if err != nil {
+		return mi
+	}
+
+	// Raw strings cannot contain backticks; bail out if the value has one.
+	if strings.Contains(unquoted, "`") {
+		return mi
+	}
+
+	newSource := "`" + unquoted + "`"
+	newLit := *lit
+	newLit.Source = newSource
+	newLit.Value = unquoted
+
+	newArgs := make([]tree.RightPadded[tree.Expression], len(args))
+	copy(newArgs, args)
+	newArgs[0] = tree.RightPadded[tree.Expression]{Element: &newLit, After: args[0].After, Markers: args[0].Markers}
+
+	newMi := *mi
+	newMi.Arguments.Elements = newArgs
+	return &newMi
 }
