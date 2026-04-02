@@ -16,6 +16,55 @@ This project implements a [Rewrite module](https://github.com/openrewrite/rewrit
 
 **Note**: These recipes are currently only supported via the [Moderne CLI](https://docs.moderne.io/user-documentation/moderne-cli/getting-started/cli-intro) or the [Moderne Platform](https://docs.moderne.io/user-documentation/moderne-platform/getting-started/running-your-first-recipe). The Moderne CLI is free to use for open-source repositories. If your repository is closed-source, you will need to obtain a license to use the CLI or the Moderne Platform. [Please contact Moderne to learn more](https://www.moderne.ai/contact-us).
 
+## Installation
+
+Install the recipes using the Moderne CLI's `mod config recipes` command. Go recipe modules are installed from source via their Git repository.
+
+### From a release tag
+
+```bash
+mod config recipes moderne.io/recipes-go add \
+  --repository-url=https://github.com/moderneinc/recipes-go \
+  --repository-branch=v0.1.0
+```
+
+### From a branch (latest on main)
+
+```bash
+mod config recipes moderne.io/recipes-go add \
+  --repository-url=https://github.com/moderneinc/recipes-go \
+  --repository-branch=main
+```
+
+### From a specific commit
+
+```bash
+mod config recipes moderne.io/recipes-go add \
+  --repository-url=https://github.com/moderneinc/recipes-go \
+  --repository-branch=39db09d
+```
+
+### Running recipes
+
+Once installed, run recipes against your Go repositories:
+
+```bash
+# Run all code quality recipes
+mod run . --recipe org.openrewrite.golang.codequality.CodeQuality
+
+# Run a specific recipe
+mod run . --recipe org.openrewrite.golang.codequality.PreferErrorsIsOverEquality
+
+# Run a category of recipes
+mod run . --recipe org.openrewrite.golang.codequality.SimplifyBooleanExpression
+```
+
+### Viewing available recipes
+
+```bash
+mod config recipes moderne.io/recipes-go list
+```
+
 ## Overview
 
 **206 recipes** across 6 categories with **546 tests**. 72% of recipes are transformational (actually fix code), 28% are diagnostic (flag patterns for review).
