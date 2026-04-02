@@ -18,30 +18,36 @@ This project implements a [Rewrite module](https://github.com/openrewrite/rewrit
 
 ## Installation
 
-Install the recipes using the Moderne CLI's `mod config recipes` command. Go recipe modules are installed from source via their Git repository.
+Install the recipes using the Moderne CLI's `mod config recipes go install` command. Go recipe modules are resolved from source via their Go module path.
 
 ### From a release tag
 
 ```bash
-mod config recipes moderne.io/recipes-go add \
-  --repository-url=https://github.com/moderneinc/recipes-go \
-  --repository-branch=v0.1.0
+mod config recipes go install github.com/moderneinc/recipes-go/code-quality@v0.1.0
 ```
 
-### From a branch (latest on main)
+### Latest (no version specified)
 
 ```bash
-mod config recipes moderne.io/recipes-go add \
-  --repository-url=https://github.com/moderneinc/recipes-go \
-  --repository-branch=main
+mod config recipes go install github.com/moderneinc/recipes-go/code-quality
 ```
 
-### From a specific commit
+### From a specific version
 
 ```bash
-mod config recipes moderne.io/recipes-go add \
-  --repository-url=https://github.com/moderneinc/recipes-go \
-  --repository-branch=39db09d
+mod config recipes go install github.com/moderneinc/recipes-go/code-quality@v0.2.0
+```
+
+### Removing recipes
+
+```bash
+mod config recipes go delete github.com/moderneinc/recipes-go/code-quality
+```
+
+### Viewing installed recipes
+
+```bash
+mod config recipes list
 ```
 
 ### Running recipes
@@ -49,20 +55,11 @@ mod config recipes moderne.io/recipes-go add \
 Once installed, run recipes against your Go repositories:
 
 ```bash
-# Run all code quality recipes
-mod run . --recipe org.openrewrite.golang.codequality.CodeQuality
-
 # Run a specific recipe
 mod run . --recipe org.openrewrite.golang.codequality.PreferErrorsIsOverEquality
 
-# Run a category of recipes
+# Run a simplification recipe
 mod run . --recipe org.openrewrite.golang.codequality.SimplifyBooleanExpression
-```
-
-### Viewing available recipes
-
-```bash
-mod config recipes moderne.io/recipes-go list
 ```
 
 ## Overview
