@@ -16,6 +16,17 @@ This project implements a [Rewrite module](https://github.com/openrewrite/rewrit
 
 **Note**: These recipes are currently only supported via the [Moderne CLI](https://docs.moderne.io/user-documentation/moderne-cli/getting-started/cli-intro) or the [Moderne Platform](https://docs.moderne.io/user-documentation/moderne-platform/getting-started/running-your-first-recipe). The Moderne CLI is free to use for open-source repositories. If your repository is closed-source, you will need to obtain a license to use the CLI or the Moderne Platform. [Please contact Moderne to learn more](https://www.moderne.ai/contact-us).
 
+## Prerequisites
+
+Go is not part of the default Moderne CLI build pipeline. You must opt in by adding a `build.steps` configuration. Create or edit `~/.moderne/cli/moderne.yml`:
+
+```yaml
+build.steps:
+  - type: go
+```
+
+Alternatively, place a `.moderne/moderne.yml` file in your repository root with the same content.
+
 ## Installation
 
 Install the recipes using the Moderne CLI's `mod config recipes go install` command. Go recipe modules are resolved from source via their Go module path.
@@ -50,11 +61,14 @@ mod config recipes go delete github.com/moderneinc/recipes-go/code-quality
 mod config recipes list
 ```
 
-### Running recipes
+### Building and running recipes
 
-Once installed, run recipes against your Go repositories:
+Build an LST first, then run recipes against it:
 
 ```bash
+# Build the LST for your Go repository
+mod build . --no-download
+
 # Run a specific recipe
 mod run . --recipe org.openrewrite.golang.codequality.PreferErrorsIsOverEquality
 

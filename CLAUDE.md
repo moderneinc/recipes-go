@@ -24,7 +24,41 @@ go test ./tests/redundancy/  # Run specific category
 The recipes depend on the `github.com/openrewrite/rewrite` module. During local development, `go.mod` uses a `replace` directive pointing to the local rewrite-go checkout:
 
 ```
-replace github.com/openrewrite/rewrite => ../../../openrewrite/rewrite/rewrite-go/rewrite
+replace github.com/openrewrite/rewrite/rewrite-go => ../../../openrewrite/rewrite/rewrite-go/rewrite
+```
+
+### Full dev loop (recipes-go → rewrite-go → CLI)
+
+When changing the rewrite-go RPC/parser/visitor layer alongside recipes:
+
+```bash
+# 1. Edit rewrite-go (parser, RPC, visitors, etc.)
+#    at ../../../openrewrite/rewrite/rewrite-go/rewrite/
+
+# 2. Run rewrite-go integration tests
+cd ../../../openrewrite/rewrite
+./gradlew :rewrite-go:integTest
+
+# 3. Recipe unit tests pick up rewrite-go changes automatically via replace directive
+cd recipes-code-quality
+go test ./... -count=1
+
+# 4. To test through the CLI (mod build / mod run), publish rewrite-go and rebuild the fat jar
+cd ../../../openrewrite/rewrite
+./gradlew :rewrite-go:publishToMavenLocal
+cd ../../../moderneinc/moderne-cli
+./gradlew :mod:devFatJar --offline
+
+# 5. Build LSTs and run recipes via CLI
+java -jar mod/build/libs/mod-*-dev-fat.jar build /path/to/go-repo --no-download
+java -jar mod/build/libs/mod-*-dev-fat.jar run /path/to/go-repo --recipe <RecipeName>
+```
+
+Go is not in the default CLI build pipeline. Configure `~/.moderne/cli/moderne.yml`:
+
+```yaml
+build.steps:
+  - type: go
 ```
 
 ## License
