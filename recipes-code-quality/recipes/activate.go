@@ -77,6 +77,9 @@ func Activate(r *recipe.Registry) {
 	r.Register(&simplification.PreferBytesContainsRune{}, golang, codeQuality, simplify)
 	r.Register(&simplification.SimplifyBytesEqualNil{}, golang, codeQuality, simplify)
 	r.Register(&simplification.SimplifyIfReturnBool{}, golang, codeQuality, simplify)
+	r.Register(&simplification.MergeCollapsibleIf{}, golang, codeQuality, simplify)
+	r.Register(&simplification.SimplifyRedundantLogicalExpression{}, golang, codeQuality, simplify)
+	r.Register(&simplification.MergeIdenticalBranches{}, golang, codeQuality, simplify)
 
 	// Redundancy
 	r.Register(&redundancy.RemoveRedundantReturn{}, golang, codeQuality, redundant)
@@ -99,6 +102,9 @@ func Activate(r *recipe.Registry) {
 	r.Register(&redundancy.RemoveRedundantInterfaceAssertion{}, golang, codeQuality, redundant)
 	r.Register(&redundancy.UseMeaningfulReturnValues{}, golang, codeQuality, redundant)
 	r.Register(&redundancy.RemoveDoubleDeref{}, golang, codeQuality, redundant)
+	r.Register(&redundancy.RemoveDuplicateConditions{}, golang, codeQuality, redundant)
+	r.Register(&redundancy.AllBranchesIdentical{}, golang, codeQuality, redundant)
+	r.Register(&redundancy.RemoveUnconditionalValueOverwrite{}, golang, codeQuality, redundant)
 
 	// Style
 	styleCategory := recipe.CategoryDescriptor{DisplayName: "Style", Description: "Code style and conventions"}

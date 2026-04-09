@@ -51,8 +51,8 @@ func setExprPrefix(expr tree.Expression, prefix tree.Space) tree.Expression {
 		}
 	case *tree.Binary:
 		return &tree.Binary{
-			ID: n.ID, Prefix: prefix, Markers: n.Markers,
-			Left: n.Left, Operator: n.Operator, Right: n.Right, Type: n.Type,
+			ID: n.ID, Prefix: n.Prefix, Markers: n.Markers,
+			Left: setExprPrefix(n.Left, prefix), Operator: n.Operator, Right: n.Right, Type: n.Type,
 		}
 	case *tree.FieldAccess:
 		return n.WithPrefix(prefix)
