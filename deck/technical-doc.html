@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Go Code Quality Recipes: Technical Capabilities</title>
+<title>Go Language Support in OpenRewrite: Technical Architecture</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -24,8 +24,8 @@ html { background: var(--bg); color: var(--ink); font-family: var(--font); }
 body { max-width: 820px; margin: 0 auto; padding: 60px 40px 120px; line-height: 1.7; }
 h1 { font-size: 2.4rem; font-weight: 700; line-height: 1.15; margin-top: 48px; }
 h1 .em { color: var(--primary); text-shadow: 1px 1px 0 color-mix(in srgb, var(--ink) 15%, transparent); }
-h2 { font-size: 1.5rem; font-weight: 700; margin-top: 48px; border-bottom: 3px solid var(--primary); padding-bottom: 8px; }
-h3 { font-size: 1.15rem; font-weight: 700; margin-top: 32px; color: var(--secondary); }
+h2 { font-size: 1.5rem; font-weight: 700; margin-top: 56px; border-bottom: 3px solid var(--primary); padding-bottom: 8px; }
+h3 { font-size: 1.15rem; font-weight: 700; margin-top: 36px; color: var(--secondary); }
 p { font-size: 1rem; margin-top: 16px; }
 code { font-family: var(--mono); font-size: 0.85em; background: color-mix(in srgb, var(--ink) 8%, transparent); padding: 2px 6px; border-radius: 3px; }
 pre { font-family: var(--mono); font-size: 0.8rem; line-height: 1.55; background: var(--ink); color: var(--bg); padding: 20px 24px; border-radius: 4px; overflow-x: auto; margin-top: 16px; }
@@ -45,147 +45,212 @@ th { font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spac
 <body>
 
 <div class="eyebrow">Moderne &middot; Technical Document</div>
-<h1>Go Code Quality Recipes:<br><span class="em">Technical Capabilities</span></h1>
+<h1>Go Language Support in OpenRewrite:<br><span class="em">Technical Architecture</span></h1>
 
-<p>This document describes the Go recipe library we've built for the Moderne platform. It covers what the recipes do, how they work, and where the technology is headed. The audience is anyone evaluating whether automated Go code remediation is real or vaporware. Short answer: it's real. 206 recipes, 594 tests, validated on production open-source code.</p>
+<p>This document describes how we built automated code remediation for Go &mdash; a language that has never had it before. It covers the architecture of the Go language module in OpenRewrite, how it extends the existing Java-native platform to support a language with fundamentally different semantics, how the template matching system works, and where the technology is headed.</p>
+
+<p>The audience is anyone who wants to understand what's actually happening under the hood when a recipe transforms Go source code. Not the marketing version. The engineering version.</p>
 
 <div class="stat-row">
-  <div class="stat-card"><div class="num">206</div><div class="lbl">Total Recipes</div></div>
+  <div class="stat-card"><div class="num">206</div><div class="lbl">Recipes</div></div>
   <div class="stat-card"><div class="num">155</div><div class="lbl">Auto-Fix</div></div>
   <div class="stat-card"><div class="num">594</div><div class="lbl">Tests</div></div>
   <div class="stat-card"><div class="num">74%</div><div class="lbl">Fix Rate</div></div>
 </div>
 
-<h2>The Gap in Go Tooling</h2>
+<h2>Why Go Is Different</h2>
 
-<p>Every mainstream language has a code transformation ecosystem. Java has OpenRewrite and Error Prone. C# has Roslyn analyzers with code fixes. Python has Ruff with auto-fix. TypeScript has codemods and ESLint with --fix.</p>
+<p>Every mainstream language except Go has a code transformation ecosystem. Java has OpenRewrite and Error Prone. C# has Roslyn analyzers with code fixes. Python has Ruff with auto-fix. TypeScript has codemods and ESLint's <code>--fix</code> flag. These tools don't just find problems &mdash; they fix them. They produce deterministic, reviewable diffs that can be applied across thousands of repositories in a single operation.</p>
 
-<p>Go has <code>staticcheck</code> and <code>golangci-lint</code>. Both are excellent at <em>finding</em> problems. Neither fixes them. Every diagnostic is a ticket for a human. Across hundreds of repositories, that doesn't scale.</p>
+<p>Go has <code>staticcheck</code> and <code>golangci-lint</code>. Both are excellent at finding problems. Neither fixes them. Every diagnostic is a line item for a human: triage, understand the context, make the edit, run the tests, open a PR. Multiply that by the number of findings, multiply again by the number of repositories, and you have a remediation backlog that grows faster than any team can burn it down.</p>
 
-<p>We built the missing piece: a recipe library that reads Go source code at the AST level, applies deterministic transformations, and produces source-faithful output. Every comment preserved. Every formatting choice respected. The diff is exactly what the recipe changed and nothing else.</p>
+<p>The reason Go doesn't have automated remediation isn't that nobody wanted it. It's that building it requires solving a specific set of hard problems. You need a lossless syntax tree that preserves every whitespace character and comment. You need a visitor infrastructure that lets you walk and modify that tree without corrupting formatting. You need a type system mapping that bridges Go's structural typing to the refactoring primitives the platform already has. And you need all of this to round-trip through an RPC bridge so Go code can be transformed by recipes running inside a Java-native platform.</p>
 
-<h2>Recipe Categories</h2>
+<p>That's what we built.</p>
 
-<h3>Simplification (61 recipes)</h3>
+<h2>Architecture: How Go Extends OpenRewrite</h2>
 
-<p>The largest category. These recipes modernize Go code by replacing deprecated or verbose patterns with cleaner standard library alternatives.</p>
+<h3>The Lossless Semantic Tree</h3>
 
-<p><strong>Deprecated API migration (7 recipes).</strong> The <code>ioutil</code> package was deprecated in Go 1.16. Every call to <code>ioutil.ReadAll</code>, <code>ioutil.ReadFile</code>, <code>ioutil.WriteFile</code>, <code>ioutil.TempDir</code>, <code>ioutil.TempFile</code>, <code>ioutil.NopCloser</code>, and <code>ioutil.ReadDir</code> has a direct replacement in <code>io</code> or <code>os</code>. Our recipes handle all seven, including the import change.</p>
+<p>OpenRewrite's core abstraction is the Lossless Semantic Tree (LST). Unlike a conventional AST, an LST preserves every character of the original source file &mdash; whitespace, comments, blank lines, trailing commas. When you print an unmodified LST, you get back the exact original source, byte for byte. This property is what makes OpenRewrite recipes trustworthy: the diff shows exactly what the recipe changed and nothing else. No spurious formatting noise. No reformatting wars.</p>
 
-<p><strong>Index-to-Contains family (12 recipes).</strong> The pattern <code>strings.Index(s, sub) != -1</code> should be <code>strings.Contains(s, sub)</code>. We handle this for <code>strings.Index</code>, <code>strings.IndexAny</code>, <code>strings.IndexRune</code>, <code>bytes.Index</code>, <code>bytes.IndexAny</code>, <code>bytes.IndexRune</code> &mdash; both positive and negative comparisons, including the <code>&gt;= 0</code> and <code>&lt; 0</code> variants.</p>
+<p>For Go, we built an LST that maps Go's syntax onto the same <code>J</code> (Java-derived) node hierarchy that OpenRewrite uses for every language. A Go function declaration maps to <code>MethodDeclaration</code>. A Go <code>for</code> loop maps to <code>ForLoop</code> or <code>ForEachLoop</code>. A method call maps to <code>MethodInvocation</code>. This isn't just naming convention &mdash; it means that cross-language recipes and visitors that operate on the <code>J</code> interface work for Go without modification. A recipe that renames a method invocation works identically whether the underlying language is Java, C#, Python, or Go.</p>
 
-<p><strong>Boolean simplification (8 patterns).</strong> <code>x == true</code> &rarr; <code>x</code>. <code>x == false</code> &rarr; <code>!x</code>. All four operators, both operand orders. Implemented as two template recipes with four before-patterns each &mdash; our Refaster-style "anyOf" mechanism.</p>
+<p>Where Go has constructs that don't exist in Java &mdash; goroutines, channels, defer statements, multiple return values, short variable declarations, composite literals, select statements &mdash; we extend the tree with Go-specific node types: <code>GoStmt</code>, <code>Channel</code>, <code>Defer</code>, <code>Send</code>, <code>MultiAssignment</code>, <code>Composite</code>, <code>CommClause</code>, <code>Slice</code>, <code>MapType</code>, and others. Each carries its own whitespace preservation and integrates cleanly with the visitor dispatch infrastructure.</p>
 
-<p><strong>Go 1.21+ adoption.</strong> <code>sort.Sort(sort.IntSlice(s))</code> &rarr; <code>sort.Ints(s)</code>. <code>math.Min(a, b)</code> &rarr; <code>min(a, b)</code>. <code>log.Println(x)</code> &rarr; <code>slog.Info(x)</code> for structured logging migration.</p>
+<p>The Go LST currently defines 45+ node types. Every node carries a <code>Prefix</code> (the whitespace and comments before the node), <code>Markers</code> (metadata like search results or diagnostics), and type-specific fields. For example, a <code>MethodInvocation</code> has a <code>Select</code> (the receiver or package), <code>Name</code> (the method name), <code>Arguments</code> (the argument list), and <code>MethodType</code> (the resolved type signature from Go's type checker).</p>
 
-<h3>Error Handling (27 recipes)</h3>
+<h3>The Parser: From Go Source to LST</h3>
 
-<p>Go error handling is the single largest source of code quality issues in Go codebases. We've built the most comprehensive automated error handling remediation available for Go.</p>
+<p>The Go parser wraps Go's standard library packages &mdash; <code>go/parser</code>, <code>go/ast</code>, <code>go/types</code>, and <code>go/token</code> &mdash; to produce the OpenRewrite LST. The standard library handles the hard parsing work; our code handles the whitespace-preserving mapping.</p>
 
-<p><strong>errors.Is migration.</strong> Direct error comparison (<code>err == io.EOF</code>) fails with wrapped errors. We transform these to <code>errors.Is(err, io.EOF)</code> for eight common sentinels: <code>io.EOF</code>, <code>sql.ErrNoRows</code>, <code>http.ErrServerClosed</code>, <code>net.ErrClosed</code>, <code>os.ErrInvalid</code>, <code>context.Canceled</code>, <code>context.DeadlineExceeded</code>, and package-qualified sentinels via FieldAccess matching.</p>
+<p>This is where things get subtle. Go's <code>go/ast</code> produces an abstract syntax tree that discards whitespace. Our parser maintains a cursor that walks through the original source text in lockstep with the AST traversal. When the AST says "here's an identifier at position 42", our parser extracts everything between the cursor and position 42 as the prefix whitespace, advances the cursor past the identifier, and continues. Comments are parsed out of the whitespace into structured <code>Comment</code> objects with their own suffix whitespace. The result is a tree where every byte of the original source is accounted for &mdash; either as node content or as whitespace in a <code>Space</code> object.</p>
 
-<p><strong>errors.As migration.</strong> The common pattern <code>if myErr, ok := err.(*MyError); ok { ... }</code> should use <code>errors.As</code> for wrapped error support. Our recipe transforms this to <code>var myErr *MyError; if errors.As(err, &amp;myErr) { ... }</code> using Block-level visiting to split one statement into two.</p>
+<p>The parser also performs type attribution using <code>go/types</code>. Every identifier, expression, and method invocation gets its resolved type attached as a <code>JavaType</code> object. This uses the same type hierarchy as Java's type system &mdash; <code>JavaTypeClass</code>, <code>JavaTypeMethod</code>, <code>JavaTypePrimitive</code>, <code>JavaTypeParameterized</code> &mdash; with Go-specific mappings. Go's <code>int</code> maps to a primitive. Go's named types map to classes. Go's structural interfaces map to class types with interface kind. Go's multiple return values (which have no Java equivalent) map to <code>JavaTypeUnknown</code> &mdash; an area for future improvement.</p>
 
-<p><strong>Sentinel extraction.</strong> Inline <code>errors.New("not found")</code> calls inside functions can't be compared with <code>errors.Is</code>. Our recipe extracts them to package-level variable declarations: <code>var ErrNotFound = errors.New("not found")</code>. This uses CompilationUnit-level visiting to modify the file's top-level declarations while replacing inline calls with references.</p>
+<h3>The RPC Bridge: Go Inside a Java Platform</h3>
 
-<p><strong>Error wrapping.</strong> Three recipes address error context:</p>
-<ul>
-  <li><code>return err</code> &rarr; <code>return fmt.Errorf("funcName: %w", err)</code> &mdash; adds function name as context</li>
-  <li><code>return nil, err</code> &rarr; <code>return nil, fmt.Errorf("funcName: %w", err)</code> &mdash; multi-return variant</li>
-  <li><code>fmt.Errorf("...: %s", err)</code> &rarr; <code>fmt.Errorf("...: %w", err)</code> &mdash; fixes the format verb</li>
-</ul>
+<p>OpenRewrite is a Java platform. The Moderne CLI and Moderne Platform are Java applications. But Go code needs to be parsed by a Go parser &mdash; you can't parse Go accurately in Java. The solution is an RPC bridge.</p>
 
-<p><strong>Swallowed error recovery.</strong> <code>if err != nil { return }</code> (bare return that silently swallows the error) &rarr; <code>if err != nil { return err }</code>. Empty error check blocks (<code>if err != nil { }</code>) get filled with <code>return err</code>.</p>
+<p>When the Moderne CLI encounters a Go repository, it launches a Go subprocess (the rewrite-go RPC server) and communicates with it over JSON-RPC. The Java side sends "parse this file" requests; the Go side parses the source, builds the LST, and sends it back as a serialized tree. The Java side then runs recipes against the tree using the same visitor infrastructure it uses for every other language.</p>
 
-<h3>Style &amp; Security (72 recipes)</h3>
+<p>The RPC layer handles the serialization of every LST node type, every whitespace object, every type attribution, and every marker. It also handles bidirectional communication &mdash; when a recipe needs to visit a tree node that was received from Go, and the node references other nodes by ID, the Java side can request those nodes from the Go process.</p>
 
-<p><strong>Resource management.</strong> Nine "ensure" recipes detect resource creation (<code>os.Open</code>, <code>db.Query</code>, <code>time.NewTicker</code>, etc.) and auto-insert the corresponding <code>defer Close/Stop/Rollback</code> statement. This uses Block-level visiting to scan for the creation assignment and splice the defer statement after it, with idempotency checks to avoid double-deferring.</p>
+<p>This architecture means Go recipes can be written in Go (running in the Go subprocess) or in Java (running in the platform). The recipe infrastructure we've built &mdash; GoTemplate, GoPattern, MethodMatcher &mdash; runs natively in Go. The platform orchestration &mdash; recipe discovery, marketplace, multi-repository execution &mdash; runs in Java. The RPC bridge makes them a single system.</p>
 
-<p><strong>Security remediation.</strong> <code>InsecureSkipVerify: true</code> &rarr; <code>false</code>. File permissions <code>0777</code> &rarr; <code>0755</code>. Hardcoded credentials &rarr; <code>os.Getenv("VAR_NAME")</code> with SCREAMING_SNAKE_CASE name generation. <code>import . "pkg"</code> &rarr; <code>import "pkg"</code>. Regex patterns in interpreted strings &rarr; raw strings.</p>
+<h3>The Visitor Infrastructure</h3>
 
-<p><strong>Guard clause refactoring.</strong> <code>if err == nil { &lt;deeply nested&gt; }</code> &rarr; <code>if err != nil { return }\n&lt;less nested&gt;</code>. Inverts conditions to enable early returns, reducing nesting depth. Includes automatic dedentation of the lifted code.</p>
+<p>OpenRewrite recipes work by visiting LST nodes. The visitor walks the tree depth-first, calling a type-specific method for each node: <code>VisitMethodInvocation</code>, <code>VisitBinary</code>, <code>VisitIf</code>, and so on. The default implementation of each visit method recursively visits child nodes and returns the (possibly modified) node.</p>
 
-<h3>Performance (20 recipes)</h3>
+<p>Go's visitor &mdash; <code>GoVisitor</code> &mdash; implements 45+ visit methods corresponding to the 45+ LST node types. A recipe author overrides the relevant method, calls the base implementation first (to recurse into children), then applies transformation logic. The critical invariant: always call the base visitor first. This ensures child transformations happen before parent transformations, which is essential for composing recipes.</p>
 
-<p><strong>Regex hoisting.</strong> <code>regexp.MustCompile("pattern")</code> inside a loop is compiled every iteration. Our recipe hoists the compile call before the loop and replaces the in-loop usage with a variable reference. For <code>regexp.Compile</code> (two-return), it promotes to <code>MustCompile</code> since the pattern is a compile-time literal.</p>
+<p>Go's visitor uses a virtual dispatch mechanism that mirrors Java's visitor pattern in a language without inheritance. A <code>Self</code> field points to the outermost struct, enabling method override dispatch. The <code>visitor.Init()</code> function uses reflection to wire this up automatically, so recipe authors just embed <code>GoVisitor</code> and override methods.</p>
 
-<p><strong>strings.Builder insertion.</strong> <code>s += expr</code> inside a loop becomes three statements: <code>var builder strings.Builder</code> before the loop, <code>builder.WriteString(expr)</code> inside, <code>s = builder.String()</code> after. Including automatic <code>import "strings"</code> addition.</p>
+<p>We made a deliberate decision early on to ensure that the base visitor's visit methods recurse into all child nodes. This sounds obvious, but the initial implementation was incomplete &mdash; several methods visited prefix and markers but didn't recurse into child expressions. For example, <code>VisitMethodInvocation</code> visited the method name but not the arguments or the receiver expression. <code>VisitVariableDeclarator</code> visited the name but not the initializer. We fixed seven visit methods to ensure complete recursion. Without this, recipes that transform deeply nested expressions simply wouldn't fire.</p>
 
-<p><strong>Defer-in-loop IIFE wrapping.</strong> <code>defer f.Close()</code> inside a loop accumulates defers until function exit. Our recipe wraps the loop body in an immediately-invoked function literal so defers run per-iteration.</p>
+<h2>The Template Matching System</h2>
 
-<p><strong>Map preallocation.</strong> <code>make(map[K]V)</code> inside a loop creates a new map each iteration. Our recipe hoists the allocation before the loop and inserts <code>clear(m)</code> at the start of each iteration.</p>
+<h3>The Problem Templates Solve</h3>
 
-<h3>Redundancy (23 recipes)</h3>
+<p>Writing a recipe as a manual visitor is powerful but verbose. A recipe that replaces <code>fmt.Sprintf("%s", s)</code> with <code>s</code> requires a visitor struct, a <code>VisitMethodInvocation</code> override, method matcher checks, argument count validation, literal value comparison, AST node construction for the replacement, and careful whitespace preservation. That's 50+ lines of Go code for what is conceptually a one-line pattern transformation.</p>
 
-<p>Dead code removal: unreachable statements after <code>return</code>, empty <code>for {}</code> loops, empty <code>switch {}</code>, empty <code>default:</code> cases, self-assignments (<code>x = x</code>), and <code>*&amp;x</code> double-deref.</p>
+<p>This is the same problem Google's Refaster solved for Java. Refaster lets you write a Java class with <code>@BeforeTemplate</code> and <code>@AfterTemplate</code> methods, and an annotation processor compiles it into an OpenRewrite recipe. The recipe author writes the pattern in the target language, and the framework handles the matching and replacement.</p>
 
-<p>Control flow simplification: <code>if true { body }</code> &rarr; <code>body</code>. <code>if false { }</code> &rarr; deleted. <code>if len(s) &gt; 0 { for range s }</code> &rarr; <code>for range s</code>. <code>if cond { return } else { body }</code> &rarr; <code>if cond { return }\nbody</code>. <code>go func() { f() }()</code> &rarr; <code>go f()</code>. <code>for k := range m { delete(m, k) }</code> &rarr; <code>clear(m)</code>.</p>
+<p>Go doesn't have annotation processors. But it turns out we don't need one. The matching and replacement machinery can run entirely at runtime, which in some ways is more flexible than compile-time generation.</p>
 
-<h3>Naming (9 recipes)</h3>
+<h3>How GoTemplate and GoPattern Work</h3>
 
-<p>All naming recipes are now transformational. <code>func (self *Foo) Bar()</code> &rarr; <code>func (f *Foo) Bar()</code>. <code>func (u *User) GetName()</code> &rarr; <code>func (u *User) Name()</code>. <code>MAX_BUFFER_SIZE</code> &rarr; <code>MaxBufferSize</code>. <code>var notFound = errors.New(...)</code> &rarr; <code>var ErrNotFound = errors.New(...)</code>. <code>func f(context context.Context)</code> &rarr; <code>func f(ctx context.Context)</code> with body-wide rename.</p>
+<p>The core idea: parse a Go code string into an LST fragment, then match or substitute against it. A pattern like <code>fmt.Sprintf("%s", __plh_s__)</code> is a real Go expression that the parser can parse &mdash; if we declare <code>__plh_s__</code> as a variable in a preamble. The placeholder identifier <code>__plh_s__</code> is the capture point: when matching, it binds to whatever subtree occupies that position in the candidate code.</p>
 
-<h2>How It Works</h2>
+<p>The scaffold system wraps template code in a compilable Go source so <code>go/parser</code> can parse it. For an expression template like <code>fmt.Sprintf("%s", __plh_s__)</code>, the scaffold is:</p>
 
-<h3>Template Recipes</h3>
+<pre>package __tmpl__
+import "fmt"
+var __plh_s__ any
+var __v__ = fmt.Sprintf("%s", __plh_s__)</pre>
 
-<p>For straightforward before&rarr;after patterns, we built a Refaster-like declarative API. A recipe author writes the before pattern and after pattern as Go code strings with named captures. The framework parses both through scaffold wrappers, matches the before against every AST node, and applies the after with captured values substituted.</p>
+<p>The parser produces an LST for the full file. The scaffold extractor navigates past the package declaration, imports, and preamble variables to find the target node &mdash; the initializer expression of <code>__v__</code>. That extracted subtree is the pattern tree.</p>
 
-<pre>s := template.Expr("s")
-r := template.NewRecipe(
-    template.WithBefore(fmt.Sprintf(`fmt.Sprintf("%%s", %s)`, s), template.Imports("fmt")),
-    template.WithAfter(fmt.Sprintf(`%s`, s)),
-    template.WithCaptures(s),
+<p>Matching works by structural comparison. The <code>PatternMatchingComparator</code> walks the pattern tree and the candidate tree in lockstep, comparing node types and structural properties. When it encounters a placeholder identifier, instead of requiring an exact match, it binds the candidate subtree to that capture name in a <code>MatchResult</code>. If the same capture name appears multiple times in the pattern, the comparator enforces structural equality between the two bindings &mdash; this is how you express patterns like "the same expression appears on both sides."</p>
+
+<p>The comparator covers all 45+ node types. For each, it compares the semantically meaningful properties (operator kind, identifier name, literal value) while ignoring whitespace and markers. A <code>Binary</code> node matches if its left operand, operator, and right operand all match. A <code>MethodInvocation</code> matches if its receiver, method name, and arguments all match. An <code>Identifier</code> matches if its name matches. And a placeholder identifier matches anything, binding the candidate to the capture.</p>
+
+<p>Replacement works by substitution. The <code>GoTemplate</code> parses the after-template the same way as the pattern, producing a template tree. The <code>SubstitutionVisitor</code> walks the template tree, replacing placeholder identifiers with the captured subtrees from the <code>MatchResult</code>. The result is a new subtree with the template's structure but the captured values from the original code.</p>
+
+<h3>The Leading Prefix Problem</h3>
+
+<p>One subtle issue deserves attention because it affects every template-based transformation. In Go's LST, compound nodes like <code>Binary</code> and <code>MethodInvocation</code> often have empty prefix whitespace. The actual leading whitespace lives on the leftmost leaf node &mdash; the first identifier or literal in the expression. This means <code>1 + 2</code> in the source <code>var a = 1 + 2</code> has a Binary node with empty prefix, a Literal <code>1</code> with prefix <code>" "</code> (the space after <code>=</code>), and a Literal <code>2</code> with prefix <code>" "</code> (the space after <code>+</code>).</p>
+
+<p>When a recipe replaces a Binary with a simpler expression, it needs to preserve the leading whitespace. But "the leading whitespace" isn't on the Binary node &mdash; it's on the Binary's left child. We built <code>getLeadingPrefix</code> and <code>setLeadingPrefix</code> functions that recursively walk to the leftmost leaf to get and set the effective prefix. Without these, every compound-to-simple replacement would either double the whitespace (if you naively copy the root prefix) or lose it entirely.</p>
+
+<h3>Multiple Before Patterns: The "anyOf" Mechanism</h3>
+
+<p>Google's Refaster supports <code>Refaster.anyOf()</code> &mdash; a way to specify multiple before-templates that all map to the same after-template. Our equivalent is calling <code>WithBefore()</code> multiple times in the recipe builder. The <code>templateRecipeVisitor</code> tries each before-pattern in order; the first match wins.</p>
+
+<p>This is essential for recipes like boolean simplification. The pattern <code>x == true</code> should simplify to <code>x</code>. But so should <code>true == x</code>, <code>x != false</code>, and <code>false != x</code>. That's four before-patterns mapping to one after-pattern. Without "anyOf", you'd need four separate recipes or a complex manual visitor with conditional logic. With it, you get:</p>
+
+<pre>var x = template.Expr("x")
+simplifyToKeep := template.NewRecipe(
+    template.WithBefore(fmt.Sprintf(`%s == true`, x)),
+    template.WithBefore(fmt.Sprintf(`true == %s`, x)),
+    template.WithBefore(fmt.Sprintf(`%s != false`, x)),
+    template.WithBefore(fmt.Sprintf(`false != %s`, x)),
+    template.WithAfter(fmt.Sprintf(`%s`, x)),
+    template.WithCaptures(x),
 )</pre>
 
-<p>Multiple before-patterns (Refaster's "anyOf") are supported &mdash; first match wins. This is how the boolean simplification recipe handles eight different input patterns with a single after pattern.</p>
+<p>Ten lines. The framework handles the rest: scaffold parsing, pattern matching against every AST node in the file, capture binding, substitution, and whitespace preservation.</p>
 
-<h3>Block-Level Visiting</h3>
+<h3>The NewRecipe Builder</h3>
 
-<p>The breakthrough that unlocked our highest-value transforms. Instead of visiting individual nodes (MethodInvocation, If, etc.), we visit Block &mdash; the brace-delimited list of statements. This enables:</p>
+<p>The <code>template.NewRecipe()</code> function is the declarative recipe API. It takes functional options &mdash; <code>WithBefore</code>, <code>WithAfter</code>, <code>WithCaptures</code>, <code>Imports</code> &mdash; and produces a <code>recipe.Recipe</code> that can be registered in the marketplace. Under the hood, it builds <code>GoPattern</code> objects for each before-pattern, a <code>GoTemplate</code> for the after-template, and a <code>templateRecipeVisitor</code> that wires them together.</p>
 
-<ul>
-  <li><strong>Statement insertion</strong> &mdash; add <code>defer f.Close()</code> after a file open</li>
-  <li><strong>Statement hoisting</strong> &mdash; move <code>regexp.MustCompile</code> before a loop</li>
-  <li><strong>Statement splitting</strong> &mdash; split <code>if myErr, ok := err.(*T); ok</code> into var + if</li>
-  <li><strong>Redundant else removal</strong> &mdash; extract else body as sibling statements</li>
-  <li><strong>IIFE wrapping</strong> &mdash; wrap loop body in <code>func() { ... }()</code></li>
-</ul>
+<p>The builder auto-detects whether the template code is an expression, a statement, or a top-level declaration based on leading keywords. <code>fmt.Sprintf(...)</code> is an expression. <code>if err != nil { return err }</code> is a statement. <code>func foo() {}</code> is a top-level declaration. Each scaffold kind uses a different wrapping strategy so the Go parser can handle it. Explicit overrides (<code>AsExpression()</code>, <code>AsStatement()</code>) are available for ambiguous cases.</p>
 
-<h3>CompilationUnit-Level Visiting</h3>
+<p>Template recipes compose. A recipe struct can implement <code>RecipeList()</code> to return multiple sub-recipes. The boolean simplification recipe, for example, is a composite of two template recipes &mdash; one for the "keep" patterns (<code>x == true</code> &rarr; <code>x</code>) and one for the "negate" patterns (<code>x == false</code> &rarr; <code>!x</code>). The framework runs sub-recipes in sequence.</p>
 
-<p>For file-wide transforms like error sentinel extraction, we visit the CompilationUnit (the whole file). A two-pass approach: first collect inline <code>errors.New</code> calls from function bodies, then add <code>var</code> declarations at the top and replace the inline calls with references.</p>
+<h2>Beyond Single-Node Transforms: Block-Level and File-Level Visiting</h2>
 
-<h3>MethodMatcher</h3>
+<h3>The Limitation of Node-Level Visitors</h3>
 
-<p>AspectJ-style pattern matching for method invocations. <code>"fmt Sprintf(..)"</code> matches any <code>fmt.Sprintf</code> call regardless of arguments. <code>"time.Time Sub(time.Time)"</code> matches <code>Sub</code> with one <code>time.Time</code> argument. Supports glob wildcards: <code>*</code> for single name, <code>*..*</code> for any type in any package.</p>
+<p>Template recipes and simple visitors operate on individual AST nodes. A visitor's <code>VisitMethodInvocation</code> method receives a single method call and returns a single replacement node. This works for most transformations &mdash; replacing one expression with another, simplifying a binary operation, renaming an identifier.</p>
 
-<h3>Markup Severity</h3>
+<p>But some transformations require modifying the <em>context</em> around a node, not just the node itself. Adding a <code>defer f.Close()</code> after an <code>os.Open()</code> call requires inserting a new statement into the parent block. Hoisting a <code>regexp.MustCompile()</code> call out of a loop requires moving a statement from inside a loop to before it. Extracting an inline <code>errors.New()</code> to a package-level variable requires adding a declaration to the file's top-level statements.</p>
 
-<p>Recipes that detect but can't auto-fix use severity-appropriate diagnostics: <code>MarkupWarn</code> for definite issues (SQL injection, race conditions, panic), <code>MarkupInfo</code> for suggestions (consider X, ensure Y). This replaces the generic <code>SearchResult</code> marker with actionable severity levels.</p>
+<p>These are the transformations that most linter tools can't do. They're also the transformations that deliver the most value &mdash; the ones that would take a human the most time to apply manually. We solved them by visiting at the Block level and the CompilationUnit level.</p>
 
-<h2>Where We Go From Here</h2>
+<h3>Block-Level Visiting: Statement Insertion, Hoisting, and Splicing</h3>
 
-<h3>Go Version Migration Recipes</h3>
-<p>Composite recipes for Go 1.18&rarr;1.21&rarr;1.22&rarr;1.23, following the C# pattern of <code>UpgradeToDotNet10</code>. Each version adds new stdlib APIs, deprecates old ones, and introduces language features (generics, range-over-func). Recipes automate the adoption path.</p>
+<p>A Block in the LST is a brace-delimited list of statements. By visiting Block instead of individual nodes, a recipe can scan the statement list, find patterns that span multiple statements, and return a modified statement list.</p>
+
+<p><strong>Defer insertion.</strong> The "ensure file closed" recipe visits each Block, scanning for assignment statements where the right-hand side is a call to <code>os.Open()</code>, <code>db.Query()</code>, <code>time.NewTicker()</code>, or similar resource-creation functions. When it finds one, it extracts the variable name from the left-hand side, checks that a matching <code>defer</code> doesn't already exist in the block, and inserts <code>defer f.Close()</code> (or <code>defer ticker.Stop()</code>, etc.) immediately after the assignment. The recipe constructs the defer AST node with whitespace matching the surrounding code.</p>
+
+<p><strong>Regex hoisting.</strong> The "compile regex outside loop" recipe visits each Block, finds ForLoop and ForEachLoop statements, and scans their bodies for <code>regexp.MustCompile("pattern")</code> calls with string literal arguments. When it finds one, it creates a <code>var compiledRegex = regexp.MustCompile("pattern")</code> declaration, inserts it before the loop in the block's statement list, and replaces the in-loop call with a reference to the hoisted variable. For <code>regexp.Compile</code> (which returns two values), it promotes to <code>MustCompile</code> since the pattern is a compile-time literal.</p>
+
+<p><strong>strings.Builder insertion.</strong> The same Block-level pattern handles the <code>s += expr</code> to <code>strings.Builder</code> transformation. The recipe inserts <code>var builder strings.Builder</code> before the loop, replaces <code>s += expr</code> with <code>builder.WriteString(expr)</code> inside the loop, and inserts <code>s = builder.String()</code> after the loop. Three statement modifications in a single Block visit.</p>
+
+<p><strong>Redundant else removal.</strong> <code>if cond { return } else { body }</code> becomes <code>if cond { return }\nbody</code>. The recipe scans the Block's statements for If nodes where the Then block ends with a Return and an Else part is present. It removes the Else, keeps the If, and splices the else body's statements as siblings after the If in the block's statement list. A dedent sub-visitor fixes the indentation of the hoisted statements.</p>
+
+<p><strong>Guard clause refactoring.</strong> <code>if err == nil { &lt;deeply nested body&gt; }</code> becomes <code>if err != nil { return }\n&lt;body&gt;</code>. The recipe inverts the condition, inserts an early return, and promotes the body to the outer scope with corrected indentation.</p>
+
+<h3>CompilationUnit-Level Visiting: File-Wide Transforms</h3>
+
+<p>Some transforms need to modify the file as a whole. The "extract error sentinel" recipe is the best example. It visits the <code>CompilationUnit</code> (the entire file), runs a sub-visitor to collect all inline <code>errors.New("message")</code> calls inside function bodies, generates variable names from the message strings (<code>"not found"</code> &rarr; <code>ErrNotFound</code>), adds <code>var ErrNotFound = errors.New("not found")</code> to the top-level declarations, and replaces the inline calls with references to the new variables. Two passes over the file: one to collect, one to replace.</p>
+
+<p>The "use strings.Builder in loop" recipe also visits CompilationUnit to add <code>import "strings"</code> when it's not already present. Import management is a CompilationUnit-level concern.</p>
+
+<h2>MethodMatcher and TypeUtils</h2>
+
+<h3>MethodMatcher: AspectJ-Style Pattern Matching</h3>
+
+<p>Many recipes need to match specific method calls. "Does this MethodInvocation call <code>fmt.Sprintf</code>?" is a question that comes up constantly. You could write <code>mi.Name.Name == "Sprintf" && mi.Select != nil && ident.Name == "fmt"</code> every time, but that's fragile and repetitive.</p>
+
+<p>MethodMatcher provides AspectJ-style pattern matching. You write <code>"fmt Sprintf(..)"</code> and it matches any call to <code>fmt.Sprintf</code> regardless of arguments. The pattern <code>"time.Time Sub(time.Time)"</code> matches <code>Sub</code> on a <code>time.Time</code> receiver with one <code>time.Time</code> argument. Wildcards work: <code>*</code> matches any single name, <code>*..*</code> matches any type in any package, <code>..</code> in argument position matches any number of arguments.</p>
+
+<p>The implementation compiles glob patterns to regular expressions at construction time, so matching at visit time is a regex check &mdash; fast. When type information is available (from the parser's type attribution), the matcher checks the <code>MethodType.DeclaringType</code> for accurate matching. When type info isn't available, it falls back to the Select expression's identifier name.</p>
+
+<h3>TypeUtils: Type Hierarchy Checking</h3>
+
+<p>Go uses structural typing for interfaces &mdash; a type satisfies an interface if it has the right methods, without an explicit <code>implements</code> declaration. Our <code>TypeUtils</code> provides type checking that works within this model: <code>IsAssignableTo(type, "error")</code> walks the type's interface list and supertype chain with cycle detection. <code>IsError(type)</code>, <code>IsString(type)</code>, <code>IsNumeric(type)</code> provide common checks. <code>AsClass(type)</code>, <code>AsMethod(type)</code> provide safe type casts.</p>
+
+<p>Type attribution coverage depends on the Go parser's ability to resolve types. For code within the parsed module, type resolution is complete. For external dependencies, it depends on whether the module cache is populated. Recipes are designed to degrade gracefully &mdash; when type info isn't available, they fall back to structural matching (identifier names, method patterns).</p>
+
+<h2>Markup Severity: Not Just "Found"</h2>
+
+<p>Recipes that can't auto-fix a pattern still need to communicate what they found and how serious it is. Our markup system provides three severity levels: <code>MarkupWarn</code> for definite issues (SQL injection risk, race condition, panic), <code>MarkupInfo</code> for suggestions (consider using X, ensure Y is closed), and <code>MarkupError</code> for critical findings. This replaces the generic <code>SearchResult</code> marker used by earlier recipe frameworks.</p>
+
+<p>Severity matters because it determines how findings are triaged. A <code>MarkupWarn</code> on a hardcoded credential or a TLS verification bypass is a security issue that needs human review. A <code>MarkupInfo</code> on a <code>context.TODO()</code> call is a technical debt item that can wait. The markup level flows through to the Moderne Platform's UI, enabling severity-based filtering and prioritization.</p>
+
+<h2>Where This Is Headed</h2>
+
+<h3>Go Version Migration</h3>
+
+<p>The C# recipe library has composite recipes that chain migrations: <code>UpgradeToDotNet10</code> runs <code>UpgradeToDotNet9</code> which runs <code>UpgradeToDotNet8</code> and so on, all the way back. Each version in the chain applies the API changes, deprecation replacements, and NuGet version bumps for that specific version.</p>
+
+<p>We want the same for Go. <code>UpgradeToGo1_23</code> would chain through <code>1.22</code>, <code>1.21</code>, <code>1.18</code>, applying the API adoptions at each step: generics patterns in 1.18, <code>min</code>/<code>max</code> builtins in 1.21, range-over-func in 1.22, iterator patterns in 1.23. Each composite recipe includes everything below it &mdash; you don't need to know your starting version.</p>
 
 <h3>Framework Migrations</h3>
-<p>gin&rarr;chi, logrus&rarr;slog, testify assertion patterns, gRPC version upgrades. The template recipe mechanism makes these straightforward to author &mdash; most framework migrations are method-to-method API mappings.</p>
+
+<p>The template recipe mechanism makes framework migrations straightforward to author. A migration from one HTTP router to another is largely method-to-method API mapping. <code>gin.Context.JSON()</code> &rarr; <code>chi's render.JSON()</code>. <code>logrus.WithField()</code> &rarr; <code>slog.With()</code>. The template system handles the matching and replacement; the recipe author just defines the patterns.</p>
 
 <h3>Module Dependency Management</h3>
-<p>Update <code>go.mod</code>, resolve breaking changes across the dependency graph, handle version conflicts. This connects to the existing Moderne platform dependency management capabilities.</p>
 
-<h3>Type-Attributed Transforms</h3>
-<p>Deeper type information enables removing truly redundant type conversions, smarter error handling (knowing a function returns error), and interface-aware refactoring. The Go parser already performs type attribution via <code>go/types</code> &mdash; the recipes need to consume it more aggressively.</p>
+<p>Go module versioning, <code>go.mod</code> updates, and dependency graph resolution. When a recipe changes an API call that requires a newer version of a dependency, the module management layer updates <code>go.mod</code> to require the new minimum version and runs <code>go mod tidy</code> to resolve the graph.</p>
+
+<h3>Deeper Type Attribution</h3>
+
+<p>The biggest gap in the current implementation is type attribution completeness. Go's type checker in <code>go/types</code> can resolve types for code within the parsed module, but external dependencies require the module cache. As we improve parser coverage, recipes will be able to make type-dependent decisions: removing truly redundant type conversions, matching method calls by receiver type rather than just receiver name, and understanding interface satisfaction for refactoring.</p>
 
 <h3>Multi-File Refactoring</h3>
-<p>Rename methods across all callers. Extract interfaces. Move packages. These require the Moderne platform's cross-repository orchestration &mdash; the recipe sees one file at a time, but the platform coordinates across all files in all repositories.</p>
 
-<h3>Harness Comparison</h3>
-<p>Automated comparison against <code>staticcheck</code> and <code>golangci-lint</code> on real repositories, following the C# pattern where every recipe is validated against its Roslyn analyzer equivalent. The infrastructure exists (diagnostic mapping, working set of repos). The automation pipeline is next.</p>
+<p>Renaming a method declaration also needs to rename every caller. Extracting an interface needs to update every implementation. Moving a package needs to rewrite every import. These are multi-file transformations that the Moderne Platform orchestrates &mdash; each file sees a recipe that modifies its own content, but the platform coordinates which files need which modifications.</p>
+
+<h3>Staticcheck/golangci-lint Harness</h3>
+
+<p>The C# recipe library validates every recipe against its equivalent Roslyn analyzer on real open-source repositories. We have the infrastructure for the Go equivalent &mdash; diagnostic mapping types, a working set of real repos, space validation &mdash; but the automated comparison pipeline is next. The goal: for every recipe that corresponds to a staticcheck or golangci-lint diagnostic, prove that our transformation produces the same result (or a strictly better one).</p>
 
 <div class="note">
-<strong>Bottom line:</strong> Go is no longer a language where linters find problems and humans fix them. We've built the transformation infrastructure. 206 recipes. 155 auto-fix. One command to run them across your entire Go estate.
+<strong>The bottom line.</strong> Go is no longer a language where linters find problems and humans fix them. The transformation infrastructure exists. The recipe library covers the most common quality, security, and modernization patterns. And it runs inside the same Moderne platform that already handles Java, C#, Python, and TypeScript &mdash; so deploying it across your Go repositories is the same workflow your teams already know.
 </div>
 
 </body>
