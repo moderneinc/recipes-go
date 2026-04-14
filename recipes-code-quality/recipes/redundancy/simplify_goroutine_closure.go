@@ -47,12 +47,21 @@ func (v *simplifyGoroutineClosureVisitor) VisitGoStmt(g *tree.GoStmt, p any) tre
 		return g
 	}
 
-	// The call's Select must be a function literal (MethodDeclaration).
+	// The call's Select must be a function literal (MethodDeclaration),
+	// possibly wrapped in StatementExpression.
 	if mi.Select == nil {
 		return g
 	}
-	funcLit, isFuncLit := mi.Select.Element.(*tree.MethodDeclaration)
-	if !isFuncLit {
+	var funcLit *tree.MethodDeclaration
+	switch sel := mi.Select.Element.(type) {
+	case *tree.MethodDeclaration:
+		funcLit = sel
+	case *tree.StatementExpression:
+		if md, ok := sel.Statement.(*tree.MethodDeclaration); ok {
+			funcLit = md
+		}
+	}
+	if funcLit == nil {
 		return g
 	}
 

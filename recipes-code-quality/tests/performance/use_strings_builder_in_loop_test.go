@@ -11,7 +11,7 @@ import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/test"
 )
 
-func TestFindStringConcatInForLoop(t *testing.T) {
+func TestUseBuilderInRangeLoop(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&performance.UseStringsBuilderInLoop{})
 	spec.RewriteRun(t,
 		test.Golang(`
@@ -24,11 +24,25 @@ func TestFindStringConcatInForLoop(t *testing.T) {
 				}
 				return s
 			}
+		`, `
+			package main
+
+			import "strings"
+
+			func f(items []string) string {
+				s := ""
+				var builder strings.Builder
+				for _, item := range items {
+					builder.WriteString(item)
+				}
+				s = builder.String()
+				return s
+			}
 		`),
 	)
 }
 
-func TestFindStringConcatInClassicForLoop(t *testing.T) {
+func TestUseBuilderInClassicForLoop(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&performance.UseStringsBuilderInLoop{})
 	spec.RewriteRun(t,
 		test.Golang(`
@@ -41,11 +55,25 @@ func TestFindStringConcatInClassicForLoop(t *testing.T) {
 				}
 				return s
 			}
+		`, `
+			package main
+
+			import "strings"
+
+			func f() string {
+				s := ""
+				var builder strings.Builder
+				for i := 0; i < 10; i++ {
+					builder.WriteString("x")
+				}
+				s = builder.String()
+				return s
+			}
 		`),
 	)
 }
 
-func TestFindStringConcatNoChangeOutsideLoop(t *testing.T) {
+func TestStringConcatNoChangeOutsideLoop(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&performance.UseStringsBuilderInLoop{})
 	spec.RewriteRun(t,
 		test.Golang(`

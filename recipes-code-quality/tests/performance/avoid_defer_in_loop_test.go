@@ -11,7 +11,7 @@ import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/test"
 )
 
-func TestFindDeferInForLoop(t *testing.T) {
+func TestWrapDeferInRangeLoop(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&performance.AvoidDeferInLoop{})
 	spec.RewriteRun(t,
 		test.Golang(`
@@ -25,11 +25,24 @@ func TestFindDeferInForLoop(t *testing.T) {
 					defer f.Close()
 				}
 			}
+		`, `
+			package main
+
+			import "os"
+
+			func f(files []string) {
+				for _, name := range files {
+					func() {
+						f, _ := os.Open(name)
+						defer f.Close()
+					}()
+				}
+			}
 		`),
 	)
 }
 
-func TestFindDeferInClassicForLoop(t *testing.T) {
+func TestWrapDeferInClassicForLoop(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&performance.AvoidDeferInLoop{})
 	spec.RewriteRun(t,
 		test.Golang(`
@@ -43,11 +56,24 @@ func TestFindDeferInClassicForLoop(t *testing.T) {
 					defer f.Close()
 				}
 			}
+		`, `
+			package main
+
+			import "os"
+
+			func f() {
+				for i := 0; i < 10; i++ {
+					func() {
+						f, _ := os.Create("file")
+						defer f.Close()
+					}()
+				}
+			}
 		`),
 	)
 }
 
-func TestFindDeferNoChangeOutsideLoop(t *testing.T) {
+func TestDeferNoChangeOutsideLoop(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&performance.AvoidDeferInLoop{})
 	spec.RewriteRun(t,
 		test.Golang(`

@@ -22,6 +22,14 @@ func TestUseTlsForHttp(t *testing.T) {
 			func f() {
 				http.ListenAndServe(":8080", nil)
 			}
+		`, `
+			package main
+
+			import "net/http"
+
+			func f() {
+				http.ListenAndServeTLS(":8080", "cert.pem", "key.pem", nil)
+			}
 		`),
 	)
 }

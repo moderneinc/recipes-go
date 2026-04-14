@@ -99,7 +99,10 @@ func extractTypeName(expr tree.Expression) string {
 	if expr == nil {
 		return ""
 	}
-	// Pointer type: *Foo is a Unary with Deref operator.
+	// Pointer type: *Foo may be PointerType or Unary(Deref).
+	if pt, ok := expr.(*tree.PointerType); ok {
+		return extractTypeName(pt.Elem)
+	}
 	if u, ok := expr.(*tree.Unary); ok {
 		return extractTypeName(u.Operand)
 	}

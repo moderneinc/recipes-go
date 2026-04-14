@@ -5,14 +5,28 @@
 package style
 
 import (
+	"fmt"
+
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 )
 
-// UseTlsForHttp finds calls to `http.ListenAndServe` which serve
-// traffic without TLS. Consider using `http.ListenAndServeTLS` instead to
-// encrypt traffic in transit.
+var (
+	tlsAddr    = template.Expr("addr")
+	tlsHandler = template.Expr("handler")
+)
+
+var useTlsForHttpImpl = template.NewRecipe(
+	template.RecipeName("org.openrewrite.golang.codequality.UseTlsForHttp$Impl"),
+	template.WithDisplayName("http.ListenAndServe → http.ListenAndServeTLS"),
+	template.WithBefore(fmt.Sprintf(`http.ListenAndServe(%s, %s)`, tlsAddr, tlsHandler), template.Imports("net/http")),
+	template.WithAfter(fmt.Sprintf(`http.ListenAndServeTLS(%s, "cert.pem", "key.pem", %s)`, tlsAddr, tlsHandler), template.Imports("net/http")),
+	template.WithCaptures(tlsAddr, tlsHandler),
+)
+
+// UseTlsForHttp replaces calls to `http.ListenAndServe(addr, handler)` with
+// `http.ListenAndServeTLS(addr, "cert.pem", "key.pem", handler)`. The
+// placeholder cert/key paths must be replaced with actual file paths.
 type UseTlsForHttp struct {
 	recipe.Base
 }
@@ -24,34 +38,10 @@ func (r *UseTlsForHttp) DisplayName() string {
 	return "Use TLS for HTTP"
 }
 func (r *UseTlsForHttp) Description() string {
-	return "Find calls to `http.ListenAndServe` which serve traffic without TLS. Consider using `http.ListenAndServeTLS` instead."
+	return "Replace `http.ListenAndServe(addr, handler)` with `http.ListenAndServeTLS(addr, \"cert.pem\", \"key.pem\", handler)` to encrypt traffic in transit."
 }
 func (r *UseTlsForHttp) Tags() []string { return []string{"security"} }
 
-func (r *UseTlsForHttp) Editor() recipe.TreeVisitor {
-	return visitor.Init(&useTlsForHttpVisitor{})
-}
-
-type useTlsForHttpVisitor struct {
-	visitor.GoVisitor
-}
-
-func (v *useTlsForHttpVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p any) tree.J {
-	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*tree.MethodInvocation)
-
-	if mi.Select == nil {
-		return mi
-	}
-
-	ident, ok := mi.Select.Element.(*tree.Identifier)
-	if !ok || ident.Name != "http" {
-		return mi
-	}
-
-	if mi.Name.Name != "ListenAndServe" {
-		return mi
-	}
-
-	mi = mi.WithMarkers(tree.MarkupInfo(mi.Markers, "http.ListenAndServe without TLS; consider http.ListenAndServeTLS"))
-	return mi
+func (r *UseTlsForHttp) RecipeList() []recipe.Recipe {
+	return []recipe.Recipe{useTlsForHttpImpl}
 }

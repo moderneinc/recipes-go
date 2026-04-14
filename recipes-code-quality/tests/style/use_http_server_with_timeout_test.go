@@ -22,6 +22,15 @@ func TestUseHttpServerWithTimeout(t *testing.T) {
 			func main() {
 				http.ListenAndServe(":8080", nil)
 			}
+		`, `
+			package main
+
+			import "net/http"
+
+			func main() {
+				server := &http.Server{Addr: ":8080", Handler: nil, ReadTimeout: 10 * time.Second, WriteTimeout: 10 * time.Second}
+				server.ListenAndServe()
+			}
 		`),
 	)
 }

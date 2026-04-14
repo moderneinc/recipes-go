@@ -5,49 +5,52 @@
 package style
 
 import (
+	"strings"
+
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
-// deprecatedAtomicFuncs lists the sync/atomic free functions that are
-// deprecated in favor of the type-safe atomic types introduced in Go 1.19
-// (e.g. atomic.Int32, atomic.Int64).
-var deprecatedAtomicFuncs = map[string]bool{
-	"AddInt32":          true,
-	"AddInt64":          true,
-	"AddUint32":         true,
-	"AddUint64":         true,
-	"AddUintptr":        true,
-	"CompareAndSwapInt32":  true,
-	"CompareAndSwapInt64":  true,
-	"CompareAndSwapUint32": true,
-	"CompareAndSwapUint64": true,
-	"CompareAndSwapUintptr": true,
-	"CompareAndSwapPointer": true,
-	"LoadInt32":          true,
-	"LoadInt64":          true,
-	"LoadUint32":         true,
-	"LoadUint64":         true,
-	"LoadUintptr":        true,
-	"LoadPointer":        true,
-	"StoreInt32":         true,
-	"StoreInt64":         true,
-	"StoreUint32":        true,
-	"StoreUint64":        true,
-	"StoreUintptr":       true,
-	"StorePointer":       true,
-	"SwapInt32":          true,
-	"SwapInt64":          true,
-	"SwapUint32":         true,
-	"SwapUint64":         true,
-	"SwapUintptr":        true,
-	"SwapPointer":        true,
+// atomicMethodMapping maps deprecated sync/atomic free-function prefixes
+// to their type-safe method equivalents.
+// e.g. "Add" → "Add", "Load" → "Load", "Store" → "Store",
+//      "CompareAndSwap" → "CompareAndSwap", "Swap" → "Swap"
+var atomicMethodPrefixes = []string{
+	"CompareAndSwap", // must be before "Swap" to match first
+	"Swap",
+	"Add",
+	"Load",
+	"Store",
 }
 
-// UseAtomicTypes finds usage of deprecated `sync/atomic` free functions
-// such as `atomic.AddInt32`, `atomic.LoadInt64`, etc. Since Go 1.19, the
-// type-safe atomic types (e.g. `atomic.Int32`) should be preferred.
+// atomicTypeSuffixes lists the type suffixes that can follow a method prefix.
+var atomicTypeSuffixes = map[string]bool{
+	"Int32":   true,
+	"Int64":   true,
+	"Uint32":  true,
+	"Uint64":  true,
+	"Uintptr": true,
+	"Pointer": true,
+}
+
+// parseAtomicFunc splits a function name like "AddInt32" into ("Add", "Int32").
+// Returns ("", "") if the name does not match a known atomic function.
+func parseAtomicFunc(name string) (method, typeSuffix string) {
+	for _, prefix := range atomicMethodPrefixes {
+		if strings.HasPrefix(name, prefix) {
+			suffix := name[len(prefix):]
+			if atomicTypeSuffixes[suffix] {
+				return prefix, suffix
+			}
+		}
+	}
+	return "", ""
+}
+
+// UseAtomicTypes transforms deprecated `sync/atomic` free-function calls
+// such as `atomic.AddInt32(&x, 1)` into method calls on the type-safe
+// atomic types introduced in Go 1.19, e.g. `x.Add(1)`.
 type UseAtomicTypes struct {
 	recipe.Base
 }
@@ -57,7 +60,7 @@ func (r *UseAtomicTypes) Name() string {
 }
 func (r *UseAtomicTypes) DisplayName() string { return "Use atomic types" }
 func (r *UseAtomicTypes) Description() string {
-	return "Find usage of deprecated `sync/atomic` free functions such as `atomic.AddInt32`. Prefer the type-safe atomic types introduced in Go 1.19 (e.g. `atomic.Int32`)."
+	return "Transform deprecated `sync/atomic` free-function calls into method calls on the type-safe atomic types introduced in Go 1.19 (e.g. `atomic.Int32`)."
 }
 func (r *UseAtomicTypes) Tags() []string { return []string{"style", "concurrency"} }
 
@@ -81,10 +84,74 @@ func (v *useAtomicTypesVisitor) VisitMethodInvocation(mi *tree.MethodInvocation,
 		return mi
 	}
 
-	if !deprecatedAtomicFuncs[mi.Name.Name] {
+	method, _ := parseAtomicFunc(mi.Name.Name)
+	if method == "" {
 		return mi
 	}
 
-	mi = mi.WithMarkers(tree.MarkupWarn(mi.Markers, "deprecated sync/atomic function; use type-safe atomic types (Go 1.19+)"))
-	return mi
+	args := mi.Arguments.Elements
+	if len(args) == 0 {
+		return mi
+	}
+
+	// First argument must be &x (AddressOf unary); strip the & to get the receiver.
+	firstArg := args[0].Element
+	addrOf, ok := firstArg.(*tree.Unary)
+	if !ok || addrOf.Operator.Element != tree.AddressOf {
+		// Cannot transform if first arg is not &x — add markup instead.
+		mi = mi.WithMarkers(tree.MarkupWarn(mi.Markers, "deprecated sync/atomic function; use type-safe atomic types (Go 1.19+)"))
+		return mi
+	}
+
+	receiver := addrOf.Operand
+
+	// Build new method invocation: receiver.Method(remaining args...)
+	newName := &tree.Identifier{
+		ID:   mi.Name.ID,
+		Name: method,
+	}
+
+	// Remaining args (everything after the first &x)
+	var newArgs []tree.RightPadded[tree.Expression]
+	for i := 1; i < len(args); i++ {
+		arg := args[i]
+		if i == 1 {
+			// Remove leading space that was after the comma separator
+			arg.Element = setAtomicExprPrefix(arg.Element, tree.EmptySpace)
+		}
+		newArgs = append(newArgs, arg)
+	}
+
+	newMI := &tree.MethodInvocation{
+		ID:     mi.ID,
+		Prefix: mi.Prefix,
+		Select: &tree.RightPadded[tree.Expression]{
+			Element: setAtomicExprPrefix(receiver, ident.Prefix),
+		},
+		Name: newName,
+		Arguments: tree.Container[tree.Expression]{
+			Before:   mi.Arguments.Before,
+			Elements: newArgs,
+			Markers:  mi.Arguments.Markers,
+		},
+		MethodType: mi.MethodType,
+	}
+
+	return newMI
+}
+
+// setAtomicExprPrefix sets the prefix on common expression node types.
+func setAtomicExprPrefix(expr tree.Expression, prefix tree.Space) tree.Expression {
+	switch e := expr.(type) {
+	case *tree.Identifier:
+		return e.WithPrefix(prefix)
+	case *tree.Literal:
+		return e.WithPrefix(prefix)
+	case *tree.FieldAccess:
+		return e.WithPrefix(prefix)
+	case *tree.Unary:
+		return e.WithPrefix(prefix)
+	default:
+		return expr
+	}
 }

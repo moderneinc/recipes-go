@@ -43,11 +43,19 @@ func (v *auditGoroutineClosureVisitor) VisitGoStmt(g *tree.GoStmt, p any) tree.J
 		return g
 	}
 
-	// The call's Select must be a function literal (MethodDeclaration).
+	// The call's Select must be a function literal (MethodDeclaration),
+	// possibly wrapped in StatementExpression.
 	if mi.Select == nil {
 		return g
 	}
-	if _, isFuncLit := mi.Select.Element.(*tree.MethodDeclaration); !isFuncLit {
+	isFuncLit := false
+	switch sel := mi.Select.Element.(type) {
+	case *tree.MethodDeclaration:
+		isFuncLit = true
+	case *tree.StatementExpression:
+		_, isFuncLit = sel.Statement.(*tree.MethodDeclaration)
+	}
+	if !isFuncLit {
 		return g
 	}
 

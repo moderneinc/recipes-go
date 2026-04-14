@@ -34,7 +34,7 @@ func TestUseErrorsAsCommaOkIf(t *testing.T) {
 			func (e *MyError) Error() string { return e.msg }
 
 			func f(err error) {
-				var myErr *MyError
+				var myErr*MyError
 				if errors.As(err, &myErr) {
 					println(myErr.msg)
 				}
