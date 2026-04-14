@@ -109,10 +109,10 @@ pre { font-family: var(--mono); font-size: 0.78rem; line-height: 1.55; backgroun
 <section class="slide" data-slide="1">
   <div class="slide-inner">
     <div class="s"><span class="eyebrow">The Problem</span></div>
-    <h2 class="headline s">Go doesn't have <span class="em">Roslyn</span>.</h2>
+    <h2 class="headline s">Go doesn't have <span class="em">automated remediation</span>.</h2>
     <div class="cols cols-55-45 mt-32">
       <div class="s">
-        <p class="subhead">Java has Error Prone and OpenRewrite. C# has Roslyn analyzers and code fixes. Python has Ruff. Go has&hellip; linters that report problems and leave the fixing to you.</p>
+        <p class="subhead">Java has OpenRewrite. C# has Roslyn code fixes. Python has Ruff with auto-fix. Go has&hellip; linters that report problems and leave the fixing to you.</p>
         <p class="subhead mt-16"><code>staticcheck</code> and <code>golangci-lint</code> find issues. They don't fix them. Every finding is a manual task &mdash; triage, understand, edit, test, repeat. Across hundreds of repositories, that manual work doesn't scale.</p>
       </div>
       <div class="s">
@@ -292,7 +292,7 @@ r := template.NewRecipe(
         <ul class="check-list">
           <li><strong>Type-attributed transforms</strong> &mdash; deeper type info enables removing redundant type conversions, smarter error handling.</li>
           <li><strong>Multi-file refactoring</strong> &mdash; rename methods across callers, extract interfaces, move packages.</li>
-          <li><strong>Harness comparison</strong> &mdash; automated comparison against staticcheck/golangci-lint on real repos, like the C# Roslyn harness.</li>
+          <li><strong>Harness comparison</strong> &mdash; automated comparison against staticcheck/golangci-lint on real repos, following the same rigor we built for C#.</li>
           <li><strong>Security recipes</strong> &mdash; SQL injection remediation, SSRF prevention, secrets scanning with auto-remediation.</li>
         </ul>
       </div>
@@ -300,15 +300,16 @@ r := template.NewRecipe(
   </div>
 </section>
 
-<!-- SLIDE 8: CTA -->
+<!-- SLIDE 8: Next Steps -->
 <section class="slide" data-slide="8">
   <div class="slide-inner centered">
-    <div class="s"><span class="eyebrow">Get Started</span></div>
-    <h2 class="headline s" style="margin-top: 16px;">Let's prove it <span class="em">on your code</span>.</h2>
-    <p class="subhead s mt-16" style="max-width: 600px;">One command installs the recipes. One command runs them. Every fix is a deterministic, reviewable diff.</p>
+    <div class="s"><span class="eyebrow">Next Steps</span></div>
+    <h2 class="headline s" style="margin-top: 16px;">Ready to run <span class="em">on your repos</span>.</h2>
+    <p class="subhead s mt-16" style="max-width: 640px;">The recipes are built and tested. Here's what running them looks like:</p>
     <pre class="s mt-24" style="text-align: left; display: inline-block;">mod config recipes go install github.com/moderneinc/recipes-go/code-quality
 mod build . --no-download
 mod run . --recipe org.openrewrite.golang.codequality.SimplifyBooleanExpression</pre>
+    <p class="subhead s mt-24" style="max-width: 640px; font-size: 0.95rem;">We'd like to run these against a sample of your Go repositories to validate coverage and identify which recipe categories deliver the most value for your codebase. From there we can prioritize additional recipes &mdash; framework migrations, module upgrades, or domain-specific patterns.</p>
   </div>
 </section>
 
