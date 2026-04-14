@@ -11,7 +11,7 @@ import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/test"
 )
 
-func TestFindMapAllocInForLoop(t *testing.T) {
+func TestHoistMapAllocFromRangeLoop(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&performance.AllocateMapOutsideLoop{})
 	spec.RewriteRun(t,
 		test.Golang(`
@@ -24,11 +24,22 @@ func TestFindMapAllocInForLoop(t *testing.T) {
 					_ = m
 				}
 			}
+		`, `
+			package main
+
+			func f(items []string) {
+				var m = make(map[string]int)
+				for _, item := range items {
+					clear(m)
+					m[item] = 1
+					_ = m
+				}
+			}
 		`),
 	)
 }
 
-func TestFindMapAllocInClassicForLoop(t *testing.T) {
+func TestHoistMapAllocFromClassicForLoop(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&performance.AllocateMapOutsideLoop{})
 	spec.RewriteRun(t,
 		test.Golang(`
@@ -40,11 +51,21 @@ func TestFindMapAllocInClassicForLoop(t *testing.T) {
 					_ = m
 				}
 			}
+		`, `
+			package main
+
+			func f() {
+				var m = make(map[int]string)
+				for i := 0; i < 10; i++ {
+					clear(m)
+					_ = m
+				}
+			}
 		`),
 	)
 }
 
-func TestFindMapAllocNoChangeOutsideLoop(t *testing.T) {
+func TestMapAllocNoChangeOutsideLoop(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&performance.AllocateMapOutsideLoop{})
 	spec.RewriteRun(t,
 		test.Golang(`

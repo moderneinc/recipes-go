@@ -12,10 +12,10 @@ import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
-// AuditMultipleErrorWraps finds `fmt.Errorf` calls whose format string contains
-// more than one `%w` verb. Multiple `%w` verbs are invalid in Go < 1.20 and,
-// while technically supported in Go 1.20+, are unusual and worth flagging for
-// review.
+// AuditMultipleErrorWraps replaces extra `%w` verbs in `fmt.Errorf` format
+// strings with `%v`, keeping only the first `%w`. Multiple `%w` is invalid in
+// Go < 1.20 and, while technically supported in 1.20+, wrapping multiple errors
+// is unusual and often unintentional.
 type AuditMultipleErrorWraps struct {
 	recipe.Base
 }
@@ -24,10 +24,10 @@ func (r *AuditMultipleErrorWraps) Name() string {
 	return "org.openrewrite.golang.codequality.AuditMultipleErrorWraps"
 }
 func (r *AuditMultipleErrorWraps) DisplayName() string {
-	return "Audit multiple error wraps"
+	return "Replace extra %w verbs with %v in fmt.Errorf"
 }
 func (r *AuditMultipleErrorWraps) Description() string {
-	return "Find `fmt.Errorf` calls whose format string contains more than one `%w` verb. Multiple error wrapping is invalid in Go < 1.20 and rare in later versions."
+	return "Replace all but the first `%w` with `%v` in `fmt.Errorf` format strings. Multiple error wrapping is invalid in Go < 1.20 and rare in later versions."
 }
 func (r *AuditMultipleErrorWraps) Tags() []string { return []string{"errorhandling", "lint"} }
 
@@ -66,13 +66,55 @@ func (v *auditMultipleErrorWrapsVisitor) VisitMethodInvocation(mi *tree.MethodIn
 		return mi
 	}
 
-	// Count occurrences of %w in the format string.
+	// Only act when there are multiple %w verbs.
 	if strings.Count(fmtLit.Source, "%w") <= 1 {
 		return mi
 	}
 
-	mi = mi.WithMarkers(
-		tree.MarkupInfo(mi.Markers, "fmt.Errorf format string contains multiple %w verbs"),
-	)
-	return mi
+	// Replace all %w after the first with %v.
+	newSource := replaceExtraW(fmtLit.Source)
+
+	newFmtLit := fmtLit.WithSource(newSource)
+
+	// Rebuild the arguments with the modified format literal.
+	newArgs := make([]tree.RightPadded[tree.Expression], len(args))
+	copy(newArgs, args)
+	newArgs[0] = tree.RightPadded[tree.Expression]{
+		Element: newFmtLit,
+		After:   args[0].After,
+		Markers: args[0].Markers,
+	}
+
+	newArgContainer := mi.Arguments
+	newArgContainer.Elements = newArgs
+
+	return &tree.MethodInvocation{
+		ID:        mi.ID,
+		Prefix:    mi.Prefix,
+		Markers:   mi.Markers,
+		Select:    mi.Select,
+		Name:      mi.Name,
+		Arguments: newArgContainer,
+	}
+}
+
+// replaceExtraW replaces all occurrences of "%w" after the first with "%v".
+func replaceExtraW(s string) string {
+	first := true
+	var b strings.Builder
+	b.Grow(len(s))
+	for i := 0; i < len(s); i++ {
+		if i+1 < len(s) && s[i] == '%' && s[i+1] == 'w' {
+			if first {
+				b.WriteString("%w")
+				first = false
+			} else {
+				b.WriteString("%v")
+			}
+			i++ // skip the 'w'
+		} else {
+			b.WriteByte(s[i])
+		}
+	}
+	return b.String()
 }

@@ -11,29 +11,41 @@ import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/test"
 )
 
-func TestReduceNestingDepth(t *testing.T) {
+func TestReduceNestingDepthGuardClause(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&style.ReduceNestingDepth{})
 	spec.RewriteRun(t,
 		test.Golang(`
 			package main
 
-			func f() {
-				for i := 0; i < 10; i++ {
-					if true {
-						if true {
-							if true {
-								x := 1
-								_ = x
-							}
-						}
-					}
+			func f() error {
+				err := doSomething()
+				if err == nil {
+					process()
 				}
+				return nil
 			}
+
+			func doSomething() error { return nil }
+			func process()           {}
+		`, `
+			package main
+
+			func f() error {
+				err := doSomething()
+				if err != nil {
+					return
+				}
+				process()
+				return nil
+			}
+
+			func doSomething() error { return nil }
+			func process()           {}
 		`),
 	)
 }
 
-func TestReduceNestingDepthNoChangeShallow(t *testing.T) {
+func TestReduceNestingDepthNoChangeNotErrEqualNil(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&style.ReduceNestingDepth{})
 	spec.RewriteRun(t,
 		test.Golang(`
@@ -45,6 +57,27 @@ func TestReduceNestingDepthNoChangeShallow(t *testing.T) {
 					_ = x
 				}
 			}
+		`),
+	)
+}
+
+func TestReduceNestingDepthNoChangeHasElse(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.ReduceNestingDepth{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			func f() {
+				var err error
+				if err == nil {
+					process()
+				} else {
+					handleError()
+				}
+			}
+
+			func process()     {}
+			func handleError() {}
 		`),
 	)
 }

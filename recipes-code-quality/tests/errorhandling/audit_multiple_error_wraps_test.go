@@ -11,7 +11,7 @@ import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/test"
 )
 
-func TestAuditMultipleErrorWrapsFound(t *testing.T) {
+func TestAuditMultipleErrorWrapsReplaced(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.AuditMultipleErrorWraps{})
 	spec.RewriteRun(t,
 		test.Golang(`
@@ -21,6 +21,37 @@ func TestAuditMultipleErrorWrapsFound(t *testing.T) {
 
 			func f(err1, err2 error) error {
 				return fmt.Errorf("a: %w, b: %w", err1, err2)
+			}
+		`, `
+			package main
+
+			import "fmt"
+
+			func f(err1, err2 error) error {
+				return fmt.Errorf("a: %w, b: %v", err1, err2)
+			}
+		`),
+	)
+}
+
+func TestAuditMultipleErrorWrapsThreeW(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.AuditMultipleErrorWraps{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "fmt"
+
+			func f(a, b, c error) error {
+				return fmt.Errorf("x: %w, y: %w, z: %w", a, b, c)
+			}
+		`, `
+			package main
+
+			import "fmt"
+
+			func f(a, b, c error) error {
+				return fmt.Errorf("x: %w, y: %v, z: %v", a, b, c)
 			}
 		`),
 	)

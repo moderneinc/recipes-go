@@ -10,9 +10,10 @@ import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
-// ReduceErrorCheckNesting finds `if err != nil` checks that are nested
-// three or more levels deep. Deeply nested error checks are hard to follow
-// and often indicate that the function should be refactored.
+// ReduceErrorCheckNesting applies the guard-clause refactoring to
+// `if err == nil { body }` by inverting the condition to
+// `if err != nil { return err }` followed by the body statements.
+// This reduces nesting in error-handling code.
 type ReduceErrorCheckNesting struct {
 	recipe.Base
 }
@@ -24,7 +25,7 @@ func (r *ReduceErrorCheckNesting) DisplayName() string {
 	return "Reduce error check nesting"
 }
 func (r *ReduceErrorCheckNesting) Description() string {
-	return "Find `if err != nil` checks nested three or more levels deep. Consider refactoring to reduce nesting."
+	return "Invert `if err == nil { body }` to `if err != nil { return err }` followed by the body, reducing nesting in error-handling code."
 }
 func (r *ReduceErrorCheckNesting) Tags() []string { return []string{"style", "lint"} }
 
@@ -34,26 +35,52 @@ func (r *ReduceErrorCheckNesting) Editor() recipe.TreeVisitor {
 
 type reduceErrorCheckNestingVisitor struct {
 	visitor.GoVisitor
-	ifDepth int
 }
 
-func (v *reduceErrorCheckNestingVisitor) VisitIf(ifStmt *tree.If, p any) tree.J {
-	v.ifDepth++
-	ifStmt = v.GoVisitor.VisitIf(ifStmt, p).(*tree.If)
-	v.ifDepth--
+func (v *reduceErrorCheckNestingVisitor) VisitBlock(block *tree.Block, p any) tree.J {
+	block = v.GoVisitor.VisitBlock(block, p).(*tree.Block)
 
-	if v.ifDepth+1 < 3 {
-		return ifStmt
+	changed := false
+	var newStmts []tree.RightPadded[tree.Statement]
+
+	dedent := visitor.Init(&nestingDedentVisitor{})
+
+	for _, rp := range block.Statements {
+		ifStmt, ok := rp.Element.(*tree.If)
+		if !ok || ifStmt.Init != nil || ifStmt.ElsePart != nil || ifStmt.Then == nil {
+			newStmts = append(newStmts, rp)
+			continue
+		}
+
+		if !isErrEqualNil(ifStmt.Condition) {
+			newStmts = append(newStmts, rp)
+			continue
+		}
+
+		changed = true
+
+		// Build `if err != nil { return err }`
+		errReturn := []tree.RightPadded[tree.Expression]{
+			{Element: &tree.Identifier{Prefix: tree.SingleSpace, Name: "err"}},
+		}
+		guard := buildErrGuard(ifStmt, errReturn)
+		newStmts = append(newStmts, tree.RightPadded[tree.Statement]{Element: guard})
+
+		// Splice the body statements out, dedented by one level.
+		for _, bodyRP := range ifStmt.Then.Statements {
+			bodyDedented := dedent.Visit(bodyRP.Element, nil).(tree.Statement)
+			newStmts = append(newStmts, tree.RightPadded[tree.Statement]{
+				Element: bodyDedented,
+				After:   bodyRP.After,
+				Markers: bodyRP.Markers,
+			})
+		}
 	}
 
-	if !isErrNotNil(ifStmt.Condition) {
-		return ifStmt
+	if !changed {
+		return block
 	}
-
-	ifStmt = ifStmt.WithMarkers(
-		tree.MarkupWarn(ifStmt.Markers, "deeply nested error check"),
-	)
-	return ifStmt
+	return block.WithStatements(newStmts)
 }
 
 // isErrNotNil returns true if the expression is `err != nil`.

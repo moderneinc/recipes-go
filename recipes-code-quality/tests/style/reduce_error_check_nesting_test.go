@@ -18,23 +18,34 @@ func TestReduceErrorCheckNesting(t *testing.T) {
 			package main
 
 			func f() error {
-				if true {
-					if true {
-						err := doSomething()
-						if err != nil {
-							return err
-						}
-					}
+				err := doSomething()
+				if err == nil {
+					process()
 				}
 				return nil
 			}
 
 			func doSomething() error { return nil }
+			func process()           {}
+		`, `
+			package main
+
+			func f() error {
+				err := doSomething()
+				if err != nil {
+					return err
+				}
+				process()
+				return nil
+			}
+
+			func doSomething() error { return nil }
+			func process()           {}
 		`),
 	)
 }
 
-func TestReduceErrorCheckNestingNoChangeShallow(t *testing.T) {
+func TestReduceErrorCheckNestingNoChangeErrNotNil(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&style.ReduceErrorCheckNesting{})
 	spec.RewriteRun(t,
 		test.Golang(`
@@ -49,6 +60,29 @@ func TestReduceErrorCheckNestingNoChangeShallow(t *testing.T) {
 			}
 
 			func doSomething() error { return nil }
+		`),
+	)
+}
+
+func TestReduceErrorCheckNestingNoChangeHasElse(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.ReduceErrorCheckNesting{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			func f() error {
+				var err error
+				if err == nil {
+					process()
+				} else {
+					handleError()
+				}
+				return nil
+			}
+
+			func doSomething() error { return nil }
+			func process()           {}
+			func handleError()       {}
 		`),
 	)
 }
