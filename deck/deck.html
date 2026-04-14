@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moderne — Go Code Quality at Scale</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F0EFEB;
+  --ink: #00193c;
+  --primary: #33ff99;
+  --secondary: #2e42ff;
+  --accent-red: #ff1947;
+  --accent-yellow: #f9a91b;
+  --pale-green: #e6fff2;
+  --mid-green: #99ffcc;
+  --pale-blue: #e6eaff;
+  --card-bg: #ffffff;
+  --muted: #737a84;
+  --font: 'Inter Tight', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+html { background: var(--bg); color: var(--ink); font-family: var(--font); scroll-behavior: smooth; }
+body { overflow: hidden; width: 100vw; height: 100vh; padding: 0; margin: 0; }
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 1px);
+  background-size: 50px 50px; pointer-events: none; z-index: 0;
+}
+
+.slide { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; padding: 40px; opacity: 0; pointer-events: none; transition: opacity 0.35s ease; z-index: 1; }
+.slide.active { opacity: 1; pointer-events: auto; z-index: 2; }
+.slide-inner { width: 100%; max-width: 1280px; max-height: calc(100vh - 80px); overflow-y: auto; background: var(--bg); border: 3px solid var(--ink); padding: 56px 72px; box-shadow: 12px 12px 0px var(--primary); position: relative; }
+.slide.inv .slide-inner { background: var(--ink); color: var(--bg); }
+.slide.inv .eyebrow { color: var(--primary); border-color: var(--primary); }
+.slide.inv .headline { color: var(--bg); }
+.slide.inv .subhead { color: color-mix(in srgb, var(--bg) 85%, transparent); }
+.slide.inv .check-list li { color: var(--bg); }
+.slide.inv .check-list li::before { background: var(--primary); border-color: var(--bg); }
+.slide.inv .label { color: var(--primary); }
+.slide.inv .stat-card { background: var(--ink); border-color: color-mix(in srgb, var(--bg) 30%, transparent); }
+.slide.inv .stat-card .stat-num { color: var(--primary); }
+.slide.inv .stat-card .stat-label { color: color-mix(in srgb, var(--bg) 60%, transparent); }
+
+@keyframes popIn { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+.slide .s { opacity: 0; transform: translateY(18px); }
+.slide.active .s { animation: popIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.slide.active .s:nth-child(1) { animation-delay: 0.08s; }
+.slide.active .s:nth-child(2) { animation-delay: 0.16s; }
+.slide.active .s:nth-child(3) { animation-delay: 0.24s; }
+.slide.active .s:nth-child(4) { animation-delay: 0.32s; }
+.slide.active .s:nth-child(5) { animation-delay: 0.4s; }
+.slide.active .s:nth-child(6) { animation-delay: 0.48s; }
+.slide.active .s:nth-child(7) { animation-delay: 0.56s; }
+
+.eyebrow { font-family: var(--mono); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--secondary); border-bottom: 2px solid var(--secondary); display: inline-block; padding-bottom: 4px; margin-bottom: 8px; }
+.headline { font-family: var(--font); font-weight: 700; font-size: clamp(2rem, 3.5vw, 3rem); line-height: 1.15; color: var(--ink); margin-top: 12px; }
+.headline .em { color: var(--primary); text-shadow: 1px 1px 0 color-mix(in srgb, var(--ink) 15%, transparent); }
+.subhead { font-family: var(--font); font-size: 1.15rem; line-height: 1.55; color: var(--ink); font-weight: 500; }
+.label { font-family: var(--mono); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--secondary); margin-bottom: 8px; }
+.centered { text-align: center; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
+.cols { display: grid; gap: 40px; }
+.cols-2 { grid-template-columns: 1fr 1fr; }
+.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+.cols-55-45 { grid-template-columns: 55fr 45fr; }
+.mt-8 { margin-top: 8px; } .mt-12 { margin-top: 12px; } .mt-16 { margin-top: 16px; } .mt-20 { margin-top: 20px; } .mt-24 { margin-top: 24px; } .mt-32 { margin-top: 32px; } .mt-40 { margin-top: 40px; }
+
+.check-list { list-style: none; padding: 0; display: grid; gap: 18px; margin: 0; }
+.check-list li { position: relative; padding-left: 28px; font-size: 0.95rem; line-height: 1.5; font-weight: 500; }
+.check-list li::before { content: ''; position: absolute; left: 0; top: 5px; width: 12px; height: 12px; background: var(--primary); border: 2px solid var(--ink); border-radius: 2px; }
+.check-list.red li::before { background: var(--accent-red); }
+
+.stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 24px; }
+.stat-card { background: var(--card-bg); border: 2px solid var(--ink); padding: 20px 24px; }
+.stat-card .stat-num { font-family: var(--mono); font-size: 2.2rem; font-weight: 700; color: var(--secondary); }
+.stat-card .stat-label { font-size: 0.8rem; font-weight: 600; color: var(--muted); margin-top: 4px; }
+
+code { font-family: var(--mono); font-size: 0.85em; background: color-mix(in srgb, var(--ink) 8%, transparent); padding: 2px 6px; border-radius: 3px; }
+.slide.inv code { background: color-mix(in srgb, var(--bg) 15%, transparent); }
+pre { font-family: var(--mono); font-size: 0.78rem; line-height: 1.55; background: var(--ink); color: var(--bg); padding: 20px 24px; border-radius: 4px; overflow-x: auto; }
+.slide.inv pre { background: color-mix(in srgb, var(--bg) 10%, transparent); }
+.del { color: var(--accent-red); text-decoration: line-through; }
+.add { color: var(--primary); font-weight: 600; }
+
+.nav { position: fixed; bottom: 24px; right: 32px; display: flex; gap: 8px; z-index: 100; }
+.nav button { width: 40px; height: 40px; border: 2px solid var(--ink); background: var(--bg); cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; }
+.nav button:hover { background: var(--primary); }
+.counter { position: fixed; bottom: 28px; left: 32px; font-family: var(--mono); font-size: 0.75rem; color: var(--muted); z-index: 100; }
+</style>
+</head>
+<body>
+
+<!-- SLIDE 0: Title -->
+<section class="slide active" data-slide="0">
+  <div class="slide-inner centered">
+    <div class="s" style="font-family: var(--mono); font-size: 0.9rem; font-weight: 600; color: var(--secondary); letter-spacing: 0.08em;">MODERNE</div>
+    <h1 class="headline s" style="margin-top: 24px;">Go Code Quality <span class="em">at Scale</span></h1>
+    <p class="subhead s mt-16" style="max-width: 640px;">206 recipes. 155 automated fixes. One command to run them across every Go repository in your organization.</p>
+  </div>
+</section>
+
+<!-- SLIDE 1: The Problem -->
+<section class="slide" data-slide="1">
+  <div class="slide-inner">
+    <div class="s"><span class="eyebrow">The Problem</span></div>
+    <h2 class="headline s">Go doesn't have <span class="em">Roslyn</span>.</h2>
+    <div class="cols cols-55-45 mt-32">
+      <div class="s">
+        <p class="subhead">Java has Error Prone and OpenRewrite. C# has Roslyn analyzers and code fixes. Python has Ruff. Go has&hellip; linters that report problems and leave the fixing to you.</p>
+        <p class="subhead mt-16"><code>staticcheck</code> and <code>golangci-lint</code> find issues. They don't fix them. Every finding is a manual task &mdash; triage, understand, edit, test, repeat. Across hundreds of repositories, that manual work doesn't scale.</p>
+      </div>
+      <div class="s">
+        <ul class="check-list red">
+          <li><strong>staticcheck</strong> &mdash; flags deprecated APIs. Doesn't migrate them.</li>
+          <li><strong>golangci-lint</strong> &mdash; finds naming violations. Doesn't rename.</li>
+          <li><strong>go vet</strong> &mdash; catches bugs. Doesn't fix them.</li>
+          <li><strong>Manual remediation</strong> &mdash; every finding requires a human. Every repo requires a PR.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 2: What We Built -->
+<section class="slide inv" data-slide="2">
+  <div class="slide-inner">
+    <div class="s"><span class="eyebrow">What We Built</span></div>
+    <h2 class="headline s">206 recipes. <span class="em">155 fix the code.</span></h2>
+    <p class="subhead s mt-16">Not just detection. Automated, deterministic, source-faithful transformation. The recipe reads your code, rewrites it, and preserves every comment, every blank line, every formatting choice.</p>
+    <div class="stat-row mt-32 s">
+      <div class="stat-card"><div class="stat-num">206</div><div class="stat-label">Total Recipes</div></div>
+      <div class="stat-card"><div class="stat-num">155</div><div class="stat-label">Auto-Fix Transforms</div></div>
+      <div class="stat-card"><div class="stat-num">594</div><div class="stat-label">Tests</div></div>
+      <div class="stat-card"><div class="stat-num">74%</div><div class="stat-label">Fix Rate</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 3: Categories -->
+<section class="slide" data-slide="3">
+  <div class="slide-inner">
+    <div class="s"><span class="eyebrow">Recipe Categories</span></div>
+    <h2 class="headline s">Six dimensions of <span class="em">Go quality</span>.</h2>
+    <div class="cols cols-3 mt-32">
+      <div class="s">
+        <div class="label">Simplification</div>
+        <div class="stat-card"><div class="stat-num">61</div><div class="stat-label">Recipes</div></div>
+        <p class="subhead mt-12" style="font-size: 0.9rem;">Deprecated API migration. Expression simplification. ioutil&rarr;io/os. strings.Index&rarr;strings.Contains. Boolean cleanup. Go 1.21+ builtins.</p>
+      </div>
+      <div class="s">
+        <div class="label">Style &amp; Security</div>
+        <div class="stat-card"><div class="stat-num">72</div><div class="stat-label">Recipes</div></div>
+        <p class="subhead mt-12" style="font-size: 0.9rem;">TLS enforcement. Hardcoded credential remediation. Resource management. Doc comments. Dot imports. Raw regex strings. Guard clauses.</p>
+      </div>
+      <div class="s">
+        <div class="label">Error Handling</div>
+        <div class="stat-card"><div class="stat-num">27</div><div class="stat-label">Recipes</div></div>
+        <p class="subhead mt-12" style="font-size: 0.9rem;">errors.Is + errors.As migration for 8+ sentinels. Error wrapping with context. Sentinel extraction to package level. %s&rarr;%w in Errorf.</p>
+      </div>
+      <div class="s">
+        <div class="label">Redundancy</div>
+        <div class="stat-card"><div class="stat-num">23</div><div class="stat-label">Recipes</div></div>
+        <p class="subhead mt-12" style="font-size: 0.9rem;">Dead code removal. Unreachable statements. Empty loops and switches. Self-assignments. Redundant else after return. Map range&rarr;clear().</p>
+      </div>
+      <div class="s">
+        <div class="label">Performance</div>
+        <div class="stat-card"><div class="stat-num">20</div><div class="stat-label">Recipes</div></div>
+        <p class="subhead mt-12" style="font-size: 0.9rem;">Regex hoisting out of loops. strings.Builder for concat. Map preallocation. Defer-in-loop IIFE wrapping. fmt&rarr;strconv conversions.</p>
+      </div>
+      <div class="s">
+        <div class="label">Naming</div>
+        <div class="stat-card"><div class="stat-num">9</div><div class="stat-label">Recipes</div></div>
+        <p class="subhead mt-12" style="font-size: 0.9rem;">Receiver names. Getter prefix removal. Stuttering. ALL_CAPS&rarr;MixedCaps. Error variable conventions. Context param naming.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 4: Before/After Examples -->
+<section class="slide" data-slide="4">
+  <div class="slide-inner">
+    <div class="s"><span class="eyebrow">Real Transforms</span></div>
+    <h2 class="headline s">What this looks like <span class="em">on your code</span>.</h2>
+    <div class="cols cols-2 mt-32">
+      <div class="s">
+        <div class="label">Error Sentinel Extraction</div>
+        <pre><span class="del">return errors.New("not found")</span>
+<span class="add">var ErrNotFound = errors.New("not found")  // package level</span>
+<span class="add">return ErrNotFound                          // inline</span></pre>
+      </div>
+      <div class="s">
+        <div class="label">Defer-in-Loop Fix</div>
+        <pre><span class="del">for _, f := range files {</span>
+<span class="del">    defer f.Close()</span>
+<span class="del">}</span>
+<span class="add">for _, f := range files {</span>
+<span class="add">    func() { defer f.Close() }()</span>
+<span class="add">}</span></pre>
+      </div>
+      <div class="s">
+        <div class="label">errors.As Migration</div>
+        <pre><span class="del">if myErr, ok := err.(*MyError); ok {</span>
+<span class="add">var myErr *MyError</span>
+<span class="add">if errors.As(err, &myErr) {</span></pre>
+      </div>
+      <div class="s">
+        <div class="label">Resource Management</div>
+        <pre><span class="del">f, err := os.Open(name)</span>
+<span class="add">f, err := os.Open(name)</span>
+<span class="add">defer f.Close()</span></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 5: Engineering Rigor -->
+<section class="slide inv" data-slide="5">
+  <div class="slide-inner">
+    <div class="s"><span class="eyebrow">Engineering Rigor</span></div>
+    <h2 class="headline s">Validated on <span class="em">real code</span>.</h2>
+    <p class="subhead s mt-16">Every recipe is tested against real open-source Go repositories &mdash; gorilla/mux, spf13/cobra, sirupsen/logrus, go-chi/chi, labstack/echo. Not synthetic test cases. Real complexity.</p>
+    <div class="stat-row mt-32 s">
+      <div class="stat-card"><div class="stat-num">594</div><div class="stat-label">Unit Tests</div></div>
+      <div class="stat-card"><div class="stat-num">5</div><div class="stat-label">OSS Repos Validated</div></div>
+      <div class="stat-card"><div class="stat-num">0</div><div class="stat-label">Panics or Corrupt Output</div></div>
+      <div class="stat-card"><div class="stat-num">740+</div><div class="stat-label">Real Findings</div></div>
+    </div>
+    <ul class="check-list mt-32 s">
+      <li><strong>Parse-print idempotence</strong> &mdash; every recipe output re-parses to the same tree. No formatting drift.</li>
+      <li><strong>Space validation</strong> &mdash; every whitespace character is verified. Parser bugs surface as test failures.</li>
+      <li><strong>Composite recipe support</strong> &mdash; recipes compose. Run one recipe that chains 200+ transformations.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- SLIDE 6: The SDK -->
+<section class="slide" data-slide="6">
+  <div class="slide-inner">
+    <div class="s"><span class="eyebrow">The SDK</span></div>
+    <h2 class="headline s">Full Go language support <span class="em">in OpenRewrite</span>.</h2>
+    <div class="cols cols-2 mt-32">
+      <div class="s">
+        <ul class="check-list">
+          <li><strong>GoTemplate + GoPattern</strong> &mdash; Refaster-like declarative recipe API. Define before/after patterns, the framework handles matching and replacement.</li>
+          <li><strong>MethodMatcher</strong> &mdash; AspectJ-style method matching: <code>"fmt Sprintf(..)"</code> matches any fmt.Sprintf call.</li>
+          <li><strong>TypeUtils</strong> &mdash; Type hierarchy checking, assignability, error/string detection.</li>
+          <li><strong>Block-level visiting</strong> &mdash; Insert defer statements, hoist code before loops, splice multiple statements.</li>
+          <li><strong>CompilationUnit-level visiting</strong> &mdash; Add package-level declarations, modify imports.</li>
+        </ul>
+      </div>
+      <div class="s">
+        <div class="label">10-Line Recipe</div>
+        <pre>s := template.Expr("s")
+r := template.NewRecipe(
+  template.WithBefore(
+    fmt.Sprintf(
+      `fmt.Sprintf("%%s", %s)`, s),
+    template.Imports("fmt")),
+  template.WithAfter(
+    fmt.Sprintf(`%s`, s)),
+  template.WithCaptures(s),
+)</pre>
+        <p class="subhead mt-12" style="font-size: 0.85rem;">What used to take 50+ lines of manual visitor code now takes 10 lines of declarative pattern matching.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 7: Where We Go -->
+<section class="slide inv" data-slide="7">
+  <div class="slide-inner">
+    <div class="s"><span class="eyebrow">Roadmap</span></div>
+    <h2 class="headline s">Where we go <span class="em">from here</span>.</h2>
+    <div class="cols cols-2 mt-32">
+      <div class="s">
+        <div class="label">Near Term</div>
+        <ul class="check-list">
+          <li><strong>Go version migration</strong> &mdash; composite recipes for Go 1.18&rarr;1.21&rarr;1.22&rarr;1.23. Automated API adoption.</li>
+          <li><strong>Module dependency upgrades</strong> &mdash; update go.mod, resolve breaking changes across the dependency graph.</li>
+          <li><strong>Framework migrations</strong> &mdash; gin&rarr;chi, logrus&rarr;slog, testify patterns.</li>
+          <li><strong>Import management</strong> &mdash; auto-add/remove imports when recipes change API usage.</li>
+        </ul>
+      </div>
+      <div class="s">
+        <div class="label">Longer Term</div>
+        <ul class="check-list">
+          <li><strong>Type-attributed transforms</strong> &mdash; deeper type info enables removing redundant type conversions, smarter error handling.</li>
+          <li><strong>Multi-file refactoring</strong> &mdash; rename methods across callers, extract interfaces, move packages.</li>
+          <li><strong>Harness comparison</strong> &mdash; automated comparison against staticcheck/golangci-lint on real repos, like the C# Roslyn harness.</li>
+          <li><strong>Security recipes</strong> &mdash; SQL injection remediation, SSRF prevention, secrets scanning with auto-remediation.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 8: CTA -->
+<section class="slide" data-slide="8">
+  <div class="slide-inner centered">
+    <div class="s"><span class="eyebrow">Get Started</span></div>
+    <h2 class="headline s" style="margin-top: 16px;">Let's prove it <span class="em">on your code</span>.</h2>
+    <p class="subhead s mt-16" style="max-width: 600px;">One command installs the recipes. One command runs them. Every fix is a deterministic, reviewable diff.</p>
+    <pre class="s mt-24" style="text-align: left; display: inline-block;">mod config recipes go install github.com/moderneinc/recipes-go/code-quality
+mod build . --no-download
+mod run . --recipe org.openrewrite.golang.codequality.SimplifyBooleanExpression</pre>
+  </div>
+</section>
+
+<div class="nav">
+  <button onclick="go(-1)">&larr;</button>
+  <button onclick="go(1)">&rarr;</button>
+</div>
+<div class="counter" id="counter"></div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+let cur = 0;
+function show(n) {
+  slides[cur].classList.remove('active');
+  cur = Math.max(0, Math.min(n, slides.length - 1));
+  slides[cur].classList.add('active');
+  document.getElementById('counter').textContent = `${cur + 1} / ${slides.length}`;
+}
+function go(d) { show(cur + d); }
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(1); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+});
+show(0);
+</script>
+</body>
+</html>

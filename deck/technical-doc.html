@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Go Code Quality Recipes: Technical Capabilities</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F0EFEB;
+  --ink: #00193c;
+  --primary: #33ff99;
+  --secondary: #2e42ff;
+  --accent-red: #ff1947;
+  --accent-yellow: #f9a91b;
+  --card-bg: #ffffff;
+  --muted: #737a84;
+  --font: 'Inter Tight', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+html { background: var(--bg); color: var(--ink); font-family: var(--font); }
+body { max-width: 820px; margin: 0 auto; padding: 60px 40px 120px; line-height: 1.7; }
+h1 { font-size: 2.4rem; font-weight: 700; line-height: 1.15; margin-top: 48px; }
+h1 .em { color: var(--primary); text-shadow: 1px 1px 0 color-mix(in srgb, var(--ink) 15%, transparent); }
+h2 { font-size: 1.5rem; font-weight: 700; margin-top: 48px; border-bottom: 3px solid var(--primary); padding-bottom: 8px; }
+h3 { font-size: 1.15rem; font-weight: 700; margin-top: 32px; color: var(--secondary); }
+p { font-size: 1rem; margin-top: 16px; }
+code { font-family: var(--mono); font-size: 0.85em; background: color-mix(in srgb, var(--ink) 8%, transparent); padding: 2px 6px; border-radius: 3px; }
+pre { font-family: var(--mono); font-size: 0.8rem; line-height: 1.55; background: var(--ink); color: var(--bg); padding: 20px 24px; border-radius: 4px; overflow-x: auto; margin-top: 16px; }
+.del { color: var(--accent-red); }
+.add { color: var(--primary); }
+.stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 24px; }
+.stat-card { background: var(--card-bg); border: 2px solid var(--ink); padding: 16px 20px; text-align: center; }
+.stat-card .num { font-family: var(--mono); font-size: 1.8rem; font-weight: 700; color: var(--secondary); }
+.stat-card .lbl { font-size: 0.75rem; font-weight: 600; color: var(--muted); margin-top: 4px; }
+table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 0.9rem; }
+th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid color-mix(in srgb, var(--ink) 15%, transparent); }
+th { font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.eyebrow { font-family: var(--mono); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--secondary); }
+.note { background: color-mix(in srgb, var(--primary) 15%, transparent); border-left: 4px solid var(--primary); padding: 16px 20px; margin-top: 20px; font-size: 0.9rem; }
+</style>
+</head>
+<body>
+
+<div class="eyebrow">Moderne &middot; Technical Document</div>
+<h1>Go Code Quality Recipes:<br><span class="em">Technical Capabilities</span></h1>
+
+<p>This document describes the Go recipe library we've built for the Moderne platform. It covers what the recipes do, how they work, and where the technology is headed. The audience is anyone evaluating whether automated Go code remediation is real or vaporware. Short answer: it's real. 206 recipes, 594 tests, validated on production open-source code.</p>
+
+<div class="stat-row">
+  <div class="stat-card"><div class="num">206</div><div class="lbl">Total Recipes</div></div>
+  <div class="stat-card"><div class="num">155</div><div class="lbl">Auto-Fix</div></div>
+  <div class="stat-card"><div class="num">594</div><div class="lbl">Tests</div></div>
+  <div class="stat-card"><div class="num">74%</div><div class="lbl">Fix Rate</div></div>
+</div>
+
+<h2>The Gap in Go Tooling</h2>
+
+<p>Every mainstream language has a code transformation ecosystem. Java has OpenRewrite and Error Prone. C# has Roslyn analyzers with code fixes. Python has Ruff with auto-fix. TypeScript has codemods and ESLint with --fix.</p>
+
+<p>Go has <code>staticcheck</code> and <code>golangci-lint</code>. Both are excellent at <em>finding</em> problems. Neither fixes them. Every diagnostic is a ticket for a human. Across hundreds of repositories, that doesn't scale.</p>
+
+<p>We built the missing piece: a recipe library that reads Go source code at the AST level, applies deterministic transformations, and produces source-faithful output. Every comment preserved. Every formatting choice respected. The diff is exactly what the recipe changed and nothing else.</p>
+
+<h2>Recipe Categories</h2>
+
+<h3>Simplification (61 recipes)</h3>
+
+<p>The largest category. These recipes modernize Go code by replacing deprecated or verbose patterns with cleaner standard library alternatives.</p>
+
+<p><strong>Deprecated API migration (7 recipes).</strong> The <code>ioutil</code> package was deprecated in Go 1.16. Every call to <code>ioutil.ReadAll</code>, <code>ioutil.ReadFile</code>, <code>ioutil.WriteFile</code>, <code>ioutil.TempDir</code>, <code>ioutil.TempFile</code>, <code>ioutil.NopCloser</code>, and <code>ioutil.ReadDir</code> has a direct replacement in <code>io</code> or <code>os</code>. Our recipes handle all seven, including the import change.</p>
+
+<p><strong>Index-to-Contains family (12 recipes).</strong> The pattern <code>strings.Index(s, sub) != -1</code> should be <code>strings.Contains(s, sub)</code>. We handle this for <code>strings.Index</code>, <code>strings.IndexAny</code>, <code>strings.IndexRune</code>, <code>bytes.Index</code>, <code>bytes.IndexAny</code>, <code>bytes.IndexRune</code> &mdash; both positive and negative comparisons, including the <code>&gt;= 0</code> and <code>&lt; 0</code> variants.</p>
+
+<p><strong>Boolean simplification (8 patterns).</strong> <code>x == true</code> &rarr; <code>x</code>. <code>x == false</code> &rarr; <code>!x</code>. All four operators, both operand orders. Implemented as two template recipes with four before-patterns each &mdash; our Refaster-style "anyOf" mechanism.</p>
+
+<p><strong>Go 1.21+ adoption.</strong> <code>sort.Sort(sort.IntSlice(s))</code> &rarr; <code>sort.Ints(s)</code>. <code>math.Min(a, b)</code> &rarr; <code>min(a, b)</code>. <code>log.Println(x)</code> &rarr; <code>slog.Info(x)</code> for structured logging migration.</p>
+
+<h3>Error Handling (27 recipes)</h3>
+
+<p>Go error handling is the single largest source of code quality issues in Go codebases. We've built the most comprehensive automated error handling remediation available for Go.</p>
+
+<p><strong>errors.Is migration.</strong> Direct error comparison (<code>err == io.EOF</code>) fails with wrapped errors. We transform these to <code>errors.Is(err, io.EOF)</code> for eight common sentinels: <code>io.EOF</code>, <code>sql.ErrNoRows</code>, <code>http.ErrServerClosed</code>, <code>net.ErrClosed</code>, <code>os.ErrInvalid</code>, <code>context.Canceled</code>, <code>context.DeadlineExceeded</code>, and package-qualified sentinels via FieldAccess matching.</p>
+
+<p><strong>errors.As migration.</strong> The common pattern <code>if myErr, ok := err.(*MyError); ok { ... }</code> should use <code>errors.As</code> for wrapped error support. Our recipe transforms this to <code>var myErr *MyError; if errors.As(err, &amp;myErr) { ... }</code> using Block-level visiting to split one statement into two.</p>
+
+<p><strong>Sentinel extraction.</strong> Inline <code>errors.New("not found")</code> calls inside functions can't be compared with <code>errors.Is</code>. Our recipe extracts them to package-level variable declarations: <code>var ErrNotFound = errors.New("not found")</code>. This uses CompilationUnit-level visiting to modify the file's top-level declarations while replacing inline calls with references.</p>
+
+<p><strong>Error wrapping.</strong> Three recipes address error context:</p>
+<ul>
+  <li><code>return err</code> &rarr; <code>return fmt.Errorf("funcName: %w", err)</code> &mdash; adds function name as context</li>
+  <li><code>return nil, err</code> &rarr; <code>return nil, fmt.Errorf("funcName: %w", err)</code> &mdash; multi-return variant</li>
+  <li><code>fmt.Errorf("...: %s", err)</code> &rarr; <code>fmt.Errorf("...: %w", err)</code> &mdash; fixes the format verb</li>
+</ul>
+
+<p><strong>Swallowed error recovery.</strong> <code>if err != nil { return }</code> (bare return that silently swallows the error) &rarr; <code>if err != nil { return err }</code>. Empty error check blocks (<code>if err != nil { }</code>) get filled with <code>return err</code>.</p>
+
+<h3>Style &amp; Security (72 recipes)</h3>
+
+<p><strong>Resource management.</strong> Nine "ensure" recipes detect resource creation (<code>os.Open</code>, <code>db.Query</code>, <code>time.NewTicker</code>, etc.) and auto-insert the corresponding <code>defer Close/Stop/Rollback</code> statement. This uses Block-level visiting to scan for the creation assignment and splice the defer statement after it, with idempotency checks to avoid double-deferring.</p>
+
+<p><strong>Security remediation.</strong> <code>InsecureSkipVerify: true</code> &rarr; <code>false</code>. File permissions <code>0777</code> &rarr; <code>0755</code>. Hardcoded credentials &rarr; <code>os.Getenv("VAR_NAME")</code> with SCREAMING_SNAKE_CASE name generation. <code>import . "pkg"</code> &rarr; <code>import "pkg"</code>. Regex patterns in interpreted strings &rarr; raw strings.</p>
+
+<p><strong>Guard clause refactoring.</strong> <code>if err == nil { &lt;deeply nested&gt; }</code> &rarr; <code>if err != nil { return }\n&lt;less nested&gt;</code>. Inverts conditions to enable early returns, reducing nesting depth. Includes automatic dedentation of the lifted code.</p>
+
+<h3>Performance (20 recipes)</h3>
+
+<p><strong>Regex hoisting.</strong> <code>regexp.MustCompile("pattern")</code> inside a loop is compiled every iteration. Our recipe hoists the compile call before the loop and replaces the in-loop usage with a variable reference. For <code>regexp.Compile</code> (two-return), it promotes to <code>MustCompile</code> since the pattern is a compile-time literal.</p>
+
+<p><strong>strings.Builder insertion.</strong> <code>s += expr</code> inside a loop becomes three statements: <code>var builder strings.Builder</code> before the loop, <code>builder.WriteString(expr)</code> inside, <code>s = builder.String()</code> after. Including automatic <code>import "strings"</code> addition.</p>
+
+<p><strong>Defer-in-loop IIFE wrapping.</strong> <code>defer f.Close()</code> inside a loop accumulates defers until function exit. Our recipe wraps the loop body in an immediately-invoked function literal so defers run per-iteration.</p>
+
+<p><strong>Map preallocation.</strong> <code>make(map[K]V)</code> inside a loop creates a new map each iteration. Our recipe hoists the allocation before the loop and inserts <code>clear(m)</code> at the start of each iteration.</p>
+
+<h3>Redundancy (23 recipes)</h3>
+
+<p>Dead code removal: unreachable statements after <code>return</code>, empty <code>for {}</code> loops, empty <code>switch {}</code>, empty <code>default:</code> cases, self-assignments (<code>x = x</code>), and <code>*&amp;x</code> double-deref.</p>
+
+<p>Control flow simplification: <code>if true { body }</code> &rarr; <code>body</code>. <code>if false { }</code> &rarr; deleted. <code>if len(s) &gt; 0 { for range s }</code> &rarr; <code>for range s</code>. <code>if cond { return } else { body }</code> &rarr; <code>if cond { return }\nbody</code>. <code>go func() { f() }()</code> &rarr; <code>go f()</code>. <code>for k := range m { delete(m, k) }</code> &rarr; <code>clear(m)</code>.</p>
+
+<h3>Naming (9 recipes)</h3>
+
+<p>All naming recipes are now transformational. <code>func (self *Foo) Bar()</code> &rarr; <code>func (f *Foo) Bar()</code>. <code>func (u *User) GetName()</code> &rarr; <code>func (u *User) Name()</code>. <code>MAX_BUFFER_SIZE</code> &rarr; <code>MaxBufferSize</code>. <code>var notFound = errors.New(...)</code> &rarr; <code>var ErrNotFound = errors.New(...)</code>. <code>func f(context context.Context)</code> &rarr; <code>func f(ctx context.Context)</code> with body-wide rename.</p>
+
+<h2>How It Works</h2>
+
+<h3>Template Recipes</h3>
+
+<p>For straightforward before&rarr;after patterns, we built a Refaster-like declarative API. A recipe author writes the before pattern and after pattern as Go code strings with named captures. The framework parses both through scaffold wrappers, matches the before against every AST node, and applies the after with captured values substituted.</p>
+
+<pre>s := template.Expr("s")
+r := template.NewRecipe(
+    template.WithBefore(fmt.Sprintf(`fmt.Sprintf("%%s", %s)`, s), template.Imports("fmt")),
+    template.WithAfter(fmt.Sprintf(`%s`, s)),
+    template.WithCaptures(s),
+)</pre>
+
+<p>Multiple before-patterns (Refaster's "anyOf") are supported &mdash; first match wins. This is how the boolean simplification recipe handles eight different input patterns with a single after pattern.</p>
+
+<h3>Block-Level Visiting</h3>
+
+<p>The breakthrough that unlocked our highest-value transforms. Instead of visiting individual nodes (MethodInvocation, If, etc.), we visit Block &mdash; the brace-delimited list of statements. This enables:</p>
+
+<ul>
+  <li><strong>Statement insertion</strong> &mdash; add <code>defer f.Close()</code> after a file open</li>
+  <li><strong>Statement hoisting</strong> &mdash; move <code>regexp.MustCompile</code> before a loop</li>
+  <li><strong>Statement splitting</strong> &mdash; split <code>if myErr, ok := err.(*T); ok</code> into var + if</li>
+  <li><strong>Redundant else removal</strong> &mdash; extract else body as sibling statements</li>
+  <li><strong>IIFE wrapping</strong> &mdash; wrap loop body in <code>func() { ... }()</code></li>
+</ul>
+
+<h3>CompilationUnit-Level Visiting</h3>
+
+<p>For file-wide transforms like error sentinel extraction, we visit the CompilationUnit (the whole file). A two-pass approach: first collect inline <code>errors.New</code> calls from function bodies, then add <code>var</code> declarations at the top and replace the inline calls with references.</p>
+
+<h3>MethodMatcher</h3>
+
+<p>AspectJ-style pattern matching for method invocations. <code>"fmt Sprintf(..)"</code> matches any <code>fmt.Sprintf</code> call regardless of arguments. <code>"time.Time Sub(time.Time)"</code> matches <code>Sub</code> with one <code>time.Time</code> argument. Supports glob wildcards: <code>*</code> for single name, <code>*..*</code> for any type in any package.</p>
+
+<h3>Markup Severity</h3>
+
+<p>Recipes that detect but can't auto-fix use severity-appropriate diagnostics: <code>MarkupWarn</code> for definite issues (SQL injection, race conditions, panic), <code>MarkupInfo</code> for suggestions (consider X, ensure Y). This replaces the generic <code>SearchResult</code> marker with actionable severity levels.</p>
+
+<h2>Where We Go From Here</h2>
+
+<h3>Go Version Migration Recipes</h3>
+<p>Composite recipes for Go 1.18&rarr;1.21&rarr;1.22&rarr;1.23, following the C# pattern of <code>UpgradeToDotNet10</code>. Each version adds new stdlib APIs, deprecates old ones, and introduces language features (generics, range-over-func). Recipes automate the adoption path.</p>
+
+<h3>Framework Migrations</h3>
+<p>gin&rarr;chi, logrus&rarr;slog, testify assertion patterns, gRPC version upgrades. The template recipe mechanism makes these straightforward to author &mdash; most framework migrations are method-to-method API mappings.</p>
+
+<h3>Module Dependency Management</h3>
+<p>Update <code>go.mod</code>, resolve breaking changes across the dependency graph, handle version conflicts. This connects to the existing Moderne platform dependency management capabilities.</p>
+
+<h3>Type-Attributed Transforms</h3>
+<p>Deeper type information enables removing truly redundant type conversions, smarter error handling (knowing a function returns error), and interface-aware refactoring. The Go parser already performs type attribution via <code>go/types</code> &mdash; the recipes need to consume it more aggressively.</p>
+
+<h3>Multi-File Refactoring</h3>
+<p>Rename methods across all callers. Extract interfaces. Move packages. These require the Moderne platform's cross-repository orchestration &mdash; the recipe sees one file at a time, but the platform coordinates across all files in all repositories.</p>
+
+<h3>Harness Comparison</h3>
+<p>Automated comparison against <code>staticcheck</code> and <code>golangci-lint</code> on real repositories, following the C# pattern where every recipe is validated against its Roslyn analyzer equivalent. The infrastructure exists (diagnostic mapping, working set of repos). The automation pipeline is next.</p>
+
+<div class="note">
+<strong>Bottom line:</strong> Go is no longer a language where linters find problems and humans fix them. We've built the transformation infrastructure. 206 recipes. 155 auto-fix. One command to run them across your entire Go estate.
+</div>
+
+</body>
+</html>
