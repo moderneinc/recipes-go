@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Ears (outer) -->
+  <ellipse cx="18" cy="18" rx="5" ry="7" fill="#79CDCD"/>
+  <ellipse cx="46" cy="18" rx="5" ry="7" fill="#79CDCD"/>
+  <!-- Ears (inner) -->
+  <ellipse cx="18" cy="19" rx="2.2" ry="3.5" fill="#F4A6A0"/>
+  <ellipse cx="46" cy="19" rx="2.2" ry="3.5" fill="#F4A6A0"/>
+  <!-- Head -->
+  <ellipse cx="32" cy="36" rx="23" ry="21" fill="#79CDCD"/>
+  <!-- Eye whites -->
+  <circle cx="22" cy="30" r="8" fill="#FFFFFF"/>
+  <circle cx="42" cy="30" r="8" fill="#FFFFFF"/>
+  <!-- Eye outlines -->
+  <circle cx="22" cy="30" r="8" fill="none" stroke="#000000" stroke-width="1"/>
+  <circle cx="42" cy="30" r="8" fill="none" stroke="#000000" stroke-width="1"/>
+  <!-- Pupils -->
+  <circle cx="24.5" cy="30" r="3" fill="#000000"/>
+  <circle cx="44.5" cy="30" r="3" fill="#000000"/>
+  <!-- Pupil highlights -->
+  <circle cx="25.5" cy="29" r="0.9" fill="#FFFFFF"/>
+  <circle cx="45.5" cy="29" r="0.9" fill="#FFFFFF"/>
+  <!-- Nose -->
+  <ellipse cx="32" cy="40" rx="3.2" ry="2.2" fill="#000000"/>
+  <!-- Teeth -->
+  <rect x="29.5" y="42" width="2.4" height="6" fill="#FFFFFF" stroke="#000000" stroke-width="0.5"/>
+  <rect x="32.1" y="42" width="2.4" height="6" fill="#FFFFFF" stroke="#000000" stroke-width="0.5"/>
+</svg>
