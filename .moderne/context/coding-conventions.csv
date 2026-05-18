@@ -1,0 +1,2 @@
+Convention type,Pattern,Example,Frequency,Scope
+naming,find* method naming pattern,findGo,,project-wide

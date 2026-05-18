@@ -1,0 +1,2 @@
+Source path,Class name,Method name,Pattern type,Exception types,Handling strategy,Logging framework,Log level
+build.gradle.kts,,findGo,try-catch,Exception,ignore,,
