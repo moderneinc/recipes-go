@@ -1,4 +1,4 @@
-module github.com/moderneinc/recipes-go/code-quality
+module github.com/moderneinc/recipes-go/recipes-code-quality
 
 go 1.25.0
 

@@ -7,7 +7,7 @@ package simplification_test
 import (
 	"testing"
 
-	"github.com/moderneinc/recipes-go/code-quality/recipes/simplification"
+	"github.com/moderneinc/recipes-go/recipes-code-quality/recipes/simplification"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/test"
 )
 

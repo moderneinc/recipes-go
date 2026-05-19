@@ -34,25 +34,25 @@ Install the recipes using the Moderne CLI's `mod config recipes go install` comm
 ### From a release tag
 
 ```bash
-mod config recipes go install github.com/moderneinc/recipes-go/code-quality@v0.1.0
+mod config recipes go install github.com/moderneinc/recipes-go/recipes-code-quality@v0.1.0
 ```
 
 ### Latest (no version specified)
 
 ```bash
-mod config recipes go install github.com/moderneinc/recipes-go/code-quality
+mod config recipes go install github.com/moderneinc/recipes-go/recipes-code-quality
 ```
 
 ### From a specific version
 
 ```bash
-mod config recipes go install github.com/moderneinc/recipes-go/code-quality@v0.2.0
+mod config recipes go install github.com/moderneinc/recipes-go/recipes-code-quality@v0.2.0
 ```
 
 ### Removing recipes
 
 ```bash
-mod config recipes go delete github.com/moderneinc/recipes-go/code-quality
+mod config recipes go delete github.com/moderneinc/recipes-go/recipes-code-quality
 ```
 
 ### Viewing installed recipes
@@ -169,7 +169,7 @@ recipe-library Maven artifact (catalog metadata) to Maven Central via OSSRH.
 The Go module itself is consumed by the Moderne CLI directly from the Go module
 proxy (`proxy.golang.org`). No active push is needed for the Go side — once the
 tag exists on GitHub, `mod config recipes go install
-github.com/moderneinc/recipes-go/code-quality@vX.Y.Z` resolves it.
+github.com/moderneinc/recipes-go/recipes-code-quality@vX.Y.Z` resolves it.
 
 ## Licensing
 

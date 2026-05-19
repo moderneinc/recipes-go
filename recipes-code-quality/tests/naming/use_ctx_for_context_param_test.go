@@ -7,7 +7,7 @@ package naming_test
 import (
 	"testing"
 
-	"github.com/moderneinc/recipes-go/code-quality/recipes/naming"
+	"github.com/moderneinc/recipes-go/recipes-code-quality/recipes/naming"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/test"
 )
 

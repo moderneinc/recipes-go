@@ -7,7 +7,7 @@ package performance_test
 import (
 	"testing"
 
-	"github.com/moderneinc/recipes-go/code-quality/recipes/performance"
+	"github.com/moderneinc/recipes-go/recipes-code-quality/recipes/performance"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/test"
 )
 
