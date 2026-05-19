@@ -152,6 +152,25 @@ go test ./tests/simplification/    # Run a specific category
 ./gradlew check                     # Full build via Gradle
 ```
 
+## Releasing
+
+Releases are cut by pushing a semver tag from `main`:
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+The `publish` workflow (`.github/workflows/publish.yml`) reacts to tags matching
+`vX.Y.Z` or `vX.Y.Z-rc.N` and delegates to the shared
+`openrewrite/gh-automation` `publish-gradle.yml` workflow, which publishes the
+recipe-library Maven artifact (catalog metadata) to Maven Central via OSSRH.
+
+The Go module itself is consumed by the Moderne CLI directly from the Go module
+proxy (`proxy.golang.org`). No active push is needed for the Go side — once the
+tag exists on GitHub, `mod config recipes go install
+github.com/moderneinc/recipes-go/code-quality@vX.Y.Z` resolves it.
+
 ## Licensing
 
 This project is licensed under the Moderne Proprietary License. Only for use by Moderne customers under the terms of a commercial contract.

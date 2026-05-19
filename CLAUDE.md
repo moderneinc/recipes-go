@@ -14,18 +14,27 @@ OpenRewrite recipes for Go codebases — code quality, migration, and remediatio
 ## Building & Testing
 
 ```bash
+./gradlew build              # Canonical entry point — builds + tests Go modules + checks license
 cd recipes-code-quality
-go test ./... -count=1       # Run all tests
+go test ./... -count=1       # Run all tests directly
 go test ./tests/redundancy/  # Run specific category
 ```
 
+## Releasing
+
+Tag-triggered. Push a `vX.Y.Z` (or `vX.Y.Z-rc.N`) tag from `main` and `.github/workflows/publish.yml` runs the shared `openrewrite/gh-automation` `publish-gradle.yml` workflow, which publishes the recipe-library Maven artifact (catalog metadata) to Maven Central via OSSRH. The Go module itself is served from `proxy.golang.org` as soon as the tag exists — no active push needed.
+
+The Go-side dependency on `github.com/openrewrite/rewrite/rewrite-go` requires upstream to have a matching `rewrite-go/vX.Y.Z` tag pushed on `openrewrite/rewrite`. Go's semantic-import-versioning rule means upstream tags must stay at `v0.x.y` or `v1.x.y` unless the module path is bumped to `/v2`+.
+
 ## Cross-repo Development with rewrite-go
 
-The recipes depend on the `github.com/openrewrite/rewrite` module. During local development, `go.mod` uses a `replace` directive pointing to the local rewrite-go checkout:
+For local cross-repo dev, re-add the `replace` directive to `recipes-code-quality/go.mod`:
 
 ```
-replace github.com/openrewrite/rewrite/rewrite-go => ../../../openrewrite/rewrite/rewrite-go/rewrite
+replace github.com/openrewrite/rewrite/rewrite-go => ../../../openrewrite/rewrite/rewrite-go
 ```
+
+(It's removed from the committed `go.mod` so CI can resolve the dep from the Go module proxy. Don't commit the replace back.)
 
 ### Full dev loop (recipes-go → rewrite-go → CLI)
 
