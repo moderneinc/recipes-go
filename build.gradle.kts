@@ -131,6 +131,14 @@ fun registerGoModule(taskPrefix: String, dirName: String, needsRpcServer: Boolea
             dependsOn(test)
         }
     }
+
+    // Make the conventional `./gradlew test` also run Go tests, even though the
+    // JVM Test task itself is disabled (see tasks.withType<Test> above).
+    tasks.named("test") {
+        if (moduleDir.exists()) {
+            dependsOn(test)
+        }
+    }
 }
 
 // ============================================
