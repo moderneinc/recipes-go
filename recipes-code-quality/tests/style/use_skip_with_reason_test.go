@@ -7,7 +7,7 @@ package style_test
 import (
 	"testing"
 
-	"github.com/moderneinc/recipes-go/code-quality/recipes/style"
+	"github.com/moderneinc/recipes-go/recipes-code-quality/recipes/style"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/test"
 )
 

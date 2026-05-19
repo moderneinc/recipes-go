@@ -5,7 +5,7 @@
 package errorhandling
 
 import (
-	"github.com/moderneinc/recipes-go/code-quality/diagnostic"
+	"github.com/moderneinc/recipes-go/recipes-code-quality/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"

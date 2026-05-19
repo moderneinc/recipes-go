@@ -23,7 +23,7 @@ package simplification
 
 import (
     "fmt"
-    "github.com/moderneinc/recipes-go/code-quality/diagnostic"
+    "github.com/moderneinc/recipes-go/recipes-code-quality/diagnostic"
     "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
     "github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 )
@@ -275,7 +275,7 @@ func TestMyRecipe(t *testing.T) {
 ## Diagnostic Mapping
 
 ```go
-import "github.com/moderneinc/recipes-go/code-quality/diagnostic"
+import "github.com/moderneinc/recipes-go/recipes-code-quality/diagnostic"
 
 func (r *MyRecipe) DiagnosticMappings() []diagnostic.Mapping {
     return []diagnostic.Mapping{

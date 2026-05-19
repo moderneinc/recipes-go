@@ -5,12 +5,12 @@
 package recipes
 
 import (
-	"github.com/moderneinc/recipes-go/code-quality/recipes/errorhandling"
-	"github.com/moderneinc/recipes-go/code-quality/recipes/naming"
-	"github.com/moderneinc/recipes-go/code-quality/recipes/performance"
-	"github.com/moderneinc/recipes-go/code-quality/recipes/redundancy"
-	"github.com/moderneinc/recipes-go/code-quality/recipes/simplification"
-	"github.com/moderneinc/recipes-go/code-quality/recipes/style"
+	"github.com/moderneinc/recipes-go/recipes-code-quality/recipes/errorhandling"
+	"github.com/moderneinc/recipes-go/recipes-code-quality/recipes/naming"
+	"github.com/moderneinc/recipes-go/recipes-code-quality/recipes/performance"
+	"github.com/moderneinc/recipes-go/recipes-code-quality/recipes/redundancy"
+	"github.com/moderneinc/recipes-go/recipes-code-quality/recipes/simplification"
+	"github.com/moderneinc/recipes-go/recipes-code-quality/recipes/style"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 )
 

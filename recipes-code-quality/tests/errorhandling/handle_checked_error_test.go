@@ -7,7 +7,7 @@ package errorhandling_test
 import (
 	"testing"
 
-	"github.com/moderneinc/recipes-go/code-quality/recipes/errorhandling"
+	"github.com/moderneinc/recipes-go/recipes-code-quality/recipes/errorhandling"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/test"
 )
 
