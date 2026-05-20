@@ -1,6 +1,8 @@
 @file:Suppress("GradlePackageUpdate", "UnstableApiUsage")
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import com.hierynomus.gradle.license.tasks.LicenseCheck
+import com.hierynomus.gradle.license.tasks.LicenseFormat
 
 plugins {
     id("org.openrewrite.build.recipe-library") version "latest.release"
@@ -28,6 +30,32 @@ dependencies {
     implementation("org.openrewrite:rewrite-go:${rewriteVersion}")
     implementation("io.moderne:jsonrpc:latest.integration")
 }
+
+// ============================================
+// License headers on Go files
+// ============================================
+// Java/Kotlin/TS are handled by the recipe-library convention plugin; here we extend
+// the same hierynomus license plugin to also check/format .go files.
+
+val goLicenseSources = fileTree(projectDir) {
+    include("**/*.go")
+    exclude("**/build/**", "**/vendor/**")
+}
+
+val licenseGo by tasks.registering(LicenseCheck::class) {
+    source = goLicenseSources
+    header = rootProject.file("gradle/licenseHeader.txt")
+    mapping("go", "SLASHSTAR_STYLE")
+}
+
+val licenseFormatGo by tasks.registering(LicenseFormat::class) {
+    source = goLicenseSources
+    header = rootProject.file("gradle/licenseHeader.txt")
+    mapping("go", "SLASHSTAR_STYLE")
+}
+
+tasks.named("license") { dependsOn(licenseGo) }
+tasks.named("licenseFormat") { dependsOn(licenseFormatGo) }
 
 // ============================================
 // Java RPC Test Server (shadow JAR for Go tests that need Java delegation)
