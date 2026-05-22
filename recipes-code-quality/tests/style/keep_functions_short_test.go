@@ -44,6 +44,36 @@ func TestKeepFunctionsShort(t *testing.T) {
 				x = x + 1
 				_ = x
 			}
+		`, `
+			package main
+
+			func /*~~(function has too many statements)~~>*/f() {
+				x := 1
+				x = x + 1
+				x = x + 1
+				x = x + 1
+				x = x + 1
+				x = x + 1
+				x = x + 1
+				x = x + 1
+				x = x + 1
+				x = x + 1
+				x = x + 1
+				x = x + 1
+				x = x + 1
+				x = x + 1
+				x = x + 1
+				x = x + 1
+				x = x + 1
+				x = x + 1
+				x = x + 1
+				x = x + 1
+				x = x + 1
+				x = x + 1
+				x = x + 1
+				x = x + 1
+				_ = x
+			}
 		`),
 	)
 }

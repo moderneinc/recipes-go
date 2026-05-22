@@ -24,6 +24,16 @@ func TestFindFmtSprintfInForLoop(t *testing.T) {
 					_ = fmt.Sprintf("%d", i)
 				}
 			}
+		`, `
+			package main
+
+			import "fmt"
+
+			func f() {
+				for i := 0; i < 10; i++ {
+					_ =/*~~(fmt formatting in loop; allocates on every call, prefer strconv or direct string operations)~~>*/ fmt.Sprintf("%d", i)
+				}
+			}
 		`),
 	)
 }
@@ -39,6 +49,16 @@ func TestFindFmtSprintInRangeLoop(t *testing.T) {
 			func f(items []int) {
 				for _, item := range items {
 					_ = fmt.Sprint(item)
+				}
+			}
+		`, `
+			package main
+
+			import "fmt"
+
+			func f(items []int) {
+				for _, item := range items {
+					_ =/*~~(fmt formatting in loop; allocates on every call, prefer strconv or direct string operations)~~>*/ fmt.Sprint(item)
 				}
 			}
 		`),

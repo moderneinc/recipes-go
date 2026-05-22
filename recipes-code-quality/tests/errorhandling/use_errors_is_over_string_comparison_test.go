@@ -20,6 +20,12 @@ func TestUseErrorsIsOverStringComparison(t *testing.T) {
 			func f(err error) bool {
 				return err.Error() == "not found"
 			}
+		`, `
+			package main
+
+			func f(err error) bool {
+				return/*~~(comparing error string is fragile; use errors.Is or errors.As)~~>*/ err.Error() == "not found"
+			}
 		`),
 	)
 }

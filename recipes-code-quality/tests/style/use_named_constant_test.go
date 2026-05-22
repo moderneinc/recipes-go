@@ -20,6 +20,12 @@ func TestUseNamedConstant(t *testing.T) {
 			func f() int {
 				return 42
 			}
+		`, `
+			package main
+
+			func f() int {
+				return /*~~(magic number; consider using a named constant)~~>*/42
+			}
 		`),
 	)
 }

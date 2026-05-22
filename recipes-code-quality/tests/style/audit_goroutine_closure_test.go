@@ -22,6 +22,14 @@ func TestAuditGoroutineClosure(t *testing.T) {
 					println("hi")
 				}()
 			}
+		`, `
+			package main
+
+			func f() {
+				/*~~(goroutine with closure)~~>*/go func() {
+					println("hi")
+				}()
+			}
 		`),
 	)
 }

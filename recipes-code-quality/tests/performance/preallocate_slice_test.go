@@ -23,6 +23,15 @@ func TestPreallocateSliceAppendInForLoop(t *testing.T) {
 					result = append(result, i)
 				}
 			}
+		`, `
+			package main
+
+			func main() {
+				var result []int
+				for i := 0; i < 10; i++ {
+					result =/*~~(consider preallocating slice)~~>*/ append(result, i)
+				}
+			}
 		`),
 	)
 }
@@ -38,6 +47,16 @@ func TestPreallocateSliceAppendInRangeLoop(t *testing.T) {
 				var result []string
 				for _, item := range items {
 					result = append(result, item)
+				}
+			}
+		`, `
+			package main
+
+			func main() {
+				items := []string{"a", "b", "c"}
+				var result []string
+				for _, item := range items {
+					result =/*~~(consider preallocating slice)~~>*/ append(result, item)
 				}
 			}
 		`),

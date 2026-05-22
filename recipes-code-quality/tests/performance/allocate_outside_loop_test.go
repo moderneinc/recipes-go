@@ -25,6 +25,17 @@ func TestFindNewInForLoop(t *testing.T) {
 					_ = buf
 				}
 			}
+		`, `
+			package main
+
+			import "bytes"
+
+			func f() {
+				for i := 0; i < 10; i++ {
+					buf :=/*~~(new() in loop; consider allocating once outside the loop)~~>*/ new(bytes.Buffer)
+					_ = buf
+				}
+			}
 		`),
 	)
 }
@@ -38,6 +49,15 @@ func TestFindNewInRangeLoop(t *testing.T) {
 			func f(items []string) {
 				for range items {
 					n := new(int)
+					_ = n
+				}
+			}
+		`, `
+			package main
+
+			func f(items []string) {
+				for range items {
+					n :=/*~~(new() in loop; consider allocating once outside the loop)~~>*/ new(int)
 					_ = n
 				}
 			}

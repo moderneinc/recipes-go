@@ -22,6 +22,14 @@ func TestCheckContextError(t *testing.T) {
 			func f(ctx context.Context) error {
 				return ctx.Err()
 			}
+		`, `
+			package main
+
+			import "context"
+
+			func f(ctx context.Context) error {
+				return/*~~(ctx.Err() found; inspect the context error)~~>*/ ctx.Err()
+			}
 		`),
 	)
 }

@@ -20,6 +20,12 @@ func TestAvoidSqlStringConcat(t *testing.T) {
 			func f(table string) string {
 				return "SELECT * FROM " + table
 			}
+		`, `
+			package main
+
+			func f(table string) string {
+				return/*~~(possible SQL injection via string concatenation)~~>*/ "SELECT * FROM " + table
+			}
 		`),
 	)
 }

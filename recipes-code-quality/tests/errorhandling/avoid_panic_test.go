@@ -20,6 +20,12 @@ func TestAvoidPanicSimple(t *testing.T) {
 			func main() {
 				panic("oops")
 			}
+		`, `
+			package main
+
+			func main() {/*~~(panic call found; consider returning an error instead)~~>*/
+				panic("oops")
+			}
 		`),
 	)
 }
@@ -48,6 +54,15 @@ func TestAvoidPanicWithVariable(t *testing.T) {
 			func main() {
 				err := recover()
 				if err != nil {
+					panic(err)
+				}
+			}
+		`, `
+			package main
+
+			func main() {
+				err := recover()
+				if err != nil {/*~~(panic call found; consider returning an error instead)~~>*/
 					panic(err)
 				}
 			}

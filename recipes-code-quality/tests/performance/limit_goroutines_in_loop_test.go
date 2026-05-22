@@ -24,6 +24,16 @@ func TestFindGoroutineInForLoop(t *testing.T) {
 					go doWork()
 				}
 			}
+		`, `
+			package main
+
+			func doWork() {}
+
+			func f() {
+				for i := 0; i < 10; i++ {
+					/*~~(goroutine launched in loop; unbounded goroutine creation can cause resource exhaustion)~~>*/go doWork()
+				}
+			}
 		`),
 	)
 }
@@ -39,6 +49,16 @@ func TestFindGoroutineInRangeLoop(t *testing.T) {
 			func f(items []string) {
 				for _, item := range items {
 					go process(item)
+				}
+			}
+		`, `
+			package main
+
+			func process(s string) {}
+
+			func f(items []string) {
+				for _, item := range items {
+					/*~~(goroutine launched in loop; unbounded goroutine creation can cause resource exhaustion)~~>*/go process(item)
 				}
 			}
 		`),
