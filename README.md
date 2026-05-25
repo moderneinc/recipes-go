@@ -78,14 +78,14 @@ mod run . --recipe org.openrewrite.golang.codequality.SimplifyBooleanExpression
 
 ## Overview
 
-**206 recipes** across 6 categories with **546 tests**. 72% of recipes are transformational (actually fix code), 28% are diagnostic (flag patterns for review).
+**213 recipes** across 6 categories with **595 tests**.
 
 | Category | Recipes | Description |
 |---|---|---|
-| **Simplification** | 58 | Modernize code with newer stdlib APIs, simplify expressions, migrate deprecated APIs |
-| **Style** | 72 | Enforce conventions, detect code smells, security patterns, resource management |
+| **Style** | 73 | Enforce conventions, detect code smells, security patterns, resource management |
+| **Simplification** | 61 | Modernize code with newer stdlib APIs, simplify expressions, migrate deprecated APIs |
 | **Error Handling** | 27 | `errors.Is`/`errors.As` migration, error wrapping, sentinel extraction |
-| **Redundancy** | 20 | Remove dead code, redundant operations, unreachable statements |
+| **Redundancy** | 23 | Remove dead code, redundant operations, unreachable statements |
 | **Performance** | 20 | Loop optimizations, allocation hoisting, format string improvements |
 | **Naming** | 9 | Receiver names, stuttering, constants, getter prefixes, error variables |
 
@@ -93,9 +93,9 @@ mod run . --recipe org.openrewrite.golang.codequality.SimplifyBooleanExpression
 
 ### Simplification
 
-- **ioutil to io/os migration**: `ioutil.ReadAll` to `io.ReadAll`, `ioutil.ReadFile` to `os.ReadFile`, etc. (7 recipes)
-- **strings/bytes Index to Contains family**: `strings.Index(s, sub) != -1` to `strings.Contains(s, sub)` (12 recipes)
-- **Boolean simplification**: `x == true` to `x`, `x == false` to `!x` (8 before patterns)
+- **ioutil to io/os migration**: `ioutil.ReadAll` to `io.ReadAll`, `ioutil.ReadFile` to `os.ReadFile`, etc. (8 recipes)
+- **strings/bytes Index to Contains family**: `strings.Index(s, sub) != -1` to `strings.Contains(s, sub)` (7 recipes)
+- **Boolean simplification**: `x == true` to `x`, `x == false` to `!x`, `!!x` to `x`
 - **fmt.Sprintf optimization**: `fmt.Sprintf("%s", s)` to `s`, `fmt.Sprintf("%v", x)` to `fmt.Sprint(x)`
 - **Go 1.21+**: `sort.Sort(sort.IntSlice(s))` to `sort.Ints(s)`, `math.Min(a, b)` to `min(a, b)`
 - **Structured logging**: `log.Println(x)` to `slog.Info(x)` (Go 1.21+)
