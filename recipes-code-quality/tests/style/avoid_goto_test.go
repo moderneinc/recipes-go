@@ -22,6 +22,14 @@ func TestAvoidGoto(t *testing.T) {
 			done:
 				println("done")
 			}
+		`, `
+			package main
+
+			func f() {
+				/*~~(consider restructuring to avoid goto)~~>*/goto done
+			done:
+				println("done")
+			}
 		`),
 	)
 }

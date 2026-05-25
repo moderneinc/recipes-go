@@ -25,6 +25,17 @@ func TestAuditTestMain(t *testing.T) {
 			func TestMain(m *testing.M) {
 				os.Exit(m.Run())
 			}
+		`, `
+			package main
+
+			import (
+				"os"
+				"testing"
+			)
+
+			func /*~~(TestMain overrides default test execution)~~>*/TestMain(m *testing.M) {
+				os.Exit(m.Run())
+			}
 		`),
 	)
 }

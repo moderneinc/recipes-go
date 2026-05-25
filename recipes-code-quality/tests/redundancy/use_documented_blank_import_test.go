@@ -20,6 +20,12 @@ func TestUseDocumentedBlankImportFound(t *testing.T) {
 			import _ "net/http/pprof"
 
 			func f() {}
+		`, `
+			package main
+
+			import /*~~(blank import used for side effects)~~>*/_ "net/http/pprof"
+
+			func f() {}
 		`),
 	)
 }

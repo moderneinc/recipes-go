@@ -22,6 +22,14 @@ func TestAuditMustFunction(t *testing.T) {
 			func f() *template.Template {
 				return template.Must(template.New("t").Parse(""))
 			}
+		`, `
+			package main
+
+			import "text/template"
+
+			func f() *template.Template {
+				return/*~~(Must* function panics on error; use with care)~~>*/ template.Must(template.New("t").Parse(""))
+			}
 		`),
 	)
 }

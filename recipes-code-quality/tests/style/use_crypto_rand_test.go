@@ -22,6 +22,14 @@ func TestUseCryptoRandIntn(t *testing.T) {
 			func f() int {
 				return rand.Intn(10)
 			}
+		`, `
+			package main
+
+			import "math/rand"
+
+			func f() int {
+				return/*~~(consider using crypto/rand for security-sensitive randomness)~~>*/ rand.Intn(10)
+			}
 		`),
 	)
 }
@@ -36,6 +44,14 @@ func TestUseCryptoRandFloat64(t *testing.T) {
 
 			func f() float64 {
 				return rand.Float64()
+			}
+		`, `
+			package main
+
+			import "math/rand"
+
+			func f() float64 {
+				return/*~~(consider using crypto/rand for security-sensitive randomness)~~>*/ rand.Float64()
 			}
 		`),
 	)

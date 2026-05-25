@@ -23,6 +23,15 @@ func TestAvoidUnsafePackage(t *testing.T) {
 				var x int
 				_ = unsafe.Pointer(&x)
 			}
+		`, `
+			package main
+
+			import "unsafe"
+
+			func f() {
+				var x int
+				_ =/*~~(unsafe package usage)~~>*/ unsafe.Pointer(&x)
+			}
 		`),
 	)
 }

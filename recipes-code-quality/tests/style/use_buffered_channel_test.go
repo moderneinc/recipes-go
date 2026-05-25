@@ -21,6 +21,13 @@ func TestUseBufferedChannel(t *testing.T) {
 				ch := make(chan int)
 				_ = ch
 			}
+		`, `
+			package main
+
+			func f() {
+				ch :=/*~~(unbuffered channel)~~>*/ make(chan int)
+				_ = ch
+			}
 		`),
 	)
 }

@@ -23,6 +23,15 @@ func TestAuditContextBackground(t *testing.T) {
 				ctx := context.Background()
 				_ = ctx
 			}
+		`, `
+			package main
+
+			import "context"
+
+			func f() {
+				ctx :=/*~~(context.Background() call; consider using a passed context instead)~~>*/ context.Background()
+				_ = ctx
+			}
 		`),
 	)
 }

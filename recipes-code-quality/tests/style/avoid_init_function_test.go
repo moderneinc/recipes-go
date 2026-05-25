@@ -20,6 +20,12 @@ func TestAvoidInitFunction(t *testing.T) {
 			func init() {
 				println("startup")
 			}
+		`, `
+			package main
+
+			func /*~~(consider removing init function)~~>*/init() {
+				println("startup")
+			}
 		`),
 	)
 }

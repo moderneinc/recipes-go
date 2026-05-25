@@ -23,6 +23,15 @@ func TestAuditJsonNumber(t *testing.T) {
 				var n json.Number
 				_ = n
 			}
+		`, `
+			package main
+
+			import "encoding/json"
+
+			func f() {
+				var n/*~~(json.Number should be used carefully)~~>*/ json.Number
+				_ = n
+			}
 		`),
 	)
 }

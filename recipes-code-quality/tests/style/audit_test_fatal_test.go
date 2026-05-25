@@ -22,6 +22,14 @@ func TestAuditTestFatal(t *testing.T) {
 			func TestFoo(t *testing.T) {
 				t.Fatal("fail")
 			}
+		`, `
+			package main
+
+			import "testing"
+
+			func TestFoo(t *testing.T) {/*~~(t.Fatal call found; consider t.Error in goroutines)~~>*/
+				t.Fatal("fail")
+			}
 		`),
 	)
 }
@@ -35,6 +43,14 @@ func TestAuditTestFatalf(t *testing.T) {
 			import "testing"
 
 			func TestFoo(t *testing.T) {
+				t.Fatalf("got %d", 1)
+			}
+		`, `
+			package main
+
+			import "testing"
+
+			func TestFoo(t *testing.T) {/*~~(t.Fatal call found; consider t.Error in goroutines)~~>*/
 				t.Fatalf("got %d", 1)
 			}
 		`),

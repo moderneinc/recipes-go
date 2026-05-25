@@ -23,6 +23,15 @@ func TestAvoidLabel(t *testing.T) {
 					break loop
 				}
 			}
+		`, `
+			package main
+
+			func f() {
+			/*~~(labeled statement indicates complex control flow)~~>*/loop:
+				for {
+					break loop
+				}
+			}
 		`),
 	)
 }

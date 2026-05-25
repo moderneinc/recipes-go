@@ -18,6 +18,10 @@ func TestUseDescriptiveVarNames(t *testing.T) {
 			package main
 
 			var q = 1
+		`, `
+			package main
+
+			var /*~~(single-letter variable name is not a conventional short name)~~>*/q = 1
 		`),
 	)
 }

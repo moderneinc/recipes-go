@@ -18,6 +18,10 @@ func TestUseDescriptivePackageNameUtils(t *testing.T) {
 			package utils
 
 			func Helper() {}
+		`, `
+			package /*~~(package name is too generic; consider a more descriptive name)~~>*/utils
+
+			func Helper() {}
 		`),
 	)
 }
@@ -27,6 +31,10 @@ func TestUseDescriptivePackageNameCommon(t *testing.T) {
 	spec.RewriteRun(t,
 		test.Golang(`
 			package common
+
+			func Do() {}
+		`, `
+			package /*~~(package name is too generic; consider a more descriptive name)~~>*/common
 
 			func Do() {}
 		`),

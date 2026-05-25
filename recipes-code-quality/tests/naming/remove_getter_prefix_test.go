@@ -27,7 +27,7 @@ func TestRemoveGetterPrefix(t *testing.T) {
 
 			type User struct{}
 
-			func (u *User) Name() string {
+			func (u *User) /*~~(callers of GetName must be updated to use Name)~~>*/Name() string {
 				return ""
 			}
 		`),

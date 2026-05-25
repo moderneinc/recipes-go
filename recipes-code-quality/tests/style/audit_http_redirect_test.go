@@ -22,6 +22,14 @@ func TestAuditHttpRedirect(t *testing.T) {
 			func handler(w http.ResponseWriter, r *http.Request) {
 				http.Redirect(w, r, "/login", 302)
 			}
+		`, `
+			package main
+
+			import "net/http"
+
+			func handler(w http.ResponseWriter, r *http.Request) {/*~~(review redirect target and status code)~~>*/
+				http.Redirect(w, r, "/login", 302)
+			}
 		`),
 	)
 }

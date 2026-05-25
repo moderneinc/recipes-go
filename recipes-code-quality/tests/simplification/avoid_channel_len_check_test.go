@@ -20,6 +20,12 @@ func TestAvoidChannelLenCheckEqualZero(t *testing.T) {
 			func f(ch chan int) bool {
 				return len(ch) == 0
 			}
+		`, `
+			package main
+
+			func f(ch chan int) bool {
+				return/*~~(channel length check is racy; the value can change between check and send/receive)~~>*/ len(ch) == 0
+			}
 		`),
 	)
 }
@@ -32,6 +38,12 @@ func TestAvoidChannelLenCheckGreaterZero(t *testing.T) {
 
 			func f(ch chan int) bool {
 				return len(ch) > 0
+			}
+		`, `
+			package main
+
+			func f(ch chan int) bool {
+				return/*~~(channel length check is racy; the value can change between check and send/receive)~~>*/ len(ch) > 0
 			}
 		`),
 	)

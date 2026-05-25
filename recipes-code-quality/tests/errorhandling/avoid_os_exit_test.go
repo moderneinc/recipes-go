@@ -22,6 +22,14 @@ func TestAvoidOsExit(t *testing.T) {
 			func main() {
 				os.Exit(1)
 			}
+		`, `
+			package main
+
+			import "os"
+
+			func main() {/*~~(os.Exit bypasses deferred functions and cleanup)~~>*/
+				os.Exit(1)
+			}
 		`),
 	)
 }
