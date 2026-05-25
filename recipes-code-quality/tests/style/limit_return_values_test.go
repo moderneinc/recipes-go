@@ -20,6 +20,12 @@ func TestLimitReturnValues(t *testing.T) {
 			func f() (int, int, int, int) {
 				return 1, 2, 3, 4
 			}
+		`, `
+			package main
+
+			func /*~~(function has too many return values)~~>*/f() (int, int, int, int) {
+				return 1, 2, 3, 4
+			}
 		`),
 	)
 }

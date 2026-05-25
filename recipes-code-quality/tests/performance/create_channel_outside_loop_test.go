@@ -23,6 +23,15 @@ func TestFindChannelCreateInForLoop(t *testing.T) {
 					_ = ch
 				}
 			}
+		`, `
+			package main
+
+			func f() {
+				for i := 0; i < 10; i++ {
+					ch :=/*~~(channel creation in loop; consider creating the channel once before the loop)~~>*/ make(chan int)
+					_ = ch
+				}
+			}
 		`),
 	)
 }
@@ -36,6 +45,15 @@ func TestFindChannelCreateInRangeLoop(t *testing.T) {
 			func f(items []string) {
 				for range items {
 					ch := make(chan string)
+					_ = ch
+				}
+			}
+		`, `
+			package main
+
+			func f(items []string) {
+				for range items {
+					ch :=/*~~(channel creation in loop; consider creating the channel once before the loop)~~>*/ make(chan string)
 					_ = ch
 				}
 			}

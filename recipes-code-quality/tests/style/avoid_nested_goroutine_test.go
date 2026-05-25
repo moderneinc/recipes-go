@@ -22,6 +22,14 @@ func TestAvoidNestedGoroutine(t *testing.T) {
 					go doMore()
 				}()
 			}
+		`, `
+			package main
+
+			func f() {
+				go func() {
+					/*~~(nested goroutine; consider restructuring to avoid goroutines inside goroutines)~~>*/go doMore()
+				}()
+			}
 		`),
 	)
 }

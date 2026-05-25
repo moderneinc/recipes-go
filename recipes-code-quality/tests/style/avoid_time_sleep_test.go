@@ -22,6 +22,14 @@ func TestAvoidTimeSleep(t *testing.T) {
 			func f() {
 				time.Sleep(time.Second)
 			}
+		`, `
+			package main
+
+			import "time"
+
+			func f() {/*~~(consider using tickers, timers, or context-based synchronization)~~>*/
+				time.Sleep(time.Second)
+			}
 		`),
 	)
 }
@@ -35,6 +43,14 @@ func TestAvoidTimeSleepDuration(t *testing.T) {
 			import "time"
 
 			func f() {
+				time.Sleep(100 * time.Millisecond)
+			}
+		`, `
+			package main
+
+			import "time"
+
+			func f() {/*~~(consider using tickers, timers, or context-based synchronization)~~>*/
 				time.Sleep(100 * time.Millisecond)
 			}
 		`),

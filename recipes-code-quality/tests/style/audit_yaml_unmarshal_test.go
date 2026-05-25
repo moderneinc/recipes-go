@@ -24,6 +24,16 @@ func TestAuditYamlUnmarshal(t *testing.T) {
 				var out map[string]string
 				_ = yaml.Unmarshal(data, &out)
 			}
+		`, `
+			package main
+
+			import "gopkg.in/yaml.v3"
+
+			func f() {
+				data := []byte("key: value")
+				var out map[string]string
+				_ =/*~~(yaml.Unmarshal() call; validate input carefully)~~>*/ yaml.Unmarshal(data, &out)
+			}
 		`),
 	)
 }

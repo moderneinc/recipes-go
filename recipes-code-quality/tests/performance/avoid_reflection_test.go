@@ -22,6 +22,14 @@ func TestAvoidReflectionTypeOf(t *testing.T) {
 			func f(x interface{}) {
 				_ = reflect.TypeOf(x)
 			}
+		`, `
+			package main
+
+			import "reflect"
+
+			func f(x interface{}) {
+				_ =/*~~(reflection is slow; avoid in performance-sensitive code)~~>*/ reflect.TypeOf(x)
+			}
 		`),
 	)
 }
@@ -36,6 +44,14 @@ func TestAvoidReflectionValueOf(t *testing.T) {
 
 			func f(x interface{}) {
 				_ = reflect.ValueOf(x)
+			}
+		`, `
+			package main
+
+			import "reflect"
+
+			func f(x interface{}) {
+				_ =/*~~(reflection is slow; avoid in performance-sensitive code)~~>*/ reflect.ValueOf(x)
 			}
 		`),
 	)

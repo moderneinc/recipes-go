@@ -42,6 +42,17 @@ func TestFindJsonUnmarshalInClassicForLoop(t *testing.T) {
 					_ = json.Unmarshal(data[i], &v)
 				}
 			}
+		`, `
+			package main
+
+			import "encoding/json"
+
+			func f(data [][]byte) {
+				for i := 0; i < len(data); i++ {
+					var v interface{}
+					_ =/*~~(json marshal/unmarshal in loop; consider using a pre-allocated encoder/decoder)~~>*/ json.Unmarshal(data[i], &v)
+				}
+			}
 		`),
 	)
 }

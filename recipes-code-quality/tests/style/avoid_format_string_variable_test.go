@@ -22,6 +22,14 @@ func TestAvoidFormatStringVariable(t *testing.T) {
 			func f(userInput string) {
 				_ = fmt.Sprintf(userInput)
 			}
+		`, `
+			package main
+
+			import "fmt"
+
+			func f(userInput string) {
+				_ =/*~~(format string is a variable, not a literal; potential format string vulnerability)~~>*/ fmt.Sprintf(userInput)
+			}
 		`),
 	)
 }

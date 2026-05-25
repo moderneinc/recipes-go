@@ -25,6 +25,17 @@ func TestFindLockInForLoop(t *testing.T) {
 					mu.Unlock()
 				}
 			}
+		`, `
+			package main
+
+			import "sync"
+
+			func f(mu *sync.Mutex) {
+				for i := 0; i < 10; i++ {/*~~(lock acquisition in loop; consider locking once outside the loop)~~>*/
+					mu.Lock()
+					mu.Unlock()
+				}
+			}
 		`),
 	)
 }
@@ -39,6 +50,17 @@ func TestFindRLockInRangeLoop(t *testing.T) {
 
 			func f(mu *sync.RWMutex, items []string) {
 				for range items {
+					mu.RLock()
+					mu.RUnlock()
+				}
+			}
+		`, `
+			package main
+
+			import "sync"
+
+			func f(mu *sync.RWMutex, items []string) {
+				for range items {/*~~(lock acquisition in loop; consider locking once outside the loop)~~>*/
 					mu.RLock()
 					mu.RUnlock()
 				}

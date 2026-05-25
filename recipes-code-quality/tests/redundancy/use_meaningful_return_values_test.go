@@ -20,6 +20,12 @@ func TestUseMeaningfulReturnValues(t *testing.T) {
 			func f() (error, error) {
 				return nil, nil
 			}
+		`, `
+			package main
+
+			func f() (error, error) {
+				/*~~(all return values are nil; possible missing error or result)~~>*/return nil, nil
+			}
 		`),
 	)
 }

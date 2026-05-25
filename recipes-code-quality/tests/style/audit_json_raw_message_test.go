@@ -23,6 +23,15 @@ func TestAuditJsonRawMessage(t *testing.T) {
 				var raw json.RawMessage
 				_ = raw
 			}
+		`, `
+			package main
+
+			import "encoding/json"
+
+			func f() {
+				var raw/*~~(json.RawMessage defers parsing; review for correctness)~~>*/ json.RawMessage
+				_ = raw
+			}
 		`),
 	)
 }

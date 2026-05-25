@@ -18,6 +18,10 @@ func TestAvoidGlobalVariable(t *testing.T) {
 			package main
 
 			var x = 1
+		`, `
+			package main
+
+			/*~~(avoid global variable)~~>*/var x = 1
 		`),
 	)
 }

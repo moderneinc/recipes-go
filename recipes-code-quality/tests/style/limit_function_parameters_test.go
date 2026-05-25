@@ -20,6 +20,12 @@ func TestLimitFunctionParameters(t *testing.T) {
 			func f(a int, b int, c int, d int, e int, g int) {
 				_ = a + b + c + d + e + g
 			}
+		`, `
+			package main
+
+			func /*~~(function has too many parameters)~~>*/f(a int, b int, c int, d int, e int, g int) {
+				_ = a + b + c + d + e + g
+			}
 		`),
 	)
 }
