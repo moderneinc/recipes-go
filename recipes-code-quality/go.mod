@@ -2,7 +2,7 @@ module github.com/moderneinc/recipes-go/recipes-code-quality
 
 go 1.25.0
 
-require github.com/openrewrite/rewrite/rewrite-go v0.0.4
+require github.com/openrewrite/rewrite/rewrite-go v0.0.5
 
 require (
 	github.com/google/uuid v1.6.0
