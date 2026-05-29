@@ -6,7 +6,7 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -34,14 +34,14 @@ type auditContextBackgroundVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *auditContextBackgroundVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p any) tree.J {
-	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*tree.MethodInvocation)
+func (v *auditContextBackgroundVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	if mi.Select == nil {
 		return mi
 	}
 
-	ident, ok := mi.Select.Element.(*tree.Identifier)
+	ident, ok := mi.Select.Element.(*java.Identifier)
 	if !ok || ident.Name != "context" {
 		return mi
 	}
@@ -50,6 +50,6 @@ func (v *auditContextBackgroundVisitor) VisitMethodInvocation(mi *tree.MethodInv
 		return mi
 	}
 
-	mi = mi.WithMarkers(tree.MarkupInfo(mi.Markers, "context.Background() call; consider using a passed context instead"))
+	mi = mi.WithMarkers(java.MarkupInfo(mi.Markers, "context.Background() call; consider using a passed context instead"))
 	return mi
 }

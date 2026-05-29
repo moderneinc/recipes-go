@@ -10,7 +10,7 @@ import (
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -46,8 +46,8 @@ type preferRawStringRegexVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *preferRawStringRegexVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p any) tree.J {
-	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*tree.MethodInvocation)
+func (v *preferRawStringRegexVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	if !regexpCompileMatcher.Matches(mi) && !regexpMustCompileMatcher.Matches(mi) {
 		return mi
@@ -60,8 +60,8 @@ func (v *preferRawStringRegexVisitor) VisitMethodInvocation(mi *tree.MethodInvoc
 	}
 
 	firstArg := args[0].Element
-	lit, ok := firstArg.(*tree.Literal)
-	if !ok || lit.Kind != tree.StringLiteral {
+	lit, ok := firstArg.(*java.Literal)
+	if !ok || lit.Kind != java.StringLiteral {
 		return mi
 	}
 
@@ -93,9 +93,9 @@ func (v *preferRawStringRegexVisitor) VisitMethodInvocation(mi *tree.MethodInvoc
 	newLit.Source = newSource
 	newLit.Value = unquoted
 
-	newArgs := make([]tree.RightPadded[tree.Expression], len(args))
+	newArgs := make([]java.RightPadded[java.Expression], len(args))
 	copy(newArgs, args)
-	newArgs[0] = tree.RightPadded[tree.Expression]{Element: &newLit, After: args[0].After, Markers: args[0].Markers}
+	newArgs[0] = java.RightPadded[java.Expression]{Element: &newLit, After: args[0].After, Markers: args[0].Markers}
 
 	newMi := *mi
 	newMi.Arguments.Elements = newArgs

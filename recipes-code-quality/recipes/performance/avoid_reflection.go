@@ -6,7 +6,7 @@ package performance
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -33,14 +33,14 @@ type avoidReflectionVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *avoidReflectionVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p any) tree.J {
-	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*tree.MethodInvocation)
+func (v *avoidReflectionVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	if mi.Select == nil {
 		return mi
 	}
 
-	ident, ok := mi.Select.Element.(*tree.Identifier)
+	ident, ok := mi.Select.Element.(*java.Identifier)
 	if !ok || ident.Name != "reflect" {
 		return mi
 	}
@@ -50,7 +50,7 @@ func (v *avoidReflectionVisitor) VisitMethodInvocation(mi *tree.MethodInvocation
 	}
 
 	mi = mi.WithMarkers(
-		tree.MarkupInfo(mi.Markers, "reflection is slow; avoid in performance-sensitive code"),
+		java.MarkupInfo(mi.Markers, "reflection is slow; avoid in performance-sensitive code"),
 	)
 	return mi
 }

@@ -6,7 +6,7 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -35,10 +35,10 @@ type ensurePreparedStatementClosedVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *ensurePreparedStatementClosedVisitor) VisitBlock(block *tree.Block, p any) tree.J {
-	block = v.GoVisitor.VisitBlock(block, p).(*tree.Block)
+func (v *ensurePreparedStatementClosedVisitor) VisitBlock(block *java.Block, p any) java.J {
+	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
 
-	var newStmts []tree.RightPadded[tree.Statement]
+	var newStmts []java.RightPadded[java.Statement]
 	changed := false
 
 	for i, rp := range block.Statements {
@@ -49,7 +49,7 @@ func (v *ensurePreparedStatementClosedVisitor) VisitBlock(block *tree.Block, p a
 				continue
 			}
 			deferStmt := buildDeferMethodCall(varName, "Close", rp.Element)
-			newStmts = append(newStmts, tree.RightPadded[tree.Statement]{Element: deferStmt})
+			newStmts = append(newStmts, java.RightPadded[java.Statement]{Element: deferStmt})
 			changed = true
 		}
 	}
@@ -61,7 +61,7 @@ func (v *ensurePreparedStatementClosedVisitor) VisitBlock(block *tree.Block, p a
 }
 
 // isDbPrepare returns true if the method invocation is *.Prepare().
-func isDbPrepare(mi *tree.MethodInvocation) bool {
+func isDbPrepare(mi *java.MethodInvocation) bool {
 	if mi.Select == nil {
 		return false
 	}

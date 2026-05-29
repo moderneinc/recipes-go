@@ -8,7 +8,8 @@ import (
 	"strings"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -36,11 +37,11 @@ type simplifySelectDefaultOnlyVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *simplifySelectDefaultOnlyVisitor) VisitSwitch(sw *tree.Switch, p any) tree.J {
-	sw = v.GoVisitor.VisitSwitch(sw, p).(*tree.Switch)
+func (v *simplifySelectDefaultOnlyVisitor) VisitSwitch(sw *java.Switch, p any) java.J {
+	sw = v.GoVisitor.VisitSwitch(sw, p).(*java.Switch)
 
 	// Only select statements (Switch with SelectStmt marker)
-	if !tree.HasMarker[tree.SelectStmt](sw.Markers) {
+	if !java.HasMarker[golang.SelectStmt](sw.Markers) {
 		return sw
 	}
 
@@ -49,10 +50,10 @@ func (v *simplifySelectDefaultOnlyVisitor) VisitSwitch(sw *tree.Switch, p any) t
 	}
 
 	// Find the single default CommClause.
-	var defaultClause *tree.CommClause
+	var defaultClause *golang.CommClause
 	clauses := 0
 	for _, stmt := range sw.Body.Statements {
-		cc, ok := stmt.Element.(*tree.CommClause)
+		cc, ok := stmt.Element.(*golang.CommClause)
 		if !ok {
 			continue
 		}
@@ -69,7 +70,7 @@ func (v *simplifySelectDefaultOnlyVisitor) VisitSwitch(sw *tree.Switch, p any) t
 
 	// Extract the body statements from the default clause.
 	if len(defaultClause.Body) == 0 {
-		return &tree.Empty{Prefix: sw.Prefix}
+		return &java.Empty{Prefix: sw.Prefix}
 	}
 
 	// Dedent the body statements since they are being lifted out of the select block.
@@ -79,20 +80,20 @@ func (v *simplifySelectDefaultOnlyVisitor) VisitSwitch(sw *tree.Switch, p any) t
 	if len(defaultClause.Body) == 1 {
 		stmt := defaultClause.Body[0].Element
 		result := dedent.Visit(stmt, p)
-		return result.(tree.Statement)
+		return result.(java.Statement)
 	}
 
 	// For multiple statements, return a Block without braces containing the body.
-	stmts := make([]tree.RightPadded[tree.Statement], len(defaultClause.Body))
+	stmts := make([]java.RightPadded[java.Statement], len(defaultClause.Body))
 	for i, rp := range defaultClause.Body {
-		dedented := dedent.Visit(rp.Element, p).(tree.Statement)
-		stmts[i] = tree.RightPadded[tree.Statement]{
+		dedented := dedent.Visit(rp.Element, p).(java.Statement)
+		stmts[i] = java.RightPadded[java.Statement]{
 			Element: dedented,
 			After:   rp.After,
 			Markers: rp.Markers,
 		}
 	}
-	return &tree.Block{
+	return &java.Block{
 		Prefix:     sw.Prefix,
 		Statements: stmts,
 	}
@@ -103,7 +104,7 @@ type selectDedentVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *selectDedentVisitor) VisitSpace(space tree.Space, p any) tree.Space {
+func (v *selectDedentVisitor) VisitSpace(space java.Space, p any) java.Space {
 	if strings.Contains(space.Whitespace, "\t") {
 		space.Whitespace = strings.Replace(space.Whitespace, "\t", "", 1)
 	}

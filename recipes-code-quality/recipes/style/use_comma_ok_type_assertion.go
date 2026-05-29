@@ -7,7 +7,8 @@ package style
 import (
 	"github.com/google/uuid"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -37,34 +38,34 @@ type useCommaOkTypeAssertionVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *useCommaOkTypeAssertionVisitor) VisitBlock(block *tree.Block, p any) tree.J {
-	block = v.GoVisitor.VisitBlock(block, p).(*tree.Block)
+func (v *useCommaOkTypeAssertionVisitor) VisitBlock(block *java.Block, p any) java.J {
+	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
 
 	changed := false
-	var newStmts []tree.RightPadded[tree.Statement]
+	var newStmts []java.RightPadded[java.Statement]
 
 	for _, rp := range block.Statements {
-		assign, ok := rp.Element.(*tree.Assignment)
+		assign, ok := rp.Element.(*java.Assignment)
 		if !ok {
 			newStmts = append(newStmts, rp)
 			continue
 		}
 
 		// Must be a short var decl (:=)
-		if !tree.HasMarker[tree.ShortVarDecl](assign.Markers) {
+		if !java.HasMarker[golang.ShortVarDecl](assign.Markers) {
 			newStmts = append(newStmts, rp)
 			continue
 		}
 
 		// RHS must be a TypeCast (type assertion)
-		_, isCast := assign.Value.Element.(*tree.TypeCast)
+		_, isCast := assign.Value.Element.(*java.TypeCast)
 		if !isCast {
 			newStmts = append(newStmts, rp)
 			continue
 		}
 
 		// LHS must be a single identifier (not blank _)
-		lhsIdent, ok := assign.Variable.(*tree.Identifier)
+		lhsIdent, ok := assign.Variable.(*java.Identifier)
 		if !ok || lhsIdent.Name == "_" {
 			newStmts = append(newStmts, rp)
 			continue
@@ -73,20 +74,20 @@ func (v *useCommaOkTypeAssertionVisitor) VisitBlock(block *tree.Block, p any) tr
 		changed = true
 
 		// Build: v, ok := x.(T)
-		ma := &tree.MultiAssignment{
+		ma := &golang.MultiAssignment{
 			ID:      uuid.New(),
 			Prefix:  assign.Prefix,
 			Markers: assign.Markers,
-			Variables: []tree.RightPadded[tree.Expression]{
+			Variables: []java.RightPadded[java.Expression]{
 				{Element: assign.Variable},
-				{Element: &tree.Identifier{
+				{Element: &java.Identifier{
 					ID:     uuid.New(),
-					Prefix: tree.SingleSpace,
+					Prefix: java.SingleSpace,
 					Name:   "ok",
 				}},
 			},
-			Operator: tree.LeftPadded[tree.Space]{Before: assign.Value.Before, Element: tree.EmptySpace},
-			Values: []tree.RightPadded[tree.Expression]{
+			Operator: java.LeftPadded[java.Space]{Before: assign.Value.Before, Element: java.EmptySpace},
+			Values: []java.RightPadded[java.Expression]{
 				{Element: assign.Value.Element},
 			},
 		}
@@ -94,27 +95,27 @@ func (v *useCommaOkTypeAssertionVisitor) VisitBlock(block *tree.Block, p any) tr
 		// Build: _ = ok (to suppress unused variable)
 		// The indent lives on the variable identifier, not on Assignment.Prefix.
 		stmtIndent := lhsIdent.Prefix
-		suppressOk := &tree.Assignment{
+		suppressOk := &java.Assignment{
 			ID:     uuid.New(),
 			Prefix: assign.Prefix,
-			Variable: &tree.Identifier{
+			Variable: &java.Identifier{
 				ID:     uuid.New(),
 				Prefix: stmtIndent,
 				Name:   "_",
 			},
-			Value: tree.LeftPadded[tree.Expression]{
-				Before: tree.SingleSpace,
-				Element: &tree.Identifier{
+			Value: java.LeftPadded[java.Expression]{
+				Before: java.SingleSpace,
+				Element: &java.Identifier{
 					ID:     uuid.New(),
-					Prefix: tree.SingleSpace,
+					Prefix: java.SingleSpace,
 					Name:   "ok",
 				},
 			},
 		}
 
 		newStmts = append(newStmts,
-			tree.RightPadded[tree.Statement]{Element: ma, After: rp.After},
-			tree.RightPadded[tree.Statement]{Element: suppressOk, After: rp.After, Markers: rp.Markers},
+			java.RightPadded[java.Statement]{Element: ma, After: rp.After},
+			java.RightPadded[java.Statement]{Element: suppressOk, After: rp.After, Markers: rp.Markers},
 		)
 	}
 

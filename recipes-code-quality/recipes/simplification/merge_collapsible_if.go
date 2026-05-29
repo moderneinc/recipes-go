@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -46,8 +46,8 @@ type mergeCollapsibleIfVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *mergeCollapsibleIfVisitor) VisitIf(ifStmt *tree.If, p any) tree.J {
-	ifStmt = v.GoVisitor.VisitIf(ifStmt, p).(*tree.If)
+func (v *mergeCollapsibleIfVisitor) VisitIf(ifStmt *java.If, p any) java.J {
+	ifStmt = v.GoVisitor.VisitIf(ifStmt, p).(*java.If)
 
 	// Outer if must not have an else clause or init statement.
 	if ifStmt.ElsePart != nil || ifStmt.Init != nil {
@@ -60,7 +60,7 @@ func (v *mergeCollapsibleIfVisitor) VisitIf(ifStmt *tree.If, p any) tree.J {
 	}
 
 	// That single statement must be another if.
-	innerIf, ok := ifStmt.Then.Statements[0].Element.(*tree.If)
+	innerIf, ok := ifStmt.Then.Statements[0].Element.(*java.If)
 	if !ok {
 		return ifStmt
 	}
@@ -75,15 +75,15 @@ func (v *mergeCollapsibleIfVisitor) VisitIf(ifStmt *tree.If, p any) tree.J {
 	outerCond := maybeWrapOr(ifStmt.Condition)
 	innerCond := maybeWrapOr(innerIf.Condition)
 
-	combined := &tree.Binary{
+	combined := &java.Binary{
 		Left:     setExprPrefix(outerCond, exprPrefix(ifStmt.Condition)),
-		Operator: tree.LeftPadded[tree.BinaryOperator]{Before: tree.SingleSpace, Element: tree.LogicalAnd},
-		Right:    setExprPrefix(innerCond, tree.SingleSpace),
+		Operator: java.LeftPadded[java.BinaryOperator]{Before: java.SingleSpace, Element: java.LogicalAnd},
+		Right:    setExprPrefix(innerCond, java.SingleSpace),
 	}
 
 	// Dedent the inner body by one level since it's moving up.
 	dedent := visitor.Init(&dedentCollapsedVisitor{})
-	newBody := dedent.Visit(innerIf.Then, p).(*tree.Block)
+	newBody := dedent.Visit(innerIf.Then, p).(*java.Block)
 
 	return ifStmt.WithCondition(combined).WithThen(newBody)
 }
@@ -94,7 +94,7 @@ type dedentCollapsedVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *dedentCollapsedVisitor) VisitSpace(space tree.Space, p any) tree.Space {
+func (v *dedentCollapsedVisitor) VisitSpace(space java.Space, p any) java.Space {
 	if strings.Contains(space.Whitespace, "\t") {
 		space.Whitespace = strings.Replace(space.Whitespace, "\t", "", 1)
 	}
@@ -103,15 +103,15 @@ func (v *dedentCollapsedVisitor) VisitSpace(space tree.Space, p any) tree.Space 
 
 // maybeWrapOr wraps the expression in parentheses if it is a top-level || binary,
 // because && binds tighter than || in Go.
-func maybeWrapOr(expr tree.Expression) tree.Expression {
-	bin, ok := expr.(*tree.Binary)
-	if !ok || bin.Operator.Element != tree.LogicalOr {
+func maybeWrapOr(expr java.Expression) java.Expression {
+	bin, ok := expr.(*java.Binary)
+	if !ok || bin.Operator.Element != java.LogicalOr {
 		return expr
 	}
-	return &tree.Parentheses{
+	return &java.Parentheses{
 		Prefix: exprPrefix(expr),
-		Tree: tree.RightPadded[tree.Expression]{
-			Element: setExprPrefix(expr, tree.Space{}),
+		Tree: java.RightPadded[java.Expression]{
+			Element: setExprPrefix(expr, java.Space{}),
 		},
 	}
 }

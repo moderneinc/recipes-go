@@ -6,7 +6,7 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -42,8 +42,8 @@ type useParameterizedSqlQueryVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *useParameterizedSqlQueryVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p any) tree.J {
-	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*tree.MethodInvocation)
+func (v *useParameterizedSqlQueryVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	if mi.Select == nil {
 		return mi
@@ -60,11 +60,11 @@ func (v *useParameterizedSqlQueryVisitor) VisitMethodInvocation(mi *tree.MethodI
 
 	// Check if the first argument is a binary expression with Add operator (string concatenation)
 	firstArg := mi.Arguments.Elements[0].Element
-	bin, ok := firstArg.(*tree.Binary)
-	if !ok || bin.Operator.Element != tree.Add {
+	bin, ok := firstArg.(*java.Binary)
+	if !ok || bin.Operator.Element != java.Add {
 		return mi
 	}
 
-	mi = mi.WithMarkers(tree.MarkupWarn(mi.Markers, "possible SQL injection via string concatenation"))
+	mi = mi.WithMarkers(java.MarkupWarn(mi.Markers, "possible SQL injection via string concatenation"))
 	return mi
 }

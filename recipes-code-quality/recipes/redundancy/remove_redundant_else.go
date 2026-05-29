@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -36,14 +36,14 @@ type removeRedundantElseVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *removeRedundantElseVisitor) VisitBlock(block *tree.Block, p any) tree.J {
-	block = v.GoVisitor.VisitBlock(block, p).(*tree.Block)
+func (v *removeRedundantElseVisitor) VisitBlock(block *java.Block, p any) java.J {
+	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
 
-	var newStmts []tree.RightPadded[tree.Statement]
+	var newStmts []java.RightPadded[java.Statement]
 	changed := false
 
 	for _, rp := range block.Statements {
-		ifStmt, ok := rp.Element.(*tree.If)
+		ifStmt, ok := rp.Element.(*java.If)
 		if !ok || ifStmt.ElsePart == nil {
 			newStmts = append(newStmts, rp)
 			continue
@@ -57,14 +57,14 @@ func (v *removeRedundantElseVisitor) VisitBlock(block *tree.Block, p any) tree.J
 		// Keep the if without else.
 		noElse := *ifStmt
 		noElse.ElsePart = nil
-		newStmts = append(newStmts, tree.RightPadded[tree.Statement]{Element: &noElse, After: rp.After})
+		newStmts = append(newStmts, java.RightPadded[java.Statement]{Element: &noElse, After: rp.After})
 
 		// Extract else body statements as siblings, dedenting by one level.
 		dedent := visitor.Init(&dedentElseVisitor{})
-		if elseBlock, ok := ifStmt.ElsePart.Element.(*tree.Block); ok {
+		if elseBlock, ok := ifStmt.ElsePart.Element.(*java.Block); ok {
 			for _, s := range elseBlock.Statements {
-				dedented := dedent.Visit(s.Element.(tree.Tree), p).(tree.Statement)
-				newStmts = append(newStmts, tree.RightPadded[tree.Statement]{Element: dedented, After: s.After})
+				dedented := dedent.Visit(s.Element.(java.Tree), p).(java.Statement)
+				newStmts = append(newStmts, java.RightPadded[java.Statement]{Element: dedented, After: s.After})
 			}
 		}
 
@@ -83,14 +83,14 @@ type dedentElseVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *dedentElseVisitor) VisitSpace(space tree.Space, p any) tree.Space {
+func (v *dedentElseVisitor) VisitSpace(space java.Space, p any) java.Space {
 	if strings.Contains(space.Whitespace, "\t") {
 		space.Whitespace = strings.Replace(space.Whitespace, "\t", "", 1)
 	}
 	return space
 }
 
-func endsWithReturn(block *tree.Block) bool {
+func endsWithReturn(block *java.Block) bool {
 	if block == nil {
 		return false
 	}
@@ -98,6 +98,6 @@ func endsWithReturn(block *tree.Block) bool {
 	if len(stmts) == 0 {
 		return false
 	}
-	_, isReturn := stmts[len(stmts)-1].Element.(*tree.Return)
+	_, isReturn := stmts[len(stmts)-1].Element.(*java.Return)
 	return isReturn
 }

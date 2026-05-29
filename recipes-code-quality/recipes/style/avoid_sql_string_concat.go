@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -40,22 +40,22 @@ type avoidSqlStringConcatVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *avoidSqlStringConcatVisitor) VisitBinary(bin *tree.Binary, p any) tree.J {
-	bin = v.GoVisitor.VisitBinary(bin, p).(*tree.Binary)
+func (v *avoidSqlStringConcatVisitor) VisitBinary(bin *java.Binary, p any) java.J {
+	bin = v.GoVisitor.VisitBinary(bin, p).(*java.Binary)
 
-	if bin.Operator.Element != tree.Add {
+	if bin.Operator.Element != java.Add {
 		return bin
 	}
 
-	lit, ok := bin.Left.(*tree.Literal)
-	if !ok || lit.Kind != tree.StringLiteral {
+	lit, ok := bin.Left.(*java.Literal)
+	if !ok || lit.Kind != java.StringLiteral {
 		return bin
 	}
 
 	upper := strings.ToUpper(lit.Source)
 	for _, kw := range sqlKeywords {
 		if strings.Contains(upper, kw) {
-			bin = bin.WithMarkers(tree.MarkupWarn(bin.Markers, "possible SQL injection via string concatenation"))
+			bin = bin.WithMarkers(java.MarkupWarn(bin.Markers, "possible SQL injection via string concatenation"))
 			return bin
 		}
 	}

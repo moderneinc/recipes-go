@@ -6,7 +6,8 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -34,14 +35,14 @@ type limitReturnValuesVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *limitReturnValuesVisitor) VisitMethodDeclaration(md *tree.MethodDeclaration, p any) tree.J {
-	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*tree.MethodDeclaration)
+func (v *limitReturnValuesVisitor) VisitMethodDeclaration(md *java.MethodDeclaration, p any) java.J {
+	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*java.MethodDeclaration)
 
 	if md.Name == nil || md.ReturnType == nil {
 		return md
 	}
 
-	tl, ok := md.ReturnType.(*tree.TypeList)
+	tl, ok := md.ReturnType.(*golang.TypeList)
 	if !ok {
 		// Single return value -- not a problem.
 		return md
@@ -49,7 +50,7 @@ func (v *limitReturnValuesVisitor) VisitMethodDeclaration(md *tree.MethodDeclara
 
 	count := 0
 	for _, elem := range tl.Types.Elements {
-		if _, isEmpty := elem.Element.(*tree.Empty); !isEmpty {
+		if _, isEmpty := elem.Element.(*java.Empty); !isEmpty {
 			count++
 		}
 	}
@@ -59,7 +60,7 @@ func (v *limitReturnValuesVisitor) VisitMethodDeclaration(md *tree.MethodDeclara
 	}
 
 	md = md.WithName(md.Name.WithMarkers(
-		tree.MarkupInfo(md.Name.Markers, "function has too many return values"),
+		java.MarkupInfo(md.Name.Markers, "function has too many return values"),
 	))
 	return md
 }

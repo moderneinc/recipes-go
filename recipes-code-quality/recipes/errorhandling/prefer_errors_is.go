@@ -6,7 +6,7 @@ package errorhandling
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -35,10 +35,10 @@ type preferErrorsIsVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *preferErrorsIsVisitor) VisitBinary(bin *tree.Binary, p any) tree.J {
-	bin = v.GoVisitor.VisitBinary(bin, p).(*tree.Binary)
+func (v *preferErrorsIsVisitor) VisitBinary(bin *java.Binary, p any) java.J {
+	bin = v.GoVisitor.VisitBinary(bin, p).(*java.Binary)
 
-	if bin.Operator.Element != tree.Equal && bin.Operator.Element != tree.NotEqual {
+	if bin.Operator.Element != java.Equal && bin.Operator.Element != java.NotEqual {
 		return bin
 	}
 
@@ -53,7 +53,7 @@ func (v *preferErrorsIsVisitor) VisitBinary(bin *tree.Binary, p any) tree.J {
 		return bin
 	}
 
-	var errExpr, sentinel tree.Expression
+	var errExpr, sentinel java.Expression
 	if rightIsErr {
 		errExpr = bin.Left
 		sentinel = bin.Right
@@ -70,44 +70,44 @@ func (v *preferErrorsIsVisitor) VisitBinary(bin *tree.Binary, p any) tree.J {
 	// Build errors.Is(err, sentinel) or !errors.Is(err, sentinel)
 	prefix := getLeadingPrefixExpr(bin)
 
-	errorsIdent := &tree.Identifier{Prefix: prefix, Name: "errors"}
-	isIdent := &tree.Identifier{Name: "Is"}
+	errorsIdent := &java.Identifier{Prefix: prefix, Name: "errors"}
+	isIdent := &java.Identifier{Name: "Is"}
 
 	errArg := stripExprPrefix(errExpr)
 	sentinelArg := stripExprPrefix(sentinel)
 	// Add space before second argument (after comma)
-	sentinelArgWithSpace := setExprPrefixLocal(sentinelArg, tree.Space{Whitespace: " "})
+	sentinelArgWithSpace := setExprPrefixLocal(sentinelArg, java.Space{Whitespace: " "})
 
-	isCall := &tree.MethodInvocation{
-		Select: &tree.RightPadded[tree.Expression]{Element: errorsIdent},
+	isCall := &java.MethodInvocation{
+		Select: &java.RightPadded[java.Expression]{Element: errorsIdent},
 		Name:   isIdent,
-		Arguments: tree.Container[tree.Expression]{
-			Elements: []tree.RightPadded[tree.Expression]{
+		Arguments: java.Container[java.Expression]{
+			Elements: []java.RightPadded[java.Expression]{
 				{Element: errArg},
 				{Element: sentinelArgWithSpace},
 			},
 		},
 	}
 
-	if bin.Operator.Element == tree.NotEqual {
-		return &tree.Unary{
+	if bin.Operator.Element == java.NotEqual {
+		return &java.Unary{
 			Prefix:   prefix,
-			Operator: tree.LeftPadded[tree.UnaryOperator]{Element: tree.Not},
-			Operand:  setMethodInvocationPrefix(isCall, tree.Space{}),
+			Operator: java.LeftPadded[java.UnaryOperator]{Element: java.Not},
+			Operand:  setMethodInvocationPrefix(isCall, java.Space{}),
 		}
 	}
 	return isCall
 }
 
-func isErrorSentinel(expr tree.Expression) bool {
+func isErrorSentinel(expr java.Expression) bool {
 	switch n := expr.(type) {
-	case *tree.Identifier:
+	case *java.Identifier:
 		if len(n.Name) >= 3 && n.Name[:3] == "Err" {
 			return true
 		}
 		// Known sentinels
 		return n.Name == "EOF"
-	case *tree.FieldAccess:
+	case *java.FieldAccess:
 		// e.g., io.EOF, os.ErrNotExist
 		ident := n.Name.Element
 		if len(ident.Name) >= 3 && ident.Name[:3] == "Err" {
@@ -118,51 +118,51 @@ func isErrorSentinel(expr tree.Expression) bool {
 	return false
 }
 
-func isNilIdentifier(expr tree.Expression) bool {
-	ident, ok := expr.(*tree.Identifier)
+func isNilIdentifier(expr java.Expression) bool {
+	ident, ok := expr.(*java.Identifier)
 	return ok && ident.Name == "nil"
 }
 
-func getLeadingPrefixExpr(bin *tree.Binary) tree.Space {
+func getLeadingPrefixExpr(bin *java.Binary) java.Space {
 	return getExprPrefix(bin.Left)
 }
 
-func getExprPrefix(expr tree.Expression) tree.Space {
+func getExprPrefix(expr java.Expression) java.Space {
 	switch n := expr.(type) {
-	case *tree.Identifier:
+	case *java.Identifier:
 		return n.Prefix
-	case *tree.Literal:
+	case *java.Literal:
 		return n.Prefix
-	case *tree.FieldAccess:
+	case *java.FieldAccess:
 		return getExprPrefix(n.Target)
-	case *tree.MethodInvocation:
+	case *java.MethodInvocation:
 		if n.Select != nil {
 			return getExprPrefix(n.Select.Element)
 		}
 		return getExprPrefix(n.Name)
 	default:
-		return tree.Space{}
+		return java.Space{}
 	}
 }
 
-func stripExprPrefix(expr tree.Expression) tree.Expression {
+func stripExprPrefix(expr java.Expression) java.Expression {
 	switch n := expr.(type) {
-	case *tree.Identifier:
-		return n.WithPrefix(tree.Space{})
-	case *tree.Literal:
-		return n.WithPrefix(tree.Space{})
-	case *tree.FieldAccess:
+	case *java.Identifier:
+		return n.WithPrefix(java.Space{})
+	case *java.Literal:
+		return n.WithPrefix(java.Space{})
+	case *java.FieldAccess:
 		return n.WithTarget(stripExprPrefix(n.Target))
 	default:
 		return expr
 	}
 }
 
-func setMethodInvocationPrefix(mi *tree.MethodInvocation, prefix tree.Space) tree.Expression {
+func setMethodInvocationPrefix(mi *java.MethodInvocation, prefix java.Space) java.Expression {
 	if mi.Select != nil {
 		sel := *mi.Select
 		sel.Element = setExprPrefixLocal(sel.Element, prefix)
-		return &tree.MethodInvocation{
+		return &java.MethodInvocation{
 			ID: mi.ID, Prefix: mi.Prefix, Markers: mi.Markers,
 			Select: &sel, Name: mi.Name, Arguments: mi.Arguments, MethodType: mi.MethodType,
 		}
@@ -170,13 +170,13 @@ func setMethodInvocationPrefix(mi *tree.MethodInvocation, prefix tree.Space) tre
 	return mi.WithPrefix(prefix)
 }
 
-func setExprPrefixLocal(expr tree.Expression, prefix tree.Space) tree.Expression {
+func setExprPrefixLocal(expr java.Expression, prefix java.Space) java.Expression {
 	switch n := expr.(type) {
-	case *tree.Identifier:
+	case *java.Identifier:
 		return n.WithPrefix(prefix)
-	case *tree.Literal:
+	case *java.Literal:
 		return n.WithPrefix(prefix)
-	case *tree.FieldAccess:
+	case *java.FieldAccess:
 		return n.WithTarget(setExprPrefixLocal(n.Target, prefix))
 	default:
 		return expr

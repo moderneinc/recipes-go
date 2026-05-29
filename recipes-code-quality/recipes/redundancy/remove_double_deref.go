@@ -6,7 +6,7 @@ package redundancy
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -34,31 +34,31 @@ type removeDoubleDerefVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *removeDoubleDerefVisitor) VisitUnary(unary *tree.Unary, p any) tree.J {
-	unary = v.GoVisitor.VisitUnary(unary, p).(*tree.Unary)
+func (v *removeDoubleDerefVisitor) VisitUnary(unary *java.Unary, p any) java.J {
+	unary = v.GoVisitor.VisitUnary(unary, p).(*java.Unary)
 
 	// Outer operator must be Deref (*).
-	if unary.Operator.Element != tree.Deref {
+	if unary.Operator.Element != java.Deref {
 		return unary
 	}
 
 	// Operand must be another Unary with operator AddressOf (&).
-	inner, ok := unary.Operand.(*tree.Unary)
-	if !ok || inner.Operator.Element != tree.AddressOf {
+	inner, ok := unary.Operand.(*java.Unary)
+	if !ok || inner.Operator.Element != java.AddressOf {
 		return unary
 	}
 
 	// Replace *&x with x, preserving the outer unary's prefix.
 	switch operand := inner.Operand.(type) {
-	case *tree.Identifier:
+	case *java.Identifier:
 		return operand.WithPrefix(unary.Prefix)
-	case *tree.MethodInvocation:
+	case *java.MethodInvocation:
 		return operand.WithPrefix(unary.Prefix)
-	case *tree.FieldAccess:
+	case *java.FieldAccess:
 		return operand.WithPrefix(unary.Prefix)
-	case *tree.Literal:
+	case *java.Literal:
 		return operand.WithPrefix(unary.Prefix)
-	case *tree.Parentheses:
+	case *java.Parentheses:
 		return operand.WithPrefix(unary.Prefix)
 	default:
 		return inner.Operand

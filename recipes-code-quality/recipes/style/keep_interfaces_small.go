@@ -6,7 +6,8 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -34,8 +35,8 @@ type keepInterfacesSmallVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *keepInterfacesSmallVisitor) VisitInterfaceType(it *tree.InterfaceType, p any) tree.J {
-	it = v.GoVisitor.VisitInterfaceType(it, p).(*tree.InterfaceType)
+func (v *keepInterfacesSmallVisitor) VisitInterfaceType(it *golang.InterfaceType, p any) java.J {
+	it = v.GoVisitor.VisitInterfaceType(it, p).(*golang.InterfaceType)
 
 	if it.Body == nil {
 		return it
@@ -43,7 +44,7 @@ func (v *keepInterfacesSmallVisitor) VisitInterfaceType(it *tree.InterfaceType, 
 
 	count := 0
 	for _, s := range it.Body.Statements {
-		if _, isEmpty := s.Element.(*tree.Empty); !isEmpty {
+		if _, isEmpty := s.Element.(*java.Empty); !isEmpty {
 			count++
 		}
 	}
@@ -52,6 +53,6 @@ func (v *keepInterfacesSmallVisitor) VisitInterfaceType(it *tree.InterfaceType, 
 		return it
 	}
 
-	it = it.WithMarkers(tree.MarkupInfo(it.Markers, "interface has too many methods"))
+	it = it.WithMarkers(java.MarkupInfo(it.Markers, "interface has too many methods"))
 	return it
 }

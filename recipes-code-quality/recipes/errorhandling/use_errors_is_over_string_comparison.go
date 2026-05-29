@@ -6,7 +6,7 @@ package errorhandling
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -37,10 +37,10 @@ type useErrorsIsOverStringComparisonVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *useErrorsIsOverStringComparisonVisitor) VisitBinary(bin *tree.Binary, p any) tree.J {
-	bin = v.GoVisitor.VisitBinary(bin, p).(*tree.Binary)
+func (v *useErrorsIsOverStringComparisonVisitor) VisitBinary(bin *java.Binary, p any) java.J {
+	bin = v.GoVisitor.VisitBinary(bin, p).(*java.Binary)
 
-	if bin.Operator.Element != tree.Equal && bin.Operator.Element != tree.NotEqual {
+	if bin.Operator.Element != java.Equal && bin.Operator.Element != java.NotEqual {
 		return bin
 	}
 
@@ -52,7 +52,7 @@ func (v *useErrorsIsOverStringComparisonVisitor) VisitBinary(bin *tree.Binary, p
 		return bin
 	}
 
-	var other tree.Expression
+	var other java.Expression
 	if leftIsErrorCall {
 		other = bin.Right
 	} else {
@@ -64,14 +64,14 @@ func (v *useErrorsIsOverStringComparisonVisitor) VisitBinary(bin *tree.Binary, p
 	}
 
 	bin = bin.WithMarkers(
-		tree.MarkupWarn(bin.Markers, "comparing error string is fragile; use errors.Is or errors.As"),
+		java.MarkupWarn(bin.Markers, "comparing error string is fragile; use errors.Is or errors.As"),
 	)
 	return bin
 }
 
 // isErrorMethodCall checks if an expression is a method call of the form x.Error().
-func isErrorMethodCall(expr tree.Expression) bool {
-	mi, ok := expr.(*tree.MethodInvocation)
+func isErrorMethodCall(expr java.Expression) bool {
+	mi, ok := expr.(*java.MethodInvocation)
 	if !ok {
 		return false
 	}
@@ -82,7 +82,7 @@ func isErrorMethodCall(expr tree.Expression) bool {
 }
 
 // isStringLiteral checks if an expression is a string Literal.
-func isStringLiteral(expr tree.Expression) bool {
-	lit, ok := expr.(*tree.Literal)
-	return ok && lit.Kind == tree.StringLiteral
+func isStringLiteral(expr java.Expression) bool {
+	lit, ok := expr.(*java.Literal)
+	return ok && lit.Kind == java.StringLiteral
 }

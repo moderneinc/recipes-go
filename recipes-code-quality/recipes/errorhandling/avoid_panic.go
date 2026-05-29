@@ -6,7 +6,7 @@ package errorhandling
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -33,8 +33,8 @@ type avoidPanicVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *avoidPanicVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p any) tree.J {
-	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*tree.MethodInvocation)
+func (v *avoidPanicVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	// Match: panic(...) — built-in, so no Select and Name == "panic".
 	if mi.Select != nil || mi.Name.Name != "panic" {
@@ -42,7 +42,7 @@ func (v *avoidPanicVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p a
 	}
 
 	mi = mi.WithMarkers(
-		tree.MarkupWarn(mi.Markers, "panic call found; consider returning an error instead"),
+		java.MarkupWarn(mi.Markers, "panic call found; consider returning an error instead"),
 	)
 	return mi
 }

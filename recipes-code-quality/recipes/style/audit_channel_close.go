@@ -6,7 +6,7 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -34,14 +34,14 @@ type auditChannelCloseVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *auditChannelCloseVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p any) tree.J {
-	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*tree.MethodInvocation)
+func (v *auditChannelCloseVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	// Match: close(...) — built-in, so no Select and Name == "close".
 	if mi.Select != nil || mi.Name.Name != "close" {
 		return mi
 	}
 
-	mi = mi.WithMarkers(tree.MarkupInfo(mi.Markers, "ensure channel is only closed by the sender"))
+	mi = mi.WithMarkers(java.MarkupInfo(mi.Markers, "ensure channel is only closed by the sender"))
 	return mi
 }

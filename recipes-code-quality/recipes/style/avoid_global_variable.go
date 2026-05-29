@@ -7,7 +7,8 @@ package style
 import (
 	"github.com/moderneinc/recipes-go/recipes-code-quality/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -40,21 +41,21 @@ type avoidGlobalVariableVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *avoidGlobalVariableVisitor) VisitCompilationUnit(cu *tree.CompilationUnit, p any) tree.J {
-	cu = v.GoVisitor.VisitCompilationUnit(cu, p).(*tree.CompilationUnit)
+func (v *avoidGlobalVariableVisitor) VisitCompilationUnit(cu *golang.CompilationUnit, p any) java.J {
+	cu = v.GoVisitor.VisitCompilationUnit(cu, p).(*golang.CompilationUnit)
 
 	changed := false
-	stmts := make([]tree.RightPadded[tree.Statement], len(cu.Statements))
+	stmts := make([]java.RightPadded[java.Statement], len(cu.Statements))
 	copy(stmts, cu.Statements)
 
 	for i, stmt := range stmts {
-		vd, ok := stmt.Element.(*tree.VariableDeclarations)
+		vd, ok := stmt.Element.(*java.VariableDeclarations)
 		if !ok {
 			continue
 		}
 		if isVarDecl(vd) {
-			marked := vd.WithMarkers(tree.MarkupInfo(vd.Markers, "avoid global variable"))
-			stmts[i] = tree.RightPadded[tree.Statement]{
+			marked := vd.WithMarkers(java.MarkupInfo(vd.Markers, "avoid global variable"))
+			stmts[i] = java.RightPadded[java.Statement]{
 				Element: marked,
 				After:   stmt.After,
 				Markers: stmt.Markers,
@@ -73,8 +74,8 @@ func (v *avoidGlobalVariableVisitor) VisitCompilationUnit(cu *tree.CompilationUn
 
 // isVarDecl returns true if the VariableDeclarations has a VarKeyword marker
 // and does not have a ConstDecl marker.
-func isVarDecl(vd *tree.VariableDeclarations) bool {
-	hasVar := tree.FindMarker[tree.VarKeyword](vd.Markers) != nil
-	hasConst := tree.FindMarker[tree.ConstDecl](vd.Markers) != nil
+func isVarDecl(vd *java.VariableDeclarations) bool {
+	hasVar := java.FindMarker[golang.VarKeyword](vd.Markers) != nil
+	hasConst := java.FindMarker[golang.ConstDecl](vd.Markers) != nil
 	return hasVar && !hasConst
 }

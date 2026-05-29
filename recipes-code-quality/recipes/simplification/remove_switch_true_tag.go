@@ -6,7 +6,8 @@ package simplification
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -34,11 +35,11 @@ type simplifySwitchTrueVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *simplifySwitchTrueVisitor) VisitSwitch(sw *tree.Switch, p any) tree.J {
-	sw = v.GoVisitor.VisitSwitch(sw, p).(*tree.Switch)
+func (v *simplifySwitchTrueVisitor) VisitSwitch(sw *java.Switch, p any) java.J {
+	sw = v.GoVisitor.VisitSwitch(sw, p).(*java.Switch)
 
 	// Skip select statements
-	if tree.HasMarker[tree.SelectStmt](sw.Markers) {
+	if java.HasMarker[golang.SelectStmt](sw.Markers) {
 		return sw
 	}
 
@@ -48,7 +49,7 @@ func (v *simplifySwitchTrueVisitor) VisitSwitch(sw *tree.Switch, p any) tree.J {
 	}
 
 	// Tag must be the identifier `true`
-	ident, ok := sw.Tag.Element.(*tree.Identifier)
+	ident, ok := sw.Tag.Element.(*java.Identifier)
 	if !ok || ident.Name != "true" {
 		return sw
 	}

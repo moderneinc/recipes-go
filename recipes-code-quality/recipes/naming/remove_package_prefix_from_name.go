@@ -10,7 +10,8 @@ import (
 	"unicode/utf8"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -43,16 +44,16 @@ type removePackagePrefixFromNameVisitor struct {
 	pkgName string
 }
 
-func (v *removePackagePrefixFromNameVisitor) VisitCompilationUnit(cu *tree.CompilationUnit, p any) tree.J {
+func (v *removePackagePrefixFromNameVisitor) VisitCompilationUnit(cu *golang.CompilationUnit, p any) java.J {
 	if cu.PackageDecl != nil {
 		v.pkgName = cu.PackageDecl.Element.Name
 	}
-	cu = v.GoVisitor.VisitCompilationUnit(cu, p).(*tree.CompilationUnit)
+	cu = v.GoVisitor.VisitCompilationUnit(cu, p).(*golang.CompilationUnit)
 	return cu
 }
 
-func (v *removePackagePrefixFromNameVisitor) VisitMethodDeclaration(md *tree.MethodDeclaration, p any) tree.J {
-	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*tree.MethodDeclaration)
+func (v *removePackagePrefixFromNameVisitor) VisitMethodDeclaration(md *java.MethodDeclaration, p any) java.J {
+	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*java.MethodDeclaration)
 
 	if md.Name == nil || v.pkgName == "" {
 		return md

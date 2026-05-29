@@ -6,7 +6,7 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -33,8 +33,8 @@ type simplifyComplexSwitchVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *simplifyComplexSwitchVisitor) VisitSwitch(sw *tree.Switch, p any) tree.J {
-	sw = v.GoVisitor.VisitSwitch(sw, p).(*tree.Switch)
+func (v *simplifyComplexSwitchVisitor) VisitSwitch(sw *java.Switch, p any) java.J {
+	sw = v.GoVisitor.VisitSwitch(sw, p).(*java.Switch)
 
 	if sw.Body == nil {
 		return sw
@@ -42,7 +42,7 @@ func (v *simplifyComplexSwitchVisitor) VisitSwitch(sw *tree.Switch, p any) tree.
 
 	count := 0
 	for _, stmt := range sw.Body.Statements {
-		if _, ok := stmt.Element.(*tree.Case); ok {
+		if _, ok := stmt.Element.(*java.Case); ok {
 			count++
 		}
 	}
@@ -51,6 +51,6 @@ func (v *simplifyComplexSwitchVisitor) VisitSwitch(sw *tree.Switch, p any) tree.
 		return sw
 	}
 
-	sw = sw.WithMarkers(tree.MarkupInfo(sw.Markers, "switch has too many cases; consider using a map or strategy pattern"))
+	sw = sw.WithMarkers(java.MarkupInfo(sw.Markers, "switch has too many cases; consider using a map or strategy pattern"))
 	return sw
 }

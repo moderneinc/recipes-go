@@ -6,7 +6,7 @@ package simplification
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -34,8 +34,8 @@ type simplifyRedundantRangeBlankVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *simplifyRedundantRangeBlankVisitor) VisitForEachLoop(forEach *tree.ForEachLoop, p any) tree.J {
-	forEach = v.GoVisitor.VisitForEachLoop(forEach, p).(*tree.ForEachLoop)
+func (v *simplifyRedundantRangeBlankVisitor) VisitForEachLoop(forEach *java.ForEachLoop, p any) java.J {
+	forEach = v.GoVisitor.VisitForEachLoop(forEach, p).(*java.ForEachLoop)
 
 	ctrl := forEach.Control
 
@@ -45,7 +45,7 @@ func (v *simplifyRedundantRangeBlankVisitor) VisitForEachLoop(forEach *tree.ForE
 	}
 
 	// Value must be the blank identifier `_`
-	ident, ok := ctrl.Value.Element.(*tree.Identifier)
+	ident, ok := ctrl.Value.Element.(*java.Identifier)
 	if !ok || ident.Name != "_" {
 		return forEach
 	}
@@ -57,7 +57,7 @@ func (v *simplifyRedundantRangeBlankVisitor) VisitForEachLoop(forEach *tree.ForE
 	// Reset Key.After to a single space (removing the `, _` trailing formatting)
 	if newCtrl.Key != nil {
 		k := *newCtrl.Key
-		k.After = tree.Space{Whitespace: " "}
+		k.After = java.Space{Whitespace: " "}
 		newCtrl.Key = &k
 	}
 

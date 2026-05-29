@@ -6,7 +6,8 @@ package naming
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -44,8 +45,8 @@ type useDescriptivePackageNameVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *useDescriptivePackageNameVisitor) VisitCompilationUnit(cu *tree.CompilationUnit, p any) tree.J {
-	cu = v.GoVisitor.VisitCompilationUnit(cu, p).(*tree.CompilationUnit)
+func (v *useDescriptivePackageNameVisitor) VisitCompilationUnit(cu *golang.CompilationUnit, p any) java.J {
+	cu = v.GoVisitor.VisitCompilationUnit(cu, p).(*golang.CompilationUnit)
 
 	if cu.PackageDecl == nil {
 		return cu
@@ -58,7 +59,7 @@ func (v *useDescriptivePackageNameVisitor) VisitCompilationUnit(cu *tree.Compila
 
 	pkg := *cu.PackageDecl
 	pkg.Element = pkg.Element.WithMarkers(
-		tree.MarkupWarn(pkg.Element.Markers, "package name is too generic; consider a more descriptive name"),
+		java.MarkupWarn(pkg.Element.Markers, "package name is too generic; consider a more descriptive name"),
 	)
 	cu = cu.WithPackageDecl(&pkg)
 	return cu

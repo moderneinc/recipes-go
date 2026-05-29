@@ -6,7 +6,7 @@ package errorhandling
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -36,10 +36,10 @@ type preferErrorsIsForFieldAccessVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *preferErrorsIsForFieldAccessVisitor) VisitBinary(bin *tree.Binary, p any) tree.J {
-	bin = v.GoVisitor.VisitBinary(bin, p).(*tree.Binary)
+func (v *preferErrorsIsForFieldAccessVisitor) VisitBinary(bin *java.Binary, p any) java.J {
+	bin = v.GoVisitor.VisitBinary(bin, p).(*java.Binary)
 
-	if bin.Operator.Element != tree.Equal && bin.Operator.Element != tree.NotEqual {
+	if bin.Operator.Element != java.Equal && bin.Operator.Element != java.NotEqual {
 		return bin
 	}
 
@@ -51,7 +51,7 @@ func (v *preferErrorsIsForFieldAccessVisitor) VisitBinary(bin *tree.Binary, p an
 	}
 
 	// Determine which side is the sentinel and which is the error expression.
-	var errExpr, sentinel tree.Expression
+	var errExpr, sentinel java.Expression
 	if rightIsFieldAccess {
 		errExpr = bin.Left
 		sentinel = bin.Right
@@ -61,36 +61,36 @@ func (v *preferErrorsIsForFieldAccessVisitor) VisitBinary(bin *tree.Binary, p an
 	}
 
 	// Skip `err == nil` — nil is an Identifier, not a FieldAccess, but be safe.
-	if ident, ok := sentinel.(*tree.Identifier); ok && ident.Name == "nil" {
+	if ident, ok := sentinel.(*java.Identifier); ok && ident.Name == "nil" {
 		return bin
 	}
 
 	// Build errors.Is(errExpr, sentinel) or !errors.Is(errExpr, sentinel)
 	prefix := getLeadingPrefixExpr(bin)
 
-	errorsIdent := &tree.Identifier{Prefix: prefix, Name: "errors"}
-	isIdent := &tree.Identifier{Name: "Is"}
+	errorsIdent := &java.Identifier{Prefix: prefix, Name: "errors"}
+	isIdent := &java.Identifier{Name: "Is"}
 
 	errArg := stripExprPrefix(errExpr)
 	sentinelArg := stripExprPrefix(sentinel)
-	sentinelArgWithSpace := setExprPrefixLocal(sentinelArg, tree.Space{Whitespace: " "})
+	sentinelArgWithSpace := setExprPrefixLocal(sentinelArg, java.Space{Whitespace: " "})
 
-	isCall := &tree.MethodInvocation{
-		Select: &tree.RightPadded[tree.Expression]{Element: errorsIdent},
+	isCall := &java.MethodInvocation{
+		Select: &java.RightPadded[java.Expression]{Element: errorsIdent},
 		Name:   isIdent,
-		Arguments: tree.Container[tree.Expression]{
-			Elements: []tree.RightPadded[tree.Expression]{
+		Arguments: java.Container[java.Expression]{
+			Elements: []java.RightPadded[java.Expression]{
 				{Element: errArg},
 				{Element: sentinelArgWithSpace},
 			},
 		},
 	}
 
-	if bin.Operator.Element == tree.NotEqual {
-		return &tree.Unary{
+	if bin.Operator.Element == java.NotEqual {
+		return &java.Unary{
 			Prefix:   prefix,
-			Operator: tree.LeftPadded[tree.UnaryOperator]{Element: tree.Not},
-			Operand:  setMethodInvocationPrefix(isCall, tree.Space{}),
+			Operator: java.LeftPadded[java.UnaryOperator]{Element: java.Not},
+			Operand:  setMethodInvocationPrefix(isCall, java.Space{}),
 		}
 	}
 	return isCall
@@ -99,8 +99,8 @@ func (v *preferErrorsIsForFieldAccessVisitor) VisitBinary(bin *tree.Binary, p an
 // isPackageQualifiedSentinel checks if the expression is a FieldAccess
 // whose field name starts with "Err" or is "EOF", indicating a package-qualified
 // error sentinel (e.g., sql.ErrNoRows, io.EOF).
-func isPackageQualifiedSentinel(expr tree.Expression) bool {
-	fa, ok := expr.(*tree.FieldAccess)
+func isPackageQualifiedSentinel(expr java.Expression) bool {
+	fa, ok := expr.(*java.FieldAccess)
 	if !ok {
 		return false
 	}

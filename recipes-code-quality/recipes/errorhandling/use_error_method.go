@@ -6,7 +6,7 @@ package errorhandling
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -34,14 +34,14 @@ type useErrorMethodVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *useErrorMethodVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p any) tree.J {
-	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*tree.MethodInvocation)
+func (v *useErrorMethodVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	if mi.Select == nil {
 		return mi
 	}
 
-	ident, ok := mi.Select.Element.(*tree.Identifier)
+	ident, ok := mi.Select.Element.(*java.Identifier)
 	if !ok || ident.Name != "fmt" {
 		return mi
 	}
@@ -56,27 +56,27 @@ func (v *useErrorMethodVisitor) VisitMethodInvocation(mi *tree.MethodInvocation,
 		return mi
 	}
 
-	argIdent, ok := args[0].Element.(*tree.Identifier)
+	argIdent, ok := args[0].Element.(*java.Identifier)
 	if !ok || argIdent.Name != "err" {
 		return mi
 	}
 
 	// Build err.Error() as a replacement, preserving the original leading prefix.
 	errIdent := argIdent.WithPrefix(ident.Prefix)
-	errorName := &tree.Identifier{Name: "Error"}
-	return &tree.MethodInvocation{
+	errorName := &java.Identifier{Name: "Error"}
+	return &java.MethodInvocation{
 		Prefix:    mi.Prefix,
-		Select:    &tree.RightPadded[tree.Expression]{Element: errIdent},
+		Select:    &java.RightPadded[java.Expression]{Element: errIdent},
 		Name:      errorName,
-		Arguments: tree.Container[tree.Expression]{},
+		Arguments: java.Container[java.Expression]{},
 	}
 }
 
-// realArgs returns arguments that are not *tree.Empty.
-func realArgs(args []tree.RightPadded[tree.Expression]) []tree.RightPadded[tree.Expression] {
-	var out []tree.RightPadded[tree.Expression]
+// realArgs returns arguments that are not *java.Empty.
+func realArgs(args []java.RightPadded[java.Expression]) []java.RightPadded[java.Expression] {
+	var out []java.RightPadded[java.Expression]
 	for _, a := range args {
-		if _, isEmpty := a.Element.(*tree.Empty); !isEmpty {
+		if _, isEmpty := a.Element.(*java.Empty); !isEmpty {
 			out = append(out, a)
 		}
 	}

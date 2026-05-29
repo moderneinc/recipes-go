@@ -6,7 +6,8 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -34,11 +35,11 @@ type auditGoroutineClosureVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *auditGoroutineClosureVisitor) VisitGoStmt(g *tree.GoStmt, p any) tree.J {
-	g = v.GoVisitor.VisitGoStmt(g, p).(*tree.GoStmt)
+func (v *auditGoroutineClosureVisitor) VisitGoStmt(g *golang.GoStmt, p any) java.J {
+	g = v.GoVisitor.VisitGoStmt(g, p).(*golang.GoStmt)
 
 	// The expression must be a function call (MethodInvocation).
-	mi, ok := g.Expr.(*tree.MethodInvocation)
+	mi, ok := g.Expr.(*java.MethodInvocation)
 	if !ok {
 		return g
 	}
@@ -50,15 +51,15 @@ func (v *auditGoroutineClosureVisitor) VisitGoStmt(g *tree.GoStmt, p any) tree.J
 	}
 	isFuncLit := false
 	switch sel := mi.Select.Element.(type) {
-	case *tree.MethodDeclaration:
+	case *java.MethodDeclaration:
 		isFuncLit = true
-	case *tree.StatementExpression:
-		_, isFuncLit = sel.Statement.(*tree.MethodDeclaration)
+	case *golang.StatementExpression:
+		_, isFuncLit = sel.Statement.(*java.MethodDeclaration)
 	}
 	if !isFuncLit {
 		return g
 	}
 
-	g = g.WithMarkers(tree.MarkupInfo(g.Markers, "goroutine with closure"))
+	g = g.WithMarkers(java.MarkupInfo(g.Markers, "goroutine with closure"))
 	return g
 }

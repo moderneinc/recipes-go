@@ -6,7 +6,7 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -38,10 +38,10 @@ var timerMethods = map[string]bool{
 	"AfterFunc": true,
 }
 
-func (v *ensureTimerStoppedVisitor) VisitBlock(block *tree.Block, p any) tree.J {
-	block = v.GoVisitor.VisitBlock(block, p).(*tree.Block)
+func (v *ensureTimerStoppedVisitor) VisitBlock(block *java.Block, p any) java.J {
+	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
 
-	var newStmts []tree.RightPadded[tree.Statement]
+	var newStmts []java.RightPadded[java.Statement]
 	changed := false
 
 	for i, rp := range block.Statements {
@@ -52,7 +52,7 @@ func (v *ensureTimerStoppedVisitor) VisitBlock(block *tree.Block, p any) tree.J 
 				continue
 			}
 			deferStmt := buildDeferMethodCall(varName, "Stop", rp.Element)
-			newStmts = append(newStmts, tree.RightPadded[tree.Statement]{Element: deferStmt})
+			newStmts = append(newStmts, java.RightPadded[java.Statement]{Element: deferStmt})
 			changed = true
 		}
 	}
@@ -64,11 +64,11 @@ func (v *ensureTimerStoppedVisitor) VisitBlock(block *tree.Block, p any) tree.J 
 }
 
 // isTimeTimer returns true if the method invocation is time.NewTimer or time.AfterFunc.
-func isTimeTimer(mi *tree.MethodInvocation) bool {
+func isTimeTimer(mi *java.MethodInvocation) bool {
 	if mi.Select == nil {
 		return false
 	}
-	ident, ok := mi.Select.Element.(*tree.Identifier)
+	ident, ok := mi.Select.Element.(*java.Identifier)
 	if !ok || ident.Name != "time" {
 		return false
 	}

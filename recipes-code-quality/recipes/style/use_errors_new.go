@@ -10,7 +10,7 @@ import (
 	"github.com/moderneinc/recipes-go/recipes-code-quality/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -48,15 +48,15 @@ type useErrorsNewVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *useErrorsNewVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p any) tree.J {
-	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*tree.MethodInvocation)
+func (v *useErrorsNewVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	// Check: fmt.Errorf(...)
 	if !fmtErrorfMatcher.Matches(mi) {
 		return mi
 	}
 
-	ident, ok := mi.Select.Element.(*tree.Identifier)
+	ident, ok := mi.Select.Element.(*java.Identifier)
 	if !ok {
 		return mi
 	}
@@ -69,8 +69,8 @@ func (v *useErrorsNewVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p
 
 	// The single argument must be a string literal with no format verbs
 	arg := args[0].Element
-	lit, ok := arg.(*tree.Literal)
-	if !ok || lit.Kind != tree.StringLiteral {
+	lit, ok := arg.(*java.Literal)
+	if !ok || lit.Kind != java.StringLiteral {
 		return mi
 	}
 	if hasFormatVerb(lit.Source) {
@@ -81,17 +81,17 @@ func (v *useErrorsNewVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p
 	// Reuse the prefix from the original "fmt" identifier.
 	prefix := ident.Prefix
 
-	errorsIdent := &tree.Identifier{
+	errorsIdent := &java.Identifier{
 		Prefix: prefix,
 		Name:   "errors",
 	}
 
-	newName := &tree.Identifier{
+	newName := &java.Identifier{
 		Name: "New",
 	}
 
-	return &tree.MethodInvocation{
-		Select:    &tree.RightPadded[tree.Expression]{Element: errorsIdent, After: mi.Select.After},
+	return &java.MethodInvocation{
+		Select:    &java.RightPadded[java.Expression]{Element: errorsIdent, After: mi.Select.After},
 		Name:      newName,
 		Arguments: mi.Arguments,
 	}

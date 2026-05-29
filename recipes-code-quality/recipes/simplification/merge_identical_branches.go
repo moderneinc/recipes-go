@@ -7,7 +7,7 @@ package simplification
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/printer"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -45,8 +45,8 @@ type mergeIdenticalBranchesVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *mergeIdenticalBranchesVisitor) VisitIf(ifStmt *tree.If, p any) tree.J {
-	ifStmt = v.GoVisitor.VisitIf(ifStmt, p).(*tree.If)
+func (v *mergeIdenticalBranchesVisitor) VisitIf(ifStmt *java.If, p any) java.J {
+	ifStmt = v.GoVisitor.VisitIf(ifStmt, p).(*java.If)
 
 	result := mergeAdjacentBranches(ifStmt)
 	if result == nil {
@@ -57,12 +57,12 @@ func (v *mergeIdenticalBranchesVisitor) VisitIf(ifStmt *tree.If, p any) tree.J {
 
 // mergeAdjacentBranches walks the if/else-if chain and merges adjacent branches
 // with identical bodies. Returns nil if nothing changed.
-func mergeAdjacentBranches(ifStmt *tree.If) *tree.If {
+func mergeAdjacentBranches(ifStmt *java.If) *java.If {
 	changed := false
 	current := ifStmt
 
 	for current.ElsePart != nil {
-		nextIf, ok := current.ElsePart.Element.(*tree.If)
+		nextIf, ok := current.ElsePart.Element.(*java.If)
 		if !ok {
 			// Plain else block — can't merge further.
 			break
@@ -74,10 +74,10 @@ func mergeAdjacentBranches(ifStmt *tree.If) *tree.If {
 		}
 
 		// Merge: combine conditions with ||
-		combined := &tree.Binary{
+		combined := &java.Binary{
 			Left:     current.Condition,
-			Operator: tree.LeftPadded[tree.BinaryOperator]{Before: tree.SingleSpace, Element: tree.LogicalOr},
-			Right:    setExprPrefix(nextIf.Condition, tree.SingleSpace),
+			Operator: java.LeftPadded[java.BinaryOperator]{Before: java.SingleSpace, Element: java.LogicalOr},
+			Right:    setExprPrefix(nextIf.Condition, java.SingleSpace),
 		}
 
 		current.Condition = combined
@@ -95,13 +95,13 @@ func mergeAdjacentBranches(ifStmt *tree.If) *tree.If {
 
 // bodiesEqual checks whether two blocks have the same printed representation
 // (ignoring leading whitespace differences).
-func bodiesEqual(a, b *tree.Block) bool {
+func bodiesEqual(a, b *java.Block) bool {
 	if a == nil || b == nil {
 		return a == b
 	}
 	return printBlock(a) == printBlock(b)
 }
 
-func printBlock(block *tree.Block) string {
-	return printer.Print(block.WithPrefix(tree.Space{}))
+func printBlock(block *java.Block) string {
+	return printer.Print(block.WithPrefix(java.Space{}))
 }

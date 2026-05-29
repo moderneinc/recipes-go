@@ -7,7 +7,7 @@ package redundancy
 import (
 	"github.com/moderneinc/recipes-go/recipes-code-quality/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -46,8 +46,8 @@ type removeRedundantTypeConversionVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *removeRedundantTypeConversionVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p any) tree.J {
-	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*tree.MethodInvocation)
+func (v *removeRedundantTypeConversionVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	// Type conversions in Go look like function calls: int(x), string(b), etc.
 	// They have no Select (no receiver) and the Name is a builtin type.
@@ -61,7 +61,7 @@ func (v *removeRedundantTypeConversionVisitor) VisitMethodInvocation(mi *tree.Me
 	// Must have exactly one argument
 	var argCount int
 	for _, a := range mi.Arguments.Elements {
-		if _, isEmpty := a.Element.(*tree.Empty); !isEmpty {
+		if _, isEmpty := a.Element.(*java.Empty); !isEmpty {
 			argCount++
 		}
 	}
@@ -71,7 +71,7 @@ func (v *removeRedundantTypeConversionVisitor) VisitMethodInvocation(mi *tree.Me
 
 	// Mark as a potential redundant conversion (search only).
 	// Full accuracy requires type attribution to confirm the arg type matches.
-	mi = mi.WithMarkers(tree.MarkupInfo(mi.Markers, "potentially redundant type conversion"))
+	mi = mi.WithMarkers(java.MarkupInfo(mi.Markers, "potentially redundant type conversion"))
 	return mi
 }
 

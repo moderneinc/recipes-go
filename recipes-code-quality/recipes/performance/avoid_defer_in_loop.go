@@ -7,7 +7,8 @@ package performance
 import (
 	"github.com/google/uuid"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -40,10 +41,10 @@ type avoidDeferInLoopVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *avoidDeferInLoopVisitor) VisitBlock(block *tree.Block, p any) tree.J {
-	block = v.GoVisitor.VisitBlock(block, p).(*tree.Block)
+func (v *avoidDeferInLoopVisitor) VisitBlock(block *java.Block, p any) java.J {
+	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
 
-	var newStmts []tree.RightPadded[tree.Statement]
+	var newStmts []java.RightPadded[java.Statement]
 	changed := false
 
 	for _, rp := range block.Statements {
@@ -59,7 +60,7 @@ func (v *avoidDeferInLoopVisitor) VisitBlock(block *tree.Block, p any) tree.J {
 		}
 
 		wrappedLoop := wrapLoopBodyInFunc(rp.Element, loopBody)
-		newStmts = append(newStmts, tree.RightPadded[tree.Statement]{Element: wrappedLoop, After: rp.After})
+		newStmts = append(newStmts, java.RightPadded[java.Statement]{Element: wrappedLoop, After: rp.After})
 		changed = true
 	}
 
@@ -71,9 +72,9 @@ func (v *avoidDeferInLoopVisitor) VisitBlock(block *tree.Block, p any) tree.J {
 
 // bodyContainsDefer checks whether a block contains any Defer statement
 // at the top level.
-func bodyContainsDefer(body *tree.Block) bool {
+func bodyContainsDefer(body *java.Block) bool {
 	for _, rp := range body.Statements {
-		if _, ok := rp.Element.(*tree.Defer); ok {
+		if _, ok := rp.Element.(*golang.Defer); ok {
 			return true
 		}
 	}
@@ -81,12 +82,12 @@ func bodyContainsDefer(body *tree.Block) bool {
 }
 
 // wrapLoopBodyInFunc replaces the loop body with a single IIFE statement.
-func wrapLoopBodyInFunc(loopStmt tree.Statement, body *tree.Block) tree.Statement {
+func wrapLoopBodyInFunc(loopStmt java.Statement, body *java.Block) java.Statement {
 	wrapped := buildIIFEBlock(body)
 	switch loop := loopStmt.(type) {
-	case *tree.ForLoop:
+	case *java.ForLoop:
 		return loop.WithBody(wrapped)
-	case *tree.ForEachLoop:
+	case *java.ForEachLoop:
 		return loop.WithBody(wrapped)
 	}
 	return loopStmt
@@ -95,38 +96,38 @@ func wrapLoopBodyInFunc(loopStmt tree.Statement, body *tree.Block) tree.Statemen
 // buildIIFEBlock wraps the original body in func() { ... }().
 //
 // It re-indents statements one level deeper inside the function literal.
-func buildIIFEBlock(originalBody *tree.Block) *tree.Block {
+func buildIIFEBlock(originalBody *java.Block) *java.Block {
 	// Determine the current statement indentation from the first statement.
 	stmtIndent := extractStmtIndent(originalBody)
 
 	// Inner body statements need to be indented one level deeper.
 	deeperIndent := stmtIndent + "\t"
-	innerStmts := make([]tree.RightPadded[tree.Statement], len(originalBody.Statements))
+	innerStmts := make([]java.RightPadded[java.Statement], len(originalBody.Statements))
 	for i, rp := range originalBody.Statements {
-		innerStmts[i] = tree.RightPadded[tree.Statement]{
-			Element: setStmtPrefix(rp.Element, tree.Space{Whitespace: deeperIndent}),
+		innerStmts[i] = java.RightPadded[java.Statement]{
+			Element: setStmtPrefix(rp.Element, java.Space{Whitespace: deeperIndent}),
 			After:   rp.After,
 		}
 	}
 
 	// Inner body End = same indent as the IIFE call.
-	innerEnd := tree.Space{Whitespace: stmtIndent}
+	innerEnd := java.Space{Whitespace: stmtIndent}
 
 	// Build: func() { ...indented body... }
 	// The leading whitespace goes on the MethodDeclaration prefix since
 	// the printer emits md.Prefix then "func".
-	funcLit := &tree.MethodDeclaration{
+	funcLit := &java.MethodDeclaration{
 		ID:     uuid.New(),
-		Prefix: tree.Space{Whitespace: stmtIndent},
-		Name: &tree.Identifier{
+		Prefix: java.Space{Whitespace: stmtIndent},
+		Name: &java.Identifier{
 			ID: uuid.New(),
 		},
-		Parameters: tree.Container[tree.Statement]{
-			Before: tree.EmptySpace,
+		Parameters: java.Container[java.Statement]{
+			Before: java.EmptySpace,
 		},
-		Body: &tree.Block{
+		Body: &java.Block{
 			ID:         uuid.New(),
-			Prefix:     tree.SingleSpace,
+			Prefix:     java.SingleSpace,
 			Statements: innerStmts,
 			End:        innerEnd,
 		},
@@ -134,24 +135,24 @@ func buildIIFEBlock(originalBody *tree.Block) *tree.Block {
 
 	// Build: func() { ... }()
 	// mi.Prefix is empty; the leading whitespace lives on funcLit.Prefix.
-	iifeCall := &tree.MethodInvocation{
+	iifeCall := &java.MethodInvocation{
 		ID: uuid.New(),
-		Select: &tree.RightPadded[tree.Expression]{
+		Select: &java.RightPadded[java.Expression]{
 			Element: funcLit,
 		},
-		Name: &tree.Identifier{
+		Name: &java.Identifier{
 			ID: uuid.New(),
 		},
-		Arguments: tree.Container[tree.Expression]{
-			Before: tree.EmptySpace,
+		Arguments: java.Container[java.Expression]{
+			Before: java.EmptySpace,
 		},
 	}
 
 	// Outer block preserves original prefix and End.
-	return &tree.Block{
+	return &java.Block{
 		ID:     uuid.New(),
 		Prefix: originalBody.Prefix,
-		Statements: []tree.RightPadded[tree.Statement]{
+		Statements: []java.RightPadded[java.Statement]{
 			{Element: iifeCall},
 		},
 		End: originalBody.End,
@@ -160,7 +161,7 @@ func buildIIFEBlock(originalBody *tree.Block) *tree.Block {
 
 // extractStmtIndent returns the indentation string from the first statement
 // in a block, including the leading newline.
-func extractStmtIndent(body *tree.Block) string {
+func extractStmtIndent(body *java.Block) string {
 	if len(body.Statements) == 0 {
 		return "\n\t"
 	}
@@ -174,19 +175,19 @@ func extractStmtIndent(body *tree.Block) string {
 }
 
 // getStmtWhitespace returns the Whitespace field of a statement's Prefix.
-func getStmtWhitespace(stmt tree.Statement) string {
+func getStmtWhitespace(stmt java.Statement) string {
 	switch s := stmt.(type) {
-	case *tree.Defer:
+	case *golang.Defer:
 		return s.Prefix.Whitespace
-	case *tree.Return:
+	case *java.Return:
 		return s.Prefix.Whitespace
-	case *tree.ForLoop:
+	case *java.ForLoop:
 		return s.Prefix.Whitespace
-	case *tree.ForEachLoop:
+	case *java.ForEachLoop:
 		return s.Prefix.Whitespace
-	case *tree.If:
+	case *java.If:
 		return s.Prefix.Whitespace
-	case *tree.VariableDeclarations:
+	case *java.VariableDeclarations:
 		return s.Prefix.Whitespace
 	default:
 		return ""
@@ -195,25 +196,25 @@ func getStmtWhitespace(stmt tree.Statement) string {
 
 // firstExprPrefix extracts the whitespace from the first sub-expression of
 // an expression-based statement (e.g. AssignmentOperation, MultiAssignment).
-func firstExprPrefix(stmt tree.Statement) string {
+func firstExprPrefix(stmt java.Statement) string {
 	switch s := stmt.(type) {
-	case *tree.AssignmentOperation:
-		if ident, ok := s.Variable.(*tree.Identifier); ok {
+	case *java.AssignmentOperation:
+		if ident, ok := s.Variable.(*java.Identifier); ok {
 			return ident.Prefix.Whitespace
 		}
-	case *tree.Assignment:
-		if ident, ok := s.Variable.(*tree.Identifier); ok {
+	case *java.Assignment:
+		if ident, ok := s.Variable.(*java.Identifier); ok {
 			return ident.Prefix.Whitespace
 		}
-	case *tree.MultiAssignment:
+	case *golang.MultiAssignment:
 		if len(s.Variables) > 0 {
-			if ident, ok := s.Variables[0].Element.(*tree.Identifier); ok {
+			if ident, ok := s.Variables[0].Element.(*java.Identifier); ok {
 				return ident.Prefix.Whitespace
 			}
 		}
-	case *tree.MethodInvocation:
+	case *java.MethodInvocation:
 		if s.Select != nil {
-			if ident, ok := s.Select.Element.(*tree.Identifier); ok {
+			if ident, ok := s.Select.Element.(*java.Identifier); ok {
 				return ident.Prefix.Whitespace
 			}
 		}
@@ -226,32 +227,32 @@ func firstExprPrefix(stmt tree.Statement) string {
 // statements (defer, return, var, for, if) the prefix is on the statement
 // itself. For expression-based statements (assignments, method calls) the
 // prefix is on the first sub-expression.
-func setStmtPrefix(stmt tree.Statement, prefix tree.Space) tree.Statement {
+func setStmtPrefix(stmt java.Statement, prefix java.Space) java.Statement {
 	switch s := stmt.(type) {
-	case *tree.Defer:
+	case *golang.Defer:
 		return s.WithPrefix(prefix)
-	case *tree.Return:
+	case *java.Return:
 		return s.WithPrefix(prefix)
-	case *tree.ForLoop:
+	case *java.ForLoop:
 		return s.WithPrefix(prefix)
-	case *tree.ForEachLoop:
+	case *java.ForEachLoop:
 		return s.WithPrefix(prefix)
-	case *tree.If:
+	case *java.If:
 		return s.WithPrefix(prefix)
-	case *tree.VariableDeclarations:
+	case *java.VariableDeclarations:
 		return s.WithPrefix(prefix)
-	case *tree.AssignmentOperation:
+	case *java.AssignmentOperation:
 		return s.WithVariable(setExprPrefix(s.Variable, prefix))
-	case *tree.Assignment:
+	case *java.Assignment:
 		c := *s
 		c.Variable = setExprPrefix(s.Variable, prefix)
 		return &c
-	case *tree.MultiAssignment:
+	case *golang.MultiAssignment:
 		if len(s.Variables) > 0 {
 			c := *s
-			vars := make([]tree.RightPadded[tree.Expression], len(s.Variables))
+			vars := make([]java.RightPadded[java.Expression], len(s.Variables))
 			copy(vars, s.Variables)
-			vars[0] = tree.RightPadded[tree.Expression]{
+			vars[0] = java.RightPadded[java.Expression]{
 				Element: setExprPrefix(s.Variables[0].Element, prefix),
 				After:   s.Variables[0].After,
 			}
@@ -259,7 +260,7 @@ func setStmtPrefix(stmt tree.Statement, prefix tree.Space) tree.Statement {
 			return &c
 		}
 		return stmt
-	case *tree.MethodInvocation:
+	case *java.MethodInvocation:
 		if s.Select != nil {
 			c := *s
 			sel := *s.Select
@@ -272,4 +273,3 @@ func setStmtPrefix(stmt tree.Statement, prefix tree.Space) tree.Statement {
 		return stmt
 	}
 }
-

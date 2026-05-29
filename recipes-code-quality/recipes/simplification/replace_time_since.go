@@ -8,7 +8,7 @@ import (
 	"github.com/moderneinc/recipes-go/recipes-code-quality/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -23,7 +23,9 @@ type ReplaceTimeSinceWithSince struct {
 func (r *ReplaceTimeSinceWithSince) Name() string {
 	return "org.openrewrite.golang.codequality.ReplaceTimeSinceWithSince"
 }
-func (r *ReplaceTimeSinceWithSince) DisplayName() string { return "Replace time.Now().Sub(t) with time.Since(t)" }
+func (r *ReplaceTimeSinceWithSince) DisplayName() string {
+	return "Replace time.Now().Sub(t) with time.Since(t)"
+}
 func (r *ReplaceTimeSinceWithSince) Description() string {
 	return "Replace `time.Now().Sub(t)` with `time.Since(t)` for clarity."
 }
@@ -43,8 +45,8 @@ type replaceTimeSinceVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *replaceTimeSinceVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p any) tree.J {
-	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*tree.MethodInvocation)
+func (v *replaceTimeSinceVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	// Match: <something>.Sub(arg)
 	if mi.Name.Name != "Sub" || mi.Select == nil {
@@ -53,12 +55,12 @@ func (v *replaceTimeSinceVisitor) VisitMethodInvocation(mi *tree.MethodInvocatio
 
 	// The select must be time.Now() — a method invocation with no args
 	selectExpr := mi.Select.Element
-	nowCall, ok := selectExpr.(*tree.MethodInvocation)
+	nowCall, ok := selectExpr.(*java.MethodInvocation)
 	if !ok || !timeNowMatcher.Matches(nowCall) {
 		return mi
 	}
 
-	timeIdent, ok := nowCall.Select.Element.(*tree.Identifier)
+	timeIdent, ok := nowCall.Select.Element.(*java.Identifier)
 	if !ok {
 		return mi
 	}
@@ -74,17 +76,17 @@ func (v *replaceTimeSinceVisitor) VisitMethodInvocation(mi *tree.MethodInvocatio
 	// Reuse the existing "time" identifier and its prefix for leading whitespace.
 	prefix := timeIdent.Prefix
 
-	newTimeIdent := &tree.Identifier{
+	newTimeIdent := &java.Identifier{
 		Prefix: prefix,
 		Name:   "time",
 	}
 
-	sinceIdent := &tree.Identifier{
+	sinceIdent := &java.Identifier{
 		Name: "Since",
 	}
 
-	return &tree.MethodInvocation{
-		Select:    &tree.RightPadded[tree.Expression]{Element: newTimeIdent, After: mi.Select.After},
+	return &java.MethodInvocation{
+		Select:    &java.RightPadded[java.Expression]{Element: newTimeIdent, After: mi.Select.After},
 		Name:      sinceIdent,
 		Arguments: mi.Arguments, // reuse the argument list (contains the original arg)
 	}
@@ -92,10 +94,10 @@ func (v *replaceTimeSinceVisitor) VisitMethodInvocation(mi *tree.MethodInvocatio
 
 // getOnlyArg returns the single real argument from the argument list,
 // skipping any Empty sentinel. Returns nil if there isn't exactly one arg.
-func getOnlyArg(args []tree.RightPadded[tree.Expression]) tree.Expression {
-	var real []tree.Expression
+func getOnlyArg(args []java.RightPadded[java.Expression]) java.Expression {
+	var real []java.Expression
 	for _, a := range args {
-		if _, isEmpty := a.Element.(*tree.Empty); !isEmpty {
+		if _, isEmpty := a.Element.(*java.Empty); !isEmpty {
 			real = append(real, a.Element)
 		}
 	}

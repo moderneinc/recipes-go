@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -59,15 +59,15 @@ func envVarName(name string) string {
 	return result.String()
 }
 
-func (v *avoidHardcodedCredentialsVisitor) VisitVariableDeclarator(vd *tree.VariableDeclarator, p any) tree.J {
-	vd = v.GoVisitor.VisitVariableDeclarator(vd, p).(*tree.VariableDeclarator)
+func (v *avoidHardcodedCredentialsVisitor) VisitVariableDeclarator(vd *java.VariableDeclarator, p any) java.J {
+	vd = v.GoVisitor.VisitVariableDeclarator(vd, p).(*java.VariableDeclarator)
 
 	if vd.Initializer == nil {
 		return vd
 	}
 
-	lit, ok := vd.Initializer.Element.(*tree.Literal)
-	if !ok || lit.Kind != tree.StringLiteral {
+	lit, ok := vd.Initializer.Element.(*java.Literal)
+	if !ok || lit.Kind != java.StringLiteral {
 		return vd
 	}
 
@@ -86,32 +86,32 @@ func (v *avoidHardcodedCredentialsVisitor) VisitVariableDeclarator(vd *tree.Vari
 	// Build os.Getenv("VAR_NAME") to replace the string literal.
 	envName := envVarName(vd.Name.Name)
 
-	osIdent := &tree.Identifier{
+	osIdent := &java.Identifier{
 		Prefix: lit.Prefix,
 		Name:   "os",
 	}
 
-	getenvIdent := &tree.Identifier{
+	getenvIdent := &java.Identifier{
 		Name: "Getenv",
 	}
 
-	envLit := &tree.Literal{
-		Kind:   tree.StringLiteral,
+	envLit := &java.Literal{
+		Kind:   java.StringLiteral,
 		Source: `"` + envName + `"`,
 	}
 
-	getenvCall := &tree.MethodInvocation{
-		Select: &tree.RightPadded[tree.Expression]{Element: osIdent},
+	getenvCall := &java.MethodInvocation{
+		Select: &java.RightPadded[java.Expression]{Element: osIdent},
 		Name:   getenvIdent,
-		Arguments: tree.Container[tree.Expression]{
-			Elements: []tree.RightPadded[tree.Expression]{
+		Arguments: java.Container[java.Expression]{
+			Elements: []java.RightPadded[java.Expression]{
 				{Element: envLit},
 			},
 		},
 	}
 
 	c := *vd
-	c.Initializer = &tree.LeftPadded[tree.Expression]{
+	c.Initializer = &java.LeftPadded[java.Expression]{
 		Before:  vd.Initializer.Before,
 		Element: getenvCall,
 	}

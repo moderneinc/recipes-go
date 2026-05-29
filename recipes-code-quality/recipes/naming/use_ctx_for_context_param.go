@@ -6,7 +6,7 @@ package naming
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -36,8 +36,8 @@ type useCtxForContextParamVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *useCtxForContextParamVisitor) VisitMethodDeclaration(md *tree.MethodDeclaration, p any) tree.J {
-	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*tree.MethodDeclaration)
+func (v *useCtxForContextParamVisitor) VisitMethodDeclaration(md *java.MethodDeclaration, p any) java.J {
+	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*java.MethodDeclaration)
 
 	if md.Name == nil {
 		return md
@@ -45,12 +45,12 @@ func (v *useCtxForContextParamVisitor) VisitMethodDeclaration(md *tree.MethodDec
 
 	// Collect old names of context params that need renaming.
 	var oldNames []string
-	params := make([]tree.RightPadded[tree.Statement], len(md.Parameters.Elements))
+	params := make([]java.RightPadded[java.Statement], len(md.Parameters.Elements))
 	copy(params, md.Parameters.Elements)
 	changed := false
 
 	for i, paramRP := range params {
-		vd, ok := paramRP.Element.(*tree.VariableDeclarations)
+		vd, ok := paramRP.Element.(*java.VariableDeclarations)
 		if !ok {
 			continue
 		}
@@ -63,7 +63,7 @@ func (v *useCtxForContextParamVisitor) VisitMethodDeclaration(md *tree.MethodDec
 		renamedVD, oldName := v.renameContextParam(vd)
 		if oldName != "" {
 			oldNames = append(oldNames, oldName)
-			params[i] = tree.RightPadded[tree.Statement]{
+			params[i] = java.RightPadded[java.Statement]{
 				Element: renamedVD,
 				After:   paramRP.After,
 				Markers: paramRP.Markers,
@@ -77,7 +77,7 @@ func (v *useCtxForContextParamVisitor) VisitMethodDeclaration(md *tree.MethodDec
 	}
 
 	c := *md
-	c.Parameters = tree.Container[tree.Statement]{
+	c.Parameters = java.Container[java.Statement]{
 		Before:   md.Parameters.Before,
 		Elements: params,
 		Markers:  md.Parameters.Markers,
@@ -87,7 +87,7 @@ func (v *useCtxForContextParamVisitor) VisitMethodDeclaration(md *tree.MethodDec
 	if c.Body != nil && len(oldNames) > 0 {
 		renamer := visitor.Init(&ctxRenameVisitor{oldNames: oldNames})
 		result := renamer.Visit(c.Body, p)
-		c.Body = result.(*tree.Block)
+		c.Body = result.(*java.Block)
 	}
 
 	return &c
@@ -95,8 +95,8 @@ func (v *useCtxForContextParamVisitor) VisitMethodDeclaration(md *tree.MethodDec
 
 // renameContextParam renames the context parameter to "ctx" and returns the old name.
 // Returns the original vd and "" if no rename is needed.
-func (v *useCtxForContextParamVisitor) renameContextParam(vd *tree.VariableDeclarations) (*tree.VariableDeclarations, string) {
-	vars := make([]tree.RightPadded[*tree.VariableDeclarator], len(vd.Variables))
+func (v *useCtxForContextParamVisitor) renameContextParam(vd *java.VariableDeclarations) (*java.VariableDeclarations, string) {
+	vars := make([]java.RightPadded[*java.VariableDeclarator], len(vd.Variables))
 	copy(vars, vd.Variables)
 	changed := false
 	oldName := ""
@@ -113,7 +113,7 @@ func (v *useCtxForContextParamVisitor) renameContextParam(vd *tree.VariableDecla
 
 		oldName = decl.Name.Name
 		renamed := decl.WithName(decl.Name.WithName("ctx"))
-		vars[j] = tree.RightPadded[*tree.VariableDeclarator]{
+		vars[j] = java.RightPadded[*java.VariableDeclarator]{
 			Element: renamed,
 			After:   varRP.After,
 			Markers: varRP.Markers,
@@ -135,8 +135,8 @@ type ctxRenameVisitor struct {
 	oldNames []string
 }
 
-func (v *ctxRenameVisitor) VisitIdentifier(ident *tree.Identifier, p any) tree.J {
-	ident = v.GoVisitor.VisitIdentifier(ident, p).(*tree.Identifier)
+func (v *ctxRenameVisitor) VisitIdentifier(ident *java.Identifier, p any) java.J {
+	ident = v.GoVisitor.VisitIdentifier(ident, p).(*java.Identifier)
 	for _, oldName := range v.oldNames {
 		if ident.Name == oldName {
 			return ident.WithName("ctx")
@@ -147,12 +147,12 @@ func (v *ctxRenameVisitor) VisitIdentifier(ident *tree.Identifier, p any) tree.J
 
 // isContextType checks if a type expression is context.Context (a FieldAccess
 // where Target is "context" and Name is "Context").
-func isContextType(expr tree.Expression) bool {
-	fa, ok := expr.(*tree.FieldAccess)
+func isContextType(expr java.Expression) bool {
+	fa, ok := expr.(*java.FieldAccess)
 	if !ok {
 		return false
 	}
-	target, ok := fa.Target.(*tree.Identifier)
+	target, ok := fa.Target.(*java.Identifier)
 	if !ok {
 		return false
 	}

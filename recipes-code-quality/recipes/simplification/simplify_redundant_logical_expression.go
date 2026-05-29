@@ -7,7 +7,7 @@ package simplification
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/printer"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -43,8 +43,8 @@ type simplifyRedundantLogicalExpressionVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *simplifyRedundantLogicalExpressionVisitor) VisitBinary(bin *tree.Binary, p any) tree.J {
-	bin = v.GoVisitor.VisitBinary(bin, p).(*tree.Binary)
+func (v *simplifyRedundantLogicalExpressionVisitor) VisitBinary(bin *java.Binary, p any) java.J {
+	bin = v.GoVisitor.VisitBinary(bin, p).(*java.Binary)
 
 	if !isLogicalOrBitwiseOp(bin.Operator.Element) {
 		return bin
@@ -61,9 +61,9 @@ func (v *simplifyRedundantLogicalExpressionVisitor) VisitBinary(bin *tree.Binary
 	return bin
 }
 
-func isLogicalOrBitwiseOp(op tree.BinaryOperator) bool {
+func isLogicalOrBitwiseOp(op java.BinaryOperator) bool {
 	switch op {
-	case tree.LogicalAnd, tree.LogicalOr, tree.BitwiseAnd, tree.BitwiseOr:
+	case java.LogicalAnd, java.LogicalOr, java.BitwiseAnd, java.BitwiseOr:
 		return true
 	}
 	return false
@@ -72,6 +72,6 @@ func isLogicalOrBitwiseOp(op tree.BinaryOperator) bool {
 // printExpr returns a normalised text representation of an expression for
 // equality comparison. Leading whitespace is trimmed so that formatting
 // differences between the left and right operands do not cause false negatives.
-func printExpr(expr tree.Expression) string {
-	return printer.Print(setExprPrefix(expr, tree.Space{}))
+func printExpr(expr java.Expression) string {
+	return printer.Print(setExprPrefix(expr, java.Space{}))
 }

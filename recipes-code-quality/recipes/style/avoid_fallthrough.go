@@ -6,7 +6,8 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -35,14 +36,14 @@ type avoidFallthroughVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *avoidFallthroughVisitor) VisitCase(c *tree.Case, p any) tree.J {
-	c = v.GoVisitor.VisitCase(c, p).(*tree.Case)
+func (v *avoidFallthroughVisitor) VisitCase(c *java.Case, p any) java.J {
+	c = v.GoVisitor.VisitCase(c, p).(*java.Case)
 
 	// Remove any fallthrough statements from the case body.
 	changed := false
-	var body []tree.RightPadded[tree.Statement]
+	var body []java.RightPadded[java.Statement]
 	for _, rp := range c.Body {
-		if _, ok := rp.Element.(*tree.Fallthrough); ok {
+		if _, ok := rp.Element.(*golang.Fallthrough); ok {
 			changed = true
 			continue
 		}

@@ -6,7 +6,7 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -35,30 +35,30 @@ type avoidUnsafePackageVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *avoidUnsafePackageVisitor) VisitFieldAccess(fa *tree.FieldAccess, p any) tree.J {
-	fa = v.GoVisitor.VisitFieldAccess(fa, p).(*tree.FieldAccess)
+func (v *avoidUnsafePackageVisitor) VisitFieldAccess(fa *java.FieldAccess, p any) java.J {
+	fa = v.GoVisitor.VisitFieldAccess(fa, p).(*java.FieldAccess)
 
-	ident, ok := fa.Target.(*tree.Identifier)
+	ident, ok := fa.Target.(*java.Identifier)
 	if !ok || ident.Name != "unsafe" {
 		return fa
 	}
 
-	fa = fa.WithMarkers(tree.MarkupWarn(fa.Markers, "unsafe package usage"))
+	fa = fa.WithMarkers(java.MarkupWarn(fa.Markers, "unsafe package usage"))
 	return fa
 }
 
-func (v *avoidUnsafePackageVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p any) tree.J {
-	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*tree.MethodInvocation)
+func (v *avoidUnsafePackageVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	if mi.Select == nil {
 		return mi
 	}
 
-	ident, ok := mi.Select.Element.(*tree.Identifier)
+	ident, ok := mi.Select.Element.(*java.Identifier)
 	if !ok || ident.Name != "unsafe" {
 		return mi
 	}
 
-	mi = mi.WithMarkers(tree.MarkupWarn(mi.Markers, "unsafe package usage"))
+	mi = mi.WithMarkers(java.MarkupWarn(mi.Markers, "unsafe package usage"))
 	return mi
 }

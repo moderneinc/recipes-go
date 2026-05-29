@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -36,15 +36,15 @@ type auditMustFunctionVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *auditMustFunctionVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p any) tree.J {
-	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*tree.MethodInvocation)
+func (v *auditMustFunctionVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	if !strings.HasPrefix(mi.Name.Name, "Must") && !strings.HasPrefix(mi.Name.Name, "must") {
 		return mi
 	}
 
 	mi = mi.WithMarkers(
-		tree.MarkupInfo(mi.Markers, "Must* function panics on error; use with care"),
+		java.MarkupInfo(mi.Markers, "Must* function panics on error; use with care"),
 	)
 	return mi
 }

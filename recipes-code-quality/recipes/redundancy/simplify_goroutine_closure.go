@@ -6,7 +6,8 @@ package redundancy
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -38,11 +39,11 @@ type simplifyGoroutineClosureVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *simplifyGoroutineClosureVisitor) VisitGoStmt(g *tree.GoStmt, p any) tree.J {
-	g = v.GoVisitor.VisitGoStmt(g, p).(*tree.GoStmt)
+func (v *simplifyGoroutineClosureVisitor) VisitGoStmt(g *golang.GoStmt, p any) java.J {
+	g = v.GoVisitor.VisitGoStmt(g, p).(*golang.GoStmt)
 
 	// The expression must be a function call (MethodInvocation).
-	mi, ok := g.Expr.(*tree.MethodInvocation)
+	mi, ok := g.Expr.(*java.MethodInvocation)
 	if !ok {
 		return g
 	}
@@ -52,12 +53,12 @@ func (v *simplifyGoroutineClosureVisitor) VisitGoStmt(g *tree.GoStmt, p any) tre
 	if mi.Select == nil {
 		return g
 	}
-	var funcLit *tree.MethodDeclaration
+	var funcLit *java.MethodDeclaration
 	switch sel := mi.Select.Element.(type) {
-	case *tree.MethodDeclaration:
+	case *java.MethodDeclaration:
 		funcLit = sel
-	case *tree.StatementExpression:
-		if md, ok := sel.Statement.(*tree.MethodDeclaration); ok {
+	case *golang.StatementExpression:
+		if md, ok := sel.Statement.(*java.MethodDeclaration); ok {
 			funcLit = md
 		}
 	}
@@ -69,9 +70,9 @@ func (v *simplifyGoroutineClosureVisitor) VisitGoStmt(g *tree.GoStmt, p any) tre
 	if funcLit.Body == nil {
 		return g
 	}
-	var realStmts []tree.Statement
+	var realStmts []java.Statement
 	for _, stmt := range funcLit.Body.Statements {
-		if _, isEmpty := stmt.Element.(*tree.Empty); !isEmpty {
+		if _, isEmpty := stmt.Element.(*java.Empty); !isEmpty {
 			realStmts = append(realStmts, stmt.Element)
 		}
 	}
@@ -80,7 +81,7 @@ func (v *simplifyGoroutineClosureVisitor) VisitGoStmt(g *tree.GoStmt, p any) tre
 	}
 
 	// That single statement must be a MethodInvocation (a function call).
-	innerCall, isCall := realStmts[0].(*tree.MethodInvocation)
+	innerCall, isCall := realStmts[0].(*java.MethodInvocation)
 	if !isCall {
 		return g
 	}
@@ -88,9 +89,9 @@ func (v *simplifyGoroutineClosureVisitor) VisitGoStmt(g *tree.GoStmt, p any) tre
 	// Replace the closure call with the inner call, preserving the go statement's prefix.
 	// Set the inner call's prefix to a single space (the space between "go" and the call)
 	// and ensure the Name prefix is empty to avoid double spacing.
-	replaced := innerCall.WithPrefix(tree.SingleSpace)
-	replaced = replaced.WithName(replaced.Name.WithPrefix(tree.EmptySpace))
-	return &tree.GoStmt{
+	replaced := innerCall.WithPrefix(java.SingleSpace)
+	replaced = replaced.WithName(replaced.Name.WithPrefix(java.EmptySpace))
+	return &golang.GoStmt{
 		ID:      g.ID,
 		Prefix:  g.Prefix,
 		Markers: g.Markers,

@@ -10,7 +10,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -42,8 +42,8 @@ type addExportedFuncCommentVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *addExportedFuncCommentVisitor) VisitMethodDeclaration(md *tree.MethodDeclaration, p any) tree.J {
-	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*tree.MethodDeclaration)
+func (v *addExportedFuncCommentVisitor) VisitMethodDeclaration(md *java.MethodDeclaration, p any) java.J {
+	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*java.MethodDeclaration)
 
 	if md.Name == nil {
 		return md
@@ -76,10 +76,10 @@ func (v *addExportedFuncCommentVisitor) VisitMethodDeclaration(md *tree.MethodDe
 	// The comment suffix is "\n" + indent so the func keyword starts at the correct column.
 	commentText := "// " + funcName + " ..."
 	indent := md.Prefix.Indent()
-	comment := tree.Comment{Kind: tree.LineComment, Text: commentText, Suffix: "\n" + indent}
+	comment := java.Comment{Kind: java.LineComment, Text: commentText, Suffix: "\n" + indent}
 
 	newComments := append(md.Prefix.Comments, comment)
-	md = md.WithPrefix(tree.Space{
+	md = md.WithPrefix(java.Space{
 		Whitespace: md.Prefix.Whitespace,
 		Comments:   newComments,
 	})

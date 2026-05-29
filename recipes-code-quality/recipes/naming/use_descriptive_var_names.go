@@ -6,7 +6,7 @@ package naming
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -44,8 +44,8 @@ type useDescriptiveVarNamesVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *useDescriptiveVarNamesVisitor) VisitVariableDeclarator(vd *tree.VariableDeclarator, p any) tree.J {
-	vd = v.GoVisitor.VisitVariableDeclarator(vd, p).(*tree.VariableDeclarator)
+func (v *useDescriptiveVarNamesVisitor) VisitVariableDeclarator(vd *java.VariableDeclarator, p any) java.J {
+	vd = v.GoVisitor.VisitVariableDeclarator(vd, p).(*java.VariableDeclarator)
 
 	if vd.Name == nil {
 		return vd
@@ -61,7 +61,7 @@ func (v *useDescriptiveVarNamesVisitor) VisitVariableDeclarator(vd *tree.Variabl
 	}
 
 	vd = vd.WithName(vd.Name.WithMarkers(
-		tree.MarkupInfo(vd.Name.Markers, "single-letter variable name is not a conventional short name"),
+		java.MarkupInfo(vd.Name.Markers, "single-letter variable name is not a conventional short name"),
 	))
 	return vd
 }

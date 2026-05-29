@@ -6,7 +6,7 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -33,10 +33,10 @@ type ensureTransactionFinalizedVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *ensureTransactionFinalizedVisitor) VisitBlock(block *tree.Block, p any) tree.J {
-	block = v.GoVisitor.VisitBlock(block, p).(*tree.Block)
+func (v *ensureTransactionFinalizedVisitor) VisitBlock(block *java.Block, p any) java.J {
+	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
 
-	var newStmts []tree.RightPadded[tree.Statement]
+	var newStmts []java.RightPadded[java.Statement]
 	changed := false
 
 	for i, rp := range block.Statements {
@@ -47,7 +47,7 @@ func (v *ensureTransactionFinalizedVisitor) VisitBlock(block *tree.Block, p any)
 				continue
 			}
 			deferStmt := buildDeferMethodCall(varName, "Rollback", rp.Element)
-			newStmts = append(newStmts, tree.RightPadded[tree.Statement]{Element: deferStmt})
+			newStmts = append(newStmts, java.RightPadded[java.Statement]{Element: deferStmt})
 			changed = true
 		}
 	}
@@ -59,7 +59,7 @@ func (v *ensureTransactionFinalizedVisitor) VisitBlock(block *tree.Block, p any)
 }
 
 // isDbBegin returns true if the method invocation is *.Begin().
-func isDbBegin(mi *tree.MethodInvocation) bool {
+func isDbBegin(mi *java.MethodInvocation) bool {
 	if mi.Select == nil {
 		return false
 	}

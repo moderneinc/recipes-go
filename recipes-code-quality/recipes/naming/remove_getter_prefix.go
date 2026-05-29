@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -36,8 +36,8 @@ type removeGetterPrefixVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *removeGetterPrefixVisitor) VisitMethodDeclaration(md *tree.MethodDeclaration, p any) tree.J {
-	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*tree.MethodDeclaration)
+func (v *removeGetterPrefixVisitor) VisitMethodDeclaration(md *java.MethodDeclaration, p any) java.J {
+	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*java.MethodDeclaration)
 
 	if md.Name == nil {
 		return md
@@ -60,7 +60,7 @@ func (v *removeGetterPrefixVisitor) VisitMethodDeclaration(md *tree.MethodDeclar
 	// Strip "Get" prefix from the method name.
 	newName := strings.TrimPrefix(funcName, "Get")
 	md = md.WithName(md.Name.WithName(newName).WithMarkers(
-		tree.MarkupInfo(md.Name.Markers, "callers of "+funcName+" must be updated to use "+newName),
+		java.MarkupInfo(md.Name.Markers, "callers of "+funcName+" must be updated to use "+newName),
 	))
 	return md
 }

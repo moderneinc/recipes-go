@@ -11,7 +11,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -44,8 +44,8 @@ type useMixedCapsForConstantsVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *useMixedCapsForConstantsVisitor) VisitVariableDeclarator(vd *tree.VariableDeclarator, p any) tree.J {
-	vd = v.GoVisitor.VisitVariableDeclarator(vd, p).(*tree.VariableDeclarator)
+func (v *useMixedCapsForConstantsVisitor) VisitVariableDeclarator(vd *java.VariableDeclarator, p any) java.J {
+	vd = v.GoVisitor.VisitVariableDeclarator(vd, p).(*java.VariableDeclarator)
 
 	if vd.Name == nil {
 		return vd

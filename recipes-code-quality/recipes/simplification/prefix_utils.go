@@ -4,59 +4,61 @@
 
 package simplification
 
-import "github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+import (
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
+)
 
 // leadingPrefix returns the effective leading prefix of a binary expression,
 // which is on its left child (since Binary.Prefix is typically empty in Go LST).
-func leadingPrefix(bin *tree.Binary) tree.Space {
+func leadingPrefix(bin *java.Binary) java.Space {
 	return exprPrefix(bin.Left)
 }
 
-func exprPrefix(expr tree.Expression) tree.Space {
+func exprPrefix(expr java.Expression) java.Space {
 	switch n := expr.(type) {
-	case *tree.Identifier:
+	case *java.Identifier:
 		return n.Prefix
-	case *tree.Literal:
+	case *java.Literal:
 		return n.Prefix
-	case *tree.Parentheses:
+	case *java.Parentheses:
 		return n.Prefix
-	case *tree.Unary:
+	case *java.Unary:
 		return n.Prefix
-	case *tree.Binary:
+	case *java.Binary:
 		return exprPrefix(n.Left)
-	case *tree.FieldAccess:
+	case *java.FieldAccess:
 		return exprPrefix(n.Target)
-	case *tree.MethodInvocation:
+	case *java.MethodInvocation:
 		if n.Select != nil {
 			return exprPrefix(n.Select.Element)
 		}
 		return exprPrefix(n.Name)
 	default:
-		return tree.Space{}
+		return java.Space{}
 	}
 }
 
-func setExprPrefix(expr tree.Expression, prefix tree.Space) tree.Expression {
+func setExprPrefix(expr java.Expression, prefix java.Space) java.Expression {
 	switch n := expr.(type) {
-	case *tree.Identifier:
+	case *java.Identifier:
 		return n.WithPrefix(prefix)
-	case *tree.Literal:
+	case *java.Literal:
 		return n.WithPrefix(prefix)
-	case *tree.Parentheses:
+	case *java.Parentheses:
 		return n.WithPrefix(prefix)
-	case *tree.Unary:
-		return &tree.Unary{
+	case *java.Unary:
+		return &java.Unary{
 			ID: n.ID, Prefix: prefix, Markers: n.Markers,
 			Operator: n.Operator, Operand: n.Operand, Type: n.Type,
 		}
-	case *tree.Binary:
-		return &tree.Binary{
+	case *java.Binary:
+		return &java.Binary{
 			ID: n.ID, Prefix: n.Prefix, Markers: n.Markers,
 			Left: setExprPrefix(n.Left, prefix), Operator: n.Operator, Right: n.Right, Type: n.Type,
 		}
-	case *tree.FieldAccess:
+	case *java.FieldAccess:
 		return n.WithPrefix(prefix)
-	case *tree.MethodInvocation:
+	case *java.MethodInvocation:
 		return n.WithPrefix(prefix)
 	default:
 		return expr

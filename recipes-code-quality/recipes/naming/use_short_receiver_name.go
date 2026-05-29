@@ -8,7 +8,8 @@ import (
 	"strings"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -36,8 +37,8 @@ type useShortReceiverNameVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *useShortReceiverNameVisitor) VisitMethodDeclaration(md *tree.MethodDeclaration, p any) tree.J {
-	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*tree.MethodDeclaration)
+func (v *useShortReceiverNameVisitor) VisitMethodDeclaration(md *java.MethodDeclaration, p any) java.J {
+	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*java.MethodDeclaration)
 
 	if md.Receiver == nil {
 		return md
@@ -48,7 +49,7 @@ func (v *useShortReceiverNameVisitor) VisitMethodDeclaration(md *tree.MethodDecl
 	if len(params) == 0 {
 		return md
 	}
-	vd, ok := params[0].Element.(*tree.VariableDeclarations)
+	vd, ok := params[0].Element.(*java.VariableDeclarations)
 	if !ok || len(vd.Variables) == 0 {
 		return md
 	}
@@ -71,12 +72,12 @@ func (v *useShortReceiverNameVisitor) VisitMethodDeclaration(md *tree.MethodDecl
 	// Rename receiver param.
 	newNameIdent := nameIdent.WithName(newName)
 	newVarDecl := vd.Variables[0].Element.WithName(newNameIdent)
-	newVars := []tree.RightPadded[*tree.VariableDeclarator]{
+	newVars := []java.RightPadded[*java.VariableDeclarator]{
 		{Element: newVarDecl, After: vd.Variables[0].After, Markers: vd.Variables[0].Markers},
 	}
 	newVd := *vd
 	newVd.Variables = newVars
-	newParams := []tree.RightPadded[tree.Statement]{
+	newParams := []java.RightPadded[java.Statement]{
 		{Element: &newVd, After: params[0].After, Markers: params[0].Markers},
 	}
 	newReceiver := *md.Receiver
@@ -87,7 +88,7 @@ func (v *useShortReceiverNameVisitor) VisitMethodDeclaration(md *tree.MethodDecl
 	// Rename usages in body.
 	if c.Body != nil {
 		renamer := visitor.Init(&receiverRenameVisitor{oldName: oldName, newName: newName})
-		c.Body = renamer.Visit(c.Body, p).(*tree.Block)
+		c.Body = renamer.Visit(c.Body, p).(*java.Block)
 	}
 
 	return &c
@@ -95,18 +96,18 @@ func (v *useShortReceiverNameVisitor) VisitMethodDeclaration(md *tree.MethodDecl
 
 // extractTypeName returns the simple type name from a type expression,
 // unwrapping pointer types (Unary with Deref operator).
-func extractTypeName(expr tree.Expression) string {
+func extractTypeName(expr java.Expression) string {
 	if expr == nil {
 		return ""
 	}
 	// Pointer type: *Foo may be PointerType or Unary(Deref).
-	if pt, ok := expr.(*tree.PointerType); ok {
+	if pt, ok := expr.(*golang.PointerType); ok {
 		return extractTypeName(pt.Elem)
 	}
-	if u, ok := expr.(*tree.Unary); ok {
+	if u, ok := expr.(*java.Unary); ok {
 		return extractTypeName(u.Operand)
 	}
-	if ident, ok := expr.(*tree.Identifier); ok {
+	if ident, ok := expr.(*java.Identifier); ok {
 		return ident.Name
 	}
 	return ""
@@ -119,8 +120,8 @@ type receiverRenameVisitor struct {
 	newName string
 }
 
-func (v *receiverRenameVisitor) VisitIdentifier(ident *tree.Identifier, p any) tree.J {
-	ident = v.GoVisitor.VisitIdentifier(ident, p).(*tree.Identifier)
+func (v *receiverRenameVisitor) VisitIdentifier(ident *java.Identifier, p any) java.J {
+	ident = v.GoVisitor.VisitIdentifier(ident, p).(*java.Identifier)
 	if ident.Name == v.oldName {
 		return ident.WithName(v.newName)
 	}

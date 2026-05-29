@@ -6,7 +6,7 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -35,7 +35,7 @@ type wrapErrorBeforeReturnVisitor struct {
 	funcName string
 }
 
-func (v *wrapErrorBeforeReturnVisitor) VisitMethodDeclaration(md *tree.MethodDeclaration, p any) tree.J {
+func (v *wrapErrorBeforeReturnVisitor) VisitMethodDeclaration(md *java.MethodDeclaration, p any) java.J {
 	oldName := v.funcName
 	if md.Name != nil {
 		v.funcName = md.Name.Name
@@ -45,22 +45,22 @@ func (v *wrapErrorBeforeReturnVisitor) VisitMethodDeclaration(md *tree.MethodDec
 	return result
 }
 
-func (v *wrapErrorBeforeReturnVisitor) VisitReturn(ret *tree.Return, p any) tree.J {
-	ret = v.GoVisitor.VisitReturn(ret, p).(*tree.Return)
+func (v *wrapErrorBeforeReturnVisitor) VisitReturn(ret *java.Return, p any) java.J {
+	ret = v.GoVisitor.VisitReturn(ret, p).(*java.Return)
 
 	if len(ret.Expressions) < 2 {
 		return ret
 	}
 
 	// First expression must be the nil identifier.
-	firstIdent, firstOk := ret.Expressions[0].Element.(*tree.Identifier)
+	firstIdent, firstOk := ret.Expressions[0].Element.(*java.Identifier)
 	if !firstOk || firstIdent.Name != "nil" {
 		return ret
 	}
 
 	// Last expression must be the bare "err" identifier.
 	lastIdx := len(ret.Expressions) - 1
-	lastIdent, lastOk := ret.Expressions[lastIdx].Element.(*tree.Identifier)
+	lastIdent, lastOk := ret.Expressions[lastIdx].Element.(*java.Identifier)
 	if !lastOk || lastIdent.Name != "err" {
 		return ret
 	}
@@ -71,30 +71,30 @@ func (v *wrapErrorBeforeReturnVisitor) VisitReturn(ret *tree.Return, p any) tree
 	}
 
 	// Build: fmt.Errorf("funcName: %w", err)
-	fmtIdent := &tree.Identifier{
+	fmtIdent := &java.Identifier{
 		Name: "fmt",
 	}
 
-	errorfIdent := &tree.Identifier{
+	errorfIdent := &java.Identifier{
 		Name: "Errorf",
 	}
 
-	formatLit := &tree.Literal{
-		Kind:   tree.StringLiteral,
+	formatLit := &java.Literal{
+		Kind:   java.StringLiteral,
 		Source: `"` + v.funcName + `: %w"`,
 	}
 
-	errIdent := &tree.Identifier{
-		Prefix: tree.SingleSpace,
+	errIdent := &java.Identifier{
+		Prefix: java.SingleSpace,
 		Name:   "err",
 	}
 
-	errorfCall := &tree.MethodInvocation{
+	errorfCall := &java.MethodInvocation{
 		Prefix: lastIdent.Prefix,
-		Select: &tree.RightPadded[tree.Expression]{Element: fmtIdent},
+		Select: &java.RightPadded[java.Expression]{Element: fmtIdent},
 		Name:   errorfIdent,
-		Arguments: tree.Container[tree.Expression]{
-			Elements: []tree.RightPadded[tree.Expression]{
+		Arguments: java.Container[java.Expression]{
+			Elements: []java.RightPadded[java.Expression]{
 				{Element: formatLit},
 				{Element: errIdent},
 			},
@@ -102,9 +102,9 @@ func (v *wrapErrorBeforeReturnVisitor) VisitReturn(ret *tree.Return, p any) tree
 	}
 
 	// Replace the last expression (bare err) with the fmt.Errorf call.
-	newExprs := make([]tree.RightPadded[tree.Expression], len(ret.Expressions))
+	newExprs := make([]java.RightPadded[java.Expression], len(ret.Expressions))
 	copy(newExprs, ret.Expressions)
-	newExprs[lastIdx] = tree.RightPadded[tree.Expression]{
+	newExprs[lastIdx] = java.RightPadded[java.Expression]{
 		Element: errorfCall,
 		After:   ret.Expressions[lastIdx].After,
 		Markers: ret.Expressions[lastIdx].Markers,

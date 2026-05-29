@@ -6,7 +6,7 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -34,26 +34,26 @@ type removeDebugPrintVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *removeDebugPrintVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p any) tree.J {
-	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*tree.MethodInvocation)
+func (v *removeDebugPrintVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	// Match built-in println/print (no Select)
 	if mi.Select == nil {
 		if mi.Name.Name == "println" || mi.Name.Name == "print" {
-			return &tree.Empty{}
+			return &java.Empty{}
 		}
 		return mi
 	}
 
 	// Match fmt.Println, fmt.Printf, fmt.Print
-	ident, ok := mi.Select.Element.(*tree.Identifier)
+	ident, ok := mi.Select.Element.(*java.Identifier)
 	if !ok || ident.Name != "fmt" {
 		return mi
 	}
 
 	switch mi.Name.Name {
 	case "Println", "Printf", "Print":
-		return &tree.Empty{}
+		return &java.Empty{}
 	}
 
 	return mi

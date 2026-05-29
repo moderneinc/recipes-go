@@ -6,7 +6,7 @@ package redundancy
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -34,17 +34,17 @@ type removeSelfAssignmentVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *removeSelfAssignmentVisitor) VisitAssignment(assign *tree.Assignment, p any) tree.J {
-	assign = v.GoVisitor.VisitAssignment(assign, p).(*tree.Assignment)
+func (v *removeSelfAssignmentVisitor) VisitAssignment(assign *java.Assignment, p any) java.J {
+	assign = v.GoVisitor.VisitAssignment(assign, p).(*java.Assignment)
 
 	// Check if the left-hand side is an identifier.
-	lhs, lhsOk := assign.Variable.(*tree.Identifier)
+	lhs, lhsOk := assign.Variable.(*java.Identifier)
 	if !lhsOk {
 		return assign
 	}
 
 	// Check if the right-hand side is an identifier with the same name.
-	rhs, rhsOk := assign.Value.Element.(*tree.Identifier)
+	rhs, rhsOk := assign.Value.Element.(*java.Identifier)
 	if !rhsOk {
 		return assign
 	}
@@ -54,5 +54,5 @@ func (v *removeSelfAssignmentVisitor) VisitAssignment(assign *tree.Assignment, p
 	}
 
 	// Replace the self-assignment with an empty statement.
-	return &tree.Empty{Prefix: assign.Variable.(*tree.Identifier).Prefix}
+	return &java.Empty{Prefix: assign.Variable.(*java.Identifier).Prefix}
 }

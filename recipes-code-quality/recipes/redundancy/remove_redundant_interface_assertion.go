@@ -6,7 +6,8 @@ package redundancy
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -38,8 +39,8 @@ type removeRedundantInterfaceAssertionVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *removeRedundantInterfaceAssertionVisitor) VisitTypeCast(tc *tree.TypeCast, p any) tree.J {
-	tc = v.GoVisitor.VisitTypeCast(tc, p).(*tree.TypeCast)
+func (v *removeRedundantInterfaceAssertionVisitor) VisitTypeCast(tc *java.TypeCast, p any) java.J {
+	tc = v.GoVisitor.VisitTypeCast(tc, p).(*java.TypeCast)
 
 	if tc.Clazz == nil {
 		return tc
@@ -50,12 +51,12 @@ func (v *removeRedundantInterfaceAssertionVisitor) VisitTypeCast(tc *tree.TypeCa
 	isRedundant := false
 
 	// Check for `x.(any)` -- the type inside the parentheses is Identifier "any".
-	if ident, ok := inner.(*tree.Identifier); ok && ident.Name == "any" {
+	if ident, ok := inner.(*java.Identifier); ok && ident.Name == "any" {
 		isRedundant = true
 	}
 
 	// Check for `x.(interface{})` -- the type inside is an InterfaceType with an empty body.
-	if iface, ok := inner.(*tree.InterfaceType); ok {
+	if iface, ok := inner.(*golang.InterfaceType); ok {
 		if iface.Body == nil || len(iface.Body.Statements) == 0 {
 			isRedundant = true
 		}
@@ -73,17 +74,17 @@ func (v *removeRedundantInterfaceAssertionVisitor) VisitTypeCast(tc *tree.TypeCa
 }
 
 // prependExprPrefix prepends extra whitespace to an expression's existing prefix.
-func prependExprPrefix(expr tree.Expression, extra tree.Space) tree.J {
+func prependExprPrefix(expr java.Expression, extra java.Space) java.J {
 	if extra.IsEmpty() {
 		return expr
 	}
 	switch n := expr.(type) {
-	case *tree.Identifier:
-		return n.WithPrefix(tree.Space{Whitespace: extra.Whitespace + n.Prefix.Whitespace})
-	case *tree.MethodInvocation:
-		return n.WithPrefix(tree.Space{Whitespace: extra.Whitespace + n.Prefix.Whitespace})
-	case *tree.FieldAccess:
-		return n.WithPrefix(tree.Space{Whitespace: extra.Whitespace + n.Prefix.Whitespace})
+	case *java.Identifier:
+		return n.WithPrefix(java.Space{Whitespace: extra.Whitespace + n.Prefix.Whitespace})
+	case *java.MethodInvocation:
+		return n.WithPrefix(java.Space{Whitespace: extra.Whitespace + n.Prefix.Whitespace})
+	case *java.FieldAccess:
+		return n.WithPrefix(java.Space{Whitespace: extra.Whitespace + n.Prefix.Whitespace})
 	default:
 		return expr
 	}

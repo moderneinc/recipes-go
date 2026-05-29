@@ -7,7 +7,7 @@ package style
 import (
 	"github.com/moderneinc/recipes-go/recipes-code-quality/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -41,8 +41,8 @@ type avoidInitFunctionVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *avoidInitFunctionVisitor) VisitMethodDeclaration(md *tree.MethodDeclaration, p any) tree.J {
-	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*tree.MethodDeclaration)
+func (v *avoidInitFunctionVisitor) VisitMethodDeclaration(md *java.MethodDeclaration, p any) java.J {
+	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*java.MethodDeclaration)
 
 	if md.Name == nil || md.Name.Name != "init" {
 		return md
@@ -55,7 +55,7 @@ func (v *avoidInitFunctionVisitor) VisitMethodDeclaration(md *tree.MethodDeclara
 
 	// Must have no parameters (only the Empty sentinel).
 	for _, param := range md.Parameters.Elements {
-		if _, isEmpty := param.Element.(*tree.Empty); !isEmpty {
+		if _, isEmpty := param.Element.(*java.Empty); !isEmpty {
 			return md
 		}
 	}
@@ -66,7 +66,7 @@ func (v *avoidInitFunctionVisitor) VisitMethodDeclaration(md *tree.MethodDeclara
 	}
 
 	md = md.WithName(md.Name.WithMarkers(
-		tree.MarkupInfo(md.Name.Markers, "consider removing init function"),
+		java.MarkupInfo(md.Name.Markers, "consider removing init function"),
 	))
 	return md
 }

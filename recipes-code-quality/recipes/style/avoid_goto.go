@@ -6,7 +6,8 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -33,8 +34,8 @@ type avoidGotoVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *avoidGotoVisitor) VisitGoto(g *tree.Goto, p any) tree.J {
-	g = v.GoVisitor.VisitGoto(g, p).(*tree.Goto)
-	g = g.WithMarkers(tree.MarkupWarn(g.Markers, "consider restructuring to avoid goto"))
+func (v *avoidGotoVisitor) VisitGoto(g *golang.Goto, p any) java.J {
+	g = v.GoVisitor.VisitGoto(g, p).(*golang.Goto)
+	g = g.WithMarkers(java.MarkupWarn(g.Markers, "consider restructuring to avoid goto"))
 	return g
 }

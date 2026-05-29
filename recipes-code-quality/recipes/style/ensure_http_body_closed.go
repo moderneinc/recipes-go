@@ -7,7 +7,8 @@ package style
 import (
 	"github.com/google/uuid"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -42,10 +43,10 @@ var httpBodyMethods = map[string]bool{
 	"Head": true,
 }
 
-func (v *ensureHttpBodyClosedVisitor) VisitBlock(block *tree.Block, p any) tree.J {
-	block = v.GoVisitor.VisitBlock(block, p).(*tree.Block)
+func (v *ensureHttpBodyClosedVisitor) VisitBlock(block *java.Block, p any) java.J {
+	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
 
-	var newStmts []tree.RightPadded[tree.Statement]
+	var newStmts []java.RightPadded[java.Statement]
 	changed := false
 
 	for i, rp := range block.Statements {
@@ -56,7 +57,7 @@ func (v *ensureHttpBodyClosedVisitor) VisitBlock(block *tree.Block, p any) tree.
 				continue
 			}
 			deferStmt := buildDeferBodyClose(varName, rp.Element)
-			newStmts = append(newStmts, tree.RightPadded[tree.Statement]{Element: deferStmt})
+			newStmts = append(newStmts, java.RightPadded[java.Statement]{Element: deferStmt})
 			changed = true
 		}
 	}
@@ -68,11 +69,11 @@ func (v *ensureHttpBodyClosedVisitor) VisitBlock(block *tree.Block, p any) tree.
 }
 
 // isHttpBodyCall returns true if the method invocation is http.Get/Post/Head or *.Do.
-func isHttpBodyCall(mi *tree.MethodInvocation) bool {
+func isHttpBodyCall(mi *java.MethodInvocation) bool {
 	if mi.Select == nil {
 		return false
 	}
-	ident, ok := mi.Select.Element.(*tree.Identifier)
+	ident, ok := mi.Select.Element.(*java.Identifier)
 	if !ok {
 		return false
 	}
@@ -89,9 +90,9 @@ func isHttpBodyCall(mi *tree.MethodInvocation) bool {
 
 // hasDeferBodyCloseAfter checks if any statement after index i is
 // defer varName.Body.Close().
-func hasDeferBodyCloseAfter(stmts []tree.RightPadded[tree.Statement], i int, varName string) bool {
+func hasDeferBodyCloseAfter(stmts []java.RightPadded[java.Statement], i int, varName string) bool {
 	for j := i + 1; j < len(stmts); j++ {
-		d, ok := stmts[j].Element.(*tree.Defer)
+		d, ok := stmts[j].Element.(*golang.Defer)
 		if !ok {
 			continue
 		}
@@ -103,8 +104,8 @@ func hasDeferBodyCloseAfter(stmts []tree.RightPadded[tree.Statement], i int, var
 }
 
 // matchesDeferBodyClose returns true if the defer calls varName.Body.Close().
-func matchesDeferBodyClose(d *tree.Defer, varName string) bool {
-	mi, ok := d.Expr.(*tree.MethodInvocation)
+func matchesDeferBodyClose(d *golang.Defer, varName string) bool {
+	mi, ok := d.Expr.(*java.MethodInvocation)
 	if !ok || mi.Name.Name != "Close" {
 		return false
 	}
@@ -112,14 +113,14 @@ func matchesDeferBodyClose(d *tree.Defer, varName string) bool {
 		return false
 	}
 	// The select should be varName.Body (a FieldAccess)
-	fa, ok := mi.Select.Element.(*tree.FieldAccess)
+	fa, ok := mi.Select.Element.(*java.FieldAccess)
 	if !ok {
 		return false
 	}
 	if fa.Name.Element.Name != "Body" {
 		return false
 	}
-	ident, ok := fa.Target.(*tree.Identifier)
+	ident, ok := fa.Target.(*java.Identifier)
 	if !ok {
 		return false
 	}
@@ -127,37 +128,37 @@ func matchesDeferBodyClose(d *tree.Defer, varName string) bool {
 }
 
 // buildDeferBodyClose builds `defer varName.Body.Close()`.
-func buildDeferBodyClose(varName string, originalStmt tree.Statement) *tree.Defer {
+func buildDeferBodyClose(varName string, originalStmt java.Statement) *golang.Defer {
 	prefix := stmtPrefix(originalStmt)
 
-	respIdent := &tree.Identifier{
+	respIdent := &java.Identifier{
 		ID:   uuid.New(),
 		Name: varName,
 	}
-	bodyAccess := &tree.FieldAccess{
+	bodyAccess := &java.FieldAccess{
 		ID:     uuid.New(),
 		Target: respIdent,
-		Name: tree.LeftPadded[*tree.Identifier]{
-			Element: &tree.Identifier{
+		Name: java.LeftPadded[*java.Identifier]{
+			Element: &java.Identifier{
 				ID:   uuid.New(),
 				Name: "Body",
 			},
 		},
 	}
-	closeIdent := &tree.Identifier{
+	closeIdent := &java.Identifier{
 		ID:   uuid.New(),
 		Name: "Close",
 	}
-	closeCall := &tree.MethodInvocation{
+	closeCall := &java.MethodInvocation{
 		ID:     uuid.New(),
-		Prefix: tree.SingleSpace,
-		Select: &tree.RightPadded[tree.Expression]{Element: bodyAccess},
+		Prefix: java.SingleSpace,
+		Select: &java.RightPadded[java.Expression]{Element: bodyAccess},
 		Name:   closeIdent,
-		Arguments: tree.Container[tree.Expression]{
-			Before: tree.EmptySpace,
+		Arguments: java.Container[java.Expression]{
+			Before: java.EmptySpace,
 		},
 	}
-	return &tree.Defer{
+	return &golang.Defer{
 		ID:     uuid.New(),
 		Prefix: prefix,
 		Expr:   closeCall,

@@ -7,7 +7,8 @@ package simplification
 import (
 	"github.com/moderneinc/recipes-go/recipes-code-quality/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -40,8 +41,8 @@ type simplifySliceRangeVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *simplifySliceRangeVisitor) VisitSlice(s *tree.Slice, p any) tree.J {
-	s = v.GoVisitor.VisitSlice(s, p).(*tree.Slice)
+func (v *simplifySliceRangeVisitor) VisitSlice(s *golang.Slice, p any) java.J {
+	s = v.GoVisitor.VisitSlice(s, p).(*golang.Slice)
 
 	// Must be a 2-index slice (no Max)
 	if s.Max != nil {
@@ -64,41 +65,41 @@ func (v *simplifySliceRangeVisitor) VisitSlice(s *tree.Slice, p any) tree.J {
 	}
 
 	// Replace low with Empty and high with Empty to produce s[:]
-	empty := &tree.Empty{}
-	return &tree.Slice{
+	empty := &java.Empty{}
+	return &golang.Slice{
 		ID:           s.ID,
 		Prefix:       s.Prefix,
 		Markers:      s.Markers,
 		Indexed:      s.Indexed,
 		OpenBracket:  s.OpenBracket,
-		Low:          tree.RightPadded[tree.Expression]{Element: empty, After: s.Low.After},
-		High:         tree.RightPadded[tree.Expression]{Element: empty, After: s.High.After},
+		Low:          java.RightPadded[java.Expression]{Element: empty, After: s.Low.After},
+		High:         java.RightPadded[java.Expression]{Element: empty, After: s.High.After},
 		Max:          nil,
 		CloseBracket: s.CloseBracket,
 	}
 }
 
-func identNameFromExpr(expr tree.Expression) string {
+func identNameFromExpr(expr java.Expression) string {
 	switch n := expr.(type) {
-	case *tree.Identifier:
+	case *java.Identifier:
 		return n.Name
 	default:
 		return ""
 	}
 }
 
-func isLiteralZero(expr tree.Expression) bool {
-	lit, ok := expr.(*tree.Literal)
+func isLiteralZero(expr java.Expression) bool {
+	lit, ok := expr.(*java.Literal)
 	return ok && lit.Source == "0"
 }
 
-func isLenOfVar(expr tree.Expression, varName string) bool {
-	mi, ok := expr.(*tree.MethodInvocation)
+func isLenOfVar(expr java.Expression, varName string) bool {
+	mi, ok := expr.(*java.MethodInvocation)
 	if !ok || mi.Select != nil || mi.Name.Name != "len" {
 		return false
 	}
 	for _, arg := range mi.Arguments.Elements {
-		if ident, ok := arg.Element.(*tree.Identifier); ok {
+		if ident, ok := arg.Element.(*java.Identifier); ok {
 			return ident.Name == varName
 		}
 	}

@@ -6,7 +6,7 @@ package redundancy
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -36,8 +36,8 @@ type useMeaningfulReturnValuesVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *useMeaningfulReturnValuesVisitor) VisitReturn(ret *tree.Return, p any) tree.J {
-	ret = v.GoVisitor.VisitReturn(ret, p).(*tree.Return)
+func (v *useMeaningfulReturnValuesVisitor) VisitReturn(ret *java.Return, p any) java.J {
+	ret = v.GoVisitor.VisitReturn(ret, p).(*java.Return)
 
 	// Must have at least 2 return expressions.
 	if len(ret.Expressions) < 2 {
@@ -46,14 +46,14 @@ func (v *useMeaningfulReturnValuesVisitor) VisitReturn(ret *tree.Return, p any) 
 
 	// All expressions must be the identifier "nil".
 	for _, rp := range ret.Expressions {
-		ident, ok := rp.Element.(*tree.Identifier)
+		ident, ok := rp.Element.(*java.Identifier)
 		if !ok || ident.Name != "nil" {
 			return ret
 		}
 	}
 
 	ret = ret.WithMarkers(
-		tree.MarkupInfo(ret.Markers, "all return values are nil; possible missing error or result"),
+		java.MarkupInfo(ret.Markers, "all return values are nil; possible missing error or result"),
 	)
 	return ret
 }

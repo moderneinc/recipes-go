@@ -6,7 +6,8 @@ package errorhandling
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -34,10 +35,10 @@ type handleDeferredCloseErrorVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *handleDeferredCloseErrorVisitor) VisitDefer(d *tree.Defer, p any) tree.J {
-	d = v.GoVisitor.VisitDefer(d, p).(*tree.Defer)
+func (v *handleDeferredCloseErrorVisitor) VisitDefer(d *golang.Defer, p any) java.J {
+	d = v.GoVisitor.VisitDefer(d, p).(*golang.Defer)
 
-	mi, ok := d.Expr.(*tree.MethodInvocation)
+	mi, ok := d.Expr.(*java.MethodInvocation)
 	if !ok {
 		return d
 	}
@@ -50,39 +51,39 @@ func (v *handleDeferredCloseErrorVisitor) VisitDefer(d *tree.Defer, p any) tree.
 	//
 	// Step 1: Move the original Close() call, stripping its leading space
 	// so it sits right after "= " in the assignment.
-	closeCall := mi.WithPrefix(tree.EmptySpace)
+	closeCall := mi.WithPrefix(java.EmptySpace)
 
 	// Step 2: _ = f.Close()
-	assignment := &tree.Assignment{
-		Prefix:   tree.SingleSpace,
-		Variable: &tree.Identifier{Name: "_"},
-		Value:    tree.LeftPadded[tree.Expression]{Before: tree.SingleSpace, Element: closeCall},
+	assignment := &java.Assignment{
+		Prefix:   java.SingleSpace,
+		Variable: &java.Identifier{Name: "_"},
+		Value:    java.LeftPadded[java.Expression]{Before: java.SingleSpace, Element: closeCall},
 	}
 
 	// Step 3: func() { _ = f.Close() }  — a MethodDeclaration with empty name
-	funcLiteral := &tree.MethodDeclaration{
-		Prefix:     tree.SingleSpace,
-		Name:       &tree.Identifier{Name: ""},
-		Parameters: tree.Container[tree.Statement]{},
-		Body: &tree.Block{
-			Prefix: tree.SingleSpace,
-			Statements: []tree.RightPadded[tree.Statement]{
+	funcLiteral := &java.MethodDeclaration{
+		Prefix:     java.SingleSpace,
+		Name:       &java.Identifier{Name: ""},
+		Parameters: java.Container[java.Statement]{},
+		Body: &java.Block{
+			Prefix: java.SingleSpace,
+			Statements: []java.RightPadded[java.Statement]{
 				{Element: assignment},
 			},
-			End: tree.SingleSpace,
+			End: java.SingleSpace,
 		},
 	}
 
 	// Step 4: func() { _ = f.Close() }()  — call the literal
-	outerCall := &tree.MethodInvocation{
-		Prefix:    tree.EmptySpace,
-		Select:    &tree.RightPadded[tree.Expression]{Element: funcLiteral},
-		Name:      &tree.Identifier{Name: ""},
-		Arguments: tree.Container[tree.Expression]{},
+	outerCall := &java.MethodInvocation{
+		Prefix:    java.EmptySpace,
+		Select:    &java.RightPadded[java.Expression]{Element: funcLiteral},
+		Name:      &java.Identifier{Name: ""},
+		Arguments: java.Container[java.Expression]{},
 	}
 
 	// Step 5: Keep the defer, replace its expression
-	return &tree.Defer{
+	return &golang.Defer{
 		ID:      d.ID,
 		Prefix:  d.Prefix,
 		Markers: d.Markers,

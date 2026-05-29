@@ -7,7 +7,8 @@ package style
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/parser"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -38,15 +39,15 @@ type useHttpServerWithTimeoutVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *useHttpServerWithTimeoutVisitor) VisitBlock(block *tree.Block, p any) tree.J {
-	block = v.GoVisitor.VisitBlock(block, p).(*tree.Block)
+func (v *useHttpServerWithTimeoutVisitor) VisitBlock(block *java.Block, p any) java.J {
+	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
 
 	stmts := block.Statements
-	var newStmts []tree.RightPadded[tree.Statement]
+	var newStmts []java.RightPadded[java.Statement]
 	changed := false
 
 	for _, stmt := range stmts {
-		mi, ok := stmt.Element.(*tree.MethodInvocation)
+		mi, ok := stmt.Element.(*java.MethodInvocation)
 		if !ok {
 			newStmts = append(newStmts, stmt)
 			continue
@@ -75,7 +76,7 @@ func (v *useHttpServerWithTimeoutVisitor) VisitBlock(block *tree.Block, p any) t
 		}
 
 		for _, r := range replacements {
-			newStmts = append(newStmts, tree.RightPadded[tree.Statement]{Element: r, After: stmt.After})
+			newStmts = append(newStmts, java.RightPadded[java.Statement]{Element: r, After: stmt.After})
 		}
 		changed = true
 	}
@@ -87,11 +88,11 @@ func (v *useHttpServerWithTimeoutVisitor) VisitBlock(block *tree.Block, p any) t
 }
 
 // isHttpListenAndServe checks if the method invocation is http.ListenAndServe.
-func isHttpListenAndServe(mi *tree.MethodInvocation) bool {
+func isHttpListenAndServe(mi *java.MethodInvocation) bool {
 	if mi.Select == nil {
 		return false
 	}
-	ident, ok := mi.Select.Element.(*tree.Identifier)
+	ident, ok := mi.Select.Element.(*java.Identifier)
 	if !ok || ident.Name != "http" {
 		return false
 	}
@@ -99,10 +100,10 @@ func isHttpListenAndServe(mi *tree.MethodInvocation) bool {
 }
 
 // nonEmptyArgs returns the non-empty arguments from an argument list.
-func nonEmptyArgs(args []tree.RightPadded[tree.Expression]) []tree.Expression {
-	var result []tree.Expression
+func nonEmptyArgs(args []java.RightPadded[java.Expression]) []java.Expression {
+	var result []java.Expression
 	for _, a := range args {
-		if _, isEmpty := a.Element.(*tree.Empty); !isEmpty {
+		if _, isEmpty := a.Element.(*java.Empty); !isEmpty {
 			result = append(result, a.Element)
 		}
 	}
@@ -111,7 +112,7 @@ func nonEmptyArgs(args []tree.RightPadded[tree.Expression]) []tree.Expression {
 
 // buildServerStatements parses a scaffold containing the replacement statements
 // and splices the captured addr/handler expressions into the result.
-func buildServerStatements(addr, handler tree.Expression, original *tree.MethodInvocation) []tree.Statement {
+func buildServerStatements(addr, handler java.Expression, original *java.MethodInvocation) []java.Statement {
 	// Parse a scaffold that contains the two replacement statements with
 	// placeholder identifiers that we will replace manually.
 	source := `package __tmpl__
@@ -133,9 +134,9 @@ func __f__() {
 	}
 
 	// Find the function body.
-	var bodyStmts []tree.RightPadded[tree.Statement]
+	var bodyStmts []java.RightPadded[java.Statement]
 	for _, stmt := range cu.Statements {
-		md, ok := stmt.Element.(*tree.MethodDeclaration)
+		md, ok := stmt.Element.(*java.MethodDeclaration)
 		if !ok || md.Name.Name != "__f__" || md.Body == nil {
 			continue
 		}
@@ -151,7 +152,7 @@ func __f__() {
 
 	// First statement: server := &http.Server{Addr: __ADDR__, Handler: __HANDLER__, ...}
 	declStmt := bodyStmts[0].Element
-	declStmt = replaceIdentsInStatement(declStmt, map[string]tree.Expression{
+	declStmt = replaceIdentsInStatement(declStmt, map[string]java.Expression{
 		"__ADDR__":    addr,
 		"__HANDLER__": handler,
 	})
@@ -161,13 +162,13 @@ func __f__() {
 	callStmt := bodyStmts[1].Element
 	callStmt = setStmtLeadingPrefix(callStmt, prefix)
 
-	return []tree.Statement{declStmt, callStmt}
+	return []java.Statement{declStmt, callStmt}
 }
 
 // httpMiPrefix extracts the leading whitespace from an http.X method invocation.
-func httpMiPrefix(mi *tree.MethodInvocation) tree.Space {
+func httpMiPrefix(mi *java.MethodInvocation) java.Space {
 	if mi.Select != nil {
-		if ident, ok := mi.Select.Element.(*tree.Identifier); ok {
+		if ident, ok := mi.Select.Element.(*java.Identifier); ok {
 			return ident.Prefix
 		}
 	}
@@ -177,14 +178,14 @@ func httpMiPrefix(mi *tree.MethodInvocation) tree.Space {
 // replaceIdentsInStatement replaces named identifiers inside a statement AST node.
 // This manually walks into Assignment values, Unary operands, and Composite elements
 // to work around GoVisitor not recursing into Composite children.
-func replaceIdentsInStatement(stmt tree.Statement, replacements map[string]tree.Expression) tree.Statement {
+func replaceIdentsInStatement(stmt java.Statement, replacements map[string]java.Expression) java.Statement {
 	switch s := stmt.(type) {
-	case *tree.Assignment:
+	case *java.Assignment:
 		val := replaceIdentsInExpression(s.Value.Element, replacements)
-		return &tree.Assignment{
+		return &java.Assignment{
 			ID: s.ID, Prefix: s.Prefix, Markers: s.Markers,
 			Variable: s.Variable,
-			Value:    tree.LeftPadded[tree.Expression]{Before: s.Value.Before, Element: val},
+			Value:    java.LeftPadded[java.Expression]{Before: s.Value.Before, Element: val},
 			Type:     s.Type,
 		}
 	default:
@@ -193,40 +194,40 @@ func replaceIdentsInStatement(stmt tree.Statement, replacements map[string]tree.
 }
 
 // replaceIdentsInExpression recursively replaces named identifiers in an expression.
-func replaceIdentsInExpression(expr tree.Expression, replacements map[string]tree.Expression) tree.Expression {
+func replaceIdentsInExpression(expr java.Expression, replacements map[string]java.Expression) java.Expression {
 	switch e := expr.(type) {
-	case *tree.Identifier:
+	case *java.Identifier:
 		if replacement, ok := replacements[e.Name]; ok {
 			return setExprPrefix(replacement, e.Prefix)
 		}
 		return e
-	case *tree.Unary:
+	case *java.Unary:
 		replaced := replaceIdentsInExpression(e.Operand, replacements)
 		return e.WithOperand(replaced)
-	case *tree.Composite:
-		newElements := make([]tree.RightPadded[tree.Expression], len(e.Elements.Elements))
+	case *golang.Composite:
+		newElements := make([]java.RightPadded[java.Expression], len(e.Elements.Elements))
 		for i, elem := range e.Elements.Elements {
-			newElements[i] = tree.RightPadded[tree.Expression]{
+			newElements[i] = java.RightPadded[java.Expression]{
 				Element: replaceIdentsInExpression(elem.Element, replacements),
 				After:   elem.After,
 				Markers: elem.Markers,
 			}
 		}
-		return &tree.Composite{
+		return &golang.Composite{
 			ID: e.ID, Prefix: e.Prefix, Markers: e.Markers,
 			TypeExpr: e.TypeExpr,
-			Elements: tree.Container[tree.Expression]{
+			Elements: java.Container[java.Expression]{
 				Before:   e.Elements.Before,
 				Elements: newElements,
 				Markers:  e.Elements.Markers,
 			},
 		}
-	case *tree.KeyValue:
+	case *golang.KeyValue:
 		val := replaceIdentsInExpression(e.Value.Element, replacements)
-		return &tree.KeyValue{
+		return &golang.KeyValue{
 			ID: e.ID, Prefix: e.Prefix, Markers: e.Markers,
 			Key:   e.Key,
-			Value: tree.LeftPadded[tree.Expression]{Before: e.Value.Before, Element: val},
+			Value: java.LeftPadded[java.Expression]{Before: e.Value.Before, Element: val},
 		}
 	default:
 		return expr
@@ -234,11 +235,11 @@ func replaceIdentsInExpression(expr tree.Expression, replacements map[string]tre
 }
 
 // setExprPrefix sets the leading prefix on an expression node.
-func setExprPrefix(expr tree.Expression, prefix tree.Space) tree.Expression {
+func setExprPrefix(expr java.Expression, prefix java.Space) java.Expression {
 	switch e := expr.(type) {
-	case *tree.Identifier:
+	case *java.Identifier:
 		return e.WithPrefix(prefix)
-	case *tree.Literal:
+	case *java.Literal:
 		return e.WithPrefix(prefix)
 	default:
 		return expr
@@ -246,16 +247,16 @@ func setExprPrefix(expr tree.Expression, prefix tree.Space) tree.Expression {
 }
 
 // setStmtLeadingPrefix sets the leading prefix on a statement node.
-func setStmtLeadingPrefix(stmt tree.Statement, prefix tree.Space) tree.Statement {
+func setStmtLeadingPrefix(stmt java.Statement, prefix java.Space) java.Statement {
 	switch s := stmt.(type) {
-	case *tree.Assignment:
-		return s.WithVariable(setExprPrefix(s.Variable, prefix).(tree.Expression))
-	case *tree.MethodInvocation:
+	case *java.Assignment:
+		return s.WithVariable(setExprPrefix(s.Variable, prefix).(java.Expression))
+	case *java.MethodInvocation:
 		if s.Select != nil {
 			sel := *s.Select
-			if ident, ok := sel.Element.(*tree.Identifier); ok {
+			if ident, ok := sel.Element.(*java.Identifier); ok {
 				sel.Element = ident.WithPrefix(prefix)
-				return &tree.MethodInvocation{
+				return &java.MethodInvocation{
 					ID: s.ID, Prefix: s.Prefix, Markers: s.Markers,
 					Select: &sel, Name: s.Name, Arguments: s.Arguments, MethodType: s.MethodType,
 				}

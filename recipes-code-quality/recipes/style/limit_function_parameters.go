@@ -6,7 +6,7 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -35,8 +35,8 @@ type limitFunctionParametersVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *limitFunctionParametersVisitor) VisitMethodDeclaration(md *tree.MethodDeclaration, p any) tree.J {
-	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*tree.MethodDeclaration)
+func (v *limitFunctionParametersVisitor) VisitMethodDeclaration(md *java.MethodDeclaration, p any) java.J {
+	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*java.MethodDeclaration)
 
 	if md.Name == nil {
 		return md
@@ -44,7 +44,7 @@ func (v *limitFunctionParametersVisitor) VisitMethodDeclaration(md *tree.MethodD
 
 	count := 0
 	for _, param := range md.Parameters.Elements {
-		if _, isEmpty := param.Element.(*tree.Empty); !isEmpty {
+		if _, isEmpty := param.Element.(*java.Empty); !isEmpty {
 			count++
 		}
 	}
@@ -54,7 +54,7 @@ func (v *limitFunctionParametersVisitor) VisitMethodDeclaration(md *tree.MethodD
 	}
 
 	md = md.WithName(md.Name.WithMarkers(
-		tree.MarkupInfo(md.Name.Markers, "function has too many parameters"),
+		java.MarkupInfo(md.Name.Markers, "function has too many parameters"),
 	))
 	return md
 }

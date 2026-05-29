@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -37,14 +37,14 @@ type auditTestFatalVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *auditTestFatalVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p any) tree.J {
-	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*tree.MethodInvocation)
+func (v *auditTestFatalVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	if mi.Select == nil {
 		return mi
 	}
 
-	ident, ok := mi.Select.Element.(*tree.Identifier)
+	ident, ok := mi.Select.Element.(*java.Identifier)
 	if !ok || ident.Name != "t" {
 		return mi
 	}
@@ -54,7 +54,7 @@ func (v *auditTestFatalVisitor) VisitMethodInvocation(mi *tree.MethodInvocation,
 	}
 
 	mi = mi.WithMarkers(
-		tree.MarkupInfo(mi.Markers, "t.Fatal call found; consider t.Error in goroutines"),
+		java.MarkupInfo(mi.Markers, "t.Fatal call found; consider t.Error in goroutines"),
 	)
 	return mi
 }

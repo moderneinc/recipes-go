@@ -6,7 +6,8 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -35,29 +36,29 @@ type avoidNestedGoroutineVisitor struct {
 	goDepth int
 }
 
-func (v *avoidNestedGoroutineVisitor) VisitGoStmt(g *tree.GoStmt, p any) tree.J {
-	g = v.GoVisitor.VisitGoStmt(g, p).(*tree.GoStmt)
+func (v *avoidNestedGoroutineVisitor) VisitGoStmt(g *golang.GoStmt, p any) java.J {
+	g = v.GoVisitor.VisitGoStmt(g, p).(*golang.GoStmt)
 
 	if v.goDepth > 0 {
 		g = g.WithMarkers(
-			tree.MarkupWarn(g.Markers, "nested goroutine; consider restructuring to avoid goroutines inside goroutines"),
+			java.MarkupWarn(g.Markers, "nested goroutine; consider restructuring to avoid goroutines inside goroutines"),
 		)
 	}
 
 	return g
 }
 
-func (v *avoidNestedGoroutineVisitor) VisitMethodDeclaration(md *tree.MethodDeclaration, p any) tree.J {
+func (v *avoidNestedGoroutineVisitor) VisitMethodDeclaration(md *java.MethodDeclaration, p any) java.J {
 	// Track goroutine depth: if the MethodDeclaration is a function literal
 	// called via go, the GoStmt has already been visited and goDepth incremented.
 	// We detect this by checking if our parent context is inside a GoStmt.
 	// Instead, we increment goDepth around the body of a GoStmt's function literal.
-	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*tree.MethodDeclaration)
+	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*java.MethodDeclaration)
 	return md
 }
 
-func (v *avoidNestedGoroutineVisitor) VisitBlock(block *tree.Block, p any) tree.J {
-	block = v.GoVisitor.VisitBlock(block, p).(*tree.Block)
+func (v *avoidNestedGoroutineVisitor) VisitBlock(block *java.Block, p any) java.J {
+	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
 	return block
 }
 
@@ -65,15 +66,15 @@ func (v *avoidNestedGoroutineVisitor) VisitBlock(block *tree.Block, p any) tree.
 // When we encounter a GoStmt, we increment depth before visiting its Expr
 // (which the default VisitGoStmt does not recurse into, but the block visitor
 // will handle the func literal body through VisitMethodDeclaration).
-func (v *avoidNestedGoroutineVisitor) Visit(t tree.Tree, p any) tree.Tree {
-	if g, ok := t.(*tree.GoStmt); ok {
+func (v *avoidNestedGoroutineVisitor) Visit(t java.Tree, p any) java.Tree {
+	if g, ok := t.(*golang.GoStmt); ok {
 		// First, call VisitGoStmt which marks if nested
 		result := v.GoVisitor.Self.(visitor.VisitorI).VisitGoStmt(g, p)
 
 		// Then increment depth and visit the expression (func literal + call)
 		v.goDepth++
-		resultG := result.(*tree.GoStmt)
-		resultG.Expr = v.GoVisitor.Self.(visitor.VisitorI).Visit(resultG.Expr, p).(tree.Expression)
+		resultG := result.(*golang.GoStmt)
+		resultG.Expr = v.GoVisitor.Self.(visitor.VisitorI).Visit(resultG.Expr, p).(java.Expression)
 		v.goDepth--
 
 		return resultG
