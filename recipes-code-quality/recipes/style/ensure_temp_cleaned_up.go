@@ -7,7 +7,8 @@ package style
 import (
 	"github.com/google/uuid"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -34,10 +35,10 @@ type ensureTempCleanedUpVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *ensureTempCleanedUpVisitor) VisitBlock(block *tree.Block, p any) tree.J {
-	block = v.GoVisitor.VisitBlock(block, p).(*tree.Block)
+func (v *ensureTempCleanedUpVisitor) VisitBlock(block *java.Block, p any) java.J {
+	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
 
-	var newStmts []tree.RightPadded[tree.Statement]
+	var newStmts []java.RightPadded[java.Statement]
 	changed := false
 
 	for i, rp := range block.Statements {
@@ -48,7 +49,7 @@ func (v *ensureTempCleanedUpVisitor) VisitBlock(block *tree.Block, p any) tree.J
 				continue
 			}
 			deferStmt := buildDeferOsRemove(varName, rp.Element)
-			newStmts = append(newStmts, tree.RightPadded[tree.Statement]{Element: deferStmt})
+			newStmts = append(newStmts, java.RightPadded[java.Statement]{Element: deferStmt})
 			changed = true
 		}
 	}
@@ -60,11 +61,11 @@ func (v *ensureTempCleanedUpVisitor) VisitBlock(block *tree.Block, p any) tree.J
 }
 
 // isOsCreateTemp returns true if the method invocation is os.CreateTemp.
-func isOsCreateTemp(mi *tree.MethodInvocation) bool {
+func isOsCreateTemp(mi *java.MethodInvocation) bool {
 	if mi.Select == nil {
 		return false
 	}
-	ident, ok := mi.Select.Element.(*tree.Identifier)
+	ident, ok := mi.Select.Element.(*java.Identifier)
 	if !ok || ident.Name != "os" {
 		return false
 	}
@@ -73,9 +74,9 @@ func isOsCreateTemp(mi *tree.MethodInvocation) bool {
 
 // hasDeferRemoveAfter checks if any statement after index i is a defer
 // calling os.Remove(varName.Name()).
-func hasDeferRemoveAfter(stmts []tree.RightPadded[tree.Statement], i int, varName string) bool {
+func hasDeferRemoveAfter(stmts []java.RightPadded[java.Statement], i int, varName string) bool {
 	for j := i + 1; j < len(stmts); j++ {
-		d, ok := stmts[j].Element.(*tree.Defer)
+		d, ok := stmts[j].Element.(*golang.Defer)
 		if !ok {
 			continue
 		}
@@ -87,15 +88,15 @@ func hasDeferRemoveAfter(stmts []tree.RightPadded[tree.Statement], i int, varNam
 }
 
 // matchesDeferOsRemove returns true if the defer calls os.Remove(varName.Name()).
-func matchesDeferOsRemove(d *tree.Defer, varName string) bool {
-	mi, ok := d.Expr.(*tree.MethodInvocation)
+func matchesDeferOsRemove(d *golang.Defer, varName string) bool {
+	mi, ok := d.Expr.(*java.MethodInvocation)
 	if !ok || mi.Name.Name != "Remove" {
 		return false
 	}
 	if mi.Select == nil {
 		return false
 	}
-	ident, ok := mi.Select.Element.(*tree.Identifier)
+	ident, ok := mi.Select.Element.(*java.Identifier)
 	if !ok || ident.Name != "os" {
 		return false
 	}
@@ -103,14 +104,14 @@ func matchesDeferOsRemove(d *tree.Defer, varName string) bool {
 	if len(mi.Arguments.Elements) != 1 {
 		return false
 	}
-	argMi, ok := mi.Arguments.Elements[0].Element.(*tree.MethodInvocation)
+	argMi, ok := mi.Arguments.Elements[0].Element.(*java.MethodInvocation)
 	if !ok || argMi.Name.Name != "Name" {
 		return false
 	}
 	if argMi.Select == nil {
 		return false
 	}
-	argIdent, ok := argMi.Select.Element.(*tree.Identifier)
+	argIdent, ok := argMi.Select.Element.(*java.Identifier)
 	if !ok {
 		return false
 	}
@@ -118,33 +119,33 @@ func matchesDeferOsRemove(d *tree.Defer, varName string) bool {
 }
 
 // buildDeferOsRemove builds `defer os.Remove(varName.Name())`.
-func buildDeferOsRemove(varName string, originalStmt tree.Statement) *tree.Defer {
+func buildDeferOsRemove(varName string, originalStmt java.Statement) *golang.Defer {
 	prefix := stmtPrefix(originalStmt)
 
 	// Build varName.Name()
-	nameCall := &tree.MethodInvocation{
+	nameCall := &java.MethodInvocation{
 		ID:     uuid.New(),
-		Select: &tree.RightPadded[tree.Expression]{Element: &tree.Identifier{ID: uuid.New(), Name: varName}},
-		Name:   &tree.Identifier{ID: uuid.New(), Name: "Name"},
-		Arguments: tree.Container[tree.Expression]{
-			Before: tree.EmptySpace,
+		Select: &java.RightPadded[java.Expression]{Element: &java.Identifier{ID: uuid.New(), Name: varName}},
+		Name:   &java.Identifier{ID: uuid.New(), Name: "Name"},
+		Arguments: java.Container[java.Expression]{
+			Before: java.EmptySpace,
 		},
 	}
 
 	// Build os.Remove(varName.Name())
-	removeCall := &tree.MethodInvocation{
+	removeCall := &java.MethodInvocation{
 		ID:     uuid.New(),
-		Prefix: tree.SingleSpace,
-		Select: &tree.RightPadded[tree.Expression]{Element: &tree.Identifier{ID: uuid.New(), Name: "os"}},
-		Name:   &tree.Identifier{ID: uuid.New(), Name: "Remove"},
-		Arguments: tree.Container[tree.Expression]{
-			Before: tree.EmptySpace,
-			Elements: []tree.RightPadded[tree.Expression]{
+		Prefix: java.SingleSpace,
+		Select: &java.RightPadded[java.Expression]{Element: &java.Identifier{ID: uuid.New(), Name: "os"}},
+		Name:   &java.Identifier{ID: uuid.New(), Name: "Remove"},
+		Arguments: java.Container[java.Expression]{
+			Before: java.EmptySpace,
+			Elements: []java.RightPadded[java.Expression]{
 				{Element: nameCall},
 			},
 		},
 	}
-	return &tree.Defer{
+	return &golang.Defer{
 		ID:     uuid.New(),
 		Prefix: prefix,
 		Expr:   removeCall,

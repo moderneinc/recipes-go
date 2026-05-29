@@ -6,7 +6,8 @@ package errorhandling
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -35,22 +36,22 @@ type checkCloseErrorVisitor struct {
 	insideAssignment int
 }
 
-func (v *checkCloseErrorVisitor) VisitAssignment(assign *tree.Assignment, p any) tree.J {
+func (v *checkCloseErrorVisitor) VisitAssignment(assign *java.Assignment, p any) java.J {
 	v.insideAssignment++
-	assign = v.GoVisitor.VisitAssignment(assign, p).(*tree.Assignment)
+	assign = v.GoVisitor.VisitAssignment(assign, p).(*java.Assignment)
 	v.insideAssignment--
 	return assign
 }
 
-func (v *checkCloseErrorVisitor) VisitMultiAssignment(ma *tree.MultiAssignment, p any) tree.J {
+func (v *checkCloseErrorVisitor) VisitMultiAssignment(ma *golang.MultiAssignment, p any) java.J {
 	v.insideAssignment++
-	ma = v.GoVisitor.VisitMultiAssignment(ma, p).(*tree.MultiAssignment)
+	ma = v.GoVisitor.VisitMultiAssignment(ma, p).(*golang.MultiAssignment)
 	v.insideAssignment--
 	return ma
 }
 
-func (v *checkCloseErrorVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p any) tree.J {
-	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*tree.MethodInvocation)
+func (v *checkCloseErrorVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	// Match: x.Close() — any method named "Close" with a receiver.
 	if mi.Select == nil || mi.Name.Name != "Close" {
@@ -67,7 +68,7 @@ func (v *checkCloseErrorVisitor) VisitMethodInvocation(mi *tree.MethodInvocation
 	// Preserve the leading prefix from the MethodInvocation on the blank identifier.
 	prefix := closeLeadingPrefix(mi)
 
-	blank := &tree.Identifier{
+	blank := &java.Identifier{
 		Prefix: prefix,
 		Name:   "_",
 	}
@@ -77,19 +78,19 @@ func (v *checkCloseErrorVisitor) VisitMethodInvocation(mi *tree.MethodInvocation
 	// prints as `_ = f.Close()`.
 	adjusted := adjustClosePrefix(mi)
 
-	return &tree.Assignment{
+	return &java.Assignment{
 		Variable: blank,
-		Value: tree.LeftPadded[tree.Expression]{
-			Before:  tree.SingleSpace,
+		Value: java.LeftPadded[java.Expression]{
+			Before:  java.SingleSpace,
 			Element: adjusted,
 		},
 	}
 }
 
 // closeLeadingPrefix extracts the leading prefix from a MethodInvocation.
-func closeLeadingPrefix(mi *tree.MethodInvocation) tree.Space {
+func closeLeadingPrefix(mi *java.MethodInvocation) java.Space {
 	if mi.Select != nil {
-		if ident, ok := mi.Select.Element.(*tree.Identifier); ok {
+		if ident, ok := mi.Select.Element.(*java.Identifier); ok {
 			return ident.Prefix
 		}
 	}
@@ -98,11 +99,11 @@ func closeLeadingPrefix(mi *tree.MethodInvocation) tree.Space {
 
 // adjustClosePrefix returns a copy of the MethodInvocation with its
 // leading prefix set to a single space (for the space after `=`).
-func adjustClosePrefix(mi *tree.MethodInvocation) *tree.MethodInvocation {
+func adjustClosePrefix(mi *java.MethodInvocation) *java.MethodInvocation {
 	if mi.Select != nil {
-		if ident, ok := mi.Select.Element.(*tree.Identifier); ok {
+		if ident, ok := mi.Select.Element.(*java.Identifier); ok {
 			newSelect := *mi.Select
-			newSelect.Element = ident.WithPrefix(tree.SingleSpace)
+			newSelect.Element = ident.WithPrefix(java.SingleSpace)
 			c := *mi
 			c.Select = &newSelect
 			return &c

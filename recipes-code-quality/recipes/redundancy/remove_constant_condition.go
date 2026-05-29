@@ -6,7 +6,7 @@ package redundancy
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -34,11 +34,11 @@ type removeConstantConditionVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *removeConstantConditionVisitor) VisitIf(ifStmt *tree.If, p any) tree.J {
-	ifStmt = v.GoVisitor.VisitIf(ifStmt, p).(*tree.If)
+func (v *removeConstantConditionVisitor) VisitIf(ifStmt *java.If, p any) java.J {
+	ifStmt = v.GoVisitor.VisitIf(ifStmt, p).(*java.If)
 
 	// Condition must be an Identifier named "true" or "false".
-	ident, ok := ifStmt.Condition.(*tree.Identifier)
+	ident, ok := ifStmt.Condition.(*java.Identifier)
 	if !ok {
 		return ifStmt
 	}
@@ -51,12 +51,12 @@ func (v *removeConstantConditionVisitor) VisitIf(ifStmt *tree.If, p any) tree.J 
 	if ident.Name == "false" {
 		// `if false { } else { elseBody }` — keep the else body.
 		if ifStmt.ElsePart != nil {
-			if block, ok := ifStmt.ElsePart.Element.(*tree.Block); ok {
+			if block, ok := ifStmt.ElsePart.Element.(*java.Block); ok {
 				return block.WithPrefix(ifStmt.Prefix)
 			}
 		}
 		// `if false { body }` — remove dead code.
-		return &tree.Empty{}
+		return &java.Empty{}
 	}
 
 	return ifStmt

@@ -6,7 +6,7 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -34,10 +34,10 @@ type auditJsonNumberVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *auditJsonNumberVisitor) VisitFieldAccess(fa *tree.FieldAccess, p any) tree.J {
-	fa = v.GoVisitor.VisitFieldAccess(fa, p).(*tree.FieldAccess)
+func (v *auditJsonNumberVisitor) VisitFieldAccess(fa *java.FieldAccess, p any) java.J {
+	fa = v.GoVisitor.VisitFieldAccess(fa, p).(*java.FieldAccess)
 
-	ident, ok := fa.Target.(*tree.Identifier)
+	ident, ok := fa.Target.(*java.Identifier)
 	if !ok || ident.Name != "json" {
 		return fa
 	}
@@ -46,6 +46,6 @@ func (v *auditJsonNumberVisitor) VisitFieldAccess(fa *tree.FieldAccess, p any) t
 		return fa
 	}
 
-	fa = fa.WithMarkers(tree.MarkupInfo(fa.Markers, "json.Number should be used carefully"))
+	fa = fa.WithMarkers(java.MarkupInfo(fa.Markers, "json.Number should be used carefully"))
 	return fa
 }

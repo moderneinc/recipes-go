@@ -6,7 +6,7 @@ package redundancy
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -37,8 +37,8 @@ type simplifyNilCheckBeforeCloseVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *simplifyNilCheckBeforeCloseVisitor) VisitIf(ifStmt *tree.If, p any) tree.J {
-	ifStmt = v.GoVisitor.VisitIf(ifStmt, p).(*tree.If)
+func (v *simplifyNilCheckBeforeCloseVisitor) VisitIf(ifStmt *java.If, p any) java.J {
+	ifStmt = v.GoVisitor.VisitIf(ifStmt, p).(*java.If)
 
 	// Must not have an else clause.
 	if ifStmt.ElsePart != nil {
@@ -62,7 +62,7 @@ func (v *simplifyNilCheckBeforeCloseVisitor) VisitIf(ifStmt *tree.If, p any) tre
 	}
 
 	// That single statement must be a MethodInvocation named "Close" on the same variable.
-	mi, ok := ifStmt.Then.Statements[0].Element.(*tree.MethodInvocation)
+	mi, ok := ifStmt.Then.Statements[0].Element.(*java.MethodInvocation)
 	if !ok {
 		return ifStmt
 	}
@@ -72,7 +72,7 @@ func (v *simplifyNilCheckBeforeCloseVisitor) VisitIf(ifStmt *tree.If, p any) tre
 	if mi.Select == nil {
 		return ifStmt
 	}
-	selectIdent, ok := mi.Select.Element.(*tree.Identifier)
+	selectIdent, ok := mi.Select.Element.(*java.Identifier)
 	if !ok || selectIdent.Name != varName {
 		return ifStmt
 	}
@@ -89,14 +89,14 @@ func (v *simplifyNilCheckBeforeCloseVisitor) VisitIf(ifStmt *tree.If, p any) tre
 
 // nilNotEqualVarName extracts the variable name from a `x != nil` or `nil != x`
 // condition. Returns "" if the condition does not match.
-func nilNotEqualVarName(cond tree.Expression) string {
-	bin, ok := cond.(*tree.Binary)
-	if !ok || bin.Operator.Element != tree.NotEqual {
+func nilNotEqualVarName(cond java.Expression) string {
+	bin, ok := cond.(*java.Binary)
+	if !ok || bin.Operator.Element != java.NotEqual {
 		return ""
 	}
 
-	leftIdent, leftOk := bin.Left.(*tree.Identifier)
-	rightIdent, rightOk := bin.Right.(*tree.Identifier)
+	leftIdent, leftOk := bin.Left.(*java.Identifier)
+	rightIdent, rightOk := bin.Right.(*java.Identifier)
 
 	// x != nil
 	if leftOk && rightOk && rightIdent.Name == "nil" {
@@ -108,4 +108,3 @@ func nilNotEqualVarName(cond tree.Expression) string {
 	}
 	return ""
 }
-

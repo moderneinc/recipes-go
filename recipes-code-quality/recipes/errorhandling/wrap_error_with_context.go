@@ -6,7 +6,7 @@ package errorhandling
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -35,7 +35,7 @@ type wrapErrorWithContextVisitor struct {
 	funcName string
 }
 
-func (v *wrapErrorWithContextVisitor) VisitMethodDeclaration(md *tree.MethodDeclaration, p any) tree.J {
+func (v *wrapErrorWithContextVisitor) VisitMethodDeclaration(md *java.MethodDeclaration, p any) java.J {
 	oldName := v.funcName
 	if md.Name != nil {
 		v.funcName = md.Name.Name
@@ -45,8 +45,8 @@ func (v *wrapErrorWithContextVisitor) VisitMethodDeclaration(md *tree.MethodDecl
 	return result
 }
 
-func (v *wrapErrorWithContextVisitor) VisitReturn(ret *tree.Return, p any) tree.J {
-	ret = v.GoVisitor.VisitReturn(ret, p).(*tree.Return)
+func (v *wrapErrorWithContextVisitor) VisitReturn(ret *java.Return, p any) java.J {
+	ret = v.GoVisitor.VisitReturn(ret, p).(*java.Return)
 
 	// Match: return with a single expression that is an identifier named "err".
 	if len(ret.Expressions) != 1 {
@@ -54,7 +54,7 @@ func (v *wrapErrorWithContextVisitor) VisitReturn(ret *tree.Return, p any) tree.
 	}
 
 	expr := ret.Expressions[0].Element
-	ident, ok := expr.(*tree.Identifier)
+	ident, ok := expr.(*java.Identifier)
 	if !ok || ident.Name != "err" {
 		return ret
 	}
@@ -72,37 +72,37 @@ func (v *wrapErrorWithContextVisitor) VisitReturn(ret *tree.Return, p any) tree.
 	//     Name:   "Errorf"
 	//     Args:   [ Literal("funcName: %w"), Identifier("err") ]
 	//   }
-	fmtIdent := &tree.Identifier{
+	fmtIdent := &java.Identifier{
 		Name: "fmt",
 	}
 
-	errorfIdent := &tree.Identifier{
+	errorfIdent := &java.Identifier{
 		Name: "Errorf",
 	}
 
-	formatLit := &tree.Literal{
-		Kind:   tree.StringLiteral,
+	formatLit := &java.Literal{
+		Kind:   java.StringLiteral,
 		Source: `"` + v.funcName + `: %w"`,
 	}
 
-	errIdent := &tree.Identifier{
-		Prefix: tree.SingleSpace,
+	errIdent := &java.Identifier{
+		Prefix: java.SingleSpace,
 		Name:   "err",
 	}
 
-	errorfCall := &tree.MethodInvocation{
-		Prefix: tree.SingleSpace,
-		Select: &tree.RightPadded[tree.Expression]{Element: fmtIdent},
+	errorfCall := &java.MethodInvocation{
+		Prefix: java.SingleSpace,
+		Select: &java.RightPadded[java.Expression]{Element: fmtIdent},
 		Name:   errorfIdent,
-		Arguments: tree.Container[tree.Expression]{
-			Elements: []tree.RightPadded[tree.Expression]{
-				{Element: formatLit, After: tree.Space{}},
-				{Element: errIdent, After: tree.Space{}},
+		Arguments: java.Container[java.Expression]{
+			Elements: []java.RightPadded[java.Expression]{
+				{Element: formatLit, After: java.Space{}},
+				{Element: errIdent, After: java.Space{}},
 			},
 		},
 	}
 
-	newExprs := []tree.RightPadded[tree.Expression]{
+	newExprs := []java.RightPadded[java.Expression]{
 		{
 			Element: errorfCall,
 			After:   ret.Expressions[0].After,

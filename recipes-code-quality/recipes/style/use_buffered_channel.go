@@ -6,7 +6,8 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -34,8 +35,8 @@ type useBufferedChannelVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *useBufferedChannelVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p any) tree.J {
-	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*tree.MethodInvocation)
+func (v *useBufferedChannelVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	// Must be a free-function call to "make" (no receiver).
 	if mi.Select != nil || mi.Name == nil || mi.Name.Name != "make" {
@@ -43,9 +44,9 @@ func (v *useBufferedChannelVisitor) VisitMethodInvocation(mi *tree.MethodInvocat
 	}
 
 	// Count real arguments (skip Empty sentinels).
-	var realArgs []tree.Expression
+	var realArgs []java.Expression
 	for _, arg := range mi.Arguments.Elements {
-		if _, isEmpty := arg.Element.(*tree.Empty); !isEmpty {
+		if _, isEmpty := arg.Element.(*java.Empty); !isEmpty {
 			realArgs = append(realArgs, arg.Element)
 		}
 	}
@@ -56,10 +57,10 @@ func (v *useBufferedChannelVisitor) VisitMethodInvocation(mi *tree.MethodInvocat
 	}
 
 	// The single argument must be a channel type.
-	if _, isChan := realArgs[0].(*tree.Channel); !isChan {
+	if _, isChan := realArgs[0].(*golang.Channel); !isChan {
 		return mi
 	}
 
-	mi = mi.WithMarkers(tree.MarkupInfo(mi.Markers, "unbuffered channel"))
+	mi = mi.WithMarkers(java.MarkupInfo(mi.Markers, "unbuffered channel"))
 	return mi
 }

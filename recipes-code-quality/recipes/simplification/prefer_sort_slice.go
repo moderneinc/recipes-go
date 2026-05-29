@@ -27,7 +27,9 @@ type PreferSortInts struct {
 func (r *PreferSortInts) Name() string {
 	return "org.openrewrite.golang.codequality.PreferSortInts"
 }
-func (r *PreferSortInts) DisplayName() string { return "Prefer sort.Ints over sort.Sort(sort.IntSlice)" }
+func (r *PreferSortInts) DisplayName() string {
+	return "Prefer sort.Ints over sort.Sort(sort.IntSlice)"
+}
 func (r *PreferSortInts) Description() string {
 	return "Replace `sort.Sort(sort.IntSlice(s))` with `sort.Ints(s)`."
 }

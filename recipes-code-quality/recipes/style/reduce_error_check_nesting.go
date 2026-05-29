@@ -6,7 +6,7 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -37,16 +37,16 @@ type reduceErrorCheckNestingVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *reduceErrorCheckNestingVisitor) VisitBlock(block *tree.Block, p any) tree.J {
-	block = v.GoVisitor.VisitBlock(block, p).(*tree.Block)
+func (v *reduceErrorCheckNestingVisitor) VisitBlock(block *java.Block, p any) java.J {
+	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
 
 	changed := false
-	var newStmts []tree.RightPadded[tree.Statement]
+	var newStmts []java.RightPadded[java.Statement]
 
 	dedent := visitor.Init(&nestingDedentVisitor{})
 
 	for _, rp := range block.Statements {
-		ifStmt, ok := rp.Element.(*tree.If)
+		ifStmt, ok := rp.Element.(*java.If)
 		if !ok || ifStmt.Init != nil || ifStmt.ElsePart != nil || ifStmt.Then == nil {
 			newStmts = append(newStmts, rp)
 			continue
@@ -60,16 +60,16 @@ func (v *reduceErrorCheckNestingVisitor) VisitBlock(block *tree.Block, p any) tr
 		changed = true
 
 		// Build `if err != nil { return err }`
-		errReturn := []tree.RightPadded[tree.Expression]{
-			{Element: &tree.Identifier{Prefix: tree.SingleSpace, Name: "err"}},
+		errReturn := []java.RightPadded[java.Expression]{
+			{Element: &java.Identifier{Prefix: java.SingleSpace, Name: "err"}},
 		}
 		guard := buildErrGuard(ifStmt, errReturn)
-		newStmts = append(newStmts, tree.RightPadded[tree.Statement]{Element: guard})
+		newStmts = append(newStmts, java.RightPadded[java.Statement]{Element: guard})
 
 		// Splice the body statements out, dedented by one level.
 		for _, bodyRP := range ifStmt.Then.Statements {
-			bodyDedented := dedent.Visit(bodyRP.Element, nil).(tree.Statement)
-			newStmts = append(newStmts, tree.RightPadded[tree.Statement]{
+			bodyDedented := dedent.Visit(bodyRP.Element, nil).(java.Statement)
+			newStmts = append(newStmts, java.RightPadded[java.Statement]{
 				Element: bodyDedented,
 				After:   bodyRP.After,
 				Markers: bodyRP.Markers,
@@ -84,14 +84,14 @@ func (v *reduceErrorCheckNestingVisitor) VisitBlock(block *tree.Block, p any) tr
 }
 
 // isErrNotNil returns true if the expression is `err != nil`.
-func isErrNotNil(expr tree.Expression) bool {
-	bin, ok := expr.(*tree.Binary)
-	if !ok || bin.Operator.Element != tree.NotEqual {
+func isErrNotNil(expr java.Expression) bool {
+	bin, ok := expr.(*java.Binary)
+	if !ok || bin.Operator.Element != java.NotEqual {
 		return false
 	}
 
-	leftIdent, leftOk := bin.Left.(*tree.Identifier)
-	rightIdent, rightOk := bin.Right.(*tree.Identifier)
+	leftIdent, leftOk := bin.Left.(*java.Identifier)
+	rightIdent, rightOk := bin.Right.(*java.Identifier)
 	if !leftOk || !rightOk {
 		return false
 	}

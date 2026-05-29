@@ -6,7 +6,7 @@ package errorhandling
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -33,8 +33,8 @@ type handleSwallowedErrorVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *handleSwallowedErrorVisitor) VisitIf(ifStmt *tree.If, p any) tree.J {
-	ifStmt = v.GoVisitor.VisitIf(ifStmt, p).(*tree.If)
+func (v *handleSwallowedErrorVisitor) VisitIf(ifStmt *java.If, p any) java.J {
+	ifStmt = v.GoVisitor.VisitIf(ifStmt, p).(*java.If)
 
 	if !isErrNotNil(ifStmt.Condition) {
 		return ifStmt
@@ -49,24 +49,24 @@ func (v *handleSwallowedErrorVisitor) VisitIf(ifStmt *tree.If, p any) tree.J {
 		return ifStmt
 	}
 
-	ret, ok := stmts[0].Element.(*tree.Return)
+	ret, ok := stmts[0].Element.(*java.Return)
 	if !ok || len(ret.Expressions) > 0 {
 		return ifStmt
 	}
 
 	// Replace bare return with return err
-	errIdent := &tree.Identifier{Prefix: tree.Space{Whitespace: " "}, Name: "err"}
-	newRet := &tree.Return{
+	errIdent := &java.Identifier{Prefix: java.Space{Whitespace: " "}, Name: "err"}
+	newRet := &java.Return{
 		ID: ret.ID, Prefix: ret.Prefix, Markers: ret.Markers,
-		Expressions: []tree.RightPadded[tree.Expression]{{Element: errIdent}},
+		Expressions: []java.RightPadded[java.Expression]{{Element: errIdent}},
 	}
 
 	// Rebuild the Then block with the new return
-	newStmts := make([]tree.RightPadded[tree.Statement], len(ifStmt.Then.Statements))
+	newStmts := make([]java.RightPadded[java.Statement], len(ifStmt.Then.Statements))
 	copy(newStmts, ifStmt.Then.Statements)
 	for i, s := range newStmts {
-		if _, ok := s.Element.(*tree.Return); ok {
-			newStmts[i] = tree.RightPadded[tree.Statement]{Element: newRet, After: s.After}
+		if _, ok := s.Element.(*java.Return); ok {
+			newStmts[i] = java.RightPadded[java.Statement]{Element: newRet, After: s.After}
 			break
 		}
 	}
@@ -75,24 +75,24 @@ func (v *handleSwallowedErrorVisitor) VisitIf(ifStmt *tree.If, p any) tree.J {
 }
 
 // isErrNotNil checks whether an expression is `err != nil`.
-func isErrNotNil(expr tree.Expression) bool {
-	bin, ok := expr.(*tree.Binary)
-	if !ok || bin.Operator.Element != tree.NotEqual {
+func isErrNotNil(expr java.Expression) bool {
+	bin, ok := expr.(*java.Binary)
+	if !ok || bin.Operator.Element != java.NotEqual {
 		return false
 	}
-	leftIdent, leftOk := bin.Left.(*tree.Identifier)
-	rightIdent, rightOk := bin.Right.(*tree.Identifier)
+	leftIdent, leftOk := bin.Left.(*java.Identifier)
+	rightIdent, rightOk := bin.Right.(*java.Identifier)
 	if !leftOk || !rightOk {
 		return false
 	}
 	return leftIdent.Name == "err" && rightIdent.Name == "nil"
 }
 
-// realStatements returns statements that are not *tree.Empty.
-func realStatements(stmts []tree.RightPadded[tree.Statement]) []tree.RightPadded[tree.Statement] {
-	var out []tree.RightPadded[tree.Statement]
+// realStatements returns statements that are not *java.Empty.
+func realStatements(stmts []java.RightPadded[java.Statement]) []java.RightPadded[java.Statement] {
+	var out []java.RightPadded[java.Statement]
 	for _, s := range stmts {
-		if _, isEmpty := s.Element.(*tree.Empty); !isEmpty {
+		if _, isEmpty := s.Element.(*java.Empty); !isEmpty {
 			out = append(out, s)
 		}
 	}

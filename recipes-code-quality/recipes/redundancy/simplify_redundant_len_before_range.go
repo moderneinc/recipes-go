@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -40,8 +40,8 @@ type simplifyRedundantLenBeforeRangeVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *simplifyRedundantLenBeforeRangeVisitor) VisitIf(ifStmt *tree.If, p any) tree.J {
-	ifStmt = v.GoVisitor.VisitIf(ifStmt, p).(*tree.If)
+func (v *simplifyRedundantLenBeforeRangeVisitor) VisitIf(ifStmt *java.If, p any) java.J {
+	ifStmt = v.GoVisitor.VisitIf(ifStmt, p).(*java.If)
 
 	// Must not have an else clause.
 	if ifStmt.ElsePart != nil {
@@ -59,7 +59,7 @@ func (v *simplifyRedundantLenBeforeRangeVisitor) VisitIf(ifStmt *tree.If, p any)
 	}
 
 	// That single statement must be a ForEachLoop (range).
-	forEach, ok := ifStmt.Then.Statements[0].Element.(*tree.ForEachLoop)
+	forEach, ok := ifStmt.Then.Statements[0].Element.(*java.ForEachLoop)
 	if !ok {
 		return ifStmt
 	}
@@ -80,19 +80,19 @@ func (v *simplifyRedundantLenBeforeRangeVisitor) VisitIf(ifStmt *tree.If, p any)
 	// Dedent the for-range body by one tab since it's being lifted out of the if block.
 	dedent := visitor.Init(&dedentVisitor{})
 	result := dedent.Visit(forEach, p)
-	return result.(*tree.ForEachLoop).WithPrefix(ifStmt.Prefix)
+	return result.(*java.ForEachLoop).WithPrefix(ifStmt.Prefix)
 }
 
 // lenCheckVarName extracts the variable name from a `len(x) > 0` style condition.
 // Returns "" if the condition does not match.
-func lenCheckVarName(cond tree.Expression) string {
-	bin, ok := cond.(*tree.Binary)
+func lenCheckVarName(cond java.Expression) string {
+	bin, ok := cond.(*java.Binary)
 	if !ok {
 		return ""
 	}
 
 	// Left side must be len(x)
-	mi, ok := bin.Left.(*tree.MethodInvocation)
+	mi, ok := bin.Left.(*java.MethodInvocation)
 	if !ok || mi.Select != nil || mi.Name.Name != "len" {
 		return ""
 	}
@@ -100,7 +100,7 @@ func lenCheckVarName(cond tree.Expression) string {
 	// Must have exactly one real argument.
 	var argName string
 	for _, arg := range mi.Arguments.Elements {
-		if ident, ok := arg.Element.(*tree.Identifier); ok {
+		if ident, ok := arg.Element.(*java.Identifier); ok {
 			argName = ident.Name
 			break
 		}
@@ -110,21 +110,21 @@ func lenCheckVarName(cond tree.Expression) string {
 	}
 
 	// Right side must be a literal 0 or 1 with the right operator.
-	lit, ok := bin.Right.(*tree.Literal)
+	lit, ok := bin.Right.(*java.Literal)
 	if !ok {
 		return ""
 	}
 
 	switch bin.Operator.Element {
-	case tree.GreaterThan:
+	case java.GreaterThan:
 		if lit.Source == "0" {
 			return argName
 		}
-	case tree.NotEqual:
+	case java.NotEqual:
 		if lit.Source == "0" {
 			return argName
 		}
-	case tree.GreaterThanOrEqual:
+	case java.GreaterThanOrEqual:
 		if lit.Source == "1" {
 			return argName
 		}
@@ -134,8 +134,8 @@ func lenCheckVarName(cond tree.Expression) string {
 
 // forEachIterableName extracts the identifier name from the iterable
 // of a ForEachLoop. Returns "" if the iterable is not a simple identifier.
-func forEachIterableName(forEach *tree.ForEachLoop) string {
-	ident, ok := forEach.Control.Iterable.(*tree.Identifier)
+func forEachIterableName(forEach *java.ForEachLoop) string {
+	ident, ok := forEach.Control.Iterable.(*java.Identifier)
 	if !ok {
 		return ""
 	}
@@ -147,7 +147,7 @@ type dedentVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *dedentVisitor) VisitSpace(space tree.Space, p any) tree.Space {
+func (v *dedentVisitor) VisitSpace(space java.Space, p any) java.Space {
 	if strings.Contains(space.Whitespace, "\t") {
 		space.Whitespace = strings.Replace(space.Whitespace, "\t", "", 1)
 	}

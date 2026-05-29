@@ -8,7 +8,7 @@ import (
 	"github.com/moderneinc/recipes-go/recipes-code-quality/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -45,8 +45,8 @@ type replaceTimeUntilVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *replaceTimeUntilVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p any) tree.J {
-	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*tree.MethodInvocation)
+func (v *replaceTimeUntilVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	// Match: <receiver>.Sub(arg)
 	if mi.Name.Name != "Sub" || mi.Select == nil {
@@ -55,9 +55,9 @@ func (v *replaceTimeUntilVisitor) VisitMethodInvocation(mi *tree.MethodInvocatio
 
 	// The argument must be time.Now()
 	args := mi.Arguments.Elements
-	var argExpr tree.Expression
+	var argExpr java.Expression
 	for _, a := range args {
-		if _, isEmpty := a.Element.(*tree.Empty); !isEmpty {
+		if _, isEmpty := a.Element.(*java.Empty); !isEmpty {
 			if argExpr != nil {
 				return mi // more than one real arg
 			}
@@ -68,7 +68,7 @@ func (v *replaceTimeUntilVisitor) VisitMethodInvocation(mi *tree.MethodInvocatio
 		return mi
 	}
 
-	nowCall, ok := argExpr.(*tree.MethodInvocation)
+	nowCall, ok := argExpr.(*java.MethodInvocation)
 	if !ok || !untilTimeNowMatcher.Matches(nowCall) {
 		return mi
 	}
@@ -79,46 +79,46 @@ func (v *replaceTimeUntilVisitor) VisitMethodInvocation(mi *tree.MethodInvocatio
 	// Get the leading prefix from the receiver for the replacement
 	prefix := exprPrefixOf(receiver)
 
-	newTimeIdent := &tree.Identifier{Prefix: prefix, Name: "time"}
-	untilIdent := &tree.Identifier{Name: "Until"}
+	newTimeIdent := &java.Identifier{Prefix: prefix, Name: "time"}
+	untilIdent := &java.Identifier{Name: "Until"}
 
 	// Build argument list with the receiver as the arg
-	receiverWithNoPrefix := setExprPrefixOf(receiver, tree.Space{})
-	newArgs := tree.Container[tree.Expression]{
+	receiverWithNoPrefix := setExprPrefixOf(receiver, java.Space{})
+	newArgs := java.Container[java.Expression]{
 		Before:   mi.Arguments.Before,
-		Elements: []tree.RightPadded[tree.Expression]{{Element: receiverWithNoPrefix}},
+		Elements: []java.RightPadded[java.Expression]{{Element: receiverWithNoPrefix}},
 	}
 
-	return &tree.MethodInvocation{
-		Select:    &tree.RightPadded[tree.Expression]{Element: newTimeIdent, After: mi.Select.After},
+	return &java.MethodInvocation{
+		Select:    &java.RightPadded[java.Expression]{Element: newTimeIdent, After: mi.Select.After},
 		Name:      untilIdent,
 		Arguments: newArgs,
 	}
 }
 
-func exprPrefixOf(expr tree.Expression) tree.Space {
+func exprPrefixOf(expr java.Expression) java.Space {
 	switch n := expr.(type) {
-	case *tree.Identifier:
+	case *java.Identifier:
 		return n.Prefix
-	case *tree.FieldAccess:
+	case *java.FieldAccess:
 		return exprPrefixOf(n.Target)
-	case *tree.MethodInvocation:
+	case *java.MethodInvocation:
 		if n.Select != nil {
 			return exprPrefixOf(n.Select.Element)
 		}
 		return exprPrefixOf(n.Name)
 	default:
-		return tree.Space{}
+		return java.Space{}
 	}
 }
 
-func setExprPrefixOf(expr tree.Expression, prefix tree.Space) tree.Expression {
+func setExprPrefixOf(expr java.Expression, prefix java.Space) java.Expression {
 	switch n := expr.(type) {
-	case *tree.Identifier:
+	case *java.Identifier:
 		return n.WithPrefix(prefix)
-	case *tree.FieldAccess:
+	case *java.FieldAccess:
 		return n.WithPrefix(prefix)
-	case *tree.MethodInvocation:
+	case *java.MethodInvocation:
 		return n.WithPrefix(prefix)
 	default:
 		return expr

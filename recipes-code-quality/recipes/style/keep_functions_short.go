@@ -6,7 +6,7 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -35,8 +35,8 @@ type keepFunctionsShortVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *keepFunctionsShortVisitor) VisitMethodDeclaration(md *tree.MethodDeclaration, p any) tree.J {
-	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*tree.MethodDeclaration)
+func (v *keepFunctionsShortVisitor) VisitMethodDeclaration(md *java.MethodDeclaration, p any) java.J {
+	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*java.MethodDeclaration)
 
 	if md.Body == nil || md.Name == nil {
 		return md
@@ -48,16 +48,16 @@ func (v *keepFunctionsShortVisitor) VisitMethodDeclaration(md *tree.MethodDeclar
 	}
 
 	md = md.WithName(md.Name.WithMarkers(
-		tree.MarkupInfo(md.Name.Markers, "function has too many statements"),
+		java.MarkupInfo(md.Name.Markers, "function has too many statements"),
 	))
 	return md
 }
 
 // countStatements counts real statements, excluding Empty sentinels.
-func countStatements(stmts []tree.RightPadded[tree.Statement]) int {
+func countStatements(stmts []java.RightPadded[java.Statement]) int {
 	count := 0
 	for _, s := range stmts {
-		if _, isEmpty := s.Element.(*tree.Empty); !isEmpty {
+		if _, isEmpty := s.Element.(*java.Empty); !isEmpty {
 			count++
 		}
 	}

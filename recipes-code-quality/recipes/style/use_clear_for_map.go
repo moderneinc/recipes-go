@@ -6,7 +6,7 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -34,18 +34,18 @@ type findMapRangeClearVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *findMapRangeClearVisitor) VisitForEachLoop(forEach *tree.ForEachLoop, p any) tree.J {
-	forEach = v.GoVisitor.VisitForEachLoop(forEach, p).(*tree.ForEachLoop)
+func (v *findMapRangeClearVisitor) VisitForEachLoop(forEach *java.ForEachLoop, p any) java.J {
+	forEach = v.GoVisitor.VisitForEachLoop(forEach, p).(*java.ForEachLoop)
 
 	if forEach.Body == nil {
 		return forEach
 	}
 
 	// The body must have exactly one real statement
-	var onlyStmt tree.Statement
+	var onlyStmt java.Statement
 	count := 0
 	for _, stmt := range forEach.Body.Statements {
-		if _, isEmpty := stmt.Element.(*tree.Empty); !isEmpty {
+		if _, isEmpty := stmt.Element.(*java.Empty); !isEmpty {
 			count++
 			onlyStmt = stmt.Element
 		}
@@ -55,7 +55,7 @@ func (v *findMapRangeClearVisitor) VisitForEachLoop(forEach *tree.ForEachLoop, p
 	}
 
 	// The single statement must be a call to delete(...)
-	mi, ok := onlyStmt.(*tree.MethodInvocation)
+	mi, ok := onlyStmt.(*java.MethodInvocation)
 	if !ok {
 		return forEach
 	}
@@ -68,11 +68,11 @@ func (v *findMapRangeClearVisitor) VisitForEachLoop(forEach *tree.ForEachLoop, p
 	// Strip the iterable's prefix (it had a space after the "range" keyword).
 	mapExpr := stripExprPrefix(forEach.Control.Iterable)
 
-	return &tree.MethodInvocation{
+	return &java.MethodInvocation{
 		Prefix: forEach.Prefix,
-		Name:   &tree.Identifier{Name: "clear"},
-		Arguments: tree.Container[tree.Expression]{
-			Elements: []tree.RightPadded[tree.Expression]{
+		Name:   &java.Identifier{Name: "clear"},
+		Arguments: java.Container[java.Expression]{
+			Elements: []java.RightPadded[java.Expression]{
 				{Element: mapExpr},
 			},
 		},
@@ -80,12 +80,12 @@ func (v *findMapRangeClearVisitor) VisitForEachLoop(forEach *tree.ForEachLoop, p
 }
 
 // stripExprPrefix returns a copy of the expression with an empty prefix.
-func stripExprPrefix(expr tree.Expression) tree.Expression {
+func stripExprPrefix(expr java.Expression) java.Expression {
 	switch e := expr.(type) {
-	case *tree.Identifier:
-		return e.WithPrefix(tree.EmptySpace)
-	case *tree.MethodInvocation:
-		return e.WithPrefix(tree.EmptySpace)
+	case *java.Identifier:
+		return e.WithPrefix(java.EmptySpace)
+	case *java.MethodInvocation:
+		return e.WithPrefix(java.EmptySpace)
 	default:
 		return expr
 	}

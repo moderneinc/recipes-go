@@ -6,7 +6,7 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -45,14 +45,14 @@ type useRestrictiveFilePermissionsVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *useRestrictiveFilePermissionsVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p any) tree.J {
-	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*tree.MethodInvocation)
+func (v *useRestrictiveFilePermissionsVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	if mi.Select == nil {
 		return mi
 	}
 
-	ident, ok := mi.Select.Element.(*tree.Identifier)
+	ident, ok := mi.Select.Element.(*java.Identifier)
 	if !ok || ident.Name != "os" {
 		return mi
 	}
@@ -61,17 +61,17 @@ func (v *useRestrictiveFilePermissionsVisitor) VisitMethodInvocation(mi *tree.Me
 		return mi
 	}
 
-	newArgs := make([]tree.RightPadded[tree.Expression], len(mi.Arguments.Elements))
+	newArgs := make([]java.RightPadded[java.Expression], len(mi.Arguments.Elements))
 	changed := false
 	for i, arg := range mi.Arguments.Elements {
-		if lit, ok := arg.Element.(*tree.Literal); ok {
+		if lit, ok := arg.Element.(*java.Literal); ok {
 			if lit.Source == "0777" {
-				newArgs[i] = tree.RightPadded[tree.Expression]{Element: lit.WithSource("0755"), After: arg.After, Markers: arg.Markers}
+				newArgs[i] = java.RightPadded[java.Expression]{Element: lit.WithSource("0755"), After: arg.After, Markers: arg.Markers}
 				changed = true
 				continue
 			}
 			if lit.Source == "0o777" {
-				newArgs[i] = tree.RightPadded[tree.Expression]{Element: lit.WithSource("0o755"), After: arg.After, Markers: arg.Markers}
+				newArgs[i] = java.RightPadded[java.Expression]{Element: lit.WithSource("0o755"), After: arg.After, Markers: arg.Markers}
 				changed = true
 				continue
 			}
@@ -83,16 +83,16 @@ func (v *useRestrictiveFilePermissionsVisitor) VisitMethodInvocation(mi *tree.Me
 		return mi
 	}
 
-	return &tree.MethodInvocation{
+	return &java.MethodInvocation{
 		ID:      mi.ID,
 		Prefix:  mi.Prefix,
 		Markers: mi.Markers,
 		Select:  mi.Select,
 		Name:    mi.Name,
-		Arguments: tree.Container[tree.Expression]{
-			Before:    mi.Arguments.Before,
-			Elements:  newArgs,
-			Markers:   mi.Arguments.Markers,
+		Arguments: java.Container[java.Expression]{
+			Before:   mi.Arguments.Before,
+			Elements: newArgs,
+			Markers:  mi.Arguments.Markers,
 		},
 		MethodType: mi.MethodType,
 	}

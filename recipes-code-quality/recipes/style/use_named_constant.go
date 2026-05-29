@@ -6,7 +6,7 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -35,22 +35,22 @@ type useNamedConstantVisitor struct {
 	insideConstOrVar bool
 }
 
-func (v *useNamedConstantVisitor) VisitVariableDeclarations(vd *tree.VariableDeclarations, p any) tree.J {
+func (v *useNamedConstantVisitor) VisitVariableDeclarations(vd *java.VariableDeclarations, p any) java.J {
 	// Skip literals inside const or var declarations.
 	v.insideConstOrVar = true
-	vd = v.GoVisitor.VisitVariableDeclarations(vd, p).(*tree.VariableDeclarations)
+	vd = v.GoVisitor.VisitVariableDeclarations(vd, p).(*java.VariableDeclarations)
 	v.insideConstOrVar = false
 	return vd
 }
 
-func (v *useNamedConstantVisitor) VisitLiteral(lit *tree.Literal, p any) tree.J {
-	lit = v.GoVisitor.VisitLiteral(lit, p).(*tree.Literal)
+func (v *useNamedConstantVisitor) VisitLiteral(lit *java.Literal, p any) java.J {
+	lit = v.GoVisitor.VisitLiteral(lit, p).(*java.Literal)
 
 	if v.insideConstOrVar {
 		return lit
 	}
 
-	if lit.Kind != tree.IntLiteral {
+	if lit.Kind != java.IntLiteral {
 		return lit
 	}
 
@@ -60,7 +60,7 @@ func (v *useNamedConstantVisitor) VisitLiteral(lit *tree.Literal, p any) tree.J 
 	}
 
 	lit = lit.WithMarkers(
-		tree.MarkupInfo(lit.Markers, "magic number; consider using a named constant"),
+		java.MarkupInfo(lit.Markers, "magic number; consider using a named constant"),
 	)
 	return lit
 }

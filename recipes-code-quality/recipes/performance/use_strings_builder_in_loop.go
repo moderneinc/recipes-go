@@ -7,7 +7,8 @@ package performance
 import (
 	"github.com/google/uuid"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -47,13 +48,13 @@ type useStringsBuilderInLoopVisitor struct {
 // stringConcatInfo records a string += found in a loop body.
 type stringConcatInfo struct {
 	stmtIdx  int             // index in loop body statement list
-	variable tree.Expression // the LHS variable (e.g. "s")
-	rhs      tree.Expression // the RHS expression (e.g. "item")
+	variable java.Expression // the LHS variable (e.g. "s")
+	rhs      java.Expression // the RHS expression (e.g. "item")
 }
 
-func (v *useStringsBuilderInLoopVisitor) VisitCompilationUnit(cu *tree.CompilationUnit, p any) tree.J {
+func (v *useStringsBuilderInLoopVisitor) VisitCompilationUnit(cu *golang.CompilationUnit, p any) java.J {
 	v.needsStringsImport = false
-	cu = v.GoVisitor.VisitCompilationUnit(cu, p).(*tree.CompilationUnit)
+	cu = v.GoVisitor.VisitCompilationUnit(cu, p).(*golang.CompilationUnit)
 
 	if !v.needsStringsImport {
 		return cu
@@ -62,7 +63,7 @@ func (v *useStringsBuilderInLoopVisitor) VisitCompilationUnit(cu *tree.Compilati
 	// Check if "strings" is already imported.
 	if cu.Imports != nil {
 		for _, rp := range cu.Imports.Elements {
-			if lit, ok := rp.Element.Qualid.(*tree.Literal); ok {
+			if lit, ok := rp.Element.Qualid.(*java.Literal); ok {
 				if lit.Source == `"strings"` {
 					return cu
 				}
@@ -72,37 +73,37 @@ func (v *useStringsBuilderInLoopVisitor) VisitCompilationUnit(cu *tree.Compilati
 
 	if cu.Imports != nil {
 		// Append to existing grouped imports.
-		newImport := &tree.Import{
+		newImport := &java.Import{
 			ID:     uuid.New(),
-			Prefix: tree.Space{Whitespace: "\n\t"},
-			Qualid: &tree.Literal{
+			Prefix: java.Space{Whitespace: "\n\t"},
+			Qualid: &java.Literal{
 				ID:     uuid.New(),
-				Prefix: tree.SingleSpace,
-				Kind:   tree.StringLiteral,
+				Prefix: java.SingleSpace,
+				Kind:   java.StringLiteral,
 				Source: `"strings"`,
 				Value:  "strings",
 			},
 		}
 		imports := *cu.Imports
-		imports.Elements = append(imports.Elements, tree.RightPadded[*tree.Import]{Element: newImport})
+		imports.Elements = append(imports.Elements, java.RightPadded[*java.Import]{Element: newImport})
 		cu = cu.WithImports(&imports)
 	} else {
 		// No imports exist yet: create a standalone import "strings".
 		// Container.Before = space before the `import` keyword.
 		// Import has no prefix; Qualid.Prefix = space between `import` and path.
-		standaloneImport := &tree.Import{
+		standaloneImport := &java.Import{
 			ID: uuid.New(),
-			Qualid: &tree.Literal{
+			Qualid: &java.Literal{
 				ID:     uuid.New(),
-				Prefix: tree.SingleSpace,
-				Kind:   tree.StringLiteral,
+				Prefix: java.SingleSpace,
+				Kind:   java.StringLiteral,
 				Source: `"strings"`,
 				Value:  "strings",
 			},
 		}
-		cu = cu.WithImports(&tree.Container[*tree.Import]{
-			Before: tree.Space{Whitespace: "\n\n"},
-			Elements: []tree.RightPadded[*tree.Import]{
+		cu = cu.WithImports(&java.Container[*java.Import]{
+			Before: java.Space{Whitespace: "\n\n"},
+			Elements: []java.RightPadded[*java.Import]{
 				{Element: standaloneImport},
 			},
 		})
@@ -111,10 +112,10 @@ func (v *useStringsBuilderInLoopVisitor) VisitCompilationUnit(cu *tree.Compilati
 	return cu
 }
 
-func (v *useStringsBuilderInLoopVisitor) VisitBlock(block *tree.Block, p any) tree.J {
-	block = v.GoVisitor.VisitBlock(block, p).(*tree.Block)
+func (v *useStringsBuilderInLoopVisitor) VisitBlock(block *java.Block, p any) java.J {
+	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
 
-	var newStmts []tree.RightPadded[tree.Statement]
+	var newStmts []java.RightPadded[java.Statement]
 	changed := false
 
 	for _, rp := range block.Statements {
@@ -137,15 +138,15 @@ func (v *useStringsBuilderInLoopVisitor) VisitBlock(block *tree.Block, p any) tr
 
 		// 1. Insert: var builder strings.Builder
 		builderDecl := buildBuilderVarDecl(prefix)
-		newStmts = append(newStmts, tree.RightPadded[tree.Statement]{Element: builderDecl})
+		newStmts = append(newStmts, java.RightPadded[java.Statement]{Element: builderDecl})
 
 		// 2. Replace s += expr with builder.WriteString(expr) inside the loop.
 		modifiedLoop := replaceAddAssignInLoop(rp.Element, sc)
-		newStmts = append(newStmts, tree.RightPadded[tree.Statement]{Element: modifiedLoop, After: rp.After})
+		newStmts = append(newStmts, java.RightPadded[java.Statement]{Element: modifiedLoop, After: rp.After})
 
 		// 3. Insert: s = builder.String()
 		assignStmt := buildBuilderStringAssign(sc.variable, prefix)
-		newStmts = append(newStmts, tree.RightPadded[tree.Statement]{Element: assignStmt})
+		newStmts = append(newStmts, java.RightPadded[java.Statement]{Element: assignStmt})
 
 		changed = true
 		v.needsStringsImport = true
@@ -158,14 +159,14 @@ func (v *useStringsBuilderInLoopVisitor) VisitBlock(block *tree.Block, p any) tr
 }
 
 // findStringConcats scans a loop body block for s += expr (AddAssign) operations.
-func findStringConcats(body *tree.Block) []stringConcatInfo {
+func findStringConcats(body *java.Block) []stringConcatInfo {
 	var results []stringConcatInfo
 	for i, rp := range body.Statements {
-		ao, ok := rp.Element.(*tree.AssignmentOperation)
+		ao, ok := rp.Element.(*java.AssignmentOperation)
 		if !ok {
 			continue
 		}
-		if ao.Operator.Element != tree.AddAssign {
+		if ao.Operator.Element != java.AddAssign {
 			continue
 		}
 		results = append(results, stringConcatInfo{
@@ -178,39 +179,39 @@ func findStringConcats(body *tree.Block) []stringConcatInfo {
 }
 
 // buildBuilderVarDecl constructs: var builder strings.Builder
-func buildBuilderVarDecl(prefix tree.Space) *tree.VariableDeclarations {
-	typeExpr := &tree.FieldAccess{
+func buildBuilderVarDecl(prefix java.Space) *java.VariableDeclarations {
+	typeExpr := &java.FieldAccess{
 		ID:     uuid.New(),
-		Prefix: tree.SingleSpace,
-		Target: &tree.Identifier{
+		Prefix: java.SingleSpace,
+		Target: &java.Identifier{
 			ID:   uuid.New(),
 			Name: "strings",
 		},
-		Name: tree.LeftPadded[*tree.Identifier]{
-			Element: &tree.Identifier{
+		Name: java.LeftPadded[*java.Identifier]{
+			Element: &java.Identifier{
 				ID:   uuid.New(),
 				Name: "Builder",
 			},
 		},
 	}
 
-	nameIdent := &tree.Identifier{
+	nameIdent := &java.Identifier{
 		ID:   uuid.New(),
 		Name: "builder",
 	}
 
-	declarator := &tree.VariableDeclarator{
+	declarator := &java.VariableDeclarator{
 		ID:     uuid.New(),
-		Prefix: tree.SingleSpace,
+		Prefix: java.SingleSpace,
 		Name:   nameIdent,
 	}
 
-	return &tree.VariableDeclarations{
-		ID:      uuid.New(),
-		Prefix:  prefix,
-		Markers: tree.Markers{ID: uuid.New(), Entries: []tree.Marker{tree.VarKeyword{Ident: uuid.New()}}},
+	return &java.VariableDeclarations{
+		ID:       uuid.New(),
+		Prefix:   prefix,
+		Markers:  java.Markers{ID: uuid.New(), Entries: []java.Marker{golang.VarKeyword{Ident: uuid.New()}}},
 		TypeExpr: typeExpr,
-		Variables: []tree.RightPadded[*tree.VariableDeclarator]{
+		Variables: []java.RightPadded[*java.VariableDeclarator]{
 			{Element: declarator},
 		},
 	}
@@ -218,22 +219,22 @@ func buildBuilderVarDecl(prefix tree.Space) *tree.VariableDeclarations {
 
 // buildBuilderStringAssign constructs: s = builder.String()
 // prefix is the loop-level indentation (e.g. "\n\t").
-func buildBuilderStringAssign(variable tree.Expression, prefix tree.Space) *tree.Assignment {
-	builderString := &tree.MethodInvocation{
+func buildBuilderStringAssign(variable java.Expression, prefix java.Space) *java.Assignment {
+	builderString := &java.MethodInvocation{
 		ID: uuid.New(),
-		Select: &tree.RightPadded[tree.Expression]{
-			Element: &tree.Identifier{
+		Select: &java.RightPadded[java.Expression]{
+			Element: &java.Identifier{
 				ID:     uuid.New(),
-				Prefix: tree.SingleSpace,
+				Prefix: java.SingleSpace,
 				Name:   "builder",
 			},
 		},
-		Name: &tree.Identifier{
+		Name: &java.Identifier{
 			ID:   uuid.New(),
 			Name: "String",
 		},
-		Arguments: tree.Container[tree.Expression]{
-			Before: tree.EmptySpace,
+		Arguments: java.Container[java.Expression]{
+			Before: java.EmptySpace,
 		},
 	}
 
@@ -241,23 +242,23 @@ func buildBuilderStringAssign(variable tree.Expression, prefix tree.Space) *tree
 	// goes on the first sub-expression (the LHS variable).
 	varClone := cloneIdentWithPrefix(variable, prefix)
 
-	return &tree.Assignment{
+	return &java.Assignment{
 		ID:       uuid.New(),
 		Variable: varClone,
-		Value: tree.LeftPadded[tree.Expression]{
-			Before:  tree.SingleSpace,
+		Value: java.LeftPadded[java.Expression]{
+			Before:  java.SingleSpace,
 			Element: builderString,
 		},
 	}
 }
 
 // replaceAddAssignInLoop replaces s += expr with builder.WriteString(expr) in the loop body.
-func replaceAddAssignInLoop(loopStmt tree.Statement, sc stringConcatInfo) tree.Statement {
+func replaceAddAssignInLoop(loopStmt java.Statement, sc stringConcatInfo) java.Statement {
 	switch loop := loopStmt.(type) {
-	case *tree.ForLoop:
+	case *java.ForLoop:
 		newBody := replaceAddAssignInBody(loop.Body, sc)
 		return loop.WithBody(newBody)
-	case *tree.ForEachLoop:
+	case *java.ForEachLoop:
 		newBody := replaceAddAssignInBody(loop.Body, sc)
 		return loop.WithBody(newBody)
 	}
@@ -266,51 +267,51 @@ func replaceAddAssignInLoop(loopStmt tree.Statement, sc stringConcatInfo) tree.S
 
 // replaceAddAssignInBody replaces the AssignmentOperation at the given index
 // with a builder.WriteString(expr) call.
-func replaceAddAssignInBody(body *tree.Block, sc stringConcatInfo) *tree.Block {
-	newStmts := make([]tree.RightPadded[tree.Statement], len(body.Statements))
+func replaceAddAssignInBody(body *java.Block, sc stringConcatInfo) *java.Block {
+	newStmts := make([]java.RightPadded[java.Statement], len(body.Statements))
 	copy(newStmts, body.Statements)
 
 	rp := newStmts[sc.stmtIdx]
-	ao := rp.Element.(*tree.AssignmentOperation)
+	ao := rp.Element.(*java.AssignmentOperation)
 
 	// For expression-based statements, the leading whitespace is on
 	// Variable.Prefix, not on the statement itself.
-	varPrefix := tree.EmptySpace
-	if ident, ok := ao.Variable.(*tree.Identifier); ok {
+	varPrefix := java.EmptySpace
+	if ident, ok := ao.Variable.(*java.Identifier); ok {
 		varPrefix = ident.Prefix
 	}
 
 	// Build: builder.WriteString(expr)
 	// Put the leading whitespace on the Select element (builder identifier).
-	writeCall := &tree.MethodInvocation{
+	writeCall := &java.MethodInvocation{
 		ID: uuid.New(),
-		Select: &tree.RightPadded[tree.Expression]{
-			Element: &tree.Identifier{
+		Select: &java.RightPadded[java.Expression]{
+			Element: &java.Identifier{
 				ID:     uuid.New(),
 				Prefix: varPrefix,
 				Name:   "builder",
 			},
 		},
-		Name: &tree.Identifier{
+		Name: &java.Identifier{
 			ID:   uuid.New(),
 			Name: "WriteString",
 		},
-		Arguments: tree.Container[tree.Expression]{
-			Before: tree.EmptySpace,
-			Elements: []tree.RightPadded[tree.Expression]{
-				{Element: setExprPrefix(sc.rhs, tree.EmptySpace)},
+		Arguments: java.Container[java.Expression]{
+			Before: java.EmptySpace,
+			Elements: []java.RightPadded[java.Expression]{
+				{Element: setExprPrefix(sc.rhs, java.EmptySpace)},
 			},
 		},
 	}
 
-	newStmts[sc.stmtIdx] = tree.RightPadded[tree.Statement]{Element: writeCall, After: rp.After}
+	newStmts[sc.stmtIdx] = java.RightPadded[java.Statement]{Element: writeCall, After: rp.After}
 	return body.WithStatements(newStmts)
 }
 
 // cloneIdentWithPrefix creates a copy of an Identifier expression with a new prefix.
-func cloneIdentWithPrefix(expr tree.Expression, prefix tree.Space) tree.Expression {
-	if ident, ok := expr.(*tree.Identifier); ok {
-		return &tree.Identifier{
+func cloneIdentWithPrefix(expr java.Expression, prefix java.Space) java.Expression {
+	if ident, ok := expr.(*java.Identifier); ok {
+		return &java.Identifier{
 			ID:     uuid.New(),
 			Prefix: prefix,
 			Name:   ident.Name,
@@ -320,17 +321,17 @@ func cloneIdentWithPrefix(expr tree.Expression, prefix tree.Space) tree.Expressi
 }
 
 // setExprPrefix sets the prefix on an expression.
-func setExprPrefix(expr tree.Expression, prefix tree.Space) tree.Expression {
+func setExprPrefix(expr java.Expression, prefix java.Space) java.Expression {
 	switch n := expr.(type) {
-	case *tree.Identifier:
+	case *java.Identifier:
 		return n.WithPrefix(prefix)
-	case *tree.Literal:
+	case *java.Literal:
 		return n.WithPrefix(prefix)
-	case *tree.MethodInvocation:
+	case *java.MethodInvocation:
 		return n.WithPrefix(prefix)
-	case *tree.FieldAccess:
+	case *java.FieldAccess:
 		return n.WithPrefix(prefix)
-	case *tree.MethodDeclaration:
+	case *java.MethodDeclaration:
 		return n.WithPrefix(prefix)
 	default:
 		return expr

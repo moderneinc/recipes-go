@@ -6,7 +6,7 @@ package errorhandling
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -34,14 +34,14 @@ type avoidOsExitVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *avoidOsExitVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p any) tree.J {
-	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*tree.MethodInvocation)
+func (v *avoidOsExitVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	if mi.Select == nil {
 		return mi
 	}
 
-	ident, ok := mi.Select.Element.(*tree.Identifier)
+	ident, ok := mi.Select.Element.(*java.Identifier)
 	if !ok || ident.Name != "os" {
 		return mi
 	}
@@ -53,14 +53,14 @@ func (v *avoidOsExitVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p 
 	// os.Exit(0) can be safely removed — the program exits naturally.
 	args := mi.Arguments.Elements
 	if len(args) == 1 {
-		if lit, ok := args[0].Element.(*tree.Literal); ok && lit.Source == "0" {
-			return &tree.Empty{}
+		if lit, ok := args[0].Element.(*java.Literal); ok && lit.Source == "0" {
+			return &java.Empty{}
 		}
 	}
 
 	// Non-zero exit codes: keep but warn.
 	mi = mi.WithMarkers(
-		tree.MarkupWarn(mi.Markers, "os.Exit bypasses deferred functions and cleanup"),
+		java.MarkupWarn(mi.Markers, "os.Exit bypasses deferred functions and cleanup"),
 	)
 	return mi
 }

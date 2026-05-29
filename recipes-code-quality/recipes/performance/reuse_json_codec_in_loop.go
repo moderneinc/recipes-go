@@ -6,7 +6,7 @@ package performance
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -35,22 +35,22 @@ type reuseJsonCodecInLoopVisitor struct {
 	insideLoop int
 }
 
-func (v *reuseJsonCodecInLoopVisitor) VisitForLoop(forLoop *tree.ForLoop, p any) tree.J {
+func (v *reuseJsonCodecInLoopVisitor) VisitForLoop(forLoop *java.ForLoop, p any) java.J {
 	v.insideLoop++
-	forLoop = v.GoVisitor.VisitForLoop(forLoop, p).(*tree.ForLoop)
+	forLoop = v.GoVisitor.VisitForLoop(forLoop, p).(*java.ForLoop)
 	v.insideLoop--
 	return forLoop
 }
 
-func (v *reuseJsonCodecInLoopVisitor) VisitForEachLoop(forEach *tree.ForEachLoop, p any) tree.J {
+func (v *reuseJsonCodecInLoopVisitor) VisitForEachLoop(forEach *java.ForEachLoop, p any) java.J {
 	v.insideLoop++
-	forEach = v.GoVisitor.VisitForEachLoop(forEach, p).(*tree.ForEachLoop)
+	forEach = v.GoVisitor.VisitForEachLoop(forEach, p).(*java.ForEachLoop)
 	v.insideLoop--
 	return forEach
 }
 
-func (v *reuseJsonCodecInLoopVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p any) tree.J {
-	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*tree.MethodInvocation)
+func (v *reuseJsonCodecInLoopVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	if v.insideLoop == 0 {
 		return mi
@@ -60,7 +60,7 @@ func (v *reuseJsonCodecInLoopVisitor) VisitMethodInvocation(mi *tree.MethodInvoc
 		return mi
 	}
 
-	ident, ok := mi.Select.Element.(*tree.Identifier)
+	ident, ok := mi.Select.Element.(*java.Identifier)
 	if !ok || ident.Name != "json" {
 		return mi
 	}
@@ -70,7 +70,7 @@ func (v *reuseJsonCodecInLoopVisitor) VisitMethodInvocation(mi *tree.MethodInvoc
 	}
 
 	mi = mi.WithMarkers(
-		tree.MarkupInfo(mi.Markers, "json marshal/unmarshal in loop; consider using a pre-allocated encoder/decoder"),
+		java.MarkupInfo(mi.Markers, "json marshal/unmarshal in loop; consider using a pre-allocated encoder/decoder"),
 	)
 	return mi
 }

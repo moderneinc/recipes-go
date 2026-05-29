@@ -8,7 +8,8 @@ import (
 	"strings"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -39,17 +40,17 @@ type findSingleCaseSelectVisitor struct {
 
 // isSingleCaseSelect returns the single CommClause if sw is a select with
 // exactly one communication clause and no default, or nil otherwise.
-func isSingleCaseSelect(sw *tree.Switch) *tree.CommClause {
-	if !tree.HasMarker[tree.SelectStmt](sw.Markers) {
+func isSingleCaseSelect(sw *java.Switch) *golang.CommClause {
+	if !java.HasMarker[golang.SelectStmt](sw.Markers) {
 		return nil
 	}
 	if sw.Body == nil {
 		return nil
 	}
-	var theClause *tree.CommClause
+	var theClause *golang.CommClause
 	clauses := 0
 	for _, stmt := range sw.Body.Statements {
-		if cc, ok := stmt.Element.(*tree.CommClause); ok {
+		if cc, ok := stmt.Element.(*golang.CommClause); ok {
 			clauses++
 			if cc.Comm == nil {
 				return nil // has default
@@ -65,15 +66,15 @@ func isSingleCaseSelect(sw *tree.Switch) *tree.CommClause {
 
 // VisitBlock replaces single-case select statements with their channel
 // operation and body statements, spliced directly into the enclosing block.
-func (v *findSingleCaseSelectVisitor) VisitBlock(block *tree.Block, p any) tree.J {
-	block = v.GoVisitor.VisitBlock(block, p).(*tree.Block)
+func (v *findSingleCaseSelectVisitor) VisitBlock(block *java.Block, p any) java.J {
+	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
 
 	changed := false
-	var newStmts []tree.RightPadded[tree.Statement]
+	var newStmts []java.RightPadded[java.Statement]
 	dedent := visitor.Init(&selectSingleDedentVisitor{})
 
 	for _, rp := range block.Statements {
-		sw, ok := rp.Element.(*tree.Switch)
+		sw, ok := rp.Element.(*java.Switch)
 		if !ok {
 			newStmts = append(newStmts, rp)
 			continue
@@ -93,14 +94,14 @@ func (v *findSingleCaseSelectVisitor) VisitBlock(block *tree.Block, p any) tree.
 		// select statement's prefix (e.g., "\n\t") so it sits at the right
 		// indentation level.
 		commFixed := replaceLeadingPrefix(clause.Comm, sw.Prefix)
-		newStmts = append(newStmts, tree.RightPadded[tree.Statement]{Element: commFixed})
+		newStmts = append(newStmts, java.RightPadded[java.Statement]{Element: commFixed})
 
 		// Body statements are indented for the case body (2 levels deeper
 		// than the function body). Dedent by 1 tab to match the select's
 		// indentation level.
 		for _, bodyRP := range clause.Body {
-			bodyDedented := dedent.Visit(bodyRP.Element, nil).(tree.Statement)
-			newStmts = append(newStmts, tree.RightPadded[tree.Statement]{
+			bodyDedented := dedent.Visit(bodyRP.Element, nil).(java.Statement)
+			newStmts = append(newStmts, java.RightPadded[java.Statement]{
 				Element: bodyDedented,
 				After:   bodyRP.After,
 				Markers: bodyRP.Markers,
@@ -119,22 +120,22 @@ func (v *findSingleCaseSelectVisitor) VisitBlock(block *tree.Block, p any) tree.
 // replaceLeadingPrefix replaces all leading whitespace of a statement with
 // the given prefix. For compound nodes like Assignment, this means setting
 // the node prefix and clearing the first child's prefix.
-func replaceLeadingPrefix(stmt tree.Statement, prefix tree.Space) tree.Statement {
+func replaceLeadingPrefix(stmt java.Statement, prefix java.Space) java.Statement {
 	switch s := stmt.(type) {
-	case *tree.Assignment:
+	case *java.Assignment:
 		c := *s
 		c.Prefix = prefix
 		// Clear the variable's prefix since it was the visual prefix before "case" was stripped.
 		switch v := c.Variable.(type) {
-		case *tree.Identifier:
-			c.Variable = v.WithPrefix(tree.EmptySpace)
+		case *java.Identifier:
+			c.Variable = v.WithPrefix(java.EmptySpace)
 		}
 		return &c
-	case *tree.Send:
+	case *golang.Send:
 		return s.WithPrefix(prefix)
-	case *tree.Unary:
+	case *java.Unary:
 		return s.WithPrefix(prefix)
-	case *tree.MethodInvocation:
+	case *java.MethodInvocation:
 		return s.WithPrefix(prefix)
 	default:
 		return stmt
@@ -147,7 +148,7 @@ type selectSingleDedentVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *selectSingleDedentVisitor) VisitSpace(space tree.Space, p any) tree.Space {
+func (v *selectSingleDedentVisitor) VisitSpace(space java.Space, p any) java.Space {
 	if strings.Contains(space.Whitespace, "\t") {
 		space.Whitespace = strings.Replace(space.Whitespace, "\t", "", 1)
 	}

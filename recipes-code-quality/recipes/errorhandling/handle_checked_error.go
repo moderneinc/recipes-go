@@ -6,7 +6,7 @@ package errorhandling
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -33,17 +33,17 @@ type handleCheckedErrorVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *handleCheckedErrorVisitor) VisitIf(ifStmt *tree.If, p any) tree.J {
-	ifStmt = v.GoVisitor.VisitIf(ifStmt, p).(*tree.If)
+func (v *handleCheckedErrorVisitor) VisitIf(ifStmt *java.If, p any) java.J {
+	ifStmt = v.GoVisitor.VisitIf(ifStmt, p).(*java.If)
 
 	// Check if the condition is `err != nil`.
-	bin, ok := ifStmt.Condition.(*tree.Binary)
-	if !ok || bin.Operator.Element != tree.NotEqual {
+	bin, ok := ifStmt.Condition.(*java.Binary)
+	if !ok || bin.Operator.Element != java.NotEqual {
 		return ifStmt
 	}
 
-	leftIdent, leftOk := bin.Left.(*tree.Identifier)
-	rightIdent, rightOk := bin.Right.(*tree.Identifier)
+	leftIdent, leftOk := bin.Left.(*java.Identifier)
+	rightIdent, rightOk := bin.Right.(*java.Identifier)
 	if !leftOk || !rightOk {
 		return ifStmt
 	}
@@ -63,15 +63,15 @@ func (v *handleCheckedErrorVisitor) VisitIf(ifStmt *tree.If, p any) tree.J {
 	// the whitespace before `}`, e.g. "\n\t". The return statement sits
 	// one indent level deeper.
 	endWS := ifStmt.Then.End.Whitespace
-	returnPrefix := tree.Space{Whitespace: endWS + "\t"}
+	returnPrefix := java.Space{Whitespace: endWS + "\t"}
 
-	errIdent := &tree.Identifier{Prefix: tree.Space{Whitespace: " "}, Name: "err"}
-	returnStmt := &tree.Return{
+	errIdent := &java.Identifier{Prefix: java.Space{Whitespace: " "}, Name: "err"}
+	returnStmt := &java.Return{
 		Prefix:      returnPrefix,
-		Expressions: []tree.RightPadded[tree.Expression]{{Element: errIdent}},
+		Expressions: []java.RightPadded[java.Expression]{{Element: errIdent}},
 	}
 
-	newStmts := []tree.RightPadded[tree.Statement]{
+	newStmts := []java.RightPadded[java.Statement]{
 		{Element: returnStmt},
 	}
 	newThen := ifStmt.Then.WithStatements(newStmts)
@@ -80,11 +80,11 @@ func (v *handleCheckedErrorVisitor) VisitIf(ifStmt *tree.If, p any) tree.J {
 	return ifStmt.WithThen(newThen)
 }
 
-// countRealStatements counts statements that are not *tree.Empty.
-func countRealStatements(stmts []tree.RightPadded[tree.Statement]) int {
+// countRealStatements counts statements that are not *java.Empty.
+func countRealStatements(stmts []java.RightPadded[java.Statement]) int {
 	n := 0
 	for _, s := range stmts {
-		if _, isEmpty := s.Element.(*tree.Empty); !isEmpty {
+		if _, isEmpty := s.Element.(*java.Empty); !isEmpty {
 			n++
 		}
 	}

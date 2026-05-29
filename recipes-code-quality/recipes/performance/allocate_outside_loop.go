@@ -6,7 +6,7 @@ package performance
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -35,22 +35,22 @@ type allocateOutsideLoopVisitor struct {
 	insideLoop int
 }
 
-func (v *allocateOutsideLoopVisitor) VisitForLoop(forLoop *tree.ForLoop, p any) tree.J {
+func (v *allocateOutsideLoopVisitor) VisitForLoop(forLoop *java.ForLoop, p any) java.J {
 	v.insideLoop++
-	forLoop = v.GoVisitor.VisitForLoop(forLoop, p).(*tree.ForLoop)
+	forLoop = v.GoVisitor.VisitForLoop(forLoop, p).(*java.ForLoop)
 	v.insideLoop--
 	return forLoop
 }
 
-func (v *allocateOutsideLoopVisitor) VisitForEachLoop(forEach *tree.ForEachLoop, p any) tree.J {
+func (v *allocateOutsideLoopVisitor) VisitForEachLoop(forEach *java.ForEachLoop, p any) java.J {
 	v.insideLoop++
-	forEach = v.GoVisitor.VisitForEachLoop(forEach, p).(*tree.ForEachLoop)
+	forEach = v.GoVisitor.VisitForEachLoop(forEach, p).(*java.ForEachLoop)
 	v.insideLoop--
 	return forEach
 }
 
-func (v *allocateOutsideLoopVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p any) tree.J {
-	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*tree.MethodInvocation)
+func (v *allocateOutsideLoopVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	if v.insideLoop == 0 {
 		return mi
@@ -62,7 +62,7 @@ func (v *allocateOutsideLoopVisitor) VisitMethodInvocation(mi *tree.MethodInvoca
 	}
 
 	mi = mi.WithMarkers(
-		tree.MarkupInfo(mi.Markers, "new() in loop; consider allocating once outside the loop"),
+		java.MarkupInfo(mi.Markers, "new() in loop; consider allocating once outside the loop"),
 	)
 	return mi
 }

@@ -7,7 +7,7 @@ package redundancy
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/printer"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -46,8 +46,8 @@ type allBranchesIdenticalVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *allBranchesIdenticalVisitor) VisitIf(ifStmt *tree.If, p any) tree.J {
-	ifStmt = v.GoVisitor.VisitIf(ifStmt, p).(*tree.If)
+func (v *allBranchesIdenticalVisitor) VisitIf(ifStmt *java.If, p any) java.J {
+	ifStmt = v.GoVisitor.VisitIf(ifStmt, p).(*java.If)
 
 	if !allBranchBodiesIdentical(ifStmt) {
 		return ifStmt
@@ -60,7 +60,7 @@ func (v *allBranchesIdenticalVisitor) VisitIf(ifStmt *tree.If, p any) tree.J {
 
 // allBranchBodiesIdentical walks the if/else-if/else chain and returns true
 // only when a final else clause exists and every branch body is identical.
-func allBranchBodiesIdentical(ifStmt *tree.If) bool {
+func allBranchBodiesIdentical(ifStmt *java.If) bool {
 	reference := printBlockNormalized(ifStmt.Then)
 	current := ifStmt
 
@@ -71,12 +71,12 @@ func allBranchBodiesIdentical(ifStmt *tree.If) bool {
 		}
 
 		switch elseBody := current.ElsePart.Element.(type) {
-		case *tree.If:
+		case *java.If:
 			if printBlockNormalized(elseBody.Then) != reference {
 				return false
 			}
 			current = elseBody
-		case *tree.Block:
+		case *java.Block:
 			return printBlockNormalized(elseBody) == reference
 		default:
 			return false
@@ -84,6 +84,6 @@ func allBranchBodiesIdentical(ifStmt *tree.If) bool {
 	}
 }
 
-func printBlockNormalized(block *tree.Block) string {
-	return printer.Print(block.WithPrefix(tree.Space{}))
+func printBlockNormalized(block *java.Block) string {
+	return printer.Print(block.WithPrefix(java.Space{}))
 }

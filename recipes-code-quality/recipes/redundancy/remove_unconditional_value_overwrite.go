@@ -7,7 +7,7 @@ package redundancy
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/printer"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -45,8 +45,8 @@ type removeUnconditionalValueOverwriteVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *removeUnconditionalValueOverwriteVisitor) VisitBlock(block *tree.Block, p any) tree.J {
-	block = v.GoVisitor.VisitBlock(block, p).(*tree.Block)
+func (v *removeUnconditionalValueOverwriteVisitor) VisitBlock(block *java.Block, p any) java.J {
+	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
 
 	stmts := block.Statements
 	if len(stmts) < 2 {
@@ -54,7 +54,7 @@ func (v *removeUnconditionalValueOverwriteVisitor) VisitBlock(block *tree.Block,
 	}
 
 	changed := false
-	var result []tree.RightPadded[tree.Statement]
+	var result []java.RightPadded[java.Statement]
 
 	for i := 0; i < len(stmts); i++ {
 		// Look ahead: if this and the next statement both assign to the same
@@ -75,7 +75,7 @@ func (v *removeUnconditionalValueOverwriteVisitor) VisitBlock(block *tree.Block,
 // isOverwrittenIndexAssignment returns true when both statements are
 // assignments of the form `receiver[key] = value` with the same receiver
 // and key (printed form, ignoring whitespace).
-func isOverwrittenIndexAssignment(first, second tree.RightPadded[tree.Statement]) bool {
+func isOverwrittenIndexAssignment(first, second java.RightPadded[java.Statement]) bool {
 	a := extractIndexAssignment(first)
 	b := extractIndexAssignment(second)
 	if a == nil || b == nil {
@@ -88,18 +88,18 @@ func isOverwrittenIndexAssignment(first, second tree.RightPadded[tree.Statement]
 // extractIndexAssignment checks whether a statement is an assignment whose
 // left-hand side is an ArrayAccess (index expression), and returns the
 // ArrayAccess if so.
-func extractIndexAssignment(stmt tree.RightPadded[tree.Statement]) *tree.ArrayAccess {
-	assign, ok := stmt.Element.(*tree.Assignment)
+func extractIndexAssignment(stmt java.RightPadded[java.Statement]) *java.ArrayAccess {
+	assign, ok := stmt.Element.(*java.Assignment)
 	if !ok {
 		return nil
 	}
-	aa, ok := assign.Variable.(*tree.ArrayAccess)
+	aa, ok := assign.Variable.(*java.ArrayAccess)
 	if !ok {
 		return nil
 	}
 	return aa
 }
 
-func printNorm(node tree.J) string {
+func printNorm(node java.J) string {
 	return printer.Print(node)
 }

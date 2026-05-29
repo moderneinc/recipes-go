@@ -6,7 +6,8 @@ package redundancy
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -33,11 +34,11 @@ type removeEmptySwitchVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *removeEmptySwitchVisitor) VisitSwitch(sw *tree.Switch, p any) tree.J {
-	sw = v.GoVisitor.VisitSwitch(sw, p).(*tree.Switch)
+func (v *removeEmptySwitchVisitor) VisitSwitch(sw *java.Switch, p any) java.J {
+	sw = v.GoVisitor.VisitSwitch(sw, p).(*java.Switch)
 
 	// Skip select statements.
-	if tree.HasMarker[tree.SelectStmt](sw.Markers) {
+	if java.HasMarker[golang.SelectStmt](sw.Markers) {
 		return sw
 	}
 
@@ -46,11 +47,11 @@ func (v *removeEmptySwitchVisitor) VisitSwitch(sw *tree.Switch, p any) tree.J {
 		return sw
 	}
 	for _, stmt := range sw.Body.Statements {
-		if _, isEmpty := stmt.Element.(*tree.Empty); !isEmpty {
+		if _, isEmpty := stmt.Element.(*java.Empty); !isEmpty {
 			return sw
 		}
 	}
 
 	// Remove the empty switch by replacing with Empty.
-	return &tree.Empty{}
+	return &java.Empty{}
 }

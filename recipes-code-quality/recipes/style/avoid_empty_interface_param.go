@@ -6,7 +6,8 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -33,24 +34,24 @@ type avoidEmptyInterfaceParamVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *avoidEmptyInterfaceParamVisitor) VisitMethodDeclaration(md *tree.MethodDeclaration, p any) tree.J {
-	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*tree.MethodDeclaration)
+func (v *avoidEmptyInterfaceParamVisitor) VisitMethodDeclaration(md *java.MethodDeclaration, p any) java.J {
+	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*java.MethodDeclaration)
 
 	changed := false
-	params := make([]tree.RightPadded[tree.Statement], len(md.Parameters.Elements))
+	params := make([]java.RightPadded[java.Statement], len(md.Parameters.Elements))
 	copy(params, md.Parameters.Elements)
 
 	for i, param := range params {
-		vd, ok := param.Element.(*tree.VariableDeclarations)
+		vd, ok := param.Element.(*java.VariableDeclarations)
 		if !ok {
 			continue
 		}
 		if isEmptyInterfaceExpr(vd.TypeExpr) {
 			// Replace interface{} with any, preserving prefix
-			prefix := vd.TypeExpr.(*tree.InterfaceType).Prefix
+			prefix := vd.TypeExpr.(*golang.InterfaceType).Prefix
 			newVd := *vd
-			newVd.TypeExpr = &tree.Identifier{Prefix: prefix, Name: "any"}
-			params[i] = tree.RightPadded[tree.Statement]{
+			newVd.TypeExpr = &java.Identifier{Prefix: prefix, Name: "any"}
+			params[i] = java.RightPadded[java.Statement]{
 				Element: &newVd,
 				After:   param.After,
 				Markers: param.Markers,
@@ -73,11 +74,11 @@ func (v *avoidEmptyInterfaceParamVisitor) VisitMethodDeclaration(md *tree.Method
 // isEmptyInterfaceExpr returns true if the expression is `interface{}` (an
 // InterfaceType with an empty body). It does NOT match `any` — that is already
 // the desired form.
-func isEmptyInterfaceExpr(expr tree.Expression) bool {
+func isEmptyInterfaceExpr(expr java.Expression) bool {
 	if expr == nil {
 		return false
 	}
-	it, ok := expr.(*tree.InterfaceType)
+	it, ok := expr.(*golang.InterfaceType)
 	if !ok {
 		return false
 	}
@@ -85,7 +86,7 @@ func isEmptyInterfaceExpr(expr tree.Expression) bool {
 		return true
 	}
 	for _, s := range it.Body.Statements {
-		if _, isEmpty := s.Element.(*tree.Empty); !isEmpty {
+		if _, isEmpty := s.Element.(*java.Empty); !isEmpty {
 			return false
 		}
 	}

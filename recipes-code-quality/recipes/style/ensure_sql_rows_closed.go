@@ -6,7 +6,7 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -33,10 +33,10 @@ type ensureSqlRowsClosedVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *ensureSqlRowsClosedVisitor) VisitBlock(block *tree.Block, p any) tree.J {
-	block = v.GoVisitor.VisitBlock(block, p).(*tree.Block)
+func (v *ensureSqlRowsClosedVisitor) VisitBlock(block *java.Block, p any) java.J {
+	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
 
-	var newStmts []tree.RightPadded[tree.Statement]
+	var newStmts []java.RightPadded[java.Statement]
 	changed := false
 
 	for i, rp := range block.Statements {
@@ -47,7 +47,7 @@ func (v *ensureSqlRowsClosedVisitor) VisitBlock(block *tree.Block, p any) tree.J
 				continue
 			}
 			deferStmt := buildDeferMethodCall(varName, "Close", rp.Element)
-			newStmts = append(newStmts, tree.RightPadded[tree.Statement]{Element: deferStmt})
+			newStmts = append(newStmts, java.RightPadded[java.Statement]{Element: deferStmt})
 			changed = true
 		}
 	}
@@ -59,7 +59,7 @@ func (v *ensureSqlRowsClosedVisitor) VisitBlock(block *tree.Block, p any) tree.J
 }
 
 // isSqlQuery returns true if the method invocation is *.Query().
-func isSqlQuery(mi *tree.MethodInvocation) bool {
+func isSqlQuery(mi *java.MethodInvocation) bool {
 	if mi.Select == nil {
 		return false
 	}

@@ -6,7 +6,7 @@ package redundancy
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -33,36 +33,36 @@ type removeEmptyLoopVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *removeEmptyLoopVisitor) VisitForLoop(forLoop *tree.ForLoop, p any) tree.J {
-	forLoop = v.GoVisitor.VisitForLoop(forLoop, p).(*tree.ForLoop)
+func (v *removeEmptyLoopVisitor) VisitForLoop(forLoop *java.ForLoop, p any) java.J {
+	forLoop = v.GoVisitor.VisitForLoop(forLoop, p).(*java.ForLoop)
 
 	if !isEmptyBlock(forLoop.Body) {
 		return forLoop
 	}
 
 	// Remove the empty for loop by replacing with Empty.
-	return &tree.Empty{}
+	return &java.Empty{}
 }
 
-func (v *removeEmptyLoopVisitor) VisitForEachLoop(forEach *tree.ForEachLoop, p any) tree.J {
-	forEach = v.GoVisitor.VisitForEachLoop(forEach, p).(*tree.ForEachLoop)
+func (v *removeEmptyLoopVisitor) VisitForEachLoop(forEach *java.ForEachLoop, p any) java.J {
+	forEach = v.GoVisitor.VisitForEachLoop(forEach, p).(*java.ForEachLoop)
 
 	if !isEmptyBlock(forEach.Body) {
 		return forEach
 	}
 
 	// Remove the empty for-range loop by replacing with Empty.
-	return &tree.Empty{}
+	return &java.Empty{}
 }
 
 // isEmptyBlock returns true if the block is nil or contains no real statements
 // (only Empty sentinels).
-func isEmptyBlock(block *tree.Block) bool {
+func isEmptyBlock(block *java.Block) bool {
 	if block == nil {
 		return true
 	}
 	for _, stmt := range block.Statements {
-		if _, isEmpty := stmt.Element.(*tree.Empty); !isEmpty {
+		if _, isEmpty := stmt.Element.(*java.Empty); !isEmpty {
 			return false
 		}
 	}

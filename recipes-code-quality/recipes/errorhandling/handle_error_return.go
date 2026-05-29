@@ -7,7 +7,8 @@ package errorhandling
 import (
 	"github.com/moderneinc/recipes-go/recipes-code-quality/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -42,8 +43,8 @@ type handleErrorReturnVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *handleErrorReturnVisitor) VisitMultiAssignment(ma *tree.MultiAssignment, p any) tree.J {
-	ma = v.GoVisitor.VisitMultiAssignment(ma, p).(*tree.MultiAssignment)
+func (v *handleErrorReturnVisitor) VisitMultiAssignment(ma *golang.MultiAssignment, p any) java.J {
+	ma = v.GoVisitor.VisitMultiAssignment(ma, p).(*golang.MultiAssignment)
 
 	if len(ma.Variables) == 0 {
 		return ma
@@ -51,16 +52,16 @@ func (v *handleErrorReturnVisitor) VisitMultiAssignment(ma *tree.MultiAssignment
 
 	// Check if the last LHS variable is the blank identifier `_`.
 	lastVar := ma.Variables[len(ma.Variables)-1]
-	ident, ok := lastVar.Element.(*tree.Identifier)
+	ident, ok := lastVar.Element.(*java.Identifier)
 	if !ok || ident.Name != "_" {
 		return ma
 	}
 
 	// Replace `_` with `err` to capture the error value.
 	replaced := ident.WithName("err")
-	vars := make([]tree.RightPadded[tree.Expression], len(ma.Variables))
+	vars := make([]java.RightPadded[java.Expression], len(ma.Variables))
 	copy(vars, ma.Variables)
-	vars[len(vars)-1] = tree.RightPadded[tree.Expression]{
+	vars[len(vars)-1] = java.RightPadded[java.Expression]{
 		Element: replaced,
 		After:   lastVar.After,
 		Markers: lastVar.Markers,

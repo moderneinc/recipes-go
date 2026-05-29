@@ -7,7 +7,7 @@ package style
 import (
 	"github.com/moderneinc/recipes-go/recipes-code-quality/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -43,8 +43,8 @@ type avoidDotImportVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *avoidDotImportVisitor) VisitImport(imp *tree.Import, p any) tree.J {
-	imp = v.GoVisitor.VisitImport(imp, p).(*tree.Import)
+func (v *avoidDotImportVisitor) VisitImport(imp *java.Import, p any) java.J {
+	imp = v.GoVisitor.VisitImport(imp, p).(*java.Import)
 
 	if imp.Alias == nil {
 		return imp
@@ -61,10 +61,10 @@ func (v *avoidDotImportVisitor) VisitImport(imp *tree.Import, p any) tree.J {
 	// "import" and the path, so we clear the qualid's leading whitespace.
 	c := *imp
 	c.Alias = nil
-	if lit, ok := c.Qualid.(*tree.Literal); ok {
-		c.Qualid = lit.WithPrefix(tree.EmptySpace)
-	} else if ident, ok := c.Qualid.(*tree.Identifier); ok {
-		c.Qualid = ident.WithPrefix(tree.EmptySpace)
+	if lit, ok := c.Qualid.(*java.Literal); ok {
+		c.Qualid = lit.WithPrefix(java.EmptySpace)
+	} else if ident, ok := c.Qualid.(*java.Identifier); ok {
+		c.Qualid = ident.WithPrefix(java.EmptySpace)
 	}
 	return &c
 }

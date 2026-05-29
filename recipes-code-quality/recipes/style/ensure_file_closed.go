@@ -7,7 +7,8 @@ package style
 import (
 	"github.com/google/uuid"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -41,10 +42,10 @@ type ensureFileClosedVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *ensureFileClosedVisitor) VisitBlock(block *tree.Block, p any) tree.J {
-	block = v.GoVisitor.VisitBlock(block, p).(*tree.Block)
+func (v *ensureFileClosedVisitor) VisitBlock(block *java.Block, p any) java.J {
+	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
 
-	var newStmts []tree.RightPadded[tree.Statement]
+	var newStmts []java.RightPadded[java.Statement]
 	changed := false
 
 	for i, rp := range block.Statements {
@@ -55,7 +56,7 @@ func (v *ensureFileClosedVisitor) VisitBlock(block *tree.Block, p any) tree.J {
 				continue
 			}
 			deferStmt := buildDeferMethodCall(varName, "Close", rp.Element)
-			newStmts = append(newStmts, tree.RightPadded[tree.Statement]{Element: deferStmt})
+			newStmts = append(newStmts, java.RightPadded[java.Statement]{Element: deferStmt})
 			changed = true
 		}
 	}
@@ -67,11 +68,11 @@ func (v *ensureFileClosedVisitor) VisitBlock(block *tree.Block, p any) tree.J {
 }
 
 // isOsFileOpen returns true if the method invocation is os.Open, os.Create, or os.OpenFile.
-func isOsFileOpen(mi *tree.MethodInvocation) bool {
+func isOsFileOpen(mi *java.MethodInvocation) bool {
 	if mi.Select == nil {
 		return false
 	}
-	ident, ok := mi.Select.Element.(*tree.Identifier)
+	ident, ok := mi.Select.Element.(*java.Identifier)
 	if !ok || ident.Name != "os" {
 		return false
 	}
@@ -81,17 +82,17 @@ func isOsFileOpen(mi *tree.MethodInvocation) bool {
 // extractAssignedVar extracts the variable name from an assignment statement
 // whose RHS matches the given predicate. Supports both Assignment (x := expr)
 // and MultiAssignment (x, err := expr).
-func extractAssignedVar(stmt tree.Statement, matchRHS func(*tree.MethodInvocation) bool) (string, bool) {
+func extractAssignedVar(stmt java.Statement, matchRHS func(*java.MethodInvocation) bool) (string, bool) {
 	switch s := stmt.(type) {
-	case *tree.Assignment:
+	case *java.Assignment:
 		mi, ok := unwrapMethodInvocation(s.Value.Element)
 		if !ok || !matchRHS(mi) {
 			return "", false
 		}
-		if ident, ok := s.Variable.(*tree.Identifier); ok {
+		if ident, ok := s.Variable.(*java.Identifier); ok {
 			return ident.Name, true
 		}
-	case *tree.MultiAssignment:
+	case *golang.MultiAssignment:
 		if len(s.Values) == 0 || len(s.Variables) == 0 {
 			return "", false
 		}
@@ -99,24 +100,24 @@ func extractAssignedVar(stmt tree.Statement, matchRHS func(*tree.MethodInvocatio
 		if !ok || !matchRHS(mi) {
 			return "", false
 		}
-		if ident, ok := s.Variables[0].Element.(*tree.Identifier); ok {
+		if ident, ok := s.Variables[0].Element.(*java.Identifier); ok {
 			return ident.Name, true
 		}
 	}
 	return "", false
 }
 
-// unwrapMethodInvocation extracts a *tree.MethodInvocation from an expression.
-func unwrapMethodInvocation(expr tree.Expression) (*tree.MethodInvocation, bool) {
-	mi, ok := expr.(*tree.MethodInvocation)
+// unwrapMethodInvocation extracts a *java.MethodInvocation from an expression.
+func unwrapMethodInvocation(expr java.Expression) (*java.MethodInvocation, bool) {
+	mi, ok := expr.(*java.MethodInvocation)
 	return mi, ok
 }
 
 // hasDeferAfter checks if any statement after index i in the block is a defer
 // calling varName.methodName().
-func hasDeferAfter(stmts []tree.RightPadded[tree.Statement], i int, varName, methodName string) bool {
+func hasDeferAfter(stmts []java.RightPadded[java.Statement], i int, varName, methodName string) bool {
 	for j := i + 1; j < len(stmts); j++ {
-		d, ok := stmts[j].Element.(*tree.Defer)
+		d, ok := stmts[j].Element.(*golang.Defer)
 		if !ok {
 			continue
 		}
@@ -128,8 +129,8 @@ func hasDeferAfter(stmts []tree.RightPadded[tree.Statement], i int, varName, met
 }
 
 // matchesDeferCall returns true if the defer calls varName.methodName().
-func matchesDeferCall(d *tree.Defer, varName, methodName string) bool {
-	mi, ok := d.Expr.(*tree.MethodInvocation)
+func matchesDeferCall(d *golang.Defer, varName, methodName string) bool {
+	mi, ok := d.Expr.(*java.MethodInvocation)
 	if !ok {
 		return false
 	}
@@ -139,7 +140,7 @@ func matchesDeferCall(d *tree.Defer, varName, methodName string) bool {
 	if mi.Select == nil {
 		return false
 	}
-	ident, ok := mi.Select.Element.(*tree.Identifier)
+	ident, ok := mi.Select.Element.(*java.Identifier)
 	if !ok {
 		return false
 	}
@@ -148,27 +149,27 @@ func matchesDeferCall(d *tree.Defer, varName, methodName string) bool {
 
 // buildDeferMethodCall builds a `defer varName.methodName()` statement,
 // copying the indentation prefix from the original statement.
-func buildDeferMethodCall(varName, methodName string, originalStmt tree.Statement) *tree.Defer {
+func buildDeferMethodCall(varName, methodName string, originalStmt java.Statement) *golang.Defer {
 	prefix := stmtPrefix(originalStmt)
 
-	selectIdent := &tree.Identifier{
+	selectIdent := &java.Identifier{
 		ID:   uuid.New(),
 		Name: varName,
 	}
-	methodIdent := &tree.Identifier{
+	methodIdent := &java.Identifier{
 		ID:   uuid.New(),
 		Name: methodName,
 	}
-	closeCall := &tree.MethodInvocation{
+	closeCall := &java.MethodInvocation{
 		ID:     uuid.New(),
-		Prefix: tree.SingleSpace,
-		Select: &tree.RightPadded[tree.Expression]{Element: selectIdent},
+		Prefix: java.SingleSpace,
+		Select: &java.RightPadded[java.Expression]{Element: selectIdent},
 		Name:   methodIdent,
-		Arguments: tree.Container[tree.Expression]{
-			Before: tree.EmptySpace,
+		Arguments: java.Container[java.Expression]{
+			Before: java.EmptySpace,
 		},
 	}
-	return &tree.Defer{
+	return &golang.Defer{
 		ID:     uuid.New(),
 		Prefix: prefix,
 		Expr:   closeCall,
@@ -178,25 +179,25 @@ func buildDeferMethodCall(varName, methodName string, originalStmt tree.Statemen
 // stmtPrefix extracts the leading whitespace from a statement.
 // In Go's AST the indentation lives on the first token of the statement,
 // not on the statement node's own Prefix field.
-func stmtPrefix(stmt tree.Statement) tree.Space {
+func stmtPrefix(stmt java.Statement) java.Space {
 	switch s := stmt.(type) {
-	case *tree.Assignment:
-		if id, ok := s.Variable.(*tree.Identifier); ok && id.Prefix.Whitespace != "" {
+	case *java.Assignment:
+		if id, ok := s.Variable.(*java.Identifier); ok && id.Prefix.Whitespace != "" {
 			return id.Prefix
 		}
 		return s.Prefix
-	case *tree.MultiAssignment:
+	case *golang.MultiAssignment:
 		if len(s.Variables) > 0 {
-			if id, ok := s.Variables[0].Element.(*tree.Identifier); ok && id.Prefix.Whitespace != "" {
+			if id, ok := s.Variables[0].Element.(*java.Identifier); ok && id.Prefix.Whitespace != "" {
 				return id.Prefix
 			}
 		}
 		return s.Prefix
-	case *tree.Defer:
+	case *golang.Defer:
 		return s.Prefix
-	case *tree.MethodInvocation:
+	case *java.MethodInvocation:
 		return s.Prefix
 	default:
-		return tree.Space{Whitespace: "\n\t"}
+		return java.Space{Whitespace: "\n\t"}
 	}
 }

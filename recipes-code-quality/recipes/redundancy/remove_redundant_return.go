@@ -7,7 +7,7 @@ package redundancy
 import (
 	"github.com/moderneinc/recipes-go/recipes-code-quality/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -41,8 +41,8 @@ type removeRedundantReturnVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *removeRedundantReturnVisitor) VisitMethodDeclaration(md *tree.MethodDeclaration, p any) tree.J {
-	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*tree.MethodDeclaration)
+func (v *removeRedundantReturnVisitor) VisitMethodDeclaration(md *java.MethodDeclaration, p any) java.J {
+	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*java.MethodDeclaration)
 
 	// Only apply to functions with no return type.
 	if md.ReturnType != nil || md.Body == nil {
@@ -56,7 +56,7 @@ func (v *removeRedundantReturnVisitor) VisitMethodDeclaration(md *tree.MethodDec
 
 	// Check if the last statement is a bare return (no return values).
 	last := stmts[len(stmts)-1]
-	ret, ok := last.Element.(*tree.Return)
+	ret, ok := last.Element.(*java.Return)
 	if !ok {
 		return md
 	}

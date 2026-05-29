@@ -7,7 +7,8 @@ package style
 import (
 	"github.com/google/uuid"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -40,7 +41,7 @@ type checkTemplateExecuteErrorVisitor struct {
 	returnsError bool
 }
 
-func (v *checkTemplateExecuteErrorVisitor) VisitMethodDeclaration(md *tree.MethodDeclaration, p any) tree.J {
+func (v *checkTemplateExecuteErrorVisitor) VisitMethodDeclaration(md *java.MethodDeclaration, p any) java.J {
 	old := v.returnsError
 	v.returnsError = funcReturnsError(md)
 	result := v.GoVisitor.VisitMethodDeclaration(md, p)
@@ -48,14 +49,14 @@ func (v *checkTemplateExecuteErrorVisitor) VisitMethodDeclaration(md *tree.Metho
 	return result
 }
 
-func (v *checkTemplateExecuteErrorVisitor) VisitBlock(block *tree.Block, p any) tree.J {
-	block = v.GoVisitor.VisitBlock(block, p).(*tree.Block)
+func (v *checkTemplateExecuteErrorVisitor) VisitBlock(block *java.Block, p any) java.J {
+	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
 
 	changed := false
-	var newStmts []tree.RightPadded[tree.Statement]
+	var newStmts []java.RightPadded[java.Statement]
 
 	for _, rp := range block.Statements {
-		mi, ok := rp.Element.(*tree.MethodInvocation)
+		mi, ok := rp.Element.(*java.MethodInvocation)
 		if !ok || !isTemplateExecuteCall(mi) {
 			newStmts = append(newStmts, rp)
 			continue
@@ -63,8 +64,8 @@ func (v *checkTemplateExecuteErrorVisitor) VisitBlock(block *tree.Block, p any) 
 
 		if !v.returnsError {
 			// Can't auto-wrap: leave a markup hint.
-			mi = mi.WithMarkers(tree.MarkupInfo(mi.Markers, "ensure template execute error is checked"))
-			newStmts = append(newStmts, tree.RightPadded[tree.Statement]{
+			mi = mi.WithMarkers(java.MarkupInfo(mi.Markers, "ensure template execute error is checked"))
+			newStmts = append(newStmts, java.RightPadded[java.Statement]{
 				Element: mi, After: rp.After, Markers: rp.Markers,
 			})
 			continue
@@ -72,7 +73,7 @@ func (v *checkTemplateExecuteErrorVisitor) VisitBlock(block *tree.Block, p any) 
 
 		changed = true
 		ifStmt := buildIfInitErrCheck(mi)
-		newStmts = append(newStmts, tree.RightPadded[tree.Statement]{
+		newStmts = append(newStmts, java.RightPadded[java.Statement]{
 			Element: ifStmt, After: rp.After, Markers: rp.Markers,
 		})
 	}
@@ -84,7 +85,7 @@ func (v *checkTemplateExecuteErrorVisitor) VisitBlock(block *tree.Block, p any) 
 }
 
 // isTemplateExecuteCall returns true if mi is *.Execute(...) or *.ExecuteTemplate(...).
-func isTemplateExecuteCall(mi *tree.MethodInvocation) bool {
+func isTemplateExecuteCall(mi *java.MethodInvocation) bool {
 	if mi.Select == nil {
 		return false
 	}
@@ -93,21 +94,21 @@ func isTemplateExecuteCall(mi *tree.MethodInvocation) bool {
 
 // funcReturnsError returns true when the last return type of md is the
 // identifier "error".
-func funcReturnsError(md *tree.MethodDeclaration) bool {
+func funcReturnsError(md *java.MethodDeclaration) bool {
 	if md.ReturnType == nil {
 		return false
 	}
 	switch rt := md.ReturnType.(type) {
-	case *tree.Identifier:
+	case *java.Identifier:
 		return rt.Name == "error"
-	case *tree.TypeList:
+	case *golang.TypeList:
 		types := rt.Types.Elements
 		if len(types) == 0 {
 			return false
 		}
 		last := types[len(types)-1].Element
-		if vd, ok := last.(*tree.VariableDeclarations); ok {
-			if ident, ok2 := vd.TypeExpr.(*tree.Identifier); ok2 {
+		if vd, ok := last.(*java.VariableDeclarations); ok {
+			if ident, ok2 := vd.TypeExpr.(*java.Identifier); ok2 {
 				return ident.Name == "error"
 			}
 		}
@@ -120,7 +121,7 @@ func funcReturnsError(md *tree.MethodDeclaration) bool {
 //	if err := <call>; err != nil {
 //	    return err
 //	}
-func buildIfInitErrCheck(mi *tree.MethodInvocation) *tree.If {
+func buildIfInitErrCheck(mi *java.MethodInvocation) *java.If {
 	// The leading whitespace for a statement-level MethodInvocation typically
 	// lives on the Select element (the receiver identifier), not on the
 	// MethodInvocation node itself.
@@ -131,68 +132,68 @@ func buildIfInitErrCheck(mi *tree.MethodInvocation) *tree.If {
 	callStripped := stripMIPrefix(mi)
 
 	// err := <call>
-	initAssign := &tree.Assignment{
+	initAssign := &java.Assignment{
 		ID: uuid.New(),
-		Variable: &tree.Identifier{
+		Variable: &java.Identifier{
 			ID:     uuid.New(),
-			Prefix: tree.SingleSpace,
+			Prefix: java.SingleSpace,
 			Name:   "err",
 		},
-		Markers: tree.Markers{
+		Markers: java.Markers{
 			ID:      uuid.New(),
-			Entries: []tree.Marker{tree.ShortVarDecl{Ident: uuid.New()}},
+			Entries: []java.Marker{golang.ShortVarDecl{Ident: uuid.New()}},
 		},
-		Value: tree.LeftPadded[tree.Expression]{
-			Before:  tree.SingleSpace,
+		Value: java.LeftPadded[java.Expression]{
+			Before:  java.SingleSpace,
 			Element: callStripped,
 		},
 	}
 
 	// err != nil
-	condition := &tree.Binary{
+	condition := &java.Binary{
 		ID: uuid.New(),
-		Left: &tree.Identifier{
+		Left: &java.Identifier{
 			ID:     uuid.New(),
-			Prefix: tree.SingleSpace,
+			Prefix: java.SingleSpace,
 			Name:   "err",
 		},
-		Operator: tree.LeftPadded[tree.BinaryOperator]{
-			Before:  tree.SingleSpace,
-			Element: tree.NotEqual,
+		Operator: java.LeftPadded[java.BinaryOperator]{
+			Before:  java.SingleSpace,
+			Element: java.NotEqual,
 		},
-		Right: &tree.Identifier{
+		Right: &java.Identifier{
 			ID:     uuid.New(),
-			Prefix: tree.SingleSpace,
+			Prefix: java.SingleSpace,
 			Name:   "nil",
 		},
 	}
 
 	// return err
-	returnStmt := &tree.Return{
+	returnStmt := &java.Return{
 		ID:     uuid.New(),
-		Prefix: tree.Space{Whitespace: "\n" + indent + "\t"},
-		Expressions: []tree.RightPadded[tree.Expression]{
-			{Element: &tree.Identifier{
+		Prefix: java.Space{Whitespace: "\n" + indent + "\t"},
+		Expressions: []java.RightPadded[java.Expression]{
+			{Element: &java.Identifier{
 				ID:     uuid.New(),
-				Prefix: tree.SingleSpace,
+				Prefix: java.SingleSpace,
 				Name:   "err",
 			}},
 		},
 	}
 
-	thenBlock := &tree.Block{
+	thenBlock := &java.Block{
 		ID:     uuid.New(),
-		Prefix: tree.SingleSpace,
-		Statements: []tree.RightPadded[tree.Statement]{
+		Prefix: java.SingleSpace,
+		Statements: []java.RightPadded[java.Statement]{
 			{Element: returnStmt},
 		},
-		End: tree.Space{Whitespace: "\n" + indent},
+		End: java.Space{Whitespace: "\n" + indent},
 	}
 
-	return &tree.If{
+	return &java.If{
 		ID:     uuid.New(),
 		Prefix: prefix,
-		Init: &tree.RightPadded[tree.Statement]{
+		Init: &java.RightPadded[java.Statement]{
 			Element: initAssign,
 		},
 		Condition: condition,
@@ -203,9 +204,9 @@ func buildIfInitErrCheck(mi *tree.MethodInvocation) *tree.If {
 // extractMIPrefix returns the leading whitespace for a MethodInvocation.
 // For `tmpl.Execute(...)`, the indent lives on the Select element (the `tmpl`
 // identifier), not on the MethodInvocation node.
-func extractMIPrefix(mi *tree.MethodInvocation) tree.Space {
+func extractMIPrefix(mi *java.MethodInvocation) java.Space {
 	if mi.Select != nil {
-		if ident, ok := mi.Select.Element.(*tree.Identifier); ok && ident.Prefix.Whitespace != "" {
+		if ident, ok := mi.Select.Element.(*java.Identifier); ok && ident.Prefix.Whitespace != "" {
 			return ident.Prefix
 		}
 	}
@@ -214,18 +215,18 @@ func extractMIPrefix(mi *tree.MethodInvocation) tree.Space {
 
 // stripMIPrefix returns a copy of mi with the leading whitespace replaced by
 // a single space so it reads correctly as an RHS expression after `:=`.
-func stripMIPrefix(mi *tree.MethodInvocation) *tree.MethodInvocation {
+func stripMIPrefix(mi *java.MethodInvocation) *java.MethodInvocation {
 	c := *mi
 	if c.Select != nil {
-		if ident, ok := c.Select.Element.(*tree.Identifier); ok {
-			stripped := ident.WithPrefix(tree.SingleSpace)
-			c.Select = &tree.RightPadded[tree.Expression]{
+		if ident, ok := c.Select.Element.(*java.Identifier); ok {
+			stripped := ident.WithPrefix(java.SingleSpace)
+			c.Select = &java.RightPadded[java.Expression]{
 				Element: stripped,
 				After:   c.Select.After,
 				Markers: c.Select.Markers,
 			}
 		}
 	}
-	c.Prefix = tree.EmptySpace
+	c.Prefix = java.EmptySpace
 	return &c
 }

@@ -6,7 +6,7 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -34,8 +34,8 @@ type auditTestMainVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *auditTestMainVisitor) VisitMethodDeclaration(md *tree.MethodDeclaration, p any) tree.J {
-	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*tree.MethodDeclaration)
+func (v *auditTestMainVisitor) VisitMethodDeclaration(md *java.MethodDeclaration, p any) java.J {
+	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*java.MethodDeclaration)
 
 	if md.Name == nil || md.Name.Name != "TestMain" {
 		return md
@@ -47,7 +47,7 @@ func (v *auditTestMainVisitor) VisitMethodDeclaration(md *tree.MethodDeclaration
 	}
 
 	md = md.WithName(md.Name.WithMarkers(
-		tree.MarkupInfo(md.Name.Markers, "TestMain overrides default test execution"),
+		java.MarkupInfo(md.Name.Markers, "TestMain overrides default test execution"),
 	))
 	return md
 }

@@ -6,7 +6,8 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -37,13 +38,13 @@ type enforceTlsVerificationVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *enforceTlsVerificationVisitor) VisitComposite(c *tree.Composite, p any) tree.J {
-	c = v.GoVisitor.VisitComposite(c, p).(*tree.Composite)
-	newElems := make([]tree.RightPadded[tree.Expression], len(c.Elements.Elements))
+func (v *enforceTlsVerificationVisitor) VisitComposite(c *golang.Composite, p any) java.J {
+	c = v.GoVisitor.VisitComposite(c, p).(*golang.Composite)
+	newElems := make([]java.RightPadded[java.Expression], len(c.Elements.Elements))
 	for i, rp := range c.Elements.Elements {
 		visited := v.GoVisitor.Visit(rp.Element, p)
 		if visited != nil {
-			rp.Element = visited.(tree.Expression)
+			rp.Element = visited.(java.Expression)
 		}
 		newElems[i] = rp
 	}
@@ -51,25 +52,25 @@ func (v *enforceTlsVerificationVisitor) VisitComposite(c *tree.Composite, p any)
 	return c
 }
 
-func (v *enforceTlsVerificationVisitor) VisitKeyValue(kv *tree.KeyValue, p any) tree.J {
-	kv = v.GoVisitor.VisitKeyValue(kv, p).(*tree.KeyValue)
+func (v *enforceTlsVerificationVisitor) VisitKeyValue(kv *golang.KeyValue, p any) java.J {
+	kv = v.GoVisitor.VisitKeyValue(kv, p).(*golang.KeyValue)
 
-	keyIdent, ok := kv.Key.(*tree.Identifier)
+	keyIdent, ok := kv.Key.(*java.Identifier)
 	if !ok || keyIdent.Name != "InsecureSkipVerify" {
 		return kv
 	}
 
-	valIdent, ok := kv.Value.Element.(*tree.Identifier)
+	valIdent, ok := kv.Value.Element.(*java.Identifier)
 	if !ok || valIdent.Name != "true" {
 		return kv
 	}
 
 	newVal := valIdent.WithName("false")
-	return &tree.KeyValue{
+	return &golang.KeyValue{
 		ID:      kv.ID,
 		Prefix:  kv.Prefix,
 		Markers: kv.Markers,
 		Key:     kv.Key,
-		Value:   tree.LeftPadded[tree.Expression]{Before: kv.Value.Before, Element: newVal},
+		Value:   java.LeftPadded[java.Expression]{Before: kv.Value.Before, Element: newVal},
 	}
 }

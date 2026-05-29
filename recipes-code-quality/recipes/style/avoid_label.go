@@ -6,7 +6,7 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -33,8 +33,8 @@ type avoidLabelVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *avoidLabelVisitor) VisitLabel(l *tree.Label, p any) tree.J {
-	l = v.GoVisitor.VisitLabel(l, p).(*tree.Label)
-	l = l.WithMarkers(tree.MarkupInfo(l.Markers, "labeled statement indicates complex control flow"))
+func (v *avoidLabelVisitor) VisitLabel(l *java.Label, p any) java.J {
+	l = v.GoVisitor.VisitLabel(l, p).(*java.Label)
+	l = l.WithMarkers(java.MarkupInfo(l.Markers, "labeled statement indicates complex control flow"))
 	return l
 }

@@ -6,7 +6,7 @@ package redundancy
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -34,8 +34,8 @@ type removeRedundantBreakVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *removeRedundantBreakVisitor) VisitCase(c *tree.Case, p any) tree.J {
-	c = v.GoVisitor.VisitCase(c, p).(*tree.Case)
+func (v *removeRedundantBreakVisitor) VisitCase(c *java.Case, p any) java.J {
+	c = v.GoVisitor.VisitCase(c, p).(*java.Case)
 
 	if len(c.Body) == 0 {
 		return c
@@ -43,7 +43,7 @@ func (v *removeRedundantBreakVisitor) VisitCase(c *tree.Case, p any) tree.J {
 
 	// Check if the last statement is a break with no label.
 	last := c.Body[len(c.Body)-1]
-	brk, ok := last.Element.(*tree.Break)
+	brk, ok := last.Element.(*java.Break)
 	if !ok || brk.Label != nil {
 		return c
 	}

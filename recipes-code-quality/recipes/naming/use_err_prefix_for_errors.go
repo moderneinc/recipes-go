@@ -10,7 +10,8 @@ import (
 	"unicode/utf8"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -38,29 +39,29 @@ type useErrPrefixForErrorsVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *useErrPrefixForErrorsVisitor) VisitCompilationUnit(cu *tree.CompilationUnit, p any) tree.J {
-	cu = v.GoVisitor.VisitCompilationUnit(cu, p).(*tree.CompilationUnit)
+func (v *useErrPrefixForErrorsVisitor) VisitCompilationUnit(cu *golang.CompilationUnit, p any) java.J {
+	cu = v.GoVisitor.VisitCompilationUnit(cu, p).(*golang.CompilationUnit)
 
 	changed := false
-	stmts := make([]tree.RightPadded[tree.Statement], len(cu.Statements))
+	stmts := make([]java.RightPadded[java.Statement], len(cu.Statements))
 	copy(stmts, cu.Statements)
 
 	for i, stmt := range stmts {
-		vd, ok := stmt.Element.(*tree.VariableDeclarations)
+		vd, ok := stmt.Element.(*java.VariableDeclarations)
 		if !ok {
 			continue
 		}
 
 		// Only check `var` declarations (not `const`).
-		hasVar := tree.FindMarker[tree.VarKeyword](vd.Markers) != nil
-		hasConst := tree.FindMarker[tree.ConstDecl](vd.Markers) != nil
+		hasVar := java.FindMarker[golang.VarKeyword](vd.Markers) != nil
+		hasConst := java.FindMarker[golang.ConstDecl](vd.Markers) != nil
 		if !hasVar || hasConst {
 			continue
 		}
 
 		markedVD := v.checkVarDecl(vd)
 		if markedVD != vd {
-			stmts[i] = tree.RightPadded[tree.Statement]{
+			stmts[i] = java.RightPadded[java.Statement]{
 				Element: markedVD,
 				After:   stmt.After,
 				Markers: stmt.Markers,
@@ -78,9 +79,9 @@ func (v *useErrPrefixForErrorsVisitor) VisitCompilationUnit(cu *tree.Compilation
 }
 
 // checkVarDecl checks a top-level var declaration for misnamed error variables.
-func (v *useErrPrefixForErrorsVisitor) checkVarDecl(vd *tree.VariableDeclarations) *tree.VariableDeclarations {
+func (v *useErrPrefixForErrorsVisitor) checkVarDecl(vd *java.VariableDeclarations) *java.VariableDeclarations {
 	changed := false
-	vars := make([]tree.RightPadded[*tree.VariableDeclarator], len(vd.Variables))
+	vars := make([]java.RightPadded[*java.VariableDeclarator], len(vd.Variables))
 	copy(vars, vd.Variables)
 
 	for j, varRP := range vars {
@@ -102,7 +103,7 @@ func (v *useErrPrefixForErrorsVisitor) checkVarDecl(vd *tree.VariableDeclaration
 		// Rename by prepending "Err" and capitalizing the first letter.
 		newName := toErrName(decl.Name.Name)
 		renamed := decl.WithName(decl.Name.WithName(newName))
-		vars[j] = tree.RightPadded[*tree.VariableDeclarator]{
+		vars[j] = java.RightPadded[*java.VariableDeclarator]{
 			Element: renamed,
 			After:   varRP.After,
 			Markers: varRP.Markers,
@@ -120,15 +121,15 @@ func (v *useErrPrefixForErrorsVisitor) checkVarDecl(vd *tree.VariableDeclaration
 
 // isErrorConstructor checks if an expression is a call to errors.New(...) or
 // fmt.Errorf(...).
-func isErrorConstructor(expr tree.Expression) bool {
-	mi, ok := expr.(*tree.MethodInvocation)
+func isErrorConstructor(expr java.Expression) bool {
+	mi, ok := expr.(*java.MethodInvocation)
 	if !ok {
 		return false
 	}
 	if mi.Select == nil {
 		return false
 	}
-	sel, ok := mi.Select.Element.(*tree.Identifier)
+	sel, ok := mi.Select.Element.(*java.Identifier)
 	if !ok {
 		return false
 	}

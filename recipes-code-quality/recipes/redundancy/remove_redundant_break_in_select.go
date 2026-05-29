@@ -6,7 +6,8 @@ package redundancy
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -38,8 +39,8 @@ type removeRedundantBreakInSelectVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *removeRedundantBreakInSelectVisitor) VisitCommClause(cc *tree.CommClause, p any) tree.J {
-	cc = v.GoVisitor.VisitCommClause(cc, p).(*tree.CommClause)
+func (v *removeRedundantBreakInSelectVisitor) VisitCommClause(cc *golang.CommClause, p any) java.J {
+	cc = v.GoVisitor.VisitCommClause(cc, p).(*golang.CommClause)
 
 	if len(cc.Body) == 0 {
 		return cc
@@ -47,7 +48,7 @@ func (v *removeRedundantBreakInSelectVisitor) VisitCommClause(cc *tree.CommClaus
 
 	// Check if the last statement is a break with no label.
 	last := cc.Body[len(cc.Body)-1]
-	brk, ok := last.Element.(*tree.Break)
+	brk, ok := last.Element.(*java.Break)
 	if !ok || brk.Label != nil {
 		return cc
 	}

@@ -6,7 +6,7 @@ package redundancy
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -34,8 +34,8 @@ type useDocumentedBlankImportVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *useDocumentedBlankImportVisitor) VisitImport(imp *tree.Import, p any) tree.J {
-	imp = v.GoVisitor.VisitImport(imp, p).(*tree.Import)
+func (v *useDocumentedBlankImportVisitor) VisitImport(imp *java.Import, p any) java.J {
+	imp = v.GoVisitor.VisitImport(imp, p).(*java.Import)
 
 	if imp.Alias == nil {
 		return imp
@@ -47,7 +47,7 @@ func (v *useDocumentedBlankImportVisitor) VisitImport(imp *tree.Import, p any) t
 	}
 
 	imp = imp.WithMarkers(
-		tree.MarkupInfo(imp.Markers, "blank import used for side effects"),
+		java.MarkupInfo(imp.Markers, "blank import used for side effects"),
 	)
 	return imp
 }

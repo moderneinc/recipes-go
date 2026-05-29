@@ -6,7 +6,7 @@ package redundancy
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -34,8 +34,8 @@ type removeEmptyDefaultVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *removeEmptyDefaultVisitor) VisitCase(c *tree.Case, p any) tree.J {
-	c = v.GoVisitor.VisitCase(c, p).(*tree.Case)
+func (v *removeEmptyDefaultVisitor) VisitCase(c *java.Case, p any) java.J {
+	c = v.GoVisitor.VisitCase(c, p).(*java.Case)
 
 	// Must be a default case (no expressions).
 	if len(c.Expressions.Elements) != 0 {
@@ -44,11 +44,11 @@ func (v *removeEmptyDefaultVisitor) VisitCase(c *tree.Case, p any) tree.J {
 
 	// Body must have no real statements (only Empty sentinels count as empty).
 	for _, stmt := range c.Body {
-		if _, ok := stmt.Element.(*tree.Empty); !ok {
+		if _, ok := stmt.Element.(*java.Empty); !ok {
 			return c
 		}
 	}
 
 	// Remove the empty default case by replacing with Empty.
-	return &tree.Empty{}
+	return &java.Empty{}
 }

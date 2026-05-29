@@ -6,7 +6,7 @@ package simplification
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -35,8 +35,8 @@ type findChannelLenCheckVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *findChannelLenCheckVisitor) VisitBinary(bin *tree.Binary, p any) tree.J {
-	bin = v.GoVisitor.VisitBinary(bin, p).(*tree.Binary)
+func (v *findChannelLenCheckVisitor) VisitBinary(bin *java.Binary, p any) java.J {
+	bin = v.GoVisitor.VisitBinary(bin, p).(*java.Binary)
 
 	// Match patterns like: len(ch) == 0, len(ch) > 0, len(ch) != 0, etc.
 	if !isComparisonOp(bin.Operator.Element) {
@@ -45,7 +45,7 @@ func (v *findChannelLenCheckVisitor) VisitBinary(bin *tree.Binary, p any) tree.J
 
 	if isLenCall(bin.Left) || isLenCall(bin.Right) {
 		bin = bin.WithMarkers(
-			tree.MarkupWarn(bin.Markers, "channel length check is racy; the value can change between check and send/receive"),
+			java.MarkupWarn(bin.Markers, "channel length check is racy; the value can change between check and send/receive"),
 		)
 	}
 
@@ -53,8 +53,8 @@ func (v *findChannelLenCheckVisitor) VisitBinary(bin *tree.Binary, p any) tree.J
 }
 
 // isLenCall checks if the expression is a call to the built-in `len` function.
-func isLenCall(expr tree.Expression) bool {
-	mi, ok := expr.(*tree.MethodInvocation)
+func isLenCall(expr java.Expression) bool {
+	mi, ok := expr.(*java.MethodInvocation)
 	if !ok {
 		return false
 	}
@@ -62,11 +62,11 @@ func isLenCall(expr tree.Expression) bool {
 }
 
 // isComparisonOp returns true for ==, !=, <, >, <=, >=.
-func isComparisonOp(op tree.BinaryOperator) bool {
+func isComparisonOp(op java.BinaryOperator) bool {
 	switch op {
-	case tree.Equal, tree.NotEqual,
-		tree.LessThan, tree.GreaterThan,
-		tree.LessThanOrEqual, tree.GreaterThanOrEqual:
+	case java.Equal, java.NotEqual,
+		java.LessThan, java.GreaterThan,
+		java.LessThanOrEqual, java.GreaterThanOrEqual:
 		return true
 	default:
 		return false

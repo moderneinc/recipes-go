@@ -6,7 +6,7 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -35,14 +35,14 @@ type useSkipWithReasonVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *useSkipWithReasonVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p any) tree.J {
-	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*tree.MethodInvocation)
+func (v *useSkipWithReasonVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	if mi.Select == nil {
 		return mi
 	}
 
-	ident, ok := mi.Select.Element.(*tree.Identifier)
+	ident, ok := mi.Select.Element.(*java.Identifier)
 	if !ok || ident.Name != "t" {
 		return mi
 	}
@@ -53,19 +53,19 @@ func (v *useSkipWithReasonVisitor) VisitMethodInvocation(mi *tree.MethodInvocati
 
 	// Check if there are any real arguments (skip Empty sentinels).
 	for _, arg := range mi.Arguments.Elements {
-		if _, isEmpty := arg.Element.(*tree.Empty); !isEmpty {
+		if _, isEmpty := arg.Element.(*java.Empty); !isEmpty {
 			return mi
 		}
 	}
 
 	// Replace the empty argument list with a placeholder reason string.
-	reason := &tree.Literal{
-		Kind:   tree.StringLiteral,
+	reason := &java.Literal{
+		Kind:   java.StringLiteral,
 		Value:  "TODO: add reason",
 		Source: `"TODO: add reason"`,
 	}
 	args := mi.Arguments
-	args.Elements = []tree.RightPadded[tree.Expression]{
+	args.Elements = []java.RightPadded[java.Expression]{
 		{Element: reason},
 	}
 	mi.Arguments = args

@@ -8,14 +8,15 @@ import (
 	"strings"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
 // atomicMethodMapping maps deprecated sync/atomic free-function prefixes
 // to their type-safe method equivalents.
 // e.g. "Add" → "Add", "Load" → "Load", "Store" → "Store",
-//      "CompareAndSwap" → "CompareAndSwap", "Swap" → "Swap"
+//
+//	"CompareAndSwap" → "CompareAndSwap", "Swap" → "Swap"
 var atomicMethodPrefixes = []string{
 	"CompareAndSwap", // must be before "Swap" to match first
 	"Swap",
@@ -72,14 +73,14 @@ type useAtomicTypesVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *useAtomicTypesVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p any) tree.J {
-	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*tree.MethodInvocation)
+func (v *useAtomicTypesVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	if mi.Select == nil {
 		return mi
 	}
 
-	ident, ok := mi.Select.Element.(*tree.Identifier)
+	ident, ok := mi.Select.Element.(*java.Identifier)
 	if !ok || ident.Name != "atomic" {
 		return mi
 	}
@@ -96,40 +97,40 @@ func (v *useAtomicTypesVisitor) VisitMethodInvocation(mi *tree.MethodInvocation,
 
 	// First argument must be &x (AddressOf unary); strip the & to get the receiver.
 	firstArg := args[0].Element
-	addrOf, ok := firstArg.(*tree.Unary)
-	if !ok || addrOf.Operator.Element != tree.AddressOf {
+	addrOf, ok := firstArg.(*java.Unary)
+	if !ok || addrOf.Operator.Element != java.AddressOf {
 		// Cannot transform if first arg is not &x — add markup instead.
-		mi = mi.WithMarkers(tree.MarkupWarn(mi.Markers, "deprecated sync/atomic function; use type-safe atomic types (Go 1.19+)"))
+		mi = mi.WithMarkers(java.MarkupWarn(mi.Markers, "deprecated sync/atomic function; use type-safe atomic types (Go 1.19+)"))
 		return mi
 	}
 
 	receiver := addrOf.Operand
 
 	// Build new method invocation: receiver.Method(remaining args...)
-	newName := &tree.Identifier{
+	newName := &java.Identifier{
 		ID:   mi.Name.ID,
 		Name: method,
 	}
 
 	// Remaining args (everything after the first &x)
-	var newArgs []tree.RightPadded[tree.Expression]
+	var newArgs []java.RightPadded[java.Expression]
 	for i := 1; i < len(args); i++ {
 		arg := args[i]
 		if i == 1 {
 			// Remove leading space that was after the comma separator
-			arg.Element = setAtomicExprPrefix(arg.Element, tree.EmptySpace)
+			arg.Element = setAtomicExprPrefix(arg.Element, java.EmptySpace)
 		}
 		newArgs = append(newArgs, arg)
 	}
 
-	newMI := &tree.MethodInvocation{
+	newMI := &java.MethodInvocation{
 		ID:     mi.ID,
 		Prefix: mi.Prefix,
-		Select: &tree.RightPadded[tree.Expression]{
+		Select: &java.RightPadded[java.Expression]{
 			Element: setAtomicExprPrefix(receiver, ident.Prefix),
 		},
 		Name: newName,
-		Arguments: tree.Container[tree.Expression]{
+		Arguments: java.Container[java.Expression]{
 			Before:   mi.Arguments.Before,
 			Elements: newArgs,
 			Markers:  mi.Arguments.Markers,
@@ -141,15 +142,15 @@ func (v *useAtomicTypesVisitor) VisitMethodInvocation(mi *tree.MethodInvocation,
 }
 
 // setAtomicExprPrefix sets the prefix on common expression node types.
-func setAtomicExprPrefix(expr tree.Expression, prefix tree.Space) tree.Expression {
+func setAtomicExprPrefix(expr java.Expression, prefix java.Space) java.Expression {
 	switch e := expr.(type) {
-	case *tree.Identifier:
+	case *java.Identifier:
 		return e.WithPrefix(prefix)
-	case *tree.Literal:
+	case *java.Literal:
 		return e.WithPrefix(prefix)
-	case *tree.FieldAccess:
+	case *java.FieldAccess:
 		return e.WithPrefix(prefix)
-	case *tree.Unary:
+	case *java.Unary:
 		return e.WithPrefix(prefix)
 	default:
 		return expr

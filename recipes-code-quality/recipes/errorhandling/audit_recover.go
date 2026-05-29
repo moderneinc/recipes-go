@@ -6,7 +6,7 @@ package errorhandling
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -34,8 +34,8 @@ type auditRecoverVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *auditRecoverVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p any) tree.J {
-	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*tree.MethodInvocation)
+func (v *auditRecoverVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	// Match: recover() — built-in, so no Select and Name == "recover".
 	if mi.Select != nil || mi.Name.Name != "recover" {
@@ -43,7 +43,7 @@ func (v *auditRecoverVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p
 	}
 
 	mi = mi.WithMarkers(
-		tree.MarkupInfo(mi.Markers, "recover() catches panics; ensure it is in a deferred function"),
+		java.MarkupInfo(mi.Markers, "recover() catches panics; ensure it is in a deferred function"),
 	)
 	return mi
 }

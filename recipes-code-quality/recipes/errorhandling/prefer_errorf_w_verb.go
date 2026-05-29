@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -38,14 +38,14 @@ type preferErrorfWrapVerbVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *preferErrorfWrapVerbVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p any) tree.J {
-	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*tree.MethodInvocation)
+func (v *preferErrorfWrapVerbVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	// Match: fmt.Errorf(...)
 	if mi.Select == nil {
 		return mi
 	}
-	ident, ok := mi.Select.Element.(*tree.Identifier)
+	ident, ok := mi.Select.Element.(*java.Identifier)
 	if !ok || ident.Name != "fmt" {
 		return mi
 	}
@@ -60,8 +60,8 @@ func (v *preferErrorfWrapVerbVisitor) VisitMethodInvocation(mi *tree.MethodInvoc
 	}
 
 	// First argument must be a string literal containing %s (but not %w).
-	fmtLit, ok := args[0].Element.(*tree.Literal)
-	if !ok || fmtLit.Kind != tree.StringLiteral {
+	fmtLit, ok := args[0].Element.(*java.Literal)
+	if !ok || fmtLit.Kind != java.StringLiteral {
 		return mi
 	}
 	content := fmtLit.Source
@@ -71,7 +71,7 @@ func (v *preferErrorfWrapVerbVisitor) VisitMethodInvocation(mi *tree.MethodInvoc
 
 	// Last real argument should be an identifier named "err".
 	lastArg := args[len(args)-1].Element
-	lastIdent, ok := lastArg.(*tree.Identifier)
+	lastIdent, ok := lastArg.(*java.Identifier)
 	if !ok || lastIdent.Name != "err" {
 		return mi
 	}
@@ -82,9 +82,9 @@ func (v *preferErrorfWrapVerbVisitor) VisitMethodInvocation(mi *tree.MethodInvoc
 	newFmtLit := fmtLit.WithSource(newSource)
 
 	// Rebuild the arguments with the modified format literal.
-	newArgs := make([]tree.RightPadded[tree.Expression], len(args))
+	newArgs := make([]java.RightPadded[java.Expression], len(args))
 	copy(newArgs, args)
-	newArgs[0] = tree.RightPadded[tree.Expression]{
+	newArgs[0] = java.RightPadded[java.Expression]{
 		Element: newFmtLit,
 		After:   args[0].After,
 		Markers: args[0].Markers,
@@ -93,7 +93,7 @@ func (v *preferErrorfWrapVerbVisitor) VisitMethodInvocation(mi *tree.MethodInvoc
 	newArgContainer := mi.Arguments
 	newArgContainer.Elements = newArgs
 
-	return &tree.MethodInvocation{
+	return &java.MethodInvocation{
 		ID:        mi.ID,
 		Prefix:    mi.Prefix,
 		Markers:   mi.Markers,

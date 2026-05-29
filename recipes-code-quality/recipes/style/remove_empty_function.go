@@ -6,7 +6,7 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -36,8 +36,8 @@ type removeEmptyFunctionVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *removeEmptyFunctionVisitor) VisitMethodDeclaration(md *tree.MethodDeclaration, p any) tree.J {
-	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*tree.MethodDeclaration)
+func (v *removeEmptyFunctionVisitor) VisitMethodDeclaration(md *java.MethodDeclaration, p any) java.J {
+	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*java.MethodDeclaration)
 
 	if md.Name == nil || md.Body == nil {
 		return md
@@ -55,11 +55,11 @@ func (v *removeEmptyFunctionVisitor) VisitMethodDeclaration(md *tree.MethodDecla
 
 	// Check if the body has any real statements (not just Empty sentinels).
 	for _, stmt := range md.Body.Statements {
-		if _, isEmpty := stmt.Element.(*tree.Empty); !isEmpty {
+		if _, isEmpty := stmt.Element.(*java.Empty); !isEmpty {
 			return md
 		}
 	}
 
 	// Remove the empty function.
-	return &tree.Empty{}
+	return &java.Empty{}
 }

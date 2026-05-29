@@ -10,7 +10,7 @@ import (
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -68,14 +68,14 @@ var stdLogPrefixes = []string{"Print", "Fatal"}
 // sub-recipes (single-argument calls only).
 var stdLogAutoFixed = map[string]bool{"Print": true, "Println": true}
 
-func (v *findStdLogVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p any) tree.J {
-	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*tree.MethodInvocation)
+func (v *findStdLogVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	if mi.Select == nil {
 		return mi
 	}
 
-	ident, ok := mi.Select.Element.(*tree.Identifier)
+	ident, ok := mi.Select.Element.(*java.Identifier)
 	if !ok || ident.Name != "log" {
 		return mi
 	}
@@ -87,7 +87,7 @@ func (v *findStdLogVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p a
 				return mi
 			}
 			mi = mi.WithMarkers(
-				tree.MarkupInfo(mi.Markers, "consider migrating to log/slog for structured logging (Go 1.21+)"),
+				java.MarkupInfo(mi.Markers, "consider migrating to log/slog for structured logging (Go 1.21+)"),
 			)
 			return mi
 		}

@@ -10,7 +10,8 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -44,11 +45,11 @@ type usePackageLevelErrorSentinelVisitor struct {
 type errNewEntry struct {
 	message string // the raw string literal value, e.g. "not found"
 	varName string // generated sentinel name, e.g. "ErrNotFound"
-	mi      *tree.MethodInvocation
+	mi      *java.MethodInvocation
 }
 
-func (v *usePackageLevelErrorSentinelVisitor) VisitCompilationUnit(cu *tree.CompilationUnit, p any) tree.J {
-	cu = v.GoVisitor.VisitCompilationUnit(cu, p).(*tree.CompilationUnit)
+func (v *usePackageLevelErrorSentinelVisitor) VisitCompilationUnit(cu *golang.CompilationUnit, p any) java.J {
+	cu = v.GoVisitor.VisitCompilationUnit(cu, p).(*golang.CompilationUnit)
 
 	// Pass 1: Collect inline errors.New("...") calls inside function bodies.
 	collector := &errNewCollector{}
@@ -77,11 +78,11 @@ func (v *usePackageLevelErrorSentinelVisitor) VisitCompilationUnit(cu *tree.Comp
 	// Pass 2: Replace inline errors.New("...") calls with identifier references.
 	replacer := &errNewReplacer{msgToVar: msgToVar}
 	replacer.Self = replacer
-	replaced := replacer.Visit(cu, nil).(*tree.CompilationUnit)
+	replaced := replacer.Visit(cu, nil).(*golang.CompilationUnit)
 
 	// Build new var declarations and prepend them to the top-level statements.
 	varStmts := buildVarDecls(entries)
-	newStmts := make([]tree.RightPadded[tree.Statement], 0, len(varStmts)+len(replaced.Statements))
+	newStmts := make([]java.RightPadded[java.Statement], 0, len(varStmts)+len(replaced.Statements))
 	newStmts = append(newStmts, varStmts...)
 	newStmts = append(newStmts, replaced.Statements...)
 	return replaced.WithStatements(newStmts)
@@ -93,19 +94,19 @@ func (v *usePackageLevelErrorSentinelVisitor) VisitCompilationUnit(cu *tree.Comp
 // a var declaration.
 type errNewCollector struct {
 	visitor.GoVisitor
-	found   []*errNewEntry
-	inFunc  int // depth counter: >0 means we are inside a function body
+	found  []*errNewEntry
+	inFunc int // depth counter: >0 means we are inside a function body
 }
 
-func (c *errNewCollector) VisitMethodDeclaration(md *tree.MethodDeclaration, p any) tree.J {
+func (c *errNewCollector) VisitMethodDeclaration(md *java.MethodDeclaration, p any) java.J {
 	c.inFunc++
-	md = c.GoVisitor.VisitMethodDeclaration(md, p).(*tree.MethodDeclaration)
+	md = c.GoVisitor.VisitMethodDeclaration(md, p).(*java.MethodDeclaration)
 	c.inFunc--
 	return md
 }
 
-func (c *errNewCollector) VisitMethodInvocation(mi *tree.MethodInvocation, p any) tree.J {
-	mi = c.GoVisitor.VisitMethodInvocation(mi, p).(*tree.MethodInvocation)
+func (c *errNewCollector) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = c.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	if c.inFunc == 0 {
 		return mi
@@ -114,7 +115,7 @@ func (c *errNewCollector) VisitMethodInvocation(mi *tree.MethodInvocation, p any
 	if mi.Select == nil {
 		return mi
 	}
-	ident, ok := mi.Select.Element.(*tree.Identifier)
+	ident, ok := mi.Select.Element.(*java.Identifier)
 	if !ok || ident.Name != "errors" {
 		return mi
 	}
@@ -124,8 +125,8 @@ func (c *errNewCollector) VisitMethodInvocation(mi *tree.MethodInvocation, p any
 	if len(mi.Arguments.Elements) != 1 {
 		return mi
 	}
-	lit, ok := mi.Arguments.Elements[0].Element.(*tree.Literal)
-	if !ok || lit.Kind != tree.StringLiteral {
+	lit, ok := mi.Arguments.Elements[0].Element.(*java.Literal)
+	if !ok || lit.Kind != java.StringLiteral {
 		return mi
 	}
 
@@ -147,15 +148,15 @@ type errNewReplacer struct {
 	inFunc   int
 }
 
-func (r *errNewReplacer) VisitMethodDeclaration(md *tree.MethodDeclaration, p any) tree.J {
+func (r *errNewReplacer) VisitMethodDeclaration(md *java.MethodDeclaration, p any) java.J {
 	r.inFunc++
-	md = r.GoVisitor.VisitMethodDeclaration(md, p).(*tree.MethodDeclaration)
+	md = r.GoVisitor.VisitMethodDeclaration(md, p).(*java.MethodDeclaration)
 	r.inFunc--
 	return md
 }
 
-func (r *errNewReplacer) VisitMethodInvocation(mi *tree.MethodInvocation, p any) tree.J {
-	mi = r.GoVisitor.VisitMethodInvocation(mi, p).(*tree.MethodInvocation)
+func (r *errNewReplacer) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = r.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	if r.inFunc == 0 {
 		return mi
@@ -164,7 +165,7 @@ func (r *errNewReplacer) VisitMethodInvocation(mi *tree.MethodInvocation, p any)
 	if mi.Select == nil {
 		return mi
 	}
-	ident, ok := mi.Select.Element.(*tree.Identifier)
+	ident, ok := mi.Select.Element.(*java.Identifier)
 	if !ok || ident.Name != "errors" {
 		return mi
 	}
@@ -174,8 +175,8 @@ func (r *errNewReplacer) VisitMethodInvocation(mi *tree.MethodInvocation, p any)
 	if len(mi.Arguments.Elements) != 1 {
 		return mi
 	}
-	lit, ok := mi.Arguments.Elements[0].Element.(*tree.Literal)
-	if !ok || lit.Kind != tree.StringLiteral {
+	lit, ok := mi.Arguments.Elements[0].Element.(*java.Literal)
+	if !ok || lit.Kind != java.StringLiteral {
 		return mi
 	}
 
@@ -190,11 +191,11 @@ func (r *errNewReplacer) VisitMethodInvocation(mi *tree.MethodInvocation, p any)
 	// not on the MethodInvocation itself.
 	prefix := mi.Prefix
 	if mi.Select != nil {
-		if selIdent, ok := mi.Select.Element.(*tree.Identifier); ok && !selIdent.Prefix.IsEmpty() {
+		if selIdent, ok := mi.Select.Element.(*java.Identifier); ok && !selIdent.Prefix.IsEmpty() {
 			prefix = selIdent.Prefix
 		}
 	}
-	return &tree.Identifier{
+	return &java.Identifier{
 		ID:     uuid.New(),
 		Prefix: prefix,
 		Name:   varName,
@@ -202,62 +203,62 @@ func (r *errNewReplacer) VisitMethodInvocation(mi *tree.MethodInvocation, p any)
 }
 
 // buildVarDecls creates `var ErrFoo = errors.New("msg")` statements for each entry.
-func buildVarDecls(entries []*errNewEntry) []tree.RightPadded[tree.Statement] {
-	result := make([]tree.RightPadded[tree.Statement], len(entries))
+func buildVarDecls(entries []*errNewEntry) []java.RightPadded[java.Statement] {
+	result := make([]java.RightPadded[java.Statement], len(entries))
 	for i, e := range entries {
-		nameIdent := &tree.Identifier{
+		nameIdent := &java.Identifier{
 			ID:     uuid.New(),
-			Prefix: tree.SingleSpace,
+			Prefix: java.SingleSpace,
 			Name:   e.varName,
 		}
 
 		// Build the initializer: errors.New("msg")
-		selectIdent := &tree.Identifier{
+		selectIdent := &java.Identifier{
 			ID:   uuid.New(),
 			Name: "errors",
 		}
-		methodName := &tree.Identifier{
+		methodName := &java.Identifier{
 			ID:   uuid.New(),
 			Name: "New",
 		}
-		argLit := &tree.Literal{
+		argLit := &java.Literal{
 			ID:     uuid.New(),
-			Kind:   tree.StringLiteral,
+			Kind:   java.StringLiteral,
 			Source: quote(e.message),
 			Value:  e.message,
 		}
-		initCall := &tree.MethodInvocation{
+		initCall := &java.MethodInvocation{
 			ID:     uuid.New(),
-			Prefix: tree.SingleSpace,
-			Select: &tree.RightPadded[tree.Expression]{Element: selectIdent},
+			Prefix: java.SingleSpace,
+			Select: &java.RightPadded[java.Expression]{Element: selectIdent},
 			Name:   methodName,
-			Arguments: tree.Container[tree.Expression]{
-				Before: tree.EmptySpace,
-				Elements: []tree.RightPadded[tree.Expression]{
+			Arguments: java.Container[java.Expression]{
+				Before: java.EmptySpace,
+				Elements: []java.RightPadded[java.Expression]{
 					{Element: argLit},
 				},
 			},
 		}
 
-		declarator := &tree.VariableDeclarator{
+		declarator := &java.VariableDeclarator{
 			ID:   uuid.New(),
 			Name: nameIdent,
-			Initializer: &tree.LeftPadded[tree.Expression]{
-				Before:  tree.SingleSpace,
+			Initializer: &java.LeftPadded[java.Expression]{
+				Before:  java.SingleSpace,
 				Element: initCall,
 			},
 		}
 
-		vd := &tree.VariableDeclarations{
+		vd := &java.VariableDeclarations{
 			ID:      uuid.New(),
-			Prefix:  tree.Space{Whitespace: "\n\n"},
-			Markers: tree.Markers{ID: uuid.New(), Entries: []tree.Marker{tree.VarKeyword{Ident: uuid.New()}}},
-			Variables: []tree.RightPadded[*tree.VariableDeclarator]{
+			Prefix:  java.Space{Whitespace: "\n\n"},
+			Markers: java.Markers{ID: uuid.New(), Entries: []java.Marker{golang.VarKeyword{Ident: uuid.New()}}},
+			Variables: []java.RightPadded[*java.VariableDeclarator]{
 				{Element: declarator},
 			},
 		}
 
-		result[i] = tree.RightPadded[tree.Statement]{Element: vd}
+		result[i] = java.RightPadded[java.Statement]{Element: vd}
 	}
 	return result
 }

@@ -6,7 +6,7 @@ package simplification
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -36,8 +36,8 @@ type simplifyIfReturnBoolVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *simplifyIfReturnBoolVisitor) VisitBlock(block *tree.Block, p any) tree.J {
-	block = v.GoVisitor.VisitBlock(block, p).(*tree.Block)
+func (v *simplifyIfReturnBoolVisitor) VisitBlock(block *java.Block, p any) java.J {
+	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
 
 	stmts := block.Statements
 	if len(stmts) < 2 {
@@ -48,10 +48,10 @@ func (v *simplifyIfReturnBoolVisitor) VisitBlock(block *tree.Block, p any) tree.
 	//   if cond { return <bool> }
 	//   return <opposite-bool>
 	changed := false
-	var newStmts []tree.RightPadded[tree.Statement]
+	var newStmts []java.RightPadded[java.Statement]
 
 	for i := 0; i < len(stmts); i++ {
-		ifStmt, ok := stmts[i].Element.(*tree.If)
+		ifStmt, ok := stmts[i].Element.(*java.If)
 		if !ok || ifStmt.Init != nil || ifStmt.Then == nil {
 			newStmts = append(newStmts, stmts[i])
 			continue
@@ -67,7 +67,7 @@ func (v *simplifyIfReturnBoolVisitor) VisitBlock(block *tree.Block, p any) tree.
 				if thenOk && elseOk && thenBool != elseBool {
 					ret := buildReturn(ifStmt, thenBool)
 					changed = true
-					newStmts = append(newStmts, tree.RightPadded[tree.Statement]{
+					newStmts = append(newStmts, java.RightPadded[java.Statement]{
 						Element: ret,
 						After:   stmts[i].After,
 					})
@@ -86,7 +86,7 @@ func (v *simplifyIfReturnBoolVisitor) VisitBlock(block *tree.Block, p any) tree.
 			if thenOk && nextOk && thenBool != nextBool {
 				ret := buildReturn(ifStmt, thenBool)
 				changed = true
-				newStmts = append(newStmts, tree.RightPadded[tree.Statement]{
+				newStmts = append(newStmts, java.RightPadded[java.Statement]{
 					Element: ret,
 					After:   stmts[i+1].After,
 				})
@@ -106,7 +106,7 @@ func (v *simplifyIfReturnBoolVisitor) VisitBlock(block *tree.Block, p any) tree.
 
 // singleReturnBool checks if a block contains exactly one statement that is
 // `return true` or `return false`. Returns the boolean value and true if matched.
-func singleReturnBool(block *tree.Block) (bool, bool) {
+func singleReturnBool(block *java.Block) (bool, bool) {
 	if block == nil || len(block.Statements) != 1 {
 		return false, false
 	}
@@ -114,12 +114,12 @@ func singleReturnBool(block *tree.Block) (bool, bool) {
 }
 
 // stmtReturnBool checks if a statement is `return true` or `return false`.
-func stmtReturnBool(stmt tree.Statement) (bool, bool) {
-	ret, ok := stmt.(*tree.Return)
+func stmtReturnBool(stmt java.Statement) (bool, bool) {
+	ret, ok := stmt.(*java.Return)
 	if !ok || len(ret.Expressions) != 1 {
 		return false, false
 	}
-	ident, ok := ret.Expressions[0].Element.(*tree.Identifier)
+	ident, ok := ret.Expressions[0].Element.(*java.Identifier)
 	if !ok {
 		return false, false
 	}
@@ -133,13 +133,13 @@ func stmtReturnBool(stmt tree.Statement) (bool, bool) {
 }
 
 // elseBody extracts the Block from an if-else clause.
-func elseBody(ifStmt *tree.If) *tree.Block {
+func elseBody(ifStmt *java.If) *java.Block {
 	if ifStmt.ElsePart == nil {
 		return nil
 	}
 	elsePart := ifStmt.ElsePart.Element
-	if elseStmt, ok := elsePart.(*tree.Else); ok {
-		if block, ok := elseStmt.Body.Element.(*tree.Block); ok {
+	if elseStmt, ok := elsePart.(*java.Else); ok {
+		if block, ok := elseStmt.Body.Element.(*java.Block); ok {
 			return block
 		}
 	}
@@ -148,20 +148,20 @@ func elseBody(ifStmt *tree.If) *tree.Block {
 
 // buildReturn constructs a `return cond` or `return !cond` statement,
 // reusing the prefix of the if statement.
-func buildReturn(ifStmt *tree.If, thenIsTrue bool) *tree.Return {
+func buildReturn(ifStmt *java.If, thenIsTrue bool) *java.Return {
 	cond := ifStmt.Condition
 	if !thenIsTrue {
 		// Negate the condition: return !cond
-		cond = &tree.Unary{
+		cond = &java.Unary{
 			Prefix:   exprPrefix(cond),
-			Operator: tree.LeftPadded[tree.UnaryOperator]{Element: tree.Not},
-			Operand:  setExprPrefix(cond, tree.Space{}),
+			Operator: java.LeftPadded[java.UnaryOperator]{Element: java.Not},
+			Operand:  setExprPrefix(cond, java.Space{}),
 		}
 	}
-	return &tree.Return{
+	return &java.Return{
 		Prefix: ifStmt.Prefix,
-		Expressions: []tree.RightPadded[tree.Expression]{
-			{Element: setExprPrefix(cond, tree.SingleSpace)},
+		Expressions: []java.RightPadded[java.Expression]{
+			{Element: setExprPrefix(cond, java.SingleSpace)},
 		},
 	}
 }

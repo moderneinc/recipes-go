@@ -6,7 +6,8 @@ package performance
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -35,29 +36,29 @@ type limitGoroutinesInLoopVisitor struct {
 	insideLoop int
 }
 
-func (v *limitGoroutinesInLoopVisitor) VisitForLoop(forLoop *tree.ForLoop, p any) tree.J {
+func (v *limitGoroutinesInLoopVisitor) VisitForLoop(forLoop *java.ForLoop, p any) java.J {
 	v.insideLoop++
-	forLoop = v.GoVisitor.VisitForLoop(forLoop, p).(*tree.ForLoop)
+	forLoop = v.GoVisitor.VisitForLoop(forLoop, p).(*java.ForLoop)
 	v.insideLoop--
 	return forLoop
 }
 
-func (v *limitGoroutinesInLoopVisitor) VisitForEachLoop(forEach *tree.ForEachLoop, p any) tree.J {
+func (v *limitGoroutinesInLoopVisitor) VisitForEachLoop(forEach *java.ForEachLoop, p any) java.J {
 	v.insideLoop++
-	forEach = v.GoVisitor.VisitForEachLoop(forEach, p).(*tree.ForEachLoop)
+	forEach = v.GoVisitor.VisitForEachLoop(forEach, p).(*java.ForEachLoop)
 	v.insideLoop--
 	return forEach
 }
 
-func (v *limitGoroutinesInLoopVisitor) VisitGoStmt(g *tree.GoStmt, p any) tree.J {
-	g = v.GoVisitor.VisitGoStmt(g, p).(*tree.GoStmt)
+func (v *limitGoroutinesInLoopVisitor) VisitGoStmt(g *golang.GoStmt, p any) java.J {
+	g = v.GoVisitor.VisitGoStmt(g, p).(*golang.GoStmt)
 
 	if v.insideLoop == 0 {
 		return g
 	}
 
 	g = g.WithMarkers(
-		tree.MarkupWarn(g.Markers, "goroutine launched in loop; unbounded goroutine creation can cause resource exhaustion"),
+		java.MarkupWarn(g.Markers, "goroutine launched in loop; unbounded goroutine creation can cause resource exhaustion"),
 	)
 	return g
 }

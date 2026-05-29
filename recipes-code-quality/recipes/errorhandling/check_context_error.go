@@ -6,7 +6,7 @@ package errorhandling
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -33,14 +33,14 @@ type checkContextErrorVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *checkContextErrorVisitor) VisitMethodInvocation(mi *tree.MethodInvocation, p any) tree.J {
-	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*tree.MethodInvocation)
+func (v *checkContextErrorVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	if mi.Select == nil {
 		return mi
 	}
 
-	ident, ok := mi.Select.Element.(*tree.Identifier)
+	ident, ok := mi.Select.Element.(*java.Identifier)
 	if !ok || ident.Name != "ctx" {
 		return mi
 	}
@@ -50,7 +50,7 @@ func (v *checkContextErrorVisitor) VisitMethodInvocation(mi *tree.MethodInvocati
 	}
 
 	mi = mi.WithMarkers(
-		tree.MarkupInfo(mi.Markers, "ctx.Err() found; inspect the context error"),
+		java.MarkupInfo(mi.Markers, "ctx.Err() found; inspect the context error"),
 	)
 	return mi
 }

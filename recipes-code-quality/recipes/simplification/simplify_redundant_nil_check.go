@@ -7,7 +7,7 @@ package simplification
 import (
 	"github.com/moderneinc/recipes-go/recipes-code-quality/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -41,10 +41,10 @@ type simplifyRedundantNilCheckVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *simplifyRedundantNilCheckVisitor) VisitBinary(bin *tree.Binary, p any) tree.J {
-	bin = v.GoVisitor.VisitBinary(bin, p).(*tree.Binary)
+func (v *simplifyRedundantNilCheckVisitor) VisitBinary(bin *java.Binary, p any) java.J {
+	bin = v.GoVisitor.VisitBinary(bin, p).(*java.Binary)
 
-	if bin.Operator.Element != tree.LogicalAnd {
+	if bin.Operator.Element != java.LogicalAnd {
 		return bin
 	}
 
@@ -67,9 +67,9 @@ func (v *simplifyRedundantNilCheckVisitor) VisitBinary(bin *tree.Binary, p any) 
 
 // isNilNotEqualCheck checks if the expression is `x != nil` or `nil != x`.
 // Returns true and the variable name if it matches.
-func isNilNotEqualCheck(expr tree.Expression) (bool, string) {
-	bin, ok := expr.(*tree.Binary)
-	if !ok || bin.Operator.Element != tree.NotEqual {
+func isNilNotEqualCheck(expr java.Expression) (bool, string) {
+	bin, ok := expr.(*java.Binary)
+	if !ok || bin.Operator.Element != java.NotEqual {
 		return false, ""
 	}
 
@@ -89,13 +89,13 @@ func isNilNotEqualCheck(expr tree.Expression) (bool, string) {
 	return false, ""
 }
 
-func isNilIdent(expr tree.Expression) bool {
-	ident, ok := expr.(*tree.Identifier)
+func isNilIdent(expr java.Expression) bool {
+	ident, ok := expr.(*java.Identifier)
 	return ok && ident.Name == "nil"
 }
 
-func identName(expr tree.Expression) string {
-	ident, ok := expr.(*tree.Identifier)
+func identName(expr java.Expression) string {
+	ident, ok := expr.(*java.Identifier)
 	if ok {
 		return ident.Name
 	}
@@ -104,14 +104,14 @@ func identName(expr tree.Expression) string {
 
 // isLenCheck checks if the expression is `len(varName) > 0` or `len(varName) != 0`
 // or `len(varName) >= 1`.
-func isLenCheck(expr tree.Expression, varName string) bool {
-	bin, ok := expr.(*tree.Binary)
+func isLenCheck(expr java.Expression, varName string) bool {
+	bin, ok := expr.(*java.Binary)
 	if !ok {
 		return false
 	}
 
 	// Check left side is len(varName)
-	mi, ok := bin.Left.(*tree.MethodInvocation)
+	mi, ok := bin.Left.(*java.MethodInvocation)
 	if !ok || mi.Select != nil || mi.Name.Name != "len" {
 		return false
 	}
@@ -121,7 +121,7 @@ func isLenCheck(expr tree.Expression, varName string) bool {
 	}
 	// Find the actual argument (skip Empty sentinels)
 	for _, arg := range args {
-		if ident, ok := arg.Element.(*tree.Identifier); ok {
+		if ident, ok := arg.Element.(*java.Identifier); ok {
 			if ident.Name == varName {
 				return isPositiveComparison(bin.Operator.Element, bin.Right)
 			}
@@ -132,15 +132,15 @@ func isLenCheck(expr tree.Expression, varName string) bool {
 
 // setLeadingPrefix sets the prefix on the leftmost leaf of an expression,
 // which is where the effective leading whitespace lives in the Go LST.
-func setLeadingPrefix(expr tree.Expression, prefix tree.Space) tree.Expression {
+func setLeadingPrefix(expr java.Expression, prefix java.Space) java.Expression {
 	switch n := expr.(type) {
-	case *tree.Binary:
+	case *java.Binary:
 		return n.WithLeft(setLeadingPrefix(n.Left, prefix))
-	case *tree.Identifier:
+	case *java.Identifier:
 		return n.WithPrefix(prefix)
-	case *tree.Literal:
+	case *java.Literal:
 		return n.WithPrefix(prefix)
-	case *tree.MethodInvocation:
+	case *java.MethodInvocation:
 		if n.Select != nil {
 			sel := *n.Select
 			sel.Element = setLeadingPrefix(sel.Element, prefix)
@@ -155,17 +155,17 @@ func setLeadingPrefix(expr tree.Expression, prefix tree.Space) tree.Expression {
 
 // isPositiveComparison checks if the operator and right operand form a
 // "length is positive" check: > 0, != 0, >= 1.
-func isPositiveComparison(op tree.BinaryOperator, right tree.Expression) bool {
-	lit, ok := right.(*tree.Literal)
+func isPositiveComparison(op java.BinaryOperator, right java.Expression) bool {
+	lit, ok := right.(*java.Literal)
 	if !ok {
 		return false
 	}
 	switch op {
-	case tree.GreaterThan:
+	case java.GreaterThan:
 		return lit.Source == "0"
-	case tree.NotEqual:
+	case java.NotEqual:
 		return lit.Source == "0"
-	case tree.GreaterThanOrEqual:
+	case java.GreaterThanOrEqual:
 		return lit.Source == "1"
 	default:
 		return false

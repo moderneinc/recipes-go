@@ -7,7 +7,8 @@ package errorhandling
 import (
 	"github.com/google/uuid"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -41,14 +42,14 @@ type useErrorsAsVisitor struct {
 // VisitBlock finds if-statements with init of the form
 // `myErr, ok := err.(*MyError); ok` and transforms them into
 // `var myErr *MyError` + `if errors.As(err, &myErr) { ... }`.
-func (v *useErrorsAsVisitor) VisitBlock(block *tree.Block, p any) tree.J {
-	block = v.GoVisitor.VisitBlock(block, p).(*tree.Block)
+func (v *useErrorsAsVisitor) VisitBlock(block *java.Block, p any) java.J {
+	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
 
 	changed := false
-	var newStmts []tree.RightPadded[tree.Statement]
+	var newStmts []java.RightPadded[java.Statement]
 
 	for _, rp := range block.Statements {
-		ifStmt, ok := rp.Element.(*tree.If)
+		ifStmt, ok := rp.Element.(*java.If)
 		if !ok {
 			newStmts = append(newStmts, rp)
 			continue
@@ -69,8 +70,8 @@ func (v *useErrorsAsVisitor) VisitBlock(block *tree.Block, p any) tree.J {
 		newIf := buildErrorsAsIf(ifStmt, errExpr, varName)
 
 		newStmts = append(newStmts,
-			tree.RightPadded[tree.Statement]{Element: varDecl},
-			tree.RightPadded[tree.Statement]{Element: newIf, After: rp.After, Markers: rp.Markers},
+			java.RightPadded[java.Statement]{Element: varDecl},
+			java.RightPadded[java.Statement]{Element: newIf, After: rp.After, Markers: rp.Markers},
 		)
 	}
 
@@ -86,18 +87,18 @@ func (v *useErrorsAsVisitor) VisitBlock(block *tree.Block, p any) tree.J {
 //	myErr, ok := err.(*MyError); ok
 //
 // Returns (varName, typeExpr, errExpr) or ("", nil, nil) if no match.
-func matchCommaOkTypeAssert(ifStmt *tree.If) (string, tree.Expression, tree.Expression) {
+func matchCommaOkTypeAssert(ifStmt *java.If) (string, java.Expression, java.Expression) {
 	if ifStmt.Init == nil {
 		return "", nil, nil
 	}
 
-	ma, ok := ifStmt.Init.Element.(*tree.MultiAssignment)
+	ma, ok := ifStmt.Init.Element.(*golang.MultiAssignment)
 	if !ok {
 		return "", nil, nil
 	}
 
 	// Must be a short var decl (:=)
-	if !tree.HasMarker[tree.ShortVarDecl](ma.Markers) {
+	if !java.HasMarker[golang.ShortVarDecl](ma.Markers) {
 		return "", nil, nil
 	}
 
@@ -107,25 +108,25 @@ func matchCommaOkTypeAssert(ifStmt *tree.If) (string, tree.Expression, tree.Expr
 	}
 
 	// The value must be a TypeCast (type assertion)
-	tc, ok := ma.Values[0].Element.(*tree.TypeCast)
+	tc, ok := ma.Values[0].Element.(*java.TypeCast)
 	if !ok {
 		return "", nil, nil
 	}
 
 	// The condition must be the "ok" identifier
-	condIdent, ok := ifStmt.Condition.(*tree.Identifier)
+	condIdent, ok := ifStmt.Condition.(*java.Identifier)
 	if !ok || condIdent.Name != "ok" {
 		return "", nil, nil
 	}
 
 	// Second variable must be "ok"
-	okIdent, ok := ma.Variables[1].Element.(*tree.Identifier)
+	okIdent, ok := ma.Variables[1].Element.(*java.Identifier)
 	if !ok || okIdent.Name != "ok" {
 		return "", nil, nil
 	}
 
 	// First variable is the target name (e.g., myErr)
-	targetIdent, ok := ma.Variables[0].Element.(*tree.Identifier)
+	targetIdent, ok := ma.Variables[0].Element.(*java.Identifier)
 	if !ok {
 		return "", nil, nil
 	}
@@ -148,14 +149,14 @@ func matchCommaOkTypeAssert(ifStmt *tree.If) (string, tree.Expression, tree.Expr
 // looksLikeError returns true if the expression is likely an error value.
 // It checks type information first; if unavailable, falls back to the
 // common convention that error variables are named "err".
-func looksLikeError(expr tree.Expression) bool {
-	ident, ok := expr.(*tree.Identifier)
+func looksLikeError(expr java.Expression) bool {
+	ident, ok := expr.(*java.Identifier)
 	if !ok {
 		return false
 	}
 	// Check type info if available.
 	if ident.Type != nil {
-		if fq, ok := ident.Type.(tree.FullyQualified); ok {
+		if fq, ok := ident.Type.(java.FullyQualified); ok {
 			return fq.GetFullyQualifiedName() == "error"
 		}
 	}
@@ -164,22 +165,22 @@ func looksLikeError(expr tree.Expression) bool {
 }
 
 // buildVarDecl constructs: var varName typeExpr
-func buildVarDecl(varName string, typeExpr tree.Expression, prefix tree.Space) *tree.VariableDeclarations {
-	return &tree.VariableDeclarations{
+func buildVarDecl(varName string, typeExpr java.Expression, prefix java.Space) *java.VariableDeclarations {
+	return &java.VariableDeclarations{
 		ID:     uuid.New(),
 		Prefix: prefix,
-		Markers: tree.Markers{
+		Markers: java.Markers{
 			ID:      uuid.New(),
-			Entries: []tree.Marker{tree.VarKeyword{Ident: uuid.New()}},
+			Entries: []java.Marker{golang.VarKeyword{Ident: uuid.New()}},
 		},
-		TypeExpr: setExprPrefix(typeExpr, tree.SingleSpace),
-		Variables: []tree.RightPadded[*tree.VariableDeclarator]{
+		TypeExpr: setExprPrefix(typeExpr, java.SingleSpace),
+		Variables: []java.RightPadded[*java.VariableDeclarator]{
 			{
-				Element: &tree.VariableDeclarator{
+				Element: &java.VariableDeclarator{
 					ID: uuid.New(),
-					Name: &tree.Identifier{
+					Name: &java.Identifier{
 						ID:     uuid.New(),
-						Prefix: tree.SingleSpace,
+						Prefix: java.SingleSpace,
 						Name:   varName,
 					},
 				},
@@ -189,31 +190,31 @@ func buildVarDecl(varName string, typeExpr tree.Expression, prefix tree.Space) *
 }
 
 // buildErrorsAsIf constructs: if errors.As(errExpr, &varName) { <original body> }
-func buildErrorsAsIf(origIf *tree.If, errExpr tree.Expression, varName string) *tree.If {
-	errorsAsCall := &tree.MethodInvocation{
+func buildErrorsAsIf(origIf *java.If, errExpr java.Expression, varName string) *java.If {
+	errorsAsCall := &java.MethodInvocation{
 		ID: uuid.New(),
-		Select: &tree.RightPadded[tree.Expression]{
-			Element: &tree.Identifier{
+		Select: &java.RightPadded[java.Expression]{
+			Element: &java.Identifier{
 				ID:     uuid.New(),
-				Prefix: tree.SingleSpace,
+				Prefix: java.SingleSpace,
 				Name:   "errors",
 			},
 		},
-		Name: &tree.Identifier{
+		Name: &java.Identifier{
 			ID:   uuid.New(),
 			Name: "As",
 		},
-		Arguments: tree.Container[tree.Expression]{
-			Elements: []tree.RightPadded[tree.Expression]{
+		Arguments: java.Container[java.Expression]{
+			Elements: []java.RightPadded[java.Expression]{
 				{
-					Element: setExprPrefix(errExpr, tree.EmptySpace),
+					Element: setExprPrefix(errExpr, java.EmptySpace),
 				},
 				{
-					Element: &tree.Unary{
+					Element: &java.Unary{
 						ID:       uuid.New(),
-						Prefix:   tree.SingleSpace,
-						Operator: tree.LeftPadded[tree.UnaryOperator]{Element: tree.AddressOf},
-						Operand: &tree.Identifier{
+						Prefix:   java.SingleSpace,
+						Operator: java.LeftPadded[java.UnaryOperator]{Element: java.AddressOf},
+						Operand: &java.Identifier{
 							ID:   uuid.New(),
 							Name: varName,
 						},
@@ -223,7 +224,7 @@ func buildErrorsAsIf(origIf *tree.If, errExpr tree.Expression, varName string) *
 		},
 	}
 
-	return &tree.If{
+	return &java.If{
 		ID:        uuid.New(),
 		Prefix:    origIf.Prefix,
 		Condition: errorsAsCall,
@@ -233,15 +234,15 @@ func buildErrorsAsIf(origIf *tree.If, errExpr tree.Expression, varName string) *
 }
 
 // setExprPrefix sets the prefix on an expression node.
-func setExprPrefix(expr tree.Expression, prefix tree.Space) tree.Expression {
+func setExprPrefix(expr java.Expression, prefix java.Space) java.Expression {
 	switch e := expr.(type) {
-	case *tree.Identifier:
+	case *java.Identifier:
 		return e.WithPrefix(prefix)
-	case *tree.Unary:
+	case *java.Unary:
 		return e.WithPrefix(prefix)
-	case *tree.FieldAccess:
+	case *java.FieldAccess:
 		c := *e
-		c.Target = setExprPrefix(c.Target, prefix).(tree.Expression)
+		c.Target = setExprPrefix(c.Target, prefix).(java.Expression)
 		return &c
 	default:
 		return expr

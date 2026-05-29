@@ -7,7 +7,7 @@ package redundancy
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/printer"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
@@ -42,8 +42,8 @@ type removeDuplicateConditionsVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *removeDuplicateConditionsVisitor) VisitIf(ifStmt *tree.If, p any) tree.J {
-	ifStmt = v.GoVisitor.VisitIf(ifStmt, p).(*tree.If)
+func (v *removeDuplicateConditionsVisitor) VisitIf(ifStmt *java.If, p any) java.J {
+	ifStmt = v.GoVisitor.VisitIf(ifStmt, p).(*java.If)
 
 	// Only process the outermost if in a chain (don't re-enter from inner else-if).
 	// We'll walk the full chain ourselves.
@@ -57,14 +57,14 @@ func (v *removeDuplicateConditionsVisitor) VisitIf(ifStmt *tree.If, p any) tree.
 // removeDuplicateBranches walks an if/else-if chain, collects conditions, and
 // removes any else-if whose condition has already appeared. Returns nil if
 // nothing changed.
-func removeDuplicateBranches(ifStmt *tree.If) *tree.If {
+func removeDuplicateBranches(ifStmt *java.If) *java.If {
 	// Collect the flat list of conditions we've seen so far.
 	seen := []string{printCondition(ifStmt.Condition)}
 	changed := false
 
 	current := ifStmt
 	for current.ElsePart != nil {
-		elseIf, ok := current.ElsePart.Element.(*tree.If)
+		elseIf, ok := current.ElsePart.Element.(*java.If)
 		if !ok {
 			// Plain else { } — end of chain.
 			break
@@ -89,8 +89,8 @@ func removeDuplicateBranches(ifStmt *tree.If) *tree.If {
 	return ifStmt
 }
 
-func printCondition(expr tree.Expression) string {
-	return printer.Print(setCondPrefix(expr, tree.Space{}))
+func printCondition(expr java.Expression) string {
+	return printer.Print(setCondPrefix(expr, java.Space{}))
 }
 
 func containsStr(slice []string, s string) bool {
@@ -103,27 +103,27 @@ func containsStr(slice []string, s string) bool {
 }
 
 // setCondPrefix sets the leading whitespace prefix on an expression.
-func setCondPrefix(expr tree.Expression, prefix tree.Space) tree.Expression {
+func setCondPrefix(expr java.Expression, prefix java.Space) java.Expression {
 	switch n := expr.(type) {
-	case *tree.Identifier:
+	case *java.Identifier:
 		return n.WithPrefix(prefix)
-	case *tree.Literal:
+	case *java.Literal:
 		return n.WithPrefix(prefix)
-	case *tree.Parentheses:
+	case *java.Parentheses:
 		return n.WithPrefix(prefix)
-	case *tree.Binary:
-		return &tree.Binary{
+	case *java.Binary:
+		return &java.Binary{
 			ID: n.ID, Prefix: n.Prefix, Markers: n.Markers,
 			Left: setCondPrefix(n.Left, prefix), Operator: n.Operator, Right: n.Right, Type: n.Type,
 		}
-	case *tree.Unary:
-		return &tree.Unary{
+	case *java.Unary:
+		return &java.Unary{
 			ID: n.ID, Prefix: prefix, Markers: n.Markers,
 			Operator: n.Operator, Operand: n.Operand, Type: n.Type,
 		}
-	case *tree.FieldAccess:
+	case *java.FieldAccess:
 		return n.WithPrefix(prefix)
-	case *tree.MethodInvocation:
+	case *java.MethodInvocation:
 		return n.WithPrefix(prefix)
 	default:
 		return expr
