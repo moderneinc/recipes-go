@@ -25,6 +25,17 @@ func TestKeepInterfacesSmall(t *testing.T) {
 				E()
 				F()
 			}
+		`, `
+			package main
+
+			type Large /*~~(interface has too many methods)~~>*/interface {
+				A()
+				B()
+				C()
+				D()
+				E()
+				F()
+			}
 		`),
 	)
 }
