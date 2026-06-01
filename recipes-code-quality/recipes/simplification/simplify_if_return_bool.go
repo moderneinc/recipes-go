@@ -40,7 +40,7 @@ func (v *simplifyIfReturnBoolVisitor) VisitBlock(block *java.Block, p any) java.
 	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
 
 	stmts := block.Statements
-	if len(stmts) < 2 {
+	if len(stmts) == 0 {
 		return block
 	}
 
@@ -137,11 +137,8 @@ func elseBody(ifStmt *java.If) *java.Block {
 	if ifStmt.ElsePart == nil {
 		return nil
 	}
-	elsePart := ifStmt.ElsePart.Element
-	if elseStmt, ok := elsePart.(*java.Else); ok {
-		if block, ok := elseStmt.Body.Element.(*java.Block); ok {
-			return block
-		}
+	if block, ok := ifStmt.ElsePart.Element.(*java.Block); ok {
+		return block
 	}
 	return nil
 }
