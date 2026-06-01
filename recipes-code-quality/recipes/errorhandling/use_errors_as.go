@@ -210,11 +210,11 @@ func buildErrorsAsIf(origIf *java.If, errExpr java.Expression, varName string) *
 					Element: setExprPrefix(errExpr, java.EmptySpace),
 				},
 				{
-					Element: &java.Unary{
+					Element: &golang.Unary{
 						ID:       uuid.New(),
 						Prefix:   java.SingleSpace,
-						Operator: java.LeftPadded[java.UnaryOperator]{Element: java.AddressOf},
-						Operand: &java.Identifier{
+						Operator: java.LeftPadded[golang.UnaryOperator]{Element: golang.AddressOf},
+						Expression: &java.Identifier{
 							ID:   uuid.New(),
 							Name: varName,
 						},
@@ -239,6 +239,8 @@ func setExprPrefix(expr java.Expression, prefix java.Space) java.Expression {
 	case *java.Identifier:
 		return e.WithPrefix(prefix)
 	case *java.Unary:
+		return e.WithPrefix(prefix)
+	case *golang.Unary:
 		return e.WithPrefix(prefix)
 	case *java.FieldAccess:
 		c := *e
