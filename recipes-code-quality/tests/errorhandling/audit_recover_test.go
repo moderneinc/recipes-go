@@ -26,6 +26,25 @@ func TestAuditRecover(t *testing.T) {
 	)
 }
 
+func TestAuditRecoverOutsideDefer(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.AuditRecover{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			func main() {
+				recover()
+			}
+		`, `
+			package main
+
+			func main() {/*~~(recover() catches panics; ensure it is in a deferred function)~~>*/
+				recover()
+			}
+		`),
+	)
+}
+
 func TestAuditRecoverNoChangePanic(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.AuditRecover{})
 	spec.RewriteRun(t,

@@ -38,20 +38,6 @@ type enforceTlsVerificationVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *enforceTlsVerificationVisitor) VisitComposite(c *golang.Composite, p any) java.J {
-	c = v.GoVisitor.VisitComposite(c, p).(*golang.Composite)
-	newElems := make([]java.RightPadded[java.Expression], len(c.Elements.Elements))
-	for i, rp := range c.Elements.Elements {
-		visited := v.GoVisitor.Visit(rp.Element, p)
-		if visited != nil {
-			rp.Element = visited.(java.Expression)
-		}
-		newElems[i] = rp
-	}
-	c.Elements.Elements = newElems
-	return c
-}
-
 func (v *enforceTlsVerificationVisitor) VisitKeyValue(kv *golang.KeyValue, p any) java.J {
 	kv = v.GoVisitor.VisitKeyValue(kv, p).(*golang.KeyValue)
 
