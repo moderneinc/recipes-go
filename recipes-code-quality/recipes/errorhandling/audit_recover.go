@@ -6,6 +6,7 @@ package errorhandling
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -32,6 +33,14 @@ func (r *AuditRecover) Editor() recipe.TreeVisitor {
 
 type auditRecoverVisitor struct {
 	visitor.GoVisitor
+	deferDepth int
+}
+
+func (v *auditRecoverVisitor) VisitDefer(d *golang.Defer, p any) java.J {
+	v.deferDepth++
+	d = v.GoVisitor.VisitDefer(d, p).(*golang.Defer)
+	v.deferDepth--
+	return d
 }
 
 func (v *auditRecoverVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
@@ -39,6 +48,12 @@ func (v *auditRecoverVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p
 
 	// Match: recover() — built-in, so no Select and Name == "recover".
 	if mi.Select != nil || mi.Name.Name != "recover" {
+		return mi
+	}
+
+	// recover() inside a deferred function is the correct usage; only flag
+	// calls outside a deferred function, which signal unusual control flow.
+	if v.deferDepth > 0 {
 		return mi
 	}
 

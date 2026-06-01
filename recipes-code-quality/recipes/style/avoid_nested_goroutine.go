@@ -37,48 +37,15 @@ type avoidNestedGoroutineVisitor struct {
 }
 
 func (v *avoidNestedGoroutineVisitor) VisitGoStmt(g *golang.GoStmt, p any) java.J {
-	g = v.GoVisitor.VisitGoStmt(g, p).(*golang.GoStmt)
-
 	if v.goDepth > 0 {
 		g = g.WithMarkers(
 			java.MarkupWarn(g.Markers, "nested goroutine; consider restructuring to avoid goroutines inside goroutines"),
 		)
 	}
 
+	v.goDepth++
+	g = v.GoVisitor.VisitGoStmt(g, p).(*golang.GoStmt)
+	v.goDepth--
+
 	return g
-}
-
-func (v *avoidNestedGoroutineVisitor) VisitMethodDeclaration(md *java.MethodDeclaration, p any) java.J {
-	// Track goroutine depth: if the MethodDeclaration is a function literal
-	// called via go, the GoStmt has already been visited and goDepth incremented.
-	// We detect this by checking if our parent context is inside a GoStmt.
-	// Instead, we increment goDepth around the body of a GoStmt's function literal.
-	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*java.MethodDeclaration)
-	return md
-}
-
-func (v *avoidNestedGoroutineVisitor) VisitBlock(block *java.Block, p any) java.J {
-	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
-	return block
-}
-
-// Visit overrides the default to track goroutine depth properly.
-// When we encounter a GoStmt, we increment depth before visiting its Expr
-// (which the default VisitGoStmt does not recurse into, but the block visitor
-// will handle the func literal body through VisitMethodDeclaration).
-func (v *avoidNestedGoroutineVisitor) Visit(t java.Tree, p any) java.Tree {
-	if g, ok := t.(*golang.GoStmt); ok {
-		// First, call VisitGoStmt which marks if nested
-		result := v.GoVisitor.Self.(visitor.VisitorI).VisitGoStmt(g, p)
-
-		// Then increment depth and visit the expression (func literal + call)
-		v.goDepth++
-		resultG := result.(*golang.GoStmt)
-		resultG.Expr = v.GoVisitor.Self.(visitor.VisitorI).Visit(resultG.Expr, p).(java.Expression)
-		v.goDepth--
-
-		return resultG
-	}
-
-	return v.GoVisitor.Visit(t, p)
 }
