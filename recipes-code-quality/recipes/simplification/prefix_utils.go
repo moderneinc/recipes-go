@@ -5,6 +5,7 @@
 package simplification
 
 import (
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 )
 
@@ -23,6 +24,8 @@ func exprPrefix(expr java.Expression) java.Space {
 	case *java.Parentheses:
 		return n.Prefix
 	case *java.Unary:
+		return n.Prefix
+	case *golang.Unary:
 		return n.Prefix
 	case *java.Binary:
 		return exprPrefix(n.Left)
@@ -51,6 +54,8 @@ func setExprPrefix(expr java.Expression, prefix java.Space) java.Expression {
 			ID: n.ID, Prefix: prefix, Markers: n.Markers,
 			Operator: n.Operator, Operand: n.Operand, Type: n.Type,
 		}
+	case *golang.Unary:
+		return n.WithPrefix(prefix)
 	case *java.Binary:
 		return &java.Binary{
 			ID: n.ID, Prefix: n.Prefix, Markers: n.Markers,

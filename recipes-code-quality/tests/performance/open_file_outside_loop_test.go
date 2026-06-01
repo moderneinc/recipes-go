@@ -24,6 +24,16 @@ func TestFindOsOpenInForLoop(t *testing.T) {
 					_, _ = os.Open("file.txt")
 				}
 			}
+		`, `
+			package main
+
+			import "os"
+
+			func f() {
+				for i := 0; i < 10; i++ {
+					_, _ =/*~~(file open in loop; consider opening file once outside loop)~~>*/ os.Open("file.txt")
+				}
+			}
 		`),
 	)
 }

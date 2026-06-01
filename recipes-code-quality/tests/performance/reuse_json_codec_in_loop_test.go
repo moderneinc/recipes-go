@@ -24,6 +24,16 @@ func TestFindJsonMarshalInForLoop(t *testing.T) {
 					_, _ = json.Marshal(item)
 				}
 			}
+		`, `
+			package main
+
+			import "encoding/json"
+
+			func f(items []string) {
+				for _, item := range items {
+					_, _ =/*~~(json marshal/unmarshal in loop; consider using a pre-allocated encoder/decoder)~~>*/ json.Marshal(item)
+				}
+			}
 		`),
 	)
 }

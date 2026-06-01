@@ -7,6 +7,7 @@ package redundancy
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/printer"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -121,6 +122,8 @@ func setCondPrefix(expr java.Expression, prefix java.Space) java.Expression {
 			ID: n.ID, Prefix: prefix, Markers: n.Markers,
 			Operator: n.Operator, Operand: n.Operand, Type: n.Type,
 		}
+	case *golang.Unary:
+		return n.WithPrefix(prefix)
 	case *java.FieldAccess:
 		return n.WithPrefix(prefix)
 	case *java.MethodInvocation:

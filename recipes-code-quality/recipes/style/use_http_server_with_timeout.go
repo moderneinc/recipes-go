@@ -204,6 +204,13 @@ func replaceIdentsInExpression(expr java.Expression, replacements map[string]jav
 	case *java.Unary:
 		replaced := replaceIdentsInExpression(e.Operand, replacements)
 		return e.WithOperand(replaced)
+	case *golang.Unary:
+		replaced := replaceIdentsInExpression(e.Expression, replacements)
+		return &golang.Unary{
+			ID: e.ID, Prefix: e.Prefix, Markers: e.Markers,
+			Operator:   e.Operator,
+			Expression: replaced,
+		}
 	case *golang.Composite:
 		newElements := make([]java.RightPadded[java.Expression], len(e.Elements.Elements))
 		for i, elem := range e.Elements.Elements {

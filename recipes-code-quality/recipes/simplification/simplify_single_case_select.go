@@ -135,6 +135,8 @@ func replaceLeadingPrefix(stmt java.Statement, prefix java.Space) java.Statement
 		return s.WithPrefix(prefix)
 	case *java.Unary:
 		return s.WithPrefix(prefix)
+	case *golang.Unary:
+		return s.WithPrefix(prefix)
 	case *java.MethodInvocation:
 		return s.WithPrefix(prefix)
 	default:

@@ -24,6 +24,16 @@ func TestFindHttpGetInForLoop(t *testing.T) {
 					_, _ = http.Get("http://example.com")
 				}
 			}
+		`, `
+			package main
+
+			import "net/http"
+
+			func f() {
+				for i := 0; i < 10; i++ {
+					_, _ =/*~~(HTTP call in loop; making HTTP requests in tight loops can be slow)~~>*/ http.Get("http://example.com")
+				}
+			}
 		`),
 	)
 }

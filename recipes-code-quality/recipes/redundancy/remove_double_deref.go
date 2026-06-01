@@ -6,6 +6,7 @@ package redundancy
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -34,22 +35,22 @@ type removeDoubleDerefVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *removeDoubleDerefVisitor) VisitUnary(unary *java.Unary, p any) java.J {
-	unary = v.GoVisitor.VisitUnary(unary, p).(*java.Unary)
+func (v *removeDoubleDerefVisitor) VisitGoUnary(unary *golang.Unary, p any) java.J {
+	unary = v.GoVisitor.VisitGoUnary(unary, p).(*golang.Unary)
 
-	// Outer operator must be Deref (*).
-	if unary.Operator.Element != java.Deref {
+	// Outer operator must be Indirection (*).
+	if unary.Operator.Element != golang.Indirection {
 		return unary
 	}
 
 	// Operand must be another Unary with operator AddressOf (&).
-	inner, ok := unary.Operand.(*java.Unary)
-	if !ok || inner.Operator.Element != java.AddressOf {
+	inner, ok := unary.Expression.(*golang.Unary)
+	if !ok || inner.Operator.Element != golang.AddressOf {
 		return unary
 	}
 
 	// Replace *&x with x, preserving the outer unary's prefix.
-	switch operand := inner.Operand.(type) {
+	switch operand := inner.Expression.(type) {
 	case *java.Identifier:
 		return operand.WithPrefix(unary.Prefix)
 	case *java.MethodInvocation:
@@ -61,6 +62,6 @@ func (v *removeDoubleDerefVisitor) VisitUnary(unary *java.Unary, p any) java.J {
 	case *java.Parentheses:
 		return operand.WithPrefix(unary.Prefix)
 	default:
-		return inner.Operand
+		return inner.Expression
 	}
 }

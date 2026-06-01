@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -97,14 +98,14 @@ func (v *useAtomicTypesVisitor) VisitMethodInvocation(mi *java.MethodInvocation,
 
 	// First argument must be &x (AddressOf unary); strip the & to get the receiver.
 	firstArg := args[0].Element
-	addrOf, ok := firstArg.(*java.Unary)
-	if !ok || addrOf.Operator.Element != java.AddressOf {
+	addrOf, ok := firstArg.(*golang.Unary)
+	if !ok || addrOf.Operator.Element != golang.AddressOf {
 		// Cannot transform if first arg is not &x — add markup instead.
 		mi = mi.WithMarkers(java.MarkupWarn(mi.Markers, "deprecated sync/atomic function; use type-safe atomic types (Go 1.19+)"))
 		return mi
 	}
 
-	receiver := addrOf.Operand
+	receiver := addrOf.Expression
 
 	// Build new method invocation: receiver.Method(remaining args...)
 	newName := &java.Identifier{
@@ -151,6 +152,8 @@ func setAtomicExprPrefix(expr java.Expression, prefix java.Space) java.Expressio
 	case *java.FieldAccess:
 		return e.WithPrefix(prefix)
 	case *java.Unary:
+		return e.WithPrefix(prefix)
+	case *golang.Unary:
 		return e.WithPrefix(prefix)
 	default:
 		return expr

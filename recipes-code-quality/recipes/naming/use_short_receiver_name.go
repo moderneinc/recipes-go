@@ -100,9 +100,12 @@ func extractTypeName(expr java.Expression) string {
 	if expr == nil {
 		return ""
 	}
-	// Pointer type: *Foo may be PointerType or Unary(Deref).
+	// Pointer type: *Foo may be PointerType or Unary(Indirection).
 	if pt, ok := expr.(*golang.PointerType); ok {
 		return extractTypeName(pt.Elem)
+	}
+	if u, ok := expr.(*golang.Unary); ok {
+		return extractTypeName(u.Expression)
 	}
 	if u, ok := expr.(*java.Unary); ok {
 		return extractTypeName(u.Operand)
