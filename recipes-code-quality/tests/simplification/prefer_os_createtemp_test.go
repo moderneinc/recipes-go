@@ -17,9 +17,12 @@ func TestPreferOsCreateTemp(t *testing.T) {
 		test.Golang(`
 			package main
 
-			import "io/ioutil"
+			import (
+				"io/ioutil"
+				"os"
+			)
 
-			func f() (*File, error) {
+			func f() (*os.File, error) {
 				return ioutil.TempFile("", "prefix")
 			}
 		`, `
@@ -29,7 +32,7 @@ func TestPreferOsCreateTemp(t *testing.T) {
 				"os"
 			)
 
-			func f() (*File, error) {
+			func f() (*os.File, error) {
 				return os.CreateTemp("", "prefix")
 			}
 		`),

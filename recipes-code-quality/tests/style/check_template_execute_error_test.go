@@ -17,18 +17,24 @@ func TestCheckTemplateExecuteError(t *testing.T) {
 		test.Golang(`
 			package main
 
-			import "html/template"
+			import (
+				"html/template"
+				"io"
+			)
 
-			func f(tmpl *template.Template, w *template.Template, data any) error {
+			func f(tmpl *template.Template, w io.Writer, data any) error {
 				tmpl.Execute(w, data)
 				return nil
 			}
 		`, `
 			package main
 
-			import "html/template"
+			import (
+				"html/template"
+				"io"
+			)
 
-			func f(tmpl *template.Template, w *template.Template, data any) error {
+			func f(tmpl *template.Template, w io.Writer, data any) error {
 				if err := tmpl.Execute(w, data); err != nil {
 					return err
 				}
@@ -44,18 +50,24 @@ func TestCheckTemplateExecuteErrorTemplate(t *testing.T) {
 		test.Golang(`
 			package main
 
-			import "html/template"
+			import (
+				"html/template"
+				"io"
+			)
 
-			func f(tmpl *template.Template, w *template.Template, data any) error {
+			func f(tmpl *template.Template, w io.Writer, data any) error {
 				tmpl.ExecuteTemplate(w, "page", data)
 				return nil
 			}
 		`, `
 			package main
 
-			import "html/template"
+			import (
+				"html/template"
+				"io"
+			)
 
-			func f(tmpl *template.Template, w *template.Template, data any) error {
+			func f(tmpl *template.Template, w io.Writer, data any) error {
 				if err := tmpl.ExecuteTemplate(w, "page", data); err != nil {
 					return err
 				}
@@ -86,9 +98,12 @@ func TestCheckTemplateExecuteErrorNoChangeNoErrorReturn(t *testing.T) {
 		test.Golang(`
 			package main
 
-			import "html/template"
+			import (
+				"html/template"
+				"io"
+			)
 
-			func f(tmpl *template.Template, w *template.Template, data any) {
+			func f(tmpl *template.Template, w io.Writer, data any) {
 				tmpl.Execute(w, data)
 			}
 		`),

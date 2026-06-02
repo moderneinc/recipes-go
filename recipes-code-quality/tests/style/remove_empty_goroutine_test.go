@@ -37,7 +37,7 @@ func TestRemoveEmptyGoroutineNoChangeWithBody(t *testing.T) {
 
 			func f() {
 				go func() {
-					doWork()
+					println("work")
 				}()
 			}
 		`),

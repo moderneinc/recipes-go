@@ -56,7 +56,7 @@ func TestRemoveEmptyFunctionNoChangeWithReturnType(t *testing.T) {
 		test.Golang(`
 			package main
 
-			func zero() int {}
+			func zero() int { return 0 }
 		`),
 	)
 }

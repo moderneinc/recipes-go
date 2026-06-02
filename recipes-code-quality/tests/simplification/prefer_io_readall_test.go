@@ -17,9 +17,12 @@ func TestPreferIoReadAll(t *testing.T) {
 		test.Golang(`
 			package main
 
-			import "io/ioutil"
+			import (
+				"io"
+				"io/ioutil"
+			)
 
-			func f(r *Reader) ([]byte, error) {
+			func f(r io.Reader) ([]byte, error) {
 				return ioutil.ReadAll(r)
 			}
 		`, `
@@ -29,7 +32,7 @@ func TestPreferIoReadAll(t *testing.T) {
 				"io"
 			)
 
-			func f(r *Reader) ([]byte, error) {
+			func f(r io.Reader) ([]byte, error) {
 				return io.ReadAll(r)
 			}
 		`),
