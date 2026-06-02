@@ -10,6 +10,7 @@ import (
 	"github.com/moderneinc/recipes-go/recipes-code-quality/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -76,6 +77,9 @@ func (v *useErrorsNewVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p
 	if hasFormatVerb(lit.Source) {
 		return mi
 	}
+
+	// The rewrite introduces a reference to the `errors` package; ensure it is imported.
+	recipegolang.MaybeAddImport(v, "errors", nil, false)
 
 	// Build: errors.New(same literal)
 	// Reuse the prefix from the original "fmt" identifier.

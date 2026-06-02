@@ -26,6 +26,8 @@ func TestWrapErrorWithContextBareReturn(t *testing.T) {
 		`, `
 			package main
 
+			import "fmt"
+
 			func f() error {
 				err := doSomething()
 				return fmt.Errorf("f: %w", err)

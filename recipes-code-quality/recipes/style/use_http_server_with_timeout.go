@@ -7,6 +7,7 @@ package style
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/parser"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -84,6 +85,10 @@ func (v *useHttpServerWithTimeoutVisitor) VisitBlock(block *java.Block, p any) j
 	if !changed {
 		return block
 	}
+
+	// The replacement statements reference `time.Second`; ensure `time` is imported.
+	recipegolang.MaybeAddImport(v, "time", nil, false)
+
 	return block.WithStatements(newStmts)
 }
 
