@@ -20,14 +20,14 @@ func TestSimplifySelectDefaultOnly(t *testing.T) {
 			func f() {
 				select {
 				default:
-					x()
+					println("x")
 				}
 			}
 		`, `
 			package main
 
 			func f() {
-				x()
+				println("x")
 			}
 		`),
 	)
@@ -42,7 +42,7 @@ func TestSimplifySelectDefaultOnlyNoChangeWithCase(t *testing.T) {
 			func f(ch chan int) {
 				select {
 				case <-ch:
-					x()
+					println("x")
 				}
 			}
 		`),

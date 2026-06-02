@@ -19,24 +19,24 @@ func TestWrapErrorBeforeReturn(t *testing.T) {
 
 			import "fmt"
 
-			func doWork() (int, error) {
+			func doWork() ([]byte, error) {
 				_, err := fmt.Println("work")
 				if err != nil {
 					return nil, err
 				}
-				return 1, nil
+				return []byte("ok"), nil
 			}
 		`, `
 			package main
 
 			import "fmt"
 
-			func doWork() (int, error) {
+			func doWork() ([]byte, error) {
 				_, err := fmt.Println("work")
 				if err != nil {
 					return nil, fmt.Errorf("doWork: %w", err)
 				}
-				return 1, nil
+				return []byte("ok"), nil
 			}
 		`),
 	)
@@ -50,12 +50,12 @@ func TestWrapErrorBeforeReturnNoChangeAlreadyWrapped(t *testing.T) {
 
 			import "fmt"
 
-			func doWork() (int, error) {
+			func doWork() ([]byte, error) {
 				_, err := fmt.Println("work")
 				if err != nil {
 					return nil, fmt.Errorf("doWork: %w", err)
 				}
-				return 1, nil
+				return []byte("ok"), nil
 			}
 		`),
 	)

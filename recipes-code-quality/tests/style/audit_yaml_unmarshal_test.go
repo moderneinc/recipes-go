@@ -17,7 +17,9 @@ func TestAuditYamlUnmarshal(t *testing.T) {
 		test.Golang(`
 			package main
 
-			import "gopkg.in/yaml.v3"
+			var yaml interface {
+				Unmarshal(in []byte, out any) error
+			}
 
 			func f() {
 				data := []byte("key: value")
@@ -27,7 +29,9 @@ func TestAuditYamlUnmarshal(t *testing.T) {
 		`, `
 			package main
 
-			import "gopkg.in/yaml.v3"
+			var yaml interface {
+				Unmarshal(in []byte, out any) error
+			}
 
 			func f() {
 				data := []byte("key: value")
