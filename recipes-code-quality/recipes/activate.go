@@ -6,6 +6,7 @@ package recipes
 
 import (
 	"github.com/moderneinc/recipes-go/recipes-code-quality/recipes/errorhandling"
+	"github.com/moderneinc/recipes-go/recipes-code-quality/recipes/migration"
 	"github.com/moderneinc/recipes-go/recipes-code-quality/recipes/naming"
 	"github.com/moderneinc/recipes-go/recipes-code-quality/recipes/performance"
 	"github.com/moderneinc/recipes-go/recipes-code-quality/recipes/redundancy"
@@ -222,4 +223,9 @@ func Activate(r *recipe.Registry) {
 	r.Register(&naming.UseShortReceiverName{}, golang, codeQuality, namingCategory)
 	r.Register(&naming.UseDescriptiveVarNames{}, golang, codeQuality, namingCategory)
 	r.Register(&naming.UseDescriptivePackageName{}, golang, codeQuality, namingCategory)
+
+	// Migration
+	migrationCategory := recipe.CategoryDescriptor{DisplayName: "Migration", Description: "Migrate to newer Go versions"}
+	r.Register(&migration.ChangeGoVersion{}, golang, codeQuality, migrationCategory)
+	r.Register(&migration.UpgradeGoTo126{}, golang, codeQuality, migrationCategory)
 }
