@@ -25,7 +25,9 @@ func TestPreferIoReadAll(t *testing.T) {
 		`, `
 			package main
 
-			import "io/ioutil"
+			import (
+				"io"
+			)
 
 			func f(r *Reader) ([]byte, error) {
 				return io.ReadAll(r)

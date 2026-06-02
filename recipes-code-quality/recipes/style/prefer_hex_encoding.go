@@ -17,7 +17,7 @@ var preferHexEncodingImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferHexEncoding$Impl"),
 	template.WithDisplayName("fmt.Sprintf(\"%x\", d) → hex.EncodeToString(d)"),
 	template.WithBefore(fmt.Sprintf(`fmt.Sprintf("%%x", %s)`, heData), template.Imports("fmt")),
-	template.WithAfter(fmt.Sprintf(`hex.EncodeToString(%s)`, heData), template.Imports("encoding/hex")),
+	template.WithAfter(fmt.Sprintf(`hex.EncodeToString(%s)`, heData), template.Imports("encoding/hex"), template.SourceImports("encoding/hex")),
 	template.WithCaptures(heData),
 )
 

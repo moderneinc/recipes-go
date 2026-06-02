@@ -41,7 +41,7 @@ var preferStringsToLowerMapImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferStringsToLowerMap$Impl"),
 	template.WithDisplayName("strings.Map(unicode.ToLower, s) -> strings.ToLower(s)"),
 	template.WithBefore(fmt.Sprintf(`strings.Map(unicode.ToLower, %s)`, stlS), template.Imports("strings", "unicode")),
-	template.WithAfter(fmt.Sprintf(`strings.ToLower(%s)`, stlS), template.Imports("strings")),
+	template.WithAfter(fmt.Sprintf(`strings.ToLower(%s)`, stlS), template.Imports("strings"), template.SourceImports("strings")),
 	template.WithCaptures(stlS),
 )
 

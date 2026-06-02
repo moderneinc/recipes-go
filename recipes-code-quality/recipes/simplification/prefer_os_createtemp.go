@@ -45,7 +45,7 @@ var preferOsCreateTempImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferOsCreateTemp$Impl"),
 	template.WithDisplayName("ioutil.TempFile → os.CreateTemp"),
 	template.WithBefore(fmt.Sprintf(`ioutil.TempFile(%s, %s)`, tfDir, tfPat), template.Imports("io/ioutil")),
-	template.WithAfter(fmt.Sprintf(`os.CreateTemp(%s, %s)`, tfDir, tfPat), template.Imports("os")),
+	template.WithAfter(fmt.Sprintf(`os.CreateTemp(%s, %s)`, tfDir, tfPat), template.Imports("os"), template.SourceImports("os")),
 	template.WithCaptures(tfDir, tfPat),
 )
 

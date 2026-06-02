@@ -25,7 +25,10 @@ func TestPreferErrorsIsHttpServerClosedEqual(t *testing.T) {
 		`, `
 			package main
 
-			import "net/http"
+			import (
+				"net/http"
+				"errors"
+			)
 
 			func f(err error) bool {
 				return errors.Is(err, http.ErrServerClosed)
@@ -48,7 +51,10 @@ func TestPreferErrorsIsHttpServerClosedNotEqual(t *testing.T) {
 		`, `
 			package main
 
-			import "net/http"
+			import (
+				"net/http"
+				"errors"
+			)
 
 			func f(err error) bool {
 				return !errors.Is(err, http.ErrServerClosed)

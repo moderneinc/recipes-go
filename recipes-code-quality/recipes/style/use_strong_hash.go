@@ -33,14 +33,14 @@ var useStrongHashMd5New = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.UseStrongHash$Md5New"),
 	template.WithDisplayName("md5.New() -> sha256.New()"),
 	template.WithBefore(`md5.New()`, template.Imports("crypto/md5")),
-	template.WithAfter(`sha256.New()`, template.Imports("crypto/sha256")),
+	template.WithAfter(`sha256.New()`, template.Imports("crypto/sha256"), template.SourceImports("crypto/sha256")),
 )
 
 var useStrongHashMd5Sum = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.UseStrongHash$Md5Sum"),
 	template.WithDisplayName("md5.Sum(d) -> sha256.Sum256(d)"),
 	template.WithBefore(fmt.Sprintf(`md5.Sum(%s)`, shData), template.Imports("crypto/md5")),
-	template.WithAfter(fmt.Sprintf(`sha256.Sum256(%s)`, shData), template.Imports("crypto/sha256")),
+	template.WithAfter(fmt.Sprintf(`sha256.Sum256(%s)`, shData), template.Imports("crypto/sha256"), template.SourceImports("crypto/sha256")),
 	template.WithCaptures(shData),
 )
 
@@ -48,14 +48,14 @@ var useStrongHashSha1New = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.UseStrongHash$Sha1New"),
 	template.WithDisplayName("sha1.New() -> sha256.New()"),
 	template.WithBefore(`sha1.New()`, template.Imports("crypto/sha1")),
-	template.WithAfter(`sha256.New()`, template.Imports("crypto/sha256")),
+	template.WithAfter(`sha256.New()`, template.Imports("crypto/sha256"), template.SourceImports("crypto/sha256")),
 )
 
 var useStrongHashSha1Sum = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.UseStrongHash$Sha1Sum"),
 	template.WithDisplayName("sha1.Sum(d) -> sha256.Sum256(d)"),
 	template.WithBefore(fmt.Sprintf(`sha1.Sum(%s)`, shData), template.Imports("crypto/sha1")),
-	template.WithAfter(fmt.Sprintf(`sha256.Sum256(%s)`, shData), template.Imports("crypto/sha256")),
+	template.WithAfter(fmt.Sprintf(`sha256.Sum256(%s)`, shData), template.Imports("crypto/sha256"), template.SourceImports("crypto/sha256")),
 	template.WithCaptures(shData),
 )
 

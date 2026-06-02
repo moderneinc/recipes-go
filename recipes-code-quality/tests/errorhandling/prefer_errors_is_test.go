@@ -65,6 +65,32 @@ func TestPreferErrorsIsNotEqual(t *testing.T) {
 	)
 }
 
+func TestPreferErrorsIsEOFAddsErrorsImport(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.PreferErrorsIsOverEquality{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "io"
+
+			func f(err error) bool {
+				return err == io.EOF
+			}
+		`, `
+			package main
+
+			import (
+				"io"
+				"errors"
+			)
+
+			func f(err error) bool {
+				return errors.Is(err, io.EOF)
+			}
+		`),
+	)
+}
+
 func TestPreferErrorsIsNoChangeNilCheck(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.PreferErrorsIsOverEquality{})
 	spec.RewriteRun(t,

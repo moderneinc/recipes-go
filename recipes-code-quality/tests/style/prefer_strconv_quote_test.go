@@ -25,7 +25,9 @@ func TestPreferStrconvQuote(t *testing.T) {
 		`, `
 			package main
 
-			import "fmt"
+			import (
+				"strconv"
+			)
 
 			func f(s string) string {
 				return strconv.Quote(s)

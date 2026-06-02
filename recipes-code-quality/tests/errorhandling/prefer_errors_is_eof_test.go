@@ -25,7 +25,10 @@ func TestPreferErrorsIsEOFEqual(t *testing.T) {
 		`, `
 			package main
 
-			import "io"
+			import (
+				"io"
+				"errors"
+			)
 
 			func f(err error) bool {
 				return errors.Is(err, io.EOF)
@@ -48,7 +51,10 @@ func TestPreferErrorsIsEOFNotEqual(t *testing.T) {
 		`, `
 			package main
 
-			import "io"
+			import (
+				"io"
+				"errors"
+			)
 
 			func f(err error) bool {
 				return !errors.Is(err, io.EOF)

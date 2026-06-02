@@ -36,7 +36,7 @@ var useStructuredLoggingPrintln = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.UseStructuredLogging$Println"),
 	template.WithDisplayName("log.Println → slog.Info"),
 	template.WithBefore(fmt.Sprintf(`log.Println(%s)`, slogMsg), template.Imports("log")),
-	template.WithAfter(fmt.Sprintf(`slog.Info(%s)`, slogMsg), template.Imports("log/slog")),
+	template.WithAfter(fmt.Sprintf(`slog.Info(%s)`, slogMsg), template.Imports("log/slog"), template.SourceImports("log/slog")),
 	template.WithCaptures(slogMsg),
 )
 
@@ -44,7 +44,7 @@ var useStructuredLoggingPrint = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.UseStructuredLogging$Print"),
 	template.WithDisplayName("log.Print → slog.Info"),
 	template.WithBefore(fmt.Sprintf(`log.Print(%s)`, slogMsg), template.Imports("log")),
-	template.WithAfter(fmt.Sprintf(`slog.Info(%s)`, slogMsg), template.Imports("log/slog")),
+	template.WithAfter(fmt.Sprintf(`slog.Info(%s)`, slogMsg), template.Imports("log/slog"), template.SourceImports("log/slog")),
 	template.WithCaptures(slogMsg),
 )
 

@@ -25,7 +25,9 @@ func TestUseStructuredLoggingPrintln(t *testing.T) {
 		`, `
 			package main
 
-			import "log"
+			import (
+				"log/slog"
+			)
 
 			func f() {
 				slog.Info("hello")

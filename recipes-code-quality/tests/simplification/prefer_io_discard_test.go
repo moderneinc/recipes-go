@@ -28,7 +28,6 @@ func TestPreferIoDiscard(t *testing.T) {
 
 			import (
 				"io"
-				"io/ioutil"
 			)
 
 			var _ io.Writer = io.Discard

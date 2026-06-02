@@ -25,7 +25,9 @@ func TestPreferHexEncoding(t *testing.T) {
 		`, `
 			package main
 
-			import "fmt"
+			import (
+				"encoding/hex"
+			)
 
 			func f(data []byte) string {
 				return hex.EncodeToString(data)

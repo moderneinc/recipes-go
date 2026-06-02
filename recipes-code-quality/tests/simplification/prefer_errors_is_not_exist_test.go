@@ -25,7 +25,10 @@ func TestPreferErrorsIsNotExist(t *testing.T) {
 		`, `
 			package main
 
-			import "os"
+			import (
+				"errors"
+				"io/fs"
+			)
 
 			func f(err error) bool {
 				return errors.Is(err, fs.ErrNotExist)
@@ -48,7 +51,10 @@ func TestPreferErrorsIsExist(t *testing.T) {
 		`, `
 			package main
 
-			import "os"
+			import (
+				"errors"
+				"io/fs"
+			)
 
 			func f(err error) bool {
 				return errors.Is(err, fs.ErrExist)

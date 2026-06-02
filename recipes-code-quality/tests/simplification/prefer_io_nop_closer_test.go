@@ -31,7 +31,6 @@ func TestPreferIoNopCloser(t *testing.T) {
 
 			import (
 				"io"
-				"io/ioutil"
 				"strings"
 			)
 

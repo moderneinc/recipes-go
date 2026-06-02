@@ -42,7 +42,7 @@ var preferErrorsIsPermissionImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferErrorsIsForPermission$Impl"),
 	template.WithDisplayName("os.IsPermission → errors.Is(err, fs.ErrPermission)"),
 	template.WithBefore(fmt.Sprintf(`os.IsPermission(%s)`, opErr), template.Imports("os")),
-	template.WithAfter(fmt.Sprintf(`errors.Is(%s, fs.ErrPermission)`, opErr), template.Imports("errors", "io/fs")),
+	template.WithAfter(fmt.Sprintf(`errors.Is(%s, fs.ErrPermission)`, opErr), template.Imports("errors", "io/fs"), template.SourceImports("errors", "io/fs")),
 	template.WithCaptures(opErr),
 )
 

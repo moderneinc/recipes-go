@@ -41,7 +41,7 @@ var preferOsReadFileImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferOsReadFile$Impl"),
 	template.WithDisplayName("ioutil.ReadFile → os.ReadFile"),
 	template.WithBefore(fmt.Sprintf(`ioutil.ReadFile(%s)`, rfName), template.Imports("io/ioutil")),
-	template.WithAfter(fmt.Sprintf(`os.ReadFile(%s)`, rfName), template.Imports("os")),
+	template.WithAfter(fmt.Sprintf(`os.ReadFile(%s)`, rfName), template.Imports("os"), template.SourceImports("os")),
 	template.WithCaptures(rfName),
 )
 

@@ -25,7 +25,10 @@ func TestPreferErrorsIsSqlNoRowsEqual(t *testing.T) {
 		`, `
 			package main
 
-			import "database/sql"
+			import (
+				"database/sql"
+				"errors"
+			)
 
 			func f(err error) bool {
 				return errors.Is(err, sql.ErrNoRows)
@@ -48,7 +51,10 @@ func TestPreferErrorsIsSqlNoRowsNotEqual(t *testing.T) {
 		`, `
 			package main
 
-			import "database/sql"
+			import (
+				"database/sql"
+				"errors"
+			)
 
 			func f(err error) bool {
 				return !errors.Is(err, sql.ErrNoRows)

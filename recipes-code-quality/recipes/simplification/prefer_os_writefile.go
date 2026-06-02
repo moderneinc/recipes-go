@@ -46,7 +46,7 @@ var preferOsWriteFileImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferOsWriteFile$Impl"),
 	template.WithDisplayName("ioutil.WriteFile → os.WriteFile"),
 	template.WithBefore(fmt.Sprintf(`ioutil.WriteFile(%s, %s, %s)`, wfName, wfData, wfPerm), template.Imports("io/ioutil")),
-	template.WithAfter(fmt.Sprintf(`os.WriteFile(%s, %s, %s)`, wfName, wfData, wfPerm), template.Imports("os")),
+	template.WithAfter(fmt.Sprintf(`os.WriteFile(%s, %s, %s)`, wfName, wfData, wfPerm), template.Imports("os"), template.SourceImports("os")),
 	template.WithCaptures(wfName, wfData, wfPerm),
 )
 

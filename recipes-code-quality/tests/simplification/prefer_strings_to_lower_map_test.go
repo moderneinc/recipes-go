@@ -30,7 +30,6 @@ func TestPreferStringsToLowerMap(t *testing.T) {
 
 			import (
 				"strings"
-				"unicode"
 			)
 
 			func f(s string) string {

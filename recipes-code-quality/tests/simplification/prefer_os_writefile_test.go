@@ -25,7 +25,9 @@ func TestPreferOsWriteFile(t *testing.T) {
 		`, `
 			package main
 
-			import "io/ioutil"
+			import (
+				"os"
+			)
 
 			func f(name string, data []byte) error {
 				return os.WriteFile(name, data, 0644)

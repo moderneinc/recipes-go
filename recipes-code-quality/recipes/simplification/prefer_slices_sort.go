@@ -32,7 +32,7 @@ var preferSlicesSortInts = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferSlicesSort$Ints"),
 	template.WithDisplayName("sort.Ints -> slices.Sort"),
 	template.WithBefore(fmt.Sprintf(`sort.Ints(%s)`, ssrtS), template.Imports("sort")),
-	template.WithAfter(fmt.Sprintf(`slices.Sort(%s)`, ssrtS), template.Imports("slices")),
+	template.WithAfter(fmt.Sprintf(`slices.Sort(%s)`, ssrtS), template.Imports("slices"), template.SourceImports("slices")),
 	template.WithCaptures(ssrtS),
 )
 
@@ -40,7 +40,7 @@ var preferSlicesSortStrings = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferSlicesSort$Strings"),
 	template.WithDisplayName("sort.Strings -> slices.Sort"),
 	template.WithBefore(fmt.Sprintf(`sort.Strings(%s)`, ssrtS), template.Imports("sort")),
-	template.WithAfter(fmt.Sprintf(`slices.Sort(%s)`, ssrtS), template.Imports("slices")),
+	template.WithAfter(fmt.Sprintf(`slices.Sort(%s)`, ssrtS), template.Imports("slices"), template.SourceImports("slices")),
 	template.WithCaptures(ssrtS),
 )
 
@@ -48,7 +48,7 @@ var preferSlicesSortFloat64s = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferSlicesSort$Float64s"),
 	template.WithDisplayName("sort.Float64s -> slices.Sort"),
 	template.WithBefore(fmt.Sprintf(`sort.Float64s(%s)`, ssrtS), template.Imports("sort")),
-	template.WithAfter(fmt.Sprintf(`slices.Sort(%s)`, ssrtS), template.Imports("slices")),
+	template.WithAfter(fmt.Sprintf(`slices.Sort(%s)`, ssrtS), template.Imports("slices"), template.SourceImports("slices")),
 	template.WithCaptures(ssrtS),
 )
 

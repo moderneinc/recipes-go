@@ -25,7 +25,10 @@ func TestPreferErrorsIsForFieldAccessEqual(t *testing.T) {
 		`, `
 			package main
 
-			import "database/sql"
+			import (
+				"database/sql"
+				"errors"
+			)
 
 			func f(err error) bool {
 				return errors.Is(err, sql.ErrNoRows)
@@ -48,10 +51,39 @@ func TestPreferErrorsIsForFieldAccessNotEqual(t *testing.T) {
 		`, `
 			package main
 
-			import "database/sql"
+			import (
+				"database/sql"
+				"errors"
+			)
 
 			func f(err error) bool {
 				return !errors.Is(err, sql.ErrNoRows)
+			}
+		`),
+	)
+}
+
+func TestPreferErrorsIsForFieldAccessEOFAddsErrorsImport(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.PreferErrorsIsForFieldAccess{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "io"
+
+			func f(err error) bool {
+				return err == io.EOF
+			}
+		`, `
+			package main
+
+			import (
+				"io"
+				"errors"
+			)
+
+			func f(err error) bool {
+				return errors.Is(err, io.EOF)
 			}
 		`),
 	)

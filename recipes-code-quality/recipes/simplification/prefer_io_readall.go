@@ -41,7 +41,7 @@ var preferIoReadAllImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferIoReadAll$Impl"),
 	template.WithDisplayName("ioutil.ReadAll → io.ReadAll"),
 	template.WithBefore(fmt.Sprintf(`ioutil.ReadAll(%s)`, raR), template.Imports("io/ioutil")),
-	template.WithAfter(fmt.Sprintf(`io.ReadAll(%s)`, raR), template.Imports("io")),
+	template.WithAfter(fmt.Sprintf(`io.ReadAll(%s)`, raR), template.Imports("io"), template.SourceImports("io")),
 	template.WithCaptures(raR),
 )
 

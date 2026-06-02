@@ -25,7 +25,10 @@ func TestPreferErrorsIsNetClosedEqual(t *testing.T) {
 		`, `
 			package main
 
-			import "net"
+			import (
+				"net"
+				"errors"
+			)
 
 			func f(err error) bool {
 				return errors.Is(err, net.ErrClosed)
@@ -48,7 +51,10 @@ func TestPreferErrorsIsNetClosedNotEqual(t *testing.T) {
 		`, `
 			package main
 
-			import "net"
+			import (
+				"net"
+				"errors"
+			)
 
 			func f(err error) bool {
 				return !errors.Is(err, net.ErrClosed)

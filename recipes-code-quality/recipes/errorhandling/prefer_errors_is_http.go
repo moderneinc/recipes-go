@@ -17,7 +17,7 @@ var preferErrorsIsHttpServerClosedEqualImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferErrorsIsHttpServerClosed$Equal"),
 	template.WithDisplayName("err == http.ErrServerClosed -> errors.Is(err, http.ErrServerClosed)"),
 	template.WithBefore(fmt.Sprintf(`%s == http.ErrServerClosed`, htErr), template.Imports("net/http")),
-	template.WithAfter(fmt.Sprintf(`errors.Is(%s, http.ErrServerClosed)`, htErr), template.Imports("errors", "net/http")),
+	template.WithAfter(fmt.Sprintf(`errors.Is(%s, http.ErrServerClosed)`, htErr), template.Imports("errors", "net/http"), template.SourceImports("errors", "net/http")),
 	template.WithCaptures(htErr),
 )
 
@@ -25,7 +25,7 @@ var preferErrorsIsHttpServerClosedNotEqualImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferErrorsIsHttpServerClosed$NotEqual"),
 	template.WithDisplayName("err != http.ErrServerClosed -> !errors.Is(err, http.ErrServerClosed)"),
 	template.WithBefore(fmt.Sprintf(`%s != http.ErrServerClosed`, htErr), template.Imports("net/http")),
-	template.WithAfter(fmt.Sprintf(`!errors.Is(%s, http.ErrServerClosed)`, htErr), template.Imports("errors", "net/http")),
+	template.WithAfter(fmt.Sprintf(`!errors.Is(%s, http.ErrServerClosed)`, htErr), template.Imports("errors", "net/http"), template.SourceImports("errors", "net/http")),
 	template.WithCaptures(htErr),
 )
 

@@ -43,7 +43,7 @@ var preferErrorsIsNotExistImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferErrorsIsForOsCheck$NotExist"),
 	template.WithDisplayName("os.IsNotExist → errors.Is(err, fs.ErrNotExist)"),
 	template.WithBefore(fmt.Sprintf(`os.IsNotExist(%s)`, oeErr), template.Imports("os")),
-	template.WithAfter(fmt.Sprintf(`errors.Is(%s, fs.ErrNotExist)`, oeErr), template.Imports("errors", "io/fs")),
+	template.WithAfter(fmt.Sprintf(`errors.Is(%s, fs.ErrNotExist)`, oeErr), template.Imports("errors", "io/fs"), template.SourceImports("errors", "io/fs")),
 	template.WithCaptures(oeErr),
 )
 
@@ -51,7 +51,7 @@ var preferErrorsIsExistImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferErrorsIsForOsCheck$Exist"),
 	template.WithDisplayName("os.IsExist → errors.Is(err, fs.ErrExist)"),
 	template.WithBefore(fmt.Sprintf(`os.IsExist(%s)`, oeErr), template.Imports("os")),
-	template.WithAfter(fmt.Sprintf(`errors.Is(%s, fs.ErrExist)`, oeErr), template.Imports("errors", "io/fs")),
+	template.WithAfter(fmt.Sprintf(`errors.Is(%s, fs.ErrExist)`, oeErr), template.Imports("errors", "io/fs"), template.SourceImports("errors", "io/fs")),
 	template.WithCaptures(oeErr),
 )
 

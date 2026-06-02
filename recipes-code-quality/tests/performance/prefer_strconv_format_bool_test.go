@@ -25,7 +25,9 @@ func TestPreferStrconvFormatBoolSimple(t *testing.T) {
 		`, `
 			package main
 
-			import "fmt"
+			import (
+				"strconv"
+			)
 
 			func f(b bool) string {
 				return strconv.FormatBool(b)

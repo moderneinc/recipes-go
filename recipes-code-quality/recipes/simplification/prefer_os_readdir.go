@@ -41,7 +41,7 @@ var preferOsReadDirImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferOsReadDir$Impl"),
 	template.WithDisplayName("ioutil.ReadDir \u2192 os.ReadDir"),
 	template.WithBefore(fmt.Sprintf(`ioutil.ReadDir(%s)`, rdirName), template.Imports("io/ioutil")),
-	template.WithAfter(fmt.Sprintf(`os.ReadDir(%s)`, rdirName), template.Imports("os")),
+	template.WithAfter(fmt.Sprintf(`os.ReadDir(%s)`, rdirName), template.Imports("os"), template.SourceImports("os")),
 	template.WithCaptures(rdirName),
 )
 

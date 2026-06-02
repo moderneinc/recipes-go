@@ -18,7 +18,7 @@ var (
 		template.RecipeName("org.openrewrite.golang.codequality.PreferStrconvFormatBool$Impl"),
 		template.WithDisplayName("Prefer strconv.FormatBool over fmt.Sprintf"),
 		template.WithBefore(fmt.Sprintf(`fmt.Sprintf("%%t", %s)`, fbB), template.Imports("fmt")),
-		template.WithAfter(fmt.Sprintf(`strconv.FormatBool(%s)`, fbB), template.Imports("strconv")),
+		template.WithAfter(fmt.Sprintf(`strconv.FormatBool(%s)`, fbB), template.Imports("strconv"), template.SourceImports("strconv")),
 		template.WithCaptures(fbB),
 	)
 )

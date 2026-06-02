@@ -45,7 +45,7 @@ var preferOsMkdirTempImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferOsMkdirTemp$Impl"),
 	template.WithDisplayName("ioutil.TempDir → os.MkdirTemp"),
 	template.WithBefore(fmt.Sprintf(`ioutil.TempDir(%s, %s)`, tdDir, tdPat), template.Imports("io/ioutil")),
-	template.WithAfter(fmt.Sprintf(`os.MkdirTemp(%s, %s)`, tdDir, tdPat), template.Imports("os")),
+	template.WithAfter(fmt.Sprintf(`os.MkdirTemp(%s, %s)`, tdDir, tdPat), template.Imports("os"), template.SourceImports("os")),
 	template.WithCaptures(tdDir, tdPat),
 )
 

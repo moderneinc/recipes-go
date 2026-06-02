@@ -25,7 +25,10 @@ func TestPreferErrorsIsContextCanceledEqual(t *testing.T) {
 		`, `
 			package main
 
-			import "context"
+			import (
+				"context"
+				"errors"
+			)
 
 			func f(err error) bool {
 				return errors.Is(err, context.Canceled)
@@ -48,7 +51,10 @@ func TestPreferErrorsIsContextCanceledNotEqual(t *testing.T) {
 		`, `
 			package main
 
-			import "context"
+			import (
+				"context"
+				"errors"
+			)
 
 			func f(err error) bool {
 				return !errors.Is(err, context.Canceled)
@@ -71,7 +77,10 @@ func TestPreferErrorsIsContextDeadlineEqual(t *testing.T) {
 		`, `
 			package main
 
-			import "context"
+			import (
+				"context"
+				"errors"
+			)
 
 			func f(err error) bool {
 				return errors.Is(err, context.DeadlineExceeded)
@@ -94,7 +103,10 @@ func TestPreferErrorsIsContextDeadlineNotEqual(t *testing.T) {
 		`, `
 			package main
 
-			import "context"
+			import (
+				"context"
+				"errors"
+			)
 
 			func f(err error) bool {
 				return !errors.Is(err, context.DeadlineExceeded)

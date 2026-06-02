@@ -46,7 +46,7 @@ var useHttpNewRequestWithContextImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.UseHttpNewRequestWithContext$Impl"),
 	template.WithDisplayName("http.NewRequest → http.NewRequestWithContext"),
 	template.WithBefore(fmt.Sprintf(`http.NewRequest(%s, %s, %s)`, nrcM, nrcU, nrcB), template.Imports("net/http")),
-	template.WithAfter(fmt.Sprintf(`http.NewRequestWithContext(context.TODO(), %s, %s, %s)`, nrcM, nrcU, nrcB), template.Imports("net/http", "context")),
+	template.WithAfter(fmt.Sprintf(`http.NewRequestWithContext(context.TODO(), %s, %s, %s)`, nrcM, nrcU, nrcB), template.Imports("net/http", "context"), template.SourceImports("net/http", "context")),
 	template.WithCaptures(nrcM, nrcU, nrcB),
 )
 

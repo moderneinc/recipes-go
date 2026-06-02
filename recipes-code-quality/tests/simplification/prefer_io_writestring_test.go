@@ -29,8 +29,8 @@ func TestPreferIoWriteString(t *testing.T) {
 			package main
 
 			import (
-				"fmt"
 				"os"
+				"io"
 			)
 
 			func f(s string) {

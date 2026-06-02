@@ -25,7 +25,10 @@ func TestUseHttpNewRequestWithContext(t *testing.T) {
 		`, `
 			package main
 
-			import "net/http"
+			import (
+				"net/http"
+				"context"
+			)
 
 			func f() (*http.Request, error) {
 				return http.NewRequestWithContext(context.TODO(), "GET", "https://example.com", nil)
