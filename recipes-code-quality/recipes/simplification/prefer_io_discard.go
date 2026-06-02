@@ -37,7 +37,7 @@ var preferIoDiscardImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferIoDiscard$Impl"),
 	template.WithDisplayName("ioutil.Discard → io.Discard"),
 	template.WithBefore(`ioutil.Discard`, template.Imports("io/ioutil")),
-	template.WithAfter(`io.Discard`, template.Imports("io")),
+	template.WithAfter(`io.Discard`, template.Imports("io"), template.SourceImports("io")),
 )
 
 func (r *PreferIoDiscard) RecipeList() []recipe.Recipe {

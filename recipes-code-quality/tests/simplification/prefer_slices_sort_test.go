@@ -25,7 +25,9 @@ func TestPreferSlicesSortInts(t *testing.T) {
 		`, `
 			package main
 
-			import "sort"
+			import (
+				"slices"
+			)
 
 			func f(s []int) {
 				slices.Sort(s)
@@ -48,7 +50,9 @@ func TestPreferSlicesSortStrings(t *testing.T) {
 		`, `
 			package main
 
-			import "sort"
+			import (
+				"slices"
+			)
 
 			func f(s []string) {
 				slices.Sort(s)
@@ -71,7 +75,9 @@ func TestPreferSlicesSortFloat64s(t *testing.T) {
 		`, `
 			package main
 
-			import "sort"
+			import (
+				"slices"
+			)
 
 			func f(s []float64) {
 				slices.Sort(s)

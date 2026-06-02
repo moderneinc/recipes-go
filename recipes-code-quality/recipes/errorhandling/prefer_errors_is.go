@@ -6,6 +6,7 @@ package errorhandling
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -66,6 +67,9 @@ func (v *preferErrorsIsVisitor) VisitBinary(bin *java.Binary, p any) java.J {
 	if isNilIdentifier(sentinel) {
 		return bin
 	}
+
+	// The rewrite introduces a reference to the `errors` package; ensure it is imported.
+	recipegolang.MaybeAddImport(v, "errors", nil, false)
 
 	// Build errors.Is(err, sentinel) or !errors.Is(err, sentinel)
 	prefix := getLeadingPrefixExpr(bin)

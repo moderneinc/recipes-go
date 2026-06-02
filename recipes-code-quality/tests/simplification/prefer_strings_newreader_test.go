@@ -25,7 +25,10 @@ func TestPreferStringsNewReader(t *testing.T) {
 		`, `
 			package main
 
-			import "bytes"
+			import (
+				"bytes"
+				"strings"
+			)
 
 			func f(s string) *bytes.Reader {
 				return strings.NewReader(s)

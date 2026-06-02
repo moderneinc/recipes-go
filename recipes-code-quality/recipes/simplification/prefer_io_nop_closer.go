@@ -41,7 +41,7 @@ var preferIoNopCloserImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferIoNopCloser$Impl"),
 	template.WithDisplayName("ioutil.NopCloser → io.NopCloser"),
 	template.WithBefore(fmt.Sprintf(`ioutil.NopCloser(%s)`, ncR), template.Imports("io/ioutil")),
-	template.WithAfter(fmt.Sprintf(`io.NopCloser(%s)`, ncR), template.Imports("io")),
+	template.WithAfter(fmt.Sprintf(`io.NopCloser(%s)`, ncR), template.Imports("io"), template.SourceImports("io")),
 	template.WithCaptures(ncR),
 )
 

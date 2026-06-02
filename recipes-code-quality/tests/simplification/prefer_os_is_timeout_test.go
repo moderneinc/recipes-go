@@ -25,7 +25,10 @@ func TestPreferOsIsTimeout(t *testing.T) {
 		`, `
 			package main
 
-			import "os"
+			import (
+				"os"
+				"errors"
+			)
 
 			func f(err error) bool {
 				return errors.Is(err, os.ErrDeadlineExceeded)

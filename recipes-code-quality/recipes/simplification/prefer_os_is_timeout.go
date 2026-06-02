@@ -42,7 +42,7 @@ var preferOsIsTimeoutImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferOsIsTimeout$Impl"),
 	template.WithDisplayName("os.IsTimeout → errors.Is(err, os.ErrDeadlineExceeded)"),
 	template.WithBefore(fmt.Sprintf(`os.IsTimeout(%s)`, otErr), template.Imports("os")),
-	template.WithAfter(fmt.Sprintf(`errors.Is(%s, os.ErrDeadlineExceeded)`, otErr), template.Imports("errors", "os")),
+	template.WithAfter(fmt.Sprintf(`errors.Is(%s, os.ErrDeadlineExceeded)`, otErr), template.Imports("errors", "os"), template.SourceImports("errors", "os")),
 	template.WithCaptures(otErr),
 )
 

@@ -17,7 +17,7 @@ var preferErrorsIsNetClosedEqualImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferErrorsIsNetClosed$Equal"),
 	template.WithDisplayName("err == net.ErrClosed -> errors.Is(err, net.ErrClosed)"),
 	template.WithBefore(fmt.Sprintf(`%s == net.ErrClosed`, netErr), template.Imports("net")),
-	template.WithAfter(fmt.Sprintf(`errors.Is(%s, net.ErrClosed)`, netErr), template.Imports("errors", "net")),
+	template.WithAfter(fmt.Sprintf(`errors.Is(%s, net.ErrClosed)`, netErr), template.Imports("errors", "net"), template.SourceImports("errors", "net")),
 	template.WithCaptures(netErr),
 )
 
@@ -25,7 +25,7 @@ var preferErrorsIsNetClosedNotEqualImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferErrorsIsNetClosed$NotEqual"),
 	template.WithDisplayName("err != net.ErrClosed -> !errors.Is(err, net.ErrClosed)"),
 	template.WithBefore(fmt.Sprintf(`%s != net.ErrClosed`, netErr), template.Imports("net")),
-	template.WithAfter(fmt.Sprintf(`!errors.Is(%s, net.ErrClosed)`, netErr), template.Imports("errors", "net")),
+	template.WithAfter(fmt.Sprintf(`!errors.Is(%s, net.ErrClosed)`, netErr), template.Imports("errors", "net"), template.SourceImports("errors", "net")),
 	template.WithCaptures(netErr),
 )
 

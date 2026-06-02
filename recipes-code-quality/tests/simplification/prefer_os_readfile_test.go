@@ -25,7 +25,9 @@ func TestPreferOsReadFile(t *testing.T) {
 		`, `
 			package main
 
-			import "io/ioutil"
+			import (
+				"os"
+			)
 
 			func f(name string) ([]byte, error) {
 				return os.ReadFile(name)

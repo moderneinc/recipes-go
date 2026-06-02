@@ -17,7 +17,7 @@ var preferErrorsIsContextCanceledEqualImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferErrorsIsContext$CanceledEqual"),
 	template.WithDisplayName("err == context.Canceled -> errors.Is(err, context.Canceled)"),
 	template.WithBefore(fmt.Sprintf(`%s == context.Canceled`, ctxErr), template.Imports("context")),
-	template.WithAfter(fmt.Sprintf(`errors.Is(%s, context.Canceled)`, ctxErr), template.Imports("errors", "context")),
+	template.WithAfter(fmt.Sprintf(`errors.Is(%s, context.Canceled)`, ctxErr), template.Imports("errors", "context"), template.SourceImports("errors", "context")),
 	template.WithCaptures(ctxErr),
 )
 
@@ -25,7 +25,7 @@ var preferErrorsIsContextCanceledNotEqualImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferErrorsIsContext$CanceledNotEqual"),
 	template.WithDisplayName("err != context.Canceled -> !errors.Is(err, context.Canceled)"),
 	template.WithBefore(fmt.Sprintf(`%s != context.Canceled`, ctxErr), template.Imports("context")),
-	template.WithAfter(fmt.Sprintf(`!errors.Is(%s, context.Canceled)`, ctxErr), template.Imports("errors", "context")),
+	template.WithAfter(fmt.Sprintf(`!errors.Is(%s, context.Canceled)`, ctxErr), template.Imports("errors", "context"), template.SourceImports("errors", "context")),
 	template.WithCaptures(ctxErr),
 )
 
@@ -33,7 +33,7 @@ var preferErrorsIsContextDeadlineEqualImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferErrorsIsContext$DeadlineEqual"),
 	template.WithDisplayName("err == context.DeadlineExceeded -> errors.Is(err, context.DeadlineExceeded)"),
 	template.WithBefore(fmt.Sprintf(`%s == context.DeadlineExceeded`, ctxErr), template.Imports("context")),
-	template.WithAfter(fmt.Sprintf(`errors.Is(%s, context.DeadlineExceeded)`, ctxErr), template.Imports("errors", "context")),
+	template.WithAfter(fmt.Sprintf(`errors.Is(%s, context.DeadlineExceeded)`, ctxErr), template.Imports("errors", "context"), template.SourceImports("errors", "context")),
 	template.WithCaptures(ctxErr),
 )
 
@@ -41,7 +41,7 @@ var preferErrorsIsContextDeadlineNotEqualImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferErrorsIsContext$DeadlineNotEqual"),
 	template.WithDisplayName("err != context.DeadlineExceeded -> !errors.Is(err, context.DeadlineExceeded)"),
 	template.WithBefore(fmt.Sprintf(`%s != context.DeadlineExceeded`, ctxErr), template.Imports("context")),
-	template.WithAfter(fmt.Sprintf(`!errors.Is(%s, context.DeadlineExceeded)`, ctxErr), template.Imports("errors", "context")),
+	template.WithAfter(fmt.Sprintf(`!errors.Is(%s, context.DeadlineExceeded)`, ctxErr), template.Imports("errors", "context"), template.SourceImports("errors", "context")),
 	template.WithCaptures(ctxErr),
 )
 

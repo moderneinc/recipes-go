@@ -17,7 +17,7 @@ var preferErrorsIsOsInvalidEqualImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferErrorsIsOsInvalid$Equal"),
 	template.WithDisplayName("err == os.ErrInvalid -> errors.Is(err, os.ErrInvalid)"),
 	template.WithBefore(fmt.Sprintf(`%s == os.ErrInvalid`, opiErr), template.Imports("os")),
-	template.WithAfter(fmt.Sprintf(`errors.Is(%s, os.ErrInvalid)`, opiErr), template.Imports("errors", "os")),
+	template.WithAfter(fmt.Sprintf(`errors.Is(%s, os.ErrInvalid)`, opiErr), template.Imports("errors", "os"), template.SourceImports("errors", "os")),
 	template.WithCaptures(opiErr),
 )
 

@@ -41,7 +41,7 @@ var preferStringsToUpperMapImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferStringsToUpperMap$Impl"),
 	template.WithDisplayName("strings.Map(unicode.ToUpper, s) -> strings.ToUpper(s)"),
 	template.WithBefore(fmt.Sprintf(`strings.Map(unicode.ToUpper, %s)`, stuS), template.Imports("strings", "unicode")),
-	template.WithAfter(fmt.Sprintf(`strings.ToUpper(%s)`, stuS), template.Imports("strings")),
+	template.WithAfter(fmt.Sprintf(`strings.ToUpper(%s)`, stuS), template.Imports("strings"), template.SourceImports("strings")),
 	template.WithCaptures(stuS),
 )
 

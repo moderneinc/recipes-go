@@ -25,7 +25,9 @@ func TestPreferOsMkdirTemp(t *testing.T) {
 		`, `
 			package main
 
-			import "io/ioutil"
+			import (
+				"os"
+			)
 
 			func f() (string, error) {
 				return os.MkdirTemp("", "prefix")

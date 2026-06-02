@@ -18,7 +18,7 @@ var (
 		template.RecipeName("org.openrewrite.golang.codequality.PreferStrconvItoa$Impl"),
 		template.WithDisplayName("Prefer strconv.Itoa over fmt.Sprintf"),
 		template.WithBefore(fmt.Sprintf(`fmt.Sprintf("%%d", %s)`, siN), template.Imports("fmt")),
-		template.WithAfter(fmt.Sprintf(`strconv.Itoa(%s)`, siN), template.Imports("strconv")),
+		template.WithAfter(fmt.Sprintf(`strconv.Itoa(%s)`, siN), template.Imports("strconv"), template.SourceImports("strconv")),
 		template.WithCaptures(siN),
 	)
 )

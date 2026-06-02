@@ -42,7 +42,7 @@ var preferStringsNewReaderImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferStringsNewReader$Impl"),
 	template.WithDisplayName("bytes.NewReader([]byte) → strings.NewReader"),
 	template.WithBefore(fmt.Sprintf(`bytes.NewReader([]byte(%s))`, snrS), template.Imports("bytes")),
-	template.WithAfter(fmt.Sprintf(`strings.NewReader(%s)`, snrS), template.Imports("strings")),
+	template.WithAfter(fmt.Sprintf(`strings.NewReader(%s)`, snrS), template.Imports("strings"), template.SourceImports("strings")),
 	template.WithCaptures(snrS),
 )
 

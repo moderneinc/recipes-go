@@ -17,7 +17,7 @@ var preferErrorsIsSqlNoRowsEqualImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferErrorsIsSqlNoRows$Equal"),
 	template.WithDisplayName("err == sql.ErrNoRows -> errors.Is(err, sql.ErrNoRows)"),
 	template.WithBefore(fmt.Sprintf(`%s == sql.ErrNoRows`, sqlErr), template.Imports("database/sql")),
-	template.WithAfter(fmt.Sprintf(`errors.Is(%s, sql.ErrNoRows)`, sqlErr), template.Imports("errors", "database/sql")),
+	template.WithAfter(fmt.Sprintf(`errors.Is(%s, sql.ErrNoRows)`, sqlErr), template.Imports("errors", "database/sql"), template.SourceImports("errors", "database/sql")),
 	template.WithCaptures(sqlErr),
 )
 
@@ -25,7 +25,7 @@ var preferErrorsIsSqlNoRowsNotEqualImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferErrorsIsSqlNoRows$NotEqual"),
 	template.WithDisplayName("err != sql.ErrNoRows -> !errors.Is(err, sql.ErrNoRows)"),
 	template.WithBefore(fmt.Sprintf(`%s != sql.ErrNoRows`, sqlErr), template.Imports("database/sql")),
-	template.WithAfter(fmt.Sprintf(`!errors.Is(%s, sql.ErrNoRows)`, sqlErr), template.Imports("errors", "database/sql")),
+	template.WithAfter(fmt.Sprintf(`!errors.Is(%s, sql.ErrNoRows)`, sqlErr), template.Imports("errors", "database/sql"), template.SourceImports("errors", "database/sql")),
 	template.WithCaptures(sqlErr),
 )
 

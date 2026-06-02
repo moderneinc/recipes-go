@@ -42,7 +42,7 @@ var preferIoWriteStringImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferIoWriteString$Impl"),
 	template.WithDisplayName(`fmt.Fprintf(w, "%s", s) → io.WriteString(w, s)`),
 	template.WithBefore(fmt.Sprintf(`fmt.Fprintf(%s, "%%s", %s)`, wsW, wsStr), template.Imports("fmt")),
-	template.WithAfter(fmt.Sprintf(`io.WriteString(%s, %s)`, wsW, wsStr), template.Imports("io")),
+	template.WithAfter(fmt.Sprintf(`io.WriteString(%s, %s)`, wsW, wsStr), template.Imports("io"), template.SourceImports("io")),
 	template.WithCaptures(wsW, wsStr),
 )
 

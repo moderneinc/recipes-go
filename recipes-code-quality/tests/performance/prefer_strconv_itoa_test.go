@@ -25,7 +25,9 @@ func TestPreferStrconvItoaSimple(t *testing.T) {
 		`, `
 			package main
 
-			import "fmt"
+			import (
+				"strconv"
+			)
 
 			func f(n int) string {
 				return strconv.Itoa(n)

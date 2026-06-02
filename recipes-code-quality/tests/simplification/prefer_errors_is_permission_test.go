@@ -25,7 +25,10 @@ func TestPreferErrorsIsPermission(t *testing.T) {
 		`, `
 			package main
 
-			import "os"
+			import (
+				"errors"
+				"io/fs"
+			)
 
 			func f(err error) bool {
 				return errors.Is(err, fs.ErrPermission)

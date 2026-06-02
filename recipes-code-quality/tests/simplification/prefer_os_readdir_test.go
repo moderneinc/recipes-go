@@ -25,7 +25,9 @@ func TestPreferOsReadDir(t *testing.T) {
 		`, `
 			package main
 
-			import "io/ioutil"
+			import (
+				"os"
+			)
 
 			func f(name string) ([]os.FileInfo, error) {
 				return os.ReadDir(name)

@@ -17,7 +17,7 @@ var preferStrconvQuoteImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferStrconvQuote$Impl"),
 	template.WithDisplayName("fmt.Sprintf(\"%q\", s) → strconv.Quote(s)"),
 	template.WithBefore(fmt.Sprintf(`fmt.Sprintf("%%q", %s)`, sqS), template.Imports("fmt")),
-	template.WithAfter(fmt.Sprintf(`strconv.Quote(%s)`, sqS), template.Imports("strconv")),
+	template.WithAfter(fmt.Sprintf(`strconv.Quote(%s)`, sqS), template.Imports("strconv"), template.SourceImports("strconv")),
 	template.WithCaptures(sqS),
 )
 

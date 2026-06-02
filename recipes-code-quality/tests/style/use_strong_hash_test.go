@@ -26,7 +26,9 @@ func TestUseStrongHashMd5New(t *testing.T) {
 		`, `
 			package main
 
-			import "crypto/md5"
+			import (
+				"crypto/sha256"
+			)
 
 			func f() {
 				h := sha256.New()
@@ -51,7 +53,9 @@ func TestUseStrongHashMd5Sum(t *testing.T) {
 		`, `
 			package main
 
-			import "crypto/md5"
+			import (
+				"crypto/sha256"
+			)
 
 			func f(data []byte) {
 				h := sha256.Sum256(data)
@@ -76,7 +80,9 @@ func TestUseStrongHashSha1New(t *testing.T) {
 		`, `
 			package main
 
-			import "crypto/sha1"
+			import (
+				"crypto/sha256"
+			)
 
 			func f() {
 				h := sha256.New()
@@ -101,7 +107,9 @@ func TestUseStrongHashSha1Sum(t *testing.T) {
 		`, `
 			package main
 
-			import "crypto/sha1"
+			import (
+				"crypto/sha256"
+			)
 
 			func f(data []byte) {
 				h := sha256.Sum256(data)

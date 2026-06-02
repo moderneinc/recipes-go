@@ -25,7 +25,9 @@ func TestPreferOsCreateTemp(t *testing.T) {
 		`, `
 			package main
 
-			import "io/ioutil"
+			import (
+				"os"
+			)
 
 			func f() (*File, error) {
 				return os.CreateTemp("", "prefix")

@@ -17,7 +17,7 @@ var preferErrorsIsEOFEqualImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferErrorsIsEOF$Equal"),
 	template.WithDisplayName("err == io.EOF -> errors.Is(err, io.EOF)"),
 	template.WithBefore(fmt.Sprintf(`%s == io.EOF`, eofErr), template.Imports("io")),
-	template.WithAfter(fmt.Sprintf(`errors.Is(%s, io.EOF)`, eofErr), template.Imports("errors", "io")),
+	template.WithAfter(fmt.Sprintf(`errors.Is(%s, io.EOF)`, eofErr), template.Imports("errors", "io"), template.SourceImports("errors", "io")),
 	template.WithCaptures(eofErr),
 )
 
@@ -25,7 +25,7 @@ var preferErrorsIsEOFNotEqualImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferErrorsIsEOF$NotEqual"),
 	template.WithDisplayName("err != io.EOF -> !errors.Is(err, io.EOF)"),
 	template.WithBefore(fmt.Sprintf(`%s != io.EOF`, eofErr), template.Imports("io")),
-	template.WithAfter(fmt.Sprintf(`!errors.Is(%s, io.EOF)`, eofErr), template.Imports("errors", "io")),
+	template.WithAfter(fmt.Sprintf(`!errors.Is(%s, io.EOF)`, eofErr), template.Imports("errors", "io"), template.SourceImports("errors", "io")),
 	template.WithCaptures(eofErr),
 )
 
