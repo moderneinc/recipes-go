@@ -25,7 +25,10 @@ func TestUseErrorsNewSimple(t *testing.T) {
 		`, `
 			package main
 
-			import "fmt"
+			import (
+				"fmt"
+				"errors"
+			)
 
 			func f() error {
 				return errors.New("something went wrong")

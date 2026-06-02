@@ -7,6 +7,7 @@ package errorhandling
 import (
 	"github.com/google/uuid"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -78,6 +79,9 @@ func (v *useErrorsAsVisitor) VisitBlock(block *java.Block, p any) java.J {
 	if !changed {
 		return block
 	}
+
+	// The rewrite introduces a reference to the `errors` package; ensure it is imported.
+	recipegolang.MaybeAddImport(v, "errors", nil, false)
 
 	return block.WithStatements(newStmts)
 }

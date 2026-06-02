@@ -29,6 +29,8 @@ func TestUseErrorsAsCommaOkIf(t *testing.T) {
 		`, `
 			package main
 
+			import "errors"
+
 			type MyError struct{ msg string }
 
 			func (e *MyError) Error() string { return e.msg }

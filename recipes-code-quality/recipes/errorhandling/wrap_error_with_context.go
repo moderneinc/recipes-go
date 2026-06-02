@@ -6,6 +6,7 @@ package errorhandling
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -63,6 +64,9 @@ func (v *wrapErrorWithContextVisitor) VisitReturn(ret *java.Return, p any) java.
 	if v.funcName == "" {
 		return ret
 	}
+
+	// The rewrite introduces a reference to the `fmt` package; ensure it is imported.
+	recipegolang.MaybeAddImport(v, "fmt", nil, false)
 
 	// Build: return fmt.Errorf("funcName: %w", err)
 	//
