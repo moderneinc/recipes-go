@@ -54,6 +54,12 @@ func (v *handleSwallowedErrorVisitor) VisitIf(ifStmt *java.If, p any) java.J {
 		return ifStmt
 	}
 
+	// Only rewrite when the enclosing function returns a single `error`, so the
+	// bare `return` is valid (named result) and `return err` keeps the arity.
+	if !enclosingReturnsSingleError(v.Cursor()) {
+		return ifStmt
+	}
+
 	// Replace bare return with return err
 	errIdent := &java.Identifier{Prefix: java.Space{Whitespace: " "}, Name: "err"}
 	newRet := &java.Return{

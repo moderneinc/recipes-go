@@ -126,6 +126,12 @@ func findRegexCalls(body *java.Block) []regexCallInfo {
 			if !hasLiteralArg(mi) {
 				continue
 			}
+			// Only safe to hoist when the error result is discarded (`re, _ :=`).
+			// A named error may be used, and collapsing it away (or assigning it
+			// an untyped nil) would not compile, so leave those untouched.
+			if !discardsErrorResult(stmt.Variables) {
+				continue
+			}
 			results = append(results, regexCallInfo{
 				call:     mi,
 				stmtIdx:  i,
@@ -151,6 +157,27 @@ func extractRegexCall(expr java.Expression) *java.MethodInvocation {
 		return nil
 	}
 	return mi
+}
+
+// discardsErrorResult reports whether a `x, _ := ...` style LHS captures the
+// first (regexp) result in a non-blank identifier and discards every remaining
+// result with the blank identifier. Only such assignments can be safely
+// collapsed to a single-value assignment from the hoisted variable.
+func discardsErrorResult(vars []java.RightPadded[java.Expression]) bool {
+	if len(vars) < 2 {
+		return false
+	}
+	first, ok := vars[0].Element.(*java.Identifier)
+	if !ok || first.Name == "_" {
+		return false
+	}
+	for _, v := range vars[1:] {
+		ident, ok := v.Element.(*java.Identifier)
+		if !ok || ident.Name != "_" {
+			return false
+		}
+	}
+	return true
 }
 
 // hasLiteralArg checks if the first argument of the method invocation is a string literal.
@@ -253,26 +280,19 @@ func replaceInBody(body *java.Block, rc regexCallInfo, varName string) *java.Blo
 		newStmts[rc.stmtIdx] = java.RightPadded[java.Statement]{Element: newAssign, After: rp.After}
 	} else {
 		// MultiAssignment: re, _ := regexp.Compile("pattern")
-		// -> re, _ := compiledRegex0, nil
-		// Since MustCompile was hoisted and doesn't return error, we replace the
-		// call with a reference to the hoisted var and nil for the error.
+		// -> re := compiledRegex0
+		// The hoisted MustCompile returns a single value, so we collapse the
+		// assignment to the regexp variable alone and drop the discarded error.
 		ma := rp.Element.(*golang.MultiAssignment)
-		nilIdent := &java.Identifier{
-			ID:     uuid.New(),
-			Prefix: java.Space{Whitespace: " "},
-			Name:   "nil",
-		}
-		newValues := []java.RightPadded[java.Expression]{
-			{Element: varRef},
-			{Element: nilIdent},
-		}
+		firstVar := ma.Variables[0]
+		firstVar.After = java.EmptySpace
 		newMA := &golang.MultiAssignment{
 			ID:        ma.ID,
 			Prefix:    ma.Prefix,
 			Markers:   ma.Markers,
-			Variables: ma.Variables,
+			Variables: []java.RightPadded[java.Expression]{firstVar},
 			Operator:  ma.Operator,
-			Values:    newValues,
+			Values:    []java.RightPadded[java.Expression]{{Element: varRef}},
 		}
 		newStmts[rc.stmtIdx] = java.RightPadded[java.Statement]{Element: newMA, After: rp.After}
 	}
