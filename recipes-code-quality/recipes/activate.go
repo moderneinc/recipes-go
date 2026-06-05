@@ -129,7 +129,7 @@ func Activate(r *recipe.Registry) {
 	r.Register(&style.ResolveContextTodo{}, golang, codeQuality, styleCategory)
 	r.Register(&style.AvoidContextWithValue{}, golang, codeQuality, styleCategory)
 	r.Register(&style.ReduceNestingDepth{}, golang, codeQuality, styleCategory)
-	r.Register(&style.UseAtomicTypes{}, golang, codeQuality, styleCategory)
+	r.Register(&style.FindDeprecatedAtomicFunctions{}, golang, codeQuality, styleCategory)
 	r.Register(&style.RemoveEmptyFunction{}, golang, codeQuality, styleCategory)
 	r.Register(&style.RemoveEmptyGoroutine{}, golang, codeQuality, styleCategory)
 	r.Register(&style.AvoidEmptyInterfaceParam{}, golang, codeQuality, styleCategory)

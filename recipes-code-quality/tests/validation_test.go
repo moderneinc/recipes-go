@@ -126,7 +126,7 @@ func allRecipes() []recipe.Recipe {
 		&style.ResolveContextTodo{},
 		&style.AvoidContextWithValue{},
 		&style.ReduceNestingDepth{},
-		&style.UseAtomicTypes{},
+		&style.FindDeprecatedAtomicFunctions{},
 		&style.RemoveEmptyFunction{},
 		&style.RemoveEmptyGoroutine{},
 		&style.AvoidEmptyInterfaceParam{},
