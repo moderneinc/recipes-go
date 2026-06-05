@@ -6,6 +6,7 @@ package errorhandling
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -59,6 +60,12 @@ func (v *handleCheckedErrorVisitor) VisitIf(ifStmt *java.If, p any) java.J {
 		return ifStmt
 	}
 
+	// Only propagate when the enclosing function returns a single `error`;
+	// otherwise `return err` would not compile (wrong arity, or nothing to return).
+	if !enclosingReturnsSingleError(v.Cursor()) {
+		return ifStmt
+	}
+
 	// Derive indentation from the block's End space. End.Whitespace is
 	// the whitespace before `}`, e.g. "\n\t". The return statement sits
 	// one indent level deeper.
@@ -78,6 +85,40 @@ func (v *handleCheckedErrorVisitor) VisitIf(ifStmt *java.If, p any) java.J {
 	// Keep the closing `}` at its original indent level.
 	newThen = newThen.WithEnd(ifStmt.Then.End)
 	return ifStmt.WithThen(newThen)
+}
+
+// enclosingReturnsSingleError reports whether the function (or function literal)
+// enclosing the cursor declares exactly one result of type `error`. A bare
+// `return err` can only be synthesized soundly in that case — a void function
+// has nothing to return, and a multi-value result would be the wrong arity.
+func enclosingReturnsSingleError(c *visitor.Cursor) bool {
+	md, ok := visitor.FirstEnclosing[*java.MethodDeclaration](c)
+	if !ok || md.ReturnType == nil {
+		return false
+	}
+	switch rt := md.ReturnType.(type) {
+	case *java.Identifier:
+		// Unnamed single result, e.g. `func f() error`.
+		return rt.Name == "error"
+	case *golang.TypeList:
+		// Parenthesized result list, e.g. `func f() (err error)`.
+		if len(rt.Types.Elements) != 1 {
+			return false
+		}
+		return isErrorResult(rt.Types.Elements[0].Element)
+	}
+	return false
+}
+
+// isErrorResult reports whether a single entry in a parenthesized result list
+// denotes the `error` type. A named result (`err error`) is represented as a
+// VariableDeclarations whose type expression is the `error` identifier.
+func isErrorResult(stmt java.Statement) bool {
+	if vd, ok := stmt.(*java.VariableDeclarations); ok {
+		ident, ok := vd.TypeExpr.(*java.Identifier)
+		return ok && ident.Name == "error"
+	}
+	return false
 }
 
 // countRealStatements counts statements that are not *java.Empty.

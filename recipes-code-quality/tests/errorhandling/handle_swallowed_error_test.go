@@ -17,22 +17,43 @@ func TestHandleSwallowedError(t *testing.T) {
 		test.Golang(`
 			package main
 
-			func f() {
-				err := doSomething()
+			func f() (err error) {
+				err = doSomething()
 				if err != nil {
 					return
 				}
+				return
 			}
 
 			func doSomething() error { return nil }
 		`, `
 			package main
 
-			func f() {
-				err := doSomething()
+			func f() (err error) {
+				err = doSomething()
 				if err != nil {
 					return err
 				}
+				return
+			}
+
+			func doSomething() error { return nil }
+		`),
+	)
+}
+
+func TestHandleSwallowedErrorNoChangeVoidFunc(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.HandleSwallowedError{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			func f() {
+				err := doSomething()
+				if err != nil {
+					return
+				}
+				_ = err
 			}
 
 			func doSomething() error { return nil }

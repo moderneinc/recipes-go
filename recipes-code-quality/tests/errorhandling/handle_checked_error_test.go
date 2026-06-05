@@ -17,21 +17,41 @@ func TestHandleCheckedErrorSimple(t *testing.T) {
 		test.Golang(`
 			package main
 
-			func f() {
+			func f() error {
 				err := doSomething()
 				if err != nil {
 				}
+				return nil
 			}
 
 			func doSomething() error { return nil }
 		`, `
 			package main
 
-			func f() {
+			func f() error {
 				err := doSomething()
 				if err != nil {
 					return err
 				}
+				return nil
+			}
+
+			func doSomething() error { return nil }
+		`),
+	)
+}
+
+func TestHandleCheckedErrorNoChangeVoidFunc(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.HandleCheckedError{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			func f() {
+				err := doSomething()
+				if err != nil {
+				}
+				_ = err
 			}
 
 			func doSomething() error { return nil }

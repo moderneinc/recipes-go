@@ -63,7 +63,28 @@ func TestHoistCompileFromClassicForLoop(t *testing.T) {
 			func f() {
 				var compiledRegex0 = regexp.MustCompile("\\d+")
 				for i := 0; i < 10; i++ {
-					re, _ := compiledRegex0, nil
+					re := compiledRegex0
+					_ = re
+				}
+			}
+		`),
+	)
+}
+
+func TestNoChangeWhenErrorVariableNamed(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&performance.CompileRegexOutsideLoop{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "regexp"
+
+			func f() {
+				for i := 0; i < 10; i++ {
+					re, err := regexp.Compile("\\d+")
+					if err != nil {
+						panic(err)
+					}
 					_ = re
 				}
 			}
