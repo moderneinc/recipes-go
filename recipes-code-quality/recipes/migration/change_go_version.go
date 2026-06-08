@@ -49,6 +49,10 @@ type ChangeGoVersionVisitor struct {
 	NewVersion string
 }
 
+func (v *ChangeGoVersionVisitor) VisitCompilationUnit(cu *golang.CompilationUnit, p any) java.J {
+	return cu
+}
+
 func (v *ChangeGoVersionVisitor) VisitGoModDirective(d *golang.GoModDirective, p any) java.Tree {
 	d = v.GoVisitor.VisitGoModDirective(d, p).(*golang.GoModDirective)
 	if d.Keyword == "go" && len(d.Values) == 1 {
