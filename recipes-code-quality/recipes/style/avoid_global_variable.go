@@ -49,12 +49,20 @@ func (v *avoidGlobalVariableVisitor) VisitCompilationUnit(cu *golang.Compilation
 	copy(stmts, cu.Statements)
 
 	for i, stmt := range stmts {
-		vd, ok := stmt.Element.(*java.VariableDeclarations)
-		if !ok {
-			continue
+		var marked java.Statement
+		switch decl := stmt.Element.(type) {
+		case *java.VariableDeclarations:
+			// Single declaration: `var x = 1`.
+			if isVarDecl(decl) {
+				marked = decl.WithMarkers(java.MarkupInfo(decl.Markers, "avoid global variable"))
+			}
+		case *golang.DeclarationBlock:
+			// Grouped declaration: `var ( ... )`.
+			if decl.Kind == golang.DeclVar {
+				marked = decl.WithMarkers(java.MarkupInfo(decl.Markers, "avoid global variable"))
+			}
 		}
-		if isVarDecl(vd) {
-			marked := vd.WithMarkers(java.MarkupInfo(vd.Markers, "avoid global variable"))
+		if marked != nil {
 			stmts[i] = java.RightPadded[java.Statement]{
 				Element: marked,
 				After:   stmt.After,

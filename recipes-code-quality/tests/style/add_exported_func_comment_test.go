@@ -41,6 +41,43 @@ func TestUnexportedFuncNoChange(t *testing.T) {
 	)
 }
 
+func TestExportedMethodNoComment(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.AddExportedFuncComment{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			type Service struct{}
+
+			func (s *Service) Run() {
+			}
+		`, `
+			package main
+
+			type Service struct{}
+
+			// Run ...
+			func (s *Service) Run() {
+			}
+		`),
+	)
+}
+
+func TestExportedMethodWithDocComment(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.AddExportedFuncComment{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			type Service struct{}
+
+			// Run does something
+			func (s *Service) Run() {
+			}
+		`),
+	)
+}
+
 func TestExportedFuncWithDocComment(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&style.AddExportedFuncComment{})
 	spec.RewriteRun(t,

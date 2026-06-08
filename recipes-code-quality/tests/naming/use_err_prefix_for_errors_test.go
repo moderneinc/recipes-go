@@ -30,6 +30,29 @@ func TestUseErrPrefixForErrors(t *testing.T) {
 	)
 }
 
+func TestUseErrPrefixForErrorsGrouped(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&naming.UseErrPrefixForErrors{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "errors"
+
+			var (
+				notFound = errors.New("not found")
+			)
+		`, `
+			package main
+
+			import "errors"
+
+			var (
+				ErrNotFound = errors.New("not found")
+			)
+		`),
+	)
+}
+
 func TestUseErrPrefixForErrorsNoChangeCorrect(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&naming.UseErrPrefixForErrors{})
 	spec.RewriteRun(t,
