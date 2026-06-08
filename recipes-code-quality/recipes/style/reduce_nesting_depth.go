@@ -99,7 +99,7 @@ func isErrEqualNil(expr java.Expression) bool {
 // buildErrGuard constructs `if err != nil { return }` or `if err != nil { return err }`,
 // reusing the prefix of the original if statement.
 // When returnExpr is non-nil it is used as the return value.
-func buildErrGuard(ifStmt *java.If, returnExpr []java.RightPadded[java.Expression]) *java.If {
+func buildErrGuard(ifStmt *java.If, returnExpr java.Expression) *java.If {
 	// Build `err != nil` from the original `err == nil` condition.
 	origBin := ifStmt.Condition.(*java.Binary)
 	invertedCond := &java.Binary{
@@ -110,8 +110,8 @@ func buildErrGuard(ifStmt *java.If, returnExpr []java.RightPadded[java.Expressio
 	}
 
 	ret := &java.Return{
-		Prefix:      java.Space{Whitespace: "\n" + guardIndent(ifStmt.Prefix)},
-		Expressions: returnExpr,
+		Prefix:     java.Space{Whitespace: "\n" + guardIndent(ifStmt.Prefix)},
+		Expression: returnExpr,
 	}
 
 	guardBody := &java.Block{

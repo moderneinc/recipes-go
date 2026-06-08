@@ -181,6 +181,8 @@ func getStmtWhitespace(stmt java.Statement) string {
 		return s.Prefix.Whitespace
 	case *java.Return:
 		return s.Prefix.Whitespace
+	case *golang.Return:
+		return s.Prefix.Whitespace
 	case *java.ForLoop:
 		return s.Prefix.Whitespace
 	case *java.ForEachLoop:
@@ -232,6 +234,8 @@ func setStmtPrefix(stmt java.Statement, prefix java.Space) java.Statement {
 	case *golang.Defer:
 		return s.WithPrefix(prefix)
 	case *java.Return:
+		return s.WithPrefix(prefix)
+	case *golang.Return:
 		return s.WithPrefix(prefix)
 	case *java.ForLoop:
 		return s.WithPrefix(prefix)

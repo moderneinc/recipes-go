@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -98,6 +99,9 @@ func endsWithReturn(block *java.Block) bool {
 	if len(stmts) == 0 {
 		return false
 	}
-	_, isReturn := stmts[len(stmts)-1].Element.(*java.Return)
-	return isReturn
+	switch stmts[len(stmts)-1].Element.(type) {
+	case *java.Return, *golang.Return:
+		return true
+	}
+	return false
 }

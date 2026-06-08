@@ -60,9 +60,7 @@ func (v *reduceErrorCheckNestingVisitor) VisitBlock(block *java.Block, p any) ja
 		changed = true
 
 		// Build `if err != nil { return err }`
-		errReturn := []java.RightPadded[java.Expression]{
-			{Element: &java.Identifier{Prefix: java.SingleSpace, Name: "err"}},
-		}
+		errReturn := &java.Identifier{Prefix: java.SingleSpace, Name: "err"}
 		guard := buildErrGuard(ifStmt, errReturn)
 		newStmts = append(newStmts, java.RightPadded[java.Statement]{Element: guard})
 

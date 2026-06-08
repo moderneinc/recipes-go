@@ -116,10 +116,10 @@ func singleReturnBool(block *java.Block) (bool, bool) {
 // stmtReturnBool checks if a statement is `return true` or `return false`.
 func stmtReturnBool(stmt java.Statement) (bool, bool) {
 	ret, ok := stmt.(*java.Return)
-	if !ok || len(ret.Expressions) != 1 {
+	if !ok || ret.Expression == nil {
 		return false, false
 	}
-	ident, ok := ret.Expressions[0].Element.(*java.Identifier)
+	ident, ok := ret.Expression.(*java.Identifier)
 	if !ok {
 		return false, false
 	}
@@ -156,9 +156,7 @@ func buildReturn(ifStmt *java.If, thenIsTrue bool) *java.Return {
 		}
 	}
 	return &java.Return{
-		Prefix: ifStmt.Prefix,
-		Expressions: []java.RightPadded[java.Expression]{
-			{Element: setExprPrefix(cond, java.SingleSpace)},
-		},
+		Prefix:     ifStmt.Prefix,
+		Expression: setExprPrefix(cond, java.SingleSpace),
 	}
 }

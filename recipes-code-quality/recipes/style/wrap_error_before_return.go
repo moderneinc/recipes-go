@@ -6,6 +6,7 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -45,8 +46,8 @@ func (v *wrapErrorBeforeReturnVisitor) VisitMethodDeclaration(md *java.MethodDec
 	return result
 }
 
-func (v *wrapErrorBeforeReturnVisitor) VisitReturn(ret *java.Return, p any) java.J {
-	ret = v.GoVisitor.VisitReturn(ret, p).(*java.Return)
+func (v *wrapErrorBeforeReturnVisitor) VisitGoReturn(ret *golang.Return, p any) java.J {
+	ret = v.GoVisitor.VisitGoReturn(ret, p).(*golang.Return)
 
 	if len(ret.Expressions) < 2 {
 		return ret
