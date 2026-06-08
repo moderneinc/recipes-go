@@ -54,6 +54,30 @@ func TestChangeGoVersionDowngrades(t *testing.T) {
 	)
 }
 
+func TestChangeGoVersionLeavesGoSourceUntouched(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&migration.ChangeGoVersion{NewVersion: "1.22"})
+	spec.RewriteRun(t,
+		test.GoProject("example",
+			test.GoMod(`
+				module example.com/foo
+
+				go 1.21
+			`, `
+				module example.com/foo
+
+				go 1.22
+			`),
+			test.Golang(`
+				package main
+
+				func main() {
+					_ = "1.21"
+				}
+			`),
+		),
+	)
+}
+
 func TestChangeGoVersionAcrossRequireBlock(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&migration.ChangeGoVersion{NewVersion: "1.23"})
 	spec.RewriteRun(t,

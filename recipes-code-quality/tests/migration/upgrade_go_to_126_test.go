@@ -48,6 +48,30 @@ func TestUpgradeGoTo126DoesNotDowngrade(t *testing.T) {
 	)
 }
 
+func TestUpgradeGoTo126LeavesGoSourceUntouched(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&migration.UpgradeGoTo126{})
+	spec.RewriteRun(t,
+		test.GoProject("example",
+			test.GoMod(`
+				module example.com/foo
+
+				go 1.21
+			`, `
+				module example.com/foo
+
+				go 1.26
+			`),
+			test.Golang(`
+				package main
+
+				func main() {
+					_ = "1.21"
+				}
+			`),
+		),
+	)
+}
+
 func TestUpgradeGoTo126AcrossRequireBlock(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&migration.UpgradeGoTo126{})
 	spec.RewriteRun(t,
