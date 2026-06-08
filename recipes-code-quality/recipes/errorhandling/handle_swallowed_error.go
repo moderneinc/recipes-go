@@ -50,7 +50,7 @@ func (v *handleSwallowedErrorVisitor) VisitIf(ifStmt *java.If, p any) java.J {
 	}
 
 	ret, ok := stmts[0].Element.(*java.Return)
-	if !ok || len(ret.Expressions) > 0 {
+	if !ok || ret.Expression != nil {
 		return ifStmt
 	}
 
@@ -64,7 +64,7 @@ func (v *handleSwallowedErrorVisitor) VisitIf(ifStmt *java.If, p any) java.J {
 	errIdent := &java.Identifier{Prefix: java.Space{Whitespace: " "}, Name: "err"}
 	newRet := &java.Return{
 		ID: ret.ID, Prefix: ret.Prefix, Markers: ret.Markers,
-		Expressions: []java.RightPadded[java.Expression]{{Element: errIdent}},
+		Expression: errIdent,
 	}
 
 	// Rebuild the Then block with the new return

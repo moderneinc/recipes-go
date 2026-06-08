@@ -6,6 +6,7 @@ package redundancy
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -44,7 +45,9 @@ func (v *removeUnreachableCodeVisitor) VisitBlock(block *java.Block, p any) java
 	// Find the first return that is not the last statement and truncate
 	// the statement list to remove unreachable code after it.
 	for i := 0; i < len(stmts)-1; i++ {
-		if _, ok := stmts[i].Element.(*java.Return); !ok {
+		switch stmts[i].Element.(type) {
+		case *java.Return, *golang.Return:
+		default:
 			continue
 		}
 

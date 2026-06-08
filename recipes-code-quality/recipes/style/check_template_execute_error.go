@@ -172,12 +172,10 @@ func buildIfInitErrCheck(mi *java.MethodInvocation) *java.If {
 	returnStmt := &java.Return{
 		ID:     uuid.New(),
 		Prefix: java.Space{Whitespace: "\n" + indent + "\t"},
-		Expressions: []java.RightPadded[java.Expression]{
-			{Element: &java.Identifier{
-				ID:     uuid.New(),
-				Prefix: java.SingleSpace,
-				Name:   "err",
-			}},
+		Expression: &java.Identifier{
+			ID:     uuid.New(),
+			Prefix: java.SingleSpace,
+			Name:   "err",
 		},
 	}
 

@@ -74,8 +74,8 @@ func (v *handleCheckedErrorVisitor) VisitIf(ifStmt *java.If, p any) java.J {
 
 	errIdent := &java.Identifier{Prefix: java.Space{Whitespace: " "}, Name: "err"}
 	returnStmt := &java.Return{
-		Prefix:      returnPrefix,
-		Expressions: []java.RightPadded[java.Expression]{{Element: errIdent}},
+		Prefix:     returnPrefix,
+		Expression: errIdent,
 	}
 
 	newStmts := []java.RightPadded[java.Statement]{

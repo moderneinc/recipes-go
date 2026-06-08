@@ -60,7 +60,7 @@ func (v *removeRedundantReturnVisitor) VisitMethodDeclaration(md *java.MethodDec
 	if !ok {
 		return md
 	}
-	if len(ret.Expressions) > 0 {
+	if ret.Expression != nil {
 		return md
 	}
 

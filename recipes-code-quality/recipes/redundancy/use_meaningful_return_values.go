@@ -6,6 +6,7 @@ package redundancy
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -36,8 +37,8 @@ type useMeaningfulReturnValuesVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *useMeaningfulReturnValuesVisitor) VisitReturn(ret *java.Return, p any) java.J {
-	ret = v.GoVisitor.VisitReturn(ret, p).(*java.Return)
+func (v *useMeaningfulReturnValuesVisitor) VisitGoReturn(ret *golang.Return, p any) java.J {
+	ret = v.GoVisitor.VisitGoReturn(ret, p).(*golang.Return)
 
 	// Must have at least 2 return expressions.
 	if len(ret.Expressions) < 2 {

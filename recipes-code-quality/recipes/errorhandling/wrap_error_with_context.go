@@ -50,12 +50,11 @@ func (v *wrapErrorWithContextVisitor) VisitReturn(ret *java.Return, p any) java.
 	ret = v.GoVisitor.VisitReturn(ret, p).(*java.Return)
 
 	// Match: return with a single expression that is an identifier named "err".
-	if len(ret.Expressions) != 1 {
+	if ret.Expression == nil {
 		return ret
 	}
 
-	expr := ret.Expressions[0].Element
-	ident, ok := expr.(*java.Identifier)
+	ident, ok := ret.Expression.(*java.Identifier)
 	if !ok || ident.Name != "err" {
 		return ret
 	}
@@ -106,15 +105,7 @@ func (v *wrapErrorWithContextVisitor) VisitReturn(ret *java.Return, p any) java.
 		},
 	}
 
-	newExprs := []java.RightPadded[java.Expression]{
-		{
-			Element: errorfCall,
-			After:   ret.Expressions[0].After,
-			Markers: ret.Expressions[0].Markers,
-		},
-	}
-
 	c := *ret
-	c.Expressions = newExprs
+	c.Expression = errorfCall
 	return &c
 }
