@@ -26,6 +26,41 @@ func TestAvoidGlobalVariable(t *testing.T) {
 	)
 }
 
+func TestAvoidGlobalVariableGrouped(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.AvoidGlobalVariable{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			var (
+				x = 1
+				y = 2
+			)
+		`, `
+			package main
+
+			/*~~(avoid global variable)~~>*/var (
+				x = 1
+				y = 2
+			)
+		`),
+	)
+}
+
+func TestAvoidGlobalVariableNoChangeGroupedConst(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.AvoidGlobalVariable{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			const (
+				x = 1
+				y = 2
+			)
+		`),
+	)
+}
+
 func TestAvoidGlobalVariableNoChangeConst(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&style.AvoidGlobalVariable{})
 	spec.RewriteRun(t,

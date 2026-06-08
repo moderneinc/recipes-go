@@ -47,22 +47,31 @@ func (v *useErrPrefixForErrorsVisitor) VisitCompilationUnit(cu *golang.Compilati
 	copy(stmts, cu.Statements)
 
 	for i, stmt := range stmts {
-		vd, ok := stmt.Element.(*java.VariableDeclarations)
-		if !ok {
-			continue
+		var renamed java.Statement
+		switch decl := stmt.Element.(type) {
+		case *java.VariableDeclarations:
+			// Single declaration: `var notFound = errors.New(...)`. Only `var`
+			// declarations qualify (not `const`).
+			hasVar := java.FindMarker[golang.VarKeyword](decl.Markers) != nil
+			hasConst := java.FindMarker[golang.ConstDecl](decl.Markers) != nil
+			if !hasVar || hasConst {
+				continue
+			}
+			if markedVD := v.checkVarDecl(decl); markedVD != decl {
+				renamed = markedVD
+			}
+		case *golang.DeclarationBlock:
+			// Grouped declaration: `var ( ... )`.
+			if decl.Kind != golang.DeclVar {
+				continue
+			}
+			if newBlock, blockChanged := v.checkVarBlock(decl); blockChanged {
+				renamed = newBlock
+			}
 		}
-
-		// Only check `var` declarations (not `const`).
-		hasVar := java.FindMarker[golang.VarKeyword](vd.Markers) != nil
-		hasConst := java.FindMarker[golang.ConstDecl](vd.Markers) != nil
-		if !hasVar || hasConst {
-			continue
-		}
-
-		markedVD := v.checkVarDecl(vd)
-		if markedVD != vd {
+		if renamed != nil {
 			stmts[i] = java.RightPadded[java.Statement]{
-				Element: markedVD,
+				Element: renamed,
 				After:   stmt.After,
 				Markers: stmt.Markers,
 			}
@@ -117,6 +126,43 @@ func (v *useErrPrefixForErrorsVisitor) checkVarDecl(vd *java.VariableDeclaration
 	c := *vd
 	c.Variables = vars
 	return &c
+}
+
+// checkVarBlock checks each declaration inside a grouped `var ( ... )` block for
+// misnamed error variables, returning the rewritten block and whether anything
+// changed.
+func (v *useErrPrefixForErrorsVisitor) checkVarBlock(block *golang.DeclarationBlock) (*golang.DeclarationBlock, bool) {
+	if block.Specs == nil {
+		return block, false
+	}
+
+	changed := false
+	elements := make([]java.RightPadded[java.Statement], len(block.Specs.Elements))
+	copy(elements, block.Specs.Elements)
+
+	for i, rp := range elements {
+		vd, ok := rp.Element.(*java.VariableDeclarations)
+		if !ok {
+			continue
+		}
+		if markedVD := v.checkVarDecl(vd); markedVD != vd {
+			elements[i] = java.RightPadded[java.Statement]{
+				Element: markedVD,
+				After:   rp.After,
+				Markers: rp.Markers,
+			}
+			changed = true
+		}
+	}
+
+	if !changed {
+		return block, false
+	}
+	c := *block
+	specs := *block.Specs
+	specs.Elements = elements
+	c.Specs = &specs
+	return &c, true
 }
 
 // isErrorConstructor checks if an expression is a call to errors.New(...) or

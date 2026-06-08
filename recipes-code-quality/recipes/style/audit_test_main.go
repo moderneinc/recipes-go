@@ -6,6 +6,7 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -41,8 +42,9 @@ func (v *auditTestMainVisitor) VisitMethodDeclaration(md *java.MethodDeclaration
 		return md
 	}
 
-	// Must be a free function (no receiver).
-	if md.Receiver != nil {
+	// Must be a free function (no receiver). A method's receiver lives on the
+	// enclosing golang.MethodDeclaration wrapper.
+	if _, isMethod := v.Cursor().Parent().Value().(*golang.MethodDeclaration); isMethod {
 		return md
 	}
 

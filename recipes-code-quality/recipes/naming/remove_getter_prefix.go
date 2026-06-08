@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -36,19 +37,18 @@ type removeGetterPrefixVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *removeGetterPrefixVisitor) VisitMethodDeclaration(md *java.MethodDeclaration, p any) java.J {
-	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*java.MethodDeclaration)
+// Only methods (which carry a receiver) are wrapped in golang.MethodDeclaration;
+// free functions stay as a bare java.MethodDeclaration. Visiting the wrapper
+// restricts this recipe to methods.
+func (v *removeGetterPrefixVisitor) VisitGoMethodDeclaration(md *golang.MethodDeclaration, p any) java.J {
+	md = v.GoVisitor.VisitGoMethodDeclaration(md, p).(*golang.MethodDeclaration)
 
-	if md.Name == nil {
+	decl := md.Declaration
+	if decl == nil || decl.Name == nil {
 		return md
 	}
 
-	// Only check methods (with a receiver), not free functions.
-	if md.Receiver == nil {
-		return md
-	}
-
-	funcName := md.Name.Name
+	funcName := decl.Name.Name
 	if len(funcName) <= 3 {
 		return md
 	}
@@ -59,8 +59,9 @@ func (v *removeGetterPrefixVisitor) VisitMethodDeclaration(md *java.MethodDeclar
 
 	// Strip "Get" prefix from the method name.
 	newName := strings.TrimPrefix(funcName, "Get")
-	md = md.WithName(md.Name.WithName(newName).WithMarkers(
-		java.MarkupInfo(md.Name.Markers, "callers of "+funcName+" must be updated to use "+newName),
+	c := *md
+	c.Declaration = decl.WithName(decl.Name.WithName(newName).WithMarkers(
+		java.MarkupInfo(decl.Name.Markers, "callers of "+funcName+" must be updated to use "+newName),
 	))
-	return md
+	return &c
 }

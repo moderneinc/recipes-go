@@ -37,12 +37,8 @@ type useShortReceiverNameVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *useShortReceiverNameVisitor) VisitMethodDeclaration(md *java.MethodDeclaration, p any) java.J {
-	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*java.MethodDeclaration)
-
-	if md.Receiver == nil {
-		return md
-	}
+func (v *useShortReceiverNameVisitor) VisitGoMethodDeclaration(md *golang.MethodDeclaration, p any) java.J {
+	md = v.GoVisitor.VisitGoMethodDeclaration(md, p).(*golang.MethodDeclaration)
 
 	// Get receiver param.
 	params := md.Receiver.Elements
@@ -80,15 +76,15 @@ func (v *useShortReceiverNameVisitor) VisitMethodDeclaration(md *java.MethodDecl
 	newParams := []java.RightPadded[java.Statement]{
 		{Element: &newVd, After: params[0].After, Markers: params[0].Markers},
 	}
-	newReceiver := *md.Receiver
-	newReceiver.Elements = newParams
 	c := *md
-	c.Receiver = &newReceiver
+	c.Receiver.Elements = newParams
 
 	// Rename usages in body.
-	if c.Body != nil {
+	if c.Declaration != nil && c.Declaration.Body != nil {
 		renamer := visitor.Init(&receiverRenameVisitor{oldName: oldName, newName: newName})
-		c.Body = renamer.Visit(c.Body, p).(*java.Block)
+		newDecl := *c.Declaration
+		newDecl.Body = renamer.Visit(newDecl.Body, p).(*java.Block)
+		c.Declaration = &newDecl
 	}
 
 	return &c

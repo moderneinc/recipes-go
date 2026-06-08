@@ -10,6 +10,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -45,43 +46,68 @@ type addExportedFuncCommentVisitor struct {
 func (v *addExportedFuncCommentVisitor) VisitMethodDeclaration(md *java.MethodDeclaration, p any) java.J {
 	md = v.GoVisitor.VisitMethodDeclaration(md, p).(*java.MethodDeclaration)
 
+	// Methods (with a receiver) are wrapped in golang.MethodDeclaration, which
+	// owns the prefix; they are handled by VisitGoMethodDeclaration. Here we only
+	// handle free functions, whose prefix lives on the declaration itself.
+	if _, wrapped := v.Cursor().Parent().Value().(*golang.MethodDeclaration); wrapped {
+		return md
+	}
 	if md.Name == nil {
 		return md
 	}
 
-	funcName := md.Name.Name
+	newPrefix, ok := addDocComment(md.Name.Name, md.Prefix)
+	if !ok {
+		return md
+	}
+	return md.WithPrefix(newPrefix)
+}
 
-	// Check if the function name starts with an uppercase letter (exported).
-	firstRune, _ := utf8.DecodeRuneInString(funcName)
-	if !unicode.IsUpper(firstRune) {
+func (v *addExportedFuncCommentVisitor) VisitGoMethodDeclaration(md *golang.MethodDeclaration, p any) java.J {
+	md = v.GoVisitor.VisitGoMethodDeclaration(md, p).(*golang.MethodDeclaration)
+
+	if md.Declaration == nil || md.Declaration.Name == nil {
 		return md
 	}
 
-	// Check if there is a doc comment in the prefix space of the method declaration.
+	// The wrapper owns the prefix (and thus any doc comment) before `func`.
+	newPrefix, ok := addDocComment(md.Declaration.Name.Name, md.Prefix)
+	if !ok {
+		return md
+	}
+	return md.WithPrefix(newPrefix)
+}
+
+// addDocComment returns prefix with a stub `// Name ...` doc comment appended and
+// true, when name is exported and prefix does not already carry a matching doc
+// comment. Otherwise it returns prefix unchanged and false.
+func addDocComment(name string, prefix java.Space) (java.Space, bool) {
+	// Only exported names (starting with an uppercase letter) get a doc comment.
+	firstRune, _ := utf8.DecodeRuneInString(name)
+	if !unicode.IsUpper(firstRune) {
+		return prefix, false
+	}
+
 	// A proper doc comment is the last comment before the `func` keyword and
-	// starts with "// FuncName".
-	comments := md.Prefix.Comments
+	// starts with "// Name".
+	comments := prefix.Comments
 	if len(comments) > 0 {
 		lastComment := comments[len(comments)-1]
-		expectedPrefix := "// " + funcName
-		if strings.HasPrefix(lastComment.Text, expectedPrefix) {
-			return md
+		if strings.HasPrefix(lastComment.Text, "// "+name) {
+			return prefix, false
 		}
 	}
 
-	// Add a stub doc comment: // FuncName ...
+	// Add a stub doc comment: // Name ...
 	// The Space model: Whitespace is emitted first, then each Comment (Text + Suffix).
 	// After the last comment's suffix, the node keyword (`func`) follows.
 	// We need the comment on its own line, indented the same as the func keyword.
 	// The comment suffix is "\n" + indent so the func keyword starts at the correct column.
-	commentText := "// " + funcName + " ..."
-	indent := md.Prefix.Indent()
+	commentText := "// " + name + " ..."
+	indent := prefix.Indent()
 	comment := java.Comment{Kind: java.LineComment, Text: commentText, Suffix: "\n" + indent}
-
-	newComments := append(md.Prefix.Comments, comment)
-	md = md.WithPrefix(java.Space{
-		Whitespace: md.Prefix.Whitespace,
-		Comments:   newComments,
-	})
-	return md
+	return java.Space{
+		Whitespace: prefix.Whitespace,
+		Comments:   append(prefix.Comments, comment),
+	}, true
 }
