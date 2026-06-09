@@ -25,8 +25,6 @@ func TestSimplifyBytesEqualNilRight(t *testing.T) {
 		`, `
 			package main
 
-			import "bytes"
-
 			func f(b []byte) bool {
 				return len(b) == 0
 			}
@@ -47,8 +45,6 @@ func TestSimplifyBytesEqualNilLeft(t *testing.T) {
 			}
 		`, `
 			package main
-
-			import "bytes"
 
 			func f(b []byte) bool {
 				return len(b) == 0

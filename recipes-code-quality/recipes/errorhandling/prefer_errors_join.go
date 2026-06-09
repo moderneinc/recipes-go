@@ -8,6 +8,7 @@ import (
 	"fmt"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 )
 
@@ -37,5 +38,5 @@ func (r *SimplifyRedundantErrorWrap) Description() string {
 func (r *SimplifyRedundantErrorWrap) Tags() []string { return []string{"error-handling"} }
 
 func (r *SimplifyRedundantErrorWrap) RecipeList() []recipe.Recipe {
-	return []recipe.Recipe{simplifyRedundantErrorWrapImpl}
+	return []recipe.Recipe{simplifyRedundantErrorWrapImpl, &recipegolang.RemoveUnusedImports{}}
 }

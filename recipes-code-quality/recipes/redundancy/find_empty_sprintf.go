@@ -6,6 +6,7 @@ package redundancy
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 )
 
@@ -33,5 +34,5 @@ var removeEmptyFmtSprintfImpl = template.NewRecipe(
 )
 
 func (r *FindEmptyFmtSprintf) RecipeList() []recipe.Recipe {
-	return []recipe.Recipe{removeEmptyFmtSprintfImpl}
+	return []recipe.Recipe{removeEmptyFmtSprintfImpl, &recipegolang.RemoveUnusedImports{}}
 }

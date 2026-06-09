@@ -9,6 +9,7 @@ import (
 
 	"github.com/moderneinc/recipes-go/recipes-code-quality/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 )
 
@@ -55,5 +56,5 @@ var simplifyTrimRightNoopImpl = template.NewRecipe(
 )
 
 func (r *SimplifyTrimLeftNoop) RecipeList() []recipe.Recipe {
-	return []recipe.Recipe{simplifyTrimLeftNoopImpl, simplifyTrimRightNoopImpl}
+	return []recipe.Recipe{simplifyTrimLeftNoopImpl, simplifyTrimRightNoopImpl, &recipegolang.RemoveUnusedImports{}}
 }

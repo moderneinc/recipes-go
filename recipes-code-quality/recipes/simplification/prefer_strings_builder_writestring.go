@@ -8,6 +8,7 @@ import (
 	"fmt"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 )
 
@@ -44,5 +45,5 @@ var preferStringsBuilderWriteStringImpl = template.NewRecipe(
 )
 
 func (r *PreferStringsBuilderWriteString) RecipeList() []recipe.Recipe {
-	return []recipe.Recipe{preferStringsBuilderWriteStringImpl}
+	return []recipe.Recipe{preferStringsBuilderWriteStringImpl, &recipegolang.RemoveUnusedImports{}}
 }

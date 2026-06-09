@@ -25,8 +25,6 @@ func TestSimplifySprintfConcat(t *testing.T) {
 		`, `
 			package main
 
-			import "fmt"
-
 			func f(a, b string) string {
 				return a + b
 			}

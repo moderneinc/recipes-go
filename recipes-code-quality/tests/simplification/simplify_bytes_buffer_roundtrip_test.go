@@ -25,8 +25,6 @@ func TestSimplifyBytesBufferRoundtrip(t *testing.T) {
 		`, `
 			package main
 
-			import "bytes"
-
 			func f(b []byte) []byte {
 				return b
 			}

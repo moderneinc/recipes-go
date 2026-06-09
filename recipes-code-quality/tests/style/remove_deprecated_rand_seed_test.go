@@ -28,11 +28,6 @@ func TestRemoveDeprecatedRandSeed(t *testing.T) {
 		`, `
 			package main
 
-			import (
-				"math/rand"
-				"time"
-			)
-
 			func f() {
 			}
 		`),

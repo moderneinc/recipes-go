@@ -25,8 +25,6 @@ func TestFindEmptyFmtSprintfEmpty(t *testing.T) {
 		`, `
 			package main
 
-			import "fmt"
-
 			func f() string {
 				return ""
 			}

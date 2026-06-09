@@ -8,6 +8,7 @@ import (
 	"fmt"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 )
 
@@ -41,5 +42,5 @@ func (r *SimplifySprintfChar) Description() string {
 func (r *SimplifySprintfChar) Tags() []string { return []string{"performance"} }
 
 func (r *SimplifySprintfChar) RecipeList() []recipe.Recipe {
-	return []recipe.Recipe{simplifySprintfCharImpl}
+	return []recipe.Recipe{simplifySprintfCharImpl, &recipegolang.RemoveUnusedImports{}}
 }

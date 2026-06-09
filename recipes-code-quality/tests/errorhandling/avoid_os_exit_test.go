@@ -49,8 +49,6 @@ func TestAvoidOsExitZeroRemoved(t *testing.T) {
 		`, `
 			package main
 
-			import "os"
-
 			func main() {
 				println("done")
 			}

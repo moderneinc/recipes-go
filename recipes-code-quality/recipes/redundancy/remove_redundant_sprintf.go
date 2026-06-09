@@ -9,6 +9,7 @@ import (
 
 	"github.com/moderneinc/recipes-go/recipes-code-quality/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 )
 
@@ -47,5 +48,5 @@ func (r *RemoveRedundantSprintf) DiagnosticMappings() []diagnostic.Mapping {
 }
 
 func (r *RemoveRedundantSprintf) RecipeList() []recipe.Recipe {
-	return []recipe.Recipe{removeRedundantSprintfImpl}
+	return []recipe.Recipe{removeRedundantSprintfImpl, &recipegolang.RemoveUnusedImports{}}
 }

@@ -25,8 +25,6 @@ func TestUseErrorMethod(t *testing.T) {
 		`, `
 			package main
 
-			import "fmt"
-
 			func f(err error) string {
 				return err.Error()
 			}

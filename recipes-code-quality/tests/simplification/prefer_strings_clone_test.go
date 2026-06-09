@@ -25,8 +25,6 @@ func TestSimplifyTrimLeftNoop(t *testing.T) {
 		`, `
 			package main
 
-			import "strings"
-
 			func f(s string) string {
 				return s
 			}
@@ -47,8 +45,6 @@ func TestSimplifyTrimRightNoop(t *testing.T) {
 			}
 		`, `
 			package main
-
-			import "strings"
 
 			func f(s string) string {
 				return s
