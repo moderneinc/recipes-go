@@ -6,6 +6,8 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -32,6 +34,15 @@ func (r *RemoveDeprecatedRandSeed) Editor() recipe.TreeVisitor {
 
 type removeDeprecatedRandSeedVisitor struct {
 	visitor.GoVisitor
+	changed bool
+}
+
+func (v *removeDeprecatedRandSeedVisitor) VisitCompilationUnit(cu *golang.CompilationUnit, p any) java.J {
+	cu = v.GoVisitor.VisitCompilationUnit(cu, p).(*golang.CompilationUnit)
+	if v.changed {
+		v.DoAfterVisit((&recipegolang.RemoveUnusedImports{}).Editor())
+	}
+	return cu
 }
 
 func (v *removeDeprecatedRandSeedVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
@@ -51,5 +62,6 @@ func (v *removeDeprecatedRandSeedVisitor) VisitMethodInvocation(mi *java.MethodI
 	}
 
 	// Remove the deprecated call.
+	v.changed = true
 	return &java.Empty{}
 }

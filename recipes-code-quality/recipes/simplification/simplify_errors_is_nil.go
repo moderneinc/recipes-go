@@ -8,6 +8,7 @@ import (
 	"fmt"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 )
 
@@ -39,5 +40,5 @@ var simplifyErrorsIsNilImpl = template.NewRecipe(
 )
 
 func (r *SimplifyErrorsIsNil) RecipeList() []recipe.Recipe {
-	return []recipe.Recipe{simplifyErrorsIsNilImpl}
+	return []recipe.Recipe{simplifyErrorsIsNilImpl, &recipegolang.RemoveUnusedImports{}}
 }

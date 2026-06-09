@@ -25,8 +25,6 @@ func TestPreferStringComparisonEq(t *testing.T) {
 		`, `
 			package main
 
-			import "strings"
-
 			func f(a, b string) bool {
 				return a == b
 			}
@@ -47,8 +45,6 @@ func TestPreferStringComparisonNeq(t *testing.T) {
 			}
 		`, `
 			package main
-
-			import "strings"
 
 			func f(a, b string) bool {
 				return a != b
@@ -71,8 +67,6 @@ func TestPreferStringComparisonLt(t *testing.T) {
 		`, `
 			package main
 
-			import "strings"
-
 			func f(a, b string) bool {
 				return a < b
 			}
@@ -93,8 +87,6 @@ func TestPreferStringComparisonGt(t *testing.T) {
 			}
 		`, `
 			package main
-
-			import "strings"
 
 			func f(a, b string) bool {
 				return a > b

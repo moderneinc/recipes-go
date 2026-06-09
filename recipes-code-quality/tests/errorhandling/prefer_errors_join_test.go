@@ -25,8 +25,6 @@ func TestSimplifyRedundantErrorWrap(t *testing.T) {
 		`, `
 			package main
 
-			import "fmt"
-
 			func f(err error) error {
 				return err
 			}

@@ -31,7 +31,6 @@ func TestPreferStringsBuilderWriteString(t *testing.T) {
 			package main
 
 			import (
-				"fmt"
 				"strings"
 			)
 

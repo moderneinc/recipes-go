@@ -25,8 +25,6 @@ func TestSimplifyErrorsIsNil(t *testing.T) {
 		`, `
 			package main
 
-			import "errors"
-
 			func f(err error) bool {
 				return err == nil
 			}

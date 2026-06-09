@@ -9,6 +9,7 @@ import (
 
 	"github.com/moderneinc/recipes-go/recipes-code-quality/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 )
 
@@ -45,5 +46,5 @@ var simplifySprintfConcatImpl = template.NewRecipe(
 )
 
 func (r *SimplifySprintfConcat) RecipeList() []recipe.Recipe {
-	return []recipe.Recipe{simplifySprintfConcatImpl}
+	return []recipe.Recipe{simplifySprintfConcatImpl, &recipegolang.RemoveUnusedImports{}}
 }

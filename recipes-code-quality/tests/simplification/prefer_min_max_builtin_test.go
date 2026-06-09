@@ -25,8 +25,6 @@ func TestPreferMinBuiltin(t *testing.T) {
 		`, `
 			package main
 
-			import "math"
-
 			func f(a, b float64) float64 {
 				return min(a, b)
 			}
@@ -47,8 +45,6 @@ func TestPreferMaxBuiltin(t *testing.T) {
 			}
 		`, `
 			package main
-
-			import "math"
 
 			func f(a, b float64) float64 {
 				return max(a, b)

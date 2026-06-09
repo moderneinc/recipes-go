@@ -8,6 +8,7 @@ import (
 	"fmt"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 )
 
@@ -42,5 +43,5 @@ var simplifyBytesBufferRoundtripImpl = template.NewRecipe(
 )
 
 func (r *SimplifyBytesBufferRoundtrip) RecipeList() []recipe.Recipe {
-	return []recipe.Recipe{simplifyBytesBufferRoundtripImpl}
+	return []recipe.Recipe{simplifyBytesBufferRoundtripImpl, &recipegolang.RemoveUnusedImports{}}
 }

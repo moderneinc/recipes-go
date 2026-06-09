@@ -25,8 +25,6 @@ func TestSimplifySprintfCharSimple(t *testing.T) {
 		`, `
 			package main
 
-			import "fmt"
-
 			func f(r rune) string {
 				return string(r)
 			}

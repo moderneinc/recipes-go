@@ -8,6 +8,7 @@ import (
 	"fmt"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 )
 
@@ -52,5 +53,5 @@ var preferMaxBuiltin = template.NewRecipe(
 )
 
 func (r *PreferMinMaxBuiltin) RecipeList() []recipe.Recipe {
-	return []recipe.Recipe{preferMinBuiltin, preferMaxBuiltin}
+	return []recipe.Recipe{preferMinBuiltin, preferMaxBuiltin, &recipegolang.RemoveUnusedImports{}}
 }

@@ -6,6 +6,8 @@ package style
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -32,6 +34,15 @@ func (r *RemoveDebugPrint) Editor() recipe.TreeVisitor {
 
 type removeDebugPrintVisitor struct {
 	visitor.GoVisitor
+	changed bool
+}
+
+func (v *removeDebugPrintVisitor) VisitCompilationUnit(cu *golang.CompilationUnit, p any) java.J {
+	cu = v.GoVisitor.VisitCompilationUnit(cu, p).(*golang.CompilationUnit)
+	if v.changed {
+		v.DoAfterVisit((&recipegolang.RemoveUnusedImports{}).Editor())
+	}
+	return cu
 }
 
 func (v *removeDebugPrintVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
@@ -53,6 +64,7 @@ func (v *removeDebugPrintVisitor) VisitMethodInvocation(mi *java.MethodInvocatio
 
 	switch mi.Name.Name {
 	case "Println", "Printf", "Print":
+		v.changed = true
 		return &java.Empty{}
 	}
 

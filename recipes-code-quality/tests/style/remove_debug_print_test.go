@@ -25,8 +25,6 @@ func TestRemoveDebugPrintFmtPrintln(t *testing.T) {
 		`, `
 			package main
 
-			import "fmt"
-
 			func f() {
 			}
 		`),

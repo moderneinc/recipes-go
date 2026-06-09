@@ -9,6 +9,7 @@ import (
 
 	"github.com/moderneinc/recipes-go/recipes-code-quality/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 )
 
@@ -57,5 +58,5 @@ var simplifyBytesEqualNilLeft = template.NewRecipe(
 )
 
 func (r *SimplifyBytesEqualNil) RecipeList() []recipe.Recipe {
-	return []recipe.Recipe{simplifyBytesEqualNilRight, simplifyBytesEqualNilLeft}
+	return []recipe.Recipe{simplifyBytesEqualNilRight, simplifyBytesEqualNilLeft, &recipegolang.RemoveUnusedImports{}}
 }

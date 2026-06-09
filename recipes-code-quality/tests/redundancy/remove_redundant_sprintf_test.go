@@ -25,8 +25,6 @@ func TestRemoveRedundantSprintfSimple(t *testing.T) {
 		`, `
 			package main
 
-			import "fmt"
-
 			func f(s string) string {
 				return s
 			}
