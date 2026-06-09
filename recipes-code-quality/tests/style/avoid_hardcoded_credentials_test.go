@@ -21,6 +21,8 @@ func TestAvoidHardcodedCredentialsPassword(t *testing.T) {
 		`, `
 			package main
 
+			import "os"
+
 			var password = os.Getenv("PASSWORD")
 		`),
 	)
@@ -35,6 +37,8 @@ func TestAvoidHardcodedCredentialsDbPassword(t *testing.T) {
 			var dbPassword = "secret123"
 		`, `
 			package main
+
+			import "os"
 
 			var dbPassword = os.Getenv("DB_PASSWORD")
 		`),
