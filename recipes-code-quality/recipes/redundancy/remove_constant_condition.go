@@ -38,7 +38,10 @@ func (v *removeConstantConditionVisitor) VisitIf(ifStmt *java.If, p any) java.J 
 	ifStmt = v.GoVisitor.VisitIf(ifStmt, p).(*java.If)
 
 	// Condition must be an Identifier named "true" or "false".
-	ident, ok := ifStmt.Condition.(*java.Identifier)
+	if ifStmt.Condition == nil {
+		return ifStmt
+	}
+	ident, ok := ifStmt.Condition.Tree.Element.(*java.Identifier)
 	if !ok {
 		return ifStmt
 	}

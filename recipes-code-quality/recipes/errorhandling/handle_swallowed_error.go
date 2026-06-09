@@ -36,7 +36,7 @@ type handleSwallowedErrorVisitor struct {
 func (v *handleSwallowedErrorVisitor) VisitIf(ifStmt *java.If, p any) java.J {
 	ifStmt = v.GoVisitor.VisitIf(ifStmt, p).(*java.If)
 
-	if !isErrNotNil(ifStmt.Condition) {
+	if ifStmt.Condition == nil || !isErrNotNil(ifStmt.Condition.Tree.Element) {
 		return ifStmt
 	}
 

@@ -46,13 +46,15 @@ func (v *reduceErrorCheckNestingVisitor) VisitBlock(block *java.Block, p any) ja
 	dedent := visitor.Init(&nestingDedentVisitor{})
 
 	for _, rp := range block.Statements {
+		// An `if init; cond` is a golang.StatementWithInit, not a *java.If, so the
+		// assertion already excludes init-bearing ifs.
 		ifStmt, ok := rp.Element.(*java.If)
-		if !ok || ifStmt.Init != nil || ifStmt.ElsePart != nil || ifStmt.Then == nil {
+		if !ok || ifStmt.ElsePart != nil || ifStmt.Then == nil || ifStmt.Condition == nil {
 			newStmts = append(newStmts, rp)
 			continue
 		}
 
-		if !isErrEqualNil(ifStmt.Condition) {
+		if !isErrEqualNil(ifStmt.Condition.Tree.Element) {
 			newStmts = append(newStmts, rp)
 			continue
 		}

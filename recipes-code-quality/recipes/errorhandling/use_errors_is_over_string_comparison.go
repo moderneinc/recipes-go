@@ -5,6 +5,7 @@
 package errorhandling
 
 import (
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -84,5 +85,5 @@ func isErrorMethodCall(expr java.Expression) bool {
 // isStringLiteral checks if an expression is a string Literal.
 func isStringLiteral(expr java.Expression) bool {
 	lit, ok := expr.(*java.Literal)
-	return ok && lit.Kind == java.StringLiteral
+	return ok && matcher.IsString(lit.Type)
 }

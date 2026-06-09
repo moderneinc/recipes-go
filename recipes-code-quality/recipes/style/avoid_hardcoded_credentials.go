@@ -7,6 +7,7 @@ package style
 import (
 	"strings"
 
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -68,7 +69,7 @@ func (v *avoidHardcodedCredentialsVisitor) VisitVariableDeclarator(vd *java.Vari
 	}
 
 	lit, ok := vd.Initializer.Element.(*java.Literal)
-	if !ok || lit.Kind != java.StringLiteral {
+	if !ok || !matcher.IsString(lit.Type) {
 		return vd
 	}
 
@@ -100,7 +101,6 @@ func (v *avoidHardcodedCredentialsVisitor) VisitVariableDeclarator(vd *java.Vari
 	}
 
 	envLit := &java.Literal{
-		Kind:   java.StringLiteral,
 		Source: `"` + envName + `"`,
 	}
 

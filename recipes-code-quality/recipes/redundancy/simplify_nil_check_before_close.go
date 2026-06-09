@@ -45,13 +45,18 @@ func (v *simplifyNilCheckBeforeCloseVisitor) VisitIf(ifStmt *java.If, p any) jav
 		return ifStmt
 	}
 
-	// Must not have an init statement.
-	if ifStmt.Init != nil {
+	// Must not have an init statement: `if x := ...; cond` is wrapped in a
+	// golang.StatementWithInit, so skip Ifs that are its inner statement.
+	if isInitWrappedIf(v.Cursor()) {
+		return ifStmt
+	}
+
+	if ifStmt.Condition == nil {
 		return ifStmt
 	}
 
 	// Condition must be `x != nil` or `nil != x`.
-	varName := nilNotEqualVarName(ifStmt.Condition)
+	varName := nilNotEqualVarName(ifStmt.Condition.Tree.Element)
 	if varName == "" {
 		return ifStmt
 	}

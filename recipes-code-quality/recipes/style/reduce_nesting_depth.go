@@ -47,13 +47,15 @@ func (v *reduceNestingDepthVisitor) VisitBlock(block *java.Block, p any) java.J 
 	dedent := visitor.Init(&nestingDedentVisitor{})
 
 	for _, rp := range block.Statements {
+		// An `if init; cond` is a golang.StatementWithInit, not a *java.If, so the
+		// assertion already excludes init-bearing ifs.
 		ifStmt, ok := rp.Element.(*java.If)
-		if !ok || ifStmt.Init != nil || ifStmt.ElsePart != nil || ifStmt.Then == nil {
+		if !ok || ifStmt.ElsePart != nil || ifStmt.Then == nil || ifStmt.Condition == nil {
 			newStmts = append(newStmts, rp)
 			continue
 		}
 
-		if !isErrEqualNil(ifStmt.Condition) {
+		if !isErrEqualNil(ifStmt.Condition.Tree.Element) {
 			newStmts = append(newStmts, rp)
 			continue
 		}
@@ -101,13 +103,15 @@ func isErrEqualNil(expr java.Expression) bool {
 // When returnExpr is non-nil it is used as the return value.
 func buildErrGuard(ifStmt *java.If, returnExpr java.Expression) *java.If {
 	// Build `err != nil` from the original `err == nil` condition.
-	origBin := ifStmt.Condition.(*java.Binary)
+	origBin := ifStmt.Condition.Tree.Element.(*java.Binary)
 	invertedCond := &java.Binary{
 		Prefix:   origBin.Prefix,
 		Left:     origBin.Left,
 		Operator: java.LeftPadded[java.BinaryOperator]{Before: origBin.Operator.Before, Element: java.NotEqual},
 		Right:    origBin.Right,
 	}
+	newCond := *ifStmt.Condition
+	newCond.Tree.Element = invertedCond
 
 	ret := &java.Return{
 		Prefix:     java.Space{Whitespace: "\n" + guardIndent(ifStmt.Prefix)},
@@ -124,7 +128,7 @@ func buildErrGuard(ifStmt *java.If, returnExpr java.Expression) *java.If {
 
 	return &java.If{
 		Prefix:    ifStmt.Prefix,
-		Condition: invertedCond,
+		Condition: &newCond,
 		Then:      guardBody,
 	}
 }

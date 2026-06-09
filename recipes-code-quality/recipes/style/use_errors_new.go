@@ -72,7 +72,7 @@ func (v *useErrorsNewVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p
 	// The single argument must be a string literal with no format verbs
 	arg := args[0].Element
 	lit, ok := arg.(*java.Literal)
-	if !ok || lit.Kind != java.StringLiteral {
+	if !ok || !matcher.IsString(lit.Type) {
 		return mi
 	}
 	if hasFormatVerb(lit.Source) {

@@ -73,14 +73,20 @@ func mergeAdjacentBranches(ifStmt *java.If) *java.If {
 			continue
 		}
 
-		// Merge: combine conditions with ||
-		combined := &java.Binary{
-			Left:     current.Condition,
-			Operator: java.LeftPadded[java.BinaryOperator]{Before: java.SingleSpace, Element: java.LogicalOr},
-			Right:    setExprPrefix(nextIf.Condition, java.SingleSpace),
+		if current.Condition == nil || nextIf.Condition == nil {
+			break
 		}
 
-		current.Condition = combined
+		// Merge: combine conditions with ||
+		combined := &java.Binary{
+			Left:     current.Condition.Tree.Element,
+			Operator: java.LeftPadded[java.BinaryOperator]{Before: java.SingleSpace, Element: java.LogicalOr},
+			Right:    setExprPrefix(nextIf.Condition.Tree.Element, java.SingleSpace),
+		}
+
+		newCond := *current.Condition
+		newCond.Tree.Element = combined
+		current.Condition = &newCond
 		// Skip the duplicate branch — adopt its else part.
 		current.ElsePart = nextIf.ElsePart
 		changed = true

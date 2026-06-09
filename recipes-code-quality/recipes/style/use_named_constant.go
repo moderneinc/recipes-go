@@ -5,7 +5,9 @@
 package style
 
 import (
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -33,6 +35,7 @@ func (r *UseNamedConstant) Editor() recipe.TreeVisitor {
 type useNamedConstantVisitor struct {
 	visitor.GoVisitor
 	insideConstOrVar bool
+	insideArrayType  bool
 }
 
 func (v *useNamedConstantVisitor) VisitVariableDeclarations(vd *java.VariableDeclarations, p any) java.J {
@@ -43,14 +46,23 @@ func (v *useNamedConstantVisitor) VisitVariableDeclarations(vd *java.VariableDec
 	return vd
 }
 
+func (v *useNamedConstantVisitor) VisitGoArrayType(at *golang.ArrayType, p any) java.J {
+	// Skip the declared array length, e.g. the `3` in `[3]int`; it is part of the
+	// type, not a magic number.
+	v.insideArrayType = true
+	at = v.GoVisitor.VisitGoArrayType(at, p).(*golang.ArrayType)
+	v.insideArrayType = false
+	return at
+}
+
 func (v *useNamedConstantVisitor) VisitLiteral(lit *java.Literal, p any) java.J {
 	lit = v.GoVisitor.VisitLiteral(lit, p).(*java.Literal)
 
-	if v.insideConstOrVar {
+	if v.insideConstOrVar || v.insideArrayType {
 		return lit
 	}
 
-	if lit.Kind != java.IntLiteral {
+	if !matcher.IsInt(lit.Type) {
 		return lit
 	}
 

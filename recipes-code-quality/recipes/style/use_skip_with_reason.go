@@ -60,7 +60,6 @@ func (v *useSkipWithReasonVisitor) VisitMethodInvocation(mi *java.MethodInvocati
 
 	// Replace the empty argument list with a placeholder reason string.
 	reason := &java.Literal{
-		Kind:   java.StringLiteral,
 		Value:  "TODO: add reason",
 		Source: `"TODO: add reason"`,
 	}

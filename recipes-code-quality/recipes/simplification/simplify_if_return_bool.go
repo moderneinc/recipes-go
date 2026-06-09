@@ -51,8 +51,10 @@ func (v *simplifyIfReturnBoolVisitor) VisitBlock(block *java.Block, p any) java.
 	var newStmts []java.RightPadded[java.Statement]
 
 	for i := 0; i < len(stmts); i++ {
+		// An `if init; cond` is a golang.StatementWithInit, not a *java.If, so the
+		// assertion already excludes init-bearing ifs.
 		ifStmt, ok := stmts[i].Element.(*java.If)
-		if !ok || ifStmt.Init != nil || ifStmt.Then == nil {
+		if !ok || ifStmt.Then == nil {
 			newStmts = append(newStmts, stmts[i])
 			continue
 		}
@@ -146,7 +148,7 @@ func elseBody(ifStmt *java.If) *java.Block {
 // buildReturn constructs a `return cond` or `return !cond` statement,
 // reusing the prefix of the if statement.
 func buildReturn(ifStmt *java.If, thenIsTrue bool) *java.Return {
-	cond := ifStmt.Condition
+	cond := ifStmt.Condition.Tree.Element
 	if !thenIsTrue {
 		// Negate the condition: return !cond
 		cond = &java.Unary{
