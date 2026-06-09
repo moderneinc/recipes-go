@@ -7,6 +7,7 @@ package style
 import (
 	"strings"
 
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -48,7 +49,7 @@ func (v *avoidSqlStringConcatVisitor) VisitBinary(bin *java.Binary, p any) java.
 	}
 
 	lit, ok := bin.Left.(*java.Literal)
-	if !ok || !isStringLiteralSource(lit.Source) {
+	if !ok || !matcher.IsString(lit.Type) {
 		return bin
 	}
 

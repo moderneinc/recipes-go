@@ -5,6 +5,7 @@
 package style
 
 import (
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -61,7 +62,7 @@ func (v *useNamedConstantVisitor) VisitLiteral(lit *java.Literal, p any) java.J 
 		return lit
 	}
 
-	if !isIntLiteralSource(lit.Source) {
+	if !matcher.IsInt(lit.Type) {
 		return lit
 	}
 

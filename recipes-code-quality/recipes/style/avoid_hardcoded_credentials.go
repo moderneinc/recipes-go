@@ -7,6 +7,7 @@ package style
 import (
 	"strings"
 
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -67,7 +68,7 @@ func (v *avoidHardcodedCredentialsVisitor) VisitVariableDeclarator(vd *java.Vari
 	}
 
 	lit, ok := vd.Initializer.Element.(*java.Literal)
-	if !ok || !isStringLiteralSource(lit.Source) {
+	if !ok || !matcher.IsString(lit.Type) {
 		return vd
 	}
 

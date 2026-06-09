@@ -126,7 +126,7 @@ func (c *errNewCollector) VisitMethodInvocation(mi *java.MethodInvocation, p any
 		return mi
 	}
 	lit, ok := mi.Arguments.Elements[0].Element.(*java.Literal)
-	if !ok || !isStringLiteralSource(lit.Source) {
+	if !ok || !isStringLiteral(lit) {
 		return mi
 	}
 
@@ -176,7 +176,7 @@ func (r *errNewReplacer) VisitMethodInvocation(mi *java.MethodInvocation, p any)
 		return mi
 	}
 	lit, ok := mi.Arguments.Elements[0].Element.(*java.Literal)
-	if !ok || !isStringLiteralSource(lit.Source) {
+	if !ok || !isStringLiteral(lit) {
 		return mi
 	}
 
