@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -82,6 +83,9 @@ func (v *avoidHardcodedCredentialsVisitor) VisitVariableDeclarator(vd *java.Vari
 	if !matched {
 		return vd
 	}
+
+	// The rewrite introduces a reference to the `os` package; ensure it is imported.
+	recipegolang.MaybeAddImport(v, "os", nil, false)
 
 	// Build os.Getenv("VAR_NAME") to replace the string literal.
 	envName := envVarName(vd.Name.Name)
