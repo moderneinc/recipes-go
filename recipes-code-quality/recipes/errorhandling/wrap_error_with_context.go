@@ -84,7 +84,6 @@ func (v *wrapErrorWithContextVisitor) VisitReturn(ret *java.Return, p any) java.
 	}
 
 	formatLit := &java.Literal{
-		Kind:   java.StringLiteral,
 		Source: `"` + v.funcName + `: %w"`,
 	}
 

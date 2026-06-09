@@ -66,7 +66,7 @@ func (v *findMapRangeClearVisitor) VisitForEachLoop(forEach *java.ForEachLoop, p
 
 	// Build: clear(m) where m is forEach.Control.Iterable.
 	// Strip the iterable's prefix (it had a space after the "range" keyword).
-	mapExpr := stripExprPrefix(forEach.Control.Iterable)
+	mapExpr := stripExprPrefix(forEach.Control.Iterable.Element)
 
 	return &java.MethodInvocation{
 		Prefix: forEach.Prefix,

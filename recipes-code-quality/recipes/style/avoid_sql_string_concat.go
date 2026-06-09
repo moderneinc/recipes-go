@@ -48,7 +48,7 @@ func (v *avoidSqlStringConcatVisitor) VisitBinary(bin *java.Binary, p any) java.
 	}
 
 	lit, ok := bin.Left.(*java.Literal)
-	if !ok || lit.Kind != java.StringLiteral {
+	if !ok || !isStringLiteralSource(lit.Source) {
 		return bin
 	}
 

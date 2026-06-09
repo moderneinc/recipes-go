@@ -79,7 +79,6 @@ func (v *useStringsBuilderInLoopVisitor) VisitCompilationUnit(cu *golang.Compila
 			Qualid: &java.Literal{
 				ID:     uuid.New(),
 				Prefix: java.SingleSpace,
-				Kind:   java.StringLiteral,
 				Source: `"strings"`,
 				Value:  "strings",
 			},
@@ -96,7 +95,6 @@ func (v *useStringsBuilderInLoopVisitor) VisitCompilationUnit(cu *golang.Compila
 			Qualid: &java.Literal{
 				ID:     uuid.New(),
 				Prefix: java.SingleSpace,
-				Kind:   java.StringLiteral,
 				Source: `"strings"`,
 				Value:  "strings",
 			},

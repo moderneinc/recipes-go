@@ -126,11 +126,13 @@ func regexpCompileCall(expr java.Expression) *java.MethodInvocation {
 // isErrGuard reports whether stmt is `if <errName> != nil { ... }` with no init
 // clause and no else branch.
 func isErrGuard(stmt java.Statement, errName string) bool {
+	// An `if init; cond` is a golang.StatementWithInit, not a *java.If, so the
+	// assertion already excludes init-bearing ifs.
 	ifStmt, ok := stmt.(*java.If)
-	if !ok || ifStmt.Init != nil || ifStmt.ElsePart != nil {
+	if !ok || ifStmt.ElsePart != nil || ifStmt.Condition == nil {
 		return false
 	}
-	bin, ok := ifStmt.Condition.(*java.Binary)
+	bin, ok := ifStmt.Condition.Tree.Element.(*java.Binary)
 	if !ok || bin.Operator.Element != java.NotEqual {
 		return false
 	}

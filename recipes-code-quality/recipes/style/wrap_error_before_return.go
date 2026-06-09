@@ -81,7 +81,6 @@ func (v *wrapErrorBeforeReturnVisitor) VisitGoReturn(ret *golang.Return, p any) 
 	}
 
 	formatLit := &java.Literal{
-		Kind:   java.StringLiteral,
 		Source: `"` + v.funcName + `: %w"`,
 	}
 

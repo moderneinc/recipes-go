@@ -6,6 +6,7 @@ package simplification
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -39,27 +40,33 @@ func (v *simplifyRedundantRangeBlankVisitor) VisitForEachLoop(forEach *java.ForE
 
 	ctrl := forEach.Control
 
-	// Must have a value in the second position
-	if ctrl.Value == nil {
+	// The loop targets and the `:=`/`=` operator live in a golang.MultiAssignment.
+	ma, ok := ctrl.Variable.Element.(*golang.MultiAssignment)
+	if !ok {
 		return forEach
 	}
 
-	// Value must be the blank identifier `_`
-	ident, ok := ctrl.Value.Element.(*java.Identifier)
+	// Must have exactly two targets: `for k, v := range s`.
+	if len(ma.Variables) != 2 {
+		return forEach
+	}
+
+	// The value (second target) must be the blank identifier `_`.
+	ident, ok := ma.Variables[1].Element.(*java.Identifier)
 	if !ok || ident.Name != "_" {
 		return forEach
 	}
 
-	// Remove the blank value. The comma and space before `_` are in Key.After,
-	// so we also need to trim the Key's trailing space to remove `, _`.
+	// Drop the blank value, keeping just the key: `for k := range s`. The comma
+	// and trailing space were carried on the key's After, which is no longer
+	// printed once the key is the only (last) target.
+	newMa := *ma
+	key := ma.Variables[0]
+	key.After = java.Space{}
+	newMa.Variables = []java.RightPadded[java.Expression]{key}
+
 	newCtrl := ctrl
-	newCtrl.Value = nil
-	// Reset Key.After to a single space (removing the `, _` trailing formatting)
-	if newCtrl.Key != nil {
-		k := *newCtrl.Key
-		k.After = java.Space{Whitespace: " "}
-		newCtrl.Key = &k
-	}
+	newCtrl.Variable.Element = &newMa
 
 	c := *forEach
 	c.Control = newCtrl

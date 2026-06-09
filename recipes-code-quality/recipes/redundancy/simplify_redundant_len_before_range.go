@@ -48,8 +48,9 @@ func (v *simplifyRedundantLenBeforeRangeVisitor) VisitIf(ifStmt *java.If, p any)
 		return ifStmt
 	}
 
-	// Must not have an init statement.
-	if ifStmt.Init != nil {
+	// Must not have an init statement: `if init; cond` is wrapped in a
+	// golang.StatementWithInit, so skip Ifs that are its inner statement.
+	if isInitWrappedIf(v.Cursor()) {
 		return ifStmt
 	}
 
@@ -64,8 +65,12 @@ func (v *simplifyRedundantLenBeforeRangeVisitor) VisitIf(ifStmt *java.If, p any)
 		return ifStmt
 	}
 
+	if ifStmt.Condition == nil {
+		return ifStmt
+	}
+
 	// Condition must be `len(x) > 0` or `len(x) != 0` or `len(x) >= 1`.
-	varName := lenCheckVarName(ifStmt.Condition)
+	varName := lenCheckVarName(ifStmt.Condition.Tree.Element)
 	if varName == "" {
 		return ifStmt
 	}
@@ -135,7 +140,7 @@ func lenCheckVarName(cond java.Expression) string {
 // forEachIterableName extracts the identifier name from the iterable
 // of a ForEachLoop. Returns "" if the iterable is not a simple identifier.
 func forEachIterableName(forEach *java.ForEachLoop) string {
-	ident, ok := forEach.Control.Iterable.(*java.Identifier)
+	ident, ok := forEach.Control.Iterable.Element.(*java.Identifier)
 	if !ok {
 		return ""
 	}

@@ -126,7 +126,7 @@ func (c *errNewCollector) VisitMethodInvocation(mi *java.MethodInvocation, p any
 		return mi
 	}
 	lit, ok := mi.Arguments.Elements[0].Element.(*java.Literal)
-	if !ok || lit.Kind != java.StringLiteral {
+	if !ok || !isStringLiteralSource(lit.Source) {
 		return mi
 	}
 
@@ -176,7 +176,7 @@ func (r *errNewReplacer) VisitMethodInvocation(mi *java.MethodInvocation, p any)
 		return mi
 	}
 	lit, ok := mi.Arguments.Elements[0].Element.(*java.Literal)
-	if !ok || lit.Kind != java.StringLiteral {
+	if !ok || !isStringLiteralSource(lit.Source) {
 		return mi
 	}
 
@@ -223,7 +223,6 @@ func buildVarDecls(entries []*errNewEntry) []java.RightPadded[java.Statement] {
 		}
 		argLit := &java.Literal{
 			ID:     uuid.New(),
-			Kind:   java.StringLiteral,
 			Source: quote(e.message),
 			Value:  e.message,
 		}

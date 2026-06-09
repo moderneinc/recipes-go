@@ -121,7 +121,7 @@ func funcReturnsError(md *java.MethodDeclaration) bool {
 //	if err := <call>; err != nil {
 //	    return err
 //	}
-func buildIfInitErrCheck(mi *java.MethodInvocation) *java.If {
+func buildIfInitErrCheck(mi *java.MethodInvocation) *golang.StatementWithInit {
 	// The leading whitespace for a statement-level MethodInvocation typically
 	// lives on the Select element (the receiver identifier), not on the
 	// MethodInvocation node itself.
@@ -188,14 +188,23 @@ func buildIfInitErrCheck(mi *java.MethodInvocation) *java.If {
 		End: java.Space{Whitespace: "\n" + indent},
 	}
 
-	return &java.If{
-		ID:     uuid.New(),
-		Prefix: prefix,
-		Init: &java.RightPadded[java.Statement]{
-			Element: initAssign,
+	// An `if init; cond` is modeled as a golang.StatementWithInit wrapping a plain
+	// java.If: the wrapper owns the keyword prefix and the init clause, and the
+	// inner If's condition is a ControlParentheses (Go elides the parens).
+	innerIf := &java.If{
+		ID: uuid.New(),
+		Condition: &java.ControlParentheses{
+			ID:   uuid.New(),
+			Tree: java.RightPadded[java.Expression]{Element: condition},
 		},
-		Condition: condition,
-		Then:      thenBlock,
+		Then: thenBlock,
+	}
+
+	return &golang.StatementWithInit{
+		ID:        uuid.New(),
+		Prefix:    prefix,
+		Init:      java.RightPadded[java.Statement]{Element: initAssign},
+		Statement: innerIf,
 	}
 }
 

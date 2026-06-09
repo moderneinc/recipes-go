@@ -61,7 +61,7 @@ func (v *preferErrorfWrapVerbVisitor) VisitMethodInvocation(mi *java.MethodInvoc
 
 	// First argument must be a string literal containing %s (but not %w).
 	fmtLit, ok := args[0].Element.(*java.Literal)
-	if !ok || fmtLit.Kind != java.StringLiteral {
+	if !ok || !isStringLiteralSource(fmtLit.Source) {
 		return mi
 	}
 	content := fmtLit.Source

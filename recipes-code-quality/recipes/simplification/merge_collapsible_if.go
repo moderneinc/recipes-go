@@ -49,8 +49,9 @@ type mergeCollapsibleIfVisitor struct {
 func (v *mergeCollapsibleIfVisitor) VisitIf(ifStmt *java.If, p any) java.J {
 	ifStmt = v.GoVisitor.VisitIf(ifStmt, p).(*java.If)
 
-	// Outer if must not have an else clause or init statement.
-	if ifStmt.ElsePart != nil || ifStmt.Init != nil {
+	// Outer if must not have an else clause or init statement. An `if init; cond`
+	// is wrapped in a golang.StatementWithInit, so skip wrapped Ifs.
+	if ifStmt.ElsePart != nil || isInitWrappedIf(v.Cursor()) {
 		return ifStmt
 	}
 
@@ -59,24 +60,30 @@ func (v *mergeCollapsibleIfVisitor) VisitIf(ifStmt *java.If, p any) java.J {
 		return ifStmt
 	}
 
-	// That single statement must be another if.
+	// That single statement must be another if. An init-bearing inner if would be
+	// a golang.StatementWithInit, not a *java.If, so it is excluded here.
 	innerIf, ok := ifStmt.Then.Statements[0].Element.(*java.If)
 	if !ok {
 		return ifStmt
 	}
 
-	// Inner if must not have an else clause or init statement.
-	if innerIf.ElsePart != nil || innerIf.Init != nil {
+	// Inner if must not have an else clause.
+	if innerIf.ElsePart != nil {
+		return ifStmt
+	}
+
+	if ifStmt.Condition == nil || innerIf.Condition == nil {
 		return ifStmt
 	}
 
 	// Build the combined condition: outerCond && innerCond.
 	// Wrap either side in parentheses if it is a || expression to preserve precedence.
-	outerCond := maybeWrapOr(ifStmt.Condition)
-	innerCond := maybeWrapOr(innerIf.Condition)
+	outerExpr := ifStmt.Condition.Tree.Element
+	outerCond := maybeWrapOr(outerExpr)
+	innerCond := maybeWrapOr(innerIf.Condition.Tree.Element)
 
 	combined := &java.Binary{
-		Left:     setExprPrefix(outerCond, exprPrefix(ifStmt.Condition)),
+		Left:     setExprPrefix(outerCond, exprPrefix(outerExpr)),
 		Operator: java.LeftPadded[java.BinaryOperator]{Before: java.SingleSpace, Element: java.LogicalAnd},
 		Right:    setExprPrefix(innerCond, java.SingleSpace),
 	}
@@ -85,7 +92,9 @@ func (v *mergeCollapsibleIfVisitor) VisitIf(ifStmt *java.If, p any) java.J {
 	dedent := visitor.Init(&dedentCollapsedVisitor{})
 	newBody := dedent.Visit(innerIf.Then, p).(*java.Block)
 
-	return ifStmt.WithCondition(combined).WithThen(newBody)
+	newCond := *ifStmt.Condition
+	newCond.Tree.Element = combined
+	return ifStmt.WithCondition(&newCond).WithThen(newBody)
 }
 
 // dedentCollapsedVisitor removes one tab from every whitespace in a subtree,

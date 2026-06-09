@@ -50,13 +50,15 @@ func (v *useErrorsAsVisitor) VisitBlock(block *java.Block, p any) java.J {
 	var newStmts []java.RightPadded[java.Statement]
 
 	for _, rp := range block.Statements {
-		ifStmt, ok := rp.Element.(*java.If)
+		// `if init; cond` is wrapped in a golang.StatementWithInit; the comma-ok
+		// type assertion lives in its init clause.
+		swi, ok := rp.Element.(*golang.StatementWithInit)
 		if !ok {
 			newStmts = append(newStmts, rp)
 			continue
 		}
 
-		varName, typeExpr, errExpr := matchCommaOkTypeAssert(ifStmt)
+		varName, typeExpr, errExpr := matchCommaOkTypeAssert(swi)
 		if varName == "" {
 			newStmts = append(newStmts, rp)
 			continue
@@ -64,11 +66,13 @@ func (v *useErrorsAsVisitor) VisitBlock(block *java.Block, p any) java.J {
 
 		changed = true
 
+		ifStmt := swi.Statement.(*java.If)
+
 		// Build: var myErr *MyError
-		varDecl := buildVarDecl(varName, typeExpr, ifStmt.Prefix)
+		varDecl := buildVarDecl(varName, typeExpr, swi.Prefix)
 
 		// Build: if errors.As(err, &myErr) { ... }
-		newIf := buildErrorsAsIf(ifStmt, errExpr, varName)
+		newIf := buildErrorsAsIf(ifStmt, swi.Prefix, errExpr, varName)
 
 		newStmts = append(newStmts,
 			java.RightPadded[java.Statement]{Element: varDecl},
@@ -91,12 +95,13 @@ func (v *useErrorsAsVisitor) VisitBlock(block *java.Block, p any) java.J {
 //	myErr, ok := err.(*MyError); ok
 //
 // Returns (varName, typeExpr, errExpr) or ("", nil, nil) if no match.
-func matchCommaOkTypeAssert(ifStmt *java.If) (string, java.Expression, java.Expression) {
-	if ifStmt.Init == nil {
+func matchCommaOkTypeAssert(swi *golang.StatementWithInit) (string, java.Expression, java.Expression) {
+	ifStmt, ok := swi.Statement.(*java.If)
+	if !ok {
 		return "", nil, nil
 	}
 
-	ma, ok := ifStmt.Init.Element.(*golang.MultiAssignment)
+	ma, ok := swi.Init.Element.(*golang.MultiAssignment)
 	if !ok {
 		return "", nil, nil
 	}
@@ -118,7 +123,10 @@ func matchCommaOkTypeAssert(ifStmt *java.If) (string, java.Expression, java.Expr
 	}
 
 	// The condition must be the "ok" identifier
-	condIdent, ok := ifStmt.Condition.(*java.Identifier)
+	if ifStmt.Condition == nil {
+		return "", nil, nil
+	}
+	condIdent, ok := ifStmt.Condition.Tree.Element.(*java.Identifier)
 	if !ok || condIdent.Name != "ok" {
 		return "", nil, nil
 	}
@@ -194,7 +202,7 @@ func buildVarDecl(varName string, typeExpr java.Expression, prefix java.Space) *
 }
 
 // buildErrorsAsIf constructs: if errors.As(errExpr, &varName) { <original body> }
-func buildErrorsAsIf(origIf *java.If, errExpr java.Expression, varName string) *java.If {
+func buildErrorsAsIf(origIf *java.If, prefix java.Space, errExpr java.Expression, varName string) *java.If {
 	errorsAsCall := &java.MethodInvocation{
 		ID: uuid.New(),
 		Select: &java.RightPadded[java.Expression]{
@@ -229,11 +237,14 @@ func buildErrorsAsIf(origIf *java.If, errExpr java.Expression, varName string) *
 	}
 
 	return &java.If{
-		ID:        uuid.New(),
-		Prefix:    origIf.Prefix,
-		Condition: errorsAsCall,
-		Then:      origIf.Then,
-		ElsePart:  origIf.ElsePart,
+		ID:     uuid.New(),
+		Prefix: prefix,
+		Condition: &java.ControlParentheses{
+			ID:   uuid.New(),
+			Tree: java.RightPadded[java.Expression]{Element: errorsAsCall},
+		},
+		Then:     origIf.Then,
+		ElsePart: origIf.ElsePart,
 	}
 }
 

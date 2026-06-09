@@ -67,7 +67,7 @@ func (v *avoidHardcodedCredentialsVisitor) VisitVariableDeclarator(vd *java.Vari
 	}
 
 	lit, ok := vd.Initializer.Element.(*java.Literal)
-	if !ok || lit.Kind != java.StringLiteral {
+	if !ok || !isStringLiteralSource(lit.Source) {
 		return vd
 	}
 
@@ -96,7 +96,6 @@ func (v *avoidHardcodedCredentialsVisitor) VisitVariableDeclarator(vd *java.Vari
 	}
 
 	envLit := &java.Literal{
-		Kind:   java.StringLiteral,
 		Source: `"` + envName + `"`,
 	}
 

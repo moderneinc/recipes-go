@@ -61,7 +61,7 @@ func (v *preferRawStringRegexVisitor) VisitMethodInvocation(mi *java.MethodInvoc
 
 	firstArg := args[0].Element
 	lit, ok := firstArg.(*java.Literal)
-	if !ok || lit.Kind != java.StringLiteral {
+	if !ok || !isStringLiteralSource(lit.Source) {
 		return mi
 	}
 

@@ -62,7 +62,7 @@ func (v *auditMultipleErrorWrapsVisitor) VisitMethodInvocation(mi *java.MethodIn
 
 	// First argument must be a string literal.
 	fmtLit, ok := args[0].Element.(*java.Literal)
-	if !ok || fmtLit.Kind != java.StringLiteral {
+	if !ok || !isStringLiteralSource(fmtLit.Source) {
 		return mi
 	}
 

@@ -84,5 +84,11 @@ func isErrorMethodCall(expr java.Expression) bool {
 // isStringLiteral checks if an expression is a string Literal.
 func isStringLiteral(expr java.Expression) bool {
 	lit, ok := expr.(*java.Literal)
-	return ok && lit.Kind == java.StringLiteral
+	return ok && isStringLiteralSource(lit.Source)
+}
+
+// isStringLiteralSource reports whether the raw literal source is a Go string
+// literal — interpreted ("...") or raw (`...`).
+func isStringLiteralSource(source string) bool {
+	return len(source) > 0 && (source[0] == '"' || source[0] == '`')
 }

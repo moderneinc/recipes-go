@@ -38,7 +38,10 @@ func (v *handleCheckedErrorVisitor) VisitIf(ifStmt *java.If, p any) java.J {
 	ifStmt = v.GoVisitor.VisitIf(ifStmt, p).(*java.If)
 
 	// Check if the condition is `err != nil`.
-	bin, ok := ifStmt.Condition.(*java.Binary)
+	if ifStmt.Condition == nil {
+		return ifStmt
+	}
+	bin, ok := ifStmt.Condition.Tree.Element.(*java.Binary)
 	if !ok || bin.Operator.Element != java.NotEqual {
 		return ifStmt
 	}

@@ -60,18 +60,21 @@ func (v *removeDuplicateConditionsVisitor) VisitIf(ifStmt *java.If, p any) java.
 // nothing changed.
 func removeDuplicateBranches(ifStmt *java.If) *java.If {
 	// Collect the flat list of conditions we've seen so far.
-	seen := []string{printCondition(ifStmt.Condition)}
+	if ifStmt.Condition == nil {
+		return nil
+	}
+	seen := []string{printCondition(ifStmt.Condition.Tree.Element)}
 	changed := false
 
 	current := ifStmt
 	for current.ElsePart != nil {
 		elseIf, ok := current.ElsePart.Element.(*java.If)
-		if !ok {
+		if !ok || elseIf.Condition == nil {
 			// Plain else { } — end of chain.
 			break
 		}
 
-		condStr := printCondition(elseIf.Condition)
+		condStr := printCondition(elseIf.Condition.Tree.Element)
 		if containsStr(seen, condStr) {
 			// This else-if duplicates an earlier condition — remove it.
 			// Splice: current's else becomes the duplicate's else.

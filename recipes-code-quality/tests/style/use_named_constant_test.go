@@ -56,6 +56,20 @@ func TestUseNamedConstantNoChangeOne(t *testing.T) {
 	)
 }
 
+func TestUseNamedConstantNoChangeArrayLength(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.UseNamedConstant{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			func f() {
+				x := [3]int{}
+				_ = x
+			}
+		`),
+	)
+}
+
 func TestUseNamedConstantNoChangeConst(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&style.UseNamedConstant{})
 	spec.RewriteRun(t,
