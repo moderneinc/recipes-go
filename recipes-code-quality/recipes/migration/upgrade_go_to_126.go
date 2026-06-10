@@ -7,6 +7,7 @@ package migration
 import (
 	"go/version"
 
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/preconditions"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -32,9 +33,12 @@ func (r *UpgradeGoTo126) Description() string {
 }
 
 func (r *UpgradeGoTo126) Editor() recipe.TreeVisitor {
-	return visitor.Init(&upgradeGoTo126Visitor{
-		ChangeGoVersionVisitor: ChangeGoVersionVisitor{NewVersion: targetGoVersion},
-	})
+	return preconditions.Check(
+		preconditions.HasSourcePath("**/go.mod"),
+		visitor.Init(&upgradeGoTo126Visitor{
+			ChangeGoVersionVisitor: ChangeGoVersionVisitor{NewVersion: targetGoVersion},
+		}),
+	)
 }
 
 type upgradeGoTo126Visitor struct {
