@@ -33,7 +33,7 @@ func TestAvoidContextWithValue(t *testing.T) {
 			type key string
 
 			func f(ctx context.Context) {
-				ctx =/*~~(context.WithValue() call; consider passing dependencies explicitly)~~>*/ context.WithValue(ctx, key("k"), "val")
+				ctx = /*~~(context.WithValue() call; consider passing dependencies explicitly)~~>*/context.WithValue(ctx, key("k"), "val")
 				_ = ctx
 			}
 		`),

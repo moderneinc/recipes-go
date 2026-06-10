@@ -49,9 +49,9 @@ func (v *handleDeferredCloseErrorVisitor) VisitDefer(d *golang.Defer, p any) jav
 
 	// Build: defer func() { _ = f.Close() }()
 	//
-	// Step 1: Move the original Close() call, stripping its leading space
-	// so it sits right after "= " in the assignment.
-	closeCall := mi.WithPrefix(java.EmptySpace)
+	// Step 1: Move the original Close() call. The space after `=` lives on the
+	// value's own (outermost) prefix.
+	closeCall := mi.WithPrefix(java.SingleSpace)
 
 	// Step 2: _ = f.Close()
 	assignment := &java.Assignment{

@@ -28,7 +28,7 @@ func TestCheckContextError(t *testing.T) {
 			import "context"
 
 			func f(ctx context.Context) error {
-				return/*~~(ctx.Err() found; inspect the context error)~~>*/ ctx.Err()
+				return /*~~(ctx.Err() found; inspect the context error)~~>*/ctx.Err()
 			}
 		`),
 	)

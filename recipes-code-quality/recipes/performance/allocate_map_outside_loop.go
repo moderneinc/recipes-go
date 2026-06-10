@@ -204,21 +204,17 @@ func replaceMapMakeInBody(body *java.Block, mi mapMakeInfo) *java.Block {
 
 	rp := newStmts[mi.stmtIdx]
 
-	// Determine the indentation prefix from the original statement.
-	stmtWs := ""
-	if assign, ok := rp.Element.(*java.Assignment); ok {
-		if ident, ok := assign.Variable.(*java.Identifier); ok {
-			stmtWs = ident.Prefix.Whitespace
-		}
-	}
+	// Determine the indentation prefix from the original statement. The leading
+	// whitespace lives on the statement's own (outermost) prefix.
+	stmtSpace := rp.Element.GetPrefix()
 
 	// Build: clear(m)
 	clearCall := &java.MethodInvocation{
-		ID: uuid.New(),
+		ID:     uuid.New(),
+		Prefix: stmtSpace,
 		Name: &java.Identifier{
-			ID:     uuid.New(),
-			Prefix: java.Space{Whitespace: stmtWs},
-			Name:   "clear",
+			ID:   uuid.New(),
+			Name: "clear",
 		},
 		Arguments: java.Container[java.Expression]{
 			Before: java.EmptySpace,

@@ -76,10 +76,7 @@ func (v *replaceTimeUntilVisitor) VisitMethodInvocation(mi *java.MethodInvocatio
 	// The receiver (mi.Select) is the time value `t` to pass to time.Until(t)
 	receiver := mi.Select.Element
 
-	// Get the leading prefix from the receiver for the replacement
-	prefix := exprPrefixOf(receiver)
-
-	newTimeIdent := &java.Identifier{Prefix: prefix, Name: "time"}
+	newTimeIdent := &java.Identifier{Name: "time"}
 	untilIdent := &java.Identifier{Name: "Until"}
 
 	// Build argument list with the receiver as the arg
@@ -89,26 +86,13 @@ func (v *replaceTimeUntilVisitor) VisitMethodInvocation(mi *java.MethodInvocatio
 		Elements: []java.RightPadded[java.Expression]{{Element: receiverWithNoPrefix}},
 	}
 
+	// The leading whitespace lives on the outermost element (the invocation),
+	// so carry the original invocation's prefix onto the replacement.
 	return &java.MethodInvocation{
+		Prefix:    mi.Prefix,
 		Select:    &java.RightPadded[java.Expression]{Element: newTimeIdent, After: mi.Select.After},
 		Name:      untilIdent,
 		Arguments: newArgs,
-	}
-}
-
-func exprPrefixOf(expr java.Expression) java.Space {
-	switch n := expr.(type) {
-	case *java.Identifier:
-		return n.Prefix
-	case *java.FieldAccess:
-		return exprPrefixOf(n.Target)
-	case *java.MethodInvocation:
-		if n.Select != nil {
-			return exprPrefixOf(n.Select.Element)
-		}
-		return exprPrefixOf(n.Name)
-	default:
-		return java.Space{}
 	}
 }
 

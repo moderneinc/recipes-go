@@ -58,8 +58,7 @@ func (v *useErrorsNewVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p
 		return mi
 	}
 
-	ident, ok := mi.Select.Element.(*java.Identifier)
-	if !ok {
+	if _, ok := mi.Select.Element.(*java.Identifier); !ok {
 		return mi
 	}
 
@@ -93,12 +92,10 @@ func (v *useErrorsNewVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p
 	recipegolang.MaybeAddImport(v, "errors", nil, false)
 
 	// Build: errors.New(same literal)
-	// Reuse the prefix from the original "fmt" identifier.
-	prefix := ident.Prefix
-
+	// The leading whitespace lives on the outermost element (the invocation),
+	// so carry the original invocation's prefix onto the replacement.
 	errorsIdent := &java.Identifier{
-		Prefix: prefix,
-		Name:   "errors",
+		Name: "errors",
 	}
 
 	newName := &java.Identifier{
@@ -106,6 +103,7 @@ func (v *useErrorsNewVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p
 	}
 
 	return &java.MethodInvocation{
+		Prefix:    mi.Prefix,
 		Select:    &java.RightPadded[java.Expression]{Element: errorsIdent, After: mi.Select.After},
 		Name:      newName,
 		Arguments: mi.Arguments,

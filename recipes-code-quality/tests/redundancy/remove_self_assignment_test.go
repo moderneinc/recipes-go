@@ -22,7 +22,7 @@ func TestRemoveSelfAssignmentSimple(t *testing.T) {
 				x = x
 				_ = x
 			}
-		`, "package main\n\nfunc f() {\n\tx := 1\n\t\n\t_ = x\n}"),
+		`, "package main\n\nfunc f() {\n\tx := 1\n\t_ = x\n}"),
 	)
 }
 

@@ -29,7 +29,7 @@ func TestAuditJsonNumber(t *testing.T) {
 			import "encoding/json"
 
 			func f() {
-				var n/*~~(json.Number should be used carefully)~~>*/ json.Number
+				var n /*~~(json.Number should be used carefully)~~>*/json.Number
 				_ = n
 			}
 		`),

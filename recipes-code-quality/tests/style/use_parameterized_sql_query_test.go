@@ -23,8 +23,8 @@ func TestUseParameterizedSqlQuery(t *testing.T) {
 		`, `
 			package main
 
-			func f(db interface{ Query(string, ...any) }, table string) {/*~~(possible SQL injection via string concatenation)~~>*/
-				db.Query("SELECT * FROM " + table)
+			func f(db interface{ Query(string, ...any) }, table string) {
+				/*~~(possible SQL injection via string concatenation)~~>*/db.Query("SELECT * FROM " + table)
 			}
 		`),
 	)

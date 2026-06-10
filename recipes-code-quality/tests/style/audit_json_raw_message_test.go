@@ -29,7 +29,7 @@ func TestAuditJsonRawMessage(t *testing.T) {
 			import "encoding/json"
 
 			func f() {
-				var raw/*~~(json.RawMessage defers parsing; review for correctness)~~>*/ json.RawMessage
+				var raw /*~~(json.RawMessage defers parsing; review for correctness)~~>*/json.RawMessage
 				_ = raw
 			}
 		`),

@@ -30,8 +30,8 @@ func TestFindCopyInForLoop(t *testing.T) {
 			func f() {
 				dst := make([]byte, 10)
 				src := []byte("hello")
-				for i := 0; i < 10; i++ {/*~~(copy in loop; consider reusing buffer outside loop)~~>*/
-					copy(dst, src)
+				for i := 0; i < 10; i++ {
+					/*~~(copy in loop; consider reusing buffer outside loop)~~>*/copy(dst, src)
 				}
 			}
 		`),

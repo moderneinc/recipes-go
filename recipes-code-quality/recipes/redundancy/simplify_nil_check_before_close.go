@@ -82,12 +82,14 @@ func (v *simplifyNilCheckBeforeCloseVisitor) VisitIf(ifStmt *java.If, p any) jav
 		return ifStmt
 	}
 
-	// Replace the if statement with just the Close() call, preserving the if's prefix.
-	// The visible leading whitespace of `f.Close()` lives on the Select element (the `f`
-	// identifier), not on the MethodInvocation itself. Set it to the if statement's prefix.
+	// Replace the if statement with just the Close() call, preserving the if's
+	// prefix. The leading whitespace lives on the outermost element (the
+	// invocation), so carry the if statement's prefix onto it and clear the
+	// inner Select element's own (inner-indentation) prefix.
 	newMi := *mi
+	newMi.Prefix = ifStmt.Prefix
 	sel := *newMi.Select
-	sel.Element = selectIdent.WithPrefix(ifStmt.Prefix)
+	sel.Element = selectIdent.WithPrefix(java.EmptySpace)
 	newMi.Select = &sel
 	return &newMi
 }

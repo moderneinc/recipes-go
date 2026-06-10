@@ -170,65 +170,18 @@ func extractStmtIndent(body *java.Block) string {
 	if ws != "" {
 		return ws
 	}
-	// Fallback: look at sub-expressions.
-	return firstExprPrefix(stmt)
-}
-
-// getStmtWhitespace returns the Whitespace field of a statement's Prefix.
-func getStmtWhitespace(stmt java.Statement) string {
-	switch s := stmt.(type) {
-	case *golang.Defer:
-		return s.Prefix.Whitespace
-	case *java.Return:
-		return s.Prefix.Whitespace
-	case *golang.Return:
-		return s.Prefix.Whitespace
-	case *java.ForLoop:
-		return s.Prefix.Whitespace
-	case *java.ForEachLoop:
-		return s.Prefix.Whitespace
-	case *java.If:
-		return s.Prefix.Whitespace
-	case *java.VariableDeclarations:
-		return s.Prefix.Whitespace
-	default:
-		return ""
-	}
-}
-
-// firstExprPrefix extracts the whitespace from the first sub-expression of
-// an expression-based statement (e.g. AssignmentOperation, MultiAssignment).
-func firstExprPrefix(stmt java.Statement) string {
-	switch s := stmt.(type) {
-	case *java.AssignmentOperation:
-		if ident, ok := s.Variable.(*java.Identifier); ok {
-			return ident.Prefix.Whitespace
-		}
-	case *java.Assignment:
-		if ident, ok := s.Variable.(*java.Identifier); ok {
-			return ident.Prefix.Whitespace
-		}
-	case *golang.MultiAssignment:
-		if len(s.Variables) > 0 {
-			if ident, ok := s.Variables[0].Element.(*java.Identifier); ok {
-				return ident.Prefix.Whitespace
-			}
-		}
-	case *java.MethodInvocation:
-		if s.Select != nil {
-			if ident, ok := s.Select.Element.(*java.Identifier); ok {
-				return ident.Prefix.Whitespace
-			}
-		}
-		return s.Prefix.Whitespace
-	}
 	return "\n\t"
 }
 
-// setStmtPrefix sets the leading whitespace on a statement. For keyword-based
-// statements (defer, return, var, for, if) the prefix is on the statement
-// itself. For expression-based statements (assignments, method calls) the
-// prefix is on the first sub-expression.
+// getStmtWhitespace returns the Whitespace field of a statement's leading
+// prefix. The parser attaches leading whitespace to the outermost element, so
+// it lives directly on the statement.
+func getStmtWhitespace(stmt java.Statement) string {
+	return stmt.GetPrefix().Whitespace
+}
+
+// setStmtPrefix sets the leading whitespace on a statement's own (outermost)
+// prefix.
 func setStmtPrefix(stmt java.Statement, prefix java.Space) java.Statement {
 	switch s := stmt.(type) {
 	case *golang.Defer:
@@ -246,32 +199,12 @@ func setStmtPrefix(stmt java.Statement, prefix java.Space) java.Statement {
 	case *java.VariableDeclarations:
 		return s.WithPrefix(prefix)
 	case *java.AssignmentOperation:
-		return s.WithVariable(setExprPrefix(s.Variable, prefix))
+		return s.WithPrefix(prefix)
 	case *java.Assignment:
-		c := *s
-		c.Variable = setExprPrefix(s.Variable, prefix)
-		return &c
+		return s.WithPrefix(prefix)
 	case *golang.MultiAssignment:
-		if len(s.Variables) > 0 {
-			c := *s
-			vars := make([]java.RightPadded[java.Expression], len(s.Variables))
-			copy(vars, s.Variables)
-			vars[0] = java.RightPadded[java.Expression]{
-				Element: setExprPrefix(s.Variables[0].Element, prefix),
-				After:   s.Variables[0].After,
-			}
-			c.Variables = vars
-			return &c
-		}
-		return stmt
+		return s.WithPrefix(prefix)
 	case *java.MethodInvocation:
-		if s.Select != nil {
-			c := *s
-			sel := *s.Select
-			sel.Element = setExprPrefix(sel.Element, prefix)
-			c.Select = &sel
-			return &c
-		}
 		return s.WithPrefix(prefix)
 	default:
 		return stmt

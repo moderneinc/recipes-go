@@ -194,11 +194,13 @@ func hasLiteralArg(mi *java.MethodInvocation) bool {
 // If the original call was regexp.Compile, it is promoted to MustCompile
 // since string literal patterns are known-valid at compile time.
 func buildVarDecl(name string, call *java.MethodInvocation, prefix java.Space) *java.VariableDeclarations {
-	// Clone the call expression, setting a single-space leading prefix.
+	// Clone the call expression. The leading whitespace lives on the call's own
+	// (outermost) prefix — a single space after "=".
 	cleanCall := *call
+	cleanCall.Prefix = java.Space{Whitespace: " "}
 	if call.Select != nil {
 		sel := *call.Select
-		sel.Element = setMISelectPrefix(sel.Element, java.Space{Whitespace: " "})
+		sel.Element = setMISelectPrefix(sel.Element, java.EmptySpace)
 		cleanCall.Select = &sel
 	}
 	// Promote Compile to MustCompile for the hoisted call.

@@ -69,10 +69,12 @@ func (v *preferErrorsIsForFieldAccessVisitor) VisitBinary(bin *java.Binary, p an
 	// The rewrite introduces a reference to the `errors` package; ensure it is imported.
 	recipegolang.MaybeAddImport(v, "errors", nil, false)
 
-	// Build errors.Is(errExpr, sentinel) or !errors.Is(errExpr, sentinel)
+	// Build errors.Is(errExpr, sentinel) or !errors.Is(errExpr, sentinel). The
+	// leading whitespace lives on the outermost element, so carry the binary's
+	// prefix onto whichever node ends up outermost.
 	prefix := getLeadingPrefixExpr(bin)
 
-	errorsIdent := &java.Identifier{Prefix: prefix, Name: "errors"}
+	errorsIdent := &java.Identifier{Name: "errors"}
 	isIdent := &java.Identifier{Name: "Is"}
 
 	errArg := stripExprPrefix(errExpr)
@@ -94,10 +96,10 @@ func (v *preferErrorsIsForFieldAccessVisitor) VisitBinary(bin *java.Binary, p an
 		return &java.Unary{
 			Prefix:   prefix,
 			Operator: java.LeftPadded[java.UnaryOperator]{Element: java.Not},
-			Operand:  setMethodInvocationPrefix(isCall, java.Space{}),
+			Operand:  isCall,
 		}
 	}
-	return isCall
+	return isCall.WithPrefix(prefix)
 }
 
 // isPackageQualifiedSentinel checks if the expression is a FieldAccess

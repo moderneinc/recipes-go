@@ -38,8 +38,8 @@ func TestAuditRecoverOutsideDefer(t *testing.T) {
 		`, `
 			package main
 
-			func main() {/*~~(recover() catches panics; ensure it is in a deferred function)~~>*/
-				recover()
+			func main() {
+				/*~~(recover() catches panics; ensure it is in a deferred function)~~>*/recover()
 			}
 		`),
 	)

@@ -52,8 +52,8 @@ func TestUseStructuredLoggingPrintf(t *testing.T) {
 
 			import "log"
 
-			func f() {/*~~(consider migrating to log/slog for structured logging (Go 1.21+))~~>*/
-				log.Printf("hello %s", "world")
+			func f() {
+				/*~~(consider migrating to log/slog for structured logging (Go 1.21+))~~>*/log.Printf("hello %s", "world")
 			}
 		`),
 	)
@@ -75,8 +75,8 @@ func TestUseStructuredLoggingFatal(t *testing.T) {
 
 			import "log"
 
-			func main() {/*~~(consider migrating to log/slog for structured logging (Go 1.21+))~~>*/
-				log.Fatal("error")
+			func main() {
+				/*~~(consider migrating to log/slog for structured logging (Go 1.21+))~~>*/log.Fatal("error")
 			}
 		`),
 	)
