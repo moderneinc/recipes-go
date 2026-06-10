@@ -25,7 +25,7 @@ func TestUseBufferedChannel(t *testing.T) {
 			package main
 
 			func f() {
-				ch :=/*~~(unbuffered channel)~~>*/ make(chan int)
+				ch := /*~~(unbuffered channel)~~>*/make(chan int)
 				_ = ch
 			}
 		`),

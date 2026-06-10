@@ -36,7 +36,7 @@ func TestAuditYamlUnmarshal(t *testing.T) {
 			func f() {
 				data := []byte("key: value")
 				var out map[string]string
-				_ =/*~~(yaml.Unmarshal() call; validate input carefully)~~>*/ yaml.Unmarshal(data, &out)
+				_ = /*~~(yaml.Unmarshal() call; validate input carefully)~~>*/yaml.Unmarshal(data, &out)
 			}
 		`),
 	)

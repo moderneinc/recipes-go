@@ -71,10 +71,12 @@ func (v *preferErrorsIsVisitor) VisitBinary(bin *java.Binary, p any) java.J {
 	// The rewrite introduces a reference to the `errors` package; ensure it is imported.
 	recipegolang.MaybeAddImport(v, "errors", nil, false)
 
-	// Build errors.Is(err, sentinel) or !errors.Is(err, sentinel)
+	// Build errors.Is(err, sentinel) or !errors.Is(err, sentinel). The leading
+	// whitespace lives on the outermost element, so carry the binary's prefix
+	// onto whichever node ends up outermost (the call, or the negating unary).
 	prefix := getLeadingPrefixExpr(bin)
 
-	errorsIdent := &java.Identifier{Prefix: prefix, Name: "errors"}
+	errorsIdent := &java.Identifier{Name: "errors"}
 	isIdent := &java.Identifier{Name: "Is"}
 
 	errArg := stripExprPrefix(errExpr)
@@ -97,10 +99,10 @@ func (v *preferErrorsIsVisitor) VisitBinary(bin *java.Binary, p any) java.J {
 		return &java.Unary{
 			Prefix:   prefix,
 			Operator: java.LeftPadded[java.UnaryOperator]{Element: java.Not},
-			Operand:  setMethodInvocationPrefix(isCall, java.Space{}),
+			Operand:  isCall,
 		}
 	}
-	return isCall
+	return isCall.WithPrefix(prefix)
 }
 
 func isErrorSentinel(expr java.Expression) bool {
@@ -127,51 +129,14 @@ func isNilIdentifier(expr java.Expression) bool {
 	return ok && ident.Name == "nil"
 }
 
+// The leading whitespace lives directly on the outermost element, so prefix
+// accessors operate on the node's own prefix rather than its leftmost leaf.
 func getLeadingPrefixExpr(bin *java.Binary) java.Space {
-	return getExprPrefix(bin.Left)
-}
-
-func getExprPrefix(expr java.Expression) java.Space {
-	switch n := expr.(type) {
-	case *java.Identifier:
-		return n.Prefix
-	case *java.Literal:
-		return n.Prefix
-	case *java.FieldAccess:
-		return getExprPrefix(n.Target)
-	case *java.MethodInvocation:
-		if n.Select != nil {
-			return getExprPrefix(n.Select.Element)
-		}
-		return getExprPrefix(n.Name)
-	default:
-		return java.Space{}
-	}
+	return bin.Prefix
 }
 
 func stripExprPrefix(expr java.Expression) java.Expression {
-	switch n := expr.(type) {
-	case *java.Identifier:
-		return n.WithPrefix(java.Space{})
-	case *java.Literal:
-		return n.WithPrefix(java.Space{})
-	case *java.FieldAccess:
-		return n.WithTarget(stripExprPrefix(n.Target))
-	default:
-		return expr
-	}
-}
-
-func setMethodInvocationPrefix(mi *java.MethodInvocation, prefix java.Space) java.Expression {
-	if mi.Select != nil {
-		sel := *mi.Select
-		sel.Element = setExprPrefixLocal(sel.Element, prefix)
-		return &java.MethodInvocation{
-			ID: mi.ID, Prefix: mi.Prefix, Markers: mi.Markers,
-			Select: &sel, Name: mi.Name, Arguments: mi.Arguments, MethodType: mi.MethodType,
-		}
-	}
-	return mi.WithPrefix(prefix)
+	return setExprPrefixLocal(expr, java.Space{})
 }
 
 func setExprPrefixLocal(expr java.Expression, prefix java.Space) java.Expression {
@@ -181,7 +146,9 @@ func setExprPrefixLocal(expr java.Expression, prefix java.Space) java.Expression
 	case *java.Literal:
 		return n.WithPrefix(prefix)
 	case *java.FieldAccess:
-		return n.WithTarget(setExprPrefixLocal(n.Target, prefix))
+		return n.WithPrefix(prefix)
+	case *java.MethodInvocation:
+		return n.WithPrefix(prefix)
 	default:
 		return expr
 	}

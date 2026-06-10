@@ -31,7 +31,7 @@ func TestFindReadAllInForLoop(t *testing.T) {
 
 			func f(r io.Reader) {
 				for i := 0; i < 10; i++ {
-					_, _ =/*~~(ReadAll in loop; reads entire content into memory each iteration)~~>*/ io.ReadAll(r)
+					_, _ = /*~~(ReadAll in loop; reads entire content into memory each iteration)~~>*/io.ReadAll(r)
 				}
 			}
 		`),

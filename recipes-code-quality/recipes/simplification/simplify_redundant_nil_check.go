@@ -55,11 +55,11 @@ func (v *simplifyRedundantNilCheckVisitor) VisitBinary(bin *java.Binary, p any) 
 	if leftNilCheck && isLenCheck(bin.Right, leftVar) {
 		// x != nil && len(x) > 0  ->  len(x) > 0
 		// Preserve the outer binary's leading prefix (space after "if")
-		return setLeadingPrefix(bin.Right, leadingPrefix(bin))
+		return setExprPrefix(bin.Right, leadingPrefix(bin))
 	}
 	if rightNilCheck && isLenCheck(bin.Left, rightVar) {
 		// len(x) > 0 && x != nil  ->  len(x) > 0
-		return setLeadingPrefix(bin.Left, leadingPrefix(bin))
+		return setExprPrefix(bin.Left, leadingPrefix(bin))
 	}
 
 	return bin
@@ -128,29 +128,6 @@ func isLenCheck(expr java.Expression, varName string) bool {
 		}
 	}
 	return false
-}
-
-// setLeadingPrefix sets the prefix on the leftmost leaf of an expression,
-// which is where the effective leading whitespace lives in the Go LST.
-func setLeadingPrefix(expr java.Expression, prefix java.Space) java.Expression {
-	switch n := expr.(type) {
-	case *java.Binary:
-		return n.WithLeft(setLeadingPrefix(n.Left, prefix))
-	case *java.Identifier:
-		return n.WithPrefix(prefix)
-	case *java.Literal:
-		return n.WithPrefix(prefix)
-	case *java.MethodInvocation:
-		if n.Select != nil {
-			sel := *n.Select
-			sel.Element = setLeadingPrefix(sel.Element, prefix)
-			n.Select = &sel
-			return n
-		}
-		return n.WithName(n.Name.WithPrefix(prefix))
-	default:
-		return expr
-	}
 }
 
 // isPositiveComparison checks if the operator and right operand form a

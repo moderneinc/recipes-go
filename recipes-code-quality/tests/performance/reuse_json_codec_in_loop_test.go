@@ -31,7 +31,7 @@ func TestFindJsonMarshalInForLoop(t *testing.T) {
 
 			func f(items []string) {
 				for _, item := range items {
-					_, _ =/*~~(json marshal/unmarshal in loop; consider using a pre-allocated encoder/decoder)~~>*/ json.Marshal(item)
+					_, _ = /*~~(json marshal/unmarshal in loop; consider using a pre-allocated encoder/decoder)~~>*/json.Marshal(item)
 				}
 			}
 		`),
@@ -60,7 +60,7 @@ func TestFindJsonUnmarshalInClassicForLoop(t *testing.T) {
 			func f(data [][]byte) {
 				for i := 0; i < len(data); i++ {
 					var v interface{}
-					_ =/*~~(json marshal/unmarshal in loop; consider using a pre-allocated encoder/decoder)~~>*/ json.Unmarshal(data[i], &v)
+					_ = /*~~(json marshal/unmarshal in loop; consider using a pre-allocated encoder/decoder)~~>*/json.Unmarshal(data[i], &v)
 				}
 			}
 		`),

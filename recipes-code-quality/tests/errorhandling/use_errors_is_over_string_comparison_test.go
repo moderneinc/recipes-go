@@ -24,7 +24,7 @@ func TestUseErrorsIsOverStringComparison(t *testing.T) {
 			package main
 
 			func f(err error) bool {
-				return/*~~(comparing error string is fragile; use errors.Is or errors.As)~~>*/ err.Error() == "not found"
+				return /*~~(comparing error string is fragile; use errors.Is or errors.As)~~>*/err.Error() == "not found"
 			}
 		`),
 	)

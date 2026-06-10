@@ -30,7 +30,7 @@ func TestAvoidUnsafePackage(t *testing.T) {
 
 			func f() {
 				var x int
-				_ =/*~~(unsafe package usage)~~>*/ unsafe.Pointer(&x)
+				_ = /*~~(unsafe package usage)~~>*/unsafe.Pointer(&x)
 			}
 		`),
 	)

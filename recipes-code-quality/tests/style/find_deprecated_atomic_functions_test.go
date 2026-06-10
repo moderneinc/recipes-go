@@ -29,8 +29,8 @@ func TestFindDeprecatedAtomicFunctionsAddInt32(t *testing.T) {
 			import "sync/atomic"
 
 			func f() {
-				var x int32/*~~(deprecated sync/atomic function; prefer the type-safe atomic types introduced in Go 1.19 (e.g. atomic.Int32))~~>*/
-				atomic.AddInt32(&x, 1)
+				var x int32
+				/*~~(deprecated sync/atomic function; prefer the type-safe atomic types introduced in Go 1.19 (e.g. atomic.Int32))~~>*/atomic.AddInt32(&x, 1)
 			}
 		`),
 	)
@@ -55,7 +55,7 @@ func TestFindDeprecatedAtomicFunctionsLoadInt64(t *testing.T) {
 
 			func f() {
 				var x int64
-				_ =/*~~(deprecated sync/atomic function; prefer the type-safe atomic types introduced in Go 1.19 (e.g. atomic.Int32))~~>*/ atomic.LoadInt64(&x)
+				_ = /*~~(deprecated sync/atomic function; prefer the type-safe atomic types introduced in Go 1.19 (e.g. atomic.Int32))~~>*/atomic.LoadInt64(&x)
 			}
 		`),
 	)
@@ -110,8 +110,8 @@ func TestFindDeprecatedAtomicFunctionsStoreInt32(t *testing.T) {
 			import "sync/atomic"
 
 			func f() {
-				var x int32/*~~(deprecated sync/atomic function; prefer the type-safe atomic types introduced in Go 1.19 (e.g. atomic.Int32))~~>*/
-				atomic.StoreInt32(&x, 42)
+				var x int32
+				/*~~(deprecated sync/atomic function; prefer the type-safe atomic types introduced in Go 1.19 (e.g. atomic.Int32))~~>*/atomic.StoreInt32(&x, 42)
 			}
 		`),
 	)
@@ -135,8 +135,8 @@ func TestFindDeprecatedAtomicFunctionsCompareAndSwapInt64(t *testing.T) {
 			import "sync/atomic"
 
 			func f() {
-				var x int64/*~~(deprecated sync/atomic function; prefer the type-safe atomic types introduced in Go 1.19 (e.g. atomic.Int32))~~>*/
-				atomic.CompareAndSwapInt64(&x, 0, 1)
+				var x int64
+				/*~~(deprecated sync/atomic function; prefer the type-safe atomic types introduced in Go 1.19 (e.g. atomic.Int32))~~>*/atomic.CompareAndSwapInt64(&x, 0, 1)
 			}
 		`),
 	)

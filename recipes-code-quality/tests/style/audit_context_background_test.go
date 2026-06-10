@@ -29,7 +29,7 @@ func TestAuditContextBackground(t *testing.T) {
 			import "context"
 
 			func f() {
-				ctx :=/*~~(context.Background() call; consider using a passed context instead)~~>*/ context.Background()
+				ctx := /*~~(context.Background() call; consider using a passed context instead)~~>*/context.Background()
 				_ = ctx
 			}
 		`),

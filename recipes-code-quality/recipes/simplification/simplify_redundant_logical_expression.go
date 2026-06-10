@@ -54,8 +54,9 @@ func (v *simplifyRedundantLogicalExpressionVisitor) VisitBinary(bin *java.Binary
 	// structural equality of the two operands.
 	if printExpr(bin.Left) == printExpr(bin.Right) {
 		// Replace the whole binary with just the left operand, preserving the
-		// outer prefix so the surrounding code keeps its whitespace.
-		return setExprPrefix(bin.Left, exprPrefix(bin.Left))
+		// outer prefix so the surrounding code keeps its whitespace. The leading
+		// whitespace lives on the outermost element (the binary), not its operand.
+		return setExprPrefix(bin.Left, bin.Prefix)
 	}
 
 	return bin

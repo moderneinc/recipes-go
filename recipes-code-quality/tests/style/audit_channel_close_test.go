@@ -25,8 +25,8 @@ func TestAuditChannelClose(t *testing.T) {
 			package main
 
 			func f() {
-				ch := make(chan int)/*~~(ensure channel is only closed by the sender)~~>*/
-				close(ch)
+				ch := make(chan int)
+				/*~~(ensure channel is only closed by the sender)~~>*/close(ch)
 			}
 		`),
 	)
@@ -46,8 +46,8 @@ func TestAuditChannelCloseBuffered(t *testing.T) {
 			package main
 
 			func f() {
-				ch := make(chan string, 10)/*~~(ensure channel is only closed by the sender)~~>*/
-				close(ch)
+				ch := make(chan string, 10)
+				/*~~(ensure channel is only closed by the sender)~~>*/close(ch)
 			}
 		`),
 	)

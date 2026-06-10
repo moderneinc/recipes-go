@@ -60,8 +60,7 @@ func (v *replaceTimeSinceVisitor) VisitMethodInvocation(mi *java.MethodInvocatio
 		return mi
 	}
 
-	timeIdent, ok := nowCall.Select.Element.(*java.Identifier)
-	if !ok {
+	if _, ok := nowCall.Select.Element.(*java.Identifier); !ok {
 		return mi
 	}
 
@@ -73,12 +72,10 @@ func (v *replaceTimeSinceVisitor) VisitMethodInvocation(mi *java.MethodInvocatio
 	}
 
 	// Build: time.Since(arg)
-	// Reuse the existing "time" identifier and its prefix for leading whitespace.
-	prefix := timeIdent.Prefix
-
+	// The leading whitespace lives on the outermost element (the invocation),
+	// so carry the original invocation's prefix onto the replacement.
 	newTimeIdent := &java.Identifier{
-		Prefix: prefix,
-		Name:   "time",
+		Name: "time",
 	}
 
 	sinceIdent := &java.Identifier{
@@ -86,6 +83,7 @@ func (v *replaceTimeSinceVisitor) VisitMethodInvocation(mi *java.MethodInvocatio
 	}
 
 	return &java.MethodInvocation{
+		Prefix:    mi.Prefix,
 		Select:    &java.RightPadded[java.Expression]{Element: newTimeIdent, After: mi.Select.After},
 		Name:      sinceIdent,
 		Arguments: mi.Arguments, // reuse the argument list (contains the original arg)

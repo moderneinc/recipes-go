@@ -272,22 +272,17 @@ func replaceAddAssignInBody(body *java.Block, sc stringConcatInfo) *java.Block {
 	rp := newStmts[sc.stmtIdx]
 	ao := rp.Element.(*java.AssignmentOperation)
 
-	// For expression-based statements, the leading whitespace is on
-	// Variable.Prefix, not on the statement itself.
-	varPrefix := java.EmptySpace
-	if ident, ok := ao.Variable.(*java.Identifier); ok {
-		varPrefix = ident.Prefix
-	}
+	// The leading whitespace lives on the statement's own (outermost) prefix.
+	stmtSpace := ao.GetPrefix()
 
 	// Build: builder.WriteString(expr)
-	// Put the leading whitespace on the Select element (builder identifier).
 	writeCall := &java.MethodInvocation{
-		ID: uuid.New(),
+		ID:     uuid.New(),
+		Prefix: stmtSpace,
 		Select: &java.RightPadded[java.Expression]{
 			Element: &java.Identifier{
-				ID:     uuid.New(),
-				Prefix: varPrefix,
-				Name:   "builder",
+				ID:   uuid.New(),
+				Name: "builder",
 			},
 		},
 		Name: &java.Identifier{

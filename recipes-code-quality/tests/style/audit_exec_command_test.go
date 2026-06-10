@@ -27,8 +27,8 @@ func TestAuditExecCommand(t *testing.T) {
 
 			import "os/exec"
 
-			func f() {/*~~(exec.Command call; ensure arguments are not from untrusted input)~~>*/
-				exec.Command("ls", "-la")
+			func f() {
+				/*~~(exec.Command call; ensure arguments are not from untrusted input)~~>*/exec.Command("ls", "-la")
 			}
 		`),
 	)

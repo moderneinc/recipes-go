@@ -65,49 +65,31 @@ func (v *checkCloseErrorVisitor) VisitMethodInvocation(mi *java.MethodInvocation
 	}
 
 	// Wrap: f.Close() → _ = f.Close()
-	// Preserve the leading prefix from the MethodInvocation on the blank identifier.
-	prefix := closeLeadingPrefix(mi)
+	// The leading whitespace lives on the outermost element, so carry the
+	// invocation's prefix onto the new assignment. The space after `=` lives on
+	// the value's own (outermost) prefix.
+	prefix := mi.GetPrefix()
 
 	blank := &java.Identifier{
-		Prefix: prefix,
-		Name:   "_",
+		Name: "_",
 	}
 
-	// Move the leading whitespace from the MethodInvocation to the blank
-	// identifier and give the MethodInvocation a single-space prefix so it
-	// prints as `_ = f.Close()`.
-	adjusted := adjustClosePrefix(mi)
-
-	return &java.Assignment{
-		Variable: blank,
-		Value: java.LeftPadded[java.Expression]{
-			Before:  java.SingleSpace,
-			Element: adjusted,
-		},
-	}
-}
-
-// closeLeadingPrefix extracts the leading prefix from a MethodInvocation.
-func closeLeadingPrefix(mi *java.MethodInvocation) java.Space {
-	if mi.Select != nil {
-		if ident, ok := mi.Select.Element.(*java.Identifier); ok {
-			return ident.Prefix
-		}
-	}
-	return mi.Prefix
-}
-
-// adjustClosePrefix returns a copy of the MethodInvocation with its
-// leading prefix set to a single space (for the space after `=`).
-func adjustClosePrefix(mi *java.MethodInvocation) *java.MethodInvocation {
+	adjusted := *mi
+	adjusted.Prefix = java.SingleSpace
 	if mi.Select != nil {
 		if ident, ok := mi.Select.Element.(*java.Identifier); ok {
 			newSelect := *mi.Select
-			newSelect.Element = ident.WithPrefix(java.SingleSpace)
-			c := *mi
-			c.Select = &newSelect
-			return &c
+			newSelect.Element = ident.WithPrefix(java.EmptySpace)
+			adjusted.Select = &newSelect
 		}
 	}
-	return mi
+
+	return &java.Assignment{
+		Prefix:   prefix,
+		Variable: blank,
+		Value: java.LeftPadded[java.Expression]{
+			Before:  java.SingleSpace,
+			Element: &adjusted,
+		},
+	}
 }

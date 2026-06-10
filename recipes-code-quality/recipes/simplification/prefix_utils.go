@@ -9,36 +9,18 @@ import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 )
 
-// leadingPrefix returns the effective leading prefix of a binary expression,
-// which is on its left child (since Binary.Prefix is typically empty in Go LST).
+// leadingPrefix returns the leading prefix of a binary expression. The parser
+// attaches inter-element whitespace to the outermost element, so it lives
+// directly on the binary's own prefix.
 func leadingPrefix(bin *java.Binary) java.Space {
-	return exprPrefix(bin.Left)
+	return bin.Prefix
 }
 
+// exprPrefix returns the node's own leading whitespace. The parser attaches
+// inter-element whitespace to the outermost element, so the leading prefix
+// lives directly on the node.
 func exprPrefix(expr java.Expression) java.Space {
-	switch n := expr.(type) {
-	case *java.Identifier:
-		return n.Prefix
-	case *java.Literal:
-		return n.Prefix
-	case *java.Parentheses:
-		return n.Prefix
-	case *java.Unary:
-		return n.Prefix
-	case *golang.Unary:
-		return n.Prefix
-	case *java.Binary:
-		return exprPrefix(n.Left)
-	case *java.FieldAccess:
-		return exprPrefix(n.Target)
-	case *java.MethodInvocation:
-		if n.Select != nil {
-			return exprPrefix(n.Select.Element)
-		}
-		return exprPrefix(n.Name)
-	default:
-		return java.Space{}
-	}
+	return expr.GetPrefix()
 }
 
 func setExprPrefix(expr java.Expression, prefix java.Space) java.Expression {
@@ -57,9 +39,12 @@ func setExprPrefix(expr java.Expression, prefix java.Space) java.Expression {
 	case *golang.Unary:
 		return n.WithPrefix(prefix)
 	case *java.Binary:
+		// Put the leading whitespace on the binary (the outermost element) and
+		// clear any prefix the leftmost operand still carries, so the leading
+		// whitespace isn't doubled.
 		return &java.Binary{
-			ID: n.ID, Prefix: n.Prefix, Markers: n.Markers,
-			Left: setExprPrefix(n.Left, prefix), Operator: n.Operator, Right: n.Right, Type: n.Type,
+			ID: n.ID, Prefix: prefix, Markers: n.Markers,
+			Left: setExprPrefix(n.Left, java.Space{}), Operator: n.Operator, Right: n.Right, Type: n.Type,
 		}
 	case *java.FieldAccess:
 		return n.WithPrefix(prefix)
