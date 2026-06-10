@@ -5,6 +5,7 @@
 package migration
 
 import (
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/preconditions"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -38,7 +39,10 @@ func (r *ChangeGoVersion) Options() []recipe.OptionDescriptor {
 }
 
 func (r *ChangeGoVersion) Editor() recipe.TreeVisitor {
-	return visitor.Init(&ChangeGoVersionVisitor{NewVersion: r.NewVersion})
+	return preconditions.Check(
+		preconditions.HasSourcePath("**/go.mod"),
+		visitor.Init(&ChangeGoVersionVisitor{NewVersion: r.NewVersion}),
+	)
 }
 
 // ChangeGoVersionVisitor rewrites the single-valued `go` directive to
@@ -47,10 +51,6 @@ func (r *ChangeGoVersion) Editor() recipe.TreeVisitor {
 type ChangeGoVersionVisitor struct {
 	visitor.GoVisitor
 	NewVersion string
-}
-
-func (v *ChangeGoVersionVisitor) VisitCompilationUnit(cu *golang.CompilationUnit, p any) java.J {
-	return cu
 }
 
 func (v *ChangeGoVersionVisitor) VisitGoModDirective(d *golang.GoModDirective, p any) java.Tree {
