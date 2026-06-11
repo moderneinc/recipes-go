@@ -21,7 +21,7 @@ type ChangeGoVersion struct {
 	NewVersion string
 }
 
-func (r *ChangeGoVersion) Name() string { return "org.openrewrite.golang.codequality.ChangeGoVersion" }
+func (r *ChangeGoVersion) Name() string { return "org.openrewrite.golang.migration.ChangeGoVersion" }
 
 func (r *ChangeGoVersion) DisplayName() string { return "Change the `go` directive version" }
 
