@@ -1,6 +1,6 @@
 github.com/google/uuid v1.6.0 h1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=
 github.com/google/uuid v1.6.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
-github.com/openrewrite/rewrite/rewrite-go v0.0.16 h1:f6mx2VF98Q8cxdmCIjDfo70ODX+h+nB2Wk3ckcnZRNs=
-github.com/openrewrite/rewrite/rewrite-go v0.0.16/go.mod h1:YquZz5hJMNrl7quFsOhlgyc5+UTV05XyFBSLJITdtvw=
+github.com/openrewrite/rewrite/rewrite-go v0.0.17 h1:BG0n7JXhg/zXt8YbPD1K5cDm04SRGlU9I+CWEwlzMpA=
+github.com/openrewrite/rewrite/rewrite-go v0.0.17/go.mod h1:YquZz5hJMNrl7quFsOhlgyc5+UTV05XyFBSLJITdtvw=
 golang.org/x/mod v0.35.0 h1:Ww1D637e6Pg+Zb2KrWfHQUnH2dQRLBQyAtpr/haaJeM=
 golang.org/x/mod v0.35.0/go.mod h1:+GwiRhIInF8wPm+4AoT6L0FA1QWAad3OMdTRx4tFYlU=
