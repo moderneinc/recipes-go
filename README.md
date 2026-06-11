@@ -31,28 +31,22 @@ Alternatively, place a `.moderne/moderne.yml` file in your repository root with 
 
 Install the recipes using the Moderne CLI's `mod config recipes go install` command. Go recipe modules are resolved from source via their Go module path.
 
-### From a release tag
+### Pinned to a release version
 
 ```bash
-mod config recipes go install github.com/moderneinc/recipes-go/recipes-code-quality@v0.1.0
+mod config recipes go install github.com/moderneinc/recipes-go@v0.4.0
 ```
 
 ### Latest (no version specified)
 
 ```bash
-mod config recipes go install github.com/moderneinc/recipes-go/recipes-code-quality
-```
-
-### From a specific version
-
-```bash
-mod config recipes go install github.com/moderneinc/recipes-go/recipes-code-quality@v0.2.0
+mod config recipes go install github.com/moderneinc/recipes-go
 ```
 
 ### Removing recipes
 
 ```bash
-mod config recipes go delete github.com/moderneinc/recipes-go/recipes-code-quality
+mod config recipes go delete github.com/moderneinc/recipes-go
 ```
 
 ### Viewing installed recipes
@@ -146,7 +140,6 @@ For help getting started with the Moderne CLI, check out our [getting started gu
 ## Building and Testing
 
 ```bash
-cd recipes-code-quality
 go test ./... -count=1              # Run all tests
 go test ./tests/simplification/    # Run a specific category
 ./gradlew check                     # Full build via Gradle
@@ -167,9 +160,11 @@ The `publish` workflow (`.github/workflows/publish.yml`) reacts to tags matching
 recipe-library Maven artifact (catalog metadata) to Maven Central via OSSRH.
 
 The Go module itself is consumed by the Moderne CLI directly from the Go module
-proxy (`proxy.golang.org`). No active push is needed for the Go side — once the
-tag exists on GitHub, `mod config recipes go install
-github.com/moderneinc/recipes-go/recipes-code-quality@vX.Y.Z` resolves it.
+proxy (`proxy.golang.org`). The module lives at the repository root, so a single
+plain `vX.Y.Z` tag serves both the Maven publish and the Go module — no
+subdirectory-prefixed tag is needed. No active push is needed for the Go side —
+once the tag exists on GitHub, `mod config recipes go install
+github.com/moderneinc/recipes-go@vX.Y.Z` resolves it.
 
 ## Licensing
 

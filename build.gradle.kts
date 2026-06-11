@@ -98,7 +98,7 @@ fun findGo(): String {
 
 // Register build/test tasks for a Go module directory
 fun registerGoModule(taskPrefix: String, dirName: String, needsRpcServer: Boolean = false) {
-    val moduleDir = projectDir.resolve(dirName)
+    val moduleDir = if (dirName == ".") projectDir else projectDir.resolve(dirName)
 
     val modDownload = tasks.register("${taskPrefix}Restore", Exec::class.java) {
         group = "go"
@@ -173,4 +173,4 @@ fun registerGoModule(taskPrefix: String, dirName: String, needsRpcServer: Boolea
 // Module registrations
 // ============================================
 
-registerGoModule("codeQuality", "recipes-code-quality", needsRpcServer = false)
+registerGoModule("codeQuality", ".", needsRpcServer = false)

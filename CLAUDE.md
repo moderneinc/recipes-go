@@ -4,10 +4,11 @@ OpenRewrite recipes for Go codebases — code quality, migration, and remediatio
 
 ## Project Structure
 
-- `recipes-code-quality/` — Go code quality recipes (simplification, redundancy, style, performance, error handling)
-- `recipes-code-quality/diagnostic/` — Diagnostic mapping types for harness comparison
-- `recipes-code-quality/recipes/` — Recipe implementations by category
-- `recipes-code-quality/tests/` — xunit-style tests by category
+The Go module lives at the repository root (module path `github.com/moderneinc/recipes-go`) so that a single plain `vX.Y.Z` tag serves both the Maven publish and the Go module proxy — no subdirectory-prefixed tag is needed.
+
+- `recipes/` — Recipe implementations by category (simplification, redundancy, style, performance, error handling)
+- `diagnostic/` — Diagnostic mapping types for harness comparison
+- `tests/` — xunit-style tests by category
 - `code-quality-harness/` — Comparison harness (staticcheck/golangci-lint vs OpenRewrite)
 - `working-set-code-quality/` — Real Go repos for harness testing
 
@@ -15,7 +16,6 @@ OpenRewrite recipes for Go codebases — code quality, migration, and remediatio
 
 ```bash
 ./gradlew build              # Canonical entry point — builds + tests Go modules + checks license
-cd recipes-code-quality
 go test ./... -count=1       # Run all tests directly
 go test ./tests/redundancy/  # Run specific category
 ```
@@ -28,7 +28,7 @@ The Go-side dependency on `github.com/openrewrite/rewrite/rewrite-go` requires u
 
 ## Cross-repo Development with rewrite-go
 
-For local cross-repo dev, re-add the `replace` directive to `recipes-code-quality/go.mod`:
+For local cross-repo dev, re-add the `replace` directive to the root `go.mod`:
 
 ```
 replace github.com/openrewrite/rewrite/rewrite-go => ../../../openrewrite/rewrite/rewrite-go
@@ -49,7 +49,6 @@ cd ../../../openrewrite/rewrite
 ./gradlew :rewrite-go:integTest
 
 # 3. Recipe unit tests pick up rewrite-go changes automatically via replace directive
-cd recipes-code-quality
 go test ./... -count=1
 
 # 4. To test through the CLI (mod build / mod run), publish rewrite-go and rebuild the fat jar
