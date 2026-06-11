@@ -24,7 +24,7 @@ type UpgradeGoTo126 struct {
 	recipe.Base
 }
 
-func (r *UpgradeGoTo126) Name() string { return "org.openrewrite.golang.codequality.UpgradeGoTo126" }
+func (r *UpgradeGoTo126) Name() string { return "org.openrewrite.golang.migration.UpgradeGoTo126" }
 
 func (r *UpgradeGoTo126) DisplayName() string { return "Upgrade Go to 1.26" }
 
