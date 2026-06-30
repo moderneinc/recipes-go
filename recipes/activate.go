@@ -227,5 +227,13 @@ func Activate(r *recipe.Registry) {
 	// Migration
 	migrationCategory := recipe.CategoryDescriptor{DisplayName: "Migration", Description: "Migrate to newer Go versions"}
 	r.Register(&migration.ChangeGoVersion{}, golang, codeQuality, migrationCategory)
+	r.Register(&migration.UpgradeGoTo118{}, golang, codeQuality, migrationCategory)
+	r.Register(&migration.UpgradeGoTo119{}, golang, codeQuality, migrationCategory)
+	r.Register(&migration.UpgradeGoTo120{}, golang, codeQuality, migrationCategory)
+	r.Register(&migration.UpgradeGoTo121{}, golang, codeQuality, migrationCategory)
+	r.Register(&migration.UpgradeGoTo122{}, golang, codeQuality, migrationCategory)
+	r.Register(&migration.UpgradeGoTo123{}, golang, codeQuality, migrationCategory)
+	r.Register(&migration.UpgradeGoTo124{}, golang, codeQuality, migrationCategory)
+	r.Register(&migration.UpgradeGoTo125{}, golang, codeQuality, migrationCategory)
 	r.Register(&migration.UpgradeGoTo126{}, golang, codeQuality, migrationCategory)
 }
