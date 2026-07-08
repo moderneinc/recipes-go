@@ -237,6 +237,7 @@ func Activate(r *recipe.Registry) {
 	r.Register(&migration.UpgradeGoTo125{}, golang, codeQuality, migrationCategory)
 	r.Register(&migration.UpgradeGoTo126{}, golang, codeQuality, migrationCategory)
 	r.Register(&migration.GoModTidy{}, golang, codeQuality, migrationCategory)
+	r.Register(&migration.AddMissingGoModRequires{}, golang, codeQuality, migrationCategory)
 	r.Register(&migration.FixGoModIndirectMarkers{}, golang, codeQuality, migrationCategory)
 	r.Register(&migration.FormatGoMod{}, golang, codeQuality, migrationCategory)
 	r.Register(&migration.FindMissingGoModRequires{}, golang, codeQuality, migrationCategory)

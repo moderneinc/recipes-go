@@ -7,6 +7,7 @@ package migration
 import (
 	"strings"
 
+	"github.com/google/uuid"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -125,6 +126,45 @@ func requireModulePaths(gm *golang.GoMod) (requires []string, mainModule string)
 		}
 	}
 	return requires, mainModule
+}
+
+// requiredModuleSet returns the set of module paths already declared by a
+// `require` directive (single-line or block entry) in the go.mod.
+func requiredModuleSet(gm *golang.GoMod) map[string]bool {
+	requires, _ := requireModulePaths(gm)
+	set := make(map[string]bool, len(requires))
+	for _, r := range requires {
+		set[r] = true
+	}
+	return set
+}
+
+func newIdent() uuid.UUID { return uuid.New() }
+
+func freshMarkers() java.Markers { return java.Markers{ID: uuid.New()} }
+
+func newGoModValue(prefix java.Space, text string) *golang.GoModValue {
+	return &golang.GoModValue{Ident: uuid.New(), Prefix: prefix, Markers: freshMarkers(), Text: text}
+}
+
+// newRequireEntry builds a `<modulePath> <version>` block-entry directive with
+// the given leading whitespace, adding a trailing `// indirect` comment when
+// indirect. Used to insert requirements that a full `go mod tidy` would add.
+func newRequireEntry(prefixWS, modulePath, version string, indirect bool) java.RightPadded[golang.GoModStatement] {
+	d := &golang.GoModDirective{
+		Ident:   uuid.New(),
+		Prefix:  java.Space{Whitespace: prefixWS},
+		Markers: freshMarkers(),
+		Values: []*golang.GoModValue{
+			newGoModValue(java.EmptySpace, modulePath),
+			newGoModValue(java.SingleSpace, version),
+		},
+	}
+	after := java.Space{Whitespace: "\n"}
+	if indirect {
+		after = withIndirectComment(after)
+	}
+	return java.RightPadded[golang.GoModStatement]{Element: d, After: after, Markers: freshMarkers()}
 }
 
 // directlyImportedModules returns the set of module paths declared in the
