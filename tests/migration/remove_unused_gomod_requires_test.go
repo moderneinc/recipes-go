@@ -158,6 +158,46 @@ func TestRemoveUnusedGoModRequiresSingleLine(t *testing.T) {
 	)
 }
 
+func TestRemoveUnusedGoModRequiresKeepsTestOnlyDependency(t *testing.T) {
+	// given a module imported only by a test file. Since the resolver runs
+	// `go list -deps -test`, that module appears in PackageModules, so it is
+	// part of the needed set and must not be removed.
+	spec := test.NewRecipeSpec().WithRecipe(&migration.RemoveUnusedGoModRequires{})
+	resolved := []golang.GoResolvedDependency{
+		{ModulePath: "example.com/app", Main: true},
+		{ModulePath: "github.com/testonly/dep", Version: "v1.0.0", Indirect: true},
+		{ModulePath: "github.com/dead/mod", Version: "v1.0.0", Indirect: true},
+	}
+	pkgs := []golang.GoPackageModule{
+		{ImportPath: "github.com/testonly/dep", ModulePath: "github.com/testonly/dep", Version: "v1.0.0"},
+	}
+
+	// when / then the test-only dependency is kept; only the dead module is dropped
+	spec.RewriteRun(t,
+		test.GoModGraph(
+			test.GoMod(`
+				module example.com/app
+
+				go 1.22
+
+				require (
+					github.com/testonly/dep v1.0.0 // indirect
+					github.com/dead/mod v1.0.0 // indirect
+				)
+			`, `
+				module example.com/app
+
+				go 1.22
+
+				require (
+					github.com/testonly/dep v1.0.0 // indirect
+				)
+			`),
+			resolved, pkgs,
+		),
+	)
+}
+
 func TestRemoveUnusedGoModRequiresNoChangeWithoutResolution(t *testing.T) {
 	// given no resolved package→module map (resolution did not run)
 	spec := test.NewRecipeSpec().WithRecipe(&migration.RemoveUnusedGoModRequires{})
