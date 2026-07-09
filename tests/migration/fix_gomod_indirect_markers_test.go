@@ -5,221 +5,178 @@
 package migration_test
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/moderneinc/recipes-go/recipes/migration"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/parser"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/printer"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/test"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 )
-
-// runFixIndirect drives the scan-then-edit lifecycle of a ScanningRecipe by
-// hand: the Go unit-test harness (RewriteRun) only invokes Editor(), so a
-// cross-file scanning recipe has to be exercised the way the production RPC
-// server does — scan every .go file, then run the go.mod editor.
-func runFixIndirect(t *testing.T, goMod string, goFiles ...string) string {
-	t.Helper()
-	r := &migration.FixGoModIndirectMarkers{}
-	ctx := recipe.NewExecutionContext()
-	acc := r.InitialValue(ctx)
-
-	scanner := r.Scanner(acc)
-	p := parser.NewGoParser()
-	for i, f := range goFiles {
-		cu, err := p.Parse(fmt.Sprintf("f%d.go", i), test.TrimIndent(f))
-		if err != nil {
-			t.Fatalf("parse .go: %v", err)
-		}
-		scanner.Visit(cu, ctx)
-	}
-
-	gm, err := parser.ParseGoModFile("go.mod", test.TrimIndent(goMod))
-	if err != nil {
-		t.Fatalf("parse go.mod: %v", err)
-	}
-	result := r.EditorWithData(acc).Visit(gm, ctx)
-	return printer.PrintGoMod(result.(*golang.GoMod))
-}
 
 func TestFixGoModIndirectStripsMarkerFromImportedModule(t *testing.T) {
 	// given a require marked // indirect that the module actually imports
-	goMod := `
-		module example.com/app
+	spec := test.NewRecipeSpec().WithRecipe(&migration.FixGoModIndirectMarkers{})
 
-		go 1.22
+	// when / then the imported one becomes direct, the unused one stays indirect
+	spec.RewriteRun(t,
+		test.GoProject("app",
+			test.GoMod(`
+				module example.com/app
 
-		require (
-			github.com/foo/bar v1.2.3 // indirect
-			github.com/baz/qux v1.0.0 // indirect
-		)
-	`
-	goFile := `
-		package main
+				go 1.22
 
-		import "github.com/foo/bar"
+				require (
+					github.com/foo/bar v1.2.3 // indirect
+					github.com/baz/qux v1.0.0 // indirect
+				)
+			`, `
+				module example.com/app
 
-		func main() { _ = bar.A }
-	`
+				go 1.22
 
-	// when
-	got := runFixIndirect(t, goMod, goFile)
+				require (
+					github.com/foo/bar v1.2.3
+					github.com/baz/qux v1.0.0 // indirect
+				)
+			`),
+			test.Golang(`
+				package main
 
-	// then the imported one becomes direct, the unused one stays indirect
-	want := test.TrimIndent(`
-		module example.com/app
+				import "github.com/foo/bar"
 
-		go 1.22
-
-		require (
-			github.com/foo/bar v1.2.3
-			github.com/baz/qux v1.0.0 // indirect
-		)
-	`)
-	if got != want {
-		t.Errorf("mismatch\n\nwant:\n%s\n\ngot:\n%s", want, got)
-	}
+				func main() { _ = bar.A }
+			`),
+		),
+	)
 }
 
 func TestFixGoModIndirectAddsMarkerToUnusedModule(t *testing.T) {
-	// given a direct require that nothing imports
-	goMod := `
-		module example.com/app
+	// given a direct require that nothing imports, and a sub-package import
+	spec := test.NewRecipeSpec().WithRecipe(&migration.FixGoModIndirectMarkers{})
 
-		go 1.22
+	// when / then the unimported module gains // indirect; the sub-package import keeps its module direct
+	spec.RewriteRun(t,
+		test.GoProject("app",
+			test.GoMod(`
+				module example.com/app
 
-		require (
-			github.com/foo/bar v1.2.3
-			github.com/baz/qux v1.0.0
-		)
-	`
-	goFile := `
-		package main
+				go 1.22
 
-		import "github.com/foo/bar/sub"
+				require (
+					github.com/foo/bar v1.2.3
+					github.com/baz/qux v1.0.0
+				)
+			`, `
+				module example.com/app
 
-		func main() { _ = sub.A }
-	`
+				go 1.22
 
-	// when
-	got := runFixIndirect(t, goMod, goFile)
+				require (
+					github.com/foo/bar v1.2.3
+					github.com/baz/qux v1.0.0 // indirect
+				)
+			`),
+			test.Golang(`
+				package main
 
-	// then the unimported module gains // indirect; the sub-package import keeps its module direct
-	want := test.TrimIndent(`
-		module example.com/app
+				import "github.com/foo/bar/sub"
 
-		go 1.22
-
-		require (
-			github.com/foo/bar v1.2.3
-			github.com/baz/qux v1.0.0 // indirect
-		)
-	`)
-	if got != want {
-		t.Errorf("mismatch\n\nwant:\n%s\n\ngot:\n%s", want, got)
-	}
+				func main() { _ = sub.A }
+			`),
+		),
+	)
 }
 
 func TestFixGoModIndirectSingleLineRequire(t *testing.T) {
 	// given a single-line require that is imported
-	goMod := `
-		module example.com/app
+	spec := test.NewRecipeSpec().WithRecipe(&migration.FixGoModIndirectMarkers{})
 
-		go 1.22
+	// when / then the // indirect marker is stripped
+	spec.RewriteRun(t,
+		test.GoProject("app",
+			test.GoMod(`
+				module example.com/app
 
-		require github.com/foo/bar v1.2.3 // indirect
-	`
-	goFile := `
-		package main
+				go 1.22
 
-		import "github.com/foo/bar"
+				require github.com/foo/bar v1.2.3 // indirect
+			`, `
+				module example.com/app
 
-		func main() { _ = bar.A }
-	`
+				go 1.22
 
-	// when
-	got := runFixIndirect(t, goMod, goFile)
+				require github.com/foo/bar v1.2.3
+			`),
+			test.Golang(`
+				package main
 
-	// then
-	want := test.TrimIndent(`
-		module example.com/app
+				import "github.com/foo/bar"
 
-		go 1.22
-
-		require github.com/foo/bar v1.2.3
-	`)
-	if got != want {
-		t.Errorf("mismatch\n\nwant:\n%s\n\ngot:\n%s", want, got)
-	}
+				func main() { _ = bar.A }
+			`),
+		),
+	)
 }
 
 func TestFixGoModIndirectNestedModulesBindToLongestPath(t *testing.T) {
 	// given a parent and a nested child module, importing only the child
-	goMod := `
-		module example.com/app
+	spec := test.NewRecipeSpec().WithRecipe(&migration.FixGoModIndirectMarkers{})
 
-		go 1.22
+	// when / then the import binds to the nested module only; the parent becomes indirect
+	spec.RewriteRun(t,
+		test.GoProject("app",
+			test.GoMod(`
+				module example.com/app
 
-		require (
-			github.com/foo/bar v1.2.3
-			github.com/foo/bar/nested v1.0.0
-		)
-	`
-	goFile := `
-		package main
+				go 1.22
 
-		import "github.com/foo/bar/nested/pkg"
+				require (
+					github.com/foo/bar v1.2.3
+					github.com/foo/bar/nested v1.0.0
+				)
+			`, `
+				module example.com/app
 
-		func main() { _ = pkg.A }
-	`
+				go 1.22
 
-	// when
-	got := runFixIndirect(t, goMod, goFile)
+				require (
+					github.com/foo/bar v1.2.3 // indirect
+					github.com/foo/bar/nested v1.0.0
+				)
+			`),
+			test.Golang(`
+				package main
 
-	// then the import binds to the nested module only; the parent becomes indirect
-	want := test.TrimIndent(`
-		module example.com/app
+				import "github.com/foo/bar/nested/pkg"
 
-		go 1.22
-
-		require (
-			github.com/foo/bar v1.2.3 // indirect
-			github.com/foo/bar/nested v1.0.0
-		)
-	`)
-	if got != want {
-		t.Errorf("mismatch\n\nwant:\n%s\n\ngot:\n%s", want, got)
-	}
+				func main() { _ = pkg.A }
+			`),
+		),
+	)
 }
 
 func TestFixGoModIndirectNoChangeWhenAlreadyCorrect(t *testing.T) {
 	// given a go.mod whose markers already match usage
-	goMod := `
-		module example.com/app
+	spec := test.NewRecipeSpec().WithRecipe(&migration.FixGoModIndirectMarkers{})
 
-		go 1.22
+	// when / then no change
+	spec.RewriteRun(t,
+		test.GoProject("app",
+			test.GoMod(`
+				module example.com/app
 
-		require (
-			github.com/foo/bar v1.2.3
-			github.com/baz/qux v1.0.0 // indirect
-		)
-	`
-	goFile := `
-		package main
+				go 1.22
 
-		import "github.com/foo/bar"
+				require (
+					github.com/foo/bar v1.2.3
+					github.com/baz/qux v1.0.0 // indirect
+				)
+			`),
+			test.Golang(`
+				package main
 
-		func main() { _ = bar.A }
-	`
+				import "github.com/foo/bar"
 
-	// when
-	got := runFixIndirect(t, goMod, goFile)
-
-	// then output is byte-identical to input
-	want := test.TrimIndent(goMod)
-	if got != want {
-		t.Errorf("expected no change\n\nwant:\n%s\n\ngot:\n%s", want, got)
-	}
+				func main() { _ = bar.A }
+			`),
+		),
+	)
 }

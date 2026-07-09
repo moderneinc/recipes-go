@@ -8,16 +8,14 @@ import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 )
 
-// GoModTidy applies `go mod tidy` behavior through composed recipes: it adds
-// missing requirements (when the module graph was resolved at parse time),
-// corrects the `// indirect` markers on requirements, and canonicalizes the
-// ordering of require blocks.
+// GoModTidy applies `go mod tidy` behavior to go.mod through composed recipes:
+// it adds missing requirements, removes unused ones, corrects the `// indirect`
+// markers, and canonicalizes the ordering of require blocks.
 //
-// AddMissingGoModRequires needs the parse-time toolchain resolution the
-// rewrite-go parser performs; without it that step is a no-op and the composite
+// Adding and removing requirements need the module graph the rewrite-go parser
+// resolves at parse time; without it those steps are no-ops and the composite
 // still applies the offline-safe indirect-marker and formatting fixes. It does
-// not remove unused requirements or sync go.sum; use FindUnusedGoModRequires to
-// report removal candidates and run `go mod tidy` for a go.sum sync.
+// not sync go.sum; the upstream `RegenerateGoSum` recipe covers that.
 type GoModTidy struct {
 	recipe.Base
 }
@@ -27,8 +25,8 @@ func (r *GoModTidy) Name() string { return "org.openrewrite.golang.migration.GoM
 func (r *GoModTidy) DisplayName() string { return "Tidy go.mod" }
 
 func (r *GoModTidy) Description() string {
-	return "Apply `go mod tidy` behavior: add missing requirements at their resolved versions (when the module graph was resolved at parse time), correct the `// indirect` markers on requirements, and sort require blocks. " +
-		"It does not remove unused requirements or sync go.sum; use `FindUnusedGoModRequires` to report removal candidates and run `go mod tidy` for a go.sum sync."
+	return "Apply `go mod tidy` behavior to go.mod: add missing requirements at their resolved versions, remove unused ones, correct the `// indirect` markers, and sort require blocks. " +
+		"Adding and removing require the module graph resolved at parse time, and are no-ops without it. It does not sync go.sum; the `RegenerateGoSum` recipe covers that."
 }
 
 func (r *GoModTidy) Tags() []string { return []string{"gomod", "tidy"} }
@@ -36,6 +34,7 @@ func (r *GoModTidy) Tags() []string { return []string{"gomod", "tidy"} }
 func (r *GoModTidy) RecipeList() []recipe.Recipe {
 	return []recipe.Recipe{
 		&AddMissingGoModRequires{},
+		&RemoveUnusedGoModRequires{},
 		&FixGoModIndirectMarkers{},
 		&FormatGoMod{},
 	}
