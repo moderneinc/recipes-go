@@ -243,7 +243,7 @@ func buildErrorsAsIf(origIf *java.If, prefix java.Space, errExpr java.Expression
 			ID:   uuid.New(),
 			Tree: java.RightPadded[java.Expression]{Element: errorsAsCall},
 		},
-		Then:     origIf.Then,
+		ThenPart: origIf.ThenPart,
 		ElsePart: origIf.ElsePart,
 	}
 }

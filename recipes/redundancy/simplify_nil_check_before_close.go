@@ -62,12 +62,13 @@ func (v *simplifyNilCheckBeforeCloseVisitor) VisitIf(ifStmt *java.If, p any) jav
 	}
 
 	// The then block must have exactly one statement.
-	if ifStmt.Then == nil || len(ifStmt.Then.Statements) != 1 {
+	thenBlock, ok := ifStmt.ThenPart.Element.(*java.Block)
+	if !ok || len(thenBlock.Statements) != 1 {
 		return ifStmt
 	}
 
 	// That single statement must be a MethodInvocation named "Close" on the same variable.
-	mi, ok := ifStmt.Then.Statements[0].Element.(*java.MethodInvocation)
+	mi, ok := thenBlock.Statements[0].Element.(*java.MethodInvocation)
 	if !ok {
 		return ifStmt
 	}

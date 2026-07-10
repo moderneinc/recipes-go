@@ -62,13 +62,15 @@ func mergeAdjacentBranches(ifStmt *java.If) *java.If {
 	current := ifStmt
 
 	for current.ElsePart != nil {
-		nextIf, ok := current.ElsePart.Element.(*java.If)
+		nextIf, ok := current.ElsePart.Body.Element.(*java.If)
 		if !ok {
 			// Plain else block — can't merge further.
 			break
 		}
 
-		if !bodiesEqual(current.Then, nextIf.Then) {
+		currentThen, currentOk := current.ThenPart.Element.(*java.Block)
+		nextThen, nextOk := nextIf.ThenPart.Element.(*java.Block)
+		if !currentOk || !nextOk || !bodiesEqual(currentThen, nextThen) {
 			current = nextIf
 			continue
 		}

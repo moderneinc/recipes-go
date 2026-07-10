@@ -50,7 +50,8 @@ func (v *removeRedundantElseVisitor) VisitBlock(block *java.Block, p any) java.J
 			continue
 		}
 
-		if !endsWithReturn(ifStmt.Then) {
+		thenBlock, ok := ifStmt.ThenPart.Element.(*java.Block)
+		if !ok || !endsWithReturn(thenBlock) {
 			newStmts = append(newStmts, rp)
 			continue
 		}
@@ -62,7 +63,7 @@ func (v *removeRedundantElseVisitor) VisitBlock(block *java.Block, p any) java.J
 
 		// Extract else body statements as siblings, dedenting by one level.
 		dedent := visitor.Init(&dedentElseVisitor{})
-		if elseBlock, ok := ifStmt.ElsePart.Element.(*java.Block); ok {
+		if elseBlock, ok := ifStmt.ElsePart.Body.Element.(*java.Block); ok {
 			for _, s := range elseBlock.Statements {
 				dedented := dedent.Visit(s.Element.(java.Tree), p).(java.Statement)
 				newStmts = append(newStmts, java.RightPadded[java.Statement]{Element: dedented, After: s.After})
