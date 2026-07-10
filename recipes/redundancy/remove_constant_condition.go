@@ -48,13 +48,16 @@ func (v *removeConstantConditionVisitor) VisitIf(ifStmt *java.If, p any) java.J 
 
 	if ident.Name == "true" {
 		// Replace `if true { body }` with the body block (preserving the if's prefix).
-		return ifStmt.Then.WithPrefix(ifStmt.Prefix)
+		if block, ok := ifStmt.ThenPart.Element.(*java.Block); ok {
+			return block.WithPrefix(ifStmt.Prefix)
+		}
+		return ifStmt
 	}
 
 	if ident.Name == "false" {
 		// `if false { } else { elseBody }` — keep the else body.
 		if ifStmt.ElsePart != nil {
-			if block, ok := ifStmt.ElsePart.Element.(*java.Block); ok {
+			if block, ok := ifStmt.ElsePart.Body.Element.(*java.Block); ok {
 				return block.WithPrefix(ifStmt.Prefix)
 			}
 		}

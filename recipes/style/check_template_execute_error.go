@@ -197,7 +197,7 @@ func buildIfInitErrCheck(mi *java.MethodInvocation) *golang.StatementWithInit {
 			ID:   uuid.New(),
 			Tree: java.RightPadded[java.Expression]{Element: condition},
 		},
-		Then: thenBlock,
+		ThenPart: java.RightPadded[java.Statement]{Element: thenBlock},
 	}
 
 	return &golang.StatementWithInit{

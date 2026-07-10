@@ -54,7 +54,12 @@ func (v *simplifyIfReturnBoolVisitor) VisitBlock(block *java.Block, p any) java.
 		// An `if init; cond` is a golang.StatementWithInit, not a *java.If, so the
 		// assertion already excludes init-bearing ifs.
 		ifStmt, ok := stmts[i].Element.(*java.If)
-		if !ok || ifStmt.Then == nil {
+		if !ok {
+			newStmts = append(newStmts, stmts[i])
+			continue
+		}
+		thenBlock, ok := ifStmt.ThenPart.Element.(*java.Block)
+		if !ok {
 			newStmts = append(newStmts, stmts[i])
 			continue
 		}
@@ -64,7 +69,7 @@ func (v *simplifyIfReturnBoolVisitor) VisitBlock(block *java.Block, p any) java.
 		if ifStmt.ElsePart != nil {
 			elseBlock := elseBody(ifStmt)
 			if elseBlock != nil {
-				thenBool, thenOk := singleReturnBool(ifStmt.Then)
+				thenBool, thenOk := singleReturnBool(thenBlock)
 				elseBool, elseOk := singleReturnBool(elseBlock)
 				if thenOk && elseOk && thenBool != elseBool {
 					ret := buildReturn(ifStmt, thenBool)
@@ -83,7 +88,7 @@ func (v *simplifyIfReturnBoolVisitor) VisitBlock(block *java.Block, p any) java.
 		// Pattern 2: if cond { return true } return false
 		// (or if cond { return false } return true)
 		if ifStmt.ElsePart == nil && i+1 < len(stmts) {
-			thenBool, thenOk := singleReturnBool(ifStmt.Then)
+			thenBool, thenOk := singleReturnBool(thenBlock)
 			nextBool, nextOk := stmtReturnBool(stmts[i+1].Element)
 			if thenOk && nextOk && thenBool != nextBool {
 				ret := buildReturn(ifStmt, thenBool)
@@ -139,7 +144,7 @@ func elseBody(ifStmt *java.If) *java.Block {
 	if ifStmt.ElsePart == nil {
 		return nil
 	}
-	if block, ok := ifStmt.ElsePart.Element.(*java.Block); ok {
+	if block, ok := ifStmt.ElsePart.Body.Element.(*java.Block); ok {
 		return block
 	}
 	return nil

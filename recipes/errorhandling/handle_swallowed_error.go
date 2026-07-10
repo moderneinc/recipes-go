@@ -40,11 +40,12 @@ func (v *handleSwallowedErrorVisitor) VisitIf(ifStmt *java.If, p any) java.J {
 		return ifStmt
 	}
 
-	if ifStmt.Then == nil {
+	thenBlock, ok := ifStmt.ThenPart.Element.(*java.Block)
+	if !ok {
 		return ifStmt
 	}
 
-	stmts := realStatements(ifStmt.Then.Statements)
+	stmts := realStatements(thenBlock.Statements)
 	if len(stmts) != 1 {
 		return ifStmt
 	}
@@ -68,16 +69,17 @@ func (v *handleSwallowedErrorVisitor) VisitIf(ifStmt *java.If, p any) java.J {
 	}
 
 	// Rebuild the Then block with the new return
-	newStmts := make([]java.RightPadded[java.Statement], len(ifStmt.Then.Statements))
-	copy(newStmts, ifStmt.Then.Statements)
+	newStmts := make([]java.RightPadded[java.Statement], len(thenBlock.Statements))
+	copy(newStmts, thenBlock.Statements)
 	for i, s := range newStmts {
 		if _, ok := s.Element.(*java.Return); ok {
 			newStmts[i] = java.RightPadded[java.Statement]{Element: newRet, After: s.After}
 			break
 		}
 	}
-	newThen := ifStmt.Then.WithStatements(newStmts)
-	return ifStmt.WithThen(newThen)
+	newThenPart := ifStmt.ThenPart
+	newThenPart.Element = thenBlock.WithStatements(newStmts)
+	return ifStmt.WithThenPart(newThenPart)
 }
 
 // isErrNotNil checks whether an expression is `err != nil`.

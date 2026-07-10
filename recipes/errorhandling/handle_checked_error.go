@@ -56,10 +56,11 @@ func (v *handleCheckedErrorVisitor) VisitIf(ifStmt *java.If, p any) java.J {
 	}
 
 	// Check if the then block is empty (no real statements).
-	if ifStmt.Then == nil {
+	thenBlock, ok := ifStmt.ThenPart.Element.(*java.Block)
+	if !ok {
 		return ifStmt
 	}
-	if countRealStatements(ifStmt.Then.Statements) > 0 {
+	if countRealStatements(thenBlock.Statements) > 0 {
 		return ifStmt
 	}
 
@@ -72,7 +73,7 @@ func (v *handleCheckedErrorVisitor) VisitIf(ifStmt *java.If, p any) java.J {
 	// Derive indentation from the block's End space. End.Whitespace is
 	// the whitespace before `}`, e.g. "\n\t". The return statement sits
 	// one indent level deeper.
-	endWS := ifStmt.Then.End.Whitespace
+	endWS := thenBlock.End.Whitespace
 	returnPrefix := java.Space{Whitespace: endWS + "\t"}
 
 	errIdent := &java.Identifier{Prefix: java.Space{Whitespace: " "}, Name: "err"}
@@ -84,10 +85,12 @@ func (v *handleCheckedErrorVisitor) VisitIf(ifStmt *java.If, p any) java.J {
 	newStmts := []java.RightPadded[java.Statement]{
 		{Element: returnStmt},
 	}
-	newThen := ifStmt.Then.WithStatements(newStmts)
+	newThen := thenBlock.WithStatements(newStmts)
 	// Keep the closing `}` at its original indent level.
-	newThen = newThen.WithEnd(ifStmt.Then.End)
-	return ifStmt.WithThen(newThen)
+	newThen = newThen.WithEnd(thenBlock.End)
+	newThenPart := ifStmt.ThenPart
+	newThenPart.Element = newThen
+	return ifStmt.WithThenPart(newThenPart)
 }
 
 // enclosingReturnsSingleError reports whether the function (or function literal)

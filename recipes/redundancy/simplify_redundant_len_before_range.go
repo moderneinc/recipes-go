@@ -55,12 +55,13 @@ func (v *simplifyRedundantLenBeforeRangeVisitor) VisitIf(ifStmt *java.If, p any)
 	}
 
 	// The then block must have exactly one statement.
-	if ifStmt.Then == nil || len(ifStmt.Then.Statements) != 1 {
+	thenBlock, ok := ifStmt.ThenPart.Element.(*java.Block)
+	if !ok || len(thenBlock.Statements) != 1 {
 		return ifStmt
 	}
 
 	// That single statement must be a ForEachLoop (range).
-	forEach, ok := ifStmt.Then.Statements[0].Element.(*java.ForEachLoop)
+	forEach, ok := thenBlock.Statements[0].Element.(*java.ForEachLoop)
 	if !ok {
 		return ifStmt
 	}

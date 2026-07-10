@@ -55,13 +55,21 @@ func (v *allBranchesIdenticalVisitor) VisitIf(ifStmt *java.If, p any) java.J {
 
 	// Replace the entire if/else chain with just the then-body, preserving
 	// the if statement's prefix (indentation).
-	return ifStmt.Then.WithPrefix(ifStmt.Prefix)
+	thenBlock, ok := ifStmt.ThenPart.Element.(*java.Block)
+	if !ok {
+		return ifStmt
+	}
+	return thenBlock.WithPrefix(ifStmt.Prefix)
 }
 
 // allBranchBodiesIdentical walks the if/else-if/else chain and returns true
 // only when a final else clause exists and every branch body is identical.
 func allBranchBodiesIdentical(ifStmt *java.If) bool {
-	reference := printBlockNormalized(ifStmt.Then)
+	thenBlock, ok := ifStmt.ThenPart.Element.(*java.Block)
+	if !ok {
+		return false
+	}
+	reference := printBlockNormalized(thenBlock)
 	current := ifStmt
 
 	for {
@@ -70,9 +78,10 @@ func allBranchBodiesIdentical(ifStmt *java.If) bool {
 			return false
 		}
 
-		switch elseBody := current.ElsePart.Element.(type) {
+		switch elseBody := current.ElsePart.Body.Element.(type) {
 		case *java.If:
-			if printBlockNormalized(elseBody.Then) != reference {
+			innerThen, ok := elseBody.ThenPart.Element.(*java.Block)
+			if !ok || printBlockNormalized(innerThen) != reference {
 				return false
 			}
 			current = elseBody

@@ -56,13 +56,14 @@ func (v *mergeCollapsibleIfVisitor) VisitIf(ifStmt *java.If, p any) java.J {
 	}
 
 	// Body must contain exactly one statement.
-	if ifStmt.Then == nil || len(ifStmt.Then.Statements) != 1 {
+	thenBlock, ok := ifStmt.ThenPart.Element.(*java.Block)
+	if !ok || len(thenBlock.Statements) != 1 {
 		return ifStmt
 	}
 
 	// That single statement must be another if. An init-bearing inner if would be
 	// a golang.StatementWithInit, not a *java.If, so it is excluded here.
-	innerIf, ok := ifStmt.Then.Statements[0].Element.(*java.If)
+	innerIf, ok := thenBlock.Statements[0].Element.(*java.If)
 	if !ok {
 		return ifStmt
 	}
@@ -88,13 +89,20 @@ func (v *mergeCollapsibleIfVisitor) VisitIf(ifStmt *java.If, p any) java.J {
 		Right:    setExprPrefix(innerCond, java.SingleSpace),
 	}
 
+	innerThen, ok := innerIf.ThenPart.Element.(*java.Block)
+	if !ok {
+		return ifStmt
+	}
+
 	// Dedent the inner body by one level since it's moving up.
 	dedent := visitor.Init(&dedentCollapsedVisitor{})
-	newBody := dedent.Visit(innerIf.Then, p).(*java.Block)
+	newBody := dedent.Visit(innerThen, p).(*java.Block)
 
 	newCond := *ifStmt.Condition
 	newCond.Tree.Element = combined
-	return ifStmt.WithCondition(&newCond).WithThen(newBody)
+	newThenPart := ifStmt.ThenPart
+	newThenPart.Element = newBody
+	return ifStmt.WithCondition(&newCond).WithThenPart(newThenPart)
 }
 
 // dedentCollapsedVisitor removes one tab from every whitespace in a subtree,

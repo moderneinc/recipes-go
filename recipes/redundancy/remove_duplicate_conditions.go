@@ -68,7 +68,7 @@ func removeDuplicateBranches(ifStmt *java.If) *java.If {
 
 	current := ifStmt
 	for current.ElsePart != nil {
-		elseIf, ok := current.ElsePart.Element.(*java.If)
+		elseIf, ok := current.ElsePart.Body.Element.(*java.If)
 		if !ok || elseIf.Condition == nil {
 			// Plain else { } — end of chain.
 			break

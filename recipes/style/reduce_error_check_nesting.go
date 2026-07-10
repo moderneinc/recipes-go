@@ -49,7 +49,12 @@ func (v *reduceErrorCheckNestingVisitor) VisitBlock(block *java.Block, p any) ja
 		// An `if init; cond` is a golang.StatementWithInit, not a *java.If, so the
 		// assertion already excludes init-bearing ifs.
 		ifStmt, ok := rp.Element.(*java.If)
-		if !ok || ifStmt.ElsePart != nil || ifStmt.Then == nil || ifStmt.Condition == nil {
+		if !ok || ifStmt.ElsePart != nil || ifStmt.Condition == nil {
+			newStmts = append(newStmts, rp)
+			continue
+		}
+		thenBlock, ok := ifStmt.ThenPart.Element.(*java.Block)
+		if !ok {
 			newStmts = append(newStmts, rp)
 			continue
 		}
@@ -67,7 +72,7 @@ func (v *reduceErrorCheckNestingVisitor) VisitBlock(block *java.Block, p any) ja
 		newStmts = append(newStmts, java.RightPadded[java.Statement]{Element: guard})
 
 		// Splice the body statements out, dedented by one level.
-		for _, bodyRP := range ifStmt.Then.Statements {
+		for _, bodyRP := range thenBlock.Statements {
 			bodyDedented := dedent.Visit(bodyRP.Element, nil).(java.Statement)
 			newStmts = append(newStmts, java.RightPadded[java.Statement]{
 				Element: bodyDedented,
