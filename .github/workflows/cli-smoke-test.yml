@@ -1,0 +1,98 @@
+---
+name: cli-smoke-test
+
+on:
+  workflow_dispatch: {}
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: 0 16 * * *
+
+concurrency:
+  group: cli-smoke-test-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  cli-smoke-test:
+    if: >
+      github.event_name != 'schedule' ||
+      github.repository_owner == 'moderneinc' ||
+      github.repository_owner == 'openrewrite'
+    runs-on: ubuntu-latest
+    steps:
+      # No actions/setup-go: the CLI's build helper shells out to the ambient
+      # `go`, and a second toolchain on PATH mismatches the image's GOROOT.
+      # GOTOOLCHAIN=auto lets the preinstalled Go fetch a managed go1.25.x to
+      # satisfy the `go 1.25.0` floor.
+      - name: Configure the Go toolchain
+        shell: bash
+        run: echo "GOTOOLCHAIN=auto" >> "$GITHUB_ENV"
+
+      - name: Checkout recipes-go
+        uses: actions/checkout@v7
+
+      # Pinned for reproducibility: at this revision the demo marks
+      # golang.org/x/net as `// indirect` while importing golang.org/x/net/html
+      # directly, so GoModTidy has a real correction to make.
+      - name: Checkout demo repository (pinned)
+        uses: actions/checkout@v7
+        with:
+          repository: MarinNoFuture/boyafushi
+          ref: 161a5770288e3c79244b40670cbe6dadf67212e1
+          path: demo
+
+      - name: Set up Java for the Moderne CLI
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '25'
+
+      - name: Install Moderne CLI (latest release)
+        shell: bash
+        run: |
+          CLI_VERSION=$(curl -s https://repo1.maven.org/maven2/io/moderne/moderne-cli/maven-metadata.xml | grep '<release>' | sed 's/.*<release>\(.*\)<\/release>.*/\1/')
+          curl -sSL -o mod.jar "https://repo1.maven.org/maven2/io/moderne/moderne-cli/${CLI_VERSION}/moderne-cli-${CLI_VERSION}.jar"
+          printf '#!/usr/bin/env bash\njava -jar "%s/mod.jar" "$@"\n' "$GITHUB_WORKSPACE" > mod
+          chmod +x mod
+          echo "$GITHUB_WORKSPACE" >> "$GITHUB_PATH"
+
+      # Go is not in the CLI's default build pipeline; enable it explicitly.
+      - name: Enable the Go build step in the CLI
+        shell: bash
+        run: |
+          mkdir -p "$HOME/.moderne/cli"
+          cat > "$HOME/.moderne/cli/moderne.yml" <<'EOF'
+          build:
+            steps:
+              - type: go
+          EOF
+
+      # Install the enclosing recipe module from this checkout so the smoke test
+      # runs exactly this commit's recipes.
+      - name: Build and install the recipe module (this checkout)
+        shell: bash
+        run: |
+          go build ./...
+          mod config recipes go install "$GITHUB_WORKSPACE"
+
+      - name: Build the demo LST
+        shell: bash
+        working-directory: demo
+        run: mod build . --no-download
+
+      - name: Run GoModTidy and assert a change
+        shell: bash
+        working-directory: demo
+        run: |
+          mod run . --recipe=org.openrewrite.golang.migration.GoModTidy
+          patch=$(find .moderne/run -name 'fix.patch' -size +0c | head -1)
+          if [ -z "$patch" ]; then
+            echo "GoModTidy produced no change"
+            exit 1
+          fi
+          if ! grep -q "golang.org/x/net" "$patch"; then
+            echo "Expected GoModTidy to correct the // indirect marker on golang.org/x/net"
+            exit 1
+          fi
+          echo "Smoke test passed: GoModTidy corrected go.mod on the pinned MarinNoFuture/boyafushi"
