@@ -16,7 +16,7 @@ import (
 // exactly the requirements `go mod tidy` would add; the recipe cannot add them
 // itself because resolving the version requires network access.
 type FindMissingGoModRequires struct {
-	recipe.Base
+	recipe.ScanningBase
 }
 
 func (r *FindMissingGoModRequires) Name() string {
@@ -34,19 +34,49 @@ func (r *FindMissingGoModRequires) Description() string {
 
 func (r *FindMissingGoModRequires) Tags() []string { return []string{"gomod", "tidy", "search"} }
 
-func (r *FindMissingGoModRequires) Editor() recipe.TreeVisitor {
-	return visitor.Init(&findMissingGoModRequiresVisitor{})
+func (r *FindMissingGoModRequires) InitialValue(*recipe.ExecutionContext) any {
+	return &goModResolutionAcc{byModulePath: make(map[string]golang.GoResolutionResult)}
+}
+
+func (r *FindMissingGoModRequires) Scanner(acc any) recipe.TreeVisitor {
+	return visitor.Init(&goModResolutionCollector{acc: acc.(*goModResolutionAcc)})
+}
+
+func (r *FindMissingGoModRequires) EditorWithData(acc any) recipe.TreeVisitor {
+	return visitor.Init(&findMissingGoModRequiresVisitor{acc: acc.(*goModResolutionAcc)})
+}
+
+type goModResolutionAcc struct {
+	byModulePath map[string]golang.GoResolutionResult
+}
+
+type goModResolutionCollector struct {
+	visitor.GoVisitor
+	acc *goModResolutionAcc
+}
+
+func (v *goModResolutionCollector) VisitGoMod(gm *golang.GoMod, p any) java.Tree {
+	gm = v.GoVisitor.VisitGoMod(gm, p).(*golang.GoMod)
+	if mrr := java.FindMarker[golang.GoResolutionResult](gm.Markers); mrr != nil && mrr.ModulePath != "" {
+		v.acc.byModulePath[mrr.ModulePath] = *mrr
+	}
+	return gm
 }
 
 type findMissingGoModRequiresVisitor struct {
 	visitor.GoVisitor
+	acc *goModResolutionAcc
 }
 
 func (v *findMissingGoModRequiresVisitor) VisitCompilationUnit(cu *golang.CompilationUnit, p any) java.J {
 	cu = v.GoVisitor.VisitCompilationUnit(cu, p).(*golang.CompilationUnit)
 
-	mrr := java.FindMarker[golang.GoResolutionResult](cu.Markers)
-	if mrr == nil || cu.Imports == nil {
+	project := java.FindMarker[golang.GoProject](cu.Markers)
+	if project == nil || project.ModulePath == "" || cu.Imports == nil {
+		return cu
+	}
+	mrr, ok := v.acc.byModulePath[project.ModulePath]
+	if !ok {
 		return cu
 	}
 
@@ -54,7 +84,7 @@ func (v *findMissingGoModRequiresVisitor) VisitCompilationUnit(cu *golang.Compil
 	newElements := make([]java.RightPadded[*java.Import], len(elements))
 	changed := false
 	for i, rp := range elements {
-		if isMissingRequire(importPathOf(rp.Element), mrr) {
+		if isMissingRequire(importPathOf(rp.Element), &mrr) {
 			rp.Element = rp.Element.WithMarkers(
 				java.FoundSearchResult(rp.Element.Markers, "missing go.mod requirement"),
 			)
