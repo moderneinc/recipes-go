@@ -12,10 +12,8 @@ import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
-// AvoidChannelLenCheck finds `len(ch) == 0`, `len(ch) > 0`, and similar
-// comparisons on channels. Checking a channel's length is almost always a
-// race condition because the value can change between the check and the
-// subsequent send/receive.
+// Flags racy channel length checks like `len(ch) == 0`, since the length can
+// change between the check and the next send or receive.
 type AvoidChannelLenCheck struct {
 	recipe.Base
 }
@@ -36,10 +34,8 @@ func (r *AvoidChannelLenCheck) Editor() recipe.TreeVisitor {
 type findChannelLenCheckVisitor struct {
 	visitor.GoVisitor
 
-	// Holds the fully-qualified names of types declared in the
-	// current compilation unit whose underlying type is a channel (e.g.
-	// `type C chan int` -> "main.C"). Populated once per compilation unit before
-	// its body is visited so that `len` on a named channel type is still matched.
+	// Fully-qualified names of same-file types whose underlying type is a channel,
+	// collected once per compilation unit before the body is visited.
 	namedChannelTypes map[string]bool
 }
 
@@ -65,10 +61,8 @@ func (v *findChannelLenCheckVisitor) VisitBinary(bin *java.Binary, p any) java.J
 	return bin
 }
 
-// Reports whether the expression is a call to the built-in
-// `len` function whose argument is a channel. `len` also accepts arrays,
-// slices, maps, and strings, so the argument's type must be checked to avoid
-// false matches.
+// Reports whether the expression is a `len` call whose argument is a channel,
+// checking the type since `len` also accepts slices, maps, arrays, and strings.
 func (v *findChannelLenCheckVisitor) isChannelLenCall(expr java.Expression) bool {
 	mi, ok := expr.(*java.MethodInvocation)
 	if !ok {
@@ -80,10 +74,8 @@ func (v *findChannelLenCheckVisitor) isChannelLenCall(expr java.Expression) bool
 	return v.isChannelType(matcher.TypeOfExpression(mi.Arguments.Elements[0].Element))
 }
 
-// Reports whether the given type is a Go channel type. Direct
-// channel types are surfaced through the FQN of their (possibly parameterized)
-// class as `chan`, `chan<-` (send-only), or `<-chan` (receive-only). Named
-// channel types declared in the same compilation unit are matched by FQN.
+// Reports whether the type is a channel, matching direct channels by FQN
+// (`chan`, `chan<-`, `<-chan`) and same-file named channel types by name.
 func (v *findChannelLenCheckVisitor) isChannelType(t java.JavaType) bool {
 	switch fqn := matcher.GetFullyQualifiedName(t); fqn {
 	case "chan", "chan<-", "<-chan":
@@ -93,13 +85,8 @@ func (v *findChannelLenCheckVisitor) isChannelType(t java.JavaType) bool {
 	}
 }
 
-// Returns the fully-qualified names of types declared
-// in the compilation unit whose underlying type is a channel, resolving
-// indirection through other named types (`type D C`). Only same-file
-// declarations are visible; a defined channel type declared in another file or
-// package is not resolvable because the type attribution collapses it to a bare
-// named class, and a type alias (`type D = chan int`) collapses to an unknown
-// type. Both remain unmatched.
+// Returns the FQNs of same-file types whose underlying type is a channel,
+// following indirection through named types like `type D C`.
 func collectNamedChannelTypes(cu *golang.CompilationUnit) map[string]bool {
 	// Map each declared type's FQN to its definition expression.
 	defs := map[string]java.Expression{}

@@ -224,10 +224,8 @@ func TestAvoidChannelLenCheckNoChangeChanTypeAlias(t *testing.T) {
 	)
 }
 
-// Known limitation: the pre-pass only sees the current file, so a channel type
-// declared in another file of the same package is not recognized. This also
-// guards against per-file state leaking between compilation units: if the
-// collected names bled from types.go into use.go, len(ch) would be flagged.
+// The per-file pre-pass misses a channel type declared in another file, and the
+// no-change result also guards against collected names leaking between files.
 func TestAvoidChannelLenCheckNoChangeCrossFileNamedChanType(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&simplification.AvoidChannelLenCheck{})
 	spec.RewriteRun(t,
