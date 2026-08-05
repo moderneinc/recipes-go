@@ -16,17 +16,8 @@ import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
-// Removes the dot alias from `import . "pkg"`, converting it to a normal
-// `import "pkg"` and re-qualifying the references it brought into scope
-// (`Println(...)` -> `fmt.Println(...)`, `Writer` -> `io.Writer`).
-//
-// Re-qualification is type-attribution driven, so it is scope-aware: locals,
-// fields, and selectors that merely share a name are left alone. Only functions
-// and type references are handled; dot-imported constants and package variables
-// carry no owning-package attribution and are left as-is. When the qualifier
-// cannot be confidently inferred from the path (see packageName), the dot import
-// is left untouched rather than re-qualified with a wrong name.
-//
+// Removes the dot alias from `import . "pkg"` and re-qualifies the references it
+// brought into scope, e.g. `Println` to `fmt.Println`.
 // golangci-lint: revive (dot-imports)
 type AvoidDotImport struct {
 	recipe.Base
@@ -60,8 +51,8 @@ type dotImport struct {
 
 type avoidDotImportVisitor struct {
 	visitor.GoVisitor
-	// dotPkgs maps a dot-imported package path (e.g. "fmt") to its
-	// re-qualification info. Rebuilt per compilation unit.
+	// dotPkgs maps a dot-imported package path to its re-qualification info,
+	// rebuilt per compilation unit.
 	dotPkgs map[string]dotImport
 }
 
@@ -83,9 +74,7 @@ func (v *avoidDotImportVisitor) VisitCompilationUnit(cu *golang.CompilationUnit,
 			if path == "" {
 				continue
 			}
-			// Only register packages whose name we can confidently derive; a
-			// low-confidence path is left untouched by VisitImport rather than
-			// re-qualified with a guess.
+			// Only register packages whose name we can confidently derive.
 			name, confident := packageName(path)
 			if !confident {
 				continue
@@ -108,8 +97,8 @@ func (v *avoidDotImportVisitor) VisitImport(imp *java.Import, p any) java.J {
 		return imp
 	}
 
-	// Only remove the alias for a package we know how to re-qualify (registered
-	// above). Otherwise leave the dot import rather than strand its references.
+	// Only remove the alias for a package we know how to re-qualify, else leave
+	// the dot import intact.
 	fq, ok := aliasIdent.Type.(java.FullyQualified)
 	if !ok || fq == nil {
 		return imp
@@ -118,10 +107,8 @@ func (v *avoidDotImportVisitor) VisitImport(imp *java.Import, p any) java.J {
 		return imp
 	}
 
-	// Remove the dot alias, converting `import . "pkg"` to `import "pkg"`.
-	// The qualid's prefix was the space between "." and the path string.
-	// With the alias gone, the import prefix covers the space between
-	// "import" and the path, so we clear the qualid's leading whitespace.
+	// Remove the dot alias and clear the qualid's leading whitespace, now covered
+	// by the import prefix.
 	c := *imp
 	c.Alias = nil
 	if lit, ok := c.Qualid.(*java.Literal); ok {
@@ -132,9 +119,8 @@ func (v *avoidDotImportVisitor) VisitImport(imp *java.Import, p any) java.J {
 	return &c
 }
 
-// Re-qualifies a free function call from a dot-imported package:
-// `Println("x")` -> `fmt.Println("x")`. A call with a receiver is left alone,
-// which also makes the pass idempotent.
+// Re-qualifies a free function call from a dot-imported package, e.g.
+// `Println("x")` to `fmt.Println("x")`.
 func (v *avoidDotImportVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
 	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
@@ -159,10 +145,8 @@ func (v *avoidDotImportVisitor) VisitMethodInvocation(mi *java.MethodInvocation,
 	return &c
 }
 
-// Re-qualifies a bare type reference from a dot-imported package:
-// `Writer` -> `io.Writer`. Fires only for type references (nil FieldType) whose
-// FQN is `<dot-package>.<Name>`, so variables, constants, fields, and selectors
-// sharing the name are left alone.
+// Re-qualifies a bare type reference from a dot-imported package, e.g. `Writer`
+// to `io.Writer`.
 func (v *avoidDotImportVisitor) VisitIdentifier(ident *java.Identifier, p any) java.J {
 	ident = v.GoVisitor.VisitIdentifier(ident, p).(*java.Identifier)
 
@@ -204,18 +188,9 @@ func (v *avoidDotImportVisitor) VisitIdentifier(ident *java.Identifier, p any) j
 	return ident
 }
 
-// Derives the qualifier (the package clause name) from an import path and
-// reports whether the derivation is trustworthy. The declared name is not in the
-// LST, so it is inferred from the last segment ("math/rand" -> "rand"), or the
-// part before a gopkg.in ".vN" suffix ("gopkg.in/yaml.v2" -> "yaml").
-//
-// A bare "/vN" segment is left unresolved: it may be a semantic-import-
-// versioning module suffix ("github.com/onsi/ginkgo/v2" is package "ginkgo") or
-// a version directory ("k8s.io/api/core/v1" is package "v1",
-// "k8s.io/api/autoscaling/v2" is package "v2", ".../servicemanagement/v1" is
-// package "servicemanagement"). Which one holds depends on the module's major
-// version, not the path, so it is not confident. A segment that is not a valid
-// Go identifier ("go-bar") is likewise not confident.
+// Derives the package-name qualifier from the import path's last segment (or the
+// part before a gopkg.in ".vN" suffix), reporting confident=false for ambiguous
+// "/vN" and non-identifier segments.
 func packageName(importPath string) (name string, confident bool) {
 	last := importPath
 	if i := strings.LastIndex(importPath, "/"); i >= 0 {
@@ -231,7 +206,7 @@ func packageName(importPath string) (name string, confident bool) {
 		}
 		return last, false
 	case isVersionTag(last):
-		// Bare "/vN": ambiguous across module conventions (see above), so decline.
+		// Bare "/vN" is ambiguous across module conventions, so decline.
 		return last, false
 	default:
 		// The last segment is the name only if it is a usable identifier; a
