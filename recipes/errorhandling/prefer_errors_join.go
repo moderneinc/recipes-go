@@ -10,20 +10,16 @@ import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
 var ejErr = template.Expr("ejErr")
 
-var simplifyRedundantErrorWrapImpl = template.NewRecipe(
-	template.RecipeName("org.openrewrite.golang.codequality.SimplifyRedundantErrorWrap$Impl"),
-	template.WithDisplayName("Simplify redundant error wrap"),
-	template.WithBefore(fmt.Sprintf(`fmt.Errorf("%%w", %s)`, ejErr), template.Imports("fmt")),
-	template.WithAfter(fmt.Sprintf(`%s`, ejErr)),
-	template.WithCaptures(ejErr),
-)
+var errorWrapPattern = template.Expression(fmt.Sprintf(`fmt.Errorf("%%w", %s)`, ejErr)).
+	Captures(ejErr).Imports("fmt").Build()
 
-// SimplifyRedundantErrorWrap replaces `fmt.Errorf("%w", err)` with just `err`.
-// Wrapping an error with no additional context is redundant.
+// Replaces `fmt.Errorf("%w", err)` with `err` when wrapping adds no context.
 type SimplifyRedundantErrorWrap struct {
 	recipe.Base
 }
@@ -37,6 +33,29 @@ func (r *SimplifyRedundantErrorWrap) Description() string {
 }
 func (r *SimplifyRedundantErrorWrap) Tags() []string { return []string{"error-handling"} }
 
-func (r *SimplifyRedundantErrorWrap) RecipeList() []recipe.Recipe {
-	return []recipe.Recipe{simplifyRedundantErrorWrapImpl, &recipegolang.RemoveUnusedImports{}}
+func (r *SimplifyRedundantErrorWrap) Editor() recipe.TreeVisitor {
+	return visitor.Init(&simplifyRedundantErrorWrapVisitor{})
+}
+
+type simplifyRedundantErrorWrapVisitor struct {
+	visitor.GoVisitor
+}
+
+func (v *simplifyRedundantErrorWrapVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
+
+	match := errorWrapPattern.Match(mi, nil)
+	if match == nil {
+		return mi
+	}
+
+	// Skip unless the wrapped value is an error, since replacing fmt.Errorf (which
+	// returns error) with the bare value would otherwise not compile.
+	arg, ok := match.GetCapture(ejErr).(java.Expression)
+	if !ok || !isErrorAssignable(arg) {
+		return mi
+	}
+
+	v.DoAfterVisit(recipe.Service[*recipegolang.ImportService](nil).RemoveUnusedImportsVisitor())
+	return setExprPrefixLocal(stripExprPrefix(arg), mi.GetPrefix())
 }

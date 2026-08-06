@@ -5,33 +5,13 @@
 package errorhandling
 
 import (
-	"fmt"
-
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
-var eofErr = template.Expr("eofErr")
-
-var preferErrorsIsEOFEqualImpl = template.NewRecipe(
-	template.RecipeName("org.openrewrite.golang.codequality.PreferErrorsIsEOF$Equal"),
-	template.WithDisplayName("err == io.EOF -> errors.Is(err, io.EOF)"),
-	template.WithBefore(fmt.Sprintf(`%s == io.EOF`, eofErr), template.Imports("io")),
-	template.WithAfter(fmt.Sprintf(`errors.Is(%s, io.EOF)`, eofErr), template.Imports("errors", "io"), template.SourceImports("errors", "io")),
-	template.WithCaptures(eofErr),
-)
-
-var preferErrorsIsEOFNotEqualImpl = template.NewRecipe(
-	template.RecipeName("org.openrewrite.golang.codequality.PreferErrorsIsEOF$NotEqual"),
-	template.WithDisplayName("err != io.EOF -> !errors.Is(err, io.EOF)"),
-	template.WithBefore(fmt.Sprintf(`%s != io.EOF`, eofErr), template.Imports("io")),
-	template.WithAfter(fmt.Sprintf(`!errors.Is(%s, io.EOF)`, eofErr), template.Imports("errors", "io"), template.SourceImports("errors", "io")),
-	template.WithCaptures(eofErr),
-)
-
-// PreferErrorsIsEOF replaces `err == io.EOF` with `errors.Is(err, io.EOF)` and
-// `err != io.EOF` with `!errors.Is(err, io.EOF)`. The io.EOF sentinel is the
-// most common error value compared by ==; using errors.Is handles wrapped errors.
+// Replaces `err == io.EOF` with `errors.Is(err, io.EOF)` (and the negated form)
+// for correct wrapped error handling.
 type PreferErrorsIsEOF struct {
 	recipe.Base
 }
@@ -47,6 +27,22 @@ func (r *PreferErrorsIsEOF) Description() string {
 }
 func (r *PreferErrorsIsEOF) Tags() []string { return []string{"error-handling"} }
 
-func (r *PreferErrorsIsEOF) RecipeList() []recipe.Recipe {
-	return []recipe.Recipe{preferErrorsIsEOFEqualImpl, preferErrorsIsEOFNotEqualImpl}
+func (r *PreferErrorsIsEOF) Editor() recipe.TreeVisitor {
+	return visitor.Init(&preferErrorsIsEOFVisitor{})
+}
+
+type preferErrorsIsEOFVisitor struct {
+	visitor.GoVisitor
+}
+
+func (v *preferErrorsIsEOFVisitor) VisitBinary(bin *java.Binary, p any) java.J {
+	bin = v.GoVisitor.VisitBinary(bin, p).(*java.Binary)
+
+	if bin.Operator.Element != java.Equal && bin.Operator.Element != java.NotEqual {
+		return bin
+	}
+	if errExpr, sentinel, ok := matchSentinel(bin, "io", "EOF"); ok {
+		return rewriteToErrorsIs(v, bin, errExpr, sentinel)
+	}
+	return bin
 }

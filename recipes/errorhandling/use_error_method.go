@@ -72,6 +72,11 @@ func (v *useErrorMethodVisitor) VisitMethodInvocation(mi *java.MethodInvocation,
 		return mi
 	}
 
+	// err.Error() only compiles when the value implements error.
+	if !isErrorAssignable(argIdent) {
+		return mi
+	}
+
 	// Build err.Error() as a replacement, preserving the original leading prefix.
 	v.changed = true
 	errIdent := argIdent.WithPrefix(ident.Prefix)

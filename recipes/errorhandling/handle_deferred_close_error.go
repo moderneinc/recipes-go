@@ -47,6 +47,12 @@ func (v *handleDeferredCloseErrorVisitor) VisitDefer(d *golang.Defer, p any) jav
 		return d
 	}
 
+	// `_ = x.Close()` only compiles when Close returns exactly one value; skip a
+	// void or multi-value Close.
+	if !returnsSingleValue(mi) {
+		return d
+	}
+
 	// Build: defer func() { _ = f.Close() }()
 	//
 	// Step 1: Move the original Close() call. The space after `=` lives on the

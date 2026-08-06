@@ -46,3 +46,19 @@ func TestSimplifySprintfConcatNoChangeFormat(t *testing.T) {
 		`),
 	)
 }
+
+// Skips []byte arguments, since %s accepts them but []byte values cannot be added.
+func TestSimplifySprintfConcatNoChangeBytes(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&simplification.SimplifySprintfConcat{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "fmt"
+
+			func f(a, b []byte) string {
+				return fmt.Sprintf("%s%s", a, b)
+			}
+		`),
+	)
+}

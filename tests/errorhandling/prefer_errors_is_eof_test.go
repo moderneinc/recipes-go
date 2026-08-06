@@ -75,3 +75,19 @@ func TestPreferErrorsIsEOFNoChangeNil(t *testing.T) {
 		`),
 	)
 }
+
+// Skips a non-error (any) operand, where errors.Is would not compile.
+func TestPreferErrorsIsEOFNoChangeNonError(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.PreferErrorsIsEOF{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "io"
+
+			func f(x any) bool {
+				return x == io.EOF
+			}
+		`),
+	)
+}

@@ -5,33 +5,14 @@
 package errorhandling
 
 import (
-	"fmt"
-
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
-var htErr = template.Expr("htErr")
-
-var preferErrorsIsHttpServerClosedEqualImpl = template.NewRecipe(
-	template.RecipeName("org.openrewrite.golang.codequality.PreferErrorsIsHttpServerClosed$Equal"),
-	template.WithDisplayName("err == http.ErrServerClosed -> errors.Is(err, http.ErrServerClosed)"),
-	template.WithBefore(fmt.Sprintf(`%s == http.ErrServerClosed`, htErr), template.Imports("net/http")),
-	template.WithAfter(fmt.Sprintf(`errors.Is(%s, http.ErrServerClosed)`, htErr), template.Imports("errors", "net/http"), template.SourceImports("errors", "net/http")),
-	template.WithCaptures(htErr),
-)
-
-var preferErrorsIsHttpServerClosedNotEqualImpl = template.NewRecipe(
-	template.RecipeName("org.openrewrite.golang.codequality.PreferErrorsIsHttpServerClosed$NotEqual"),
-	template.WithDisplayName("err != http.ErrServerClosed -> !errors.Is(err, http.ErrServerClosed)"),
-	template.WithBefore(fmt.Sprintf(`%s != http.ErrServerClosed`, htErr), template.Imports("net/http")),
-	template.WithAfter(fmt.Sprintf(`!errors.Is(%s, http.ErrServerClosed)`, htErr), template.Imports("errors", "net/http"), template.SourceImports("errors", "net/http")),
-	template.WithCaptures(htErr),
-)
-
-// PreferErrorsIsHttpServerClosed replaces `err == http.ErrServerClosed` with
-// `errors.Is(err, http.ErrServerClosed)` and `err != http.ErrServerClosed` with
-// `!errors.Is(err, http.ErrServerClosed)`. Using errors.Is handles wrapped errors.
+// Replaces `err == http.ErrServerClosed` with
+// `errors.Is(err, http.ErrServerClosed)` (and the negated form) for correct
+// wrapped error handling.
 type PreferErrorsIsHttpServerClosed struct {
 	recipe.Base
 }
@@ -47,6 +28,22 @@ func (r *PreferErrorsIsHttpServerClosed) Description() string {
 }
 func (r *PreferErrorsIsHttpServerClosed) Tags() []string { return []string{"error-handling"} }
 
-func (r *PreferErrorsIsHttpServerClosed) RecipeList() []recipe.Recipe {
-	return []recipe.Recipe{preferErrorsIsHttpServerClosedEqualImpl, preferErrorsIsHttpServerClosedNotEqualImpl}
+func (r *PreferErrorsIsHttpServerClosed) Editor() recipe.TreeVisitor {
+	return visitor.Init(&preferErrorsIsHttpVisitor{})
+}
+
+type preferErrorsIsHttpVisitor struct {
+	visitor.GoVisitor
+}
+
+func (v *preferErrorsIsHttpVisitor) VisitBinary(bin *java.Binary, p any) java.J {
+	bin = v.GoVisitor.VisitBinary(bin, p).(*java.Binary)
+
+	if bin.Operator.Element != java.Equal && bin.Operator.Element != java.NotEqual {
+		return bin
+	}
+	if errExpr, sentinel, ok := matchSentinel(bin, "http", "ErrServerClosed"); ok {
+		return rewriteToErrorsIs(v, bin, errExpr, sentinel)
+	}
+	return bin
 }

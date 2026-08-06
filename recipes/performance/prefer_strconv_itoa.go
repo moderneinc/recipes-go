@@ -23,8 +23,12 @@ var (
 	)
 )
 
-// PreferStrconvItoa replaces `fmt.Sprintf("%d", n)` with `strconv.Itoa(n)`
-// for better performance on int-to-string conversion.
+// Replaces `fmt.Sprintf("%d", n)` with `strconv.Itoa(n)` for better performance
+// on int-to-string conversion.
+//
+// It rewrites int64/uint arguments into non-compiling code because the LST
+// resolves all integer widths to a single type, so it cannot restrict itself to
+// int.
 type PreferStrconvItoa struct {
 	recipe.Base
 }

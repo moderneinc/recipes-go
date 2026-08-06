@@ -5,6 +5,7 @@
 package style
 
 import (
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -40,12 +41,23 @@ type reduceErrorCheckNestingVisitor struct {
 func (v *reduceErrorCheckNestingVisitor) VisitBlock(block *java.Block, p any) java.J {
 	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
 
+	// Only rewrite the function's top-level body, and only when it returns a
+	// single error, so the synthesized `return err` compiles and an early return
+	// from a nested block does not change control flow.
+	if !lstutil.IsFunctionBodyBlock(v.Cursor()) {
+		return block
+	}
+	md, ok := visitor.FirstEnclosing[*java.MethodDeclaration](v.Cursor())
+	if !ok || !funcReturnsError(md) {
+		return block
+	}
+
 	changed := false
 	var newStmts []java.RightPadded[java.Statement]
 
 	dedent := visitor.Init(&nestingDedentVisitor{})
 
-	for _, rp := range block.Statements {
+	for i, rp := range block.Statements {
 		// An `if init; cond` is a golang.StatementWithInit, not a *java.If, so the
 		// assertion already excludes init-bearing ifs.
 		ifStmt, ok := rp.Element.(*java.If)
@@ -60,6 +72,13 @@ func (v *reduceErrorCheckNestingVisitor) VisitBlock(block *java.Block, p any) ja
 		}
 
 		if !isErrEqualNil(ifStmt.Condition.Tree.Element) {
+			newStmts = append(newStmts, rp)
+			continue
+		}
+
+		// Inverting to an early return is behaviour-preserving only when the `if`
+		// is the block's last statement.
+		if !isLastRealStatement(block.Statements, i) {
 			newStmts = append(newStmts, rp)
 			continue
 		}
@@ -86,19 +105,4 @@ func (v *reduceErrorCheckNestingVisitor) VisitBlock(block *java.Block, p any) ja
 		return block
 	}
 	return block.WithStatements(newStmts)
-}
-
-// isErrNotNil returns true if the expression is `err != nil`.
-func isErrNotNil(expr java.Expression) bool {
-	bin, ok := expr.(*java.Binary)
-	if !ok || bin.Operator.Element != java.NotEqual {
-		return false
-	}
-
-	leftIdent, leftOk := bin.Left.(*java.Identifier)
-	rightIdent, rightOk := bin.Right.(*java.Identifier)
-	if !leftOk || !rightOk {
-		return false
-	}
-	return leftIdent.Name == "err" && rightIdent.Name == "nil"
 }

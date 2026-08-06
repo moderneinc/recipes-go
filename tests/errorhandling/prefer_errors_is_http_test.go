@@ -75,3 +75,19 @@ func TestPreferErrorsIsHttpServerClosedNoChangeNil(t *testing.T) {
 		`),
 	)
 }
+
+// Skips a non-error (any) operand, where errors.Is would not compile.
+func TestPreferErrorsIsHttpServerClosedNoChangeNonError(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.PreferErrorsIsHttpServerClosed{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "net/http"
+
+			func f(x any) bool {
+				return x == http.ErrServerClosed
+			}
+		`),
+	)
+}

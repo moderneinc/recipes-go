@@ -64,6 +64,12 @@ func (v *wrapErrorWithContextVisitor) VisitReturn(ret *java.Return, p any) java.
 		return ret
 	}
 
+	// fmt.Errorf returns error, so only wrap when the function returns a single
+	// error result; a concrete error type such as *MyErr would not accept it.
+	if !enclosingReturnsSingleError(v.Cursor()) {
+		return ret
+	}
+
 	// The rewrite introduces a reference to the `fmt` package; ensure it is imported.
 	recipegolang.MaybeAddImport(v, "fmt", nil, false)
 

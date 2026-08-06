@@ -52,3 +52,21 @@ func TestHandleDeferredCloseErrorNoChangeDone(t *testing.T) {
 		`),
 	)
 }
+
+// Skips a void Close(), where `_ = t.Close()` inside the closure would not compile.
+func TestHandleDeferredCloseErrorNoChangeVoidClose(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.HandleDeferredCloseError{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			type T struct{}
+
+			func (T) Close() {}
+
+			func f(t T) {
+				defer t.Close()
+			}
+		`),
+	)
+}

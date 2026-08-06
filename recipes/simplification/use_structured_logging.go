@@ -8,15 +8,16 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
-// UseStructuredLogging finds calls to the standard `log` package such as `log.Println`,
-// `log.Printf`, `log.Fatal`, and `log.Fatalf`. In Go 1.21+ consider migrating
-// to `log/slog` for structured logging.
+// Finds calls to the standard `log` package such as `log.Println`, `log.Printf`,
+// `log.Fatal`, and `log.Fatalf` and suggests migrating to `log/slog` (Go 1.21+).
 type UseStructuredLogging struct {
 	recipe.Base
 }
@@ -32,25 +33,14 @@ func (r *UseStructuredLogging) Tags() []string { return []string{"simplification
 
 var slogMsg = template.Expr("slogMsg")
 
-var useStructuredLoggingPrintln = template.NewRecipe(
-	template.RecipeName("org.openrewrite.golang.codequality.UseStructuredLogging$Println"),
-	template.WithDisplayName("log.Println → slog.Info"),
-	template.WithBefore(fmt.Sprintf(`log.Println(%s)`, slogMsg), template.Imports("log")),
-	template.WithAfter(fmt.Sprintf(`slog.Info(%s)`, slogMsg), template.Imports("log/slog"), template.SourceImports("log/slog")),
-	template.WithCaptures(slogMsg),
+var (
+	logPrintlnPattern = template.Expression(fmt.Sprintf(`log.Println(%s)`, slogMsg)).
+				Captures(slogMsg).Imports("log").Build()
+	logPrintPattern = template.Expression(fmt.Sprintf(`log.Print(%s)`, slogMsg)).
+			Captures(slogMsg).Imports("log").Build()
+	slogInfoTemplate = template.ExpressionTemplate(fmt.Sprintf(`slog.Info(%s)`, slogMsg)).
+				Captures(slogMsg).Imports("log/slog").Build()
 )
-
-var useStructuredLoggingPrint = template.NewRecipe(
-	template.RecipeName("org.openrewrite.golang.codequality.UseStructuredLogging$Print"),
-	template.WithDisplayName("log.Print → slog.Info"),
-	template.WithBefore(fmt.Sprintf(`log.Print(%s)`, slogMsg), template.Imports("log")),
-	template.WithAfter(fmt.Sprintf(`slog.Info(%s)`, slogMsg), template.Imports("log/slog"), template.SourceImports("log/slog")),
-	template.WithCaptures(slogMsg),
-)
-
-func (r *UseStructuredLogging) RecipeList() []recipe.Recipe {
-	return []recipe.Recipe{useStructuredLoggingPrintln, useStructuredLoggingPrint}
-}
 
 func (r *UseStructuredLogging) Editor() recipe.TreeVisitor {
 	return visitor.Init(&findStdLogVisitor{})
@@ -64,34 +54,61 @@ type findStdLogVisitor struct {
 // that should be flagged.
 var stdLogPrefixes = []string{"Print", "Fatal"}
 
-// stdLogAutoFixed lists method names that are auto-converted by the template
-// sub-recipes (single-argument calls only).
-var stdLogAutoFixed = map[string]bool{"Print": true, "Println": true}
-
 func (v *findStdLogVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
 	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	if mi.Select == nil {
 		return mi
 	}
-
 	ident, ok := mi.Select.Element.(*java.Identifier)
 	if !ok || ident.Name != "log" {
 		return mi
 	}
 
-	for _, prefix := range stdLogPrefixes {
-		if strings.HasPrefix(mi.Name.Name, prefix) {
-			// Skip single-argument Print/Println — handled by template sub-recipes.
-			if stdLogAutoFixed[mi.Name.Name] && len(mi.Arguments.Elements) == 1 {
-				return mi
-			}
-			mi = mi.WithMarkers(
-				java.MarkupInfo(mi.Markers, "consider migrating to log/slog for structured logging (Go 1.21+)"),
-			)
-			return mi
+	// Auto-convert a single-argument log.Print/Println to slog.Info only when the
+	// argument is a string, since slog.Info takes a string message; a non-string
+	// argument falls through to the markup hint below.
+	if mi.Name.Name == "Print" || mi.Name.Name == "Println" {
+		if replaced := v.toSlogInfo(mi); replaced != nil {
+			return replaced
 		}
 	}
 
+	for _, prefix := range stdLogPrefixes {
+		if strings.HasPrefix(mi.Name.Name, prefix) {
+			return mi.WithMarkers(
+				java.MarkupInfo(mi.Markers, "consider migrating to log/slog for structured logging (Go 1.21+)"),
+			)
+		}
+	}
 	return mi
+}
+
+// toSlogInfo returns the slog.Info replacement for a single-argument log.Print /
+// log.Println whose argument is a string, or nil when it does not apply.
+func (v *findStdLogVisitor) toSlogInfo(mi *java.MethodInvocation) java.J {
+	var pat *template.GoPattern
+	switch mi.Name.Name {
+	case "Println":
+		pat = logPrintlnPattern
+	case "Print":
+		pat = logPrintPattern
+	default:
+		return nil
+	}
+	match := pat.Match(mi, nil)
+	if match == nil {
+		return nil
+	}
+	arg, ok := match.GetCapture(slogMsg).(java.Expression)
+	if !ok || !matcher.IsString(matcher.TypeOfExpression(arg)) {
+		return nil
+	}
+	replaced, ok := slogInfoTemplate.Apply(nil, match).(*java.MethodInvocation)
+	if !ok {
+		return nil
+	}
+	recipegolang.MaybeAddImport(v, "log/slog", nil, false)
+	v.DoAfterVisit(recipe.Service[*recipegolang.ImportService](nil).RemoveUnusedImportsVisitor())
+	return replaced.WithPrefix(mi.GetPrefix())
 }

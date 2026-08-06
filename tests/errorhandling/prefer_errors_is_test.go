@@ -116,3 +116,19 @@ func TestPreferErrorsIsNoChangeNonError(t *testing.T) {
 		`),
 	)
 }
+
+// Skips a comparison that only matched by an Err* name but is an int constant.
+func TestPreferErrorsIsNoChangeIntErrConst(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.PreferErrorsIsOverEquality{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			const ErrLevel = 3
+
+			func f(x int) bool {
+				return x == ErrLevel
+			}
+		`),
+	)
+}

@@ -5,24 +5,13 @@
 package errorhandling
 
 import (
-	"fmt"
-
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
-var opiErr = template.Expr("opiErr")
-
-var preferErrorsIsOsInvalidEqualImpl = template.NewRecipe(
-	template.RecipeName("org.openrewrite.golang.codequality.PreferErrorsIsOsInvalid$Equal"),
-	template.WithDisplayName("err == os.ErrInvalid -> errors.Is(err, os.ErrInvalid)"),
-	template.WithBefore(fmt.Sprintf(`%s == os.ErrInvalid`, opiErr), template.Imports("os")),
-	template.WithAfter(fmt.Sprintf(`errors.Is(%s, os.ErrInvalid)`, opiErr), template.Imports("errors", "os"), template.SourceImports("errors", "os")),
-	template.WithCaptures(opiErr),
-)
-
-// PreferErrorsIsOsInvalid replaces `err == os.ErrInvalid` with
-// `errors.Is(err, os.ErrInvalid)`. Using errors.Is handles wrapped errors.
+// Replaces `err == os.ErrInvalid` with `errors.Is(err, os.ErrInvalid)` for
+// correct wrapped error handling.
 type PreferErrorsIsOsInvalid struct {
 	recipe.Base
 }
@@ -38,6 +27,22 @@ func (r *PreferErrorsIsOsInvalid) Description() string {
 }
 func (r *PreferErrorsIsOsInvalid) Tags() []string { return []string{"error-handling"} }
 
-func (r *PreferErrorsIsOsInvalid) RecipeList() []recipe.Recipe {
-	return []recipe.Recipe{preferErrorsIsOsInvalidEqualImpl}
+func (r *PreferErrorsIsOsInvalid) Editor() recipe.TreeVisitor {
+	return visitor.Init(&preferErrorsIsOsVisitor{})
+}
+
+type preferErrorsIsOsVisitor struct {
+	visitor.GoVisitor
+}
+
+func (v *preferErrorsIsOsVisitor) VisitBinary(bin *java.Binary, p any) java.J {
+	bin = v.GoVisitor.VisitBinary(bin, p).(*java.Binary)
+
+	if bin.Operator.Element != java.Equal && bin.Operator.Element != java.NotEqual {
+		return bin
+	}
+	if errExpr, sentinel, ok := matchSentinel(bin, "os", "ErrInvalid"); ok {
+		return rewriteToErrorsIs(v, bin, errExpr, sentinel)
+	}
+	return bin
 }

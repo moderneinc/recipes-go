@@ -75,3 +75,21 @@ func TestCheckCloseErrorNoChangeRead(t *testing.T) {
 		`),
 	)
 }
+
+// Skips a void Close(), where `_ = t.Close()` would not compile.
+func TestCheckCloseErrorNoChangeVoidClose(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.CheckCloseError{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			type T struct{}
+
+			func (T) Close() {}
+
+			func f(t T) {
+				t.Close()
+			}
+		`),
+	)
+}

@@ -46,10 +46,30 @@ type preferRawStringRegexVisitor struct {
 	visitor.GoVisitor
 }
 
+// Reports whether the node at the cursor is the sole value of a single variable
+// declaration or single-target assignment.
+func inSingleValueContext(c *visitor.Cursor) bool {
+	parent := c.Parent()
+	if parent == nil {
+		return false
+	}
+	switch parent.Value().(type) {
+	case *java.VariableDeclarator, *java.Assignment:
+		return true
+	}
+	return false
+}
+
 func (v *preferRawStringRegexVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
 	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
 	if !regexpCompileMatcher.Matches(mi) && !regexpMustCompileMatcher.Matches(mi) {
+		return mi
+	}
+
+	// Skip regexp.Compile forced into a single-value slot, where the surrounding
+	// two-value-in-single-value code already fails to compile.
+	if regexpCompileMatcher.Matches(mi) && inSingleValueContext(v.Cursor()) {
 		return mi
 	}
 
@@ -85,6 +105,12 @@ func (v *preferRawStringRegexVisitor) VisitMethodInvocation(mi *java.MethodInvoc
 
 	// Raw strings cannot contain backticks; bail out if the value has one.
 	if strings.Contains(unquoted, "`") {
+		return mi
+	}
+
+	// Bail on control characters, since a raw string would embed a literal
+	// newline or tab instead of the readable interpreted escape.
+	if strings.ContainsFunc(unquoted, func(r rune) bool { return r < 0x20 || r == 0x7f }) {
 		return mi
 	}
 

@@ -50,3 +50,19 @@ func TestPreferHexEncodingNoChangeOtherVerb(t *testing.T) {
 		`),
 	)
 }
+
+// Skips a string argument, since %x accepts it but hex.EncodeToString needs []byte.
+func TestPreferHexEncodingNoChangeString(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.PreferHexEncoding{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "fmt"
+
+			func f(s string) string {
+				return fmt.Sprintf("%x", s)
+			}
+		`),
+	)
+}

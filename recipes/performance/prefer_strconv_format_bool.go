@@ -7,24 +7,25 @@ package performance
 import (
 	"fmt"
 
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
+
+var fbB = template.Expr("fbB")
 
 var (
-	fbB = template.Expr("fbB")
-
-	preferStrconvFormatBoolImpl = template.NewRecipe(
-		template.RecipeName("org.openrewrite.golang.codequality.PreferStrconvFormatBool$Impl"),
-		template.WithDisplayName("Prefer strconv.FormatBool over fmt.Sprintf"),
-		template.WithBefore(fmt.Sprintf(`fmt.Sprintf("%%t", %s)`, fbB), template.Imports("fmt")),
-		template.WithAfter(fmt.Sprintf(`strconv.FormatBool(%s)`, fbB), template.Imports("strconv"), template.SourceImports("strconv")),
-		template.WithCaptures(fbB),
-	)
+	formatBoolPattern = template.Expression(fmt.Sprintf(`fmt.Sprintf("%%t", %s)`, fbB)).
+				Captures(fbB).Imports("fmt").Build()
+	formatBoolTemplate = template.ExpressionTemplate(fmt.Sprintf(`strconv.FormatBool(%s)`, fbB)).
+				Captures(fbB).Imports("strconv").Build()
 )
 
-// PreferStrconvFormatBool replaces `fmt.Sprintf("%t", b)` with
-// `strconv.FormatBool(b)` for better performance on bool-to-string conversion.
+// Replaces `fmt.Sprintf("%t", b)` with `strconv.FormatBool(b)` for better
+// performance on bool-to-string conversion.
 type PreferStrconvFormatBool struct {
 	recipe.Base
 }
@@ -40,6 +41,33 @@ func (r *PreferStrconvFormatBool) Description() string {
 }
 func (r *PreferStrconvFormatBool) Tags() []string { return []string{"performance"} }
 
-func (r *PreferStrconvFormatBool) RecipeList() []recipe.Recipe {
-	return []recipe.Recipe{preferStrconvFormatBoolImpl}
+func (r *PreferStrconvFormatBool) Editor() recipe.TreeVisitor {
+	return visitor.Init(&preferStrconvFormatBoolVisitor{})
+}
+
+type preferStrconvFormatBoolVisitor struct {
+	visitor.GoVisitor
+}
+
+func (v *preferStrconvFormatBoolVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
+
+	match := formatBoolPattern.Match(mi, nil)
+	if match == nil {
+		return mi
+	}
+
+	// Skip unless the argument is a bool, since strconv.FormatBool takes a bool.
+	arg, ok := match.GetCapture(fbB).(java.Expression)
+	if !ok || !matcher.IsBool(matcher.TypeOfExpression(arg)) {
+		return mi
+	}
+
+	replaced, ok := formatBoolTemplate.Apply(nil, match).(*java.MethodInvocation)
+	if !ok {
+		return mi
+	}
+	recipegolang.MaybeAddImport(v, "strconv", nil, false)
+	v.DoAfterVisit(recipe.Service[*recipegolang.ImportService](nil).RemoveUnusedImportsVisitor())
+	return replaced.WithPrefix(mi.GetPrefix())
 }

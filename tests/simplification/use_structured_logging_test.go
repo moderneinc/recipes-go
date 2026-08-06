@@ -96,3 +96,28 @@ func TestUseStructuredLoggingNoChangeFmt(t *testing.T) {
 		`),
 	)
 }
+
+// A non-string argument is not auto-converted to slog.Info (which needs a string
+// message); it is flagged for manual migration instead.
+func TestUseStructuredLoggingNoAutoConvertNonString(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&simplification.UseStructuredLogging{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "log"
+
+			func f(err error) {
+				log.Println(err)
+			}
+		`, `
+			package main
+
+			import "log"
+
+			func f(err error) {
+				/*~~(consider migrating to log/slog for structured logging (Go 1.21+))~~>*/log.Println(err)
+			}
+		`),
+	)
+}

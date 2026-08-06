@@ -62,3 +62,24 @@ func TestPreferStringsBuilderWriteStringNoChangeFormat(t *testing.T) {
 		`),
 	)
 }
+
+// Skips a []byte argument, since Builder.WriteString takes a string.
+func TestPreferStringsBuilderWriteStringNoChangeBytes(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&simplification.PreferStringsBuilderWriteString{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"fmt"
+				"strings"
+			)
+
+			func f(b []byte) {
+				var sb strings.Builder
+				fmt.Fprintf(&sb, "%s", b)
+				_ = sb
+			}
+		`),
+	)
+}

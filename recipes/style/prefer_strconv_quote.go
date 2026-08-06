@@ -7,22 +7,25 @@ package style
 import (
 	"fmt"
 
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
 var sqS = template.Expr("sqS")
 
-var preferStrconvQuoteImpl = template.NewRecipe(
-	template.RecipeName("org.openrewrite.golang.codequality.PreferStrconvQuote$Impl"),
-	template.WithDisplayName("fmt.Sprintf(\"%q\", s) → strconv.Quote(s)"),
-	template.WithBefore(fmt.Sprintf(`fmt.Sprintf("%%q", %s)`, sqS), template.Imports("fmt")),
-	template.WithAfter(fmt.Sprintf(`strconv.Quote(%s)`, sqS), template.Imports("strconv"), template.SourceImports("strconv")),
-	template.WithCaptures(sqS),
+var (
+	quotePattern = template.Expression(fmt.Sprintf(`fmt.Sprintf("%%q", %s)`, sqS)).
+			Captures(sqS).Imports("fmt").Build()
+	quoteTemplate = template.ExpressionTemplate(fmt.Sprintf(`strconv.Quote(%s)`, sqS)).
+			Captures(sqS).Imports("strconv").Build()
 )
 
-// PreferStrconvQuote replaces `fmt.Sprintf("%q", s)` with `strconv.Quote(s)`
-// for clearer intent when quoting strings.
+// Replaces `fmt.Sprintf("%q", s)` with `strconv.Quote(s)` for clearer intent
+// when quoting strings.
 type PreferStrconvQuote struct {
 	recipe.Base
 }
@@ -38,6 +41,34 @@ func (r *PreferStrconvQuote) Description() string {
 }
 func (r *PreferStrconvQuote) Tags() []string { return []string{"style", "cleanup"} }
 
-func (r *PreferStrconvQuote) RecipeList() []recipe.Recipe {
-	return []recipe.Recipe{preferStrconvQuoteImpl}
+func (r *PreferStrconvQuote) Editor() recipe.TreeVisitor {
+	return visitor.Init(&preferStrconvQuoteVisitor{})
+}
+
+type preferStrconvQuoteVisitor struct {
+	visitor.GoVisitor
+}
+
+func (v *preferStrconvQuoteVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
+
+	match := quotePattern.Match(mi, nil)
+	if match == nil {
+		return mi
+	}
+
+	// Skip unless the argument is a string, since strconv.Quote takes a string
+	// while %q also accepts a rune or []byte.
+	arg, ok := match.GetCapture(sqS).(java.Expression)
+	if !ok || !matcher.IsString(matcher.TypeOfExpression(arg)) {
+		return mi
+	}
+
+	replaced, ok := quoteTemplate.Apply(nil, match).(*java.MethodInvocation)
+	if !ok {
+		return mi
+	}
+	recipegolang.MaybeAddImport(v, "strconv", nil, false)
+	v.DoAfterVisit(recipe.Service[*recipegolang.ImportService](nil).RemoveUnusedImportsVisitor())
+	return replaced.WithPrefix(mi.GetPrefix())
 }

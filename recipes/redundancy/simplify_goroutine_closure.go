@@ -39,6 +39,16 @@ type simplifyGoroutineClosureVisitor struct {
 	visitor.GoVisitor
 }
 
+// Reports whether the function literal declares any parameters.
+func closureHasParams(md *java.MethodDeclaration) bool {
+	for _, e := range md.Parameters.Elements {
+		if _, isEmpty := e.Element.(*java.Empty); !isEmpty {
+			return true
+		}
+	}
+	return false
+}
+
 func (v *simplifyGoroutineClosureVisitor) VisitGoStmt(g *golang.GoStmt, p any) java.J {
 	g = v.GoVisitor.VisitGoStmt(g, p).(*golang.GoStmt)
 
@@ -63,6 +73,12 @@ func (v *simplifyGoroutineClosureVisitor) VisitGoStmt(g *golang.GoStmt, p any) j
 		}
 	}
 	if funcLit == nil {
+		return g
+	}
+
+	// Only simplify a parameterless closure; dropping its parameters and the
+	// call's arguments would leave the inner call referencing out-of-scope names.
+	if closureHasParams(funcLit) {
 		return g
 	}
 

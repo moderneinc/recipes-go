@@ -92,8 +92,8 @@ func isTemplateExecuteCall(mi *java.MethodInvocation) bool {
 	return mi.Name.Name == "Execute" || mi.Name.Name == "ExecuteTemplate"
 }
 
-// funcReturnsError returns true when the last return type of md is the
-// identifier "error".
+// Reports whether md returns a single error result, the only case where the
+// synthesized `return err` compiles.
 func funcReturnsError(md *java.MethodDeclaration) bool {
 	if md.ReturnType == nil {
 		return false
@@ -103,11 +103,10 @@ func funcReturnsError(md *java.MethodDeclaration) bool {
 		return rt.Name == "error"
 	case *golang.TypeList:
 		types := rt.Types.Elements
-		if len(types) == 0 {
+		if len(types) != 1 {
 			return false
 		}
-		last := types[len(types)-1].Element
-		if vd, ok := last.(*java.VariableDeclarations); ok {
+		if vd, ok := types[0].Element.(*java.VariableDeclarations); ok {
 			if ident, ok2 := vd.TypeExpr.(*java.Identifier); ok2 {
 				return ident.Name == "error"
 			}

@@ -8,8 +8,12 @@ import (
 	"fmt"
 
 	"github.com/moderneinc/recipes-go/diagnostic"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
 var snrS = template.Expr("snrS")
@@ -38,14 +42,53 @@ func (r *PreferStringsNewReader) DiagnosticMappings() []diagnostic.Mapping {
 	}
 }
 
-var preferStringsNewReaderImpl = template.NewRecipe(
-	template.RecipeName("org.openrewrite.golang.codequality.PreferStringsNewReader$Impl"),
-	template.WithDisplayName("bytes.NewReader([]byte) → strings.NewReader"),
-	template.WithBefore(fmt.Sprintf(`bytes.NewReader([]byte(%s))`, snrS), template.Imports("bytes")),
-	template.WithAfter(fmt.Sprintf(`strings.NewReader(%s)`, snrS), template.Imports("strings"), template.SourceImports("strings")),
-	template.WithCaptures(snrS),
+var (
+	newReaderPattern = template.Expression(fmt.Sprintf(`bytes.NewReader([]byte(%s))`, snrS)).
+				Captures(snrS).Imports("bytes").Build()
+	newReaderTemplate = template.ExpressionTemplate(fmt.Sprintf(`strings.NewReader(%s)`, snrS)).
+				Captures(snrS).Imports("strings").Build()
 )
 
-func (r *PreferStringsNewReader) RecipeList() []recipe.Recipe {
-	return []recipe.Recipe{preferStringsNewReaderImpl}
+func (r *PreferStringsNewReader) Editor() recipe.TreeVisitor {
+	return visitor.Init(&preferStringsNewReaderVisitor{})
+}
+
+type preferStringsNewReaderVisitor struct {
+	visitor.GoVisitor
+}
+
+func (v *preferStringsNewReaderVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
+
+	match := newReaderPattern.Match(mi, nil)
+	if match == nil {
+		return mi
+	}
+
+	// Skip unless the converted value is a string, since strings.NewReader takes
+	// a string and would not compile on a []byte argument.
+	inner, ok := match.GetCapture(snrS).(java.Expression)
+	if !ok || !matcher.IsString(matcher.TypeOfExpression(inner)) {
+		return mi
+	}
+
+	// Skip when the result is required as *bytes.Reader by a return or a typed
+	// variable declaration, where strings.NewReader's *strings.Reader would not
+	// compile, but leave an interface target such as io.Reader to rewrite.
+	if t, ok := requiredResultType(v.Cursor()); ok && t == "*bytes.Reader" {
+		return mi
+	}
+
+	replaced := newReaderTemplate.Apply(nil, match)
+	if replaced == nil {
+		return mi
+	}
+	newCall, ok := replaced.(*java.MethodInvocation)
+	if !ok {
+		return mi
+	}
+
+	recipegolang.MaybeAddImport(v, "strings", nil, false)
+	v.DoAfterVisit(recipe.Service[*recipegolang.ImportService](nil).RemoveUnusedImportsVisitor())
+	return newCall.WithPrefix(mi.GetPrefix())
 }

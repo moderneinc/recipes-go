@@ -49,3 +49,19 @@ func TestPreferErrorsIsOsInvalidNoChangeNil(t *testing.T) {
 		`),
 	)
 }
+
+// Skips a non-error (any) operand, where errors.Is would not compile.
+func TestPreferErrorsIsOsInvalidNoChangeNonError(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.PreferErrorsIsOsInvalid{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "os"
+
+			func f(x any) bool {
+				return x == os.ErrInvalid
+			}
+		`),
+	)
+}

@@ -38,7 +38,10 @@ func TestUseStrongHashMd5New(t *testing.T) {
 	)
 }
 
-func TestUseStrongHashMd5Sum(t *testing.T) {
+// md5.Sum is intentionally not rewritten: it returns [16]byte while
+// sha256.Sum256 returns [32]byte, so a local swap does not compile in typed
+// contexts and would need a whole-usage migration.
+func TestUseStrongHashNoChangeMd5Sum(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&style.UseStrongHash{})
 	spec.RewriteRun(t,
 		test.Golang(`
@@ -48,17 +51,6 @@ func TestUseStrongHashMd5Sum(t *testing.T) {
 
 			func f(data []byte) {
 				h := md5.Sum(data)
-				_ = h
-			}
-		`, `
-			package main
-
-			import (
-				"crypto/sha256"
-			)
-
-			func f(data []byte) {
-				h := sha256.Sum256(data)
 				_ = h
 			}
 		`),
@@ -92,7 +84,9 @@ func TestUseStrongHashSha1New(t *testing.T) {
 	)
 }
 
-func TestUseStrongHashSha1Sum(t *testing.T) {
+// sha1.Sum is intentionally not rewritten for the same [20]byte vs [32]byte
+// reason as md5.Sum.
+func TestUseStrongHashNoChangeSha1Sum(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&style.UseStrongHash{})
 	spec.RewriteRun(t,
 		test.Golang(`
@@ -102,17 +96,6 @@ func TestUseStrongHashSha1Sum(t *testing.T) {
 
 			func f(data []byte) {
 				h := sha1.Sum(data)
-				_ = h
-			}
-		`, `
-			package main
-
-			import (
-				"crypto/sha256"
-			)
-
-			func f(data []byte) {
-				h := sha256.Sum256(data)
 				_ = h
 			}
 		`),

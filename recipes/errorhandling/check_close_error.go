@@ -50,6 +50,18 @@ func (v *checkCloseErrorVisitor) VisitMultiAssignment(ma *golang.MultiAssignment
 	return ma
 }
 
+// Reports whether mi's method returns exactly one value, the only case where
+// `_ = mi` compiles.
+func returnsSingleValue(mi *java.MethodInvocation) bool {
+	if mi.MethodType == nil || mi.MethodType.ReturnType == nil {
+		return false
+	}
+	if _, isTuple := mi.MethodType.ReturnType.(*java.JavaTypeParameterized); isTuple {
+		return false
+	}
+	return java.TypeSignature(mi.MethodType.ReturnType) != "void"
+}
+
 func (v *checkCloseErrorVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
 	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
@@ -61,6 +73,12 @@ func (v *checkCloseErrorVisitor) VisitMethodInvocation(mi *java.MethodInvocation
 	// Only transform bare statement calls. If this MethodInvocation is already
 	// the RHS of an assignment, skip it.
 	if v.insideAssignment > 0 {
+		return mi
+	}
+
+	// `_ = x.Close()` only compiles when Close returns exactly one value; skip a
+	// void or multi-value Close.
+	if !returnsSingleValue(mi) {
 		return mi
 	}
 

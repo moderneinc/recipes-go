@@ -67,3 +67,22 @@ func TestSimplifyGoroutineClosureNoChangeDirectCall(t *testing.T) {
 		`),
 	)
 }
+
+// Skips a closure with parameters, where dropping them would leave the inner
+// call referencing an out-of-scope name.
+func TestSimplifyGoroutineClosureNoChangeWithParams(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&redundancy.SimplifyGoroutineClosure{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			func process(x int) {}
+
+			func f() {
+				go func(n int) {
+					process(n)
+				}(5)
+			}
+		`),
+	)
+}

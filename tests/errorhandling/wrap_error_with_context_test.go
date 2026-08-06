@@ -83,3 +83,23 @@ func TestWrapErrorWithContextNoChangeMultiReturn(t *testing.T) {
 		`),
 	)
 }
+
+// Skips a function returning a concrete error type, where `return fmt.Errorf(...)`
+// (which yields error) would not compile.
+func TestWrapErrorWithContextNoChangeConcreteReturn(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.WrapErrorWithContext{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			type MyErr struct{}
+
+			func (*MyErr) Error() string { return "" }
+
+			func g() *MyErr {
+				err := &MyErr{}
+				return err
+			}
+		`),
+	)
+}

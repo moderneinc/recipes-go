@@ -7,6 +7,7 @@ package redundancy
 import (
 	"strings"
 
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -50,7 +51,7 @@ func (v *simplifyRedundantLenBeforeRangeVisitor) VisitIf(ifStmt *java.If, p any)
 
 	// Must not have an init statement: `if init; cond` is wrapped in a
 	// golang.StatementWithInit, so skip Ifs that are its inner statement.
-	if isInitWrappedIf(v.Cursor()) {
+	if lstutil.IsInitWrappedIf(v.Cursor()) {
 		return ifStmt
 	}
 

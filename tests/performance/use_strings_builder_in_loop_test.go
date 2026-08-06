@@ -87,3 +87,21 @@ func TestStringConcatNoChangeOutsideLoop(t *testing.T) {
 		`),
 	)
 }
+
+// Skips a numeric accumulator, where builder.WriteString(number) would not compile.
+func TestStringConcatNoChangeNumeric(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&performance.UseStringsBuilderInLoop{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			func total(xs []int) int {
+				s := 0
+				for _, x := range xs {
+					s += x
+				}
+				return s
+			}
+		`),
+	)
+}
