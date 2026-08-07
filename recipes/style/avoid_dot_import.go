@@ -151,10 +151,10 @@ func (v *avoidDotImportVisitor) VisitImport(imp *java.Import, p any) java.J {
 func (v *avoidDotImportVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
 	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
-	if mi.Select != nil || mi.MethodType == nil || mi.MethodType.DeclaringType == nil {
+	if mi.Select != nil {
 		return mi
 	}
-	dp, ok := v.dotPkgs[mi.MethodType.DeclaringType.GetFullyQualifiedName()]
+	dp, ok := v.callPackage(mi)
 	if !ok {
 		return mi
 	}
@@ -172,15 +172,36 @@ func (v *avoidDotImportVisitor) VisitMethodInvocation(mi *java.MethodInvocation,
 	return &c
 }
 
+// callPackage returns the dot-imported package a receiver-less call resolves to,
+// via the function's declaring type or, for a var holding a func, the name's owner.
+func (v *avoidDotImportVisitor) callPackage(mi *java.MethodInvocation) (dotImport, bool) {
+	if mt := mi.MethodType; mt != nil && mt.DeclaringType != nil {
+		if dp, ok := v.dotPkgs[mt.DeclaringType.GetFullyQualifiedName()]; ok {
+			return dp, true
+		}
+	}
+	if mi.Name != nil && mi.Name.FieldType != nil {
+		if owner, ok := mi.Name.FieldType.Owner.(java.FullyQualified); ok && owner != nil {
+			if dp, ok := v.dotPkgs[owner.GetFullyQualifiedName()]; ok {
+				return dp, true
+			}
+		}
+	}
+	return dotImport{}, false
+}
+
 // Re-qualifies a bare reference from a dot-imported package, e.g. `Writer` to
 // `io.Writer` or a `math.Pi` constant used bare.
 func (v *avoidDotImportVisitor) VisitIdentifier(ident *java.Identifier, p any) java.J {
 	ident = v.GoVisitor.VisitIdentifier(ident, p).(*java.Identifier)
 
-	// Skip an identifier already used as a FieldAccess selector, so re-running is
-	// a no-op.
 	if parent := v.Cursor().Parent(); parent != nil {
+		// Skip an identifier already used as a FieldAccess selector (idempotency).
 		if fa, ok := parent.Value().(*java.FieldAccess); ok && fa.Name.Element == v.Cursor().Value() {
+			return ident
+		}
+		// A call's name is re-qualified by VisitMethodInvocation, not here.
+		if mi, ok := parent.Value().(*java.MethodInvocation); ok && mi.Name == v.Cursor().Value() {
 			return ident
 		}
 	}
@@ -191,6 +212,14 @@ func (v *avoidDotImportVisitor) VisitIdentifier(ident *java.Identifier, p any) j
 			if dp, found := v.dotPkgs[owner.GetFullyQualifiedName()]; found {
 				return v.qualify(ident, dp)
 			}
+		}
+		return ident
+	}
+
+	// A function used as a value (a bare reference, not a call).
+	if mt, ok := ident.Type.(*java.JavaTypeMethod); ok && mt.DeclaringType != nil {
+		if dp, found := v.dotPkgs[mt.DeclaringType.GetFullyQualifiedName()]; found {
+			return v.qualify(ident, dp)
 		}
 		return ident
 	}

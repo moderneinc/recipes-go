@@ -237,6 +237,26 @@ func TestAvoidDotImportDoesNotReQualifyBuiltinsOrLocalFuncs(t *testing.T) {
 	)
 }
 
+// A dot-imported function used as a value (passed, not called) is re-qualified.
+func TestAvoidDotImportReQualifiesFunctionValue(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.AvoidDotImport{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import . "sort"
+
+			var less = Strings
+		`, `
+			package main
+
+			import "sort"
+
+			var less = sort.Strings
+		`),
+	)
+}
+
 // A package imported both normally and via a dot alias is left untouched, so
 // stripping the dot does not produce a duplicate import.
 func TestAvoidDotImportNoChangeWhenAlsoImportedNormally(t *testing.T) {
