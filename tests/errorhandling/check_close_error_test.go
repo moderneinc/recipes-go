@@ -93,3 +93,53 @@ func TestCheckCloseErrorNoChangeVoidClose(t *testing.T) {
 		`),
 	)
 }
+
+// Skips a returned Close(), where `return _ = r.Close()` would not compile.
+func TestCheckCloseErrorNoChangeReturn(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.CheckCloseError{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "os"
+
+			func f(r *os.File) error {
+				return r.Close()
+			}
+		`),
+	)
+}
+
+// Skips a Close() whose error is already inspected in a condition.
+func TestCheckCloseErrorNoChangeInCondition(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.CheckCloseError{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "os"
+
+			func f(r *os.File) {
+				if r.Close() != nil {
+					return
+				}
+			}
+		`),
+	)
+}
+
+// Skips a deferred Close(), where `defer _ = r.Close()` would not compile.
+func TestCheckCloseErrorNoChangeDefer(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.CheckCloseError{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "os"
+
+			func f(r *os.File) {
+				defer r.Close()
+			}
+		`),
+	)
+}
