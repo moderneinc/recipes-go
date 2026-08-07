@@ -61,9 +61,19 @@ type avoidDotImportVisitor struct {
 func (v *avoidDotImportVisitor) VisitCompilationUnit(cu *golang.CompilationUnit, p any) java.J {
 	v.dotPkgs = map[string]dotImport{}
 	if cu.Imports != nil {
+		// Record packages already imported normally, so stripping a dot alias for
+		// one of them does not create a duplicate import.
+		normal := map[string]bool{}
+		for _, rp := range cu.Imports.Elements {
+			if imp := rp.Element; !isDotImport(imp) {
+				if path := importPath(imp); path != "" {
+					normal[path] = true
+				}
+			}
+		}
 		for _, rp := range cu.Imports.Elements {
 			imp := rp.Element
-			if imp.Alias == nil || imp.Alias.Element == nil || imp.Alias.Element.Name != "." {
+			if !isDotImport(imp) {
 				continue
 			}
 			fq, ok := imp.Alias.Element.Type.(java.FullyQualified)
@@ -71,7 +81,7 @@ func (v *avoidDotImportVisitor) VisitCompilationUnit(cu *golang.CompilationUnit,
 				continue
 			}
 			path := fq.GetFullyQualifiedName()
-			if path == "" {
+			if path == "" || normal[path] {
 				continue
 			}
 			// Only register packages whose name we can confidently derive.
@@ -83,6 +93,23 @@ func (v *avoidDotImportVisitor) VisitCompilationUnit(cu *golang.CompilationUnit,
 		}
 	}
 	return v.GoVisitor.VisitCompilationUnit(cu, p)
+}
+
+// isDotImport reports whether imp uses the "." alias.
+func isDotImport(imp *java.Import) bool {
+	return imp.Alias != nil && imp.Alias.Element != nil && imp.Alias.Element.Name == "."
+}
+
+// importPath returns the package path of a non-dot import, unquoted.
+func importPath(imp *java.Import) string {
+	lit, ok := imp.Qualid.(*java.Literal)
+	if !ok {
+		return ""
+	}
+	if s, ok := lit.Value.(string); ok && s != "" {
+		return strings.Trim(s, "\"`")
+	}
+	return strings.Trim(lit.Source, "\"`")
 }
 
 func (v *avoidDotImportVisitor) VisitImport(imp *java.Import, p any) java.J {
@@ -145,19 +172,11 @@ func (v *avoidDotImportVisitor) VisitMethodInvocation(mi *java.MethodInvocation,
 	return &c
 }
 
-// Re-qualifies a bare type reference from a dot-imported package, e.g. `Writer`
-// to `io.Writer`.
+// Re-qualifies a bare reference from a dot-imported package, e.g. `Writer` to
+// `io.Writer` or a `math.Pi` constant used bare.
 func (v *avoidDotImportVisitor) VisitIdentifier(ident *java.Identifier, p any) java.J {
 	ident = v.GoVisitor.VisitIdentifier(ident, p).(*java.Identifier)
 
-	// Variable/const uses carry a FieldType; only type references have none.
-	if ident.FieldType != nil {
-		return ident
-	}
-	fq, ok := ident.Type.(java.FullyQualified)
-	if !ok || fq == nil {
-		return ident
-	}
 	// Skip an identifier already used as a FieldAccess selector, so re-running is
 	// a no-op.
 	if parent := v.Cursor().Parent(); parent != nil {
@@ -165,27 +184,48 @@ func (v *avoidDotImportVisitor) VisitIdentifier(ident *java.Identifier, p any) j
 			return ident
 		}
 	}
+
+	// A const/var reference carries a FieldType whose Owner is its package.
+	if ft := ident.FieldType; ft != nil {
+		if owner, ok := ft.Owner.(java.FullyQualified); ok && owner != nil && ft.Name == ident.Name {
+			if dp, found := v.dotPkgs[owner.GetFullyQualifiedName()]; found {
+				return v.qualify(ident, dp)
+			}
+		}
+		return ident
+	}
+
+	// A type reference's fully-qualified name is `<dot-package>.<Name>`.
+	fq, ok := ident.Type.(java.FullyQualified)
+	if !ok || fq == nil {
+		return ident
+	}
 	fqn := fq.GetFullyQualifiedName()
 	for path, dp := range v.dotPkgs {
 		if fqn == path+"."+ident.Name {
-			return &java.FieldAccess{
-				ID:     uuid.New(),
-				Prefix: ident.Prefix,
-				Target: &java.Identifier{
-					ID:     uuid.New(),
-					Prefix: java.EmptySpace,
-					Name:   dp.qualifier,
-					Type:   dp.pkgType,
-				},
-				Name: java.LeftPadded[*java.Identifier]{
-					Before:  java.EmptySpace,
-					Element: ident.WithPrefix(java.EmptySpace),
-				},
-				Type: ident.Type,
-			}
+			return v.qualify(ident, dp)
 		}
 	}
 	return ident
+}
+
+// qualify wraps ident in a `<qualifier>.<ident>` FieldAccess for a dot-imported package.
+func (v *avoidDotImportVisitor) qualify(ident *java.Identifier, dp dotImport) java.J {
+	return &java.FieldAccess{
+		ID:     uuid.New(),
+		Prefix: ident.Prefix,
+		Target: &java.Identifier{
+			ID:     uuid.New(),
+			Prefix: java.EmptySpace,
+			Name:   dp.qualifier,
+			Type:   dp.pkgType,
+		},
+		Name: java.LeftPadded[*java.Identifier]{
+			Before:  java.EmptySpace,
+			Element: ident.WithPrefix(java.EmptySpace),
+		},
+		Type: ident.Type,
+	}
 }
 
 // Derives the package-name qualifier from the import path's last segment (or the
