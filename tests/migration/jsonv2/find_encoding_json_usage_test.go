@@ -81,7 +81,7 @@ func run(c Config) {
 	ctx.PutMessage(recipe.DataTableStoreKey, store)
 	(&jsonv2.FindEncodingJsonUsage{}).Editor().Visit(cu, ctx)
 
-	raw := store.GetRows("org.openrewrite.golang.migration.FindEncodingJsonUsage$Findings", "")
+	raw := store.GetRows("org.openrewrite.golang.migration.table.EncodingJsonUsage", "")
 	got := map[string]int{}
 	for _, r := range raw {
 		row := r.(jsonv2.EncodingJsonUsageRow)
@@ -144,7 +144,7 @@ func run(v any) {
 	ctx.PutMessage(recipe.DataTableStoreKey, store)
 	(&jsonv2.FindEncodingJsonUsage{}).Editor().Visit(cu, ctx)
 
-	raw := store.GetRows("org.openrewrite.golang.migration.FindEncodingJsonUsage$Findings", "")
+	raw := store.GetRows("org.openrewrite.golang.migration.table.EncodingJsonUsage", "")
 	got := map[string]int{}
 	for _, r := range raw {
 		row := r.(jsonv2.EncodingJsonUsageRow)
@@ -177,7 +177,7 @@ func runInventory(t *testing.T, path, source string) []jsonv2.EncodingJsonUsageR
 	ctx := recipe.NewExecutionContext()
 	ctx.PutMessage(recipe.DataTableStoreKey, store)
 	(&jsonv2.FindEncodingJsonUsage{}).Editor().Visit(cu, ctx)
-	raw := store.GetRows("org.openrewrite.golang.migration.FindEncodingJsonUsage$Findings", "")
+	raw := store.GetRows("org.openrewrite.golang.migration.table.EncodingJsonUsage", "")
 	rows := make([]jsonv2.EncodingJsonUsageRow, len(raw))
 	for i, r := range raw {
 		rows[i] = r.(jsonv2.EncodingJsonUsageRow)

@@ -23,7 +23,7 @@ type EncodingJsonUsageRow struct {
 }
 
 var encodingJsonUsageTable = recipe.NewDataTable[EncodingJsonUsageRow](
-	"org.openrewrite.golang.migration.FindEncodingJsonUsage$Findings",
+	"org.openrewrite.golang.migration.table.EncodingJsonUsage",
 	"encoding/json usage for the v2 migration",
 	"Every encoding/json touchpoint that an encoding/json/v2 migration must address.",
 	[]recipe.ColumnDescriptor{
