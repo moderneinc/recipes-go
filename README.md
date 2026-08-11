@@ -72,15 +72,16 @@ mod run . --recipe org.openrewrite.golang.codequality.SimplifyBooleanExpression
 
 ## Overview
 
-**213 recipes** across 6 categories with **595 tests**.
+**206 recipes** across 7 categories with **672 tests**.
 
 | Category | Recipes | Description |
 |---|---|---|
-| **Style** | 73 | Enforce conventions, detect code smells, security patterns, resource management |
-| **Simplification** | 61 | Modernize code with newer stdlib APIs, simplify expressions, migrate deprecated APIs |
-| **Error Handling** | 27 | `errors.Is`/`errors.As` migration, error wrapping, sentinel extraction |
+| **Style** | 58 | Enforce conventions, detect code smells, security patterns, resource management |
+| **Simplification** | 58 | Modernize code with newer stdlib APIs, simplify expressions, migrate deprecated APIs |
+| **Error Handling** | 24 | `errors.Is`/`errors.As` migration, error wrapping, sentinel extraction |
 | **Redundancy** | 23 | Remove dead code, redundant operations, unreachable statements |
-| **Performance** | 20 | Loop optimizations, allocation hoisting, format string improvements |
+| **Migration** | 18 | Go version and go.mod upgrades, encoding/json/v2 migration scoping |
+| **Performance** | 16 | Loop optimizations, allocation hoisting, format string improvements |
 | **Naming** | 9 | Receiver names, stuttering, constants, getter prefixes, error variables |
 
 ## Recipe Highlights
@@ -132,6 +133,12 @@ mod run . --recipe org.openrewrite.golang.codequality.SimplifyBooleanExpression
 - **Stuttering**: `func HttpGet()` in `package http` to `func Get()`
 - **Constants**: `MAX_BUFFER_SIZE` to `MaxBufferSize`
 - **Error variables**: `var notFound = errors.New(...)` to `var ErrNotFound = errors.New(...)`
+
+### Migration
+
+- **encoding/json/v2 migration scoping**: One report cataloguing every `encoding/json` touchpoint (import, package functions, type-resolved `Encoder`/`Decoder` method calls, exported types, `[N]byte`/`time.Duration` fields, `omitempty` tags, custom `MarshalJSON` implementations) into a data table categorized as import, rewrite, review, or modernize
+- **Go version upgrades**: Bump the `go` directive across releases (1.18 through 1.26)
+- **go.mod maintenance**: Tidy, format, and reconcile `require` directives and indirect markers
 
 ## Getting Started
 

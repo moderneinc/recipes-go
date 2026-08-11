@@ -7,6 +7,7 @@ package recipes
 import (
 	"github.com/moderneinc/recipes-go/recipes/errorhandling"
 	"github.com/moderneinc/recipes-go/recipes/migration"
+	"github.com/moderneinc/recipes-go/recipes/migration/jsonv2"
 	"github.com/moderneinc/recipes-go/recipes/naming"
 	"github.com/moderneinc/recipes-go/recipes/performance"
 	"github.com/moderneinc/recipes-go/recipes/redundancy"
@@ -245,4 +246,8 @@ func Activate(r *recipe.Registry) {
 	r.Register(&migration.FormatGoMod{}, golang, codeQuality, migrationCategory)
 	r.Register(&migration.FindMissingGoModRequires{}, golang, codeQuality, migrationCategory)
 	r.Register(&migration.FindUnusedGoModRequires{}, golang, codeQuality, migrationCategory)
+
+	// Migration — encoding/json to encoding/json/v2
+	jsonV2Category := recipe.CategoryDescriptor{DisplayName: "JSON v2", Description: "Migrate encoding/json to encoding/json/v2"}
+	r.Register(&jsonv2.FindEncodingJsonUsage{}, golang, codeQuality, migrationCategory, jsonV2Category)
 }
