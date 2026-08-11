@@ -5,33 +5,13 @@
 package errorhandling
 
 import (
-	"fmt"
-
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
-var sqlErr = template.Expr("sqlErr")
-
-var preferErrorsIsSqlNoRowsEqualImpl = template.NewRecipe(
-	template.RecipeName("org.openrewrite.golang.codequality.PreferErrorsIsSqlNoRows$Equal"),
-	template.WithDisplayName("err == sql.ErrNoRows -> errors.Is(err, sql.ErrNoRows)"),
-	template.WithBefore(fmt.Sprintf(`%s == sql.ErrNoRows`, sqlErr), template.Imports("database/sql")),
-	template.WithAfter(fmt.Sprintf(`errors.Is(%s, sql.ErrNoRows)`, sqlErr), template.Imports("errors", "database/sql"), template.SourceImports("errors", "database/sql")),
-	template.WithCaptures(sqlErr),
-)
-
-var preferErrorsIsSqlNoRowsNotEqualImpl = template.NewRecipe(
-	template.RecipeName("org.openrewrite.golang.codequality.PreferErrorsIsSqlNoRows$NotEqual"),
-	template.WithDisplayName("err != sql.ErrNoRows -> !errors.Is(err, sql.ErrNoRows)"),
-	template.WithBefore(fmt.Sprintf(`%s != sql.ErrNoRows`, sqlErr), template.Imports("database/sql")),
-	template.WithAfter(fmt.Sprintf(`!errors.Is(%s, sql.ErrNoRows)`, sqlErr), template.Imports("errors", "database/sql"), template.SourceImports("errors", "database/sql")),
-	template.WithCaptures(sqlErr),
-)
-
-// PreferErrorsIsSqlNoRows replaces `err == sql.ErrNoRows` with `errors.Is(err, sql.ErrNoRows)` and
-// `err != sql.ErrNoRows` with `!errors.Is(err, sql.ErrNoRows)`. The sql.ErrNoRows sentinel is a
-// common error value compared by ==; using errors.Is handles wrapped errors.
+// Replaces `err == sql.ErrNoRows` with `errors.Is(err, sql.ErrNoRows)` (and the
+// negated form) for correct wrapped error handling.
 type PreferErrorsIsSqlNoRows struct {
 	recipe.Base
 }
@@ -47,6 +27,22 @@ func (r *PreferErrorsIsSqlNoRows) Description() string {
 }
 func (r *PreferErrorsIsSqlNoRows) Tags() []string { return []string{"error-handling"} }
 
-func (r *PreferErrorsIsSqlNoRows) RecipeList() []recipe.Recipe {
-	return []recipe.Recipe{preferErrorsIsSqlNoRowsEqualImpl, preferErrorsIsSqlNoRowsNotEqualImpl}
+func (r *PreferErrorsIsSqlNoRows) Editor() recipe.TreeVisitor {
+	return visitor.Init(&preferErrorsIsSqlVisitor{})
+}
+
+type preferErrorsIsSqlVisitor struct {
+	visitor.GoVisitor
+}
+
+func (v *preferErrorsIsSqlVisitor) VisitBinary(bin *java.Binary, p any) java.J {
+	bin = v.GoVisitor.VisitBinary(bin, p).(*java.Binary)
+
+	if bin.Operator.Element != java.Equal && bin.Operator.Element != java.NotEqual {
+		return bin
+	}
+	if errExpr, sentinel, ok := matchSentinel(bin, "sql", "ErrNoRows"); ok {
+		return rewriteToErrorsIs(v, bin, errExpr, sentinel)
+	}
+	return bin
 }

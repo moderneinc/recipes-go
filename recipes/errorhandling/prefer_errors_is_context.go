@@ -5,50 +5,13 @@
 package errorhandling
 
 import (
-	"fmt"
-
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
-var ctxErr = template.Expr("ctxErr")
-
-var preferErrorsIsContextCanceledEqualImpl = template.NewRecipe(
-	template.RecipeName("org.openrewrite.golang.codequality.PreferErrorsIsContext$CanceledEqual"),
-	template.WithDisplayName("err == context.Canceled -> errors.Is(err, context.Canceled)"),
-	template.WithBefore(fmt.Sprintf(`%s == context.Canceled`, ctxErr), template.Imports("context")),
-	template.WithAfter(fmt.Sprintf(`errors.Is(%s, context.Canceled)`, ctxErr), template.Imports("errors", "context"), template.SourceImports("errors", "context")),
-	template.WithCaptures(ctxErr),
-)
-
-var preferErrorsIsContextCanceledNotEqualImpl = template.NewRecipe(
-	template.RecipeName("org.openrewrite.golang.codequality.PreferErrorsIsContext$CanceledNotEqual"),
-	template.WithDisplayName("err != context.Canceled -> !errors.Is(err, context.Canceled)"),
-	template.WithBefore(fmt.Sprintf(`%s != context.Canceled`, ctxErr), template.Imports("context")),
-	template.WithAfter(fmt.Sprintf(`!errors.Is(%s, context.Canceled)`, ctxErr), template.Imports("errors", "context"), template.SourceImports("errors", "context")),
-	template.WithCaptures(ctxErr),
-)
-
-var preferErrorsIsContextDeadlineEqualImpl = template.NewRecipe(
-	template.RecipeName("org.openrewrite.golang.codequality.PreferErrorsIsContext$DeadlineEqual"),
-	template.WithDisplayName("err == context.DeadlineExceeded -> errors.Is(err, context.DeadlineExceeded)"),
-	template.WithBefore(fmt.Sprintf(`%s == context.DeadlineExceeded`, ctxErr), template.Imports("context")),
-	template.WithAfter(fmt.Sprintf(`errors.Is(%s, context.DeadlineExceeded)`, ctxErr), template.Imports("errors", "context"), template.SourceImports("errors", "context")),
-	template.WithCaptures(ctxErr),
-)
-
-var preferErrorsIsContextDeadlineNotEqualImpl = template.NewRecipe(
-	template.RecipeName("org.openrewrite.golang.codequality.PreferErrorsIsContext$DeadlineNotEqual"),
-	template.WithDisplayName("err != context.DeadlineExceeded -> !errors.Is(err, context.DeadlineExceeded)"),
-	template.WithBefore(fmt.Sprintf(`%s != context.DeadlineExceeded`, ctxErr), template.Imports("context")),
-	template.WithAfter(fmt.Sprintf(`!errors.Is(%s, context.DeadlineExceeded)`, ctxErr), template.Imports("errors", "context"), template.SourceImports("errors", "context")),
-	template.WithCaptures(ctxErr),
-)
-
-// PreferErrorsIsContext replaces `err == context.Canceled` with
-// `errors.Is(err, context.Canceled)` and `err == context.DeadlineExceeded` with
-// `errors.Is(err, context.DeadlineExceeded)`, plus their != variants.
-// Using errors.Is handles wrapped errors correctly.
+// Replaces `err == context.Canceled` and `err == context.DeadlineExceeded` with
+// `errors.Is` (and the negated forms) for correct wrapped error handling.
 type PreferErrorsIsContext struct {
 	recipe.Base
 }
@@ -64,11 +27,24 @@ func (r *PreferErrorsIsContext) Description() string {
 }
 func (r *PreferErrorsIsContext) Tags() []string { return []string{"error-handling"} }
 
-func (r *PreferErrorsIsContext) RecipeList() []recipe.Recipe {
-	return []recipe.Recipe{
-		preferErrorsIsContextCanceledEqualImpl,
-		preferErrorsIsContextCanceledNotEqualImpl,
-		preferErrorsIsContextDeadlineEqualImpl,
-		preferErrorsIsContextDeadlineNotEqualImpl,
+func (r *PreferErrorsIsContext) Editor() recipe.TreeVisitor {
+	return visitor.Init(&preferErrorsIsContextVisitor{})
+}
+
+type preferErrorsIsContextVisitor struct {
+	visitor.GoVisitor
+}
+
+func (v *preferErrorsIsContextVisitor) VisitBinary(bin *java.Binary, p any) java.J {
+	bin = v.GoVisitor.VisitBinary(bin, p).(*java.Binary)
+
+	if bin.Operator.Element != java.Equal && bin.Operator.Element != java.NotEqual {
+		return bin
 	}
+	for _, name := range []string{"Canceled", "DeadlineExceeded"} {
+		if errExpr, sentinel, ok := matchSentinel(bin, "context", name); ok {
+			return rewriteToErrorsIs(v, bin, errExpr, sentinel)
+		}
+	}
+	return bin
 }

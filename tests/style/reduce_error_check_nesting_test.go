@@ -17,12 +17,11 @@ func TestReduceErrorCheckNesting(t *testing.T) {
 		test.Golang(`
 			package main
 
-			func f() error {
-				err := doSomething()
+			func f() (err error) {
+				err = doSomething()
 				if err == nil {
 					process()
 				}
-				return nil
 			}
 
 			func doSomething() error { return nil }
@@ -30,17 +29,36 @@ func TestReduceErrorCheckNesting(t *testing.T) {
 		`, `
 			package main
 
-			func f() error {
-				err := doSomething()
+			func f() (err error) {
+				err = doSomething()
 				if err != nil {
 					return err
 				}
 				process()
-				return nil
 			}
 
 			func doSomething() error { return nil }
 			func process()           {}
+		`),
+	)
+}
+
+// Skips a function that does not return a single error.
+func TestReduceErrorCheckNestingNoChangeNonErrorReturn(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.ReduceErrorCheckNesting{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			func load() int {
+				err := doSomething()
+				if err == nil {
+					return 42
+				}
+				return 0
+			}
+
+			func doSomething() error { return nil }
 		`),
 	)
 }

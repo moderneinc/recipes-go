@@ -65,3 +65,19 @@ func TestPreferStrconvFormatBoolNoChangeMultipleArgs(t *testing.T) {
 		`),
 	)
 }
+
+// Skips a non-bool argument.
+func TestPreferStrconvFormatBoolNoChangeNonBool(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&performance.PreferStrconvFormatBool{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "fmt"
+
+			func f(x int) string {
+				return fmt.Sprintf("%t", x)
+			}
+		`),
+	)
+}

@@ -17,12 +17,11 @@ func TestReduceNestingDepthGuardClause(t *testing.T) {
 		test.Golang(`
 			package main
 
-			func f() error {
+			func f() {
 				err := doSomething()
 				if err == nil {
 					process()
 				}
-				return nil
 			}
 
 			func doSomething() error { return nil }
@@ -30,13 +29,12 @@ func TestReduceNestingDepthGuardClause(t *testing.T) {
 		`, `
 			package main
 
-			func f() error {
+			func f() {
 				err := doSomething()
 				if err != nil {
 					return
 				}
 				process()
-				return nil
 			}
 
 			func doSomething() error { return nil }
@@ -57,6 +55,71 @@ func TestReduceNestingDepthNoChangeNotErrEqualNil(t *testing.T) {
 					_ = x
 				}
 			}
+		`),
+	)
+}
+
+// Skips a value-returning function.
+func TestReduceNestingDepthNoChangeValueReturningFunc(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.ReduceNestingDepth{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			func f() error {
+				err := doSomething()
+				if err == nil {
+					process()
+				}
+				return nil
+			}
+
+			func doSomething() error { return nil }
+			func process()           {}
+		`),
+	)
+}
+
+// Skips a non-terminal `if err == nil`.
+func TestReduceNestingDepthNoChangeNotLastStatement(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.ReduceNestingDepth{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			func f() {
+				err := doSomething()
+				if err == nil {
+					process()
+				}
+				cleanup()
+			}
+
+			func doSomething() error { return nil }
+			func process()           {}
+			func cleanup()           {}
+		`),
+	)
+}
+
+// Skips an `if err == nil` in a loop body.
+func TestReduceNestingDepthNoChangeInsideLoop(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.ReduceNestingDepth{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			func f(xs []int) {
+				for _, x := range xs {
+					err := check(x)
+					if err == nil {
+						process(x)
+					}
+				}
+			}
+
+			func check(int) error { return nil }
+			func process(int)      {}
 		`),
 	)
 }

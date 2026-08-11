@@ -8,8 +8,12 @@ import (
 	"fmt"
 
 	"github.com/moderneinc/recipes-go/diagnostic"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
 var (
@@ -17,7 +21,14 @@ var (
 	wsStr = template.Expr("wsStr")
 )
 
-// PreferIoWriteString replaces `fmt.Fprintf(w, "%s", s)` with `io.WriteString(w, s)`.
+var (
+	ioWriteStringPattern = template.Expression(fmt.Sprintf(`fmt.Fprintf(%s, "%%s", %s)`, wsW, wsStr)).
+				Captures(wsW, wsStr).Imports("fmt").Build()
+	ioWriteStringTemplate = template.ExpressionTemplate(fmt.Sprintf(`io.WriteString(%s, %s)`, wsW, wsStr)).
+				Captures(wsW, wsStr).Imports("io").Build()
+)
+
+// Replaces `fmt.Fprintf(w, "%s", s)` with `io.WriteString(w, s)`.
 // Staticcheck: S1025
 type PreferIoWriteString struct {
 	recipe.Base
@@ -38,14 +49,34 @@ func (r *PreferIoWriteString) DiagnosticMappings() []diagnostic.Mapping {
 	}
 }
 
-var preferIoWriteStringImpl = template.NewRecipe(
-	template.RecipeName("org.openrewrite.golang.codequality.PreferIoWriteString$Impl"),
-	template.WithDisplayName(`fmt.Fprintf(w, "%s", s) → io.WriteString(w, s)`),
-	template.WithBefore(fmt.Sprintf(`fmt.Fprintf(%s, "%%s", %s)`, wsW, wsStr), template.Imports("fmt")),
-	template.WithAfter(fmt.Sprintf(`io.WriteString(%s, %s)`, wsW, wsStr), template.Imports("io"), template.SourceImports("io")),
-	template.WithCaptures(wsW, wsStr),
-)
+func (r *PreferIoWriteString) Editor() recipe.TreeVisitor {
+	return visitor.Init(&preferIoWriteStringVisitor{})
+}
 
-func (r *PreferIoWriteString) RecipeList() []recipe.Recipe {
-	return []recipe.Recipe{preferIoWriteStringImpl}
+type preferIoWriteStringVisitor struct {
+	visitor.GoVisitor
+}
+
+func (v *preferIoWriteStringVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
+
+	match := ioWriteStringPattern.Match(mi, nil)
+	if match == nil {
+		return mi
+	}
+
+	// Skip unless the formatted value is a string, since io.WriteString takes a
+	// string while %s also accepts []byte or a fmt.Stringer.
+	arg, ok := match.GetCapture(wsStr).(java.Expression)
+	if !ok || !matcher.IsString(matcher.TypeOfExpression(arg)) {
+		return mi
+	}
+
+	replaced, ok := ioWriteStringTemplate.Apply(nil, match).(*java.MethodInvocation)
+	if !ok {
+		return mi
+	}
+	recipegolang.MaybeAddImport(v, "io", nil, false)
+	v.DoAfterVisit(recipe.Service[*recipegolang.ImportService](nil).RemoveUnusedImportsVisitor())
+	return replaced.WithPrefix(mi.GetPrefix())
 }

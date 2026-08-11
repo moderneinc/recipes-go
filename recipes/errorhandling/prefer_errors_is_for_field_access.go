@@ -6,7 +6,6 @@ package errorhandling
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -66,40 +65,7 @@ func (v *preferErrorsIsForFieldAccessVisitor) VisitBinary(bin *java.Binary, p an
 		return bin
 	}
 
-	// The rewrite introduces a reference to the `errors` package; ensure it is imported.
-	recipegolang.MaybeAddImport(v, "errors", nil, false)
-
-	// Build errors.Is(errExpr, sentinel) or !errors.Is(errExpr, sentinel). The
-	// leading whitespace lives on the outermost element, so carry the binary's
-	// prefix onto whichever node ends up outermost.
-	prefix := getLeadingPrefixExpr(bin)
-
-	errorsIdent := &java.Identifier{Name: "errors"}
-	isIdent := &java.Identifier{Name: "Is"}
-
-	errArg := stripExprPrefix(errExpr)
-	sentinelArg := stripExprPrefix(sentinel)
-	sentinelArgWithSpace := setExprPrefixLocal(sentinelArg, java.Space{Whitespace: " "})
-
-	isCall := &java.MethodInvocation{
-		Select: &java.RightPadded[java.Expression]{Element: errorsIdent},
-		Name:   isIdent,
-		Arguments: java.Container[java.Expression]{
-			Elements: []java.RightPadded[java.Expression]{
-				{Element: errArg},
-				{Element: sentinelArgWithSpace},
-			},
-		},
-	}
-
-	if bin.Operator.Element == java.NotEqual {
-		return &java.Unary{
-			Prefix:   prefix,
-			Operator: java.LeftPadded[java.UnaryOperator]{Element: java.Not},
-			Operand:  isCall,
-		}
-	}
-	return isCall.WithPrefix(prefix)
+	return rewriteToErrorsIs(v, bin, errExpr, sentinel)
 }
 
 // isPackageQualifiedSentinel checks if the expression is a FieldAccess

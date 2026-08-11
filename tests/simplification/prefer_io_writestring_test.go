@@ -57,3 +57,22 @@ func TestPreferIoWriteStringNoChange(t *testing.T) {
 		`),
 	)
 }
+
+// Skips a []byte argument.
+func TestPreferIoWriteStringNoChangeBytes(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&simplification.PreferIoWriteString{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"fmt"
+				"io"
+			)
+
+			func f(w io.Writer, b []byte) {
+				fmt.Fprintf(w, "%s", b)
+			}
+		`),
+	)
+}

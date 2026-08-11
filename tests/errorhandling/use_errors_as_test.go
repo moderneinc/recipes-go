@@ -74,3 +74,23 @@ func TestUseErrorsAsNoChangeNoInit(t *testing.T) {
 		`),
 	)
 }
+
+// Skips an assertion on an any-typed value.
+func TestUseErrorsAsNoChangeNonError(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.UseErrorsAs{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			type MyError struct{}
+
+			func (e *MyError) Error() string { return "x" }
+
+			func f(err any) {
+				if e, ok := err.(*MyError); ok {
+					_ = e
+				}
+			}
+		`),
+	)
+}

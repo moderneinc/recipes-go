@@ -61,3 +61,19 @@ func TestRemoveRedundantSprintfNoChangeFormatD(t *testing.T) {
 		`),
 	)
 }
+
+// Skips a []byte argument.
+func TestRemoveRedundantSprintfNoChangeBytes(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&redundancy.RemoveRedundantSprintf{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "fmt"
+
+			func f(b []byte) string {
+				return fmt.Sprintf("%s", b)
+			}
+		`),
+	)
+}

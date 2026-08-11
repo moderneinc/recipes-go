@@ -5,33 +5,13 @@
 package errorhandling
 
 import (
-	"fmt"
-
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
-var netErr = template.Expr("netErr")
-
-var preferErrorsIsNetClosedEqualImpl = template.NewRecipe(
-	template.RecipeName("org.openrewrite.golang.codequality.PreferErrorsIsNetClosed$Equal"),
-	template.WithDisplayName("err == net.ErrClosed -> errors.Is(err, net.ErrClosed)"),
-	template.WithBefore(fmt.Sprintf(`%s == net.ErrClosed`, netErr), template.Imports("net")),
-	template.WithAfter(fmt.Sprintf(`errors.Is(%s, net.ErrClosed)`, netErr), template.Imports("errors", "net"), template.SourceImports("errors", "net")),
-	template.WithCaptures(netErr),
-)
-
-var preferErrorsIsNetClosedNotEqualImpl = template.NewRecipe(
-	template.RecipeName("org.openrewrite.golang.codequality.PreferErrorsIsNetClosed$NotEqual"),
-	template.WithDisplayName("err != net.ErrClosed -> !errors.Is(err, net.ErrClosed)"),
-	template.WithBefore(fmt.Sprintf(`%s != net.ErrClosed`, netErr), template.Imports("net")),
-	template.WithAfter(fmt.Sprintf(`!errors.Is(%s, net.ErrClosed)`, netErr), template.Imports("errors", "net"), template.SourceImports("errors", "net")),
-	template.WithCaptures(netErr),
-)
-
-// PreferErrorsIsNetClosed replaces `err == net.ErrClosed` with
-// `errors.Is(err, net.ErrClosed)` and `err != net.ErrClosed` with
-// `!errors.Is(err, net.ErrClosed)`. Using errors.Is handles wrapped errors.
+// Replaces `err == net.ErrClosed` with `errors.Is(err, net.ErrClosed)` (and the
+// negated form) for correct wrapped error handling.
 type PreferErrorsIsNetClosed struct {
 	recipe.Base
 }
@@ -47,6 +27,22 @@ func (r *PreferErrorsIsNetClosed) Description() string {
 }
 func (r *PreferErrorsIsNetClosed) Tags() []string { return []string{"error-handling"} }
 
-func (r *PreferErrorsIsNetClosed) RecipeList() []recipe.Recipe {
-	return []recipe.Recipe{preferErrorsIsNetClosedEqualImpl, preferErrorsIsNetClosedNotEqualImpl}
+func (r *PreferErrorsIsNetClosed) Editor() recipe.TreeVisitor {
+	return visitor.Init(&preferErrorsIsNetVisitor{})
+}
+
+type preferErrorsIsNetVisitor struct {
+	visitor.GoVisitor
+}
+
+func (v *preferErrorsIsNetVisitor) VisitBinary(bin *java.Binary, p any) java.J {
+	bin = v.GoVisitor.VisitBinary(bin, p).(*java.Binary)
+
+	if bin.Operator.Element != java.Equal && bin.Operator.Element != java.NotEqual {
+		return bin
+	}
+	if errExpr, sentinel, ok := matchSentinel(bin, "net", "ErrClosed"); ok {
+		return rewriteToErrorsIs(v, bin, errExpr, sentinel)
+	}
+	return bin
 }

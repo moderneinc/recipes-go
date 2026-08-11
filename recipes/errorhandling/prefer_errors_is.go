@@ -5,6 +5,7 @@
 package errorhandling
 
 import (
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -68,6 +69,12 @@ func (v *preferErrorsIsVisitor) VisitBinary(bin *java.Binary, p any) java.J {
 		return bin
 	}
 
+	// errors.Is requires both operands to be error values; skip a comparison that
+	// only matched by the Err* name, such as an int constant named ErrLevel.
+	if !isErrorAssignable(errExpr) || !isErrorAssignable(sentinel) {
+		return bin
+	}
+
 	// The rewrite introduces a reference to the `errors` package; ensure it is imported.
 	recipegolang.MaybeAddImport(v, "errors", nil, false)
 
@@ -103,6 +110,12 @@ func (v *preferErrorsIsVisitor) VisitBinary(bin *java.Binary, p any) java.J {
 		}
 	}
 	return isCall.WithPrefix(prefix)
+}
+
+// Reports whether expr is a value assignable to error, which errors.Is requires
+// of both of its arguments and err.Error() requires of its receiver.
+func isErrorAssignable(expr java.Expression) bool {
+	return matcher.IsAssignableTo(matcher.TypeOfExpression(expr), "error")
 }
 
 func isErrorSentinel(expr java.Expression) bool {

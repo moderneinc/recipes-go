@@ -19,8 +19,9 @@ func TestPreferOsReadDir(t *testing.T) {
 
 			import "io/ioutil"
 
-			func f(name string) ([]os.FileInfo, error) {
-				return ioutil.ReadDir(name)
+			func f(name string) {
+				entries, _ := ioutil.ReadDir(name)
+				_ = entries
 			}
 		`, `
 			package main
@@ -29,8 +30,9 @@ func TestPreferOsReadDir(t *testing.T) {
 				"os"
 			)
 
-			func f(name string) ([]os.FileInfo, error) {
-				return os.ReadDir(name)
+			func f(name string) {
+				entries, _ := os.ReadDir(name)
+				_ = entries
 			}
 		`),
 	)
@@ -47,6 +49,25 @@ func TestPreferOsReadDirNoChange(t *testing.T) {
 			func f(name string) {
 				entries, _ := os.ReadDir(name)
 				_ = entries
+			}
+		`),
+	)
+}
+
+// Skips a direct return of []os.FileInfo.
+func TestPreferOsReadDirNoChangeFileInfoContext(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&simplification.PreferOsReadDir{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"io/ioutil"
+				"os"
+			)
+
+			func f(name string) ([]os.FileInfo, error) {
+				return ioutil.ReadDir(name)
 			}
 		`),
 	)

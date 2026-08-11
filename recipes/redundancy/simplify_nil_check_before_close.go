@@ -5,6 +5,7 @@
 package redundancy
 
 import (
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -47,7 +48,7 @@ func (v *simplifyNilCheckBeforeCloseVisitor) VisitIf(ifStmt *java.If, p any) jav
 
 	// Must not have an init statement: `if x := ...; cond` is wrapped in a
 	// golang.StatementWithInit, so skip Ifs that are its inner statement.
-	if isInitWrappedIf(v.Cursor()) {
+	if lstutil.IsInitWrappedIf(v.Cursor()) {
 		return ifStmt
 	}
 

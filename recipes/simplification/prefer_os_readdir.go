@@ -9,7 +9,10 @@ import (
 
 	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
 var rdirName = template.Expr("rdirName")
@@ -37,14 +40,45 @@ func (r *PreferOsReadDir) DiagnosticMappings() []diagnostic.Mapping {
 	}
 }
 
-var preferOsReadDirImpl = template.NewRecipe(
-	template.RecipeName("org.openrewrite.golang.codequality.PreferOsReadDir$Impl"),
-	template.WithDisplayName("ioutil.ReadDir \u2192 os.ReadDir"),
-	template.WithBefore(fmt.Sprintf(`ioutil.ReadDir(%s)`, rdirName), template.Imports("io/ioutil")),
-	template.WithAfter(fmt.Sprintf(`os.ReadDir(%s)`, rdirName), template.Imports("os"), template.SourceImports("os")),
-	template.WithCaptures(rdirName),
+var (
+	readDirPattern = template.Expression(fmt.Sprintf(`ioutil.ReadDir(%s)`, rdirName)).
+			Captures(rdirName).Imports("io/ioutil").Build()
+	readDirTemplate = template.ExpressionTemplate(fmt.Sprintf(`os.ReadDir(%s)`, rdirName)).
+			Captures(rdirName).Imports("os").Build()
 )
 
-func (r *PreferOsReadDir) RecipeList() []recipe.Recipe {
-	return []recipe.Recipe{preferOsReadDirImpl}
+func (r *PreferOsReadDir) Editor() recipe.TreeVisitor {
+	return visitor.Init(&preferOsReadDirVisitor{})
+}
+
+type preferOsReadDirVisitor struct {
+	visitor.GoVisitor
+}
+
+func (v *preferOsReadDirVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
+
+	match := readDirPattern.Match(mi, nil)
+	if match == nil {
+		return mi
+	}
+
+	// Skip when the result is required as []os.FileInfo by a return or a typed
+	// variable declaration, where os.ReadDir's []os.DirEntry would not compile.
+	if t, ok := requiredResultType(v.Cursor()); ok && t == "[]os.FileInfo" {
+		return mi
+	}
+
+	replaced := readDirTemplate.Apply(nil, match)
+	if replaced == nil {
+		return mi
+	}
+	newCall, ok := replaced.(*java.MethodInvocation)
+	if !ok {
+		return mi
+	}
+
+	recipegolang.MaybeAddImport(v, "os", nil, false)
+	v.DoAfterVisit(recipe.Service[*recipegolang.ImportService](nil).RemoveUnusedImportsVisitor())
+	return newCall.WithPrefix(mi.GetPrefix())
 }

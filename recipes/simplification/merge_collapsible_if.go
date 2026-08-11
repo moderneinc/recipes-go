@@ -7,6 +7,7 @@ package simplification
 import (
 	"strings"
 
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -51,7 +52,7 @@ func (v *mergeCollapsibleIfVisitor) VisitIf(ifStmt *java.If, p any) java.J {
 
 	// Outer if must not have an else clause or init statement. An `if init; cond`
 	// is wrapped in a golang.StatementWithInit, so skip wrapped Ifs.
-	if ifStmt.ElsePart != nil || isInitWrappedIf(v.Cursor()) {
+	if ifStmt.ElsePart != nil || lstutil.IsInitWrappedIf(v.Cursor()) {
 		return ifStmt
 	}
 

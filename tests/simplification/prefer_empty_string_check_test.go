@@ -48,3 +48,17 @@ func TestPreferEmptyStringCheckNotEqual(t *testing.T) {
 		`),
 	)
 }
+
+// Skips a []byte argument.
+func TestPreferEmptyStringCheckNoChangeBytes(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&simplification.PreferEmptyStringCheck{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			func f(b []byte) bool {
+				return len(b) == 0
+			}
+		`),
+	)
+}

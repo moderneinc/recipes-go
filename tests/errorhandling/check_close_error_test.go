@@ -75,3 +75,71 @@ func TestCheckCloseErrorNoChangeRead(t *testing.T) {
 		`),
 	)
 }
+
+// Skips a void Close().
+func TestCheckCloseErrorNoChangeVoidClose(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.CheckCloseError{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			type T struct{}
+
+			func (T) Close() {}
+
+			func f(t T) {
+				t.Close()
+			}
+		`),
+	)
+}
+
+// Skips a returned Close().
+func TestCheckCloseErrorNoChangeReturn(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.CheckCloseError{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "os"
+
+			func f(r *os.File) error {
+				return r.Close()
+			}
+		`),
+	)
+}
+
+// Skips a Close() whose error is already inspected in a condition.
+func TestCheckCloseErrorNoChangeInCondition(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.CheckCloseError{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "os"
+
+			func f(r *os.File) {
+				if r.Close() != nil {
+					return
+				}
+			}
+		`),
+	)
+}
+
+// Skips a deferred Close().
+func TestCheckCloseErrorNoChangeDefer(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.CheckCloseError{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "os"
+
+			func f(r *os.File) {
+				defer r.Close()
+			}
+		`),
+	)
+}

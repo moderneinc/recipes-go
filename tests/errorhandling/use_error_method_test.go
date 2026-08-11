@@ -46,3 +46,19 @@ func TestUseErrorMethodNoChangeInt(t *testing.T) {
 		`),
 	)
 }
+
+// Skips a non-error value named err.
+func TestUseErrorMethodNoChangeNonError(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.UseErrorMethod{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "fmt"
+
+			func f(err any) string {
+				return fmt.Sprint(err)
+			}
+		`),
+	)
+}

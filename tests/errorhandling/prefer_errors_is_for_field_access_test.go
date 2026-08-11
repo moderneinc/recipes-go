@@ -114,3 +114,19 @@ func TestPreferErrorsIsForFieldAccessNoChangeNonSentinel(t *testing.T) {
 		`),
 	)
 }
+
+// Skips a non-error field comparison that only matched by an Err* field name.
+func TestPreferErrorsIsForFieldAccessNoChangeNonError(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.PreferErrorsIsForFieldAccess{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			type C struct{ ErrThreshold int }
+
+			func f(c C, n int) bool {
+				return n == c.ErrThreshold
+			}
+		`),
+	)
+}

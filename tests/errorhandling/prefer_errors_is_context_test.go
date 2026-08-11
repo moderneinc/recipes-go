@@ -127,3 +127,19 @@ func TestPreferErrorsIsContextNoChangeNilCheck(t *testing.T) {
 		`),
 	)
 }
+
+// Skips a non-error (any) operand.
+func TestPreferErrorsIsContextNoChangeNonError(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.PreferErrorsIsContext{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "context"
+
+			func f(x any) bool {
+				return x == context.Canceled
+			}
+		`),
+	)
+}

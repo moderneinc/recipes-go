@@ -8,9 +8,12 @@ import (
 	"fmt"
 
 	"github.com/moderneinc/recipes-go/diagnostic"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
 var (
@@ -18,8 +21,15 @@ var (
 	scB = template.Expr("scB")
 )
 
-// SimplifySprintfConcat replaces `fmt.Sprintf("%s%s", a, b)` with `a + b`.
-// Using fmt.Sprintf for simple string concatenation is unnecessary overhead.
+var (
+	sprintfConcatPattern = template.Expression(fmt.Sprintf(`fmt.Sprintf("%%s%%s", %s, %s)`, scA, scB)).
+				Captures(scA, scB).Imports("fmt").Build()
+	sprintfConcatTemplate = template.ExpressionTemplate(fmt.Sprintf(`%s + %s`, scA, scB)).
+				Captures(scA, scB).Build()
+)
+
+// Replaces `fmt.Sprintf("%s%s", a, b)` with `a + b` to avoid unnecessary
+// formatting overhead for simple string concatenation.
 type SimplifySprintfConcat struct {
 	recipe.Base
 }
@@ -37,14 +47,36 @@ func (r *SimplifySprintfConcat) DiagnosticMappings() []diagnostic.Mapping {
 	return []diagnostic.Mapping{}
 }
 
-var simplifySprintfConcatImpl = template.NewRecipe(
-	template.RecipeName("org.openrewrite.golang.codequality.SimplifySprintfConcat$Impl"),
-	template.WithDisplayName("fmt.Sprintf(\"%s%s\", a, b) → a + b"),
-	template.WithBefore(fmt.Sprintf(`fmt.Sprintf("%%s%%s", %s, %s)`, scA, scB), template.Imports("fmt")),
-	template.WithAfter(fmt.Sprintf(`%s + %s`, scA, scB)),
-	template.WithCaptures(scA, scB),
-)
+func (r *SimplifySprintfConcat) Editor() recipe.TreeVisitor {
+	return visitor.Init(&simplifySprintfConcatVisitor{})
+}
 
-func (r *SimplifySprintfConcat) RecipeList() []recipe.Recipe {
-	return []recipe.Recipe{simplifySprintfConcatImpl, &recipegolang.RemoveUnusedImports{}}
+type simplifySprintfConcatVisitor struct {
+	visitor.GoVisitor
+}
+
+func (v *simplifySprintfConcatVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
+
+	match := sprintfConcatPattern.Match(mi, nil)
+	if match == nil {
+		return mi
+	}
+
+	// Skip unless both arguments are strings, since `+` concatenates strings but
+	// %s also accepts []byte and fmt.Stringer, which cannot be added.
+	a, aok := match.GetCapture(scA).(java.Expression)
+	b, bok := match.GetCapture(scB).(java.Expression)
+	if !aok || !bok ||
+		!matcher.IsString(matcher.TypeOfExpression(a)) ||
+		!matcher.IsString(matcher.TypeOfExpression(b)) {
+		return mi
+	}
+
+	replaced, ok := sprintfConcatTemplate.Apply(nil, match).(*java.Binary)
+	if !ok {
+		return mi
+	}
+	v.DoAfterVisit(recipe.Service[*recipegolang.ImportService](nil).RemoveUnusedImportsVisitor())
+	return replaced.WithPrefix(mi.GetPrefix())
 }

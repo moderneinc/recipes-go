@@ -46,3 +46,19 @@ func TestSimplifyRedundantErrorWrapNoChangeWithContext(t *testing.T) {
 		`),
 	)
 }
+
+// Skips a non-error (any) argument.
+func TestSimplifyRedundantErrorWrapNoChangeNonError(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.SimplifyRedundantErrorWrap{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "fmt"
+
+			func f(x any) error {
+				return fmt.Errorf("%w", x)
+			}
+		`),
+	)
+}

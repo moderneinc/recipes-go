@@ -6,6 +6,7 @@ package performance
 
 import (
 	"github.com/google/uuid"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -165,6 +166,11 @@ func findStringConcats(body *java.Block) []stringConcatInfo {
 			continue
 		}
 		if ao.Operator.Element != java.AddAssign {
+			continue
+		}
+		// Only string accumulators concatenate; `+=` on a numeric variable would
+		// become builder.WriteString(number), which does not compile.
+		if !matcher.IsString(matcher.TypeOfExpression(ao.Variable)) {
 			continue
 		}
 		results = append(results, stringConcatInfo{

@@ -6,6 +6,7 @@ package errorhandling
 
 import (
 	"github.com/google/uuid"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
@@ -158,21 +159,19 @@ func matchCommaOkTypeAssert(swi *golang.StatementWithInit) (string, java.Express
 	return targetIdent.Name, typeExpr, tc.Expr
 }
 
-// looksLikeError returns true if the expression is likely an error value.
-// It checks type information first; if unavailable, falls back to the
-// common convention that error variables are named "err".
+// Reports whether the expression is assignable to error, deciding from the
+// resolved type when present and otherwise from the "err" naming convention.
 func looksLikeError(expr java.Expression) bool {
 	ident, ok := expr.(*java.Identifier)
 	if !ok {
 		return false
 	}
-	// Check type info if available.
+	// A resolved type is decisive: an `any`/`interface{}` value is not assignable
+	// to error, so errors.As would not compile.
 	if ident.Type != nil {
-		if fq, ok := ident.Type.(java.FullyQualified); ok {
-			return fq.GetFullyQualifiedName() == "error"
-		}
+		return matcher.IsAssignableTo(ident.Type, "error")
 	}
-	// Fall back to name convention.
+	// Fall back to name convention only when the type is unresolved.
 	return ident.Name == "err"
 }
 

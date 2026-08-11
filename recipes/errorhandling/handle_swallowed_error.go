@@ -5,6 +5,7 @@
 package errorhandling
 
 import (
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -36,7 +37,7 @@ type handleSwallowedErrorVisitor struct {
 func (v *handleSwallowedErrorVisitor) VisitIf(ifStmt *java.If, p any) java.J {
 	ifStmt = v.GoVisitor.VisitIf(ifStmt, p).(*java.If)
 
-	if ifStmt.Condition == nil || !isErrNotNil(ifStmt.Condition.Tree.Element) {
+	if ifStmt.Condition == nil || !lstutil.IsErrNotNil(ifStmt.Condition.Tree.Element) {
 		return ifStmt
 	}
 
@@ -80,20 +81,6 @@ func (v *handleSwallowedErrorVisitor) VisitIf(ifStmt *java.If, p any) java.J {
 	newThenPart := ifStmt.ThenPart
 	newThenPart.Element = thenBlock.WithStatements(newStmts)
 	return ifStmt.WithThenPart(newThenPart)
-}
-
-// isErrNotNil checks whether an expression is `err != nil`.
-func isErrNotNil(expr java.Expression) bool {
-	bin, ok := expr.(*java.Binary)
-	if !ok || bin.Operator.Element != java.NotEqual {
-		return false
-	}
-	leftIdent, leftOk := bin.Left.(*java.Identifier)
-	rightIdent, rightOk := bin.Right.(*java.Identifier)
-	if !leftOk || !rightOk {
-		return false
-	}
-	return leftIdent.Name == "err" && rightIdent.Name == "nil"
 }
 
 // realStatements returns statements that are not *java.Empty.

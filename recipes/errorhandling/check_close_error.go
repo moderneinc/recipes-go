@@ -6,7 +6,6 @@ package errorhandling
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -33,21 +32,18 @@ func (r *CheckCloseError) Editor() recipe.TreeVisitor {
 
 type checkCloseErrorVisitor struct {
 	visitor.GoVisitor
-	insideAssignment int
 }
 
-func (v *checkCloseErrorVisitor) VisitAssignment(assign *java.Assignment, p any) java.J {
-	v.insideAssignment++
-	assign = v.GoVisitor.VisitAssignment(assign, p).(*java.Assignment)
-	v.insideAssignment--
-	return assign
-}
-
-func (v *checkCloseErrorVisitor) VisitMultiAssignment(ma *golang.MultiAssignment, p any) java.J {
-	v.insideAssignment++
-	ma = v.GoVisitor.VisitMultiAssignment(ma, p).(*golang.MultiAssignment)
-	v.insideAssignment--
-	return ma
+// Reports whether mi's method returns exactly one value, the only case where
+// `_ = mi` compiles.
+func returnsSingleValue(mi *java.MethodInvocation) bool {
+	if mi.MethodType == nil || mi.MethodType.ReturnType == nil {
+		return false
+	}
+	if _, isTuple := mi.MethodType.ReturnType.(*java.JavaTypeParameterized); isTuple {
+		return false
+	}
+	return java.TypeSignature(mi.MethodType.ReturnType) != "void"
 }
 
 func (v *checkCloseErrorVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
@@ -58,9 +54,19 @@ func (v *checkCloseErrorVisitor) VisitMethodInvocation(mi *java.MethodInvocation
 		return mi
 	}
 
-	// Only transform bare statement calls. If this MethodInvocation is already
-	// the RHS of an assignment, skip it.
-	if v.insideAssignment > 0 {
+	// Only wraps a Close() that stands alone as a statement; a call whose result
+	// is consumed, such as `return x.Close()`, has a non-block parent.
+	parent := v.Cursor().Parent()
+	if parent == nil {
+		return mi
+	}
+	if _, ok := parent.Value().(*java.Block); !ok {
+		return mi
+	}
+
+	// `_ = x.Close()` only compiles when Close returns exactly one value; skip a
+	// void or multi-value Close.
+	if !returnsSingleValue(mi) {
 		return mi
 	}
 

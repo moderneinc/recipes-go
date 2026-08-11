@@ -109,3 +109,23 @@ func TestCheckTemplateExecuteErrorNoChangeNoErrorReturn(t *testing.T) {
 		`),
 	)
 }
+
+// Skips a multi-value result like (int, error).
+func TestCheckTemplateExecuteErrorNoChangeMultiReturn(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.CheckTemplateExecuteError{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"html/template"
+				"io"
+			)
+
+			func f(tmpl *template.Template, w io.Writer) (int, error) {
+				tmpl.Execute(w, nil)
+				return 0, nil
+			}
+		`),
+	)
+}

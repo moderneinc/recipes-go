@@ -7,7 +7,9 @@ package style
 import (
 	"strings"
 
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -41,16 +43,29 @@ type reduceNestingDepthVisitor struct {
 func (v *reduceNestingDepthVisitor) VisitBlock(block *java.Block, p any) java.J {
 	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
 
+	// Only rewrite the function's top-level body, where falling through the `if`
+	// reaches the function end so the synthesised `return` preserves behaviour.
+	if !lstutil.IsFunctionBodyBlock(v.Cursor()) {
+		return block
+	}
+
 	changed := false
 	var newStmts []java.RightPadded[java.Statement]
 
 	dedent := visitor.Init(&nestingDedentVisitor{})
 
-	for _, rp := range block.Statements {
+	for i, rp := range block.Statements {
 		// An `if init; cond` is a golang.StatementWithInit, not a *java.If, so the
 		// assertion already excludes init-bearing ifs.
 		ifStmt, ok := rp.Element.(*java.If)
 		if !ok || ifStmt.ElsePart != nil || ifStmt.Condition == nil {
+			newStmts = append(newStmts, rp)
+			continue
+		}
+
+		// Only invert when the `if` is the block's last statement, so the guard's
+		// `return` does not skip statements that ran after it on the err != nil path.
+		if !isLastRealStatement(block.Statements, i) {
 			newStmts = append(newStmts, rp)
 			continue
 		}
@@ -61,6 +76,13 @@ func (v *reduceNestingDepthVisitor) VisitBlock(block *java.Block, p any) java.J 
 		}
 
 		if !isErrEqualNil(ifStmt.Condition.Tree.Element) {
+			newStmts = append(newStmts, rp)
+			continue
+		}
+
+		// Skip unless a bare `return` is legal here, since a function with unnamed
+		// results would need return values ("not enough return values").
+		if !bareReturnLegal(v.Cursor()) {
 			newStmts = append(newStmts, rp)
 			continue
 		}
@@ -86,6 +108,56 @@ func (v *reduceNestingDepthVisitor) VisitBlock(block *java.Block, p any) java.J 
 		return block
 	}
 	return block.WithStatements(newStmts)
+}
+
+// Reports whether a bare `return` is legal in the enclosing function, true for
+// no results or all-named results and false when the function cannot be resolved.
+func bareReturnLegal(c *visitor.Cursor) bool {
+	md, ok := visitor.FirstEnclosing[*java.MethodDeclaration](c)
+	if !ok {
+		return false
+	}
+	if md.ReturnType == nil {
+		return true
+	}
+	// A single unnamed result is not a TypeList, so a bare return is illegal.
+	tl, ok := md.ReturnType.(*golang.TypeList)
+	if !ok {
+		return false
+	}
+	for _, e := range tl.Types.Elements {
+		vd, ok := e.Element.(*java.VariableDeclarations)
+		if !ok || !allNamed(vd) {
+			return false
+		}
+	}
+	return true
+}
+
+// Reports whether a result-list entry declares a name (`err error`) rather than
+// being a bare type (`error`).
+func allNamed(vd *java.VariableDeclarations) bool {
+	if len(vd.Variables) == 0 {
+		return false
+	}
+	for _, dv := range vd.Variables {
+		d := dv.Element
+		if d == nil || d.Name == nil || d.Name.Name == "" {
+			return false
+		}
+	}
+	return true
+}
+
+// Reports whether index i is the last non-empty statement in stmts (trailing
+// *java.Empty entries, e.g. stray semicolons, are ignored).
+func isLastRealStatement(stmts []java.RightPadded[java.Statement], i int) bool {
+	for _, rp := range stmts[i+1:] {
+		if _, isEmpty := rp.Element.(*java.Empty); !isEmpty {
+			return false
+		}
+	}
+	return true
 }
 
 // isErrEqualNil returns true if the expression is `err == nil`.
@@ -128,7 +200,7 @@ func buildErrGuard(ifStmt *java.If, returnExpr java.Expression) *java.If {
 		Statements: []java.RightPadded[java.Statement]{
 			{Element: ret},
 		},
-		End: java.Space{Whitespace: "\n" + baseIndent(ifStmt.Prefix)},
+		End: java.Space{Whitespace: "\n" + lstutil.BaseIndent(ifStmt.Prefix)},
 	}
 
 	return &java.If{
@@ -138,19 +210,9 @@ func buildErrGuard(ifStmt *java.If, returnExpr java.Expression) *java.If {
 	}
 }
 
-// baseIndent extracts the indentation (everything after the last newline)
-// from a Space's Whitespace field.
-func baseIndent(space java.Space) string {
-	ws := space.Whitespace
-	if idx := strings.LastIndex(ws, "\n"); idx >= 0 {
-		return ws[idx+1:]
-	}
-	return ws
-}
-
 // guardIndent returns one extra tab level of indentation for the guard body.
 func guardIndent(space java.Space) string {
-	return baseIndent(space) + "\t"
+	return lstutil.BaseIndent(space) + "\t"
 }
 
 // nestingDedentVisitor removes one tab from every whitespace in a subtree,

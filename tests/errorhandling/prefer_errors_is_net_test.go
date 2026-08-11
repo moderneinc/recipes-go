@@ -75,3 +75,19 @@ func TestPreferErrorsIsNetClosedNoChangeNil(t *testing.T) {
 		`),
 	)
 }
+
+// Skips a non-error (any) operand.
+func TestPreferErrorsIsNetClosedNoChangeNonError(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.PreferErrorsIsNetClosed{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "net"
+
+			func f(x any) bool {
+				return x == net.ErrClosed
+			}
+		`),
+	)
+}

@@ -75,3 +75,19 @@ func TestPreferErrorsIsSqlNoRowsNoChangeNil(t *testing.T) {
 		`),
 	)
 }
+
+// Skips a non-error (any) operand.
+func TestPreferErrorsIsSqlNoRowsNoChangeNonError(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.PreferErrorsIsSqlNoRows{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "database/sql"
+
+			func f(x any) bool {
+				return x == sql.ErrNoRows
+			}
+		`),
+	)
+}

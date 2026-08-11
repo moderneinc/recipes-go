@@ -7,9 +7,12 @@ package simplification
 import (
 	"fmt"
 
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
 var (
@@ -17,8 +20,16 @@ var (
 	sbwS = template.Expr("sbwS")
 )
 
-// PreferStringsBuilderWriteString replaces `fmt.Fprintf(&b, "%s", s)` with
-// `b.WriteString(s)` when writing to a strings.Builder. Staticcheck: S1038
+var (
+	sbWriteStringPattern = template.Expression(fmt.Sprintf(`fmt.Fprintf(&%s, "%%s", %s)`, sbwB, sbwS)).
+				Captures(sbwB, sbwS).Imports("fmt").Build()
+	sbWriteStringTemplate = template.ExpressionTemplate(fmt.Sprintf(`%s.WriteString(%s)`, sbwB, sbwS)).
+				Captures(sbwB, sbwS).Build()
+)
+
+// Replaces `fmt.Fprintf(&b, "%s", s)` with `b.WriteString(s)` when writing to a
+// strings.Builder.
+// Staticcheck: S1038
 type PreferStringsBuilderWriteString struct {
 	recipe.Base
 }
@@ -36,14 +47,33 @@ func (r *PreferStringsBuilderWriteString) Tags() []string {
 	return []string{"cleanup", "simplification"}
 }
 
-var preferStringsBuilderWriteStringImpl = template.NewRecipe(
-	template.RecipeName("org.openrewrite.golang.codequality.PreferStringsBuilderWriteString$Impl"),
-	template.WithDisplayName(`fmt.Fprintf(&b, "%s", s) -> b.WriteString(s)`),
-	template.WithBefore(fmt.Sprintf(`fmt.Fprintf(&%s, "%%s", %s)`, sbwB, sbwS), template.Imports("fmt")),
-	template.WithAfter(fmt.Sprintf(`%s.WriteString(%s)`, sbwB, sbwS)),
-	template.WithCaptures(sbwB, sbwS),
-)
+func (r *PreferStringsBuilderWriteString) Editor() recipe.TreeVisitor {
+	return visitor.Init(&preferStringsBuilderWriteStringVisitor{})
+}
 
-func (r *PreferStringsBuilderWriteString) RecipeList() []recipe.Recipe {
-	return []recipe.Recipe{preferStringsBuilderWriteStringImpl, &recipegolang.RemoveUnusedImports{}}
+type preferStringsBuilderWriteStringVisitor struct {
+	visitor.GoVisitor
+}
+
+func (v *preferStringsBuilderWriteStringVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
+
+	match := sbWriteStringPattern.Match(mi, nil)
+	if match == nil {
+		return mi
+	}
+
+	// Skip unless the formatted value is a string, since Builder.WriteString takes
+	// a string while %s also accepts []byte or a fmt.Stringer.
+	arg, ok := match.GetCapture(sbwS).(java.Expression)
+	if !ok || !matcher.IsString(matcher.TypeOfExpression(arg)) {
+		return mi
+	}
+
+	replaced, ok := sbWriteStringTemplate.Apply(nil, match).(*java.MethodInvocation)
+	if !ok {
+		return mi
+	}
+	v.DoAfterVisit(recipe.Service[*recipegolang.ImportService](nil).RemoveUnusedImportsVisitor())
+	return replaced.WithPrefix(mi.GetPrefix())
 }

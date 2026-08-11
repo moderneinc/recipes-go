@@ -15,8 +15,8 @@ func TestPreferRawStringRegexCompile(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&style.PreferRawStringForRegex{})
 	spec.RewriteRun(t,
 		test.Golang(
-			"package main\n\nimport \"regexp\"\n\nvar r = regexp.Compile(\"\\\\d+\")\n",
-			"package main\n\nimport \"regexp\"\n\nvar r = regexp.Compile(`\\d+`)\n",
+			"package main\n\nimport \"regexp\"\n\nfunc f() *regexp.Regexp {\n\tr, _ := regexp.Compile(\"\\\\d+\")\n\treturn r\n}\n",
+			"package main\n\nimport \"regexp\"\n\nfunc f() *regexp.Regexp {\n\tr, _ := regexp.Compile(`\\d+`)\n\treturn r\n}\n",
 		),
 	)
 }
@@ -35,6 +35,33 @@ func TestPreferRawStringRegexNoChangeRawString(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&style.PreferRawStringForRegex{})
 	spec.RewriteRun(t,
 		test.Golang("package main\n\nimport \"regexp\"\n\nvar r = regexp.MustCompile(`\\d+`)\n"),
+	)
+}
+
+// Skips regexp.Compile in a single-value context.
+func TestPreferRawStringRegexNoChangeSingleValueContext(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.PreferRawStringForRegex{})
+	spec.RewriteRun(t,
+		test.Golang("package main\n\nimport \"regexp\"\n\nvar r = regexp.Compile(\"\\\\d+\")\n"),
+	)
+}
+
+// Skips a real newline escape.
+func TestPreferRawStringRegexNoChangeControlChar(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.PreferRawStringForRegex{})
+	spec.RewriteRun(t,
+		test.Golang("package main\n\nimport \"regexp\"\n\nvar re = regexp.MustCompile(\"a\\nb\")\n"),
+	)
+}
+
+// Rewrites a `\\t` metacharacter escape.
+func TestPreferRawStringRegexMetacharTab(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.PreferRawStringForRegex{})
+	spec.RewriteRun(t,
+		test.Golang(
+			"package main\n\nimport \"regexp\"\n\nvar re = regexp.MustCompile(\"\\\\t+\")\n",
+			"package main\n\nimport \"regexp\"\n\nvar re = regexp.MustCompile(`\\t+`)\n",
+		),
 	)
 }
 
