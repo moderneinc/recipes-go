@@ -54,7 +54,7 @@ func TestPreferOsReadDirNoChange(t *testing.T) {
 	)
 }
 
-// Skips a direct return of []os.FileInfo, where os.ReadDir's []os.DirEntry would not compile.
+// Skips a direct return of []os.FileInfo.
 func TestPreferOsReadDirNoChangeFileInfoContext(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&simplification.PreferOsReadDir{})
 	spec.RewriteRun(t,

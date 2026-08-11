@@ -66,7 +66,7 @@ func TestPreferStrconvFormatBoolNoChangeMultipleArgs(t *testing.T) {
 	)
 }
 
-// Skips a non-bool argument, since strconv.FormatBool needs a bool.
+// Skips a non-bool argument.
 func TestPreferStrconvFormatBoolNoChangeNonBool(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&performance.PreferStrconvFormatBool{})
 	spec.RewriteRun(t,

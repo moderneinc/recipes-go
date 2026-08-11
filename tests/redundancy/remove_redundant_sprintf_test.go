@@ -62,7 +62,7 @@ func TestRemoveRedundantSprintfNoChangeFormatD(t *testing.T) {
 	)
 }
 
-// Skips a []byte argument, since %s accepts it but the bare value is not a string.
+// Skips a []byte argument.
 func TestRemoveRedundantSprintfNoChangeBytes(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&redundancy.RemoveRedundantSprintf{})
 	spec.RewriteRun(t,

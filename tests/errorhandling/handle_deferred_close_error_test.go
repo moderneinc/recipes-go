@@ -53,7 +53,7 @@ func TestHandleDeferredCloseErrorNoChangeDone(t *testing.T) {
 	)
 }
 
-// Skips a void Close(), where `_ = t.Close()` inside the closure would not compile.
+// Skips a void Close().
 func TestHandleDeferredCloseErrorNoChangeVoidClose(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.HandleDeferredCloseError{})
 	spec.RewriteRun(t,

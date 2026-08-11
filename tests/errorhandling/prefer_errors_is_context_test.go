@@ -128,7 +128,7 @@ func TestPreferErrorsIsContextNoChangeNilCheck(t *testing.T) {
 	)
 }
 
-// Skips a non-error (any) operand, where errors.Is would not compile.
+// Skips a non-error (any) operand.
 func TestPreferErrorsIsContextNoChangeNonError(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.PreferErrorsIsContext{})
 	spec.RewriteRun(t,

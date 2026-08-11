@@ -38,9 +38,7 @@ func TestUseStrongHashMd5New(t *testing.T) {
 	)
 }
 
-// md5.Sum is intentionally not rewritten: it returns [16]byte while
-// sha256.Sum256 returns [32]byte, so a local swap does not compile in typed
-// contexts and would need a whole-usage migration.
+// md5.Sum is intentionally left alone: its result type differs from sha256.Sum256.
 func TestUseStrongHashNoChangeMd5Sum(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&style.UseStrongHash{})
 	spec.RewriteRun(t,
@@ -84,8 +82,7 @@ func TestUseStrongHashSha1New(t *testing.T) {
 	)
 }
 
-// sha1.Sum is intentionally not rewritten for the same [20]byte vs [32]byte
-// reason as md5.Sum.
+// sha1.Sum is intentionally left alone: its result type differs from sha256.Sum256.
 func TestUseStrongHashNoChangeSha1Sum(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&style.UseStrongHash{})
 	spec.RewriteRun(t,

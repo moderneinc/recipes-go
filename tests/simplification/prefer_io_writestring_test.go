@@ -58,7 +58,7 @@ func TestPreferIoWriteStringNoChange(t *testing.T) {
 	)
 }
 
-// Skips a []byte argument, since io.WriteString takes a string.
+// Skips a []byte argument.
 func TestPreferIoWriteStringNoChangeBytes(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&simplification.PreferIoWriteString{})
 	spec.RewriteRun(t,

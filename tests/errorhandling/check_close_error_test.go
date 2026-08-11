@@ -76,7 +76,7 @@ func TestCheckCloseErrorNoChangeRead(t *testing.T) {
 	)
 }
 
-// Skips a void Close(), where `_ = t.Close()` would not compile.
+// Skips a void Close().
 func TestCheckCloseErrorNoChangeVoidClose(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.CheckCloseError{})
 	spec.RewriteRun(t,
@@ -94,7 +94,7 @@ func TestCheckCloseErrorNoChangeVoidClose(t *testing.T) {
 	)
 }
 
-// Skips a returned Close(), where `return _ = r.Close()` would not compile.
+// Skips a returned Close().
 func TestCheckCloseErrorNoChangeReturn(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.CheckCloseError{})
 	spec.RewriteRun(t,
@@ -128,7 +128,7 @@ func TestCheckCloseErrorNoChangeInCondition(t *testing.T) {
 	)
 }
 
-// Skips a deferred Close(), where `defer _ = r.Close()` would not compile.
+// Skips a deferred Close().
 func TestCheckCloseErrorNoChangeDefer(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.CheckCloseError{})
 	spec.RewriteRun(t,

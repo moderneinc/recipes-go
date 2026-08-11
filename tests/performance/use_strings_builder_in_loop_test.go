@@ -88,7 +88,7 @@ func TestStringConcatNoChangeOutsideLoop(t *testing.T) {
 	)
 }
 
-// Skips a numeric accumulator, where builder.WriteString(number) would not compile.
+// Skips a numeric accumulator.
 func TestStringConcatNoChangeNumeric(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&performance.UseStringsBuilderInLoop{})
 	spec.RewriteRun(t,

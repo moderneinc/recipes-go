@@ -59,7 +59,7 @@ func TestReduceNestingDepthNoChangeNotErrEqualNil(t *testing.T) {
 	)
 }
 
-// Skips a value-returning function, where the bare `return` guard would not compile.
+// Skips a value-returning function.
 func TestReduceNestingDepthNoChangeValueReturningFunc(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&style.ReduceNestingDepth{})
 	spec.RewriteRun(t,
@@ -80,7 +80,7 @@ func TestReduceNestingDepthNoChangeValueReturningFunc(t *testing.T) {
 	)
 }
 
-// Skips a non-terminal `if err == nil`, where the early return would drop the following cleanup().
+// Skips a non-terminal `if err == nil`.
 func TestReduceNestingDepthNoChangeNotLastStatement(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&style.ReduceNestingDepth{})
 	spec.RewriteRun(t,
@@ -102,7 +102,7 @@ func TestReduceNestingDepthNoChangeNotLastStatement(t *testing.T) {
 	)
 }
 
-// Skips an `if err == nil` in a loop body, where the early return would exit the whole function.
+// Skips an `if err == nil` in a loop body.
 func TestReduceNestingDepthNoChangeInsideLoop(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&style.ReduceNestingDepth{})
 	spec.RewriteRun(t,

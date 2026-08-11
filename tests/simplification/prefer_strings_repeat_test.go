@@ -47,7 +47,7 @@ func TestSimplifySprintfConcatNoChangeFormat(t *testing.T) {
 	)
 }
 
-// Skips []byte arguments, since %s accepts them but []byte values cannot be added.
+// Skips []byte arguments.
 func TestSimplifySprintfConcatNoChangeBytes(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&simplification.SimplifySprintfConcat{})
 	spec.RewriteRun(t,

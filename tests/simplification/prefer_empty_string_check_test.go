@@ -49,7 +49,7 @@ func TestPreferEmptyStringCheckNotEqual(t *testing.T) {
 	)
 }
 
-// Skips a []byte argument, since `== ""` requires a string while len accepts slices.
+// Skips a []byte argument.
 func TestPreferEmptyStringCheckNoChangeBytes(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&simplification.PreferEmptyStringCheck{})
 	spec.RewriteRun(t,

@@ -38,7 +38,7 @@ func TestPreferRawStringRegexNoChangeRawString(t *testing.T) {
 	)
 }
 
-// Skips regexp.Compile in a single-value context, where the two-value call does not compile.
+// Skips regexp.Compile in a single-value context.
 func TestPreferRawStringRegexNoChangeSingleValueContext(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&style.PreferRawStringForRegex{})
 	spec.RewriteRun(t,
@@ -46,7 +46,7 @@ func TestPreferRawStringRegexNoChangeSingleValueContext(t *testing.T) {
 	)
 }
 
-// Skips a real newline escape, which a raw string would embed as a literal line break.
+// Skips a real newline escape.
 func TestPreferRawStringRegexNoChangeControlChar(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&style.PreferRawStringForRegex{})
 	spec.RewriteRun(t,
@@ -54,7 +54,7 @@ func TestPreferRawStringRegexNoChangeControlChar(t *testing.T) {
 	)
 }
 
-// Rewrites a `\\t` metacharacter escape, which is a backslash rather than a control character.
+// Rewrites a `\\t` metacharacter escape.
 func TestPreferRawStringRegexMetacharTab(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&style.PreferRawStringForRegex{})
 	spec.RewriteRun(t,

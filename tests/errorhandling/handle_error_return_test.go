@@ -41,7 +41,7 @@ func TestHandleErrorReturnDiscarded(t *testing.T) {
 	)
 }
 
-// Skips a plain `=` assignment in main(), where `err` is undeclared and no error return exists.
+// Skips a plain `=` assignment in main().
 func TestHandleErrorReturnNoChangeUndeclaredErr(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.HandleErrorReturn{})
 	spec.RewriteRun(t,
@@ -57,7 +57,7 @@ func TestHandleErrorReturnNoChangeUndeclaredErr(t *testing.T) {
 	)
 }
 
-// Skips the comma-ok map access, where the discarded value is a bool rather than an error.
+// Skips the comma-ok map access.
 func TestHandleErrorReturnNoChangeCommaOkMap(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.HandleErrorReturn{})
 	spec.RewriteRun(t,
@@ -73,7 +73,7 @@ func TestHandleErrorReturnNoChangeCommaOkMap(t *testing.T) {
 	)
 }
 
-// Skips the comma-ok type assertion, where the discarded value is a bool.
+// Skips the comma-ok type assertion.
 func TestHandleErrorReturnNoChangeCommaOkTypeAssert(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.HandleErrorReturn{})
 	spec.RewriteRun(t,
@@ -89,7 +89,7 @@ func TestHandleErrorReturnNoChangeCommaOkTypeAssert(t *testing.T) {
 	)
 }
 
-// Skips a capture in a loop body, where the inserted `return err` would change control flow.
+// Skips a capture in a loop body.
 func TestHandleErrorReturnNoChangeInsideLoop(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.HandleErrorReturn{})
 	spec.RewriteRun(t,

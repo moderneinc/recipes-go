@@ -47,8 +47,7 @@ func TestSimplifyRedundantErrorWrapNoChangeWithContext(t *testing.T) {
 	)
 }
 
-// Skips a non-error (any) argument, where replacing fmt.Errorf with the bare
-// value would not compile.
+// Skips a non-error (any) argument.
 func TestSimplifyRedundantErrorWrapNoChangeNonError(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.SimplifyRedundantErrorWrap{})
 	spec.RewriteRun(t,

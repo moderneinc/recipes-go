@@ -63,7 +63,7 @@ func TestPreferStringsBuilderWriteStringNoChangeFormat(t *testing.T) {
 	)
 }
 
-// Skips a []byte argument, since Builder.WriteString takes a string.
+// Skips a []byte argument.
 func TestPreferStringsBuilderWriteStringNoChangeBytes(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&simplification.PreferStringsBuilderWriteString{})
 	spec.RewriteRun(t,

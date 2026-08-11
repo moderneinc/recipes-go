@@ -75,7 +75,7 @@ func TestUseErrorsAsNoChangeNoInit(t *testing.T) {
 	)
 }
 
-// Skips an assertion on an any-typed value, since errors.As needs an error argument.
+// Skips an assertion on an any-typed value.
 func TestUseErrorsAsNoChangeNonError(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.UseErrorsAs{})
 	spec.RewriteRun(t,

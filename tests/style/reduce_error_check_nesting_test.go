@@ -43,8 +43,7 @@ func TestReduceErrorCheckNesting(t *testing.T) {
 	)
 }
 
-// Skips a function that does not return a single error, where the synthesized
-// `return err` would not compile.
+// Skips a function that does not return a single error.
 func TestReduceErrorCheckNestingNoChangeNonErrorReturn(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&style.ReduceErrorCheckNesting{})
 	spec.RewriteRun(t,

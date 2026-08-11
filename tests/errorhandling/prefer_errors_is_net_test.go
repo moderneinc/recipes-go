@@ -76,7 +76,7 @@ func TestPreferErrorsIsNetClosedNoChangeNil(t *testing.T) {
 	)
 }
 
-// Skips a non-error (any) operand, where errors.Is would not compile.
+// Skips a non-error (any) operand.
 func TestPreferErrorsIsNetClosedNoChangeNonError(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.PreferErrorsIsNetClosed{})
 	spec.RewriteRun(t,

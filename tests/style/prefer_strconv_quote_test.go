@@ -51,7 +51,7 @@ func TestPreferStrconvQuoteNoChangeOtherVerb(t *testing.T) {
 	)
 }
 
-// Skips a rune argument, since %q accepts it but strconv.Quote needs a string.
+// Skips a rune argument.
 func TestPreferStrconvQuoteNoChangeRune(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&style.PreferStrconvQuote{})
 	spec.RewriteRun(t,

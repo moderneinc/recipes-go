@@ -118,7 +118,7 @@ func TestPreferStrconvAtoiNoChangeBitSize(t *testing.T) {
 	)
 }
 
-// Skips a direct return of the int64 result, where strconv.Atoi's int would not compile.
+// Skips a direct return of the int64 result.
 func TestPreferStrconvAtoiNoChangeInt64Context(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&simplification.PreferStrconvAtoi{})
 	spec.RewriteRun(t,

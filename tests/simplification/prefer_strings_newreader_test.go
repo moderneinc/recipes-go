@@ -40,7 +40,7 @@ func TestPreferStringsNewReader(t *testing.T) {
 	)
 }
 
-// Skips a []byte argument, where strings.NewReader's string parameter would not compile.
+// Skips a []byte argument.
 func TestPreferStringsNewReaderNoChangeByteSliceArg(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&simplification.PreferStringsNewReader{})
 	spec.RewriteRun(t,
@@ -57,7 +57,7 @@ func TestPreferStringsNewReaderNoChangeByteSliceArg(t *testing.T) {
 	)
 }
 
-// A string literal is a string, so the rewrite still proceeds.
+// A string literal is a string.
 func TestPreferStringsNewReaderStringLiteralArg(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&simplification.PreferStringsNewReader{})
 	spec.RewriteRun(t,
@@ -87,7 +87,7 @@ func TestPreferStringsNewReaderStringLiteralArg(t *testing.T) {
 	)
 }
 
-// Skips a *bytes.Reader variable declaration, which *strings.Reader would not satisfy.
+// Skips a *bytes.Reader variable declaration.
 func TestPreferStringsNewReaderNoChangeTypedVarDecl(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&simplification.PreferStringsNewReader{})
 	spec.RewriteRun(t,
@@ -104,7 +104,7 @@ func TestPreferStringsNewReaderNoChangeTypedVarDecl(t *testing.T) {
 	)
 }
 
-// An interface-typed declaration accepts both readers, so the rewrite proceeds.
+// An interface-typed declaration accepts both readers.
 func TestPreferStringsNewReaderInterfaceVarDecl(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&simplification.PreferStringsNewReader{})
 	spec.RewriteRun(t,
@@ -151,7 +151,7 @@ func TestPreferStringsNewReaderNoChange(t *testing.T) {
 	)
 }
 
-// Skips a direct return of *bytes.Reader, where *strings.Reader would not compile.
+// Skips a direct return of *bytes.Reader.
 func TestPreferStringsNewReaderNoChangeBytesReaderContext(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&simplification.PreferStringsNewReader{})
 	spec.RewriteRun(t,

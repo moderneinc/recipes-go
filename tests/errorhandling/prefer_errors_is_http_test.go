@@ -76,7 +76,7 @@ func TestPreferErrorsIsHttpServerClosedNoChangeNil(t *testing.T) {
 	)
 }
 
-// Skips a non-error (any) operand, where errors.Is would not compile.
+// Skips a non-error (any) operand.
 func TestPreferErrorsIsHttpServerClosedNoChangeNonError(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.PreferErrorsIsHttpServerClosed{})
 	spec.RewriteRun(t,

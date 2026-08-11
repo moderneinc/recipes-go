@@ -110,8 +110,7 @@ func TestCheckTemplateExecuteErrorNoChangeNoErrorReturn(t *testing.T) {
 	)
 }
 
-// Skips a multi-value result like (int, error), where the synthesized bare
-// `return err` would not compile.
+// Skips a multi-value result like (int, error).
 func TestCheckTemplateExecuteErrorNoChangeMultiReturn(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&style.CheckTemplateExecuteError{})
 	spec.RewriteRun(t,

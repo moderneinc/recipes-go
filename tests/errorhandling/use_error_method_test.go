@@ -47,7 +47,7 @@ func TestUseErrorMethodNoChangeInt(t *testing.T) {
 	)
 }
 
-// Skips a non-error value named err, since err.Error() requires the error interface.
+// Skips a non-error value named err.
 func TestUseErrorMethodNoChangeNonError(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.UseErrorMethod{})
 	spec.RewriteRun(t,
