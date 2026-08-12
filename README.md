@@ -72,7 +72,7 @@ mod run . --recipe org.openrewrite.golang.codequality.SimplifyBooleanExpression
 
 ## Overview
 
-**206 recipes** across 7 categories with **672 tests**.
+**211 recipes** across 7 categories with **719 tests**.
 
 | Category | Recipes | Description |
 |---|---|---|
@@ -80,7 +80,7 @@ mod run . --recipe org.openrewrite.golang.codequality.SimplifyBooleanExpression
 | **Simplification** | 58 | Modernize code with newer stdlib APIs, simplify expressions, migrate deprecated APIs |
 | **Error Handling** | 24 | `errors.Is`/`errors.As` migration, error wrapping, sentinel extraction |
 | **Redundancy** | 23 | Remove dead code, redundant operations, unreachable statements |
-| **Migration** | 18 | Go version and go.mod upgrades, encoding/json/v2 migration scoping |
+| **Migration** | 23 | Go version and go.mod upgrades, encoding/json/v2 migration scoping and rewrites |
 | **Performance** | 16 | Loop optimizations, allocation hoisting, format string improvements |
 | **Naming** | 9 | Receiver names, stuttering, constants, getter prefixes, error variables |
 
@@ -137,6 +137,7 @@ mod run . --recipe org.openrewrite.golang.codequality.SimplifyBooleanExpression
 ### Migration
 
 - **encoding/json/v2 migration scoping**: One report cataloguing every `encoding/json` touchpoint (import, package functions, type-resolved `Encoder`/`Decoder` method calls, exported types, `[N]byte`/`time.Duration` fields, `omitempty` tags, custom `MarshalJSON` implementations) into a data table categorized as import, rewrite, review, or modernize
+- **encoding/json/v2 mechanical migration**: Rewrite the mechanical `encoding/json` idioms to `encoding/json/v2` and swap the import, either construct by construct (`UseMarshalWriteUnmarshalRead` for streaming chains, `ReplaceMarshalIndent`, `RelocateEncoderDecoderTypes` for local encoders/decoders) or all at once via the `MigrateToJSONV2` bundle, applied per file only when every `encoding/json` touchpoint is a mechanical construct so the whole file stays consistent
 - **Go version upgrades**: Bump the `go` directive across releases (1.18 through 1.26)
 - **go.mod maintenance**: Tidy, format, and reconcile `require` directives and indirect markers
 
