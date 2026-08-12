@@ -28,7 +28,6 @@ dependencies {
     implementation(platform("org.openrewrite:rewrite-bom:${rewriteVersion}"))
     implementation("org.openrewrite:rewrite-java")
     implementation("org.openrewrite:rewrite-go:${rewriteVersion}")
-    implementation("io.moderne:jsonrpc:latest.integration")
 }
 
 // ============================================
