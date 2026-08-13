@@ -37,8 +37,7 @@ type removeEmptyDefaultVisitor struct {
 func (v *removeEmptyDefaultVisitor) VisitCase(c *java.Case, p any) java.J {
 	c = v.GoVisitor.VisitCase(c, p).(*java.Case)
 
-	// Must be a default case (no expressions).
-	if len(c.Expressions.Elements) != 0 {
+	if !isDefaultCase(c) {
 		return c
 	}
 
@@ -51,4 +50,14 @@ func (v *removeEmptyDefaultVisitor) VisitCase(c *java.Case, p any) java.J {
 
 	// Remove the empty default case by replacing with Empty.
 	return &java.Empty{}
+}
+
+// isDefaultCase reports whether a case is Go's `default:` clause, modeled as a
+// single identifier named "default".
+func isDefaultCase(c *java.Case) bool {
+	if len(c.Expressions.Elements) != 1 {
+		return false
+	}
+	id, ok := c.Expressions.Elements[0].Element.(*java.Identifier)
+	return ok && id.Name == "default"
 }
