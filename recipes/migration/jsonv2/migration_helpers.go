@@ -8,9 +8,22 @@ import (
 	"reflect"
 	"strings"
 
+	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
+
+// Queues the encoding/json to encoding/json/v2 import rename on the current
+// file, the shared import step every construct rewrite defers to. Queued before
+// recursion so the rename runs first and never touches a jsontext import added
+// during it.
+func queueImportSwapToV2(v visitor.AfterVisitsProvider) {
+	v.DoAfterVisit((&recipegolang.RenamePackage{
+		OldPackagePath: "encoding/json",
+		NewPackagePath: "encoding/json/v2",
+	}).Editor())
+}
 
 // Reports whether cu imports any encoding/json/... sub-path, such as
 // encoding/json/v2 or encoding/json/jsontext.
@@ -63,30 +76,36 @@ func streamingTarget(method string) (fn, ctor string) {
 	return "", ""
 }
 
-// Reports whether a struct field is a fixed-size [N]byte/[N]uint8 or a
-// time.Duration, both of which change JSON representation in v2; a named type
-// whose underlying type is one of these is not detected.
-func isByteArrayOrDurationField(vd *java.VariableDeclarations) bool {
-	if at, ok := vd.TypeExpr.(*golang.ArrayType); ok && at.Length.Element != nil {
-		if elem, ok := at.ElementType.(*java.Identifier); ok && (elem.Name == "byte" || elem.Name == "uint8") {
-			return true
-		}
-	}
-	if fa, ok := vd.TypeExpr.(*java.FieldAccess); ok {
-		if pkg, ok := fa.Target.(*java.Identifier); ok && pkg.Name == "time" && fa.Name.Element.Name == "Duration" {
-			return true
-		}
-	}
-	// Resolve through the type system so a time.Duration reached via an aliased
-	// time import is caught too.
-	for _, decl := range vd.Variables {
-		if d := decl.Element; d != nil && d.Name != nil {
-			if fq, ok := d.Name.Type.(java.FullyQualified); ok && fq.GetFullyQualifiedName() == "time.Duration" {
-				return true
-			}
-		}
+// Reports whether a json.<name> identifier still exists in encoding/json/v2, so
+// that a reference to it compiles unchanged after the import swap; every other
+// v1 export was removed or relocated to jsontext.
+func isV2SurvivingJsonName(name string) bool {
+	switch name {
+	case "Marshal", "Unmarshal", "Marshaler", "Unmarshaler":
+		return true
 	}
 	return false
+}
+
+// Returns the local name a file uses for a regular or aliased encoding/json
+// import, or an empty string when the package is absent or imported blank or
+// dot, none of which is migratable.
+func regularJsonPackage(cu *golang.CompilationUnit) string {
+	jsonPkg := localJsonPackage(cu)
+	if jsonPkg == "" || jsonPkg == "_" || jsonPkg == "." {
+		return ""
+	}
+	return jsonPkg
+}
+
+// Reports whether fa is a json.<Name> reference to a symbol v2 removed, which
+// cannot survive the import swap and so blocks the file.
+func jsonFieldAccessBlocks(fa *java.FieldAccess, jsonPkg string) bool {
+	ident, ok := fa.Target.(*java.Identifier)
+	if !ok || ident.Name != jsonPkg {
+		return false
+	}
+	return fa.Name.Element == nil || !isV2SurvivingJsonName(fa.Name.Element.Name)
 }
 
 // Returns expr with a single leading space, preserving any leading comments.

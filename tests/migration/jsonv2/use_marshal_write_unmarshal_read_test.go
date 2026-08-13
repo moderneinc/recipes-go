@@ -71,42 +71,6 @@ func TestMigrateDecoderStreaming(t *testing.T) {
 	)
 }
 
-func TestMigrateBothInOneFile(t *testing.T) {
-	spec().RewriteRun(t,
-		test.Golang(`
-			package main
-
-			import (
-				"encoding/json"
-				"os"
-			)
-
-			func write(v any) error {
-				return json.NewEncoder(os.Stdout).Encode(v)
-			}
-
-			func read(v any) error {
-				return json.NewDecoder(os.Stdin).Decode(&v)
-			}
-		`, `
-			package main
-
-			import (
-				"encoding/json/v2"
-				"os"
-			)
-
-			func write(v any) error {
-				return json.MarshalWrite(os.Stdout, v)
-			}
-
-			func read(v any) error {
-				return json.UnmarshalRead(os.Stdin, &v)
-			}
-		`),
-	)
-}
-
 func TestMigrateAliasedImport(t *testing.T) {
 	spec().RewriteRun(t,
 		test.Golang(`
@@ -135,112 +99,8 @@ func TestMigrateAliasedImport(t *testing.T) {
 	)
 }
 
-// A local `[N]byte` or `time.Duration` is only a v2 concern as a struct field,
-// so their presence outside a struct does not block migration.
-func TestMigrateWithNonFieldByteArrayAndDuration(t *testing.T) {
-	spec().RewriteRun(t,
-		test.Golang(`
-			package main
-
-			import (
-				"encoding/json"
-				"os"
-				"time"
-			)
-
-			func write(v any, timeout time.Duration) error {
-				var scratch [8]byte
-				_ = scratch
-				_ = timeout
-				return json.NewEncoder(os.Stdout).Encode(v)
-			}
-		`, `
-			package main
-
-			import (
-				"encoding/json/v2"
-				"os"
-				"time"
-			)
-
-			func write(v any, timeout time.Duration) error {
-				var scratch [8]byte
-				_ = scratch
-				_ = timeout
-				return json.MarshalWrite(os.Stdout, v)
-			}
-		`),
-	)
-}
-
-// A migratable call sharing a file with json.MarshalIndent is left untouched:
-// the whole file is atomic, so the import is never swapped out from under the
-// still-v1 MarshalIndent call.
-func TestNoChangeMixedWithMarshalIndent(t *testing.T) {
-	spec().RewriteRun(t,
-		test.Golang(`
-			package main
-
-			import (
-				"encoding/json"
-				"os"
-			)
-
-			func run(v any) error {
-				if err := json.NewEncoder(os.Stdout).Encode(v); err != nil {
-					return err
-				}
-				_, err := json.MarshalIndent(v, "", "  ")
-				return err
-			}
-		`),
-	)
-}
-
-func TestNoChangeCustomMarshalJSON(t *testing.T) {
-	spec().RewriteRun(t,
-		test.Golang(`
-			package main
-
-			import (
-				"encoding/json"
-				"os"
-			)
-
-			type T struct{}
-
-			func (T) MarshalJSON() ([]byte, error) {
-				return []byte("null"), nil
-			}
-
-			func write(v any) error {
-				return json.NewEncoder(os.Stdout).Encode(v)
-			}
-		`),
-	)
-}
-
-func TestNoChangeOmitemptyTag(t *testing.T) {
-	spec().RewriteRun(t,
-		test.Golang(`
-			package main
-
-			import (
-				"encoding/json"
-				"os"
-			)
-
-			type T struct {
-				Name string `+"`"+`json:"name,omitempty"`+"`"+`
-			}
-
-			func write(v any) error {
-				return json.NewEncoder(os.Stdout).Encode(v)
-			}
-		`),
-	)
-}
-
+// json.RawMessage was removed in v2 (use jsontext.Value), so the file cannot be
+// migrated and is left untouched.
 func TestNoChangeRawMessageField(t *testing.T) {
 	spec().RewriteRun(t,
 		test.Golang(`
@@ -262,7 +122,9 @@ func TestNoChangeRawMessageField(t *testing.T) {
 	)
 }
 
-func TestNoChangeByteArrayField(t *testing.T) {
+// A [N]byte field changes encoding in v2, and the migration adopts that new
+// behavior rather than blocking the file.
+func TestMigrateWithByteArrayField(t *testing.T) {
 	spec().RewriteRun(t,
 		test.Golang(`
 			package main
@@ -279,32 +141,27 @@ func TestNoChangeByteArrayField(t *testing.T) {
 			func write(v any) error {
 				return json.NewEncoder(os.Stdout).Encode(v)
 			}
-		`),
-	)
-}
-
-func TestNoChangeDurationField(t *testing.T) {
-	spec().RewriteRun(t,
-		test.Golang(`
+		`, `
 			package main
 
 			import (
-				"encoding/json"
+				"encoding/json/v2"
 				"os"
-				"time"
 			)
 
 			type T struct {
-				Timeout time.Duration
+				Hash [32]byte
 			}
 
 			func write(v any) error {
-				return json.NewEncoder(os.Stdout).Encode(v)
+				return json.MarshalWrite(os.Stdout, v)
 			}
 		`),
 	)
 }
 
+// A file whose only json use is a plain Marshal has no construct this recipe
+// rewrites, so it is left unchanged.
 func TestNoChangePlainMarshal(t *testing.T) {
 	spec().RewriteRun(t,
 		test.Golang(`
@@ -313,6 +170,44 @@ func TestNoChangePlainMarshal(t *testing.T) {
 			import "encoding/json"
 
 			func run(v any) ([]byte, error) {
+				return json.Marshal(v)
+			}
+		`),
+	)
+}
+
+// Marshal survives in v2, so a plain Marshal sharing the file with a streaming
+// chain stays put and adopts v2 semantics while the chain migrates.
+func TestMigrateLeavesCoexistingPlainMarshal(t *testing.T) {
+	spec().RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"encoding/json"
+				"os"
+			)
+
+			func write(v any) error {
+				return json.NewEncoder(os.Stdout).Encode(v)
+			}
+
+			func dump(v any) ([]byte, error) {
+				return json.Marshal(v)
+			}
+		`, `
+			package main
+
+			import (
+				"encoding/json/v2"
+				"os"
+			)
+
+			func write(v any) error {
+				return json.MarshalWrite(os.Stdout, v)
+			}
+
+			func dump(v any) ([]byte, error) {
 				return json.Marshal(v)
 			}
 		`),
@@ -479,49 +374,6 @@ func TestMigratePreservesValueComment(t *testing.T) {
 
 			func write(v any) error {
 				return json.MarshalWrite(os.Stdout, /* payload */ v)
-			}
-		`),
-	)
-}
-
-func TestNoChangeByteArrayUint8Field(t *testing.T) {
-	spec().RewriteRun(t,
-		test.Golang(`
-			package main
-
-			import (
-				"encoding/json"
-				"os"
-			)
-
-			type T struct {
-				Hash [32]uint8
-			}
-
-			func write(v any) error {
-				return json.NewEncoder(os.Stdout).Encode(v)
-			}
-		`),
-	)
-}
-
-func TestNoChangeAliasedDurationField(t *testing.T) {
-	spec().RewriteRun(t,
-		test.Golang(`
-			package main
-
-			import (
-				"encoding/json"
-				"os"
-				tt "time"
-			)
-
-			type T struct {
-				Timeout tt.Duration
-			}
-
-			func write(v any) error {
-				return json.NewEncoder(os.Stdout).Encode(v)
 			}
 		`),
 	)

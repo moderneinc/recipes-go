@@ -66,7 +66,9 @@ func TestReplaceMarshalIndentPointerValue(t *testing.T) {
 	)
 }
 
-func TestReplaceMarshalIndentNoChangeWithPlainMarshal(t *testing.T) {
+// Marshal survives in v2, so a plain Marshal sharing the file with a
+// MarshalIndent stays put and adopts v2 semantics while MarshalIndent migrates.
+func TestReplaceMarshalIndentLeavesCoexistingPlainMarshal(t *testing.T) {
 	marshalIndentSpec().RewriteRun(t,
 		test.Golang(`
 			package main
@@ -79,6 +81,22 @@ func TestReplaceMarshalIndentNoChangeWithPlainMarshal(t *testing.T) {
 					return nil, nil, err
 				}
 				b, err := json.MarshalIndent(v, "", "  ")
+				return a, b, err
+			}
+		`, `
+			package main
+
+			import (
+				"encoding/json/v2"
+				"encoding/json/jsontext"
+			)
+
+			func run(v any) ([]byte, []byte, error) {
+				a, err := json.Marshal(v)
+				if err != nil {
+					return nil, nil, err
+				}
+				b, err := json.Marshal(v, jsontext.WithIndent("  "), jsontext.WithIndentPrefix(""))
 				return a, b, err
 			}
 		`),

@@ -17,9 +17,8 @@ import (
 )
 
 // Relocates a function-local json.Encoder/Decoder to jsontext and rewrites its
-// Encode/Decode calls to the v2 package functions, applied per file only when
-// every encoder and decoder is a local used solely as an Encode/Decode receiver
-// so the value never escapes to code the recipe cannot see.
+// Encode/Decode calls to the v2 package functions, applied only when every such
+// value stays local and no v1 symbol v2 removed would be stranded.
 type RelocateEncoderDecoderTypes struct {
 	recipe.Base
 }
@@ -31,7 +30,7 @@ func (r *RelocateEncoderDecoderTypes) DisplayName() string {
 	return "Relocate `json.Encoder` and `json.Decoder` to `jsontext`"
 }
 func (r *RelocateEncoderDecoderTypes) Description() string {
-	return "Relocate `json.Encoder`/`json.Decoder` values created as function-local variables to `encoding/json/jsontext`, rewriting `enc.Encode(v)` to `json.MarshalEncode(enc, v)` and `dec.Decode(&v)` to `json.UnmarshalDecode(dec, &v)`, adding the `encoding/json/jsontext` import and swapping the `encoding/json` import to `encoding/json/v2`. Applied per file only when every encoder and decoder is a local variable used solely as the receiver of an `Encode`/`Decode` call, never embedded, passed, returned, stored, referenced by type, or reached through method promotion, and the file has no other `encoding/json` usage; anything else leaves the whole file unchanged so it can be migrated and reviewed by other recipes. Dot and blank imports are left untouched, and the v2 targets are not byte-for-byte behavior preserving."
+	return "Relocate function-local `json.Encoder`/`json.Decoder` values to `jsontext` and rewrite their `enc.Encode(v)`/`dec.Decode(&v)` calls to `json.MarshalEncode(enc, v)`/`json.UnmarshalDecode(dec, &v)`, swapping the import to `encoding/json/v2`."
 }
 func (r *RelocateEncoderDecoderTypes) Tags() []string { return []string{"migration", "json"} }
 
@@ -46,8 +45,8 @@ type relocateEncoderDecoderVisitor struct {
 }
 
 func (v *relocateEncoderDecoderVisitor) VisitCompilationUnit(cu *golang.CompilationUnit, p any) java.J {
-	jsonPkg := localJsonPackage(cu)
-	if jsonPkg == "" || jsonPkg == "_" || jsonPkg == "." {
+	jsonPkg := regularJsonPackage(cu)
+	if jsonPkg == "" {
 		return cu
 	}
 	// The added jsontext import is emitted under its default name, so a file that
@@ -67,10 +66,7 @@ func (v *relocateEncoderDecoderVisitor) VisitCompilationUnit(cu *golang.Compilat
 
 	v.jsonPkg = jsonPkg
 	v.localEncoders = locals
-	v.DoAfterVisit((&recipegolang.RenamePackage{
-		OldPackagePath: "encoding/json",
-		NewPackagePath: "encoding/json/v2",
-	}).Editor())
+	queueImportSwapToV2(v)
 
 	return v.GoVisitor.VisitCompilationUnit(cu, p)
 }
@@ -270,7 +266,6 @@ type relocateVerify struct {
 	jsonPkg        string
 	locals         map[string]bool
 	ctorIDs        map[uuid.UUID]struct{}
-	insideStruct   int
 	blocked        bool
 	jsonReferenced bool
 }
@@ -297,10 +292,15 @@ func (s *relocateVerify) VisitMethodInvocation(mi *java.MethodInvocation, p any)
 		}
 		return s.GoVisitor.VisitMethodInvocation(mi, p)
 	}
-	// Any other json package function is out of scope for this recipe.
+	// A surviving json package function (Marshal, Unmarshal) stays as is and
+	// adopts v2 semantics; any other one v2 dropped and this recipe cannot
+	// rewrite it.
 	if selectIdentName(mi) == s.jsonPkg {
-		s.blocked = true
-		return mi
+		if mi.Name == nil || !isV2SurvivingJsonName(mi.Name.Name) {
+			s.blocked = true
+			return mi
+		}
+		return s.GoVisitor.VisitMethodInvocation(mi, p)
 	}
 	// An Encode/Decode call is fine only on a local encoder/decoder identifier.
 	if _, ok := encoderValueCallTarget(mi); ok {
@@ -325,42 +325,13 @@ func (s *relocateVerify) VisitFieldAccess(fa *java.FieldAccess, p any) java.J {
 	if s.blocked {
 		return fa
 	}
-	// Any json.<Name> type or value reference (Encoder, Decoder, RawMessage,
-	// Number, an error type) is out of scope.
-	if ident, ok := fa.Target.(*java.Identifier); ok && ident.Name == s.jsonPkg {
+	// A json.<Name> reference to a type v2 removed (Encoder, Decoder, RawMessage,
+	// Number, an error type) cannot survive the import swap.
+	if jsonFieldAccessBlocks(fa, s.jsonPkg) {
 		s.blocked = true
 		return fa
 	}
 	return s.GoVisitor.VisitFieldAccess(fa, p)
-}
-
-func (s *relocateVerify) VisitMethodDeclaration(md *java.MethodDeclaration, p any) java.J {
-	if s.blocked {
-		return md
-	}
-	if md.Name != nil && (md.Name.Name == "MarshalJSON" || md.Name.Name == "UnmarshalJSON") {
-		s.blocked = true
-		return md
-	}
-	return s.GoVisitor.VisitMethodDeclaration(md, p)
-}
-
-func (s *relocateVerify) VisitStructType(st *golang.StructType, p any) java.J {
-	s.insideStruct++
-	st = s.GoVisitor.VisitStructType(st, p).(*golang.StructType)
-	s.insideStruct--
-	return st
-}
-
-func (s *relocateVerify) VisitVariableDeclarations(vd *java.VariableDeclarations, p any) java.J {
-	if s.blocked {
-		return vd
-	}
-	if hasOmitemptyTag(vd) || (s.insideStruct > 0 && isByteArrayOrDurationField(vd)) {
-		s.blocked = true
-		return vd
-	}
-	return s.GoVisitor.VisitVariableDeclarations(vd, p)
 }
 
 // Reports whether mi is a json.NewEncoder or json.NewDecoder call on the given

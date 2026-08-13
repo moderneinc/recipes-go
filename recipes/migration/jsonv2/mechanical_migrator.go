@@ -16,8 +16,8 @@ import (
 )
 
 // The mechanical encoding/json constructs a recipe may migrate; a file is
-// migrated only when every json touchpoint is in this set and json stays
-// referenced afterwards.
+// migrated only when this recipe rewrites at least one construct and every other
+// json touchpoint still compiles under v2.
 type mechanicalSet struct {
 	streaming     bool // json.NewEncoder(w).Encode(v) / json.NewDecoder(r).Decode(&v)
 	marshalIndent bool // json.MarshalIndent(v, prefix, indent)
@@ -27,9 +27,11 @@ type mechanicalSet struct {
 type constructKind int
 
 const (
-	constructOther         constructKind = iota // never mechanically migratable
+	constructNone          constructKind = iota // not an encoding/json touchpoint
+	constructSurvivor                           // Marshal/Unmarshal/Marshaler/Unmarshaler, unchanged in v2
 	constructStreaming                          // json.NewEncoder(w).Encode(v) chain
 	constructMarshalIndent                      // json.MarshalIndent(...)
+	constructRemoved                            // a v1 symbol v2 dropped, so the import cannot be swapped
 )
 
 // Applies the allowed mechanical rewrites and swaps the import, per file, only
@@ -41,11 +43,8 @@ type mechanicalMigrator struct {
 }
 
 func (v *mechanicalMigrator) VisitCompilationUnit(cu *golang.CompilationUnit, p any) java.J {
-	jsonPkg := localJsonPackage(cu)
-
-	// Only a regular or aliased import is migratable, so skip files that do not
-	// import encoding/json and skip blank and dot imports.
-	if jsonPkg == "" || jsonPkg == "_" || jsonPkg == "." {
+	jsonPkg := regularJsonPackage(cu)
+	if jsonPkg == "" {
 		return cu
 	}
 
@@ -56,20 +55,14 @@ func (v *mechanicalMigrator) VisitCompilationUnit(cu *golang.CompilationUnit, p 
 		return cu
 	}
 
-	// Leave the file untouched unless every json touchpoint is a construct this
-	// recipe handles and json stays referenced afterwards.
+	// Leave the file untouched unless this recipe rewrites a construct here and
+	// the import can be swapped without stranding a v1 symbol v2 removed.
 	if mechanicalFileBlocked(cu, jsonPkg, v.allowed) {
 		return cu
 	}
 
 	v.jsonPkg = jsonPkg
-
-	// Queued before the recursion so the rename runs first and never touches a
-	// jsontext import added during it.
-	v.DoAfterVisit((&recipegolang.RenamePackage{
-		OldPackagePath: "encoding/json",
-		NewPackagePath: "encoding/json/v2",
-	}).Editor())
+	queueImportSwapToV2(v)
 
 	return v.GoVisitor.VisitCompilationUnit(cu, p)
 }
@@ -169,9 +162,9 @@ func jsontextOption(fn string, arg java.Expression) *java.MethodInvocation {
 	}
 }
 
-// Reports whether cu contains any json touchpoint the allowed set cannot
-// migrate or that would leave json unreferenced, so the whole file is left
-// unchanged.
+// Reports whether cu should be left unchanged, either because this recipe
+// rewrites nothing in it or because a v1 symbol v2 removed would be stranded by
+// the import swap.
 func mechanicalFileBlocked(cu *golang.CompilationUnit, jsonPkg string, allowed mechanicalSet) bool {
 	scan := visitor.Init(&mechanicalBlockerScan{
 		jsonPkg: jsonPkg,
@@ -179,8 +172,8 @@ func mechanicalFileBlocked(cu *golang.CompilationUnit, jsonPkg string, allowed m
 		handled: map[uuid.UUID]struct{}{},
 	})
 	scan.Visit(cu, nil)
-	// A migratable file must still reference json through a v2 package function
-	// after the rename, otherwise the renamed import is left unused.
+	// A migratable file must have at least one construct this recipe rewrites,
+	// otherwise the import swap would change nothing but the import.
 	return scan.blocked || !scan.jsonReferencedAfter
 }
 
@@ -188,7 +181,6 @@ type mechanicalBlockerScan struct {
 	visitor.GoVisitor
 	jsonPkg             string
 	allowed             mechanicalSet
-	insideStruct        int
 	blocked             bool
 	jsonReferencedAfter bool
 	handled             map[uuid.UUID]struct{}
@@ -236,17 +228,25 @@ func (s *mechanicalBlockerScan) classifyCall(mi *java.MethodInvocation) (constru
 		if mi.Name.Name == "MarshalIndent" && len(mi.Arguments.Elements) == 3 && !marshalIndentHasArgComments(mi) {
 			return constructMarshalIndent, true
 		}
-		return constructOther, true
+		if isV2SurvivingJsonName(mi.Name.Name) {
+			return constructSurvivor, true
+		}
+		// Compact, HTMLEscape, Indent, Valid, a stored NewEncoder/NewDecoder, and
+		// every other package function v2 dropped.
+		return constructRemoved, true
 	}
+	// A method call on a v1 Encoder/Decoder value, which v2 relocated to jsontext.
 	declaring := declaringFQN(mi)
 	if declaring == "encoding/json" || strings.HasPrefix(declaring, "encoding/json.") {
-		return constructOther, true
+		return constructRemoved, true
 	}
-	return constructOther, false
+	return constructNone, false
 }
 
 func (s *mechanicalBlockerScan) isAllowed(k constructKind) bool {
 	switch k {
+	case constructSurvivor:
+		return true
 	case constructStreaming:
 		return s.allowed.streaming
 	case constructMarshalIndent:
@@ -259,45 +259,14 @@ func (s *mechanicalBlockerScan) VisitFieldAccess(fa *java.FieldAccess, p any) ja
 	if s.blocked {
 		return fa
 	}
-	// Any json.<Name> reference that is not a call is an exported type or value
-	// this recipe cannot rewrite, such as Encoder, Decoder, RawMessage, or
-	// Number.
-	if ident, ok := fa.Target.(*java.Identifier); ok && ident.Name == s.jsonPkg {
+	// A json.<Name> reference to a type or value v2 removed cannot survive the
+	// import swap; RawMessage, Number, Encoder, Decoder, Delim, Token, and the
+	// error types were all removed or relocated to jsontext.
+	if jsonFieldAccessBlocks(fa, s.jsonPkg) {
 		s.blocked = true
 		return fa
 	}
 	return s.GoVisitor.VisitFieldAccess(fa, p)
-}
-
-func (s *mechanicalBlockerScan) VisitMethodDeclaration(md *java.MethodDeclaration, p any) java.J {
-	if s.blocked {
-		return md
-	}
-	if md.Name != nil && (md.Name.Name == "MarshalJSON" || md.Name.Name == "UnmarshalJSON") {
-		s.blocked = true
-		return md
-	}
-	return s.GoVisitor.VisitMethodDeclaration(md, p)
-}
-
-func (s *mechanicalBlockerScan) VisitStructType(st *golang.StructType, p any) java.J {
-	s.insideStruct++
-	st = s.GoVisitor.VisitStructType(st, p).(*golang.StructType)
-	s.insideStruct--
-	return st
-}
-
-func (s *mechanicalBlockerScan) VisitVariableDeclarations(vd *java.VariableDeclarations, p any) java.J {
-	if s.blocked {
-		return vd
-	}
-	// omitempty tags only appear on struct fields, and the two field types below
-	// change JSON representation in v2 and need review.
-	if hasOmitemptyTag(vd) || (s.insideStruct > 0 && isByteArrayOrDurationField(vd)) {
-		s.blocked = true
-		return vd
-	}
-	return s.GoVisitor.VisitVariableDeclarations(vd, p)
 }
 
 // Reports whether any MarshalIndent argument carries a comment in its own prefix

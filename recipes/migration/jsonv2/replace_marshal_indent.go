@@ -9,9 +9,8 @@ import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
-// Rewrites json.MarshalIndent to json.Marshal with jsontext indentation options,
-// applied per file only when every encoding/json touchpoint is a MarshalIndent
-// call so the whole file stays consistent.
+// Rewrites json.MarshalIndent to json.Marshal with jsontext indentation options
+// and swaps the import, unless a v1 symbol v2 removed would be stranded.
 type ReplaceMarshalIndent struct {
 	recipe.Base
 }
@@ -23,7 +22,7 @@ func (r *ReplaceMarshalIndent) DisplayName() string {
 	return "Replace `json.MarshalIndent`"
 }
 func (r *ReplaceMarshalIndent) Description() string {
-	return "Rewrite `json.MarshalIndent(v, prefix, indent)` to `json.Marshal(v, jsontext.WithIndent(indent), jsontext.WithIndentPrefix(prefix))`, add the `encoding/json/jsontext` import, and swap the `encoding/json` import to `encoding/json/v2`. Applied per file only when every `encoding/json` touchpoint is a `MarshalIndent` call; any other usage leaves the whole file unchanged so it can be migrated and reviewed by other recipes. Dot and blank imports are left untouched."
+	return "Rewrite `json.MarshalIndent(v, prefix, indent)` to `json.Marshal(v, jsontext.WithIndent(indent), jsontext.WithIndentPrefix(prefix))`, swapping the import to `encoding/json/v2`."
 }
 func (r *ReplaceMarshalIndent) Tags() []string { return []string{"migration", "json"} }
 

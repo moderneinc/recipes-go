@@ -235,7 +235,9 @@ func TestRelocateNoChangeTypedParameter(t *testing.T) {
 	)
 }
 
-func TestRelocateNoChangeWithPlainMarshal(t *testing.T) {
+// Marshal survives in v2, so a plain Marshal sharing the file with a local
+// encoder stays put and adopts v2 semantics while the encoder relocates.
+func TestRelocateLeavesCoexistingPlainMarshal(t *testing.T) {
 	relocateSpec().RewriteRun(t,
 		test.Golang(`
 			package main
@@ -251,6 +253,22 @@ func TestRelocateNoChangeWithPlainMarshal(t *testing.T) {
 					return err
 				}
 				return enc.Encode(v)
+			}
+		`, `
+			package main
+
+			import (
+				"encoding/json/v2"
+				"os"
+				"encoding/json/jsontext"
+			)
+
+			func run(v any) error {
+				enc := jsontext.NewEncoder(os.Stdout)
+				if _, err := json.Marshal(v); err != nil {
+					return err
+				}
+				return json.MarshalEncode(enc, v)
 			}
 		`),
 	)
