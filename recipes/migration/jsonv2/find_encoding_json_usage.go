@@ -220,7 +220,7 @@ func (v *findEncodingJsonUsageVisitor) insertRow(p any, category, api, detail, s
 func classifyJsonFunc(name string) (category, suggestion string, ok bool) {
 	switch name {
 	case "Marshal", "Unmarshal":
-		return "review", "defaults differ in v2; pass json.DefaultOptionsV1() for byte-identical output", true
+		return "review", "defaults differ in v2; pass jsonv1.DefaultOptionsV1() from encoding/json for byte-identical output", true
 	case "MarshalIndent":
 		return "rewrite", "removed in v2; use json.Marshal with jsontext.WithIndent and jsontext.WithIndentPrefix", true
 	case "NewEncoder":
