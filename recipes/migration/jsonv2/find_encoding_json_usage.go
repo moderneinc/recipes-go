@@ -272,7 +272,7 @@ func classifyDecoderMethod(name string) (category, suggestion string) {
 func classifyJsonType(name string) (category, suggestion string) {
 	switch name {
 	case "RawMessage":
-		return "review", "supported in v2; review deferred-parsing semantics"
+		return "rewrite", "the raw JSON type moves to jsontext.Value in v2"
 	case "Number":
 		return "review", "review numeric handling; v2 tightens parsing and adds StringifyNumbers"
 	case "Encoder", "Decoder":

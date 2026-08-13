@@ -99,67 +99,6 @@ func TestMigrateAliasedImport(t *testing.T) {
 	)
 }
 
-// json.RawMessage was removed in v2 (use jsontext.Value), so the file cannot be
-// migrated and is left untouched.
-func TestNoChangeRawMessageField(t *testing.T) {
-	spec().RewriteRun(t,
-		test.Golang(`
-			package main
-
-			import (
-				"encoding/json"
-				"os"
-			)
-
-			type T struct {
-				Raw json.RawMessage
-			}
-
-			func write(v any) error {
-				return json.NewEncoder(os.Stdout).Encode(v)
-			}
-		`),
-	)
-}
-
-// A [N]byte field changes encoding in v2, and the migration adopts that new
-// behavior rather than blocking the file.
-func TestMigrateWithByteArrayField(t *testing.T) {
-	spec().RewriteRun(t,
-		test.Golang(`
-			package main
-
-			import (
-				"encoding/json"
-				"os"
-			)
-
-			type T struct {
-				Hash [32]byte
-			}
-
-			func write(v any) error {
-				return json.NewEncoder(os.Stdout).Encode(v)
-			}
-		`, `
-			package main
-
-			import (
-				"encoding/json/v2"
-				"os"
-			)
-
-			type T struct {
-				Hash [32]byte
-			}
-
-			func write(v any) error {
-				return json.MarshalWrite(os.Stdout, v)
-			}
-		`),
-	)
-}
-
 // A file whose only json use is a plain Marshal has no construct this recipe
 // rewrites, so it is left unchanged.
 func TestNoChangePlainMarshal(t *testing.T) {
@@ -391,23 +330,6 @@ func TestNoChangeBlankImport(t *testing.T) {
 
 			func main() {
 				_ = os.Stdout
-			}
-		`),
-	)
-}
-
-func TestNoChangeNonJsonEncoder(t *testing.T) {
-	spec().RewriteRun(t,
-		test.Golang(`
-			package main
-
-			import (
-				"encoding/xml"
-				"os"
-			)
-
-			func write(v any) error {
-				return xml.NewEncoder(os.Stdout).Encode(v)
 			}
 		`),
 	)

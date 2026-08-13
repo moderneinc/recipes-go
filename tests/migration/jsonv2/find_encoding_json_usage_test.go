@@ -93,7 +93,7 @@ func run(c Config) {
 		"review|[8]byte":                            1,
 		"review|time.Duration":                      1,
 		"review|omitempty tag":                      2,
-		"review|json.RawMessage":                    1,
+		"rewrite|json.RawMessage":                   1,
 		"modernize|MarshalJSON":                     1,
 		"review|json.Marshal":                       1,
 		"rewrite|json.MarshalIndent":                1,
@@ -249,7 +249,7 @@ func use(m Marshaler, enc *Encoder) {
 	for _, row := range rows {
 		got[row.Category+"|"+row.API]++
 	}
-	want := []string{"review|json.RawMessage", "modernize|json.Marshaler", "rewrite|json.Encoder", "review|json.Number"}
+	want := []string{"rewrite|json.RawMessage", "modernize|json.Marshaler", "rewrite|json.Encoder", "review|json.Number"}
 	for _, k := range want {
 		if got[k] != 1 {
 			t.Errorf("expected %q once, got %d (all: %v)", k, got[k], got)

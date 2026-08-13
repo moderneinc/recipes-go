@@ -101,6 +101,30 @@ func TestMigrateToJSONV2StoredEncoder(t *testing.T) {
 	)
 }
 
+// A json.RawMessage field is handled only by the RelocateRawMessage member of
+// the bundle, so this confirms the composition covers it.
+func TestMigrateToJSONV2RawMessage(t *testing.T) {
+	bundleSpec().RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "encoding/json"
+
+			type Payload struct {
+				Raw json.RawMessage
+			}
+		`, `
+			package main
+
+			import "encoding/json/jsontext"
+
+			type Payload struct {
+				Raw jsontext.Value
+			}
+		`),
+	)
+}
+
 func TestMigrateToJSONV2NoChangePlainMarshal(t *testing.T) {
 	bundleSpec().RewriteRun(t,
 		test.Golang(`
