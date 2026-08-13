@@ -2,7 +2,7 @@ module github.com/moderneinc/recipes-go
 
 go 1.25.0
 
-require github.com/openrewrite/rewrite/rewrite-go v0.0.28
+require github.com/openrewrite/rewrite/rewrite-go v0.0.29
 
 require (
 	github.com/google/uuid v1.6.0

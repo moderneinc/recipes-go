@@ -207,9 +207,9 @@ func TestAvoidChannelLenCheckNoChangeNamedIntType(t *testing.T) {
 	)
 }
 
-// Known limitation: a channel type alias (`type D = chan int`) collapses to an
-// unknown type at the use site, so it is not recognized as a channel.
-func TestAvoidChannelLenCheckNoChangeChanTypeAlias(t *testing.T) {
+// A channel type alias (`type D = chan int`) resolves to the underlying channel
+// type at the use site, so the length check is flagged.
+func TestAvoidChannelLenCheckChanTypeAlias(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&simplification.AvoidChannelLenCheck{})
 	spec.RewriteRun(t,
 		test.Golang(`
@@ -219,6 +219,14 @@ func TestAvoidChannelLenCheckNoChangeChanTypeAlias(t *testing.T) {
 
 			func f(ch D) bool {
 				return len(ch) == 0
+			}
+		`, `
+			package main
+
+			type D = chan int
+
+			func f(ch D) bool {
+				return `+racyMarker+`len(ch) == 0
 			}
 		`),
 	)
