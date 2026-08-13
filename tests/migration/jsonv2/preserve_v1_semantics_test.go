@@ -42,6 +42,40 @@ func TestPreserveV1SemanticsAppendsOption(t *testing.T) {
 	)
 }
 
+// For streaming, the option is added to the jsontext codec constructor (which
+// carries the syntactic defaults like HTML escaping into MarshalEncode), not to
+// the MarshalEncode call.
+func TestPreserveV1SemanticsStreamingConstructor(t *testing.T) {
+	preserveSpec().RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"encoding/json/v2"
+				"encoding/json/jsontext"
+				"os"
+			)
+
+			func write(v any) error {
+				return json.MarshalEncode(jsontext.NewEncoder(os.Stdout), v)
+			}
+		`, `
+			package main
+
+			import (
+				"encoding/json/v2"
+				"encoding/json/jsontext"
+				"os"
+				jsonv1 "encoding/json"
+			)
+
+			func write(v any) error {
+				return json.MarshalEncode(jsontext.NewEncoder(os.Stdout, jsonv1.DefaultOptionsV1()), v)
+			}
+		`),
+	)
+}
+
 // A call that already passes DefaultOptionsV1 is left unchanged.
 func TestPreserveV1SemanticsIdempotent(t *testing.T) {
 	preserveSpec().RewriteRun(t,

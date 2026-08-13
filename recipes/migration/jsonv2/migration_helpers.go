@@ -81,14 +81,15 @@ func handledStreamingChain(mi *java.MethodInvocation, jsonPkg string) (*java.Met
 	return inner, true
 }
 
-// Maps a streaming method to its v2 package function and the constructor that
-// must front it.
+// Maps a streaming method to its v2 package function and the jsontext
+// constructor that fronts it; the jsontext codec preserves v1's streaming
+// contract (the trailing newline on encode, a single value on decode).
 func streamingTarget(method string) (fn, ctor string) {
 	switch method {
 	case "Encode":
-		return "MarshalWrite", "NewEncoder"
+		return "MarshalEncode", "NewEncoder"
 	case "Decode":
-		return "UnmarshalRead", "NewDecoder"
+		return "UnmarshalDecode", "NewDecoder"
 	}
 	return "", ""
 }

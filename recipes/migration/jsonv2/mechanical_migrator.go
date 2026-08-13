@@ -72,6 +72,7 @@ func (v *mechanicalMigrator) VisitMethodInvocation(mi *java.MethodInvocation, p 
 	// to catch nested json usage.
 	if v.allowed.streaming {
 		if r, ok := rewriteStreamingCall(mi, v.jsonPkg); ok {
+			recipegolang.MaybeAddImport(v, "encoding/json/jsontext", nil, false)
 			return v.GoVisitor.VisitMethodInvocation(r, p)
 		}
 	}
@@ -86,22 +87,30 @@ func (v *mechanicalMigrator) VisitMethodInvocation(mi *java.MethodInvocation, p 
 	return mi
 }
 
-// Rewrites json.NewEncoder(w).Encode(v) to json.MarshalWrite(w, v) and
-// json.NewDecoder(r).Decode(&v) to json.UnmarshalRead(r, &v), preserving the
-// receiver and leading whitespace.
+// Rewrites json.NewEncoder(w).Encode(v) to
+// json.MarshalEncode(jsontext.NewEncoder(w), v) and json.NewDecoder(r).Decode(&v)
+// to json.UnmarshalDecode(jsontext.NewDecoder(r), &v), keeping the stream and
+// value expressions and their trivia so a comment is not dropped.
 func rewriteStreamingCall(mi *java.MethodInvocation, jsonPkg string) (*java.MethodInvocation, bool) {
 	inner, ok := handledStreamingChain(mi, jsonPkg)
 	if !ok {
 		return nil, false
 	}
-	fn, _ := streamingTarget(mi.Name.Name)
+	fn, ctor := streamingTarget(mi.Name.Name)
 
 	stream := inner.Arguments.Elements[0] // the io.Writer / io.Reader
 	value := mi.Arguments.Elements[0]     // the value / pointer being encoded or decoded
 
-	// The writer keeps its position after the paren and the value gets a space
-	// after the comma, both carrying their original trailing trivia so a comment
-	// is not dropped.
+	// jsontext.NewEncoder(w) / jsontext.NewDecoder(r), carrying the stream arg.
+	codec := &java.MethodInvocation{
+		Select: &java.RightPadded[java.Expression]{Element: &java.Identifier{Name: "jsontext"}},
+		Name:   &java.Identifier{Name: ctor},
+		Arguments: java.Container[java.Expression]{
+			Before:   inner.Arguments.Before,
+			Elements: []java.RightPadded[java.Expression]{{Element: stream.Element, After: stream.After}},
+		},
+	}
+
 	return &java.MethodInvocation{
 		Prefix: mi.Prefix,
 		Select: inner.Select,
@@ -109,7 +118,7 @@ func rewriteStreamingCall(mi *java.MethodInvocation, jsonPkg string) (*java.Meth
 		Arguments: java.Container[java.Expression]{
 			Before: inner.Arguments.Before,
 			Elements: []java.RightPadded[java.Expression]{
-				{Element: stream.Element, After: stream.After},
+				{Element: codec, After: java.EmptySpace},
 				{Element: withLeadingSpace(value.Element), After: value.After},
 			},
 		},

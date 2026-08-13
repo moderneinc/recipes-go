@@ -8,8 +8,8 @@ import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 )
 
-// Runs the full v2 migration and then preserves v1 semantics, for a
-// byte-identical move to the encoding/json/v2 API.
+// Composes MigrateToJSONV2 and PreserveV1Semantics for a low-disruption move to
+// encoding/json/v2 that preserves v1 behavior.
 type MigrateToJSONV2PreservingV1 struct {
 	recipe.Base
 }
@@ -21,7 +21,7 @@ func (r *MigrateToJSONV2PreservingV1) DisplayName() string {
 	return "Migrate `encoding/json` to `encoding/json/v2`, preserving v1 semantics"
 }
 func (r *MigrateToJSONV2PreservingV1) Description() string {
-	return "Run the full `MigrateToJSONV2` mechanical migration and then `PreserveV1Semantics`, so the code moves to the `encoding/json/v2` API while its output stays byte-identical to v1 through `jsonv1.DefaultOptionsV1()`. Use this instead of `MigrateToJSONV2` when a disruption-free migration is required."
+	return "Migrate `encoding/json` to `encoding/json/v2` while preserving v1 behavior, by composing `MigrateToJSONV2` and `PreserveV1Semantics`. Use it instead of `MigrateToJSONV2` for a low-disruption migration."
 }
 func (r *MigrateToJSONV2PreservingV1) Tags() []string { return []string{"migration", "json"} }
 

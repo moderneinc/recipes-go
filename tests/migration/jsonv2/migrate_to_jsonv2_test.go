@@ -34,10 +34,11 @@ func TestMigrateToJSONV2Streaming(t *testing.T) {
 			import (
 				"encoding/json/v2"
 				"os"
+				"encoding/json/jsontext"
 			)
 
 			func write(v any) error {
-				return json.MarshalWrite(os.Stdout, v)
+				return json.MarshalEncode(jsontext.NewEncoder(os.Stdout), v)
 			}
 		`),
 	)

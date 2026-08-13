@@ -37,11 +37,12 @@ func TestMigrateToJSONV2PreservingV1(t *testing.T) {
 			import (
 				"encoding/json/v2"
 				"os"
+				"encoding/json/jsontext"
 				jsonv1 "encoding/json"
 			)
 
 			func write(v any) error {
-				return json.MarshalWrite(os.Stdout, v, jsonv1.DefaultOptionsV1())
+				return json.MarshalEncode(jsontext.NewEncoder(os.Stdout, jsonv1.DefaultOptionsV1()), v)
 			}
 		`),
 	)

@@ -34,10 +34,11 @@ func TestMigrateEncoderStreaming(t *testing.T) {
 			import (
 				"encoding/json/v2"
 				"os"
+				"encoding/json/jsontext"
 			)
 
 			func write(v any) error {
-				return json.MarshalWrite(os.Stdout, v)
+				return json.MarshalEncode(jsontext.NewEncoder(os.Stdout), v)
 			}
 		`),
 	)
@@ -62,10 +63,11 @@ func TestMigrateDecoderStreaming(t *testing.T) {
 			import (
 				"encoding/json/v2"
 				"os"
+				"encoding/json/jsontext"
 			)
 
 			func read(v any) error {
-				return json.UnmarshalRead(os.Stdin, &v)
+				return json.UnmarshalDecode(jsontext.NewDecoder(os.Stdin), &v)
 			}
 		`),
 	)
@@ -90,10 +92,11 @@ func TestMigrateAliasedImport(t *testing.T) {
 			import (
 				j "encoding/json/v2"
 				"os"
+				"encoding/json/jsontext"
 			)
 
 			func write(v any) error {
-				return j.MarshalWrite(os.Stdout, v)
+				return j.MarshalEncode(jsontext.NewEncoder(os.Stdout), v)
 			}
 		`),
 	)
@@ -124,10 +127,11 @@ func TestMigrateLeavesCoexistingPlainMarshal(t *testing.T) {
 			import (
 				"encoding/json/v2"
 				"os"
+				"encoding/json/jsontext"
 			)
 
 			func write(v any) error {
-				return json.MarshalWrite(os.Stdout, v)
+				return json.MarshalEncode(jsontext.NewEncoder(os.Stdout), v)
 			}
 
 			func dump(v any) ([]byte, error) {
@@ -184,7 +188,7 @@ func TestMigrateAlongsideExistingJsontextImport(t *testing.T) {
 			var _ = jsontext.NewEncoder
 
 			func write(v any) error {
-				return json.MarshalWrite(os.Stdout, v)
+				return json.MarshalEncode(jsontext.NewEncoder(os.Stdout), v)
 			}
 		`),
 	)
@@ -238,6 +242,7 @@ func TestMigrateCompositeLiteralValue(t *testing.T) {
 			import (
 				"encoding/json/v2"
 				"os"
+				"encoding/json/jsontext"
 			)
 
 			type Point struct {
@@ -246,7 +251,7 @@ func TestMigrateCompositeLiteralValue(t *testing.T) {
 			}
 
 			func write() error {
-				return json.MarshalWrite(os.Stdout, Point{X: 1, Y: 2})
+				return json.MarshalEncode(jsontext.NewEncoder(os.Stdout), Point{X: 1, Y: 2})
 			}
 		`),
 	)
@@ -279,10 +284,11 @@ func TestMigrateJsonLeavesXmlChain(t *testing.T) {
 				"encoding/json/v2"
 				"encoding/xml"
 				"os"
+				"encoding/json/jsontext"
 			)
 
 			func writeJSON(v any) error {
-				return json.MarshalWrite(os.Stdout, v)
+				return json.MarshalEncode(jsontext.NewEncoder(os.Stdout), v)
 			}
 
 			func writeXML(v any) error {
@@ -313,10 +319,11 @@ func TestMigratePreservesValueComment(t *testing.T) {
 			import (
 				"encoding/json/v2"
 				"os"
+				"encoding/json/jsontext"
 			)
 
 			func write(v any) error {
-				return json.MarshalWrite(os.Stdout, /* payload */ v)
+				return json.MarshalEncode(jsontext.NewEncoder(os.Stdout), /* payload */ v)
 			}
 		`),
 	)

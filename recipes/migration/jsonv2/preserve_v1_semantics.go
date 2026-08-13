@@ -17,7 +17,7 @@ import (
 const jsonV1Alias = "jsonv1"
 
 // Appends jsonv1.DefaultOptionsV1() to encoding/json/v2 marshal and unmarshal
-// calls so their output matches encoding/json v1 byte for byte.
+// calls to re-enable the v1 defaults that v2 changed.
 type PreserveV1Semantics struct {
 	recipe.Base
 }
@@ -29,7 +29,7 @@ func (r *PreserveV1Semantics) DisplayName() string {
 	return "Preserve v1 semantics on `encoding/json/v2` calls"
 }
 func (r *PreserveV1Semantics) Description() string {
-	return "Append `jsonv1.DefaultOptionsV1()` to `encoding/json/v2` marshal and unmarshal calls (`Marshal`, `Unmarshal`, `MarshalWrite`, `UnmarshalRead`, `MarshalEncode`, `UnmarshalDecode`) so their output matches v1 byte for byte, adding the `jsonv1 \"encoding/json\"` import. `DefaultOptionsV1` is the v1 compatibility bundle from the `encoding/json` package and re-enables every v1 default that v2 changed. Runs only on files that import `encoding/json/v2`, and skips a call that already passes `DefaultOptionsV1`."
+	return "Append `jsonv1.DefaultOptionsV1()` to `encoding/json/v2` marshal and unmarshal calls, adding the `jsonv1 \"encoding/json\"` import, to re-enable the v1 defaults that v2 changed. `DefaultOptionsV1` is the v1 compatibility bundle from the `encoding/json` package."
 }
 func (r *PreserveV1Semantics) Tags() []string { return []string{"migration", "json"} }
 
@@ -39,7 +39,8 @@ func (r *PreserveV1Semantics) Editor() recipe.TreeVisitor {
 
 type preserveV1SemanticsVisitor struct {
 	visitor.GoVisitor
-	jsonPkg string
+	jsonPkg     string
+	jsontextPkg string
 }
 
 func (v *preserveV1SemanticsVisitor) VisitCompilationUnit(cu *golang.CompilationUnit, p any) java.J {
@@ -47,14 +48,30 @@ func (v *preserveV1SemanticsVisitor) VisitCompilationUnit(cu *golang.Compilation
 	if v.jsonPkg == "" || v.jsonPkg == "_" || v.jsonPkg == "." {
 		return cu
 	}
+	v.jsontextPkg = localJsontextPackage(cu)
 	return v.GoVisitor.VisitCompilationUnit(cu, p)
 }
 
 func (v *preserveV1SemanticsVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
 	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
-	if selectIdentName(mi) != v.jsonPkg || mi.Name == nil || !takesV1Options(mi.Name.Name) {
+	if mi.Name == nil {
 		return mi
 	}
+	sel := selectIdentName(mi)
+	// For streaming, the options belong on the jsontext codec (which MarshalEncode
+	// and UnmarshalDecode read from), not on the marshal call itself; the encoder
+	// constructor also carries the syntactic options like HTML escaping.
+	if v.jsontextPkg != "" && sel == v.jsontextPkg && (mi.Name.Name == "NewEncoder" || mi.Name.Name == "NewDecoder") {
+		return v.appendDefaultOptionsV1(mi)
+	}
+	// For one-shot calls the options belong on the call, which builds its own codec.
+	if sel == v.jsonPkg && takesV1OptionsOnCall(mi.Name.Name) {
+		return v.appendDefaultOptionsV1(mi)
+	}
+	return mi
+}
+
+func (v *preserveV1SemanticsVisitor) appendDefaultOptionsV1(mi *java.MethodInvocation) java.J {
 	if hasDefaultOptionsV1(mi) {
 		return mi
 	}
@@ -70,11 +87,12 @@ func (v *preserveV1SemanticsVisitor) VisitMethodInvocation(mi *java.MethodInvoca
 	return &c
 }
 
-// Reports whether the v2 package function accepts trailing Options that
-// DefaultOptionsV1 can set.
-func takesV1Options(name string) bool {
+// Reports whether the v2 package function builds its own codec and so accepts
+// trailing Options directly; MarshalEncode/UnmarshalDecode are excluded because
+// their options belong on the jsontext codec they are given.
+func takesV1OptionsOnCall(name string) bool {
 	switch name {
-	case "Marshal", "Unmarshal", "MarshalWrite", "UnmarshalRead", "MarshalEncode", "UnmarshalDecode":
+	case "Marshal", "Unmarshal", "MarshalWrite", "UnmarshalRead":
 		return true
 	}
 	return false
@@ -111,6 +129,23 @@ func localJsonV2Package(cu *golang.CompilationUnit) string {
 				return alias
 			}
 			return "json"
+		}
+	}
+	return ""
+}
+
+// Returns the local name a file uses for encoding/json/jsontext (its alias, or
+// jsontext), or an empty string when the package is not imported.
+func localJsontextPackage(cu *golang.CompilationUnit) string {
+	if cu.Imports == nil {
+		return ""
+	}
+	for _, imp := range cu.Imports.Elements {
+		if path, ok := importPath(imp.Element); ok && path == "encoding/json/jsontext" {
+			if alias := importAlias(imp.Element); alias != "" {
+				return alias
+			}
+			return "jsontext"
 		}
 	}
 	return ""
