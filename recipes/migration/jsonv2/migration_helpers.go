@@ -94,6 +94,54 @@ func streamingTarget(method string) (fn, ctor string) {
 	return "", ""
 }
 
+// Reports whether cu declares a struct field of type time.Duration, which v2
+// marshals as a runtime error without an explicit format, so a file containing
+// one is left for review rather than migrated into runtime-erroring code.
+func fileHasDurationField(cu *golang.CompilationUnit) bool {
+	scan := visitor.Init(&durationFieldScan{})
+	scan.Visit(cu, nil)
+	return scan.found
+}
+
+type durationFieldScan struct {
+	visitor.GoVisitor
+	insideStruct int
+	found        bool
+}
+
+func (s *durationFieldScan) VisitStructType(st *golang.StructType, p any) java.J {
+	s.insideStruct++
+	st = s.GoVisitor.VisitStructType(st, p).(*golang.StructType)
+	s.insideStruct--
+	return st
+}
+
+func (s *durationFieldScan) VisitVariableDeclarations(vd *java.VariableDeclarations, p any) java.J {
+	if s.insideStruct > 0 && isDurationField(vd) {
+		s.found = true
+	}
+	return s.GoVisitor.VisitVariableDeclarations(vd, p)
+}
+
+// Reports whether a struct field is a time.Duration, resolving an aliased time
+// import through the type system.
+func isDurationField(vd *java.VariableDeclarations) bool {
+	if fa, ok := vd.TypeExpr.(*java.FieldAccess); ok {
+		if pkg, ok := fa.Target.(*java.Identifier); ok && pkg.Name == "time" &&
+			fa.Name.Element != nil && fa.Name.Element.Name == "Duration" {
+			return true
+		}
+	}
+	for _, decl := range vd.Variables {
+		if d := decl.Element; d != nil && d.Name != nil {
+			if fq, ok := d.Name.Type.(java.FullyQualified); ok && fq.GetFullyQualifiedName() == "time.Duration" {
+				return true
+			}
+		}
+	}
+	return false
+}
+
 // Reports whether a json.<name> identifier still exists in encoding/json/v2, so
 // that a reference to it compiles unchanged after the import swap; every other
 // v1 export was removed or relocated to jsontext.

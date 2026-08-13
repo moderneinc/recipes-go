@@ -58,6 +58,11 @@ func (v *relocateEncoderDecoderVisitor) VisitCompilationUnit(cu *golang.Compilat
 	if importsEncodingJsonV2(cu) {
 		return cu
 	}
+	// A time.Duration field marshals to a runtime error under v2 without an
+	// explicit format, so the file is left for review.
+	if fileHasDurationField(cu) {
+		return cu
+	}
 
 	locals, safe := analyzeRelocation(cu, jsonPkg)
 	if !safe {

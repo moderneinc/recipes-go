@@ -194,6 +194,30 @@ func TestMigrateAlongsideExistingJsontextImport(t *testing.T) {
 	)
 }
 
+// A time.Duration field marshals to a runtime error under v2 without an explicit
+// format, so the file is left for review rather than migrated.
+func TestNoChangeWithDurationField(t *testing.T) {
+	spec().RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"encoding/json"
+				"os"
+				"time"
+			)
+
+			type T struct {
+				Timeout time.Duration
+			}
+
+			func write(v any) error {
+				return json.NewEncoder(os.Stdout).Encode(v)
+			}
+		`),
+	)
+}
+
 // A file that already imports encoding/json/v2 is left unchanged, since swapping
 // would produce a duplicate import.
 func TestNoChangeWhenJsonV2AlreadyImported(t *testing.T) {

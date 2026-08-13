@@ -54,6 +54,12 @@ func (v *mechanicalMigrator) VisitCompilationUnit(cu *golang.CompilationUnit, p 
 		return cu
 	}
 
+	// A time.Duration field has no default v2 representation and would marshal to
+	// a runtime error, so the file is left for review rather than migrated.
+	if fileHasDurationField(cu) {
+		return cu
+	}
+
 	// Leave the file untouched unless this recipe rewrites a construct here and
 	// the import can be swapped without stranding a v1 symbol v2 removed.
 	if mechanicalFileBlocked(cu, jsonPkg, v.allowed) {

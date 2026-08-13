@@ -50,6 +50,11 @@ func (v *relocateRawMessageVisitor) VisitCompilationUnit(cu *golang.CompilationU
 	if importsEncodingJsonV2(cu) {
 		return cu
 	}
+	// A time.Duration field marshals to a runtime error under v2 without an
+	// explicit format, so the file is left for review.
+	if fileHasDurationField(cu) {
+		return cu
+	}
 
 	scan := visitor.Init(&rawMessageBlockerScan{jsonPkg: jsonPkg})
 	scan.Visit(cu, nil)
