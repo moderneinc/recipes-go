@@ -21,6 +21,7 @@ import (
 // value stays local and no v1 symbol v2 removed would be stranded.
 type RelocateEncoderDecoderTypes struct {
 	recipe.Base
+	preserveV1 bool
 }
 
 func (r *RelocateEncoderDecoderTypes) Name() string {
@@ -35,11 +36,12 @@ func (r *RelocateEncoderDecoderTypes) Description() string {
 func (r *RelocateEncoderDecoderTypes) Tags() []string { return []string{"migration", "json"} }
 
 func (r *RelocateEncoderDecoderTypes) Editor() recipe.TreeVisitor {
-	return visitor.Init(&relocateEncoderDecoderVisitor{})
+	return visitor.Init(&relocateEncoderDecoderVisitor{preserveV1: r.preserveV1})
 }
 
 type relocateEncoderDecoderVisitor struct {
 	visitor.GoVisitor
+	preserveV1    bool
 	jsonPkg       string
 	localEncoders map[string]bool
 }
@@ -59,8 +61,9 @@ func (v *relocateEncoderDecoderVisitor) VisitCompilationUnit(cu *golang.Compilat
 		return cu
 	}
 	// A time.Duration field marshals to a runtime error under v2 without an
-	// explicit format, so the file is left for review.
-	if fileHasDurationField(cu) {
+	// explicit format, so the file is left for review; the compat path skips this
+	// guard, since PreserveV1Semantics restores the v1 representation.
+	if !v.preserveV1 && fileHasDurationField(cu) {
 		return cu
 	}
 

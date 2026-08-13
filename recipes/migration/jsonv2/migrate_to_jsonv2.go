@@ -12,6 +12,7 @@ import (
 // each construct to its idiomatic v2 form and adopting v2 semantics.
 type MigrateToJSONV2 struct {
 	recipe.Base
+	preserveV1 bool
 }
 
 func (r *MigrateToJSONV2) Name() string {
@@ -27,10 +28,10 @@ func (r *MigrateToJSONV2) Tags() []string { return []string{"migration", "json"}
 
 func (r *MigrateToJSONV2) RecipeList() []recipe.Recipe {
 	return []recipe.Recipe{
-		&UseMarshalWriteUnmarshalRead{},
-		&ReplaceMarshalIndent{},
-		&RelocateEncoderDecoderTypes{},
-		&RelocateRawMessage{},
-		&MigrateImportOnlyToJSONV2{},
+		&UseMarshalWriteUnmarshalRead{preserveV1: r.preserveV1},
+		&ReplaceMarshalIndent{preserveV1: r.preserveV1},
+		&RelocateEncoderDecoderTypes{preserveV1: r.preserveV1},
+		&RelocateRawMessage{preserveV1: r.preserveV1},
+		&MigrateImportOnlyToJSONV2{preserveV1: r.preserveV1},
 	}
 }

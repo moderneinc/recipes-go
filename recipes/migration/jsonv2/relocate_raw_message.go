@@ -18,6 +18,7 @@ import (
 // swaps the import, unless a v1 symbol v2 removed would be stranded.
 type RelocateRawMessage struct {
 	recipe.Base
+	preserveV1 bool
 }
 
 func (r *RelocateRawMessage) Name() string {
@@ -32,12 +33,13 @@ func (r *RelocateRawMessage) Description() string {
 func (r *RelocateRawMessage) Tags() []string { return []string{"migration", "json"} }
 
 func (r *RelocateRawMessage) Editor() recipe.TreeVisitor {
-	return visitor.Init(&relocateRawMessageVisitor{})
+	return visitor.Init(&relocateRawMessageVisitor{preserveV1: r.preserveV1})
 }
 
 type relocateRawMessageVisitor struct {
 	visitor.GoVisitor
-	jsonPkg string
+	preserveV1 bool
+	jsonPkg    string
 }
 
 func (v *relocateRawMessageVisitor) VisitCompilationUnit(cu *golang.CompilationUnit, p any) java.J {
@@ -51,8 +53,9 @@ func (v *relocateRawMessageVisitor) VisitCompilationUnit(cu *golang.CompilationU
 		return cu
 	}
 	// A time.Duration field marshals to a runtime error under v2 without an
-	// explicit format, so the file is left for review.
-	if fileHasDurationField(cu) {
+	// explicit format, so the file is left for review; the compat path skips this
+	// guard, since PreserveV1Semantics restores the v1 representation.
+	if !v.preserveV1 && fileHasDurationField(cu) {
 		return cu
 	}
 

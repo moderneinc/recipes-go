@@ -27,7 +27,7 @@ func (r *MigrateToJSONV2PreservingV1) Tags() []string { return []string{"migrati
 
 func (r *MigrateToJSONV2PreservingV1) RecipeList() []recipe.Recipe {
 	return []recipe.Recipe{
-		&MigrateToJSONV2{},
+		&MigrateToJSONV2{preserveV1: true},
 		&PreserveV1Semantics{},
 	}
 }

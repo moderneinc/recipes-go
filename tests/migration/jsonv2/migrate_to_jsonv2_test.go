@@ -200,6 +200,30 @@ func TestMigrateToJSONV2NoChangeWithRemovedType(t *testing.T) {
 	)
 }
 
+// A time.Duration field marshals to a runtime error under bare v2, so the
+// default bundle leaves the file for review; only the compat bundle migrates it.
+func TestMigrateToJSONV2NoChangeWithDurationField(t *testing.T) {
+	bundleSpec().RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"encoding/json"
+				"os"
+				"time"
+			)
+
+			type T struct {
+				Timeout time.Duration
+			}
+
+			func write(v any) error {
+				return json.NewEncoder(os.Stdout).Encode(v)
+			}
+		`),
+	)
+}
+
 // A file mixing two mechanical constructs is left unchanged, since neither the
 // streaming nor the MarshalIndent recipe can swap the single json import without
 // stranding the other's not-yet-rewritten construct.

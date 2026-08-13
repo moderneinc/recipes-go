@@ -13,6 +13,7 @@ import (
 // and swaps the import, unless a v1 symbol v2 removed would be stranded.
 type ReplaceMarshalIndent struct {
 	recipe.Base
+	preserveV1 bool
 }
 
 func (r *ReplaceMarshalIndent) Name() string {
@@ -27,5 +28,5 @@ func (r *ReplaceMarshalIndent) Description() string {
 func (r *ReplaceMarshalIndent) Tags() []string { return []string{"migration", "json"} }
 
 func (r *ReplaceMarshalIndent) Editor() recipe.TreeVisitor {
-	return visitor.Init(&mechanicalMigrator{allowed: mechanicalSet{marshalIndent: true}})
+	return visitor.Init(&mechanicalMigrator{allowed: mechanicalSet{marshalIndent: true}, preserveV1: r.preserveV1})
 }

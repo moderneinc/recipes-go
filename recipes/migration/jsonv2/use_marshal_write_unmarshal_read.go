@@ -14,6 +14,7 @@ import (
 // v2 removed would be stranded.
 type UseMarshalWriteUnmarshalRead struct {
 	recipe.Base
+	preserveV1 bool
 }
 
 func (r *UseMarshalWriteUnmarshalRead) Name() string {
@@ -28,5 +29,5 @@ func (r *UseMarshalWriteUnmarshalRead) Description() string {
 func (r *UseMarshalWriteUnmarshalRead) Tags() []string { return []string{"migration", "json"} }
 
 func (r *UseMarshalWriteUnmarshalRead) Editor() recipe.TreeVisitor {
-	return visitor.Init(&mechanicalMigrator{allowed: mechanicalSet{streaming: true}})
+	return visitor.Init(&mechanicalMigrator{allowed: mechanicalSet{streaming: true}, preserveV1: r.preserveV1})
 }

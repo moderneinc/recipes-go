@@ -38,8 +38,9 @@ const (
 // when the file is fully migratable by its allowed set.
 type mechanicalMigrator struct {
 	visitor.GoVisitor
-	allowed mechanicalSet
-	jsonPkg string
+	allowed    mechanicalSet
+	preserveV1 bool
+	jsonPkg    string
 }
 
 func (v *mechanicalMigrator) VisitCompilationUnit(cu *golang.CompilationUnit, p any) java.J {
@@ -55,8 +56,9 @@ func (v *mechanicalMigrator) VisitCompilationUnit(cu *golang.CompilationUnit, p 
 	}
 
 	// A time.Duration field has no default v2 representation and would marshal to
-	// a runtime error, so the file is left for review rather than migrated.
-	if fileHasDurationField(cu) {
+	// a runtime error, so the file is left for review; the compat path skips this
+	// guard, since PreserveV1Semantics restores the v1 representation.
+	if !v.preserveV1 && fileHasDurationField(cu) {
 		return cu
 	}
 

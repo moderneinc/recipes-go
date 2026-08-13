@@ -15,6 +15,7 @@ import (
 // is entirely v2-compatible, so no code changes are needed.
 type MigrateImportOnlyToJSONV2 struct {
 	recipe.Base
+	preserveV1 bool
 }
 
 func (r *MigrateImportOnlyToJSONV2) Name() string {
@@ -29,11 +30,12 @@ func (r *MigrateImportOnlyToJSONV2) Description() string {
 func (r *MigrateImportOnlyToJSONV2) Tags() []string { return []string{"migration", "json"} }
 
 func (r *MigrateImportOnlyToJSONV2) Editor() recipe.TreeVisitor {
-	return visitor.Init(&migrateImportOnlyVisitor{})
+	return visitor.Init(&migrateImportOnlyVisitor{preserveV1: r.preserveV1})
 }
 
 type migrateImportOnlyVisitor struct {
 	visitor.GoVisitor
+	preserveV1 bool
 }
 
 func (v *migrateImportOnlyVisitor) VisitCompilationUnit(cu *golang.CompilationUnit, p any) java.J {
@@ -45,8 +47,9 @@ func (v *migrateImportOnlyVisitor) VisitCompilationUnit(cu *golang.CompilationUn
 		return cu
 	}
 	// A time.Duration field marshals to a runtime error under v2 without an
-	// explicit format, so the file is left for review.
-	if fileHasDurationField(cu) {
+	// explicit format, so the file is left for review; the compat path skips this
+	// guard, since PreserveV1Semantics restores the v1 representation.
+	if !v.preserveV1 && fileHasDurationField(cu) {
 		return cu
 	}
 
