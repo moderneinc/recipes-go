@@ -72,7 +72,7 @@ mod run . --recipe org.openrewrite.golang.codequality.SimplifyBooleanExpression
 
 ## Overview
 
-**207 recipes** across 7 categories with **712 tests**.
+**207 recipes** across 7 categories with **716 tests**.
 
 | Category | Recipes | Description |
 |---|---|---|
@@ -137,7 +137,7 @@ mod run . --recipe org.openrewrite.golang.codequality.SimplifyBooleanExpression
 ### Migration
 
 - **encoding/json/v2 migration scoping**: One report cataloguing every `encoding/json` touchpoint (import, package functions, type-resolved `Encoder`/`Decoder` method calls, exported types, `[N]byte`/`time.Duration` fields, `omitempty` tags, custom `MarshalJSON` implementations) into a data table categorized as import, rewrite, review, or modernize
-- **encoding/json/v2 mechanical migration**: Rewrite the mechanical `encoding/json` idioms to `encoding/json/v2` and swap the import, either construct by construct (`UseMarshalWriteUnmarshalRead` for streaming chains, `ReplaceMarshalIndent`, `RelocateEncoderDecoderTypes` for local encoders/decoders, `RelocateRawMessage` for `RawMessage` fields) or all at once via the `MigrateToJSONV2` bundle, migrating each construct to its idiomatic v2 form and adopting v2 semantics, applied per file only when the import can be swapped without stranding a v1 symbol that v2 removed
+- **encoding/json/v2 mechanical migration**: Rewrite the mechanical `encoding/json` idioms to `encoding/json/v2` and swap the import, either construct by construct (`UseMarshalWriteUnmarshalRead` for streaming chains, `ReplaceMarshalIndent`, `RelocateEncoderDecoderTypes` for local encoders/decoders, `RelocateRawMessage` for `RawMessage` fields, `MigrateImportOnlyToJSONV2` for files whose usage already exists in v2) or all at once via the `MigrateToJSONV2` bundle, migrating each construct to its idiomatic v2 form and adopting v2 semantics, applied per file only when the import can be swapped without stranding a v1 symbol that v2 removed
 - **Go version upgrades**: Bump the `go` directive across releases (1.18 through 1.26)
 - **go.mod maintenance**: Tidy, format, and reconcile `require` directives and indirect markers
 

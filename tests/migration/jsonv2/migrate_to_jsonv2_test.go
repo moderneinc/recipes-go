@@ -125,12 +125,22 @@ func TestMigrateToJSONV2RawMessage(t *testing.T) {
 	)
 }
 
-func TestMigrateToJSONV2NoChangePlainMarshal(t *testing.T) {
+// A plain Marshal file is handled only by the MigrateImportOnlyToJSONV2 member
+// of the bundle, which swaps the import so the call adopts v2 semantics.
+func TestMigrateToJSONV2PlainMarshal(t *testing.T) {
 	bundleSpec().RewriteRun(t,
 		test.Golang(`
 			package main
 
 			import "encoding/json"
+
+			func run(v any) ([]byte, error) {
+				return json.Marshal(v)
+			}
+		`, `
+			package main
+
+			import "encoding/json/v2"
 
 			func run(v any) ([]byte, error) {
 				return json.Marshal(v)

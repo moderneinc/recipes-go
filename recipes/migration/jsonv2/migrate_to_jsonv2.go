@@ -22,7 +22,7 @@ func (r *MigrateToJSONV2) DisplayName() string {
 	return "Migrate `encoding/json` to `encoding/json/v2` (all mechanical rewrites)"
 }
 func (r *MigrateToJSONV2) Description() string {
-	return "Migrate the mechanical `encoding/json` idioms to `encoding/json/v2` by composing the streaming, `MarshalIndent`, function-local `Encoder`/`Decoder`, and `RawMessage` rewrites, adopting v2 semantics."
+	return "Migrate the mechanical `encoding/json` idioms to `encoding/json/v2` by composing the streaming, `MarshalIndent`, function-local `Encoder`/`Decoder`, and `RawMessage` rewrites plus an import-only swap for files whose usage already exists in v2, adopting v2 semantics."
 }
 func (r *MigrateToJSONV2) Tags() []string { return []string{"migration", "json"} }
 
@@ -32,5 +32,6 @@ func (r *MigrateToJSONV2) RecipeList() []recipe.Recipe {
 		&ReplaceMarshalIndent{},
 		&RelocateEncoderDecoderTypes{},
 		&RelocateRawMessage{},
+		&MigrateImportOnlyToJSONV2{},
 	}
 }

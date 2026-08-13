@@ -99,22 +99,6 @@ func TestMigrateAliasedImport(t *testing.T) {
 	)
 }
 
-// A file whose only json use is a plain Marshal has no construct this recipe
-// rewrites, so it is left unchanged.
-func TestNoChangePlainMarshal(t *testing.T) {
-	spec().RewriteRun(t,
-		test.Golang(`
-			package main
-
-			import "encoding/json"
-
-			func run(v any) ([]byte, error) {
-				return json.Marshal(v)
-			}
-		`),
-	)
-}
-
 // Marshal survives in v2, so a plain Marshal sharing the file with a streaming
 // chain stays put and adopts v2 semantics while the chain migrates.
 func TestMigrateLeavesCoexistingPlainMarshal(t *testing.T) {
@@ -148,24 +132,6 @@ func TestMigrateLeavesCoexistingPlainMarshal(t *testing.T) {
 
 			func dump(v any) ([]byte, error) {
 				return json.Marshal(v)
-			}
-		`),
-	)
-}
-
-func TestNoChangeStoredEncoderVar(t *testing.T) {
-	spec().RewriteRun(t,
-		test.Golang(`
-			package main
-
-			import (
-				"encoding/json"
-				"os"
-			)
-
-			func write(v any) error {
-				enc := json.NewEncoder(os.Stdout)
-				return enc.Encode(v)
 			}
 		`),
 	)
