@@ -353,6 +353,30 @@ func TestMigratePreservesValueComment(t *testing.T) {
 	)
 }
 
+// A MarshalIndent alongside a streaming chain is a second mechanical construct
+// this recipe does not handle, so it declines rather than strand MarshalIndent
+// under a swapped import.
+func TestNoChangeWithMarshalIndent(t *testing.T) {
+	spec().RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"encoding/json"
+				"os"
+			)
+
+			func dump(v any) ([]byte, error) {
+				return json.MarshalIndent(v, "", "  ")
+			}
+
+			func write(v any) error {
+				return json.NewEncoder(os.Stdout).Encode(v)
+			}
+		`),
+	)
+}
+
 func TestNoChangeBlankImport(t *testing.T) {
 	spec().RewriteRun(t,
 		test.Golang(`

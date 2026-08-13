@@ -185,6 +185,38 @@ func runInventory(t *testing.T, path, source string) []jsonv2.EncodingJsonUsageR
 	return rows
 }
 
+// The package functions and streaming token types that v2 removed without a
+// shipped rewrite are reported for review, not rewrite.
+func TestFindEncodingJsonUsageReviewLabels(t *testing.T) {
+	rows := runInventory(t, "demo/review.go", `package demo
+
+import (
+	"bytes"
+	"encoding/json"
+)
+
+func run(dst *bytes.Buffer, src []byte, tok json.Token, d json.Delim) {
+	_ = json.Compact(dst, src)
+	_ = json.Indent(dst, src, "", "  ")
+	json.HTMLEscape(dst, src)
+	_ = json.Valid(src)
+	_, _ = tok, d
+}
+`)
+	got := map[string]int{}
+	for _, row := range rows {
+		got[row.Category+"|"+row.API]++
+	}
+	for _, k := range []string{
+		"review|json.Compact", "review|json.Indent", "review|json.HTMLEscape",
+		"review|json.Valid", "review|json.Token", "review|json.Delim",
+	} {
+		if got[k] != 1 {
+			t.Errorf("expected %q once, got %d (all: %v)", k, got[k], got)
+		}
+	}
+}
+
 // Codecs reached through a parameter (not a local NewEncoder/NewDecoder) are
 // found via the method's declaring type.
 func TestFindEncodingJsonUsageIndirectCodec(t *testing.T) {

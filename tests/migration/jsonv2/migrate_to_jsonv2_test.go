@@ -149,3 +149,77 @@ func TestMigrateToJSONV2PlainMarshal(t *testing.T) {
 		`),
 	)
 }
+
+// A removed package function (json.Compact) has no v2 rewrite, so it blocks the
+// import swap and the whole file is left unchanged despite the streaming chain
+// alongside it that would otherwise migrate.
+func TestMigrateToJSONV2NoChangeWithRemovedFunc(t *testing.T) {
+	bundleSpec().RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"bytes"
+				"encoding/json"
+				"os"
+			)
+
+			func run(v any, dst *bytes.Buffer, src []byte) error {
+				if err := json.Compact(dst, src); err != nil {
+					return err
+				}
+				return json.NewEncoder(os.Stdout).Encode(v)
+			}
+		`),
+	)
+}
+
+// A removed type reference (json.Number, json.Delim, or a json error type) cannot
+// survive the import swap, so the whole file is left unchanged despite the
+// streaming chain that would otherwise migrate.
+func TestMigrateToJSONV2NoChangeWithRemovedType(t *testing.T) {
+	bundleSpec().RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"encoding/json"
+				"os"
+			)
+
+			type T struct {
+				N   json.Number
+				D   json.Delim
+				Err *json.SyntaxError
+			}
+
+			func write(v any) error {
+				return json.NewEncoder(os.Stdout).Encode(v)
+			}
+		`),
+	)
+}
+
+// A file mixing two mechanical constructs is left unchanged, since neither the
+// streaming nor the MarshalIndent recipe can swap the single json import without
+// stranding the other's not-yet-rewritten construct.
+func TestMigrateToJSONV2NoChangeMixedMechanical(t *testing.T) {
+	bundleSpec().RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"encoding/json"
+				"os"
+			)
+
+			func dump(v any) ([]byte, error) {
+				return json.MarshalIndent(v, "", "  ")
+			}
+
+			func write(v any) error {
+				return json.NewEncoder(os.Stdout).Encode(v)
+			}
+		`),
+	)
+}
