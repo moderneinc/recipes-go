@@ -256,5 +256,6 @@ func Activate(r *recipe.Registry) {
 	jsonV2Category := recipe.CategoryDescriptor{DisplayName: "JSON v2", Description: "Migrate encoding/json to encoding/json/v2"}
 	r.Register(&jsonv2.FindEncodingJsonUsage{}, golang, codeQuality, migrationCategory, jsonV2Category)
 	r.Register(&jsonv2.MigrateToJSONV2{}, golang, codeQuality, migrationCategory, jsonV2Category)
+	r.Register(&jsonv2.MigrateToJSONV2PreservingV1{}, golang, codeQuality, migrationCategory, jsonV2Category)
 	r.Register(&jsonv2.PreserveV1Semantics{}, golang, codeQuality, migrationCategory, jsonV2Category)
 }
