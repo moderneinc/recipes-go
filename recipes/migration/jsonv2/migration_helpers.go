@@ -8,31 +8,48 @@ import (
 	"reflect"
 	"strings"
 
-	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
-// Queues the encoding/json to encoding/json/v2 import rename on the current
-// file, the shared import step every construct rewrite defers to. Queued before
-// recursion so the rename runs first and never touches a jsontext import added
-// during it.
+// Queues the encoding/json to encoding/json/v2 import swap on the current file,
+// the shared import step every construct rewrite defers to. It rewrites only the
+// exact encoding/json import, so an existing encoding/json/jsontext sub-path
+// import is left intact and its alias is preserved.
 func queueImportSwapToV2(v visitor.AfterVisitsProvider) {
-	v.DoAfterVisit((&recipegolang.RenamePackage{
-		OldPackagePath: "encoding/json",
-		NewPackagePath: "encoding/json/v2",
-	}).Editor())
+	v.DoAfterVisit(visitor.Init(&importSwapToV2Visitor{}))
 }
 
-// Reports whether cu imports any encoding/json/... sub-path, such as
-// encoding/json/v2 or encoding/json/jsontext.
-func importsEncodingJsonSubpath(cu *golang.CompilationUnit) bool {
+type importSwapToV2Visitor struct {
+	visitor.GoVisitor
+}
+
+func (v *importSwapToV2Visitor) VisitImport(imp *java.Import, p any) java.J {
+	imp = v.GoVisitor.VisitImport(imp, p).(*java.Import)
+	lit, ok := imp.Qualid.(*java.Literal)
+	if !ok {
+		return imp
+	}
+	if path, ok := importPath(imp); !ok || path != "encoding/json" {
+		return imp
+	}
+	newLit := *lit
+	newLit.Value = "encoding/json/v2"
+	newLit.Source = strings.Replace(lit.Source, "encoding/json", "encoding/json/v2", 1)
+	c := *imp
+	c.Qualid = &newLit
+	return &c
+}
+
+// Reports whether cu already imports encoding/json/v2, so the swap would produce
+// a duplicate import and the file is left unchanged.
+func importsEncodingJsonV2(cu *golang.CompilationUnit) bool {
 	if cu.Imports == nil {
 		return false
 	}
 	for _, imp := range cu.Imports.Elements {
-		if path, ok := importPath(imp.Element); ok && strings.HasPrefix(path, "encoding/json/") {
+		if path, ok := importPath(imp.Element); ok && path == "encoding/json/v2" {
 			return true
 		}
 	}

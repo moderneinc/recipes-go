@@ -55,7 +55,7 @@ func (v *relocateEncoderDecoderVisitor) VisitCompilationUnit(cu *golang.Compilat
 	if jsonPkg == "jsontext" {
 		return cu
 	}
-	if importsEncodingJsonSubpath(cu) {
+	if importsEncodingJsonV2(cu) {
 		return cu
 	}
 

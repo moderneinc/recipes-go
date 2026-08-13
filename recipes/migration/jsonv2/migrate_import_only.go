@@ -41,7 +41,7 @@ func (v *migrateImportOnlyVisitor) VisitCompilationUnit(cu *golang.CompilationUn
 	if jsonPkg == "" {
 		return cu
 	}
-	if importsEncodingJsonSubpath(cu) {
+	if importsEncodingJsonV2(cu) {
 		return cu
 	}
 

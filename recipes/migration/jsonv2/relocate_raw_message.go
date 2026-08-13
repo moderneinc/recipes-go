@@ -47,7 +47,7 @@ func (v *relocateRawMessageVisitor) VisitCompilationUnit(cu *golang.CompilationU
 	if jsonPkg == "" || jsonPkg == "jsontext" {
 		return cu
 	}
-	if importsEncodingJsonSubpath(cu) {
+	if importsEncodingJsonV2(cu) {
 		return cu
 	}
 

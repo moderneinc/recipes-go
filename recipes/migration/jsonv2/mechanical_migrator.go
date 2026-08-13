@@ -48,10 +48,9 @@ func (v *mechanicalMigrator) VisitCompilationUnit(cu *golang.CompilationUnit, p 
 		return cu
 	}
 
-	// The rename rewrites encoding/json and every sub-path, so skip files that
-	// already reference a sub-path rather than corrupt an encoding/json/jsontext
-	// import.
-	if importsEncodingJsonSubpath(cu) {
+	// A file already importing encoding/json/v2 is skipped so the swap does not
+	// produce a duplicate import.
+	if importsEncodingJsonV2(cu) {
 		return cu
 	}
 

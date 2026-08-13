@@ -154,7 +154,9 @@ func TestNoChangeDotImport(t *testing.T) {
 	)
 }
 
-func TestNoChangeAlreadyReferencesJsonSubpath(t *testing.T) {
+// The import swap rewrites only the exact encoding/json import, so a file that
+// already imports encoding/json/jsontext migrates without corrupting it.
+func TestMigrateAlongsideExistingJsontextImport(t *testing.T) {
 	spec().RewriteRun(t,
 		test.Golang(`
 			package main
@@ -166,6 +168,42 @@ func TestNoChangeAlreadyReferencesJsonSubpath(t *testing.T) {
 			)
 
 			var _ = jsontext.NewEncoder
+
+			func write(v any) error {
+				return json.NewEncoder(os.Stdout).Encode(v)
+			}
+		`, `
+			package main
+
+			import (
+				"encoding/json/v2"
+				"encoding/json/jsontext"
+				"os"
+			)
+
+			var _ = jsontext.NewEncoder
+
+			func write(v any) error {
+				return json.MarshalWrite(os.Stdout, v)
+			}
+		`),
+	)
+}
+
+// A file that already imports encoding/json/v2 is left unchanged, since swapping
+// would produce a duplicate import.
+func TestNoChangeWhenJsonV2AlreadyImported(t *testing.T) {
+	spec().RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"encoding/json"
+				jsonv2 "encoding/json/v2"
+				"os"
+			)
+
+			var _ = jsonv2.Marshal
 
 			func write(v any) error {
 				return json.NewEncoder(os.Stdout).Encode(v)
