@@ -72,13 +72,13 @@ mod run . --recipe org.openrewrite.golang.codequality.SimplifyBooleanExpression
 
 ## Overview
 
-**209 recipes** across 7 categories with **723 tests**.
+**214 recipes** across 7 categories with **794 tests**.
 
 | Category | Recipes | Description |
 |---|---|---|
-| **Style** | 58 | Enforce conventions, detect code smells, security patterns, resource management |
+| **Style** | 59 | Enforce conventions, detect code smells, security patterns, resource management |
 | **Simplification** | 58 | Modernize code with newer stdlib APIs, simplify expressions, migrate deprecated APIs |
-| **Error Handling** | 24 | `errors.Is`/`errors.As` migration, error wrapping, sentinel extraction |
+| **Error Handling** | 28 | `errors.Is`/`errors.As` migration, error wrapping, sentinel extraction |
 | **Redundancy** | 23 | Remove dead code, redundant operations, unreachable statements |
 | **Migration** | 21 | Go version and go.mod upgrades, encoding/json/v2 migration scoping and rewrites |
 | **Performance** | 16 | Loop optimizations, allocation hoisting, format string improvements |
