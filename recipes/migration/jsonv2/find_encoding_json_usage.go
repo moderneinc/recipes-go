@@ -228,13 +228,13 @@ func classifyJsonFunc(name string) (category, suggestion string, ok bool) {
 	case "NewDecoder":
 		return "rewrite", "moves to jsontext.NewDecoder; decode via json.UnmarshalDecode", true
 	case "Indent":
-		return "rewrite", "removed in v2; use jsontext.Value.Indent", true
+		return "review", "removed in v2; use jsontext.Value.Indent", true
 	case "Compact":
-		return "rewrite", "removed in v2; use jsontext.Value.Compact", true
+		return "review", "removed in v2; use jsontext.Value.Compact", true
 	case "HTMLEscape":
-		return "rewrite", "removed in v2; use the jsontext.EscapeForHTML option", true
+		return "review", "removed in v2; use the jsontext.EscapeForHTML option", true
 	case "Valid":
-		return "rewrite", "removed in v2; validate via jsontext", true
+		return "review", "removed in v2; validate via jsontext", true
 	}
 	return "", "", false
 }

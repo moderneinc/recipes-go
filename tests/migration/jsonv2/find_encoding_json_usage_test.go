@@ -222,7 +222,7 @@ func run(v any) {
 	for _, row := range rows {
 		got[row.Category+"|"+row.API]++
 	}
-	for _, k := range []string{"review|json.Marshal", "rewrite|json.Valid"} {
+	for _, k := range []string{"review|json.Marshal", "review|json.Valid"} {
 		if got[k] != 1 {
 			t.Errorf("expected %q once, got %d (all: %v)", k, got[k], got)
 		}
