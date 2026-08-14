@@ -270,6 +270,53 @@ func run(data []byte, dec *json.Decoder, v any) {
 	}
 }
 
+// The finder enumerates the silent marshal-output divergences (HTML escaping, nil
+// slice/map encoding, map ordering) at each marshal site rather than a generic
+// note.
+func TestFindEncodingJsonUsageMarshalDivergences(t *testing.T) {
+	rows := runInventory(t, "demo/enc.go", `package demo
+
+import "encoding/json"
+
+func run(enc *json.Encoder, v any) {
+	_, _ = json.Marshal(v)
+	_ = enc.Encode(v)
+}
+`)
+	suggestion := map[string]string{}
+	for _, row := range rows {
+		suggestion[row.Category+"|"+row.API] = row.Suggestion
+	}
+	for _, k := range []string{"review|json.Marshal", "rewrite|json.Encoder.Encode"} {
+		s := suggestion[k]
+		if !strings.Contains(s, "HTML") || !strings.Contains(s, "nil slices") {
+			t.Errorf("%q should enumerate marshal divergences (HTML escaping, nil slices/maps), got %q", k, s)
+		}
+	}
+}
+
+// A field using the ,string tag option is flagged, since v2 changed which types
+// the option applies to.
+func TestFindEncodingJsonUsageStringTag(t *testing.T) {
+	rows := runInventory(t, "demo/str.go", strings.ReplaceAll(`package demo
+
+import "encoding/json"
+
+type T struct {
+	N int @json:",string"@
+}
+
+func run(v any) { _, _ = json.Marshal(v) }
+`, "@", "`"))
+	got := map[string]int{}
+	for _, row := range rows {
+		got[row.Category+"|"+row.API]++
+	}
+	if got["review|string tag"] != 1 {
+		t.Errorf("expected one review row for the ,string tag, got %d (all: %v)", got["review|string tag"], got)
+	}
+}
+
 // Dot-imported package functions carry no `json.` qualifier and are found via
 // the declaring type.
 func TestFindEncodingJsonUsageDotImport(t *testing.T) {

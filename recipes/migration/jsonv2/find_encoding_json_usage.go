@@ -52,7 +52,7 @@ func (r *FindEncodingJsonUsage) DisplayName() string {
 	return "Find `encoding/json` usage for the v2 migration"
 }
 func (r *FindEncodingJsonUsage) Description() string {
-	return "Inventory every `encoding/json` (v1) touchpoint that an `encoding/json/v2` migration must address: the import, package functions, `Encoder`/`Decoder` and other type methods (resolved through the type system, so receivers reached via variables, parameters, or fields are all found), exported types, `[N]byte`/`time.Duration` struct fields, `omitempty` tags classified by field type, and custom `MarshalJSON`/`UnmarshalJSON` implementations. Findings populate a data table categorized as import, rewrite, review, or modernize. This recipe reports only and does not modify code."
+	return "Inventory every `encoding/json` (v1) touchpoint that an `encoding/json/v2` migration must address: the import, package functions, `Encoder`/`Decoder` and other type methods (resolved through the type system, so receivers reached via variables, parameters, or fields are all found), exported types, `[N]byte`/`time.Duration` struct fields, `omitempty` and `,string` tags, and custom `MarshalJSON`/`UnmarshalJSON` implementations. Findings populate a data table categorized as import, rewrite, review, or modernize. This recipe reports only and does not modify code."
 }
 func (r *FindEncodingJsonUsage) Tags() []string { return []string{"migration", "json"} }
 
@@ -191,6 +191,17 @@ func (v *findEncodingJsonUsageVisitor) VisitVariableDeclarations(vd *java.Variab
 			v.insertRow(p, "review", "omitempty tag", qualifyField(v.currentType, d.Name.Name), classifyOmitempty(d.Name.Type))
 		}
 	}
+
+	if hasJsonTagOption(vd, "string") {
+		for _, decl := range vd.Variables {
+			d := decl.Element
+			if d == nil || d.Name == nil {
+				continue
+			}
+			v.insertRow(p, "review", "string tag", qualifyField(v.currentType, d.Name.Name),
+				"the ,string option changed scope in v2: it stringifies only numbers (recursing into composites) and no longer quotes bool or string; preserve v1 with MigrateToJSONV2PreservingV1")
+		}
+	}
 	return vd
 }
 
@@ -220,7 +231,7 @@ func (v *findEncodingJsonUsageVisitor) insertRow(p any, category, api, detail, s
 func classifyJsonFunc(name string) (category, suggestion string, ok bool) {
 	switch name {
 	case "Marshal":
-		return "review", "defaults differ in v2; migrate with MigrateToJSONV2PreservingV1 for byte-identical output", true
+		return "review", "output defaults differ in v2: HTML escaping is off, nil slices/maps encode as [] and {} (not null), and map keys are unordered; migrate with MigrateToJSONV2PreservingV1 to keep v1 output", true
 	case "Unmarshal":
 		return "review", "v2 tightens decoding: member names are case-sensitive so mixed-case JSON keys are silently dropped (add json:\",case:ignore\"), and base64 []byte values reject embedded newlines v1 ignored; preserve both with MigrateToJSONV2PreservingV1", true
 	case "MarshalIndent":
@@ -245,7 +256,7 @@ func classifyJsonFunc(name string) (category, suggestion string, ok bool) {
 func classifyEncoderMethod(name string) (category, suggestion string) {
 	switch name {
 	case "Encode":
-		return "rewrite", "encode via json.MarshalEncode(enc, v) in v2"
+		return "rewrite", "encode via json.MarshalEncode(enc, v); output defaults differ (HTML escaping off, nil slices/maps as []/{}, unordered map keys)"
 	case "SetIndent":
 		return "rewrite", "configure indentation via the jsontext.WithIndent option in v2"
 	case "SetEscapeHTML":
@@ -353,6 +364,12 @@ func selectIdentName(mi *java.MethodInvocation) string {
 
 // hasOmitemptyTag reports whether a struct field carries `json:"...,omitempty"`.
 func hasOmitemptyTag(vd *java.VariableDeclarations) bool {
+	return hasJsonTagOption(vd, "omitempty")
+}
+
+// Reports whether a struct field's `json:"..."` tag carries the given option,
+// which follows the JSON name in the comma-separated tag value.
+func hasJsonTagOption(vd *java.VariableDeclarations, option string) bool {
 	for _, ann := range vd.LeadingAnnotations {
 		id, ok := ann.AnnotationType.(*java.Identifier)
 		if !ok || id.Name != "json" || ann.Arguments == nil {
@@ -364,8 +381,8 @@ func hasOmitemptyTag(vd *java.VariableDeclarations) bool {
 				continue
 			}
 			value, _ := lit.Value.(string)
-			for _, opt := range strings.Split(value, ",") {
-				if opt == "omitempty" {
+			for i, opt := range strings.Split(value, ",") {
+				if i > 0 && opt == option {
 					return true
 				}
 			}
