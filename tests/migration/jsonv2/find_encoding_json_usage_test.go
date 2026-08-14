@@ -204,8 +204,10 @@ func run(dst *bytes.Buffer, src []byte, tok json.Token, d json.Delim) {
 }
 `)
 	got := map[string]int{}
+	suggestion := map[string]string{}
 	for _, row := range rows {
 		got[row.Category+"|"+row.API]++
+		suggestion[row.Category+"|"+row.API] = row.Suggestion
 	}
 	for _, k := range []string{
 		"review|json.Compact", "review|json.Indent", "review|json.HTMLEscape",
@@ -213,6 +215,18 @@ func run(dst *bytes.Buffer, src []byte, tok json.Token, d json.Delim) {
 	} {
 		if got[k] != 1 {
 			t.Errorf("expected %q once, got %d (all: %v)", k, got[k], got)
+		}
+	}
+	// The removed-function suggestions name the precise v2 replacement.
+	precise := map[string]string{
+		"review|json.Compact":    "jsontext.AppendFormat",
+		"review|json.Indent":     "jsontext.AppendFormat",
+		"review|json.HTMLEscape": "EscapeForHTML",
+		"review|json.Valid":      "IsValid",
+	}
+	for k, want := range precise {
+		if !strings.Contains(suggestion[k], want) {
+			t.Errorf("%q suggestion should mention %q, got %q", k, want, suggestion[k])
 		}
 	}
 }

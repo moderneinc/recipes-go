@@ -241,13 +241,13 @@ func classifyJsonFunc(name string) (category, suggestion string, ok bool) {
 	case "NewDecoder":
 		return "rewrite", "moves to jsontext.NewDecoder; decode via json.UnmarshalDecode", true
 	case "Indent":
-		return "review", "removed in v2; use jsontext.Value.Indent", true
+		return "review", "removed in v2; reformat with jsontext.AppendFormat(dst, src, jsontext.WithIndentPrefix(prefix), jsontext.WithIndent(indent)) or jsontext.Value.Indent; operates on []byte, not *bytes.Buffer, and the prefix must be whitespace", true
 	case "Compact":
-		return "review", "removed in v2; use jsontext.Value.Compact", true
+		return "review", "removed in v2; reformat with jsontext.AppendFormat(dst, src) or jsontext.Value.Compact; operates on []byte, not *bytes.Buffer", true
 	case "HTMLEscape":
-		return "review", "removed in v2; use the jsontext.EscapeForHTML option", true
+		return "review", "removed in v2 with no byte-for-byte equivalent (v1 escapes without reformatting); apply the jsontext.EscapeForHTML option where the JSON is encoded", true
 	case "Valid":
-		return "review", "removed in v2; validate via jsontext", true
+		return "review", "removed in v2; use jsontext.Value(data).IsValid()", true
 	}
 	return "", "", false
 }
