@@ -94,33 +94,47 @@ func streamingTarget(method string) (fn, ctor string) {
 	return "", ""
 }
 
-// Reports whether cu declares a struct field of type time.Duration, which v2
-// marshals as a runtime error without an explicit format, so a file containing
-// one is left for review rather than migrated into runtime-erroring code.
-func fileHasDurationField(cu *golang.CompilationUnit) bool {
-	scan := visitor.Init(&durationFieldScan{})
+// Reports whether cu declares a struct field whose bare-v2 encoding differs from
+// v1: a time.Duration, which v2 marshals as a runtime error without an explicit
+// format, or a fixed [N]byte array, which v2 encodes as a base64 string rather
+// than a number array. The default path leaves such a file for review, while the
+// compat path migrates it, since DefaultOptionsV1 restores the v1 encoding.
+func fileNeedsV1Compat(cu *golang.CompilationUnit) bool {
+	scan := visitor.Init(&v1CompatFieldScan{})
 	scan.Visit(cu, nil)
 	return scan.found
 }
 
-type durationFieldScan struct {
+type v1CompatFieldScan struct {
 	visitor.GoVisitor
 	insideStruct int
 	found        bool
 }
 
-func (s *durationFieldScan) VisitStructType(st *golang.StructType, p any) java.J {
+func (s *v1CompatFieldScan) VisitStructType(st *golang.StructType, p any) java.J {
 	s.insideStruct++
 	st = s.GoVisitor.VisitStructType(st, p).(*golang.StructType)
 	s.insideStruct--
 	return st
 }
 
-func (s *durationFieldScan) VisitVariableDeclarations(vd *java.VariableDeclarations, p any) java.J {
-	if s.insideStruct > 0 && isDurationField(vd) {
+func (s *v1CompatFieldScan) VisitVariableDeclarations(vd *java.VariableDeclarations, p any) java.J {
+	if s.insideStruct > 0 && (isDurationField(vd) || isFixedByteArrayField(vd)) {
 		s.found = true
 	}
 	return s.GoVisitor.VisitVariableDeclarations(vd, p)
+}
+
+// Reports whether a struct field is a fixed-size [N]byte array, whose base64
+// encoding under v2 differs from v1's number-array encoding. A []byte slice is
+// excluded, since it encodes as base64 under both v1 and v2.
+func isFixedByteArrayField(vd *java.VariableDeclarations) bool {
+	at, ok := vd.TypeExpr.(*golang.ArrayType)
+	if !ok || at.Length.Element == nil {
+		return false
+	}
+	elem, ok := at.ElementType.(*java.Identifier)
+	return ok && (elem.Name == "byte" || elem.Name == "uint8")
 }
 
 // Reports whether a struct field is a time.Duration, resolving an aliased time

@@ -224,6 +224,69 @@ func TestMigrateToJSONV2NoChangeWithDurationField(t *testing.T) {
 	)
 }
 
+// A fixed [N]byte field encodes as base64 under bare v2 instead of v1's number
+// array, so the default bundle leaves the file for review; only the compat bundle
+// migrates it.
+func TestMigrateToJSONV2NoChangeWithFixedByteArray(t *testing.T) {
+	bundleSpec().RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"encoding/json"
+				"os"
+			)
+
+			type T struct {
+				ID [8]byte
+			}
+
+			func write(v any) error {
+				return json.NewEncoder(os.Stdout).Encode(v)
+			}
+		`),
+	)
+}
+
+// A []byte slice encodes as base64 under both v1 and v2, so it does not block the
+// default migration the way a fixed [N]byte array does.
+func TestMigrateToJSONV2ByteSliceMigrates(t *testing.T) {
+	bundleSpec().RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"encoding/json"
+				"os"
+			)
+
+			type T struct {
+				Data []byte
+			}
+
+			func write(v any) error {
+				return json.NewEncoder(os.Stdout).Encode(v)
+			}
+		`, `
+			package main
+
+			import (
+				"encoding/json/v2"
+				"os"
+				"encoding/json/jsontext"
+			)
+
+			type T struct {
+				Data []byte
+			}
+
+			func write(v any) error {
+				return json.MarshalEncode(jsontext.NewEncoder(os.Stdout), v)
+			}
+		`),
+	)
+}
+
 // A file mixing two mechanical constructs is left unchanged, since neither the
 // streaming nor the MarshalIndent recipe can swap the single json import without
 // stranding the other's not-yet-rewritten construct.

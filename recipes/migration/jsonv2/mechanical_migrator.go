@@ -55,10 +55,10 @@ func (v *mechanicalMigrator) VisitCompilationUnit(cu *golang.CompilationUnit, p 
 		return cu
 	}
 
-	// A time.Duration field has no default v2 representation and would marshal to
-	// a runtime error, so the file is left for review; the compat path skips this
-	// guard, since PreserveV1Semantics restores the v1 representation.
-	if !v.preserveV1 && fileHasDurationField(cu) {
+	// A time.Duration or fixed [N]byte field encodes incompatibly under bare v2,
+	// so the default path leaves the file for review; the compat path migrates it,
+	// since PreserveV1Semantics restores the v1 encoding.
+	if !v.preserveV1 && fileNeedsV1Compat(cu) {
 		return cu
 	}
 

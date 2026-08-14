@@ -60,10 +60,10 @@ func (v *relocateEncoderDecoderVisitor) VisitCompilationUnit(cu *golang.Compilat
 	if importsEncodingJsonV2(cu) {
 		return cu
 	}
-	// A time.Duration field marshals to a runtime error under v2 without an
-	// explicit format, so the file is left for review; the compat path skips this
-	// guard, since PreserveV1Semantics restores the v1 representation.
-	if !v.preserveV1 && fileHasDurationField(cu) {
+	// A time.Duration or fixed [N]byte field encodes incompatibly under bare v2,
+	// so the default path leaves the file for review; the compat path migrates it,
+	// since PreserveV1Semantics restores the v1 encoding.
+	if !v.preserveV1 && fileNeedsV1Compat(cu) {
 		return cu
 	}
 

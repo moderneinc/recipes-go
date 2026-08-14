@@ -90,3 +90,44 @@ func TestMigrateToJSONV2PreservingV1WithDurationField(t *testing.T) {
 		`),
 	)
 }
+
+// A fixed [N]byte field is blocked on the default path (bare v2 would silently
+// switch it to base64), but the compat path migrates it, since the appended
+// DefaultOptionsV1 restores the v1 number-array encoding byte-for-byte.
+func TestMigrateToJSONV2PreservingV1WithFixedByteArray(t *testing.T) {
+	preservingBundleSpec().RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"encoding/json"
+				"os"
+			)
+
+			type T struct {
+				ID [8]byte
+			}
+
+			func write(v any) error {
+				return json.NewEncoder(os.Stdout).Encode(v)
+			}
+		`, `
+			package main
+
+			import (
+				"encoding/json/v2"
+				"os"
+				"encoding/json/jsontext"
+				jsonv1 "encoding/json"
+			)
+
+			type T struct {
+				ID [8]byte
+			}
+
+			func write(v any) error {
+				return json.MarshalEncode(jsontext.NewEncoder(os.Stdout, jsonv1.DefaultOptionsV1()), v)
+			}
+		`),
+	)
+}
