@@ -28,7 +28,7 @@ func (r *MigrateToJSONV2) Tags() []string { return []string{"migration", "json"}
 
 func (r *MigrateToJSONV2) RecipeList() []recipe.Recipe {
 	return []recipe.Recipe{
-		&UseMarshalWriteUnmarshalRead{preserveV1: r.preserveV1},
+		&MigrateStreamingEncodeDecode{preserveV1: r.preserveV1},
 		&ReplaceMarshalIndent{preserveV1: r.preserveV1},
 		&RelocateEncoderDecoderTypes{preserveV1: r.preserveV1},
 		&RelocateRawMessage{preserveV1: r.preserveV1},

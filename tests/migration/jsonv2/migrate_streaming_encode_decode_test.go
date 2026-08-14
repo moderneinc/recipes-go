@@ -12,7 +12,7 @@ import (
 )
 
 func spec() *test.RecipeSpec {
-	return test.NewRecipeSpec().WithRecipe(&jsonv2.UseMarshalWriteUnmarshalRead{})
+	return test.NewRecipeSpec().WithRecipe(&jsonv2.MigrateStreamingEncodeDecode{})
 }
 
 func TestMigrateEncoderStreaming(t *testing.T) {
