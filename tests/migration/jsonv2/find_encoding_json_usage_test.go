@@ -238,6 +238,35 @@ func read(dec *json.Decoder, v any)  { _ = dec.Decode(v) }
 	}
 }
 
+// v2 matches member names case-sensitively, which can silently drop mixed-case
+// JSON keys on decode, so the finder flags each decode entry point with that
+// specific risk rather than a generic note.
+func TestFindEncodingJsonUsageDecodeCaseSensitivity(t *testing.T) {
+	rows := runInventory(t, "demo/dec.go", `package demo
+
+import "encoding/json"
+
+func run(data []byte, dec *json.Decoder, v any) {
+	_, _ = json.Marshal(v)
+	_ = json.Unmarshal(data, v)
+	_ = dec.Decode(v)
+}
+`)
+	suggestion := map[string]string{}
+	for _, row := range rows {
+		suggestion[row.Category+"|"+row.API] = row.Suggestion
+	}
+	for _, k := range []string{"review|json.Unmarshal", "rewrite|json.Decoder.Decode"} {
+		if !strings.Contains(suggestion[k], "case-sensitiv") {
+			t.Errorf("%q should warn about case-sensitive matching, got %q", k, suggestion[k])
+		}
+	}
+	// Marshal keeps its own output-oriented message, not the decode warning.
+	if strings.Contains(suggestion["review|json.Marshal"], "case-sensitiv") {
+		t.Errorf("json.Marshal should not carry the decode case warning, got %q", suggestion["review|json.Marshal"])
+	}
+}
+
 // Dot-imported package functions carry no `json.` qualifier and are found via
 // the declaring type.
 func TestFindEncodingJsonUsageDotImport(t *testing.T) {
