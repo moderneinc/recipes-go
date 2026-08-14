@@ -222,7 +222,7 @@ func classifyJsonFunc(name string) (category, suggestion string, ok bool) {
 	case "Marshal":
 		return "review", "defaults differ in v2; migrate with MigrateToJSONV2PreservingV1 for byte-identical output", true
 	case "Unmarshal":
-		return "review", "v2 matches member names case-sensitively (v1 folded case), so mixed-case JSON keys are silently dropped; use MigrateToJSONV2PreservingV1 or add json:\",case:ignore\"", true
+		return "review", "v2 tightens decoding: member names are case-sensitive so mixed-case JSON keys are silently dropped (add json:\",case:ignore\"), and base64 []byte values reject embedded newlines v1 ignored; preserve both with MigrateToJSONV2PreservingV1", true
 	case "MarshalIndent":
 		return "rewrite", "removed in v2; use json.Marshal with jsontext.WithIndent and jsontext.WithIndentPrefix", true
 	case "NewEncoder":
@@ -258,7 +258,7 @@ func classifyEncoderMethod(name string) (category, suggestion string) {
 func classifyDecoderMethod(name string) (category, suggestion string) {
 	switch name {
 	case "Decode":
-		return "rewrite", "decode via json.UnmarshalDecode(dec, &v); v2 matches member names case-sensitively, so mixed-case JSON keys are silently dropped"
+		return "rewrite", "decode via json.UnmarshalDecode(dec, &v); v2 tightens decoding (case-sensitive member names drop mixed-case keys; base64 []byte rejects embedded newlines)"
 	case "DisallowUnknownFields":
 		return "review", "use the json.RejectUnknownMembers option in v2"
 	case "UseNumber":
