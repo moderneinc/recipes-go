@@ -287,18 +287,22 @@ func classifyJsonType(name string) (category, suggestion string) {
 	case "RawMessage":
 		return "rewrite", "the raw JSON type moves to jsontext.Value in v2"
 	case "Number":
-		return "review", "review numeric handling; v2 tightens parsing and adds StringifyNumbers"
+		return "review", "v2 has no Number type; keep encoding/json.Number (it implements the v2 marshaler interfaces), or unmarshal a jsontext.Value / use the StringifyNumbers option for raw numbers"
 	case "Encoder", "Decoder":
 		return "rewrite", "the streaming type moves to jsontext in v2"
 	case "Marshaler":
 		return "modernize", "consider the streaming MarshalerTo interface (MarshalJSONTo) in v2"
 	case "Unmarshaler":
 		return "modernize", "consider the streaming UnmarshalerFrom interface (UnmarshalJSONFrom) in v2"
-	case "Token", "Delim":
-		return "review", "streaming token API; verify jsontext token equivalents in v2"
-	case "SyntaxError", "UnmarshalTypeError", "UnsupportedTypeError", "UnsupportedValueError",
+	case "Token":
+		return "review", "the streaming token type moves to jsontext.Token in v2 (a concrete struct, replacing v1's any)"
+	case "Delim":
+		return "review", "json.Delim (object/array delimiters) maps to jsontext.Kind in v2"
+	case "SyntaxError":
+		return "review", "malformed-JSON errors move to jsontext.SyntacticError in v2"
+	case "UnmarshalTypeError", "UnsupportedTypeError", "UnsupportedValueError",
 		"InvalidUnmarshalError", "MarshalerError", "InvalidUTF8Error", "UnmarshalFieldError":
-		return "review", "error type; verify error types and handling in v2"
+		return "review", "v2 reports type and value errors as jsonv2.SemanticError; match on that instead"
 	}
 	return "review", "encoding/json reference; verify against the v2 API"
 }

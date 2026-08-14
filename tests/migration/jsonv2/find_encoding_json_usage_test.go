@@ -231,6 +231,38 @@ func run(dst *bytes.Buffer, src []byte, tok json.Token, d json.Delim) {
 	}
 }
 
+// The removed types carry precise pointers to their v2 replacements.
+func TestFindEncodingJsonUsageRemovedTypeSuggestions(t *testing.T) {
+	rows := runInventory(t, "demo/types.go", `package demo
+
+import "encoding/json"
+
+type Holder struct {
+	N   json.Number
+	Tok json.Token
+	D   json.Delim
+	Err *json.SyntaxError
+	Sem *json.UnmarshalTypeError
+}
+`)
+	suggestion := map[string]string{}
+	for _, row := range rows {
+		suggestion[row.Category+"|"+row.API] = row.Suggestion
+	}
+	want := map[string]string{
+		"review|json.Number":             "encoding/json.Number",
+		"review|json.Token":              "jsontext.Token",
+		"review|json.Delim":              "jsontext.Kind",
+		"review|json.SyntaxError":        "jsontext.SyntacticError",
+		"review|json.UnmarshalTypeError": "jsonv2.SemanticError",
+	}
+	for k, v := range want {
+		if !strings.Contains(suggestion[k], v) {
+			t.Errorf("%q suggestion should mention %q, got %q", k, v, suggestion[k])
+		}
+	}
+}
+
 // Codecs reached through a parameter (not a local NewEncoder/NewDecoder) are
 // found via the method's declaring type.
 func TestFindEncodingJsonUsageIndirectCodec(t *testing.T) {
