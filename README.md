@@ -72,7 +72,7 @@ mod run . --recipe org.openrewrite.golang.codequality.SimplifyBooleanExpression
 
 ## Overview
 
-**214 recipes** across 7 categories with **800 tests**.
+**214 recipes** across 7 categories with **802 tests**.
 
 | Category | Recipes | Description |
 |---|---|---|
