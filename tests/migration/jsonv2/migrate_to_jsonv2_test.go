@@ -248,6 +248,86 @@ func TestMigrateToJSONV2NoChangeWithFixedByteArray(t *testing.T) {
 	)
 }
 
+// A time.Duration field pinned to format:nano encodes identically under v2, so
+// the tag unblocks the default bundle that a bare time.Duration would stop.
+func TestMigrateToJSONV2MigratesTaggedDurationField(t *testing.T) {
+	bundleSpec().RewriteRun(t,
+		test.Golang(backticks(`
+			package main
+
+			import (
+				"encoding/json"
+				"os"
+				"time"
+			)
+
+			type T struct {
+				Timeout time.Duration @json:",format:nano"@
+			}
+
+			func write(v any) error {
+				return json.NewEncoder(os.Stdout).Encode(v)
+			}
+		`), backticks(`
+			package main
+
+			import (
+				"encoding/json/v2"
+				"os"
+				"time"
+				"encoding/json/jsontext"
+			)
+
+			type T struct {
+				Timeout time.Duration @json:",format:nano"@
+			}
+
+			func write(v any) error {
+				return json.MarshalEncode(jsontext.NewEncoder(os.Stdout), v)
+			}
+		`)),
+	)
+}
+
+// A fixed [N]byte field pinned to format:array encodes identically under v2, so
+// the tag unblocks the default bundle that a bare [N]byte field would stop.
+func TestMigrateToJSONV2MigratesTaggedFixedByteArray(t *testing.T) {
+	bundleSpec().RewriteRun(t,
+		test.Golang(backticks(`
+			package main
+
+			import (
+				"encoding/json"
+				"os"
+			)
+
+			type T struct {
+				ID [8]byte @json:",format:array"@
+			}
+
+			func write(v any) error {
+				return json.NewEncoder(os.Stdout).Encode(v)
+			}
+		`), backticks(`
+			package main
+
+			import (
+				"encoding/json/v2"
+				"os"
+				"encoding/json/jsontext"
+			)
+
+			type T struct {
+				ID [8]byte @json:",format:array"@
+			}
+
+			func write(v any) error {
+				return json.MarshalEncode(jsontext.NewEncoder(os.Stdout), v)
+			}
+		`)),
+	)
+}
+
 // A []byte slice encodes as base64 under both v1 and v2, so it does not block the
 // default migration the way a fixed [N]byte array does.
 func TestMigrateToJSONV2ByteSliceMigrates(t *testing.T) {

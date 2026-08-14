@@ -258,4 +258,5 @@ func Activate(r *recipe.Registry) {
 	r.Register(&jsonv2.MigrateToJSONV2{}, golang, codeQuality, migrationCategory, jsonV2Category)
 	r.Register(&jsonv2.MigrateToJSONV2PreservingV1{}, golang, codeQuality, migrationCategory, jsonV2Category)
 	r.Register(&jsonv2.PreserveV1Semantics{}, golang, codeQuality, migrationCategory, jsonV2Category)
+	r.Register(&jsonv2.AddV1FormatTags{}, golang, codeQuality, migrationCategory, jsonV2Category)
 }
