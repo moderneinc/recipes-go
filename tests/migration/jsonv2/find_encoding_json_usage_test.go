@@ -252,9 +252,10 @@ func read(dec *json.Decoder, v any)  { _ = dec.Decode(v) }
 	}
 }
 
-// v2 tightens decoding in two silent ways (case-sensitive member matching drops
-// mixed-case keys; strict base64 rejects embedded newlines v1 ignored), so the
-// finder flags each decode entry point with both risks rather than a generic note.
+// v2 tightens decoding in several silent ways (case-sensitive matching drops
+// mixed-case keys; strict base64, duplicate keys, and RFC 3339 time parsing all
+// error), so the finder flags each decode entry point with those risks rather
+// than a generic note.
 func TestFindEncodingJsonUsageDecodeStrictness(t *testing.T) {
 	rows := runInventory(t, "demo/dec.go", `package demo
 
@@ -271,11 +272,10 @@ func run(data []byte, dec *json.Decoder, v any) {
 		suggestion[row.Category+"|"+row.API] = row.Suggestion
 	}
 	for _, k := range []string{"review|json.Unmarshal", "rewrite|json.Decoder.Decode"} {
-		if !strings.Contains(suggestion[k], "case-sensitiv") {
-			t.Errorf("%q should warn about case-sensitive matching, got %q", k, suggestion[k])
-		}
-		if !strings.Contains(suggestion[k], "base64") {
-			t.Errorf("%q should warn about strict base64 decoding, got %q", k, suggestion[k])
+		for _, want := range []string{"case-sensitiv", "base64", "duplicate", "RFC 3339"} {
+			if !strings.Contains(suggestion[k], want) {
+				t.Errorf("%q should warn about %q, got %q", k, want, suggestion[k])
+			}
 		}
 	}
 	// Marshal keeps its own output-oriented message, not the decode warnings.
