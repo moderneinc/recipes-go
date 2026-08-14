@@ -105,27 +105,63 @@ func receiverIsPointer(md *golang.MethodDeclaration) bool {
 	return false
 }
 
-// Collects file-local names declared as `type X byte` or `type X uint8`, whose
-// []X slices are base64 in v1 but a number array in v2. Cross-file named byte
-// types are not resolved, since the type system does not expose the underlying.
+// Collects file-local names declared as `type X byte` or `type X uint8` whose
+// []X slices diverge (base64 in v1, number array in v2), excluding any that
+// implement a JSON marshaler: v2 honors the element marshaler exactly like v1, so
+// those do not diverge. Cross-file named byte types are not resolved, since the
+// type system does not expose the underlying.
 func collectNamedByteTypes(cu *golang.CompilationUnit) map[string]bool {
-	scan := visitor.Init(&namedByteTypeScan{names: map[string]bool{}})
+	scan := visitor.Init(&namedByteTypeScan{byteTypes: map[string]bool{}, marshalers: map[string]bool{}})
 	scan.Visit(cu, nil)
-	return scan.names
+	for name := range scan.marshalers {
+		delete(scan.byteTypes, name)
+	}
+	return scan.byteTypes
 }
 
 type namedByteTypeScan struct {
 	visitor.GoVisitor
-	names map[string]bool
+	byteTypes  map[string]bool
+	marshalers map[string]bool
 }
 
 func (s *namedByteTypeScan) VisitTypeDecl(td *golang.TypeDecl, p any) java.J {
 	if td.Name != nil {
 		if id, ok := td.Definition.(*java.Identifier); ok && (id.Name == "byte" || id.Name == "uint8") {
-			s.names[td.Name.Name] = true
+			s.byteTypes[td.Name.Name] = true
 		}
 	}
 	return s.GoVisitor.VisitTypeDecl(td, p)
+}
+
+func (s *namedByteTypeScan) VisitGoMethodDeclaration(md *golang.MethodDeclaration, p any) java.J {
+	if md.Declaration != nil && md.Declaration.Name != nil {
+		switch md.Declaration.Name.Name {
+		case "MarshalJSON", "MarshalJSONTo":
+			if name := receiverBaseTypeName(md); name != "" {
+				s.marshalers[name] = true
+			}
+		}
+	}
+	return s.GoVisitor.VisitGoMethodDeclaration(md, p)
+}
+
+// Returns a Go method's receiver base type name, stripping a pointer: "T" for
+// both (t *T) and (t T).
+func receiverBaseTypeName(md *golang.MethodDeclaration) string {
+	for _, e := range md.Receiver.Elements {
+		if vd, ok := e.Element.(*java.VariableDeclarations); ok {
+			switch te := vd.TypeExpr.(type) {
+			case *java.Identifier:
+				return te.Name
+			case *golang.PointerType:
+				if id, ok := te.Elem.(*java.Identifier); ok {
+					return id.Name
+				}
+			}
+		}
+	}
+	return ""
 }
 
 func (v *findEncodingJsonUsageVisitor) VisitImport(imp *java.Import, p any) java.J {
@@ -288,9 +324,9 @@ func (v *findEncodingJsonUsageVisitor) insertRow(p any, category, api, detail, s
 func classifyJsonFunc(name string) (category, suggestion string, ok bool) {
 	switch name {
 	case "Marshal":
-		return "review", "output defaults differ in v2: HTML escaping is off, nil slices/maps encode as [] and {} (not null), and map keys are unordered; migrate with MigrateToJSONV2PreservingV1 to keep v1 output", true
+		return "review", "output defaults differ in v2: HTML and JS (U+2028/U+2029) escaping is off, nil slices/maps encode as [] and {} (not null), map keys are unordered, and invalid UTF-8 now errors; migrate with MigrateToJSONV2PreservingV1 to keep v1 output", true
 	case "Unmarshal":
-		return "review", "v2 tightens decoding, rejecting or dropping inputs v1 accepted: case-sensitive member matching (mixed-case keys silently dropped; add json:\",case:ignore\"), stricter base64 []byte, duplicate object keys, and strict RFC 3339 time.Time parsing; preserve v1 with MigrateToJSONV2PreservingV1", true
+		return "review", "v2 tightens decoding, rejecting or dropping inputs v1 accepted: case-sensitive member matching (mixed-case keys silently dropped; json:\",case:ignore\" loosens it but also ignores -/_), stricter base64 []byte, duplicate object keys, strict RFC 3339 time.Time parsing, and array-length mismatches now error; preserve v1 exactly with MigrateToJSONV2PreservingV1", true
 	case "MarshalIndent":
 		return "rewrite", "removed in v2; use json.Marshal with jsontext.WithIndent and jsontext.WithIndentPrefix", true
 	case "NewEncoder":
@@ -313,7 +349,7 @@ func classifyJsonFunc(name string) (category, suggestion string, ok bool) {
 func classifyEncoderMethod(name string) (category, suggestion string) {
 	switch name {
 	case "Encode":
-		return "rewrite", "encode via json.MarshalEncode(enc, v); output defaults differ (HTML escaping off, nil slices/maps as []/{}, unordered map keys)"
+		return "rewrite", "encode via json.MarshalEncode(enc, v); output defaults differ (HTML/JS escaping off, nil slices/maps as []/{}, unordered map keys, invalid UTF-8 errors)"
 	case "SetIndent":
 		return "rewrite", "configure indentation via the jsontext.WithIndent option in v2"
 	case "SetEscapeHTML":
@@ -326,7 +362,7 @@ func classifyEncoderMethod(name string) (category, suggestion string) {
 func classifyDecoderMethod(name string) (category, suggestion string) {
 	switch name {
 	case "Decode":
-		return "rewrite", "decode via json.UnmarshalDecode(dec, &v); v2 tightens decoding: case-sensitive matching drops mixed-case keys, and stricter base64, duplicate object keys, and RFC 3339 time.Time parsing all error"
+		return "rewrite", "decode via json.UnmarshalDecode(dec, &v); v2 tightens decoding: case-sensitive matching drops mixed-case keys (case:ignore over-loosens), and stricter base64, duplicate keys, RFC 3339 time, and array-length mismatch all error"
 	case "DisallowUnknownFields":
 		return "review", "use the json.RejectUnknownMembers option in v2"
 	case "UseNumber":

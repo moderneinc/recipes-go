@@ -295,28 +295,39 @@ func (u U) MarshalJSON() ([]byte, error)  { return nil, nil }
 	}
 }
 
-// A named byte slice ([]MyByte, declared in the same file) is base64 in v1 but a
-// number array in v2; a plain []byte is unaffected and not flagged.
+// A plain named byte slice ([]MyByte) is base64 in v1 but a number array in v2.
+// But one whose element implements a JSON marshaler is NOT flagged: v2 honors the
+// marshaler exactly like v1, so there is no divergence. A plain []byte is also
+// unaffected.
 func TestFindEncodingJsonUsageNamedByteSlice(t *testing.T) {
-	rows := runInventory(t, "demo/nb.go", `package demo
+	rows := runInventory(t, "demo/nb.go", strings.ReplaceAll(`package demo
 
 import "encoding/json"
 
 type MyByte byte
 
+type Marshaled byte
+
+func (m Marshaled) MarshalJSON() ([]byte, error) { return nil, nil }
+
 type T struct {
 	Data []MyByte
+	Enc  []Marshaled
 	Raw  []byte
 }
 
 var _ = json.Marshal
-`)
+`, "@", "`"))
 	got := map[string]string{}
 	for _, row := range rows {
 		got[row.Category+"|"+row.API] = row.Suggestion
 	}
 	if s, ok := got["review|[]MyByte"]; !ok || !strings.Contains(s, "MigrateToJSONV2PreservingV1") {
 		t.Errorf("expected review|[]MyByte pointing at the compat bundle, got %q (present=%v)", s, ok)
+	}
+	// v2 honors the element marshaler like v1, so no divergence and no flag.
+	if _, ok := got["review|[]Marshaled"]; ok {
+		t.Errorf("a named byte slice whose element implements a marshaler should not be flagged")
 	}
 	if _, ok := got["review|[]byte"]; ok {
 		t.Errorf("a plain []byte should not be flagged as a named byte slice")
