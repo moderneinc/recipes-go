@@ -63,7 +63,7 @@ func (v *migrateImportOnlyVisitor) VisitCompilationUnit(cu *golang.CompilationUn
 	}
 
 	queueImportSwapToV2(v)
-	return cu
+	return drainQueuedImports(v, cu, p)
 }
 
 type importOnlyScan struct {

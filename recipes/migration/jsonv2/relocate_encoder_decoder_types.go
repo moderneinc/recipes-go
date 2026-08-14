@@ -76,7 +76,8 @@ func (v *relocateEncoderDecoderVisitor) VisitCompilationUnit(cu *golang.Compilat
 	v.localEncoders = locals
 	queueImportSwapToV2(v)
 
-	return v.GoVisitor.VisitCompilationUnit(cu, p)
+	cu = v.GoVisitor.VisitCompilationUnit(cu, p).(*golang.CompilationUnit)
+	return drainQueuedImports(v, cu, p)
 }
 
 func (v *relocateEncoderDecoderVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {

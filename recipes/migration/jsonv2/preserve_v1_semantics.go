@@ -49,7 +49,8 @@ func (v *preserveV1SemanticsVisitor) VisitCompilationUnit(cu *golang.Compilation
 		return cu
 	}
 	v.jsontextPkg = localJsontextPackage(cu)
-	return v.GoVisitor.VisitCompilationUnit(cu, p)
+	cu = v.GoVisitor.VisitCompilationUnit(cu, p).(*golang.CompilationUnit)
+	return drainQueuedImports(v, cu, p)
 }
 
 func (v *preserveV1SemanticsVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {

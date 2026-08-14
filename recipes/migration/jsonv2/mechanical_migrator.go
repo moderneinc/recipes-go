@@ -71,7 +71,8 @@ func (v *mechanicalMigrator) VisitCompilationUnit(cu *golang.CompilationUnit, p 
 	v.jsonPkg = jsonPkg
 	queueImportSwapToV2(v)
 
-	return v.GoVisitor.VisitCompilationUnit(cu, p)
+	cu = v.GoVisitor.VisitCompilationUnit(cu, p).(*golang.CompilationUnit)
+	return drainQueuedImports(v, cu, p)
 }
 
 func (v *mechanicalMigrator) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {

@@ -76,7 +76,8 @@ func (v *relocateRawMessageVisitor) VisitCompilationUnit(cu *golang.CompilationU
 		v.DoAfterVisit((&recipegolang.RemoveImport{PackagePath: "encoding/json"}).Editor())
 	}
 
-	return v.GoVisitor.VisitCompilationUnit(cu, p)
+	cu = v.GoVisitor.VisitCompilationUnit(cu, p).(*golang.CompilationUnit)
+	return drainQueuedImports(v, cu, p)
 }
 
 // Rewrites a json.RawMessage type reference to jsontext.Value, keeping the

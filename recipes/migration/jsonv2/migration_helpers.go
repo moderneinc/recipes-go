@@ -21,6 +21,16 @@ func queueImportSwapToV2(v visitor.AfterVisitsProvider) {
 	v.DoAfterVisit(visitor.Init(&importSwapToV2Visitor{}))
 }
 
+// Applies to cu any import operations the visit queued via DoAfterVisit so they
+// land as part of the returned tree, which the Moderne CLI's RPC applies where it
+// does not run the recipe runner's separate DoAfterVisit drain.
+func drainQueuedImports(v visitor.AfterVisitsProvider, cu *golang.CompilationUnit, p any) *golang.CompilationUnit {
+	if drained, ok := visitor.DrainAfterVisits(v, cu, p).(*golang.CompilationUnit); ok {
+		return drained
+	}
+	return cu
+}
+
 type importSwapToV2Visitor struct {
 	visitor.GoVisitor
 }
