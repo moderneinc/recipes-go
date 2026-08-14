@@ -93,7 +93,7 @@ func run(c Config) {
 		"review|[8]byte":                            1,
 		"review|time.Duration":                      1,
 		"review|omitempty tag":                      2,
-		"review|json.RawMessage":                    1,
+		"rewrite|json.RawMessage":                   1,
 		"modernize|MarshalJSON":                     1,
 		"review|json.Marshal":                       1,
 		"rewrite|json.MarshalIndent":                1,
@@ -185,6 +185,155 @@ func runInventory(t *testing.T, path, source string) []jsonv2.EncodingJsonUsageR
 	return rows
 }
 
+// The package functions and streaming token types that v2 removed without a
+// shipped rewrite are reported for review, not rewrite.
+func TestFindEncodingJsonUsageReviewLabels(t *testing.T) {
+	rows := runInventory(t, "demo/review.go", `package demo
+
+import (
+	"bytes"
+	"encoding/json"
+)
+
+func run(dst *bytes.Buffer, src []byte, tok json.Token, d json.Delim) {
+	_ = json.Compact(dst, src)
+	_ = json.Indent(dst, src, "", "  ")
+	json.HTMLEscape(dst, src)
+	_ = json.Valid(src)
+	_, _ = tok, d
+}
+`)
+	got := map[string]int{}
+	suggestion := map[string]string{}
+	for _, row := range rows {
+		got[row.Category+"|"+row.API]++
+		suggestion[row.Category+"|"+row.API] = row.Suggestion
+	}
+	for _, k := range []string{
+		"review|json.Compact", "review|json.Indent", "review|json.HTMLEscape",
+		"review|json.Valid", "review|json.Token", "review|json.Delim",
+	} {
+		if got[k] != 1 {
+			t.Errorf("expected %q once, got %d (all: %v)", k, got[k], got)
+		}
+	}
+	// The removed-function suggestions name the precise v2 replacement.
+	precise := map[string]string{
+		"review|json.Compact":    "jsontext.AppendFormat",
+		"review|json.Indent":     "jsontext.AppendFormat",
+		"review|json.HTMLEscape": "EscapeForHTML",
+		"review|json.Valid":      "IsValid",
+	}
+	for k, want := range precise {
+		if !strings.Contains(suggestion[k], want) {
+			t.Errorf("%q suggestion should mention %q, got %q", k, want, suggestion[k])
+		}
+	}
+}
+
+// The removed types carry precise pointers to their v2 replacements.
+func TestFindEncodingJsonUsageRemovedTypeSuggestions(t *testing.T) {
+	rows := runInventory(t, "demo/types.go", `package demo
+
+import "encoding/json"
+
+type Holder struct {
+	N   json.Number
+	Tok json.Token
+	D   json.Delim
+	Err *json.SyntaxError
+	Sem *json.UnmarshalTypeError
+}
+`)
+	suggestion := map[string]string{}
+	for _, row := range rows {
+		suggestion[row.Category+"|"+row.API] = row.Suggestion
+	}
+	want := map[string]string{
+		"review|json.Number":             "encoding/json.Number",
+		"review|json.Token":              "jsontext.Token",
+		"review|json.Delim":              "jsontext.Kind",
+		"review|json.SyntaxError":        "jsontext.SyntacticError",
+		"review|json.UnmarshalTypeError": "jsonv2.SemanticError",
+	}
+	for k, v := range want {
+		if !strings.Contains(suggestion[k], v) {
+			t.Errorf("%q suggestion should mention %q, got %q", k, v, suggestion[k])
+		}
+	}
+}
+
+// A pointer-receiver MarshalJSON is flagged for review: v2 calls it for
+// non-addressable values (map/interface elements) that v1 skipped.
+func TestFindEncodingJsonUsagePointerReceiverMarshalJSON(t *testing.T) {
+	rows := runInventory(t, "demo/ptr.go", `package demo
+
+type T struct{ V int }
+type U struct{ W int }
+
+func (t *T) MarshalJSON() ([]byte, error) { return nil, nil }
+func (u U) MarshalJSON() ([]byte, error)  { return nil, nil }
+`)
+	got := map[string]int{}
+	suggestion := map[string]string{}
+	for _, row := range rows {
+		got[row.Category+"|"+row.API]++
+		if row.Category == "review" {
+			suggestion[row.API] = row.Suggestion
+		}
+	}
+	// Only the pointer receiver gets the addressability review row.
+	if got["review|MarshalJSON"] != 1 {
+		t.Errorf("expected one review|MarshalJSON (pointer receiver only), got %d (all: %v)", got["review|MarshalJSON"], got)
+	}
+	if !strings.Contains(suggestion["MarshalJSON"], "non-addressable") {
+		t.Errorf("review suggestion should mention non-addressable, got %q", suggestion["MarshalJSON"])
+	}
+	// Both still get the modernize (MarshalerTo) row.
+	if got["modernize|MarshalJSON"] != 2 {
+		t.Errorf("expected two modernize|MarshalJSON, got %d (all: %v)", got["modernize|MarshalJSON"], got)
+	}
+}
+
+// A plain named byte slice ([]MyByte) is base64 in v1 but a number array in v2.
+// But one whose element implements a JSON marshaler is NOT flagged: v2 honors the
+// marshaler exactly like v1, so there is no divergence. A plain []byte is also
+// unaffected.
+func TestFindEncodingJsonUsageNamedByteSlice(t *testing.T) {
+	rows := runInventory(t, "demo/nb.go", strings.ReplaceAll(`package demo
+
+import "encoding/json"
+
+type MyByte byte
+
+type Marshaled byte
+
+func (m Marshaled) MarshalJSON() ([]byte, error) { return nil, nil }
+
+type T struct {
+	Data []MyByte
+	Enc  []Marshaled
+	Raw  []byte
+}
+
+var _ = json.Marshal
+`, "@", "`"))
+	got := map[string]string{}
+	for _, row := range rows {
+		got[row.Category+"|"+row.API] = row.Suggestion
+	}
+	if s, ok := got["review|[]MyByte"]; !ok || !strings.Contains(s, "MigrateToJSONV2PreservingV1") {
+		t.Errorf("expected review|[]MyByte pointing at the compat bundle, got %q (present=%v)", s, ok)
+	}
+	// v2 honors the element marshaler like v1, so no divergence and no flag.
+	if _, ok := got["review|[]Marshaled"]; ok {
+		t.Errorf("a named byte slice whose element implements a marshaler should not be flagged")
+	}
+	if _, ok := got["review|[]byte"]; ok {
+		t.Errorf("a plain []byte should not be flagged as a named byte slice")
+	}
+}
+
 // Codecs reached through a parameter (not a local NewEncoder/NewDecoder) are
 // found via the method's declaring type.
 func TestFindEncodingJsonUsageIndirectCodec(t *testing.T) {
@@ -206,6 +355,85 @@ func read(dec *json.Decoder, v any)  { _ = dec.Decode(v) }
 	}
 }
 
+// v2 tightens decoding in several silent ways (case-sensitive matching drops
+// mixed-case keys; strict base64, duplicate keys, and RFC 3339 time parsing all
+// error), so the finder flags each decode entry point with those risks rather
+// than a generic note.
+func TestFindEncodingJsonUsageDecodeStrictness(t *testing.T) {
+	rows := runInventory(t, "demo/dec.go", `package demo
+
+import "encoding/json"
+
+func run(data []byte, dec *json.Decoder, v any) {
+	_, _ = json.Marshal(v)
+	_ = json.Unmarshal(data, v)
+	_ = dec.Decode(v)
+}
+`)
+	suggestion := map[string]string{}
+	for _, row := range rows {
+		suggestion[row.Category+"|"+row.API] = row.Suggestion
+	}
+	for _, k := range []string{"review|json.Unmarshal", "rewrite|json.Decoder.Decode"} {
+		for _, want := range []string{"case-sensitiv", "base64", "duplicate", "RFC 3339"} {
+			if !strings.Contains(suggestion[k], want) {
+				t.Errorf("%q should warn about %q, got %q", k, want, suggestion[k])
+			}
+		}
+	}
+	// Marshal keeps its own output-oriented message, not the decode warnings.
+	if strings.Contains(suggestion["review|json.Marshal"], "base64") {
+		t.Errorf("json.Marshal should not carry the decode warnings, got %q", suggestion["review|json.Marshal"])
+	}
+}
+
+// The finder enumerates the silent marshal-output divergences (HTML escaping, nil
+// slice/map encoding, map ordering) at each marshal site rather than a generic
+// note.
+func TestFindEncodingJsonUsageMarshalDivergences(t *testing.T) {
+	rows := runInventory(t, "demo/enc.go", `package demo
+
+import "encoding/json"
+
+func run(enc *json.Encoder, v any) {
+	_, _ = json.Marshal(v)
+	_ = enc.Encode(v)
+}
+`)
+	suggestion := map[string]string{}
+	for _, row := range rows {
+		suggestion[row.Category+"|"+row.API] = row.Suggestion
+	}
+	for _, k := range []string{"review|json.Marshal", "rewrite|json.Encoder.Encode"} {
+		s := suggestion[k]
+		if !strings.Contains(s, "HTML") || !strings.Contains(s, "nil slices") {
+			t.Errorf("%q should enumerate marshal divergences (HTML escaping, nil slices/maps), got %q", k, s)
+		}
+	}
+}
+
+// A field using the ,string tag option is flagged, since v2 changed which types
+// the option applies to.
+func TestFindEncodingJsonUsageStringTag(t *testing.T) {
+	rows := runInventory(t, "demo/str.go", strings.ReplaceAll(`package demo
+
+import "encoding/json"
+
+type T struct {
+	N int @json:",string"@
+}
+
+func run(v any) { _, _ = json.Marshal(v) }
+`, "@", "`"))
+	got := map[string]int{}
+	for _, row := range rows {
+		got[row.Category+"|"+row.API]++
+	}
+	if got["review|string tag"] != 1 {
+		t.Errorf("expected one review row for the ,string tag, got %d (all: %v)", got["review|string tag"], got)
+	}
+}
+
 // Dot-imported package functions carry no `json.` qualifier and are found via
 // the declaring type.
 func TestFindEncodingJsonUsageDotImport(t *testing.T) {
@@ -222,7 +450,7 @@ func run(v any) {
 	for _, row := range rows {
 		got[row.Category+"|"+row.API]++
 	}
-	for _, k := range []string{"review|json.Marshal", "rewrite|json.Valid"} {
+	for _, k := range []string{"review|json.Marshal", "review|json.Valid"} {
 		if got[k] != 1 {
 			t.Errorf("expected %q once, got %d (all: %v)", k, got[k], got)
 		}
@@ -249,7 +477,7 @@ func use(m Marshaler, enc *Encoder) {
 	for _, row := range rows {
 		got[row.Category+"|"+row.API]++
 	}
-	want := []string{"review|json.RawMessage", "modernize|json.Marshaler", "rewrite|json.Encoder", "review|json.Number"}
+	want := []string{"rewrite|json.RawMessage", "modernize|json.Marshaler", "rewrite|json.Encoder", "review|json.Number"}
 	for _, k := range want {
 		if got[k] != 1 {
 			t.Errorf("expected %q once, got %d (all: %v)", k, got[k], got)
@@ -266,6 +494,7 @@ import "time"
 type Config struct {
 	When  time.Time @json:",omitempty"@
 	Count int       @json:",omitempty"@
+	Name  string    @json:",omitempty"@
 }
 `, "@", "`"))
 
@@ -278,7 +507,12 @@ type Config struct {
 	if s := byField["Config.When"]; !strings.Contains(s, "known divergence") {
 		t.Errorf("time.Time omitempty suggestion = %q, want it to flag a known divergence", s)
 	}
-	if s := byField["Config.Count"]; !strings.Contains(s, "primitive") {
-		t.Errorf("int omitempty suggestion = %q, want it to note a primitive is unaffected", s)
+	// A bool/number field is the primary omitempty divergence (v2 keeps false/0).
+	if s := byField["Config.Count"]; !strings.Contains(s, "omitzero") {
+		t.Errorf("int omitempty suggestion = %q, want it to flag the divergence and omitzero", s)
+	}
+	// A string field is unaffected.
+	if s := byField["Config.Name"]; !strings.Contains(s, "unaffected") {
+		t.Errorf("string omitempty suggestion = %q, want it to note a string is unaffected", s)
 	}
 }

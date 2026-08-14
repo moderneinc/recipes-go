@@ -52,7 +52,7 @@ func (r *FindEncodingJsonUsage) DisplayName() string {
 	return "Find `encoding/json` usage for the v2 migration"
 }
 func (r *FindEncodingJsonUsage) Description() string {
-	return "Inventory every `encoding/json` (v1) touchpoint that an `encoding/json/v2` migration must address: the import, package functions, `Encoder`/`Decoder` and other type methods (resolved through the type system, so receivers reached via variables, parameters, or fields are all found), exported types, `[N]byte`/`time.Duration` struct fields, `omitempty` tags classified by field type, and custom `MarshalJSON`/`UnmarshalJSON` implementations. Findings populate a data table categorized as import, rewrite, review, or modernize. This recipe reports only and does not modify code."
+	return "Inventory every `encoding/json` (v1) touchpoint that an `encoding/json/v2` migration must address: the import, package functions, `Encoder`/`Decoder` and other type methods (resolved through the type system, so receivers reached via variables, parameters, or fields are all found), exported types, `[N]byte`/`time.Duration` struct fields, `omitempty` and `,string` tags, and custom `MarshalJSON`/`UnmarshalJSON` implementations. Findings populate a data table categorized as import, rewrite, review, or modernize. This recipe reports only and does not modify code."
 }
 func (r *FindEncodingJsonUsage) Tags() []string { return []string{"migration", "json"} }
 
@@ -66,16 +66,102 @@ func (r *FindEncodingJsonUsage) Editor() recipe.TreeVisitor {
 
 type findEncodingJsonUsageVisitor struct {
 	visitor.GoVisitor
-	sourcePath   string
-	jsonPkg      string
-	currentType  string
-	insideStruct int
+	sourcePath     string
+	jsonPkg        string
+	currentType    string
+	insideStruct   int
+	namedByteTypes map[string]bool // file-local `type X byte` names, for []X detection
 }
 
 func (v *findEncodingJsonUsageVisitor) VisitCompilationUnit(cu *golang.CompilationUnit, p any) java.J {
 	v.sourcePath = cu.SourcePath
 	v.jsonPkg = localJsonPackage(cu)
+	v.namedByteTypes = collectNamedByteTypes(cu)
 	return v.GoVisitor.VisitCompilationUnit(cu, p)
+}
+
+func (v *findEncodingJsonUsageVisitor) VisitGoMethodDeclaration(md *golang.MethodDeclaration, p any) java.J {
+	// A pointer-receiver MarshalJSON/UnmarshalJSON is called for more values in v2
+	// than v1, which skipped it on non-addressable map/interface elements.
+	if md.Declaration != nil && md.Declaration.Name != nil && receiverIsPointer(md) {
+		switch md.Declaration.Name.Name {
+		case "MarshalJSON", "UnmarshalJSON":
+			v.insertRow(p, "review", md.Declaration.Name.Name, "",
+				"pointer-receiver method: v2 always calls it, but v1 skipped it for non-addressable values (map/interface elements), so their marshaled output changes")
+		}
+	}
+	return v.GoVisitor.VisitGoMethodDeclaration(md, p)
+}
+
+// Reports whether a Go method has a pointer receiver, e.g. func (t *T) M().
+func receiverIsPointer(md *golang.MethodDeclaration) bool {
+	for _, e := range md.Receiver.Elements {
+		if vd, ok := e.Element.(*java.VariableDeclarations); ok {
+			if _, ok := vd.TypeExpr.(*golang.PointerType); ok {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+// Collects file-local names declared as `type X byte` or `type X uint8` whose
+// []X slices diverge (base64 in v1, number array in v2), excluding any that
+// implement a JSON marshaler: v2 honors the element marshaler exactly like v1, so
+// those do not diverge. Cross-file named byte types are not resolved, since the
+// type system does not expose the underlying.
+func collectNamedByteTypes(cu *golang.CompilationUnit) map[string]bool {
+	scan := visitor.Init(&namedByteTypeScan{byteTypes: map[string]bool{}, marshalers: map[string]bool{}})
+	scan.Visit(cu, nil)
+	for name := range scan.marshalers {
+		delete(scan.byteTypes, name)
+	}
+	return scan.byteTypes
+}
+
+type namedByteTypeScan struct {
+	visitor.GoVisitor
+	byteTypes  map[string]bool
+	marshalers map[string]bool
+}
+
+func (s *namedByteTypeScan) VisitTypeDecl(td *golang.TypeDecl, p any) java.J {
+	if td.Name != nil {
+		if id, ok := td.Definition.(*java.Identifier); ok && (id.Name == "byte" || id.Name == "uint8") {
+			s.byteTypes[td.Name.Name] = true
+		}
+	}
+	return s.GoVisitor.VisitTypeDecl(td, p)
+}
+
+func (s *namedByteTypeScan) VisitGoMethodDeclaration(md *golang.MethodDeclaration, p any) java.J {
+	if md.Declaration != nil && md.Declaration.Name != nil {
+		switch md.Declaration.Name.Name {
+		case "MarshalJSON", "MarshalJSONTo":
+			if name := receiverBaseTypeName(md); name != "" {
+				s.marshalers[name] = true
+			}
+		}
+	}
+	return s.GoVisitor.VisitGoMethodDeclaration(md, p)
+}
+
+// Returns a Go method's receiver base type name, stripping a pointer: "T" for
+// both (t *T) and (t T).
+func receiverBaseTypeName(md *golang.MethodDeclaration) string {
+	for _, e := range md.Receiver.Elements {
+		if vd, ok := e.Element.(*java.VariableDeclarations); ok {
+			switch te := vd.TypeExpr.(type) {
+			case *java.Identifier:
+				return te.Name
+			case *golang.PointerType:
+				if id, ok := te.Elem.(*java.Identifier); ok {
+					return id.Name
+				}
+			}
+		}
+	}
+	return ""
 }
 
 func (v *findEncodingJsonUsageVisitor) VisitImport(imp *java.Import, p any) java.J {
@@ -156,7 +242,7 @@ func (v *findEncodingJsonUsageVisitor) VisitVariableDeclarations(vd *java.Variab
 	// A bare (unqualified) type identifier resolving to encoding/json is a
 	// dot-imported type reference at a var, field, or parameter position.
 	// Qualified references are FieldAccess nodes handled in VisitFieldAccess.
-	if name, ok := bareJsonTypeName(vd.TypeExpr); ok {
+	if name, ok := bareJsonTypeName(vd.TypeExpr, v.jsonPkg == "."); ok {
 		category, suggestion := classifyJsonType(name)
 		v.insertRow(p, category, "json."+name, "", suggestion)
 	}
@@ -171,6 +257,13 @@ func (v *findEncodingJsonUsageVisitor) VisitVariableDeclarations(vd *java.Variab
 			for _, field := range fieldNames(vd) {
 				v.insertRow(p, "review", fieldType, qualifyField(v.currentType, field),
 					"encodes as a base64 string in v2; add json:\",format:array\" to keep v1 output")
+			}
+		}
+	} else if at, ok := vd.TypeExpr.(*java.ArrayType); ok {
+		if elem, ok := at.ElementType.(*java.Identifier); ok && v.namedByteTypes[elem.Name] {
+			for _, field := range fieldNames(vd) {
+				v.insertRow(p, "review", "[]"+elem.Name, qualifyField(v.currentType, field),
+					"a named byte slice is base64 in v1 but a number array in v2, and no per-field format tag applies; use MigrateToJSONV2PreservingV1 to keep the v1 base64 output")
 			}
 		}
 	} else if fa, ok := vd.TypeExpr.(*java.FieldAccess); ok {
@@ -189,6 +282,17 @@ func (v *findEncodingJsonUsageVisitor) VisitVariableDeclarations(vd *java.Variab
 				continue
 			}
 			v.insertRow(p, "review", "omitempty tag", qualifyField(v.currentType, d.Name.Name), classifyOmitempty(d.Name.Type))
+		}
+	}
+
+	if hasJsonTagOption(vd, "string") {
+		for _, decl := range vd.Variables {
+			d := decl.Element
+			if d == nil || d.Name == nil {
+				continue
+			}
+			v.insertRow(p, "review", "string tag", qualifyField(v.currentType, d.Name.Name),
+				"the ,string option changed scope in v2: it stringifies only numbers (recursing into composites) and no longer quotes bool or string; preserve v1 with MigrateToJSONV2PreservingV1")
 		}
 	}
 	return vd
@@ -219,8 +323,10 @@ func (v *findEncodingJsonUsageVisitor) insertRow(p any, category, api, detail, s
 // classifyJsonFunc categorizes an encoding/json package function by name.
 func classifyJsonFunc(name string) (category, suggestion string, ok bool) {
 	switch name {
-	case "Marshal", "Unmarshal":
-		return "review", "defaults differ in v2; pass json.DefaultOptionsV1() for byte-identical output", true
+	case "Marshal":
+		return "review", "output defaults differ in v2: HTML and JS (U+2028/U+2029) escaping is off, nil slices/maps encode as [] and {} (not null), map keys are unordered, and invalid UTF-8 now errors; migrate with MigrateToJSONV2PreservingV1 to keep v1 output", true
+	case "Unmarshal":
+		return "review", "v2 tightens decoding, rejecting or dropping inputs v1 accepted: case-sensitive member matching (mixed-case keys silently dropped; json:\",case:ignore\" loosens it but also ignores -/_), stricter base64 []byte, duplicate object keys, strict RFC 3339 time.Time parsing, and array-length mismatches now error; preserve v1 exactly with MigrateToJSONV2PreservingV1", true
 	case "MarshalIndent":
 		return "rewrite", "removed in v2; use json.Marshal with jsontext.WithIndent and jsontext.WithIndentPrefix", true
 	case "NewEncoder":
@@ -228,13 +334,13 @@ func classifyJsonFunc(name string) (category, suggestion string, ok bool) {
 	case "NewDecoder":
 		return "rewrite", "moves to jsontext.NewDecoder; decode via json.UnmarshalDecode", true
 	case "Indent":
-		return "rewrite", "removed in v2; use jsontext.Value.Indent", true
+		return "review", "removed in v2; reformat with jsontext.AppendFormat(dst, src, jsontext.WithIndentPrefix(prefix), jsontext.WithIndent(indent)) or jsontext.Value.Indent; operates on []byte, not *bytes.Buffer, and the prefix must be whitespace", true
 	case "Compact":
-		return "rewrite", "removed in v2; use jsontext.Value.Compact", true
+		return "review", "removed in v2; reformat with jsontext.AppendFormat(dst, src) or jsontext.Value.Compact; operates on []byte, not *bytes.Buffer", true
 	case "HTMLEscape":
-		return "rewrite", "removed in v2; use the jsontext.EscapeForHTML option", true
+		return "review", "removed in v2 with no byte-for-byte equivalent (v1 escapes without reformatting); apply the jsontext.EscapeForHTML option where the JSON is encoded", true
 	case "Valid":
-		return "rewrite", "removed in v2; validate via jsontext", true
+		return "review", "removed in v2; use jsontext.Value(data).IsValid()", true
 	}
 	return "", "", false
 }
@@ -243,7 +349,7 @@ func classifyJsonFunc(name string) (category, suggestion string, ok bool) {
 func classifyEncoderMethod(name string) (category, suggestion string) {
 	switch name {
 	case "Encode":
-		return "rewrite", "encode via json.MarshalEncode(enc, v) in v2"
+		return "rewrite", "encode via json.MarshalEncode(enc, v); output defaults differ (HTML/JS escaping off, nil slices/maps as []/{}, unordered map keys, invalid UTF-8 errors)"
 	case "SetIndent":
 		return "rewrite", "configure indentation via the jsontext.WithIndent option in v2"
 	case "SetEscapeHTML":
@@ -256,7 +362,7 @@ func classifyEncoderMethod(name string) (category, suggestion string) {
 func classifyDecoderMethod(name string) (category, suggestion string) {
 	switch name {
 	case "Decode":
-		return "rewrite", "decode via json.UnmarshalDecode(dec, &v) in v2"
+		return "rewrite", "decode via json.UnmarshalDecode(dec, &v); v2 tightens decoding: case-sensitive matching drops mixed-case keys (case:ignore over-loosens), and stricter base64, duplicate keys, RFC 3339 time, and array-length mismatch all error"
 	case "DisallowUnknownFields":
 		return "review", "use the json.RejectUnknownMembers option in v2"
 	case "UseNumber":
@@ -272,20 +378,24 @@ func classifyDecoderMethod(name string) (category, suggestion string) {
 func classifyJsonType(name string) (category, suggestion string) {
 	switch name {
 	case "RawMessage":
-		return "review", "supported in v2; review deferred-parsing semantics"
+		return "rewrite", "the raw JSON type moves to jsontext.Value in v2"
 	case "Number":
-		return "review", "review numeric handling; v2 tightens parsing and adds StringifyNumbers"
+		return "review", "v2 has no Number type; keep encoding/json.Number (it implements the v2 marshaler interfaces), or unmarshal a jsontext.Value / use the StringifyNumbers option for raw numbers"
 	case "Encoder", "Decoder":
 		return "rewrite", "the streaming type moves to jsontext in v2"
 	case "Marshaler":
 		return "modernize", "consider the streaming MarshalerTo interface (MarshalJSONTo) in v2"
 	case "Unmarshaler":
 		return "modernize", "consider the streaming UnmarshalerFrom interface (UnmarshalJSONFrom) in v2"
-	case "Token", "Delim":
-		return "review", "streaming token API; verify jsontext token equivalents in v2"
-	case "SyntaxError", "UnmarshalTypeError", "UnsupportedTypeError", "UnsupportedValueError",
+	case "Token":
+		return "review", "the streaming token type moves to jsontext.Token in v2 (a concrete struct, replacing v1's any)"
+	case "Delim":
+		return "review", "json.Delim (object/array delimiters) maps to jsontext.Kind in v2"
+	case "SyntaxError":
+		return "review", "malformed-JSON errors move to jsontext.SyntacticError in v2"
+	case "UnmarshalTypeError", "UnsupportedTypeError", "UnsupportedValueError",
 		"InvalidUnmarshalError", "MarshalerError", "InvalidUTF8Error", "UnmarshalFieldError":
-		return "review", "error type; verify error types and handling in v2"
+		return "review", "v2 reports type and value errors as jsonv2.SemanticError; match on that instead"
 	}
 	return "review", "encoding/json reference; verify against the v2 API"
 }
@@ -301,30 +411,46 @@ func classifyOmitempty(fieldType java.JavaType) string {
 		}
 		return base + "; the named type " + fq.GetFullyQualifiedName() + " may diverge (structs and custom marshalers), verify and consider omitzero"
 	}
-	if _, ok := fieldType.(*java.JavaTypePrimitive); ok {
-		return base + ", but a primitive field is unaffected"
+	if pr, ok := fieldType.(*java.JavaTypePrimitive); ok {
+		if pr.Keyword == "String" {
+			return base + ", but a string field is unaffected (both omit \"\")"
+		}
+		return base + "; a bool or number field diverges (v2 keeps false/0), switch to omitzero"
 	}
 	return base + "; verify this field and consider omitzero"
 }
 
-// bareJsonTypeName returns the encoding/json type named by a bare (unqualified)
-// type identifier, unwrapping a single pointer. Bare json identifiers only
-// occur under a dot import; qualified references are FieldAccess nodes.
-func bareJsonTypeName(expr java.Expression) (string, bool) {
+// The v1 encoding/json types whose jsonv2 definitions are aliases into other
+// packages, which the type system leaves unresolved, so a v1 dot import detects
+// them by name rather than through type attribution.
+var jsonV2AliasTypeNames = map[string]bool{
+	"RawMessage":  true,
+	"Marshaler":   true,
+	"Unmarshaler": true,
+}
+
+// Returns the encoding/json type named by a bare (unqualified) type identifier,
+// unwrapping a single pointer. Bare json identifiers only occur under a dot
+// import; qualified references are FieldAccess nodes. Concrete types resolve
+// through the type system, while the RawMessage/Marshaler/Unmarshaler aliases
+// come back unresolved and are matched by name under a v1 dot import.
+func bareJsonTypeName(expr java.Expression, dotImportsV1 bool) (string, bool) {
 	if pt, ok := expr.(*golang.PointerType); ok {
 		expr = pt.Elem
 	}
 	id, ok := expr.(*java.Identifier)
-	if !ok || id.Type == nil {
-		return "", false
-	}
-	fq, ok := id.Type.(java.FullyQualified)
 	if !ok {
 		return "", false
 	}
-	const prefix = "encoding/json."
-	if name := fq.GetFullyQualifiedName(); strings.HasPrefix(name, prefix) {
-		return strings.TrimPrefix(name, prefix), true
+	if fq, ok := id.Type.(java.FullyQualified); ok {
+		const prefix = "encoding/json."
+		if name := fq.GetFullyQualifiedName(); strings.HasPrefix(name, prefix) {
+			return strings.TrimPrefix(name, prefix), true
+		}
+		return "", false
+	}
+	if dotImportsV1 && jsonV2AliasTypeNames[id.Name] {
+		return id.Name, true
 	}
 	return "", false
 }
@@ -351,6 +477,12 @@ func selectIdentName(mi *java.MethodInvocation) string {
 
 // hasOmitemptyTag reports whether a struct field carries `json:"...,omitempty"`.
 func hasOmitemptyTag(vd *java.VariableDeclarations) bool {
+	return hasJsonTagOption(vd, "omitempty")
+}
+
+// Reports whether a struct field's `json:"..."` tag carries the given option,
+// which follows the JSON name in the comma-separated tag value.
+func hasJsonTagOption(vd *java.VariableDeclarations, option string) bool {
 	for _, ann := range vd.LeadingAnnotations {
 		id, ok := ann.AnnotationType.(*java.Identifier)
 		if !ok || id.Name != "json" || ann.Arguments == nil {
@@ -362,8 +494,8 @@ func hasOmitemptyTag(vd *java.VariableDeclarations) bool {
 				continue
 			}
 			value, _ := lit.Value.(string)
-			for _, opt := range strings.Split(value, ",") {
-				if opt == "omitempty" {
+			for i, opt := range strings.Split(value, ",") {
+				if i > 0 && opt == option {
 					return true
 				}
 			}
