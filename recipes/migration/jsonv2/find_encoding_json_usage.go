@@ -314,8 +314,11 @@ func classifyOmitempty(fieldType java.JavaType) string {
 		}
 		return base + "; the named type " + fq.GetFullyQualifiedName() + " may diverge (structs and custom marshalers), verify and consider omitzero"
 	}
-	if _, ok := fieldType.(*java.JavaTypePrimitive); ok {
-		return base + ", but a primitive field is unaffected"
+	if pr, ok := fieldType.(*java.JavaTypePrimitive); ok {
+		if pr.Keyword == "String" {
+			return base + ", but a string field is unaffected (both omit \"\")"
+		}
+		return base + "; a bool or number field diverges (v2 keeps false/0), switch to omitzero"
 	}
 	return base + "; verify this field and consider omitzero"
 }

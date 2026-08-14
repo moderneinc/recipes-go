@@ -391,6 +391,7 @@ import "time"
 type Config struct {
 	When  time.Time @json:",omitempty"@
 	Count int       @json:",omitempty"@
+	Name  string    @json:",omitempty"@
 }
 `, "@", "`"))
 
@@ -403,7 +404,12 @@ type Config struct {
 	if s := byField["Config.When"]; !strings.Contains(s, "known divergence") {
 		t.Errorf("time.Time omitempty suggestion = %q, want it to flag a known divergence", s)
 	}
-	if s := byField["Config.Count"]; !strings.Contains(s, "primitive") {
-		t.Errorf("int omitempty suggestion = %q, want it to note a primitive is unaffected", s)
+	// A bool/number field is the primary omitempty divergence (v2 keeps false/0).
+	if s := byField["Config.Count"]; !strings.Contains(s, "omitzero") {
+		t.Errorf("int omitempty suggestion = %q, want it to flag the divergence and omitzero", s)
+	}
+	// A string field is unaffected.
+	if s := byField["Config.Name"]; !strings.Contains(s, "unaffected") {
+		t.Errorf("string omitempty suggestion = %q, want it to note a string is unaffected", s)
 	}
 }
