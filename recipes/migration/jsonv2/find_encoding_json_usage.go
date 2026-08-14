@@ -252,7 +252,7 @@ func (v *findEncodingJsonUsageVisitor) VisitVariableDeclarations(vd *java.Variab
 	}
 
 	if at, ok := vd.TypeExpr.(*golang.ArrayType); ok {
-		if elem, ok := at.ElementType.(*java.Identifier); ok && elem.Name == "byte" {
+		if elem, ok := at.ElementType.(*java.Identifier); ok && elem.Name == "byte" && !hasJsonFormatOption(vd) {
 			fieldType := "[" + arrayLengthText(at) + "]byte"
 			for _, field := range fieldNames(vd) {
 				v.insertRow(p, "review", fieldType, qualifyField(v.currentType, field),
@@ -267,7 +267,7 @@ func (v *findEncodingJsonUsageVisitor) VisitVariableDeclarations(vd *java.Variab
 			}
 		}
 	} else if fa, ok := vd.TypeExpr.(*java.FieldAccess); ok {
-		if pkg, ok := fa.Target.(*java.Identifier); ok && pkg.Name == "time" && fa.Name.Element.Name == "Duration" {
+		if pkg, ok := fa.Target.(*java.Identifier); ok && pkg.Name == "time" && fa.Name.Element.Name == "Duration" && !hasJsonFormatOption(vd) {
 			for _, field := range fieldNames(vd) {
 				v.insertRow(p, "review", "time.Duration", qualifyField(v.currentType, field),
 					"representation changes in v2; add json:\",format:nano\" to keep v1 output")

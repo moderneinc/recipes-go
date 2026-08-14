@@ -72,7 +72,7 @@ mod run . --recipe org.openrewrite.golang.codequality.SimplifyBooleanExpression
 
 ## Overview
 
-**214 recipes** across 7 categories with **805 tests**.
+**215 recipes** across 7 categories with **810 tests**.
 
 | Category | Recipes | Description |
 |---|---|---|
@@ -80,7 +80,7 @@ mod run . --recipe org.openrewrite.golang.codequality.SimplifyBooleanExpression
 | **Simplification** | 58 | Modernize code with newer stdlib APIs, simplify expressions, migrate deprecated APIs |
 | **Error Handling** | 28 | `errors.Is`/`errors.As` migration, error wrapping, sentinel extraction |
 | **Redundancy** | 23 | Remove dead code, redundant operations, unreachable statements |
-| **Migration** | 21 | Go version and go.mod upgrades, encoding/json/v2 migration scoping and rewrites |
+| **Migration** | 22 | Go version and go.mod upgrades, encoding/json/v2 migration scoping and rewrites |
 | **Performance** | 16 | Loop optimizations, allocation hoisting, format string improvements |
 | **Naming** | 9 | Receiver names, stuttering, constants, getter prefixes, error variables |
 
@@ -138,6 +138,7 @@ mod run . --recipe org.openrewrite.golang.codequality.SimplifyBooleanExpression
 
 - **encoding/json/v2 migration scoping**: One report cataloguing every `encoding/json` touchpoint (import, package functions, type-resolved `Encoder`/`Decoder` method calls, exported types, `[N]byte`/`time.Duration` fields, `omitempty` tags, custom `MarshalJSON` implementations) into a data table categorized as import, rewrite, review, or modernize
 - **encoding/json/v2 mechanical migration**: Rewrite the mechanical `encoding/json` idioms to `encoding/json/v2` and swap the import, either construct by construct (`MigrateStreamingEncodeDecode` for streaming chains, `ReplaceMarshalIndent`, `RelocateEncoderDecoderTypes` for local encoders/decoders, `RelocateRawMessage` for `RawMessage` fields, `MigrateImportOnlyToJSONV2` for files whose usage already exists in v2) or all at once via the `MigrateToJSONV2` bundle, adopting v2 semantics, applied per file only when the import can be swapped without stranding a v1 symbol that v2 removed. For a low-disruption migration that keeps v1 behavior (byte-identical marshal output, and unchanged decode semantics), use the opt-in `MigrateToJSONV2PreservingV1` bundle (or run `PreserveV1Semantics` afterwards), which appends `jsonv1.DefaultOptionsV1()` to the migrated calls
+- **encoding/json/v2 per-field format tags**: `AddV1FormatTags` pins a `time.Duration` field to `json:",format:nano"` and a fixed `[N]byte` field to `json:",format:array"`, the two struct-field types whose default v2 encoding diverges from v1, so the field encodes identically under both and `MigrateToJSONV2` migrates the file on its default path instead of leaving it for review
 - **Go version upgrades**: Bump the `go` directive across releases (1.18 through 1.26)
 - **go.mod maintenance**: Tidy, format, and reconcile `require` directives and indirect markers
 

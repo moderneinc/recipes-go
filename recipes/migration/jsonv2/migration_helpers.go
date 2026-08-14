@@ -129,10 +129,35 @@ func (s *v1CompatFieldScan) VisitStructType(st *golang.StructType, p any) java.J
 }
 
 func (s *v1CompatFieldScan) VisitVariableDeclarations(vd *java.VariableDeclarations, p any) java.J {
-	if s.insideStruct > 0 && (isDurationField(vd) || isFixedByteArrayField(vd)) {
+	if s.insideStruct > 0 && (isDurationField(vd) || isFixedByteArrayField(vd)) && !hasJsonFormatOption(vd) {
 		s.found = true
 	}
 	return s.GoVisitor.VisitVariableDeclarations(vd, p)
+}
+
+// Reports whether a struct field's json tag already pins a wire format through a
+// format: option, in which case its v2 encoding is explicitly specified and does
+// not silently diverge from v1.
+func hasJsonFormatOption(vd *java.VariableDeclarations) bool {
+	for _, ann := range vd.LeadingAnnotations {
+		id, ok := ann.AnnotationType.(*java.Identifier)
+		if !ok || id.Name != "json" || ann.Arguments == nil {
+			continue
+		}
+		for _, arg := range ann.Arguments.Elements {
+			lit, ok := arg.Element.(*java.Literal)
+			if !ok {
+				continue
+			}
+			value, _ := lit.Value.(string)
+			for i, opt := range strings.Split(value, ",") {
+				if i > 0 && strings.HasPrefix(opt, "format:") {
+					return true
+				}
+			}
+		}
+	}
+	return false
 }
 
 // Reports whether a struct field is a fixed-size [N]byte array, whose base64
