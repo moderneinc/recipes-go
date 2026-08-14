@@ -242,7 +242,7 @@ func (v *findEncodingJsonUsageVisitor) VisitVariableDeclarations(vd *java.Variab
 	// A bare (unqualified) type identifier resolving to encoding/json is a
 	// dot-imported type reference at a var, field, or parameter position.
 	// Qualified references are FieldAccess nodes handled in VisitFieldAccess.
-	if name, ok := bareJsonTypeName(vd.TypeExpr); ok {
+	if name, ok := bareJsonTypeName(vd.TypeExpr, v.jsonPkg == "."); ok {
 		category, suggestion := classifyJsonType(name)
 		v.insertRow(p, category, "json."+name, "", suggestion)
 	}
@@ -420,24 +420,37 @@ func classifyOmitempty(fieldType java.JavaType) string {
 	return base + "; verify this field and consider omitzero"
 }
 
-// bareJsonTypeName returns the encoding/json type named by a bare (unqualified)
-// type identifier, unwrapping a single pointer. Bare json identifiers only
-// occur under a dot import; qualified references are FieldAccess nodes.
-func bareJsonTypeName(expr java.Expression) (string, bool) {
+// The v1 encoding/json types whose jsonv2 definitions are aliases into other
+// packages, which the type system leaves unresolved, so a v1 dot import detects
+// them by name rather than through type attribution.
+var jsonV2AliasTypeNames = map[string]bool{
+	"RawMessage":  true,
+	"Marshaler":   true,
+	"Unmarshaler": true,
+}
+
+// Returns the encoding/json type named by a bare (unqualified) type identifier,
+// unwrapping a single pointer. Bare json identifiers only occur under a dot
+// import; qualified references are FieldAccess nodes. Concrete types resolve
+// through the type system, while the RawMessage/Marshaler/Unmarshaler aliases
+// come back unresolved and are matched by name under a v1 dot import.
+func bareJsonTypeName(expr java.Expression, dotImportsV1 bool) (string, bool) {
 	if pt, ok := expr.(*golang.PointerType); ok {
 		expr = pt.Elem
 	}
 	id, ok := expr.(*java.Identifier)
-	if !ok || id.Type == nil {
-		return "", false
-	}
-	fq, ok := id.Type.(java.FullyQualified)
 	if !ok {
 		return "", false
 	}
-	const prefix = "encoding/json."
-	if name := fq.GetFullyQualifiedName(); strings.HasPrefix(name, prefix) {
-		return strings.TrimPrefix(name, prefix), true
+	if fq, ok := id.Type.(java.FullyQualified); ok {
+		const prefix = "encoding/json."
+		if name := fq.GetFullyQualifiedName(); strings.HasPrefix(name, prefix) {
+			return strings.TrimPrefix(name, prefix), true
+		}
+		return "", false
+	}
+	if dotImportsV1 && jsonV2AliasTypeNames[id.Name] {
+		return id.Name, true
 	}
 	return "", false
 }
