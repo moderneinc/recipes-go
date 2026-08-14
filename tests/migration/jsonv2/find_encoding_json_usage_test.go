@@ -263,6 +263,66 @@ type Holder struct {
 	}
 }
 
+// A pointer-receiver MarshalJSON is flagged for review: v2 calls it for
+// non-addressable values (map/interface elements) that v1 skipped.
+func TestFindEncodingJsonUsagePointerReceiverMarshalJSON(t *testing.T) {
+	rows := runInventory(t, "demo/ptr.go", `package demo
+
+type T struct{ V int }
+type U struct{ W int }
+
+func (t *T) MarshalJSON() ([]byte, error) { return nil, nil }
+func (u U) MarshalJSON() ([]byte, error)  { return nil, nil }
+`)
+	got := map[string]int{}
+	suggestion := map[string]string{}
+	for _, row := range rows {
+		got[row.Category+"|"+row.API]++
+		if row.Category == "review" {
+			suggestion[row.API] = row.Suggestion
+		}
+	}
+	// Only the pointer receiver gets the addressability review row.
+	if got["review|MarshalJSON"] != 1 {
+		t.Errorf("expected one review|MarshalJSON (pointer receiver only), got %d (all: %v)", got["review|MarshalJSON"], got)
+	}
+	if !strings.Contains(suggestion["MarshalJSON"], "non-addressable") {
+		t.Errorf("review suggestion should mention non-addressable, got %q", suggestion["MarshalJSON"])
+	}
+	// Both still get the modernize (MarshalerTo) row.
+	if got["modernize|MarshalJSON"] != 2 {
+		t.Errorf("expected two modernize|MarshalJSON, got %d (all: %v)", got["modernize|MarshalJSON"], got)
+	}
+}
+
+// A named byte slice ([]MyByte, declared in the same file) is base64 in v1 but a
+// number array in v2; a plain []byte is unaffected and not flagged.
+func TestFindEncodingJsonUsageNamedByteSlice(t *testing.T) {
+	rows := runInventory(t, "demo/nb.go", `package demo
+
+import "encoding/json"
+
+type MyByte byte
+
+type T struct {
+	Data []MyByte
+	Raw  []byte
+}
+
+var _ = json.Marshal
+`)
+	got := map[string]string{}
+	for _, row := range rows {
+		got[row.Category+"|"+row.API] = row.Suggestion
+	}
+	if s, ok := got["review|[]MyByte"]; !ok || !strings.Contains(s, "MigrateToJSONV2PreservingV1") {
+		t.Errorf("expected review|[]MyByte pointing at the compat bundle, got %q (present=%v)", s, ok)
+	}
+	if _, ok := got["review|[]byte"]; ok {
+		t.Errorf("a plain []byte should not be flagged as a named byte slice")
+	}
+}
+
 // Codecs reached through a parameter (not a local NewEncoder/NewDecoder) are
 // found via the method's declaring type.
 func TestFindEncodingJsonUsageIndirectCodec(t *testing.T) {

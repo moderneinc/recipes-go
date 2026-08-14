@@ -66,16 +66,66 @@ func (r *FindEncodingJsonUsage) Editor() recipe.TreeVisitor {
 
 type findEncodingJsonUsageVisitor struct {
 	visitor.GoVisitor
-	sourcePath   string
-	jsonPkg      string
-	currentType  string
-	insideStruct int
+	sourcePath     string
+	jsonPkg        string
+	currentType    string
+	insideStruct   int
+	namedByteTypes map[string]bool // file-local `type X byte` names, for []X detection
 }
 
 func (v *findEncodingJsonUsageVisitor) VisitCompilationUnit(cu *golang.CompilationUnit, p any) java.J {
 	v.sourcePath = cu.SourcePath
 	v.jsonPkg = localJsonPackage(cu)
+	v.namedByteTypes = collectNamedByteTypes(cu)
 	return v.GoVisitor.VisitCompilationUnit(cu, p)
+}
+
+func (v *findEncodingJsonUsageVisitor) VisitGoMethodDeclaration(md *golang.MethodDeclaration, p any) java.J {
+	// A pointer-receiver MarshalJSON/UnmarshalJSON is called for more values in v2
+	// than v1, which skipped it on non-addressable map/interface elements.
+	if md.Declaration != nil && md.Declaration.Name != nil && receiverIsPointer(md) {
+		switch md.Declaration.Name.Name {
+		case "MarshalJSON", "UnmarshalJSON":
+			v.insertRow(p, "review", md.Declaration.Name.Name, "",
+				"pointer-receiver method: v2 always calls it, but v1 skipped it for non-addressable values (map/interface elements), so their marshaled output changes")
+		}
+	}
+	return v.GoVisitor.VisitGoMethodDeclaration(md, p)
+}
+
+// Reports whether a Go method has a pointer receiver, e.g. func (t *T) M().
+func receiverIsPointer(md *golang.MethodDeclaration) bool {
+	for _, e := range md.Receiver.Elements {
+		if vd, ok := e.Element.(*java.VariableDeclarations); ok {
+			if _, ok := vd.TypeExpr.(*golang.PointerType); ok {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+// Collects file-local names declared as `type X byte` or `type X uint8`, whose
+// []X slices are base64 in v1 but a number array in v2. Cross-file named byte
+// types are not resolved, since the type system does not expose the underlying.
+func collectNamedByteTypes(cu *golang.CompilationUnit) map[string]bool {
+	scan := visitor.Init(&namedByteTypeScan{names: map[string]bool{}})
+	scan.Visit(cu, nil)
+	return scan.names
+}
+
+type namedByteTypeScan struct {
+	visitor.GoVisitor
+	names map[string]bool
+}
+
+func (s *namedByteTypeScan) VisitTypeDecl(td *golang.TypeDecl, p any) java.J {
+	if td.Name != nil {
+		if id, ok := td.Definition.(*java.Identifier); ok && (id.Name == "byte" || id.Name == "uint8") {
+			s.names[td.Name.Name] = true
+		}
+	}
+	return s.GoVisitor.VisitTypeDecl(td, p)
 }
 
 func (v *findEncodingJsonUsageVisitor) VisitImport(imp *java.Import, p any) java.J {
@@ -171,6 +221,13 @@ func (v *findEncodingJsonUsageVisitor) VisitVariableDeclarations(vd *java.Variab
 			for _, field := range fieldNames(vd) {
 				v.insertRow(p, "review", fieldType, qualifyField(v.currentType, field),
 					"encodes as a base64 string in v2; add json:\",format:array\" to keep v1 output")
+			}
+		}
+	} else if at, ok := vd.TypeExpr.(*java.ArrayType); ok {
+		if elem, ok := at.ElementType.(*java.Identifier); ok && v.namedByteTypes[elem.Name] {
+			for _, field := range fieldNames(vd) {
+				v.insertRow(p, "review", "[]"+elem.Name, qualifyField(v.currentType, field),
+					"a named byte slice is base64 in v1 but a number array in v2, and no per-field format tag applies; use MigrateToJSONV2PreservingV1 to keep the v1 base64 output")
 			}
 		}
 	} else if fa, ok := vd.TypeExpr.(*java.FieldAccess); ok {
