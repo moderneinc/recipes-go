@@ -18,7 +18,11 @@ import (
 
 // Activate registers all Go code quality recipes with the given registry.
 func Activate(r *recipe.Registry) {
-	golang := recipe.CategoryDescriptor{DisplayName: "Go"}
+	// Matches rewrite-go's go-categories.yml so these merge into the one Go category.
+	golang := recipe.CategoryDescriptor{
+		DisplayName: "Go",
+		Description: "Recipes for the [Go](https://go.dev/) programming language.",
+	}
 	codeQuality := recipe.CategoryDescriptor{DisplayName: "Code quality", Description: "Recipes for improving Go code quality"}
 	simplify := recipe.CategoryDescriptor{DisplayName: "Simplification", Description: "Simplify expressions and patterns"}
 	redundant := recipe.CategoryDescriptor{DisplayName: "Redundancy", Description: "Remove redundant code"}
