@@ -188,6 +188,10 @@ func Activate(r *recipe.Registry) {
 	r.Register(&style.EnsureTransactionFinalized{}, golang, codeQuality, styleCategory)
 	r.Register(&style.EnsureTempCleanedUp{}, golang, codeQuality, styleCategory)
 	r.Register(&style.EnsureTickerStopped{}, golang, codeQuality, styleCategory)
+	r.Register(&style.AvoidFallthrough{}, golang, codeQuality, styleCategory)
+	r.Register(&style.EnsureHttpBodyClosed{}, golang, codeQuality, styleCategory)
+	r.Register(&style.EnsureSqlRowsClosed{}, golang, codeQuality, styleCategory)
+	r.Register(&style.EnsureTimerStopped{}, golang, codeQuality, styleCategory)
 
 	// Error handling
 	errCategory := recipe.CategoryDescriptor{DisplayName: "Error handling", Description: "Error handling best practices"}

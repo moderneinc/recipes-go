@@ -10,7 +10,7 @@ import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
-// EnsureSqlRowsClosed finds calls to `db.Query()` and inserts
+// EnsureSqlRowsClosed finds assignments of a `*sql.Rows` and inserts
 // `defer rows.Close()` after the assignment.
 type EnsureSqlRowsClosed struct {
 	recipe.Base
@@ -21,7 +21,7 @@ func (r *EnsureSqlRowsClosed) Name() string {
 }
 func (r *EnsureSqlRowsClosed) DisplayName() string { return "Ensure SQL rows closed" }
 func (r *EnsureSqlRowsClosed) Description() string {
-	return "Find calls to `db.Query`. The returned rows must be closed with `defer rows.Close()` to avoid connection leaks."
+	return "Find assignments of a `*sql.Rows`, as returned by `db.Query`. The rows must be closed with `defer rows.Close()` to avoid connection leaks."
 }
 func (r *EnsureSqlRowsClosed) Tags() []string { return []string{"style", "database/sql"} }
 
@@ -35,33 +35,9 @@ type ensureSqlRowsClosedVisitor struct {
 
 func (v *ensureSqlRowsClosedVisitor) VisitBlock(block *java.Block, p any) java.J {
 	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
-
-	var newStmts []java.RightPadded[java.Statement]
-	changed := false
-
-	for i, rp := range block.Statements {
-		newStmts = append(newStmts, rp)
-
-		if varName, ok := extractAssignedVar(rp.Element, isSqlQuery); ok {
-			if hasDeferAfter(block.Statements, i, varName, "Close") {
-				continue
-			}
-			deferStmt := buildDeferMethodCall(varName, "Close", rp.Element)
-			newStmts = append(newStmts, java.RightPadded[java.Statement]{Element: deferStmt})
-			changed = true
-		}
-	}
-
-	if changed {
-		return block.WithStatements(newStmts)
-	}
-	return block
+	return insertDeferMethodCall(block, isSqlRows, "Close")
 }
 
-// isSqlQuery returns true if the method invocation is *.Query().
-func isSqlQuery(mi *java.MethodInvocation) bool {
-	if mi.Select == nil {
-		return false
-	}
-	return mi.Name.Name == "Query"
+func isSqlRows(a acquisition) bool {
+	return typeIs(a.varType, "database/sql.Rows")
 }
