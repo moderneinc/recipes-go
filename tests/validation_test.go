@@ -187,6 +187,7 @@ func allRecipes() []recipe.Recipe {
 		&errorhandling.UseErrorMethod{},
 		&errorhandling.CheckContextError{},
 		&errorhandling.AuditMustFunction{},
+		&errorhandling.FixErrorStringFormat{},
 		&errorhandling.HandleSwallowedError{},
 
 		// Performance

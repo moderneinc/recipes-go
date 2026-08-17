@@ -80,15 +80,8 @@ func (v *auditErrorStringFormatVisitor) VisitCompilationUnit(cu *golang.Compilat
 func (v *auditErrorStringFormatVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
 	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
-	if mi.Select == nil {
-		return mi
-	}
-	ident, ok := mi.Select.Element.(*java.Identifier)
-	if !ok {
-		return mi
-	}
-	pkg, fn := ident.Name, mi.Name.Name
-	if !((pkg == "errors" && fn == "New") || (pkg == "fmt" && fn == "Errorf")) {
+	constructor := errorConstructorName(mi)
+	if constructor == "" {
 		return mi
 	}
 
@@ -112,7 +105,7 @@ func (v *auditErrorStringFormatVisitor) VisitMethodInvocation(mi *java.MethodInv
 	if ctx, ok := p.(*recipe.ExecutionContext); ok {
 		errorStringFormatTable.InsertRow(ctx, ErrorStringFormatRow{
 			SourcePath:  v.sourcePath,
-			Constructor: pkg + "." + fn,
+			Constructor: constructor,
 			Issue:       reason,
 			Message:     msg,
 		})
@@ -120,20 +113,51 @@ func (v *auditErrorStringFormatVisitor) VisitMethodInvocation(mi *java.MethodInv
 	return mi.WithMarkers(java.MarkupInfo(mi.Markers, "error string should not "+reason+" (ST1005)"))
 }
 
-// errorStringIssue reports why an error message violates ST1005, or "" if it is
-// fine. Capitalization is only flagged when the first word looks like an
-// ordinary word (leading upper followed by lower), so initialisms and proper
-// nouns like "HTTP" or "TLS" are left alone.
-func errorStringIssue(msg string) string {
-	runes := []rune(msg)
-	if len(runes) >= 2 && unicode.IsUpper(runes[0]) && unicode.IsLower(runes[1]) {
-		return "be capitalized"
+// errorConstructorName returns "errors.New" or "fmt.Errorf" for a call to
+// either, and "" for anything else.
+func errorConstructorName(mi *java.MethodInvocation) string {
+	if mi.Select == nil {
+		return ""
 	}
-	if !strings.HasSuffix(msg, "...") {
-		switch runes[len(runes)-1] {
-		case '.', ':', '!':
-			return "end with punctuation"
-		}
+	ident, ok := mi.Select.Element.(*java.Identifier)
+	if !ok {
+		return ""
+	}
+	switch name := ident.Name + "." + mi.Name.Name; name {
+	case "errors.New", "fmt.Errorf":
+		return name
 	}
 	return ""
+}
+
+// errorStringIssue reports why an error message violates ST1005, or "" if it is
+// fine.
+func errorStringIssue(msg string) string {
+	runes := []rune(msg)
+	if startsWithOrdinaryCapital(runes) {
+		return "be capitalized"
+	}
+	if endsWithPunctuation(runes) {
+		return "end with punctuation"
+	}
+	return ""
+}
+
+// A leading upper followed by a lower marks an ordinary word, so initialisms
+// and proper nouns like "HTTP" or "TLS" keep their case.
+func startsWithOrdinaryCapital(runes []rune) bool {
+	return len(runes) >= 2 && unicode.IsUpper(runes[0]) && unicode.IsLower(runes[1])
+}
+
+// An ellipsis reads as deliberate continuation, so only a lone trailing mark
+// counts as punctuation.
+func endsWithPunctuation(runes []rune) bool {
+	if len(runes) == 0 || strings.HasSuffix(string(runes), "...") {
+		return false
+	}
+	switch runes[len(runes)-1] {
+	case '.', ':', '!':
+		return true
+	}
+	return false
 }
