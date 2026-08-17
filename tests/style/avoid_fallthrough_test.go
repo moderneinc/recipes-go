@@ -11,7 +11,7 @@ import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/test"
 )
 
-func TestAvoidFallthroughRemoved(t *testing.T) {
+func TestAvoidFallthroughMarked(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&style.AvoidFallthrough{})
 	spec.RewriteRun(t,
 		test.Golang(`
@@ -33,6 +33,7 @@ func TestAvoidFallthroughRemoved(t *testing.T) {
 				switch x {
 				case 1:
 					println("one")
+					/*~~(fallthrough continues into the next case; merge or duplicate the cases instead)~~>*/fallthrough
 				case 2:
 					println("two")
 				}

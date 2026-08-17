@@ -39,6 +39,85 @@ func TestEnsureHttpBodyClosedGet(t *testing.T) {
 	)
 }
 
+func TestEnsureHttpBodyClosedClientDo(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.EnsureHttpBodyClosed{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "net/http"
+
+			func f(client *http.Client, req *http.Request) {
+				resp, err := client.Do(req)
+				_ = err
+				_ = resp
+			}
+		`, `
+			package main
+
+			import "net/http"
+
+			func f(client *http.Client, req *http.Request) {
+				resp, err := client.Do(req)
+				defer resp.Body.Close()
+				_ = err
+				_ = resp
+			}
+		`),
+	)
+}
+
+func TestEnsureHttpBodyClosedAfterErrorCheck(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.EnsureHttpBodyClosed{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "net/http"
+
+			func f() error {
+				resp, err := http.Get("http://example.com")
+				if err != nil {
+					return err
+				}
+				_ = resp
+				return nil
+			}
+		`, `
+			package main
+
+			import "net/http"
+
+			func f() error {
+				resp, err := http.Get("http://example.com")
+				if err != nil {
+					return err
+				}
+				defer resp.Body.Close()
+				_ = resp
+				return nil
+			}
+		`),
+	)
+}
+
+// Only a *http.Response has a Body to close; any other `Do` must be left alone.
+func TestEnsureHttpBodyClosedNoChangeForeignDo(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.EnsureHttpBodyClosed{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "github.com/example/retry"
+
+			func f() {
+				err := retry.Do(func() error { return nil })
+				_ = err
+			}
+		`),
+	)
+}
+
 func TestEnsureHttpBodyClosedNoChangeError(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&style.EnsureHttpBodyClosed{})
 	spec.RewriteRun(t,

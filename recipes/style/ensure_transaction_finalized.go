@@ -35,33 +35,9 @@ type ensureTransactionFinalizedVisitor struct {
 
 func (v *ensureTransactionFinalizedVisitor) VisitBlock(block *java.Block, p any) java.J {
 	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
-
-	var newStmts []java.RightPadded[java.Statement]
-	changed := false
-
-	for i, rp := range block.Statements {
-		newStmts = append(newStmts, rp)
-
-		if varName, ok := extractAssignedVar(rp.Element, isDbBegin); ok {
-			if hasDeferAfter(block.Statements, i, varName, "Rollback") {
-				continue
-			}
-			deferStmt := buildDeferMethodCall(varName, "Rollback", rp.Element)
-			newStmts = append(newStmts, java.RightPadded[java.Statement]{Element: deferStmt})
-			changed = true
-		}
-	}
-
-	if changed {
-		return block.WithStatements(newStmts)
-	}
-	return block
+	return insertDeferMethodCall(block, isSqlTx, "Rollback")
 }
 
-// isDbBegin returns true if the method invocation is *.Begin().
-func isDbBegin(mi *java.MethodInvocation) bool {
-	if mi.Select == nil {
-		return false
-	}
-	return mi.Name.Name == "Begin"
+func isSqlTx(a acquisition) bool {
+	return typeIs(a.varType, "database/sql.Tx")
 }

@@ -385,12 +385,6 @@ var unregisteredByDesign = map[string]string{
 	"org.openrewrite.golang.migration.RelocateEncoderDecoderTypes":  "composed by MigrateToJSONV2",
 	"org.openrewrite.golang.migration.RelocateRawMessage":           "composed by MigrateToJSONV2",
 	"org.openrewrite.golang.migration.ReplaceMarshalIndent":         "composed by MigrateToJSONV2",
-
-	// These produce code a customer would have to undo by hand.
-	"org.openrewrite.golang.codequality.AvoidFallthrough":     "deleting fallthrough changes what the switch does, and still compiles",
-	"org.openrewrite.golang.codequality.EnsureHttpBodyClosed": "matches any method named Do, so `err := retry.Do(f)` gains `defer err.Body.Close()`",
-	"org.openrewrite.golang.codequality.EnsureSqlRowsClosed":  "matches any method named Query, so `q := r.URL.Query()` gains `defer q.Close()`",
-	"org.openrewrite.golang.codequality.EnsureTimerStopped":   "`defer t.Stop()` on a time.AfterFunc timer cancels the callback it scheduled",
 }
 
 func TestEveryDeclaredRecipeIsRegistered(t *testing.T) {
