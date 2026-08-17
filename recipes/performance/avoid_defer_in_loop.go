@@ -6,6 +6,7 @@ package performance
 
 import (
 	"github.com/google/uuid"
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -32,6 +33,13 @@ func (r *AvoidDeferInLoop) Description() string {
 }
 
 func (r *AvoidDeferInLoop) Tags() []string { return []string{"performance"} }
+
+func (r *AvoidDeferInLoop) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "SA9001", Tool: diagnostic.Staticcheck, HasFix: true},
+		{DiagnosticID: "deferInLoop", Tool: diagnostic.GolangciLint, HasFix: true},
+	}
+}
 
 func (r *AvoidDeferInLoop) Editor() recipe.TreeVisitor {
 	return visitor.Init(&avoidDeferInLoopVisitor{})

@@ -5,6 +5,7 @@
 package style
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -24,6 +25,12 @@ func (r *EnsureSqlConnectionClosed) Description() string {
 	return "Find calls to `sql.Open`. Database connections should be managed carefully and closed when no longer needed."
 }
 func (r *EnsureSqlConnectionClosed) Tags() []string { return []string{"style", "database/sql"} }
+
+func (r *EnsureSqlConnectionClosed) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "sqlclosecheck", Tool: diagnostic.GolangciLint, HasFix: false},
+	}
+}
 
 func (r *EnsureSqlConnectionClosed) Editor() recipe.TreeVisitor {
 	return visitor.Init(&ensureSqlConnectionClosedVisitor{})

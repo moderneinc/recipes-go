@@ -5,6 +5,7 @@
 package errorhandling
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -27,6 +28,12 @@ func (r *PreferErrorsIsForFieldAccess) Description() string {
 	return "Replace `err == sentinel` with `errors.Is(err, sentinel)` where the sentinel is a package-qualified value (e.g., `sql.ErrNoRows`). Use `errors.Is` for correct wrapped error handling."
 }
 func (r *PreferErrorsIsForFieldAccess) Tags() []string { return []string{"error-handling", "lint"} }
+
+func (r *PreferErrorsIsForFieldAccess) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "errorlint", Tool: diagnostic.GolangciLint, HasFix: true},
+	}
+}
 
 func (r *PreferErrorsIsForFieldAccess) Editor() recipe.TreeVisitor {
 	return visitor.Init(&preferErrorsIsForFieldAccessVisitor{})

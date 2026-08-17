@@ -7,7 +7,6 @@ package simplification
 import (
 	"fmt"
 
-	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 )
@@ -36,12 +35,6 @@ func (r *PreferStringsContainsOverCount) Description() string {
 }
 func (r *PreferStringsContainsOverCount) Tags() []string {
 	return []string{"cleanup", "simplification"}
-}
-
-func (r *PreferStringsContainsOverCount) DiagnosticMappings() []diagnostic.Mapping {
-	return []diagnostic.Mapping{
-		{DiagnosticID: "S1003", Tool: diagnostic.Staticcheck, HasFix: true},
-	}
 }
 
 var preferStringsContainsOverCountPositive = template.NewRecipe(

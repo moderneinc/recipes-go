@@ -5,6 +5,7 @@
 package redundancy
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -24,6 +25,12 @@ func (r *RemoveEmptyLoop) Description() string {
 	return "Remove `for` loops with empty bodies that spin without doing useful work."
 }
 func (r *RemoveEmptyLoop) Tags() []string { return []string{"cleanup", "redundancy"} }
+
+func (r *RemoveEmptyLoop) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "SA5002", Tool: diagnostic.Staticcheck, HasFix: true},
+	}
+}
 
 func (r *RemoveEmptyLoop) Editor() recipe.TreeVisitor {
 	return visitor.Init(&removeEmptyLoopVisitor{})

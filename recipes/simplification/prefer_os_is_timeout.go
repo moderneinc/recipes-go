@@ -7,7 +7,6 @@ package simplification
 import (
 	"fmt"
 
-	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 )
@@ -31,12 +30,6 @@ func (r *PreferOsIsTimeout) Description() string {
 	return "Replace deprecated `os.IsTimeout(err)` with `errors.Is(err, os.ErrDeadlineExceeded)` (Go 1.16+)."
 }
 func (r *PreferOsIsTimeout) Tags() []string { return []string{"cleanup", "simplification"} }
-
-func (r *PreferOsIsTimeout) DiagnosticMappings() []diagnostic.Mapping {
-	return []diagnostic.Mapping{
-		{DiagnosticID: "SA1019", Tool: diagnostic.Staticcheck, HasFix: true},
-	}
-}
 
 var preferOsIsTimeoutImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferOsIsTimeout$Impl"),

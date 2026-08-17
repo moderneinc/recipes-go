@@ -7,7 +7,6 @@ package simplification
 import (
 	"fmt"
 
-	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 )
@@ -32,12 +31,6 @@ func (r *PreferErrorsIsForOsCheck) Description() string {
 	return "Replace deprecated `os.IsNotExist(err)` with `errors.Is(err, fs.ErrNotExist)` and `os.IsExist(err)` with `errors.Is(err, fs.ErrExist)` (Go 1.16+)."
 }
 func (r *PreferErrorsIsForOsCheck) Tags() []string { return []string{"cleanup", "simplification"} }
-
-func (r *PreferErrorsIsForOsCheck) DiagnosticMappings() []diagnostic.Mapping {
-	return []diagnostic.Mapping{
-		{DiagnosticID: "SA1019", Tool: diagnostic.Staticcheck, HasFix: true},
-	}
-}
 
 var preferErrorsIsNotExistImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferErrorsIsForOsCheck$NotExist"),

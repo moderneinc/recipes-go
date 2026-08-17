@@ -66,7 +66,7 @@ func (r *SimplifyBooleanExpression) Tags() []string { return []string{"cleanup",
 
 func (r *SimplifyBooleanExpression) DiagnosticMappings() []diagnostic.Mapping {
 	return []diagnostic.Mapping{
-		{DiagnosticID: "SA4000", Tool: diagnostic.Staticcheck, HasFix: false},
+		{DiagnosticID: "SA4000", Tool: diagnostic.Staticcheck, HasFix: true},
 	}
 }
 

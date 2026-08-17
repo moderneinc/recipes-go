@@ -5,6 +5,7 @@
 package style
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -39,6 +40,14 @@ func (r *UseRestrictiveFilePermissions) Description() string {
 	return "Replace `0777` with `0755` in `os.Chmod`, `os.MkdirAll` and `os.Mkdir`, and with `0644` in `os.WriteFile`. Overly permissive file permissions are a security risk."
 }
 func (r *UseRestrictiveFilePermissions) Tags() []string { return []string{"style", "security"} }
+
+func (r *UseRestrictiveFilePermissions) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "G301", Tool: diagnostic.GolangciLint, HasFix: false},
+		{DiagnosticID: "G302", Tool: diagnostic.GolangciLint, HasFix: false},
+		{DiagnosticID: "G306", Tool: diagnostic.GolangciLint, HasFix: false},
+	}
+}
 
 func (r *UseRestrictiveFilePermissions) Editor() recipe.TreeVisitor {
 	return visitor.Init(&useRestrictiveFilePermissionsVisitor{})

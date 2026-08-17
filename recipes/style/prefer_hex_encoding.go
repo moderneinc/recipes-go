@@ -6,6 +6,7 @@ package style
 
 import (
 	"fmt"
+	"github.com/moderneinc/recipes-go/diagnostic"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
@@ -40,6 +41,12 @@ func (r *PreferHexEncoding) Description() string {
 	return "Replace `fmt.Sprintf(\"%x\", data)` with `hex.EncodeToString(data)` for clearer intent and better performance."
 }
 func (r *PreferHexEncoding) Tags() []string { return []string{"style", "cleanup"} }
+
+func (r *PreferHexEncoding) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "perfsprint", Tool: diagnostic.GolangciLint, HasFix: true},
+	}
+}
 
 func (r *PreferHexEncoding) Editor() recipe.TreeVisitor {
 	return visitor.Init(&preferHexEncodingVisitor{})

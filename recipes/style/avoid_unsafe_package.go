@@ -5,6 +5,7 @@
 package style
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -26,6 +27,12 @@ func (r *AvoidUnsafePackage) Description() string {
 	return "Find any usage of the `unsafe` package. The unsafe package bypasses Go's type safety guarantees and should be avoided unless absolutely necessary."
 }
 func (r *AvoidUnsafePackage) Tags() []string { return []string{"security"} }
+
+func (r *AvoidUnsafePackage) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "G103", Tool: diagnostic.GolangciLint, HasFix: false},
+	}
+}
 
 func (r *AvoidUnsafePackage) Editor() recipe.TreeVisitor {
 	return visitor.Init(&avoidUnsafePackageVisitor{})

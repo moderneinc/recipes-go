@@ -29,7 +29,7 @@ func (r *SimplifySliceRange) Tags() []string { return []string{"cleanup", "simpl
 
 func (r *SimplifySliceRange) DiagnosticMappings() []diagnostic.Mapping {
 	return []diagnostic.Mapping{
-		{DiagnosticID: "S1003", Tool: diagnostic.Staticcheck, HasFix: true},
+		{DiagnosticID: "S1010", Tool: diagnostic.Staticcheck, HasFix: true},
 	}
 }
 

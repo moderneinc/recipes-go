@@ -5,6 +5,7 @@
 package redundancy
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -25,6 +26,12 @@ func (r *UseDocumentedBlankImport) Description() string {
 	return "Find blank imports (`import _ \"pkg\"`). Blank imports are used for side effects and should be documented."
 }
 func (r *UseDocumentedBlankImport) Tags() []string { return []string{"cleanup", "redundancy"} }
+
+func (r *UseDocumentedBlankImport) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "blank-imports", Tool: diagnostic.GolangciLint, HasFix: true},
+	}
+}
 
 func (r *UseDocumentedBlankImport) Editor() recipe.TreeVisitor {
 	return visitor.Init(&useDocumentedBlankImportVisitor{})

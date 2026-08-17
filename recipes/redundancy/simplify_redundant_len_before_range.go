@@ -5,6 +5,7 @@
 package redundancy
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"strings"
 
 	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
@@ -31,6 +32,12 @@ func (r *SimplifyRedundantLenBeforeRange) Description() string {
 }
 func (r *SimplifyRedundantLenBeforeRange) Tags() []string {
 	return []string{"cleanup", "redundancy"}
+}
+
+func (r *SimplifyRedundantLenBeforeRange) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "S1031", Tool: diagnostic.Staticcheck, HasFix: true},
+	}
 }
 
 func (r *SimplifyRedundantLenBeforeRange) Editor() recipe.TreeVisitor {

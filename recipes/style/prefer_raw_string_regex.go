@@ -5,6 +5,7 @@
 package style
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"strconv"
 	"strings"
 
@@ -37,6 +38,12 @@ func (r *PreferRawStringForRegex) Description() string {
 	return "Replace interpreted string literals containing backslash escapes with raw string literals in `regexp.Compile` or `regexp.MustCompile` calls."
 }
 func (r *PreferRawStringForRegex) Tags() []string { return []string{"style"} }
+
+func (r *PreferRawStringForRegex) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "S1007", Tool: diagnostic.Staticcheck, HasFix: true},
+	}
+}
 
 func (r *PreferRawStringForRegex) Editor() recipe.TreeVisitor {
 	return visitor.Init(&preferRawStringRegexVisitor{})

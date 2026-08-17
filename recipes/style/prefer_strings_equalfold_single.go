@@ -6,6 +6,7 @@ package style
 
 import (
 	"fmt"
+	"github.com/moderneinc/recipes-go/diagnostic"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
@@ -35,6 +36,12 @@ func (r *PreferStringsEqualFoldSingle) Description() string {
 }
 func (r *PreferStringsEqualFoldSingle) Tags() []string {
 	return []string{"cleanup", "simplification"}
+}
+
+func (r *PreferStringsEqualFoldSingle) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "SA6005", Tool: diagnostic.Staticcheck, HasFix: true},
+	}
 }
 
 // strings.ToLower(s) == t -> strings.EqualFold(s, t)

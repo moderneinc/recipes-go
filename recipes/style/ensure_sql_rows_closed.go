@@ -5,6 +5,7 @@
 package style
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -24,6 +25,12 @@ func (r *EnsureSqlRowsClosed) Description() string {
 	return "Find assignments of a `*sql.Rows`, as returned by `db.Query`. The rows must be closed with `defer rows.Close()` to avoid connection leaks."
 }
 func (r *EnsureSqlRowsClosed) Tags() []string { return []string{"style", "database/sql"} }
+
+func (r *EnsureSqlRowsClosed) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "sqlclosecheck", Tool: diagnostic.GolangciLint, HasFix: false},
+	}
+}
 
 func (r *EnsureSqlRowsClosed) Editor() recipe.TreeVisitor {
 	return visitor.Init(&ensureSqlRowsClosedVisitor{})

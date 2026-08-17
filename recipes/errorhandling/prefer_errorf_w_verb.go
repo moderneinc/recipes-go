@@ -5,6 +5,7 @@
 package errorhandling
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"strings"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
@@ -29,6 +30,12 @@ func (r *PreferErrorfWrapVerb) Description() string {
 	return "Replace `%s` with `%w` in `fmt.Errorf` format strings when the corresponding argument is an error, to preserve the error chain."
 }
 func (r *PreferErrorfWrapVerb) Tags() []string { return []string{"errorhandling", "lint"} }
+
+func (r *PreferErrorfWrapVerb) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "errorlint", Tool: diagnostic.GolangciLint, HasFix: true},
+	}
+}
 
 func (r *PreferErrorfWrapVerb) Editor() recipe.TreeVisitor {
 	return visitor.Init(&preferErrorfWrapVerbVisitor{})

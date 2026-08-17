@@ -5,6 +5,7 @@
 package simplification
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"strings"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
@@ -29,6 +30,12 @@ func (r *SimplifySingleCaseSelect) Description() string {
 	return "Replace `select` statements with a single case and no default with the channel operation directly."
 }
 func (r *SimplifySingleCaseSelect) Tags() []string { return []string{"simplification", "cleanup"} }
+
+func (r *SimplifySingleCaseSelect) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "S1000", Tool: diagnostic.Staticcheck, HasFix: true},
+	}
+}
 
 func (r *SimplifySingleCaseSelect) Editor() recipe.TreeVisitor {
 	return visitor.Init(&findSingleCaseSelectVisitor{})

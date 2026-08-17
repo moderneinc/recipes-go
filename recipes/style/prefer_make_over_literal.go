@@ -34,12 +34,6 @@ func (r *PreferMakeForEmptyMap) Description() string {
 }
 func (r *PreferMakeForEmptyMap) Tags() []string { return []string{"style"} }
 
-func (r *PreferMakeForEmptyMap) DiagnosticMappings() []diagnostic.Mapping {
-	return []diagnostic.Mapping{
-		{DiagnosticID: "emptyMapLiteral", Tool: diagnostic.GolangciLint, HasFix: false},
-	}
-}
-
 // Note: This pattern requires matching composite literals with type expressions,
 // which the current template system doesn't support well for generic map types.
 // Keeping as a search-only placeholder for now.

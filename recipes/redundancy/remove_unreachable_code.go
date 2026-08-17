@@ -5,6 +5,7 @@
 package redundancy
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -25,6 +26,12 @@ func (r *RemoveUnreachableCode) Description() string {
 	return "Remove statements after a `return` in the same block which are unreachable."
 }
 func (r *RemoveUnreachableCode) Tags() []string { return []string{"cleanup", "redundancy", "lint"} }
+
+func (r *RemoveUnreachableCode) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "unreachable", Tool: diagnostic.GoVet, HasFix: true},
+	}
+}
 
 func (r *RemoveUnreachableCode) Editor() recipe.TreeVisitor {
 	return visitor.Init(&removeUnreachableCodeVisitor{})

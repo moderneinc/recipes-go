@@ -5,6 +5,7 @@
 package redundancy
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -29,6 +30,12 @@ func (r *RemoveRedundantInterfaceAssertion) Description() string {
 }
 func (r *RemoveRedundantInterfaceAssertion) Tags() []string {
 	return []string{"cleanup", "redundancy"}
+}
+
+func (r *RemoveRedundantInterfaceAssertion) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "S1040", Tool: diagnostic.Staticcheck, HasFix: true},
+	}
 }
 
 func (r *RemoveRedundantInterfaceAssertion) Editor() recipe.TreeVisitor {

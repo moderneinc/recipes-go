@@ -5,6 +5,7 @@
 package style
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -26,6 +27,12 @@ func (r *KeepInterfacesSmall) Description() string {
 	return "Find interfaces with more than 5 methods. Large interfaces violate the Interface Segregation Principle."
 }
 func (r *KeepInterfacesSmall) Tags() []string { return []string{"style", "lint"} }
+
+func (r *KeepInterfacesSmall) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "interfacebloat", Tool: diagnostic.GolangciLint, HasFix: false},
+	}
+}
 
 func (r *KeepInterfacesSmall) Editor() recipe.TreeVisitor {
 	return visitor.Init(&keepInterfacesSmallVisitor{})

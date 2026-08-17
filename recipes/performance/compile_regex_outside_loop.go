@@ -6,6 +6,7 @@ package performance
 
 import (
 	"fmt"
+	"github.com/moderneinc/recipes-go/diagnostic"
 
 	"github.com/google/uuid"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
@@ -31,6 +32,12 @@ func (r *CompileRegexOutsideLoop) Description() string {
 	return "Find `regexp.Compile()` or `regexp.MustCompile()` calls inside for/range loops. Compile the regex once outside the loop for better performance."
 }
 func (r *CompileRegexOutsideLoop) Tags() []string { return []string{"performance"} }
+
+func (r *CompileRegexOutsideLoop) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "SA6000", Tool: diagnostic.Staticcheck, HasFix: true},
+	}
+}
 
 func (r *CompileRegexOutsideLoop) Editor() recipe.TreeVisitor {
 	return visitor.Init(&compileRegexOutsideLoopVisitor{})

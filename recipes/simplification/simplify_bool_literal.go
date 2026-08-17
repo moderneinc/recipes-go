@@ -31,7 +31,7 @@ func (r *SimplifyDoubleNegation) Tags() []string { return []string{"cleanup", "s
 
 func (r *SimplifyDoubleNegation) DiagnosticMappings() []diagnostic.Mapping {
 	return []diagnostic.Mapping{
-		{DiagnosticID: "S1001", Tool: diagnostic.Staticcheck, HasFix: false},
+		{DiagnosticID: "SA4013", Tool: diagnostic.Staticcheck, HasFix: true},
 	}
 }
 

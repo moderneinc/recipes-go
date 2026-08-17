@@ -34,7 +34,7 @@ func (r *RemoveRedundantTypeConversion) Tags() []string { return []string{"clean
 
 func (r *RemoveRedundantTypeConversion) DiagnosticMappings() []diagnostic.Mapping {
 	return []diagnostic.Mapping{
-		{DiagnosticID: "S1021", Tool: diagnostic.Staticcheck, HasFix: true},
+		{DiagnosticID: "unconvert", Tool: diagnostic.GolangciLint, HasFix: false},
 	}
 }
 
