@@ -7,372 +7,294 @@ package tests
 import (
 	"fmt"
 	"go/ast"
+	"go/build"
 	goparser "go/parser"
 	"go/token"
 	"io/fs"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"runtime"
 	"sort"
 	"strconv"
 	"strings"
+	"sync"
 	"testing"
 
 	"github.com/moderneinc/recipes-go/recipes"
-	"github.com/moderneinc/recipes-go/recipes/errorhandling"
-	"github.com/moderneinc/recipes-go/recipes/naming"
-	"github.com/moderneinc/recipes-go/recipes/performance"
-	"github.com/moderneinc/recipes-go/recipes/redundancy"
-	"github.com/moderneinc/recipes-go/recipes/simplification"
-	"github.com/moderneinc/recipes-go/recipes/style"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/parser"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/printer"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/test"
 )
 
-// allRecipes returns all code quality recipes for validation.
-func allRecipes() []recipe.Recipe {
-	return []recipe.Recipe{
-		// Simplification
-		&simplification.SimplifyBooleanExpression{},
-		&simplification.ReplaceTimeSinceWithSince{},
-		&simplification.ReplaceTimeUntilWithUntil{},
-		&simplification.SimplifyRedundantNilCheck{},
-		&simplification.SimplifySliceRange{},
-		&simplification.SimplifyFmtSprintf{},
-		&simplification.PreferBytesEqual{},
-		&simplification.PreferSortInts{},
-		&simplification.PreferStringsHasPrefix{},
-		&simplification.UseStringsReplaceAll{},
-		&simplification.SimplifyRedundantTrimSpace{},
-		&simplification.PreferStringsContainsOverCount{},
-		&simplification.PreferEmptyStringCheck{},
-		&simplification.PreferLenCheck{},
-		&simplification.PreferIoDiscard{},
-		&simplification.PreferIoNopCloser{},
-		&simplification.PreferIoReadAll{},
-		&simplification.PreferOsReadFile{},
-		&simplification.PreferOsWriteFile{},
-		&simplification.PreferOsMkdirTemp{},
-		&simplification.PreferOsCreateTemp{},
-		&simplification.AvoidChannelLenCheck{},
-		&simplification.RemoveRedundantRangeBlank{},
-		&simplification.SimplifySingleCaseSelect{},
-		&simplification.UseStructuredLogging{},
-		&simplification.RemoveSwitchTrueTag{},
-		&simplification.PreferBytesHasPrefix{},
-		&simplification.PreferCopyString{},
-		&simplification.PreferErrorsIsForOsCheck{},
-		&simplification.PreferErrorsIsForPermission{},
-		&simplification.PreferFilepathClean{},
-		&simplification.PreferIoWriteString{},
-		&simplification.PreferOsReadDir{},
-		&simplification.PreferSlicesSort{},
-		&simplification.PreferStrconvAtoi{},
-		&simplification.PreferStringsBuilderWriteString{},
-		&simplification.PreferStringsNewReader{},
-		&simplification.SimplifyTrimLeftNoop{},
-		&simplification.SimplifySprintfConcat{},
-		&simplification.SimplifyDoubleNegation{},
-		&simplification.SimplifyBytesBufferRoundtrip{},
-		&simplification.SimplifyBytesSplitN{},
-		&simplification.SimplifyRedundantBytesTrimSpace{},
-		&simplification.SimplifySplitN{},
-		&simplification.UseBytesReplaceAll{},
-		&simplification.PreferBytesContainsAny{},
-		&simplification.PreferStringsContainsAny{},
-		&simplification.PreferStringsContainsRune{},
-		&simplification.UseHttpNewRequestWithContext{},
-		&simplification.PreferOsIsTimeout{},
-		&simplification.SimplifyErrorsIsNil{},
-		&simplification.PreferMinMaxBuiltin{},
-		&simplification.PreferBytesContainsRune{},
-		&simplification.SimplifyBytesEqualNil{},
-		&simplification.SimplifyIfReturnBool{},
+// realWorldEnv gates the sweep, which reaches the network and takes longer than
+// the rest of the suite.
+const realWorldEnv = "REALWORLD_REPOS"
 
-		// Redundancy
-		&redundancy.RemoveRedundantReturn{},
-		&redundancy.RemoveRedundantBreak{},
-		&redundancy.RemoveRedundantBreakInSelect{},
-		&redundancy.RemoveRedundantSprintf{},
-		&redundancy.RemoveRedundantTypeConversion{},
-		&redundancy.UseDocumentedBlankImport{},
-		&redundancy.RemoveEmptyDefault{},
-		&redundancy.RemoveEmptySwitch{},
-		&redundancy.SimplifyNilCheckBeforeClose{},
-		&redundancy.RemoveRedundantElse{},
-		&redundancy.SimplifyRedundantLenBeforeRange{},
-		&redundancy.RemoveSelfAssignment{},
-		&redundancy.RemoveUnreachableCode{},
-		&redundancy.RemoveConstantCondition{},
-		&redundancy.RemoveEmptyLoop{},
-		&redundancy.FindEmptyFmtSprintf{},
-		&redundancy.SimplifyGoroutineClosure{},
-		&redundancy.RemoveRedundantInterfaceAssertion{},
-		&redundancy.UseMeaningfulReturnValues{},
-		&redundancy.RemoveDoubleDeref{},
+// realWorldRepo is an upstream repository the sweep runs over. The revision is
+// pinned so a run's outcome depends on the pin rather than on the day it ran.
+type realWorldRepo struct {
+	Repo string // owner/name on github.com
+	SHA  string
+}
 
-		// Style
-		&style.UseErrorsNewForSimpleErrors{},
-		&style.PreferStringsContains{},
-		&style.PreferBytesContains{},
-		&style.AddExportedFuncComment{},
-		&style.PreferStringsEqualFold{},
-		&style.PreferStringsEqualFoldSingle{},
-		&style.PreferRegexpMustCompile{},
-		&style.AvoidInitFunction{},
-		&style.AvoidGlobalVariable{},
-		&style.PreferRawStringForRegex{},
-		&style.UseCryptoRand{},
-		&style.AvoidDotImport{},
-		&style.PreferHexEncoding{},
-		&style.PreferStrconvQuote{},
-		&style.WrapErrorBeforeReturn{},
-		&style.AuditChannelClose{},
-		&style.AuditContextBackground{},
-		&style.ResolveContextTodo{},
-		&style.AvoidContextWithValue{},
-		&style.ReduceNestingDepth{},
-		&style.FindDeprecatedAtomicFunctions{},
-		&style.RemoveEmptyFunction{},
-		&style.RemoveEmptyGoroutine{},
-		&style.AvoidEmptyInterfaceParam{},
-		&style.AuditExecCommand{},
-		&style.AuditGoroutineClosure{},
-		&style.AvoidHardcodedCredentials{},
-		&style.UseCustomHttpClient{},
-		&style.UseHttpServerWithTimeout{},
-		&style.AuditHttpRedirect{},
-		&style.UseTlsForHttp{},
-		&style.AuditJsonNumber{},
-		&style.AuditJsonRawMessage{},
-		&style.KeepInterfacesSmall{},
-		&style.KeepFunctionsShort{},
-		&style.UseNamedConstant{},
-		&style.LimitFunctionParameters{},
-		&style.LimitReturnValues{},
-		&style.ReduceErrorCheckNesting{},
-		&style.EnsureFileClosed{},
-		&style.UseSkipWithReason{},
-		&style.AvoidSqlStringConcat{},
-		&style.CheckTemplateExecuteError{},
-		&style.AuditTestFatal{},
-		&style.AuditTestMain{},
-		&style.AvoidTimeSleep{},
-		&style.UseCommaOkTypeAssertion{},
-		&style.UseBufferedChannel{},
-		&style.AvoidUnsafePackage{},
-		&style.PreferMakeForEmptyMap{},
-		&style.EnsureSqlConnectionClosed{},
-		&style.AuditYamlUnmarshal{},
-		&style.AvoidFormatStringVariable{},
-		&style.FindMapRangeClear{},
-		&style.AvoidNestedGoroutine{},
-		&style.RemoveDebugPrint{},
-		&style.SimplifySelectDefaultOnly{},
+var realWorldRepos = []realWorldRepo{
+	{"gorilla/mux", "db9d1d0073d27a0a2d9a8c1bc52aa0af4374d265"},
+	{"spf13/cobra", "adbc8813901bba65827259daa8e22ff94ec1f30e"},
+	{"sirupsen/logrus", "457e372460c7a80ca7c800b51ebeee5362aaa180"},
+	{"go-chi/chi", "8b258c7bb28f97a5f2a856ff7ef962578fec9215"},
+	{"labstack/echo", "05489dc1730161df26b72d1ae2a3ba6fb8178fc7"},
+}
 
-		// Error handling
-		&errorhandling.PreferErrorsIsOverEquality{},
-		&errorhandling.HandleErrorReturn{},
-		&errorhandling.WrapErrorWithContext{},
-		&errorhandling.AvoidPanic{},
-		&errorhandling.HandleCheckedError{},
-		&errorhandling.CheckCloseError{},
-		&errorhandling.HandleDeferredCloseError{},
-		&errorhandling.UseErrorsIsOverStringComparison{},
-		&errorhandling.UseErrorsAs{},
-		&errorhandling.AvoidLogFatal{},
-		&errorhandling.AuditMultipleErrorWraps{},
-		&errorhandling.AvoidOsExit{},
-		&errorhandling.AuditRecover{},
-		&errorhandling.PreferErrorfWrapVerb{},
-		&errorhandling.SimplifyRedundantErrorWrap{},
-		&errorhandling.UsePackageLevelErrorSentinel{},
-		&errorhandling.PreferErrorsIsContext{},
-		&errorhandling.PreferErrorsIsEOF{},
-		&errorhandling.PreferErrorsIsForFieldAccess{},
-		&errorhandling.UseErrorMethod{},
-		&errorhandling.CheckContextError{},
-		&errorhandling.AuditMustFunction{},
-		&errorhandling.FixErrorStringFormat{},
-		&errorhandling.HandleSwallowedError{},
+// registeredRecipes instantiates every recipe in the catalog. The registry is
+// the set the library ships, so the sweep covers exactly that set.
+func registeredRecipes() []recipe.Recipe {
+	registry := recipe.NewRegistry()
+	recipes.Activate(registry)
 
-		// Performance
-		&performance.PreallocateSlice{},
-		&performance.PreferStrconvItoa{},
-		&performance.PreferStrconvFormatBool{},
-		&performance.AvoidDeferInLoop{},
-		&performance.ReuseJsonCodecInLoop{},
-		&performance.AllocateMapOutsideLoop{},
-		&performance.AllocateOutsideLoop{},
-		&performance.AvoidReflection{},
-		&performance.CompileRegexOutsideLoop{},
-		&performance.UseStringsBuilderInLoop{},
-		&performance.PreferBytesBufferString{},
-		&performance.SimplifySprintfChar{},
-		&performance.CreateChannelOutsideLoop{},
-		&performance.AvoidFmtInLoop{},
-		&performance.LimitGoroutinesInLoop{},
-		&performance.AvoidLockInLoop{},
+	var all []recipe.Recipe
+	for _, registration := range registry.AllRegistrations() {
+		if registration.Constructor == nil {
+			continue
+		}
+		// Descriptor-only registrations construct to nil.
+		if r := registration.Constructor(nil); r != nil {
+			all = append(all, r)
+		}
+	}
+	sort.Slice(all, func(i, j int) bool { return all[i].Name() < all[j].Name() })
+	return all
+}
 
-		// Naming
-		&naming.UseErrPrefixForErrors{},
-		&naming.RemovePackagePrefixFromName{},
-		&naming.UseMixedCaps{},
-		&naming.UseMixedCapsForConstants{},
-		&naming.UseCtxForContextParam{},
-		&naming.RemoveGetterPrefix{},
-		&naming.UseShortReceiverName{},
-		&naming.UseDescriptiveVarNames{},
-		&naming.UseDescriptivePackageName{},
+// TestParseRealRepos runs every registered recipe over real Go source, checking
+// that recipes neither panic nor emit output that fails to reparse or reprint.
+func TestParseRealRepos(t *testing.T) {
+	if os.Getenv(realWorldEnv) == "" {
+		t.Skipf("set %s=1 to sweep every recipe over the pinned upstream repositories", realWorldEnv)
+	}
+	t.Logf("Sweeping %d registered recipes", len(registeredRecipes()))
+	for _, repo := range realWorldRepos {
+		t.Run(repo.Repo, func(t *testing.T) { sweepRepo(t, repo) })
 	}
 }
 
-// TestParseRealRepos validates that we can parse real Go files from the
-// working set without crashing, and that recipes run without panicking.
-func TestParseRealRepos(t *testing.T) {
-	// Resolve the working set directory relative to the module root.
-	// The test runs from tests/, and the working set
-	// is at the repo root: recipes-go/working-set-code-quality/
-	workingSet := filepath.Join("..", "working-set-code-quality")
-	if _, err := os.Stat(workingSet); os.IsNotExist(err) {
-		t.Skip("working-set-code-quality not found; run `git clone` to populate")
+// fetchRepo checks the pinned revision out under build/, which is gitignored,
+// and returns its path. The path carries the SHA, so each pin has its own
+// checkout.
+func fetchRepo(t *testing.T, repo realWorldRepo) string {
+	t.Helper()
+
+	dir := filepath.Join("..", "build", "realworld", filepath.FromSlash(repo.Repo)+"@"+repo.SHA)
+	if _, err := os.Stat(dir); err == nil {
+		return dir
 	}
 
-	repos := []string{"gorilla/mux", "spf13/cobra", "sirupsen/logrus", "go-chi/chi", "labstack/echo"}
-	p := parser.NewGoParser()
-	recipes := allRecipes()
+	// Populate a scratch path and rename, so an interrupted fetch cannot leave
+	// a partial checkout that later runs would treat as cached.
+	scratch := dir + ".partial"
+	if err := os.RemoveAll(scratch); err != nil {
+		t.Fatalf("clearing %s: %v", scratch, err)
+	}
+	if err := os.MkdirAll(scratch, 0o755); err != nil {
+		t.Fatalf("creating %s: %v", scratch, err)
+	}
 
-	for _, repo := range repos {
-		repoDir := filepath.Join(workingSet, repo)
-		if _, err := os.Stat(repoDir); os.IsNotExist(err) {
-			t.Logf("Skipping %s (not cloned)", repo)
+	url := "https://github.com/" + repo.Repo + ".git"
+	for _, args := range [][]string{
+		{"init", "-q"},
+		{"remote", "add", "origin", url},
+		{"fetch", "--depth", "1", "-q", "origin", repo.SHA},
+		{"checkout", "-q", "FETCH_HEAD"},
+	} {
+		cmd := exec.Command("git", append([]string{"-C", scratch}, args...)...)
+		if out, err := cmd.CombinedOutput(); err != nil {
+			t.Fatalf("git %s in %s: %v\n%s", strings.Join(args, " "), scratch, err, out)
+		}
+	}
+
+	if err := os.Rename(scratch, dir); err != nil {
+		t.Fatalf("renaming %s to %s: %v", scratch, dir, err)
+	}
+	return dir
+}
+
+func sweepRepo(t *testing.T, repo realWorldRepo) {
+	repoDir := fetchRepo(t, repo)
+
+	var goFiles []string
+	err := filepath.WalkDir(repoDir, func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return nil // skip errors
+		}
+		if d.IsDir() && (d.Name() == "vendor" || d.Name() == "testdata" || d.Name() == ".git") {
+			return filepath.SkipDir
+		}
+		if strings.HasSuffix(path, ".go") && !strings.HasSuffix(path, "_test.go") {
+			goFiles = append(goFiles, path)
+		}
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("walking %s: %v", repoDir, err)
+	}
+	if len(goFiles) == 0 {
+		t.Fatalf("no .go files under %s; the checkout of %s is not usable", repoDir, repo.Repo)
+	}
+	sort.Strings(goFiles)
+	t.Logf("Found %d .go files in %s", len(goFiles), repo.Repo)
+
+	results := sweepFiles(t, repoDir, goFiles)
+	reportSweep(t, repo, results)
+}
+
+// fileResult is one file's outcome. Results are collected rather than logged in
+// place so that the report reads the same however the work was scheduled.
+type fileResult struct {
+	path        string
+	constrained bool     // build constraints exclude the file on this platform
+	parseFail   string   // why the file did not parse and reprint; empty when it did
+	spaceIssues []string // whitespace validation failures on the parsed tree
+	problems    []string // recipes that panicked or produced unusable output
+	findings    map[string]int
+}
+
+func sweepFiles(t *testing.T, repoDir string, goFiles []string) []fileResult {
+	results := make([]fileResult, len(goFiles))
+
+	indices := make(chan int)
+	var wg sync.WaitGroup
+	for range runtime.GOMAXPROCS(0) {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			// Per-worker parser and recipe instances: a recipe may carry state
+			// across the files it visits, and the sweep visits them concurrently.
+			p := parser.NewGoParser()
+			recipes := registeredRecipes()
+			for i := range indices {
+				results[i] = sweepFile(p, recipes, repoDir, goFiles[i])
+			}
+		}()
+	}
+	for i := range goFiles {
+		indices <- i
+	}
+	close(indices)
+	wg.Wait()
+
+	return results
+}
+
+func sweepFile(p *parser.GoParser, recipes []recipe.Recipe, repoDir, goFile string) fileResult {
+	relPath, _ := filepath.Rel(repoDir, goFile)
+	res := fileResult{path: relPath, findings: map[string]int{}}
+
+	// The parser yields nothing for a file the current GOOS/GOARCH excludes, so
+	// classifying those here keeps the sweep's report identical across platforms.
+	if match, err := build.Default.MatchFile(filepath.Dir(goFile), filepath.Base(goFile)); err == nil && !match {
+		res.constrained = true
+		return res
+	}
+
+	srcBytes, err := os.ReadFile(goFile)
+	if err != nil {
+		res.parseFail = fmt.Sprintf("read: %v", err)
+		return res
+	}
+	src := string(srcBytes)
+
+	cu, err := p.Parse(relPath, src)
+	if err != nil {
+		res.parseFail = fmt.Sprintf("parse: %v", err)
+		return res
+	}
+	if printer.Print(cu) != src {
+		res.parseFail = "parse/print is not idempotent"
+		return res
+	}
+	res.spaceIssues = test.ValidateSpaces(cu)
+
+	for _, r := range recipes {
+		editor := r.Editor()
+		if editor == nil {
 			continue
 		}
+		func() {
+			defer func() {
+				if rec := recover(); rec != nil {
+					res.problems = append(res.problems, fmt.Sprintf("PANIC        %s: %v", r.Name(), rec))
+				}
+			}()
 
-		t.Run(repo, func(t *testing.T) {
-			var goFiles []string
-			err := filepath.Walk(repoDir, func(path string, info os.FileInfo, err error) error {
+			result := editor.Visit(cu, recipe.NewExecutionContext())
+			if result == nil {
+				return
+			}
+
+			after := printer.Print(result)
+			if after != src {
+				res.findings[r.DisplayName()]++
+				cu2, err := p.Parse(relPath, after)
 				if err != nil {
-					return nil // skip errors
+					res.problems = append(res.problems, fmt.Sprintf("UNPARSEABLE  %s: %v", r.Name(), err))
+				} else if printer.Print(cu2) != after {
+					res.problems = append(res.problems, fmt.Sprintf("ROUND-TRIP   %s: output does not reprint", r.Name()))
 				}
-				if info.IsDir() && (info.Name() == "vendor" || info.Name() == "testdata" || info.Name() == ".git") {
-					return filepath.SkipDir
-				}
-				if strings.HasSuffix(path, ".go") && !strings.HasSuffix(path, "_test.go") {
-					goFiles = append(goFiles, path)
-				}
-				return nil
-			})
-			if err != nil {
-				t.Fatalf("walking %s: %v", repoDir, err)
+			} else if printer.PrintWithMarkers(result, printer.DefaultMarkerPrinter) != src {
+				res.findings[r.DisplayName()]++ // search-only recipe, reporting through markers
 			}
-
-			t.Logf("Found %d .go files in %s", len(goFiles), repo)
-
-			var parseOK, parseFail int
-			var spaceIssues int
-			recipeFindings := make(map[string]int) // recipe name -> findings count
-
-			for _, goFile := range goFiles {
-				src, err := os.ReadFile(goFile)
-				if err != nil {
-					continue
-				}
-
-				relPath, _ := filepath.Rel(repoDir, goFile)
-
-				// Parse
-				cu, err := p.Parse(relPath, string(src))
-				if err != nil {
-					parseFail++
-					if parseFail <= 5 {
-						t.Logf("  PARSE FAIL: %s: %v", relPath, err)
-					}
-					continue
-				}
-				parseOK++
-
-				// Check parse-print idempotence
-				printed := printer.Print(cu)
-				if printed != string(src) {
-					if parseFail+1 <= 3 {
-						t.Logf("  IDEMPOTENCE FAIL: %s", relPath)
-					}
-					parseFail++
-					continue
-				}
-
-				// Space validation
-				if errs := test.ValidateSpaces(cu); len(errs) > 0 {
-					spaceIssues += len(errs)
-					for _, e := range errs {
-						t.Logf("  SPACE: %s: %s", relPath, e)
-					}
-				}
-
-				// Run each recipe
-				for _, r := range recipes {
-					editor := r.Editor()
-					if editor == nil {
-						continue
-					}
-					func() {
-						defer func() {
-							if rec := recover(); rec != nil {
-								t.Errorf("  PANIC in %s on %s: %v", r.Name(), relPath, rec)
-							}
-						}()
-
-						ctx := recipe.NewExecutionContext()
-						result := editor.Visit(cu, ctx)
-						if result == nil {
-							return
-						}
-
-						after := printer.Print(result)
-						if after != string(src) {
-							recipeFindings[r.DisplayName()]++
-
-							// Verify the modified output is still parseable
-							cu2, err2 := p.Parse(relPath, after)
-							if err2 != nil {
-								t.Errorf("  CORRUPT OUTPUT: %s produced unparseable output on %s: %v",
-									r.DisplayName(), relPath, err2)
-							} else {
-								// Verify round-trip of modified output
-								reprinted := printer.Print(cu2)
-								if reprinted != after {
-									t.Errorf("  ROUND-TRIP FAIL: %s output on %s is not idempotent",
-										r.DisplayName(), relPath)
-								}
-							}
-						}
-
-						// Check search results via marker printing
-						markerOutput := printer.PrintWithMarkers(result, printer.DefaultMarkerPrinter)
-						if markerOutput != string(src) && after == string(src) {
-							// Search-only recipe found something
-							recipeFindings[r.DisplayName()]++
-						}
-					}()
-				}
-			}
-
-			t.Logf("  Parse: %d OK, %d fail/idempotence issues", parseOK, parseFail)
-			t.Logf("  Space validation issues: %d", spaceIssues)
-			t.Logf("  Recipe findings:")
-			totalFindings := 0
-			for name, count := range recipeFindings {
-				t.Logf("    %s: %d", name, count)
-				totalFindings += count
-			}
-			if totalFindings == 0 {
-				t.Logf("    (none)")
-			}
-			fmt.Printf("\n[%s] Parse: %d OK, %d fail | Findings: %d\n", repo, parseOK, parseFail, totalFindings)
-		})
+		}()
 	}
+	return res
+}
+
+func reportSweep(t *testing.T, repo realWorldRepo, results []fileResult) {
+	var parseOK, parseFail, constrained, spaceIssues int
+	findings := map[string]int{}
+
+	for _, res := range results {
+		if res.constrained {
+			constrained++
+			continue
+		}
+		if res.parseFail != "" {
+			parseFail++
+			t.Logf("  PARSE FAIL: %s: %s", res.path, res.parseFail)
+			continue
+		}
+		parseOK++
+		spaceIssues += len(res.spaceIssues)
+		for _, e := range res.spaceIssues {
+			t.Logf("  SPACE: %s: %s", res.path, e)
+		}
+		for _, p := range res.problems {
+			t.Errorf("  %s\n    on %s", p, res.path)
+		}
+		for name, count := range res.findings {
+			findings[name] += count
+		}
+	}
+
+	t.Logf("  Parse: %d OK, %d fail/idempotence issues, %d excluded by build constraints",
+		parseOK, parseFail, constrained)
+	t.Logf("  Space validation issues: %d", spaceIssues)
+	t.Logf("  Recipe findings:")
+	names := make([]string, 0, len(findings))
+	for name := range findings {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	totalFindings := 0
+	for _, name := range names {
+		t.Logf("    %s: %d", name, findings[name])
+		totalFindings += findings[name]
+	}
+	if totalFindings == 0 {
+		t.Logf("    (none)")
+	}
+	fmt.Printf("\n[%s] Parse: %d OK, %d fail, %d constrained | Findings: %d\n",
+		repo.Repo, parseOK, parseFail, constrained, totalFindings)
 }
 
 // unregisteredByDesign maps a recipe name to the reason it is kept out of

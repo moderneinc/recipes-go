@@ -60,3 +60,33 @@ func TestRemoveEmptyFunctionNoChangeWithReturnType(t *testing.T) {
 		`),
 	)
 }
+
+func TestRemoveEmptyFunctionNoChangeWithFunctionLiteral(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.RemoveEmptyFunction{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			func cleanup() (string, func()) {
+				return "", func() {}
+			}
+		`),
+	)
+}
+
+func TestRemoveEmptyFunctionNoChangeWithFunctionLiteralArgument(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.RemoveEmptyFunction{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			func run(fn func()) {
+				fn()
+			}
+
+			func main() {
+				run(func() {})
+			}
+		`),
+	)
+}
