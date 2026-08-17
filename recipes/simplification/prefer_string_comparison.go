@@ -19,7 +19,6 @@ var (
 
 // PreferStringComparison replaces `strings.Compare(a, b)` comparison patterns
 // with direct string comparison operators.
-// Staticcheck: S1021
 type PreferStringComparison struct {
 	recipe.Base
 }

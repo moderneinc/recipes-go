@@ -42,37 +42,11 @@ type ensureSqlConnectionClosedVisitor struct {
 
 func (v *ensureSqlConnectionClosedVisitor) VisitBlock(block *java.Block, p any) java.J {
 	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
-
-	var newStmts []java.RightPadded[java.Statement]
-	changed := false
-
-	for i, rp := range block.Statements {
-		newStmts = append(newStmts, rp)
-
-		if varName, ok := extractAssignedVar(rp.Element, isSqlOpen); ok {
-			if hasDeferAfter(block.Statements, i, varName, "Close") {
-				continue
-			}
-			deferStmt := buildDeferMethodCall(varName, "Close", rp.Element)
-			newStmts = append(newStmts, java.RightPadded[java.Statement]{Element: deferStmt})
-			changed = true
-		}
-	}
-
-	if changed {
-		return block.WithStatements(newStmts)
-	}
-	return block
+	return insertDeferMethodCall(block, isSqlOpen, "Close")
 }
 
 // isSqlOpen returns true if the method invocation is sql.Open.
-func isSqlOpen(mi *java.MethodInvocation) bool {
-	if mi.Select == nil {
-		return false
-	}
-	ident, ok := mi.Select.Element.(*java.Identifier)
-	if !ok || ident.Name != "sql" {
-		return false
-	}
-	return mi.Name.Name == "Open"
+func isSqlOpen(a acquisition) bool {
+	declaring, ok := declaringType(a.call)
+	return ok && declaring == "database/sql" && a.call.Name.Name == "Open"
 }

@@ -11,18 +11,21 @@ import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
-// permission777Methods lists the os package methods that accept a file mode.
-var permission777Methods = map[string]bool{
-	"Chmod":     true,
-	"MkdirAll":  true,
-	"Mkdir":     true,
-	"WriteFile": true,
+// permission777Methods maps each os package method that accepts a file mode to
+// the mode 0777 becomes. A directory needs the execute bit to be traversable and
+// a written file does not; Chmod takes the directory mode because its target may
+// be either.
+var permission777Methods = map[string]string{
+	"Chmod":     "755",
+	"MkdirAll":  "755",
+	"Mkdir":     "755",
+	"WriteFile": "644",
 }
 
 // UseRestrictiveFilePermissions replaces `0777` with `0755` in calls to
-// `os.Chmod`, `os.MkdirAll`, `os.Mkdir`, or `os.WriteFile`. Using 0777
-// grants full read/write/execute permission to all users, which is overly
-// permissive.
+// `os.Chmod`, `os.MkdirAll` and `os.Mkdir`, and with `0644` in calls to
+// `os.WriteFile`. Using 0777 grants full read/write/execute permission to all
+// users, which is overly permissive.
 type UseRestrictiveFilePermissions struct {
 	recipe.Base
 }
@@ -34,7 +37,7 @@ func (r *UseRestrictiveFilePermissions) DisplayName() string {
 	return "Use restrictive file permissions"
 }
 func (r *UseRestrictiveFilePermissions) Description() string {
-	return "Replace `0777` with `0755` in `os.Chmod`, `os.MkdirAll`, `os.Mkdir`, or `os.WriteFile`. Overly permissive file permissions are a security risk."
+	return "Replace `0777` with `0755` in `os.Chmod`, `os.MkdirAll` and `os.Mkdir`, and with `0644` in `os.WriteFile`. Overly permissive file permissions are a security risk."
 }
 func (r *UseRestrictiveFilePermissions) Tags() []string { return []string{"style", "security"} }
 
@@ -66,7 +69,8 @@ func (v *useRestrictiveFilePermissionsVisitor) VisitMethodInvocation(mi *java.Me
 		return mi
 	}
 
-	if !permission777Methods[mi.Name.Name] {
+	mode, ok := permission777Methods[mi.Name.Name]
+	if !ok {
 		return mi
 	}
 
@@ -75,12 +79,12 @@ func (v *useRestrictiveFilePermissionsVisitor) VisitMethodInvocation(mi *java.Me
 	for i, arg := range mi.Arguments.Elements {
 		if lit, ok := arg.Element.(*java.Literal); ok {
 			if lit.Source == "0777" {
-				newArgs[i] = java.RightPadded[java.Expression]{Element: lit.WithSource("0755"), After: arg.After, Markers: arg.Markers}
+				newArgs[i] = java.RightPadded[java.Expression]{Element: lit.WithSource("0" + mode), After: arg.After, Markers: arg.Markers}
 				changed = true
 				continue
 			}
 			if lit.Source == "0o777" {
-				newArgs[i] = java.RightPadded[java.Expression]{Element: lit.WithSource("0o755"), After: arg.After, Markers: arg.Markers}
+				newArgs[i] = java.RightPadded[java.Expression]{Element: lit.WithSource("0o" + mode), After: arg.After, Markers: arg.Markers}
 				changed = true
 				continue
 			}

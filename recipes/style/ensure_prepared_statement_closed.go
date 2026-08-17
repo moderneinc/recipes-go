@@ -44,33 +44,9 @@ type ensurePreparedStatementClosedVisitor struct {
 
 func (v *ensurePreparedStatementClosedVisitor) VisitBlock(block *java.Block, p any) java.J {
 	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
-
-	var newStmts []java.RightPadded[java.Statement]
-	changed := false
-
-	for i, rp := range block.Statements {
-		newStmts = append(newStmts, rp)
-
-		if varName, ok := extractAssignedVar(rp.Element, isDbPrepare); ok {
-			if hasDeferAfter(block.Statements, i, varName, "Close") {
-				continue
-			}
-			deferStmt := buildDeferMethodCall(varName, "Close", rp.Element)
-			newStmts = append(newStmts, java.RightPadded[java.Statement]{Element: deferStmt})
-			changed = true
-		}
-	}
-
-	if changed {
-		return block.WithStatements(newStmts)
-	}
-	return block
+	return insertDeferMethodCall(block, isSqlStmt, "Close")
 }
 
-// isDbPrepare returns true if the method invocation is *.Prepare().
-func isDbPrepare(mi *java.MethodInvocation) bool {
-	if mi.Select == nil {
-		return false
-	}
-	return mi.Name.Name == "Prepare"
+func isSqlStmt(a acquisition) bool {
+	return typeIs(a.varType, "database/sql.Stmt")
 }

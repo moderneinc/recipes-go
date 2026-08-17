@@ -6,11 +6,18 @@ package tests
 
 import (
 	"fmt"
+	"go/ast"
+	goparser "go/parser"
+	"go/token"
+	"io/fs"
 	"os"
 	"path/filepath"
+	"sort"
+	"strconv"
 	"strings"
 	"testing"
 
+	"github.com/moderneinc/recipes-go/recipes"
 	"github.com/moderneinc/recipes-go/recipes/errorhandling"
 	"github.com/moderneinc/recipes-go/recipes/naming"
 	"github.com/moderneinc/recipes-go/recipes/performance"
@@ -365,4 +372,132 @@ func TestParseRealRepos(t *testing.T) {
 			fmt.Printf("\n[%s] Parse: %d OK, %d fail | Findings: %d\n", repo, parseOK, parseFail, totalFindings)
 		})
 	}
+}
+
+// unregisteredByDesign maps a recipe name to the reason it is kept out of
+// recipes.Activate. Any other recipe missing from the registry is invisible to
+// the catalog and the CLI, which the test below reports as a failure.
+var unregisteredByDesign = map[string]string{
+	// MigrateToJSONV2 composes these five, so registering them as well would
+	// list them twice in the catalog.
+	"org.openrewrite.golang.migration.MigrateImportOnlyToJSONV2":    "composed by MigrateToJSONV2",
+	"org.openrewrite.golang.migration.MigrateStreamingEncodeDecode": "composed by MigrateToJSONV2",
+	"org.openrewrite.golang.migration.RelocateEncoderDecoderTypes":  "composed by MigrateToJSONV2",
+	"org.openrewrite.golang.migration.RelocateRawMessage":           "composed by MigrateToJSONV2",
+	"org.openrewrite.golang.migration.ReplaceMarshalIndent":         "composed by MigrateToJSONV2",
+}
+
+func TestEveryDeclaredRecipeIsRegistered(t *testing.T) {
+	registry := recipe.NewRegistry()
+	registry.Activate(recipes.Activate)
+	registered := make(map[string]bool)
+	for _, desc := range registry.AllRecipes() {
+		registered[desc.Name] = true
+	}
+
+	declared := declaredRecipeNames(t)
+
+	var missing []string
+	for name, file := range declared {
+		if registered[name] || unregisteredByDesign[name] != "" {
+			continue
+		}
+		missing = append(missing, fmt.Sprintf("%s (%s)", name, file))
+	}
+	sort.Strings(missing)
+	if len(missing) > 0 {
+		t.Errorf("%d recipe(s) declared but not registered in recipes/activate.go:\n\t%s",
+			len(missing), strings.Join(missing, "\n\t"))
+	}
+
+	// A stale allowlist entry hides a recipe as effectively as a missing
+	// registration does.
+	for name := range unregisteredByDesign {
+		if _, ok := declared[name]; !ok {
+			t.Errorf("allowlisted recipe %s no longer exists; remove it from unregisteredByDesign", name)
+		}
+		if registered[name] {
+			t.Errorf("%s is registered; remove it from unregisteredByDesign", name)
+		}
+	}
+}
+
+// declaredRecipeNames maps every recipe name declared under recipes/ to the file
+// declaring it. Reflection cannot enumerate a package's types, so the set is
+// read from the source.
+func declaredRecipeNames(t *testing.T) map[string]string {
+	t.Helper()
+
+	names := make(map[string]string)
+	fset := token.NewFileSet()
+	err := filepath.WalkDir(filepath.Join("..", "recipes"), func(path string, d fs.DirEntry, err error) error {
+		if err != nil || d.IsDir() || !strings.HasSuffix(path, ".go") || strings.HasSuffix(path, "_test.go") {
+			return err
+		}
+		file, err := goparser.ParseFile(fset, path, nil, 0)
+		if err != nil {
+			return err
+		}
+		for _, decl := range file.Decls {
+			fn, ok := decl.(*ast.FuncDecl)
+			if !ok || !isRecipeNameMethod(fn) {
+				continue
+			}
+			name, ok := singleStringReturn(fn)
+			if !ok {
+				t.Errorf("%s: %s.Name() does not return a string literal; teach declaredRecipeNames how to read it",
+					fset.Position(fn.Pos()), receiverTypeName(fn))
+				continue
+			}
+			names[name] = path
+		}
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("scanning recipes/: %v", err)
+	}
+	return names
+}
+
+// Every recipe declares its name through a pointer-receiver `Name() string`.
+func isRecipeNameMethod(fn *ast.FuncDecl) bool {
+	if fn.Recv == nil || len(fn.Recv.List) != 1 || fn.Name.Name != "Name" || fn.Body == nil {
+		return false
+	}
+	if _, ok := fn.Recv.List[0].Type.(*ast.StarExpr); !ok {
+		return false
+	}
+	if len(fn.Type.Params.List) != 0 || fn.Type.Results == nil || len(fn.Type.Results.List) != 1 {
+		return false
+	}
+	ident, ok := fn.Type.Results.List[0].Type.(*ast.Ident)
+	return ok && ident.Name == "string"
+}
+
+func singleStringReturn(fn *ast.FuncDecl) (string, bool) {
+	if len(fn.Body.List) != 1 {
+		return "", false
+	}
+	ret, ok := fn.Body.List[0].(*ast.ReturnStmt)
+	if !ok || len(ret.Results) != 1 {
+		return "", false
+	}
+	lit, ok := ret.Results[0].(*ast.BasicLit)
+	if !ok || lit.Kind != token.STRING {
+		return "", false
+	}
+	value, err := strconv.Unquote(lit.Value)
+	return value, err == nil
+}
+
+func receiverTypeName(fn *ast.FuncDecl) string {
+	star, ok := fn.Recv.List[0].Type.(*ast.StarExpr)
+	if !ok {
+		return "?"
+	}
+	ident, ok := star.X.(*ast.Ident)
+	if !ok {
+		return "?"
+	}
+	return ident.Name
 }

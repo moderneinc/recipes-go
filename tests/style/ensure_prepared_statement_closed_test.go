@@ -17,16 +17,20 @@ func TestEnsurePreparedStatementClosed(t *testing.T) {
 		test.Golang(`
 			package main
 
-			func f(db interface{ Prepare(string) (interface{ Close() }, error) }) {
-				stmt, err := db.Prepare("SELECT ?")
+			import "database/sql"
+
+			func f(db *sql.DB) {
+				stmt, err := db.Prepare("SELECT 1")
 				_ = err
 				_ = stmt
 			}
 		`, `
 			package main
 
-			func f(db interface{ Prepare(string) (interface{ Close() }, error) }) {
-				stmt, err := db.Prepare("SELECT ?")
+			import "database/sql"
+
+			func f(db *sql.DB) {
+				stmt, err := db.Prepare("SELECT 1")
 				defer stmt.Close()
 				_ = err
 				_ = stmt
@@ -35,14 +39,54 @@ func TestEnsurePreparedStatementClosed(t *testing.T) {
 	)
 }
 
-func TestEnsurePreparedStatementClosedNoChange(t *testing.T) {
+func TestEnsurePreparedStatementClosedAfterErrorCheck(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&style.EnsurePreparedStatementClosed{})
 	spec.RewriteRun(t,
 		test.Golang(`
 			package main
 
-			func f(db interface{ Query(string, ...any) }) {
-				db.Query("SELECT 1")
+			import "database/sql"
+
+			func f(db *sql.DB) error {
+				stmt, err := db.Prepare("SELECT 1")
+				if err != nil {
+					return err
+				}
+				_ = stmt
+				return nil
+			}
+		`, `
+			package main
+
+			import "database/sql"
+
+			func f(db *sql.DB) error {
+				stmt, err := db.Prepare("SELECT 1")
+				if err != nil {
+					return err
+				}
+				defer stmt.Close()
+				_ = stmt
+				return nil
+			}
+		`),
+	)
+}
+
+// Only a *sql.Stmt has to be closed; an unrelated `Prepare` must be left alone.
+func TestEnsurePreparedStatementClosedNoChangeForeignPrepare(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.EnsurePreparedStatementClosed{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			type builder struct{}
+
+			func (builder) Prepare(q string) (string, error) { return q, nil }
+
+			func f(b builder) {
+				s, err := b.Prepare("SELECT 1")
+				_, _ = s, err
 			}
 		`),
 	)
@@ -54,8 +98,10 @@ func TestEnsurePreparedStatementClosedAlreadyDeferred(t *testing.T) {
 		test.Golang(`
 			package main
 
-			func f(db interface{ Prepare(string) (interface{ Close() }, error) }) {
-				stmt, err := db.Prepare("SELECT ?")
+			import "database/sql"
+
+			func f(db *sql.DB) {
+				stmt, err := db.Prepare("SELECT 1")
 				defer stmt.Close()
 				_ = err
 			}
