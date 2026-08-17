@@ -55,7 +55,7 @@ func (r *AuditErrorStringFormat) Tags() []string { return []string{"error-handli
 
 func (r *AuditErrorStringFormat) DiagnosticMappings() []diagnostic.Mapping {
 	return []diagnostic.Mapping{
-		{DiagnosticID: "ST1005", Tool: diagnostic.Staticcheck, HasFix: false},
+		{DiagnosticID: "ST1005", Tool: diagnostic.Staticcheck, HasFix: true},
 	}
 }
 

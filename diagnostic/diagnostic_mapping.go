@@ -29,7 +29,7 @@ func (t AnalyzerTool) String() string {
 type Mapping struct {
 	DiagnosticID string       // e.g., "S1012", "SA4000"
 	Tool         AnalyzerTool // which tool produces this diagnostic
-	HasFix       bool         // whether the tool can auto-fix this diagnostic
+	HasFix       bool         // whether the owning linter supports applying fixes
 }
 
 // HasMappings is implemented by recipes that correspond to
