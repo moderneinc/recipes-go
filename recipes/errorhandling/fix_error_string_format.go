@@ -32,7 +32,7 @@ func (r *FixErrorStringFormat) Tags() []string { return []string{"error-handling
 
 func (r *FixErrorStringFormat) DiagnosticMappings() []diagnostic.Mapping {
 	return []diagnostic.Mapping{
-		{DiagnosticID: "ST1005", Tool: diagnostic.Staticcheck, HasFix: false},
+		{DiagnosticID: "ST1005", Tool: diagnostic.Staticcheck, HasFix: true},
 	}
 }
 
