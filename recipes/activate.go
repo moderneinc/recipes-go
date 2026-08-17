@@ -87,6 +87,9 @@ func Activate(r *recipe.Registry) {
 	r.Register(&simplification.MergeCollapsibleIf{}, golang, codeQuality, simplify)
 	r.Register(&simplification.SimplifyRedundantLogicalExpression{}, golang, codeQuality, simplify)
 	r.Register(&simplification.MergeIdenticalBranches{}, golang, codeQuality, simplify)
+	r.Register(&simplification.PreferStringComparison{}, golang, codeQuality, simplify)
+	r.Register(&simplification.PreferStringsToLowerMap{}, golang, codeQuality, simplify)
+	r.Register(&simplification.PreferStringsToUpperMap{}, golang, codeQuality, simplify)
 
 	// Redundancy
 	r.Register(&redundancy.RemoveRedundantReturn{}, golang, codeQuality, redundant)
@@ -174,6 +177,17 @@ func Activate(r *recipe.Registry) {
 	r.Register(&style.AvoidNestedGoroutine{}, golang, codeQuality, styleCategory)
 	r.Register(&style.RemoveDebugPrint{}, golang, codeQuality, styleCategory)
 	r.Register(&style.SimplifySelectDefaultOnly{}, golang, codeQuality, styleCategory)
+	r.Register(&style.AvoidGoto{}, golang, codeQuality, styleCategory)
+	r.Register(&style.AvoidLabel{}, golang, codeQuality, styleCategory)
+	r.Register(&style.SimplifyComplexSwitch{}, golang, codeQuality, styleCategory)
+	r.Register(&style.RemoveDeprecatedRandSeed{}, golang, codeQuality, styleCategory)
+	r.Register(&style.EnforceTlsVerification{}, golang, codeQuality, styleCategory)
+	r.Register(&style.UseParameterizedSqlQuery{}, golang, codeQuality, styleCategory)
+	r.Register(&style.UseRestrictiveFilePermissions{}, golang, codeQuality, styleCategory)
+	r.Register(&style.EnsurePreparedStatementClosed{}, golang, codeQuality, styleCategory)
+	r.Register(&style.EnsureTransactionFinalized{}, golang, codeQuality, styleCategory)
+	r.Register(&style.EnsureTempCleanedUp{}, golang, codeQuality, styleCategory)
+	r.Register(&style.EnsureTickerStopped{}, golang, codeQuality, styleCategory)
 
 	// Error handling
 	errCategory := recipe.CategoryDescriptor{DisplayName: "Error handling", Description: "Error handling best practices"}
@@ -224,6 +238,10 @@ func Activate(r *recipe.Registry) {
 	r.Register(&performance.AvoidFmtInLoop{}, golang, codeQuality, perfCategory)
 	r.Register(&performance.LimitGoroutinesInLoop{}, golang, codeQuality, perfCategory)
 	r.Register(&performance.AvoidLockInLoop{}, golang, codeQuality, perfCategory)
+	r.Register(&performance.AvoidReadAllInLoop{}, golang, codeQuality, perfCategory)
+	r.Register(&performance.BatchHttpCalls{}, golang, codeQuality, perfCategory)
+	r.Register(&performance.OpenFileOutsideLoop{}, golang, codeQuality, perfCategory)
+	r.Register(&performance.OptimizeCopyInLoop{}, golang, codeQuality, perfCategory)
 
 	// Naming
 	namingCategory := recipe.CategoryDescriptor{DisplayName: "Naming", Description: "Naming conventions"}
