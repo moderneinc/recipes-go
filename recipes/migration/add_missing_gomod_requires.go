@@ -90,6 +90,19 @@ func missingRequires(gm *golang.GoMod, mrr *golang.GoResolutionResult) []missing
 	return missing
 }
 
+// AddRequire returns gm with a `require modulePath version` directive added when
+// no `require` for modulePath is already present; otherwise gm is returned
+// unchanged. The entry is appended to the first `require` block (or a new block
+// when none exists) and marked `// indirect` when indirect is true. It does not
+// touch go.sum, so callers introducing a brand-new module still need a
+// `go mod tidy` / `go mod download` to complete resolution.
+func AddRequire(gm *golang.GoMod, modulePath, version string, indirect bool) *golang.GoMod {
+	if requiredModuleSet(gm)[modulePath] {
+		return gm
+	}
+	return insertRequires(gm, []missingRequire{{modulePath: modulePath, version: version, indirect: indirect}})
+}
+
 // insertRequires appends the missing requirements to the first `require` block,
 // or creates a new block when none exists.
 func insertRequires(gm *golang.GoMod, missing []missingRequire) *golang.GoMod {
