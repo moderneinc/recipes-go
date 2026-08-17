@@ -57,9 +57,9 @@ func (v *useCommaOkTypeAssertionVisitor) VisitBlock(block *java.Block, p any) ja
 			continue
 		}
 
-		// RHS must be a TypeCast (type assertion)
-		_, isCast := assign.Value.Element.(*java.TypeCast)
-		if !isCast {
+		// RHS must be a type assertion
+		_, isAssertion := assign.Value.Element.(*golang.TypeAssertion)
+		if !isAssertion {
 			newStmts = append(newStmts, rp)
 			continue
 		}

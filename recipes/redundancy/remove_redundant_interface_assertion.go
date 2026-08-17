@@ -39,14 +39,14 @@ type removeRedundantInterfaceAssertionVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *removeRedundantInterfaceAssertionVisitor) VisitTypeCast(tc *java.TypeCast, p any) java.J {
-	tc = v.GoVisitor.VisitTypeCast(tc, p).(*java.TypeCast)
+func (v *removeRedundantInterfaceAssertionVisitor) VisitTypeAssertion(ta *golang.TypeAssertion, p any) java.J {
+	ta = v.GoVisitor.VisitTypeAssertion(ta, p).(*golang.TypeAssertion)
 
-	if tc.Clazz == nil {
-		return tc
+	if ta.AssertedType == nil {
+		return ta
 	}
 
-	inner := tc.Clazz.Tree.Element
+	inner := ta.AssertedType.Tree.Element
 
 	isRedundant := false
 
@@ -63,14 +63,14 @@ func (v *removeRedundantInterfaceAssertionVisitor) VisitTypeCast(tc *java.TypeCa
 	}
 
 	if !isRedundant {
-		return tc
+		return ta
 	}
 
-	// Replace the type assertion with just the inner expression.
-	// The Expr already carries the correct prefix (the space between the
+	// Replace the type assertion with just the asserted expression.
+	// That expression already carries the correct prefix (the space between the
 	// preceding token and the expression, e.g. the space after "=" in "_ = x.(any)").
-	// We prepend tc.Prefix whitespace in case the TypeCast itself had leading space.
-	return prependExprPrefix(tc.Expr, tc.Prefix)
+	// We prepend ta.Prefix whitespace in case the assertion itself had leading space.
+	return prependExprPrefix(ta.Left.Element, ta.Prefix)
 }
 
 // prependExprPrefix prepends extra whitespace to an expression's existing prefix.

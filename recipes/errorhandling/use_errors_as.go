@@ -117,8 +117,8 @@ func matchCommaOkTypeAssert(swi *golang.StatementWithInit) (string, java.Express
 		return "", nil, nil
 	}
 
-	// The value must be a TypeCast (type assertion)
-	tc, ok := ma.Values[0].Element.(*java.TypeCast)
+	// The value must be a type assertion
+	ta, ok := ma.Values[0].Element.(*golang.TypeAssertion)
 	if !ok {
 		return "", nil, nil
 	}
@@ -146,17 +146,17 @@ func matchCommaOkTypeAssert(swi *golang.StatementWithInit) (string, java.Express
 
 	// The expression being asserted must be an error.
 	// Check type info first; fall back to name heuristic.
-	if !looksLikeError(tc.Expr) {
+	if !looksLikeError(ta.Left.Element) {
 		return "", nil, nil
 	}
 
 	// Extract the type from the type assertion (inside the ControlParentheses)
-	if tc.Clazz == nil {
+	if ta.AssertedType == nil {
 		return "", nil, nil
 	}
-	typeExpr := tc.Clazz.Tree.Element
+	typeExpr := ta.AssertedType.Tree.Element
 
-	return targetIdent.Name, typeExpr, tc.Expr
+	return targetIdent.Name, typeExpr, ta.Left.Element
 }
 
 // Reports whether the expression is assignable to error, deciding from the

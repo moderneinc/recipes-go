@@ -200,9 +200,13 @@ func buildIfInitErrCheck(mi *java.MethodInvocation) *golang.StatementWithInit {
 	}
 
 	return &golang.StatementWithInit{
-		ID:        uuid.New(),
-		Prefix:    prefix,
-		Init:      java.RightPadded[java.Statement]{Element: initAssign},
+		ID:     uuid.New(),
+		Prefix: prefix,
+		Init: java.RightPadded[java.Statement]{
+			Element: initAssign,
+			// The printer emits the `;` between init and condition from this marker.
+			Markers: java.Markers{ID: uuid.New(), Entries: []java.Marker{golang.NewSemicolon()}},
+		},
 		Statement: innerIf,
 	}
 }
