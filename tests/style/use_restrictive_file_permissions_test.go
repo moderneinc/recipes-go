@@ -49,6 +49,30 @@ func TestUseRestrictiveFilePermissionsNoChange0755(t *testing.T) {
 	)
 }
 
+// A written file does not need the execute bit that 0755 grants a directory.
+func TestUseRestrictiveFilePermissionsWriteFile(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.UseRestrictiveFilePermissions{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "os"
+
+			func f() {
+				os.WriteFile("/tmp/file", nil, 0777)
+			}
+		`, `
+			package main
+
+			import "os"
+
+			func f() {
+				os.WriteFile("/tmp/file", nil, 0644)
+			}
+		`),
+	)
+}
+
 func TestUseRestrictiveFilePermissionsChmod(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&style.UseRestrictiveFilePermissions{})
 	spec.RewriteRun(t,
