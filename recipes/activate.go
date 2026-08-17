@@ -8,6 +8,7 @@ import (
 	"github.com/moderneinc/recipes-go/recipes/errorhandling"
 	"github.com/moderneinc/recipes-go/recipes/migration"
 	"github.com/moderneinc/recipes-go/recipes/migration/jsonv2"
+	"github.com/moderneinc/recipes-go/recipes/migration/testify"
 	"github.com/moderneinc/recipes-go/recipes/naming"
 	"github.com/moderneinc/recipes-go/recipes/performance"
 	"github.com/moderneinc/recipes-go/recipes/redundancy"
@@ -86,6 +87,9 @@ func Activate(r *recipe.Registry) {
 	r.Register(&simplification.MergeCollapsibleIf{}, golang, codeQuality, simplify)
 	r.Register(&simplification.SimplifyRedundantLogicalExpression{}, golang, codeQuality, simplify)
 	r.Register(&simplification.MergeIdenticalBranches{}, golang, codeQuality, simplify)
+	r.Register(&simplification.PreferStringComparison{}, golang, codeQuality, simplify)
+	r.Register(&simplification.PreferStringsToLowerMap{}, golang, codeQuality, simplify)
+	r.Register(&simplification.PreferStringsToUpperMap{}, golang, codeQuality, simplify)
 
 	// Redundancy
 	r.Register(&redundancy.RemoveRedundantReturn{}, golang, codeQuality, redundant)
@@ -173,6 +177,21 @@ func Activate(r *recipe.Registry) {
 	r.Register(&style.AvoidNestedGoroutine{}, golang, codeQuality, styleCategory)
 	r.Register(&style.RemoveDebugPrint{}, golang, codeQuality, styleCategory)
 	r.Register(&style.SimplifySelectDefaultOnly{}, golang, codeQuality, styleCategory)
+	r.Register(&style.AvoidGoto{}, golang, codeQuality, styleCategory)
+	r.Register(&style.AvoidLabel{}, golang, codeQuality, styleCategory)
+	r.Register(&style.SimplifyComplexSwitch{}, golang, codeQuality, styleCategory)
+	r.Register(&style.RemoveDeprecatedRandSeed{}, golang, codeQuality, styleCategory)
+	r.Register(&style.EnforceTlsVerification{}, golang, codeQuality, styleCategory)
+	r.Register(&style.UseParameterizedSqlQuery{}, golang, codeQuality, styleCategory)
+	r.Register(&style.UseRestrictiveFilePermissions{}, golang, codeQuality, styleCategory)
+	r.Register(&style.EnsurePreparedStatementClosed{}, golang, codeQuality, styleCategory)
+	r.Register(&style.EnsureTransactionFinalized{}, golang, codeQuality, styleCategory)
+	r.Register(&style.EnsureTempCleanedUp{}, golang, codeQuality, styleCategory)
+	r.Register(&style.EnsureTickerStopped{}, golang, codeQuality, styleCategory)
+	r.Register(&style.AvoidFallthrough{}, golang, codeQuality, styleCategory)
+	r.Register(&style.EnsureHttpBodyClosed{}, golang, codeQuality, styleCategory)
+	r.Register(&style.EnsureSqlRowsClosed{}, golang, codeQuality, styleCategory)
+	r.Register(&style.EnsureTimerStopped{}, golang, codeQuality, styleCategory)
 
 	// Error handling
 	errCategory := recipe.CategoryDescriptor{DisplayName: "Error handling", Description: "Error handling best practices"}
@@ -223,6 +242,10 @@ func Activate(r *recipe.Registry) {
 	r.Register(&performance.AvoidFmtInLoop{}, golang, codeQuality, perfCategory)
 	r.Register(&performance.LimitGoroutinesInLoop{}, golang, codeQuality, perfCategory)
 	r.Register(&performance.AvoidLockInLoop{}, golang, codeQuality, perfCategory)
+	r.Register(&performance.AvoidReadAllInLoop{}, golang, codeQuality, perfCategory)
+	r.Register(&performance.BatchHttpCalls{}, golang, codeQuality, perfCategory)
+	r.Register(&performance.OpenFileOutsideLoop{}, golang, codeQuality, perfCategory)
+	r.Register(&performance.OptimizeCopyInLoop{}, golang, codeQuality, perfCategory)
 
 	// Naming
 	namingCategory := recipe.CategoryDescriptor{DisplayName: "Naming", Description: "Naming conventions"}
@@ -255,6 +278,23 @@ func Activate(r *recipe.Registry) {
 	r.Register(&migration.FormatGoMod{}, golang, codeQuality, migrationCategory)
 	r.Register(&migration.FindMissingGoModRequires{}, golang, codeQuality, migrationCategory)
 	r.Register(&migration.FindUnusedGoModRequires{}, golang, codeQuality, migrationCategory)
+
+	// Migration — adopt stretchr/testify
+	testifyCategory := recipe.CategoryDescriptor{DisplayName: "Testify", Description: "Adopt the stretchr/testify assertion library"}
+	r.Register(&testify.AdoptTestify{}, golang, codeQuality, migrationCategory, testifyCategory)
+	r.Register(&testify.AdoptTestifyRequireNoError{}, golang, codeQuality, migrationCategory, testifyCategory)
+	r.Register(&testify.AdoptTestifyAssertNoError{}, golang, codeQuality, migrationCategory, testifyCategory)
+	r.Register(&testify.AdoptTestifyRequireError{}, golang, codeQuality, migrationCategory, testifyCategory)
+	r.Register(&testify.AdoptTestifyAssertError{}, golang, codeQuality, migrationCategory, testifyCategory)
+	r.Register(&testify.AdoptTestifyRequireEqual{}, golang, codeQuality, migrationCategory, testifyCategory)
+	r.Register(&testify.AdoptTestifyAssertEqual{}, golang, codeQuality, migrationCategory, testifyCategory)
+	r.Register(&testify.AdoptTestifyRequireTrue{}, golang, codeQuality, migrationCategory, testifyCategory)
+	r.Register(&testify.AdoptTestifyAssertTrue{}, golang, codeQuality, migrationCategory, testifyCategory)
+	r.Register(&testify.AdoptTestifyRequireNil{}, golang, codeQuality, migrationCategory, testifyCategory)
+	r.Register(&testify.AdoptTestifyAssertNil{}, golang, codeQuality, migrationCategory, testifyCategory)
+	r.Register(&testify.AdoptTestifyRequireLen{}, golang, codeQuality, migrationCategory, testifyCategory)
+	r.Register(&testify.AdoptTestifyAssertLen{}, golang, codeQuality, migrationCategory, testifyCategory)
+	r.Register(&testify.AddTestifyDependency{}, golang, codeQuality, migrationCategory, testifyCategory)
 
 	// Migration — encoding/json to encoding/json/v2
 	jsonV2Category := recipe.CategoryDescriptor{DisplayName: "JSON v2", Description: "Migrate encoding/json to encoding/json/v2"}

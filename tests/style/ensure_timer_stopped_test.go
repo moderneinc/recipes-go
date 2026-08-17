@@ -37,6 +37,24 @@ func TestEnsureTimerStopped(t *testing.T) {
 	)
 }
 
+// A time.AfterFunc callback is meant to run after the enclosing function
+// returns, which is exactly when a deferred Stop would cancel it.
+func TestEnsureTimerStoppedNoChangeAfterFunc(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.EnsureTimerStopped{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "time"
+
+			func schedule(f func()) {
+				t := time.AfterFunc(time.Minute, f)
+				_ = t
+			}
+		`),
+	)
+}
+
 func TestEnsureTimerStoppedNoChangeNow(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&style.EnsureTimerStopped{})
 	spec.RewriteRun(t,

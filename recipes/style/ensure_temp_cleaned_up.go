@@ -37,39 +37,16 @@ type ensureTempCleanedUpVisitor struct {
 
 func (v *ensureTempCleanedUpVisitor) VisitBlock(block *java.Block, p any) java.J {
 	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
-
-	var newStmts []java.RightPadded[java.Statement]
-	changed := false
-
-	for i, rp := range block.Statements {
-		newStmts = append(newStmts, rp)
-
-		if varName, ok := extractAssignedVar(rp.Element, isOsCreateTemp); ok {
-			if hasDeferRemoveAfter(block.Statements, i, varName) {
-				continue
-			}
-			deferStmt := buildDeferOsRemove(varName, rp.Element)
-			newStmts = append(newStmts, java.RightPadded[java.Statement]{Element: deferStmt})
-			changed = true
-		}
-	}
-
-	if changed {
-		return block.WithStatements(newStmts)
-	}
-	return block
+	return insertDefer(block, isOsCreateTemp, hasDeferRemoveAfter,
+		func(a acquisition, acquire java.Statement) *golang.Defer {
+			return buildDeferOsRemove(a.varName, acquire)
+		})
 }
 
 // isOsCreateTemp returns true if the method invocation is os.CreateTemp.
-func isOsCreateTemp(mi *java.MethodInvocation) bool {
-	if mi.Select == nil {
-		return false
-	}
-	ident, ok := mi.Select.Element.(*java.Identifier)
-	if !ok || ident.Name != "os" {
-		return false
-	}
-	return mi.Name.Name == "CreateTemp"
+func isOsCreateTemp(a acquisition) bool {
+	declaring, ok := declaringType(a.call)
+	return ok && declaring == "os" && a.call.Name.Name == "CreateTemp"
 }
 
 // hasDeferRemoveAfter checks if any statement after index i is a defer

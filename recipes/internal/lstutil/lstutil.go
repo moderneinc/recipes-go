@@ -50,6 +50,11 @@ func IsInitWrappedIf(c *visitor.Cursor) bool {
 
 // Reports whether an expression is `err != nil`.
 func IsErrNotNil(expr java.Expression) bool {
+	return IsNotNilCheck(expr, "err")
+}
+
+// Reports whether an expression is `<name> != nil`.
+func IsNotNilCheck(expr java.Expression, name string) bool {
 	bin, ok := expr.(*java.Binary)
 	if !ok || bin.Operator.Element != java.NotEqual {
 		return false
@@ -59,5 +64,5 @@ func IsErrNotNil(expr java.Expression) bool {
 	if !leftOk || !rightOk {
 		return false
 	}
-	return leftIdent.Name == "err" && rightIdent.Name == "nil"
+	return leftIdent.Name == name && rightIdent.Name == "nil"
 }

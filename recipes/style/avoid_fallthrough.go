@@ -11,10 +11,9 @@ import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
-// AvoidFallthrough removes fallthrough statements in switch cases.
-// Fallthrough is rarely used in Go and can be confusing to readers.
-// Removing fallthrough changes behavior by stopping the fall-through,
-// which is the intended remediation.
+// AvoidFallthrough marks fallthrough statements in switch cases. It reports
+// rather than rewrites: the remediation is to merge or duplicate the cases,
+// which changes the code around the statement.
 type AvoidFallthrough struct {
 	recipe.Base
 }
@@ -24,7 +23,7 @@ func (r *AvoidFallthrough) Name() string {
 }
 func (r *AvoidFallthrough) DisplayName() string { return "Avoid fallthrough" }
 func (r *AvoidFallthrough) Description() string {
-	return "Remove fallthrough statements in switch cases. Fallthrough is rarely used in Go and can be confusing."
+	return "Find fallthrough statements in switch cases. Fallthrough is rarely used in Go and can be confusing."
 }
 func (r *AvoidFallthrough) Tags() []string { return []string{"style"} }
 
@@ -36,24 +35,8 @@ type avoidFallthroughVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *avoidFallthroughVisitor) VisitCase(c *java.Case, p any) java.J {
-	c = v.GoVisitor.VisitCase(c, p).(*java.Case)
-
-	// Remove any fallthrough statements from the case body.
-	changed := false
-	var body []java.RightPadded[java.Statement]
-	for _, rp := range c.Body {
-		if _, ok := rp.Element.(*golang.Fallthrough); ok {
-			changed = true
-			continue
-		}
-		body = append(body, rp)
-	}
-
-	if !changed {
-		return c
-	}
-
-	c.Body = body
-	return c
+func (v *avoidFallthroughVisitor) VisitFallthrough(f *golang.Fallthrough, p any) java.J {
+	f = v.GoVisitor.VisitFallthrough(f, p).(*golang.Fallthrough)
+	return f.WithMarkers(java.MarkupInfo(f.Markers,
+		"fallthrough continues into the next case; merge or duplicate the cases instead"))
 }
