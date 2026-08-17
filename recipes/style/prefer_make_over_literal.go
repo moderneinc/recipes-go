@@ -7,20 +7,18 @@ package style
 import (
 	"fmt"
 
+	"github.com/google/uuid"
 	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
-)
-
-var (
-	mapKey = template.Expr("k")
-	mapVal = template.Expr("v")
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
 // PreferMakeForEmptyMap replaces `map[K]V{}` with `make(map[K]V)` for
 // empty map initialization. This is the idiomatic Go style when the map
 // will be populated later.
-// golangci-lint: gocritic (emptyMapLiteral)
 type PreferMakeForEmptyMap struct {
 	recipe.Base
 }
@@ -34,12 +32,46 @@ func (r *PreferMakeForEmptyMap) Description() string {
 }
 func (r *PreferMakeForEmptyMap) Tags() []string { return []string{"style"} }
 
-// Note: This pattern requires matching composite literals with type expressions,
-// which the current template system doesn't support well for generic map types.
-// Keeping as a search-only placeholder for now.
-func (r *PreferMakeForEmptyMap) RecipeList() []recipe.Recipe { return nil }
+func (r *PreferMakeForEmptyMap) Editor() recipe.TreeVisitor {
+	return visitor.Init(&preferMakeForEmptyMapVisitor{})
+}
 
-// --- Simpler template-expressible recipes ---
+type preferMakeForEmptyMapVisitor struct {
+	visitor.GoVisitor
+}
+
+func (v *preferMakeForEmptyMapVisitor) VisitComposite(comp *golang.Composite, p any) java.J {
+	comp = v.GoVisitor.VisitComposite(comp, p).(*golang.Composite)
+
+	mapType, ok := comp.TypeExpr.(*golang.MapType)
+	if !ok {
+		return comp
+	}
+
+	// A `{}` holding only comments carries them as elements, and make() has
+	// nowhere to put them.
+	if len(comp.Elements.Elements) > 0 {
+		return comp
+	}
+
+	// `&map[K]V{}` is legal Go; `&make(map[K]V)` is not, since make is a call.
+	if unary, ok := v.Cursor().Parent().Value().(*golang.Unary); ok && unary.Operator.Element == golang.AddressOf {
+		return comp
+	}
+
+	return &java.MethodInvocation{
+		ID:     uuid.New(),
+		Prefix: comp.Prefix,
+		Name:   &java.Identifier{ID: uuid.New(), Name: "make"},
+		Arguments: java.Container[java.Expression]{
+			Elements: []java.RightPadded[java.Expression]{
+				{Element: mapType.WithPrefix(java.EmptySpace)},
+			},
+		},
+	}
+}
+
+// --- Template-expressible recipes ---
 
 var (
 	newS1 = template.Expr("s")
