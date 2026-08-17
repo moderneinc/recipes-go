@@ -6,11 +6,11 @@ OpenRewrite recipes for Go codebases — code quality, migration, and remediatio
 
 The Go module lives at the repository root (module path `github.com/moderneinc/recipes-go`) so that a single plain `vX.Y.Z` tag serves both the Maven publish and the Go module proxy — no subdirectory-prefixed tag is needed.
 
-- `recipes/` — Recipe implementations by category (simplification, redundancy, style, performance, error handling)
-- `diagnostic/` — Diagnostic mapping types for harness comparison
+- `activate.go` — Registers every recipe with the catalog; `recipes/activate.go` holds the per-category registrations
+- `recipes/` — Recipe implementations by category (simplification, redundancy, style, performance, error handling, naming, migration)
+- `diagnostic/` — The staticcheck and golangci-lint check IDs, and the `HasMappings` interface a recipe implements to claim one
 - `tests/` — xunit-style tests by category
-- `code-quality-harness/` — Comparison harness (staticcheck/golangci-lint vs OpenRewrite)
-- `working-set-code-quality/` — Real Go repos for harness testing
+- `deck/` — Standalone HTML slide deck and technical write-up
 
 ## Building & Testing
 
@@ -19,6 +19,16 @@ The Go module lives at the repository root (module path `github.com/moderneinc/r
 go test ./... -count=1       # Run all tests directly
 go test ./tests/redundancy/  # Run specific category
 ```
+
+### Sweeping every recipe over real repositories
+
+`TestParseRealRepos` runs all registered recipes over upstream Go projects, checking that none panics or emits output that fails to reparse or reprint. It reaches the network and is excluded from `./gradlew build`, so run it by hand — after adding a recipe, and before a release:
+
+```bash
+REALWORLD_REPOS=1 go test ./tests/ -run TestParseRealRepos -count=1 -v
+```
+
+The repositories and their pinned revisions are `realWorldRepos` in `tests/validation_test.go`. Each is fetched shallow into `build/realworld/<owner>/<repo>@<sha>/` and reused across runs; bumping a pin fetches afresh. Findings are informational — only panics and unusable output fail the test.
 
 ## Releasing
 

@@ -44,9 +44,11 @@ func (v *removeEmptyFunctionVisitor) VisitMethodDeclaration(md *java.MethodDecla
 		return md
 	}
 
-	// Skip methods (have a receiver) -- they may implement an interface. A method's
-	// receiver lives on the enclosing golang.MethodDeclaration wrapper.
-	if _, isMethod := v.Cursor().Parent().Value().(*golang.MethodDeclaration); isMethod {
+	// Only a declaration sitting directly in the file is a free function: a
+	// method nests inside the golang.MethodDeclaration carrying its receiver and
+	// may implement an interface, and a function literal nests inside the
+	// expression whose operand it is.
+	if _, isTopLevel := v.Cursor().Parent().Value().(*golang.CompilationUnit); !isTopLevel {
 		return md
 	}
 
