@@ -5,6 +5,7 @@
 package style
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"strings"
 
 	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
@@ -31,6 +32,12 @@ func (r *ReduceNestingDepth) Description() string {
 	return "Invert `if err == nil { body }` to `if err != nil { return }` followed by the body, reducing nesting by one level."
 }
 func (r *ReduceNestingDepth) Tags() []string { return []string{"style", "lint"} }
+
+func (r *ReduceNestingDepth) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "nestif", Tool: diagnostic.GolangciLint, HasFix: false},
+	}
+}
 
 func (r *ReduceNestingDepth) Editor() recipe.TreeVisitor {
 	return visitor.Init(&reduceNestingDepthVisitor{})

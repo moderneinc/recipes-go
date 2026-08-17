@@ -34,6 +34,7 @@ func (r *AvoidDotImport) Tags() []string { return []string{"style", "lint"} }
 
 func (r *AvoidDotImport) DiagnosticMappings() []diagnostic.Mapping {
 	return []diagnostic.Mapping{
+		{DiagnosticID: "ST1001", Tool: diagnostic.Staticcheck, HasFix: true},
 		{DiagnosticID: "dot-imports", Tool: diagnostic.GolangciLint, HasFix: true},
 	}
 }

@@ -5,6 +5,7 @@
 package style
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/parser"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
@@ -31,6 +32,12 @@ func (r *UseHttpServerWithTimeout) Description() string {
 	return "Replace `http.ListenAndServe(addr, handler)` with an explicit `http.Server` with read/write timeouts."
 }
 func (r *UseHttpServerWithTimeout) Tags() []string { return []string{"security"} }
+
+func (r *UseHttpServerWithTimeout) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "G114", Tool: diagnostic.GolangciLint, HasFix: false},
+	}
+}
 
 func (r *UseHttpServerWithTimeout) Editor() recipe.TreeVisitor {
 	return visitor.Init(&useHttpServerWithTimeoutVisitor{})

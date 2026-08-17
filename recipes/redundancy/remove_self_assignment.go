@@ -5,6 +5,7 @@
 package redundancy
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -25,6 +26,12 @@ func (r *RemoveSelfAssignment) Description() string {
 	return "Remove `x = x` self-assignments which are redundant and may indicate a bug."
 }
 func (r *RemoveSelfAssignment) Tags() []string { return []string{"cleanup", "redundancy", "lint"} }
+
+func (r *RemoveSelfAssignment) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "SA4018", Tool: diagnostic.Staticcheck, HasFix: true},
+	}
+}
 
 func (r *RemoveSelfAssignment) Editor() recipe.TreeVisitor {
 	return visitor.Init(&removeSelfAssignmentVisitor{})

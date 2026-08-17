@@ -5,6 +5,7 @@
 package style
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
@@ -27,6 +28,12 @@ func (r *RemoveDebugPrint) Description() string {
 	return "Remove calls to `fmt.Println`, `fmt.Printf`, `fmt.Print`, `println`, and `print`."
 }
 func (r *RemoveDebugPrint) Tags() []string { return []string{"style"} }
+
+func (r *RemoveDebugPrint) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "forbidigo", Tool: diagnostic.GolangciLint, HasFix: false},
+	}
+}
 
 func (r *RemoveDebugPrint) Editor() recipe.TreeVisitor {
 	return visitor.Init(&removeDebugPrintVisitor{})

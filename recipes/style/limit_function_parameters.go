@@ -5,6 +5,7 @@
 package style
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -26,6 +27,12 @@ func (r *LimitFunctionParameters) Description() string {
 	return "Find functions with more than 5 parameters. Consider grouping parameters into a struct."
 }
 func (r *LimitFunctionParameters) Tags() []string { return []string{"style", "lint"} }
+
+func (r *LimitFunctionParameters) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "argument-limit", Tool: diagnostic.GolangciLint, HasFix: true},
+	}
+}
 
 func (r *LimitFunctionParameters) Editor() recipe.TreeVisitor {
 	return visitor.Init(&limitFunctionParametersVisitor{})

@@ -5,6 +5,7 @@
 package errorhandling
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
@@ -28,6 +29,12 @@ func (r *PreferErrorsIsOverEquality) Description() string {
 	return "Replace `err == ErrFoo` with `errors.Is(err, ErrFoo)` for correct wrapped error handling."
 }
 func (r *PreferErrorsIsOverEquality) Tags() []string { return []string{"error-handling"} }
+
+func (r *PreferErrorsIsOverEquality) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "errorlint", Tool: diagnostic.GolangciLint, HasFix: true},
+	}
+}
 
 func (r *PreferErrorsIsOverEquality) Editor() recipe.TreeVisitor {
 	return visitor.Init(&preferErrorsIsVisitor{})

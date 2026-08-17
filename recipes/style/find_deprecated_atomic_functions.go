@@ -5,6 +5,7 @@
 package style
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"strings"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
@@ -57,11 +58,19 @@ type FindDeprecatedAtomicFunctions struct {
 func (r *FindDeprecatedAtomicFunctions) Name() string {
 	return "org.openrewrite.golang.codequality.FindDeprecatedAtomicFunctions"
 }
-func (r *FindDeprecatedAtomicFunctions) DisplayName() string { return "Find deprecated `sync/atomic` functions" }
+func (r *FindDeprecatedAtomicFunctions) DisplayName() string {
+	return "Find deprecated `sync/atomic` functions"
+}
 func (r *FindDeprecatedAtomicFunctions) Description() string {
 	return "Find deprecated `sync/atomic` free-function calls (e.g. `atomic.AddInt32`) that should be migrated to the type-safe atomic types introduced in Go 1.19 (e.g. `atomic.Int32`)."
 }
 func (r *FindDeprecatedAtomicFunctions) Tags() []string { return []string{"style", "concurrency"} }
+
+func (r *FindDeprecatedAtomicFunctions) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "SA1019", Tool: diagnostic.Staticcheck, HasFix: true},
+	}
+}
 
 func (r *FindDeprecatedAtomicFunctions) Editor() recipe.TreeVisitor {
 	return visitor.Init(&findDeprecatedAtomicFunctionsVisitor{})

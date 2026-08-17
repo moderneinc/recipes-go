@@ -7,7 +7,6 @@ package simplification
 import (
 	"fmt"
 
-	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
@@ -42,12 +41,6 @@ func (r *PreferIoWriteString) Description() string {
 	return "Replace `fmt.Fprintf(w, \"%s\", s)` with `io.WriteString(w, s)`."
 }
 func (r *PreferIoWriteString) Tags() []string { return []string{"cleanup", "simplification"} }
-
-func (r *PreferIoWriteString) DiagnosticMappings() []diagnostic.Mapping {
-	return []diagnostic.Mapping{
-		{DiagnosticID: "S1025", Tool: diagnostic.Staticcheck, HasFix: true},
-	}
-}
 
 func (r *PreferIoWriteString) Editor() recipe.TreeVisitor {
 	return visitor.Init(&preferIoWriteStringVisitor{})

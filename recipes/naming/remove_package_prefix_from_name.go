@@ -5,6 +5,7 @@
 package naming
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"strings"
 	"unicode"
 	"unicode/utf8"
@@ -34,6 +35,12 @@ func (r *RemovePackagePrefixFromName) Description() string {
 	return "Find exported identifiers whose name starts with the package name. Go convention discourages repeating the package name in exported identifiers."
 }
 func (r *RemovePackagePrefixFromName) Tags() []string { return []string{"naming"} }
+
+func (r *RemovePackagePrefixFromName) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "ST1003", Tool: diagnostic.Staticcheck, HasFix: true},
+	}
+}
 
 func (r *RemovePackagePrefixFromName) Editor() recipe.TreeVisitor {
 	return visitor.Init(&removePackagePrefixFromNameVisitor{})

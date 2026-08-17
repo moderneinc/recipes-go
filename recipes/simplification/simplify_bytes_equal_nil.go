@@ -7,7 +7,6 @@ package simplification
 import (
 	"fmt"
 
-	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
@@ -33,12 +32,6 @@ func (r *SimplifyBytesEqualNil) Description() string {
 }
 func (r *SimplifyBytesEqualNil) Tags() []string {
 	return []string{"cleanup", "simplification"}
-}
-
-func (r *SimplifyBytesEqualNil) DiagnosticMappings() []diagnostic.Mapping {
-	return []diagnostic.Mapping{
-		{DiagnosticID: "S1003", Tool: diagnostic.Staticcheck, HasFix: true},
-	}
 }
 
 var simplifyBytesEqualNilRight = template.NewRecipe(

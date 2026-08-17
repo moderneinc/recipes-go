@@ -5,6 +5,7 @@
 package style
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"strings"
 	"unicode"
 	"unicode/utf8"
@@ -33,6 +34,13 @@ func (r *AddExportedFuncComment) Description() string {
 }
 func (r *AddExportedFuncComment) Tags() []string {
 	return []string{"style", "lint"}
+}
+
+func (r *AddExportedFuncComment) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "ST1020", Tool: diagnostic.Staticcheck, HasFix: true},
+		{DiagnosticID: "exported", Tool: diagnostic.GolangciLint, HasFix: true},
+	}
 }
 
 func (r *AddExportedFuncComment) Editor() recipe.TreeVisitor {

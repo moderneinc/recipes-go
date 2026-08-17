@@ -5,6 +5,7 @@
 package errorhandling
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -25,6 +26,12 @@ func (r *CheckCloseError) Description() string {
 	return "Replace bare `f.Close()` with `_ = f.Close()` to explicitly mark the discarded error."
 }
 func (r *CheckCloseError) Tags() []string { return []string{"error-handling"} }
+
+func (r *CheckCloseError) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "errcheck", Tool: diagnostic.GolangciLint, HasFix: false},
+	}
+}
 
 func (r *CheckCloseError) Editor() recipe.TreeVisitor {
 	return visitor.Init(&checkCloseErrorVisitor{})

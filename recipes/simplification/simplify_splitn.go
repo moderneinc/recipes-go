@@ -7,7 +7,6 @@ package simplification
 import (
 	"fmt"
 
-	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 )
@@ -34,12 +33,6 @@ func (r *SimplifySplitN) Description() string {
 	return "Replace `strings.SplitN(s, sep, -1)` with `strings.Split(s, sep)` since -1 means split all."
 }
 func (r *SimplifySplitN) Tags() []string { return []string{"cleanup", "simplification"} }
-
-func (r *SimplifySplitN) DiagnosticMappings() []diagnostic.Mapping {
-	return []diagnostic.Mapping{
-		{DiagnosticID: "S1011", Tool: diagnostic.Staticcheck, HasFix: true},
-	}
-}
 
 var simplifySplitNImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.SimplifySplitN$Impl"),

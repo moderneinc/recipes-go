@@ -7,7 +7,6 @@ package simplification
 import (
 	"fmt"
 
-	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
@@ -31,12 +30,6 @@ func (r *PreferStrconvAtoi) Description() string {
 	return "Replace `strconv.ParseInt(s, 10, 0)` with `strconv.Atoi(s)`."
 }
 func (r *PreferStrconvAtoi) Tags() []string { return []string{"cleanup", "simplification"} }
-
-func (r *PreferStrconvAtoi) DiagnosticMappings() []diagnostic.Mapping {
-	return []diagnostic.Mapping{
-		{DiagnosticID: "S1030", Tool: diagnostic.Staticcheck, HasFix: true},
-	}
-}
 
 var (
 	atoiPattern = template.Expression(fmt.Sprintf(`strconv.ParseInt(%s, 10, 0)`, atoiS)).

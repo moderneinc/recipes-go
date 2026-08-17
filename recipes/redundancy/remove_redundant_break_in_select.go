@@ -5,6 +5,7 @@
 package redundancy
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -29,6 +30,12 @@ func (r *RemoveRedundantBreakInSelect) Description() string {
 }
 func (r *RemoveRedundantBreakInSelect) Tags() []string {
 	return []string{"cleanup", "simplification"}
+}
+
+func (r *RemoveRedundantBreakInSelect) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "S1023", Tool: diagnostic.Staticcheck, HasFix: true},
+	}
 }
 
 func (r *RemoveRedundantBreakInSelect) Editor() recipe.TreeVisitor {

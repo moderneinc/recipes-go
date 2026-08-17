@@ -5,6 +5,7 @@
 package style
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -40,6 +41,12 @@ func (r *UseCryptoRand) Description() string {
 	return "Find usage of `math/rand` functions. Consider using `crypto/rand` for security-sensitive randomness."
 }
 func (r *UseCryptoRand) Tags() []string { return []string{"style", "security"} }
+
+func (r *UseCryptoRand) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "G404", Tool: diagnostic.GolangciLint, HasFix: false},
+	}
+}
 
 func (r *UseCryptoRand) Editor() recipe.TreeVisitor {
 	return visitor.Init(&useCryptoRandVisitor{})

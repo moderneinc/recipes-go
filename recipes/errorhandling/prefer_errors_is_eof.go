@@ -5,6 +5,7 @@
 package errorhandling
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -26,6 +27,12 @@ func (r *PreferErrorsIsEOF) Description() string {
 	return "Replace `err == io.EOF` with `errors.Is(err, io.EOF)` and `err != io.EOF` with `!errors.Is(err, io.EOF)` for correct wrapped error handling."
 }
 func (r *PreferErrorsIsEOF) Tags() []string { return []string{"error-handling"} }
+
+func (r *PreferErrorsIsEOF) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "errorlint", Tool: diagnostic.GolangciLint, HasFix: true},
+	}
+}
 
 func (r *PreferErrorsIsEOF) Editor() recipe.TreeVisitor {
 	return visitor.Init(&preferErrorsIsEOFVisitor{})

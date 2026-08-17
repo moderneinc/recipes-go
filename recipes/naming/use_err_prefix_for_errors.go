@@ -5,6 +5,7 @@
 package naming
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"strings"
 	"unicode"
 	"unicode/utf8"
@@ -30,6 +31,12 @@ func (r *UseErrPrefixForErrors) Description() string {
 	return "Find package-level error variables not following the `ErrFoo` naming convention. Go convention is to prefix sentinel errors with \"Err\"."
 }
 func (r *UseErrPrefixForErrors) Tags() []string { return []string{"naming"} }
+
+func (r *UseErrPrefixForErrors) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "ST1012", Tool: diagnostic.Staticcheck, HasFix: true},
+	}
+}
 
 func (r *UseErrPrefixForErrors) Editor() recipe.TreeVisitor {
 	return visitor.Init(&useErrPrefixForErrorsVisitor{})

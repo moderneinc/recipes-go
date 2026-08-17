@@ -5,6 +5,7 @@
 package simplification
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -27,6 +28,12 @@ func (r *SimplifyIfReturnBool) Description() string {
 	return "Replace `if cond { return true }; return false` with `return cond`, and vice versa."
 }
 func (r *SimplifyIfReturnBool) Tags() []string { return []string{"cleanup", "simplification"} }
+
+func (r *SimplifyIfReturnBool) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "S1008", Tool: diagnostic.Staticcheck, HasFix: true},
+	}
+}
 
 func (r *SimplifyIfReturnBool) Editor() recipe.TreeVisitor {
 	return visitor.Init(&simplifyIfReturnBoolVisitor{})

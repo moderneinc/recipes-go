@@ -5,6 +5,7 @@
 package style
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -26,6 +27,12 @@ func (r *AvoidFormatStringVariable) Description() string {
 	return "Find calls like `fmt.Sprintf(variable)` where the format string is not a literal. This is a potential format string vulnerability."
 }
 func (r *AvoidFormatStringVariable) Tags() []string { return []string{"style", "security"} }
+
+func (r *AvoidFormatStringVariable) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "SA1006", Tool: diagnostic.Staticcheck, HasFix: true},
+	}
+}
 
 func (r *AvoidFormatStringVariable) Editor() recipe.TreeVisitor {
 	return visitor.Init(&avoidFormatStringVariableVisitor{})

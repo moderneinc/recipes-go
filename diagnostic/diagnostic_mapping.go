@@ -8,10 +8,22 @@ package diagnostic
 type AnalyzerTool int
 
 const (
-	Staticcheck  AnalyzerTool = iota // staticcheck (SA*, S*, ST*, QF*)
+	Staticcheck  AnalyzerTool = iota // staticcheck (S*, SA*, ST*, U*)
 	GoVet                            // go vet
 	GolangciLint                     // golangci-lint (meta-linter)
 )
+
+func (t AnalyzerTool) String() string {
+	switch t {
+	case Staticcheck:
+		return "Staticcheck"
+	case GoVet:
+		return "GoVet"
+	case GolangciLint:
+		return "GolangciLint"
+	}
+	return "unknown"
+}
 
 // Mapping maps a recipe to its equivalent static analysis diagnostic.
 type Mapping struct {
@@ -21,7 +33,7 @@ type Mapping struct {
 }
 
 // HasMappings is implemented by recipes that correspond to
-// known static analysis diagnostics. Used by the comparison harness.
+// known static analysis diagnostics.
 type HasMappings interface {
 	DiagnosticMappings() []Mapping
 }

@@ -5,6 +5,7 @@
 package errorhandling
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -26,6 +27,12 @@ func (r *HandleDeferredCloseError) Description() string {
 	return "Wrap `defer x.Close()` in a closure to explicitly handle the error: `defer func() { _ = x.Close() }()`."
 }
 func (r *HandleDeferredCloseError) Tags() []string { return []string{"error-handling"} }
+
+func (r *HandleDeferredCloseError) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "errcheck", Tool: diagnostic.GolangciLint, HasFix: false},
+	}
+}
 
 func (r *HandleDeferredCloseError) Editor() recipe.TreeVisitor {
 	return visitor.Init(&handleDeferredCloseErrorVisitor{})

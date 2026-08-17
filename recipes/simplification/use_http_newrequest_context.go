@@ -38,7 +38,7 @@ func (r *UseHttpNewRequestWithContext) Tags() []string { return []string{"cleanu
 
 func (r *UseHttpNewRequestWithContext) DiagnosticMappings() []diagnostic.Mapping {
 	return []diagnostic.Mapping{
-		{DiagnosticID: "SA1019", Tool: diagnostic.Staticcheck, HasFix: true},
+		{DiagnosticID: "noctx", Tool: diagnostic.GolangciLint, HasFix: false},
 	}
 }
 

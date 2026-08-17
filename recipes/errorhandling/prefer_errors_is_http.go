@@ -5,6 +5,7 @@
 package errorhandling
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -27,6 +28,12 @@ func (r *PreferErrorsIsHttpServerClosed) Description() string {
 	return "Replace `err == http.ErrServerClosed` with `errors.Is(err, http.ErrServerClosed)` and `err != http.ErrServerClosed` with `!errors.Is(err, http.ErrServerClosed)` for correct wrapped error handling."
 }
 func (r *PreferErrorsIsHttpServerClosed) Tags() []string { return []string{"error-handling"} }
+
+func (r *PreferErrorsIsHttpServerClosed) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "errorlint", Tool: diagnostic.GolangciLint, HasFix: true},
+	}
+}
 
 func (r *PreferErrorsIsHttpServerClosed) Editor() recipe.TreeVisitor {
 	return visitor.Init(&preferErrorsIsHttpVisitor{})

@@ -5,6 +5,7 @@
 package redundancy
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/printer"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
@@ -33,6 +34,12 @@ func (r *RemoveDuplicateConditions) Description() string {
 }
 func (r *RemoveDuplicateConditions) Tags() []string {
 	return []string{"cleanup", "redundancy", "RSPEC-S1862"}
+}
+
+func (r *RemoveDuplicateConditions) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "SA4014", Tool: diagnostic.Staticcheck, HasFix: true},
+	}
 }
 
 func (r *RemoveDuplicateConditions) Editor() recipe.TreeVisitor {

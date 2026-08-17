@@ -5,6 +5,7 @@
 package style
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -33,6 +34,13 @@ func (r *UseParameterizedSqlQuery) Description() string {
 	return "Find SQL queries built with string concatenation via db.Query, db.QueryRow, or db.Exec. Use parameterized queries to avoid SQL injection."
 }
 func (r *UseParameterizedSqlQuery) Tags() []string { return []string{"security", "database/sql"} }
+
+func (r *UseParameterizedSqlQuery) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "G201", Tool: diagnostic.GolangciLint, HasFix: false},
+		{DiagnosticID: "G202", Tool: diagnostic.GolangciLint, HasFix: false},
+	}
+}
 
 func (r *UseParameterizedSqlQuery) Editor() recipe.TreeVisitor {
 	return visitor.Init(&useParameterizedSqlQueryVisitor{})

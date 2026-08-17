@@ -6,6 +6,7 @@ package performance
 
 import (
 	"fmt"
+	"github.com/moderneinc/recipes-go/diagnostic"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
@@ -43,6 +44,12 @@ func (r *PreferStrconvItoa) Description() string {
 	return "Replace `fmt.Sprintf(\"%d\", n)` with `strconv.Itoa(n)` for better performance."
 }
 func (r *PreferStrconvItoa) Tags() []string { return []string{"performance"} }
+
+func (r *PreferStrconvItoa) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "perfsprint", Tool: diagnostic.GolangciLint, HasFix: true},
+	}
+}
 
 func (r *PreferStrconvItoa) RecipeList() []recipe.Recipe {
 	return []recipe.Recipe{preferStrconvItoaImpl}

@@ -5,6 +5,7 @@
 package naming
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"strings"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
@@ -28,6 +29,12 @@ func (r *UseShortReceiverName) Description() string {
 	return "Rename method receivers longer than 2 characters to the first lowercase letter of the type name."
 }
 func (r *UseShortReceiverName) Tags() []string { return []string{"naming"} }
+
+func (r *UseShortReceiverName) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "ST1006", Tool: diagnostic.Staticcheck, HasFix: true},
+	}
+}
 
 func (r *UseShortReceiverName) Editor() recipe.TreeVisitor {
 	return visitor.Init(&useShortReceiverNameVisitor{})

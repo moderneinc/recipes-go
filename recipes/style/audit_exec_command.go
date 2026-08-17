@@ -5,6 +5,7 @@
 package style
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -25,6 +26,12 @@ func (r *AuditExecCommand) Description() string {
 	return "Find calls to `exec.Command()`. If arguments come from user input, this is a potential command injection vulnerability."
 }
 func (r *AuditExecCommand) Tags() []string { return []string{"security"} }
+
+func (r *AuditExecCommand) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "G204", Tool: diagnostic.GolangciLint, HasFix: false},
+	}
+}
 
 func (r *AuditExecCommand) Editor() recipe.TreeVisitor {
 	return visitor.Init(&auditExecCommandVisitor{})

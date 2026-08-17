@@ -7,7 +7,6 @@ package simplification
 import (
 	"fmt"
 
-	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
@@ -35,12 +34,6 @@ func (r *PreferStringComparison) Description() string {
 	return "Replace `strings.Compare(a, b) == 0` with `a == b`, `strings.Compare(a, b) != 0` with `a != b`, `strings.Compare(a, b) < 0` with `a < b`, and `strings.Compare(a, b) > 0` with `a > b`."
 }
 func (r *PreferStringComparison) Tags() []string { return []string{"cleanup", "simplification"} }
-
-func (r *PreferStringComparison) DiagnosticMappings() []diagnostic.Mapping {
-	return []diagnostic.Mapping{
-		{DiagnosticID: "S1021", Tool: diagnostic.Staticcheck, HasFix: true},
-	}
-}
 
 var preferStringComparisonEq = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferStringComparison$Eq"),

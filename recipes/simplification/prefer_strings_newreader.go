@@ -38,7 +38,7 @@ func (r *PreferStringsNewReader) Tags() []string { return []string{"cleanup", "s
 
 func (r *PreferStringsNewReader) DiagnosticMappings() []diagnostic.Mapping {
 	return []diagnostic.Mapping{
-		{DiagnosticID: "S1036", Tool: diagnostic.Staticcheck, HasFix: true},
+		{DiagnosticID: "mirror", Tool: diagnostic.GolangciLint, HasFix: true},
 	}
 }
 
