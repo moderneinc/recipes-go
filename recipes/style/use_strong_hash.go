@@ -5,6 +5,7 @@
 package style
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
@@ -28,6 +29,14 @@ func (r *UseStrongHash) Description() string {
 	return "Replace weak hash constructors (md5.New, sha1.New) with sha256.New."
 }
 func (r *UseStrongHash) Tags() []string { return []string{"style", "security"} }
+
+func (r *UseStrongHash) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "G401", Tool: diagnostic.GolangciLint, HasFix: false},
+		{DiagnosticID: "G501", Tool: diagnostic.GolangciLint, HasFix: false},
+		{DiagnosticID: "G505", Tool: diagnostic.GolangciLint, HasFix: false},
+	}
+}
 
 func (r *UseStrongHash) Editor() recipe.TreeVisitor {
 	return visitor.Init(&useStrongHashVisitor{})

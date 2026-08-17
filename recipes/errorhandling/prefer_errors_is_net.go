@@ -5,6 +5,7 @@
 package errorhandling
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -26,6 +27,12 @@ func (r *PreferErrorsIsNetClosed) Description() string {
 	return "Replace `err == net.ErrClosed` with `errors.Is(err, net.ErrClosed)` and `err != net.ErrClosed` with `!errors.Is(err, net.ErrClosed)` for correct wrapped error handling."
 }
 func (r *PreferErrorsIsNetClosed) Tags() []string { return []string{"error-handling"} }
+
+func (r *PreferErrorsIsNetClosed) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "errorlint", Tool: diagnostic.GolangciLint, HasFix: true},
+	}
+}
 
 func (r *PreferErrorsIsNetClosed) Editor() recipe.TreeVisitor {
 	return visitor.Init(&preferErrorsIsNetVisitor{})

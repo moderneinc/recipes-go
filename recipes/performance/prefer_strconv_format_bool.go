@@ -6,6 +6,7 @@ package performance
 
 import (
 	"fmt"
+	"github.com/moderneinc/recipes-go/diagnostic"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
@@ -40,6 +41,12 @@ func (r *PreferStrconvFormatBool) Description() string {
 	return "Replace `fmt.Sprintf(\"%t\", b)` with `strconv.FormatBool(b)` for better performance."
 }
 func (r *PreferStrconvFormatBool) Tags() []string { return []string{"performance"} }
+
+func (r *PreferStrconvFormatBool) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "perfsprint", Tool: diagnostic.GolangciLint, HasFix: true},
+	}
+}
 
 func (r *PreferStrconvFormatBool) Editor() recipe.TreeVisitor {
 	return visitor.Init(&preferStrconvFormatBoolVisitor{})

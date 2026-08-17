@@ -5,6 +5,7 @@
 package naming
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"strings"
 	"unicode"
 	"unicode/utf8"
@@ -31,6 +32,12 @@ func (r *UseMixedCaps) Description() string {
 	return "Find exported functions using underscores instead of camelCase. Go convention is to use MixedCaps or mixedCaps."
 }
 func (r *UseMixedCaps) Tags() []string { return []string{"naming"} }
+
+func (r *UseMixedCaps) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "ST1003", Tool: diagnostic.Staticcheck, HasFix: true},
+	}
+}
 
 func (r *UseMixedCaps) Editor() recipe.TreeVisitor {
 	return visitor.Init(&useMixedCapsVisitor{})

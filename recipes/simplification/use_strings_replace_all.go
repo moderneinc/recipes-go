@@ -7,7 +7,6 @@ package simplification
 import (
 	"fmt"
 
-	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 )
@@ -35,12 +34,6 @@ func (r *UseStringsReplaceAll) Description() string {
 	return "Replace `strings.Replace(s, old, new, -1)` with `strings.ReplaceAll(s, old, new)`."
 }
 func (r *UseStringsReplaceAll) Tags() []string { return []string{"cleanup", "simplification"} }
-
-func (r *UseStringsReplaceAll) DiagnosticMappings() []diagnostic.Mapping {
-	return []diagnostic.Mapping{
-		{DiagnosticID: "S1017", Tool: diagnostic.Staticcheck, HasFix: true},
-	}
-}
 
 var useStringsReplaceAllImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.UseStringsReplaceAll$Impl"),

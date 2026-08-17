@@ -5,6 +5,7 @@
 package simplification
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -26,6 +27,12 @@ func (r *RemoveRedundantRangeBlank) Description() string {
 	return "Remove the blank identifier from `for i, _ := range s` loops. Use `for i := range s` instead."
 }
 func (r *RemoveRedundantRangeBlank) Tags() []string { return []string{"simplification", "cleanup"} }
+
+func (r *RemoveRedundantRangeBlank) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "S1005", Tool: diagnostic.Staticcheck, HasFix: true},
+	}
+}
 
 func (r *RemoveRedundantRangeBlank) Editor() recipe.TreeVisitor {
 	return visitor.Init(&simplifyRedundantRangeBlankVisitor{})

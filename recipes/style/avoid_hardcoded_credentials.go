@@ -5,6 +5,7 @@
 package style
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"strings"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
@@ -33,6 +34,12 @@ func (r *AvoidHardcodedCredentials) Description() string {
 	return "Replace hardcoded credential string literals with `os.Getenv(\"VAR_NAME\")` calls."
 }
 func (r *AvoidHardcodedCredentials) Tags() []string { return []string{"security"} }
+
+func (r *AvoidHardcodedCredentials) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "G101", Tool: diagnostic.GolangciLint, HasFix: false},
+	}
+}
 
 func (r *AvoidHardcodedCredentials) Editor() recipe.TreeVisitor {
 	return visitor.Init(&avoidHardcodedCredentialsVisitor{})

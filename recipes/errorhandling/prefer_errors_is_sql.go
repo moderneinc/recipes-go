@@ -5,6 +5,7 @@
 package errorhandling
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -26,6 +27,12 @@ func (r *PreferErrorsIsSqlNoRows) Description() string {
 	return "Replace `err == sql.ErrNoRows` with `errors.Is(err, sql.ErrNoRows)` and `err != sql.ErrNoRows` with `!errors.Is(err, sql.ErrNoRows)` for correct wrapped error handling."
 }
 func (r *PreferErrorsIsSqlNoRows) Tags() []string { return []string{"error-handling"} }
+
+func (r *PreferErrorsIsSqlNoRows) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "errorlint", Tool: diagnostic.GolangciLint, HasFix: true},
+	}
+}
 
 func (r *PreferErrorsIsSqlNoRows) Editor() recipe.TreeVisitor {
 	return visitor.Init(&preferErrorsIsSqlVisitor{})

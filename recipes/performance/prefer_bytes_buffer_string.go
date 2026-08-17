@@ -6,6 +6,7 @@ package performance
 
 import (
 	"fmt"
+	"github.com/moderneinc/recipes-go/diagnostic"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
@@ -39,6 +40,12 @@ func (r *PreferBytesBufferString) Description() string {
 	return "Replace `string(buf.Bytes())` with `buf.String()` for better performance and readability."
 }
 func (r *PreferBytesBufferString) Tags() []string { return []string{"performance"} }
+
+func (r *PreferBytesBufferString) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "S1030", Tool: diagnostic.Staticcheck, HasFix: true},
+	}
+}
 
 func (r *PreferBytesBufferString) RecipeList() []recipe.Recipe {
 	return []recipe.Recipe{preferBytesBufferStringImpl}

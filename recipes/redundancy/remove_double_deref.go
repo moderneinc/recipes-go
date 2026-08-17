@@ -5,6 +5,7 @@
 package redundancy
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -26,6 +27,12 @@ func (r *RemoveDoubleDeref) Description() string {
 	return "Remove `*&x` where taking the address and immediately dereferencing is a no-op."
 }
 func (r *RemoveDoubleDeref) Tags() []string { return []string{"cleanup", "redundancy"} }
+
+func (r *RemoveDoubleDeref) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "SA4001", Tool: diagnostic.Staticcheck, HasFix: true},
+	}
+}
 
 func (r *RemoveDoubleDeref) Editor() recipe.TreeVisitor {
 	return visitor.Init(&removeDoubleDerefVisitor{})

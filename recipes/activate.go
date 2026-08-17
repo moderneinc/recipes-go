@@ -206,6 +206,7 @@ func Activate(r *recipe.Registry) {
 	r.Register(&errorhandling.UseErrorsAs{}, golang, codeQuality, errCategory)
 	r.Register(&errorhandling.AvoidLogFatal{}, golang, codeQuality, errCategory)
 	r.Register(&errorhandling.AuditErrorStringFormat{}, golang, codeQuality, errCategory)
+	r.Register(&errorhandling.FixErrorStringFormat{}, golang, codeQuality, errCategory)
 	r.Register(&errorhandling.AuditMultipleErrorWraps{}, golang, codeQuality, errCategory)
 	r.Register(&errorhandling.AvoidOsExit{}, golang, codeQuality, errCategory)
 	r.Register(&errorhandling.AuditRecover{}, golang, codeQuality, errCategory)

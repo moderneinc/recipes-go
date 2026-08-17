@@ -5,6 +5,7 @@
 package redundancy
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
@@ -25,6 +26,12 @@ func (r *FindEmptyFmtSprintf) Description() string {
 	return "Replace `fmt.Sprintf(\"\")` calls with an empty format string and no args with `\"\"`."
 }
 func (r *FindEmptyFmtSprintf) Tags() []string { return []string{"cleanup", "redundancy"} }
+
+func (r *FindEmptyFmtSprintf) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "S1039", Tool: diagnostic.Staticcheck, HasFix: true},
+	}
+}
 
 var removeEmptyFmtSprintfImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.FindEmptyFmtSprintf$Impl"),

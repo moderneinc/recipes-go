@@ -5,6 +5,7 @@
 package errorhandling
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -28,6 +29,12 @@ func (r *UseErrorsIsOverStringComparison) Description() string {
 }
 func (r *UseErrorsIsOverStringComparison) Tags() []string {
 	return []string{"error-handling", "lint"}
+}
+
+func (r *UseErrorsIsOverStringComparison) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "errorlint", Tool: diagnostic.GolangciLint, HasFix: true},
+	}
 }
 
 func (r *UseErrorsIsOverStringComparison) Editor() recipe.TreeVisitor {

@@ -6,6 +6,7 @@ package style
 
 import (
 	"fmt"
+	"github.com/moderneinc/recipes-go/diagnostic"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
@@ -40,6 +41,12 @@ func (r *PreferStrconvQuote) Description() string {
 	return "Replace `fmt.Sprintf(\"%q\", s)` with `strconv.Quote(s)` for clearer intent when quoting strings."
 }
 func (r *PreferStrconvQuote) Tags() []string { return []string{"style", "cleanup"} }
+
+func (r *PreferStrconvQuote) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "perfsprint", Tool: diagnostic.GolangciLint, HasFix: true},
+	}
+}
 
 func (r *PreferStrconvQuote) Editor() recipe.TreeVisitor {
 	return visitor.Init(&preferStrconvQuoteVisitor{})

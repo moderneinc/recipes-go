@@ -5,6 +5,7 @@
 package naming
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"regexp"
 	"strings"
 	"unicode"
@@ -35,6 +36,12 @@ func (r *UseMixedCapsForConstants) Description() string {
 	return "Find constant or variable names using ALL_CAPS_WITH_UNDERSCORES. Go convention is to use MixedCaps, not ALL_CAPS."
 }
 func (r *UseMixedCapsForConstants) Tags() []string { return []string{"naming"} }
+
+func (r *UseMixedCapsForConstants) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "ST1003", Tool: diagnostic.Staticcheck, HasFix: true},
+	}
+}
 
 func (r *UseMixedCapsForConstants) Editor() recipe.TreeVisitor {
 	return visitor.Init(&useMixedCapsForConstantsVisitor{})

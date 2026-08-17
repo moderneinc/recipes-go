@@ -5,6 +5,7 @@
 package style
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -26,6 +27,12 @@ func (r *EnsurePreparedStatementClosed) Description() string {
 	return "Find calls to `db.Prepare`. The returned prepared statement must be closed to avoid resource leaks."
 }
 func (r *EnsurePreparedStatementClosed) Tags() []string { return []string{"style", "database/sql"} }
+
+func (r *EnsurePreparedStatementClosed) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "sqlclosecheck", Tool: diagnostic.GolangciLint, HasFix: false},
+	}
+}
 
 func (r *EnsurePreparedStatementClosed) Editor() recipe.TreeVisitor {
 	return visitor.Init(&ensurePreparedStatementClosedVisitor{})

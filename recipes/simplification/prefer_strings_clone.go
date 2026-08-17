@@ -7,7 +7,6 @@ package simplification
 import (
 	"fmt"
 
-	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
@@ -32,12 +31,6 @@ func (r *SimplifyTrimLeftNoop) Description() string {
 	return "Replace `strings.TrimLeft(s, \"\")` and `strings.TrimRight(s, \"\")` with `s` since trimming with an empty cutset is a no-op."
 }
 func (r *SimplifyTrimLeftNoop) Tags() []string { return []string{"cleanup", "simplification"} }
-
-func (r *SimplifyTrimLeftNoop) DiagnosticMappings() []diagnostic.Mapping {
-	return []diagnostic.Mapping{
-		{DiagnosticID: "SA1024", Tool: diagnostic.Staticcheck, HasFix: false},
-	}
-}
 
 var simplifyTrimLeftNoopImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.SimplifyTrimLeftNoop$TrimLeft"),

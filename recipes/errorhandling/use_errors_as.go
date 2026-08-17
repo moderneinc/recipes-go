@@ -6,6 +6,7 @@ package errorhandling
 
 import (
 	"github.com/google/uuid"
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
@@ -32,6 +33,12 @@ func (r *UseErrorsAs) Description() string {
 	return "Replace `if myErr, ok := err.(*MyError); ok { ... }` with `var myErr *MyError; if errors.As(err, &myErr) { ... }` for correct wrapped error handling."
 }
 func (r *UseErrorsAs) Tags() []string { return []string{"errorhandling", "lint"} }
+
+func (r *UseErrorsAs) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "errorlint", Tool: diagnostic.GolangciLint, HasFix: true},
+	}
+}
 
 func (r *UseErrorsAs) Editor() recipe.TreeVisitor {
 	return visitor.Init(&useErrorsAsVisitor{})

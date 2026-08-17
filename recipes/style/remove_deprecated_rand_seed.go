@@ -5,6 +5,7 @@
 package style
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
@@ -27,6 +28,12 @@ func (r *RemoveDeprecatedRandSeed) Description() string {
 	return "Remove calls to `rand.Seed()`. Deprecated since Go 1.20; automatic seeding is used."
 }
 func (r *RemoveDeprecatedRandSeed) Tags() []string { return []string{"style", "deprecation"} }
+
+func (r *RemoveDeprecatedRandSeed) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "SA1019", Tool: diagnostic.Staticcheck, HasFix: true},
+	}
+}
 
 func (r *RemoveDeprecatedRandSeed) Editor() recipe.TreeVisitor {
 	return visitor.Init(&removeDeprecatedRandSeedVisitor{})

@@ -5,6 +5,7 @@
 package style
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"strings"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
@@ -32,6 +33,13 @@ func (r *AvoidSqlStringConcat) Description() string {
 	return "Find string concatenation where the left operand contains SQL keywords. Use parameterized queries to avoid SQL injection."
 }
 func (r *AvoidSqlStringConcat) Tags() []string { return []string{"security"} }
+
+func (r *AvoidSqlStringConcat) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "G201", Tool: diagnostic.GolangciLint, HasFix: false},
+		{DiagnosticID: "G202", Tool: diagnostic.GolangciLint, HasFix: false},
+	}
+}
 
 func (r *AvoidSqlStringConcat) Editor() recipe.TreeVisitor {
 	return visitor.Init(&avoidSqlStringConcatVisitor{})

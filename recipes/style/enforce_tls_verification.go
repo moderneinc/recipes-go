@@ -5,6 +5,7 @@
 package style
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -29,6 +30,12 @@ func (r *EnforceTlsVerification) Description() string {
 	return "Replace `InsecureSkipVerify: true` with `false` in TLS config. Disabling certificate verification makes connections vulnerable to man-in-the-middle attacks."
 }
 func (r *EnforceTlsVerification) Tags() []string { return []string{"style", "security"} }
+
+func (r *EnforceTlsVerification) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "G402", Tool: diagnostic.GolangciLint, HasFix: false},
+	}
+}
 
 func (r *EnforceTlsVerification) Editor() recipe.TreeVisitor {
 	return visitor.Init(&enforceTlsVerificationVisitor{})

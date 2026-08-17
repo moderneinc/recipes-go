@@ -7,7 +7,6 @@ package simplification
 import (
 	"fmt"
 
-	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 )
@@ -33,12 +32,6 @@ func (r *PreferCopyString) Description() string {
 	return "Replace `copy(dst, []byte(src))` with `copy(dst, src)` since copy accepts a string source."
 }
 func (r *PreferCopyString) Tags() []string { return []string{"cleanup", "simplification"} }
-
-func (r *PreferCopyString) DiagnosticMappings() []diagnostic.Mapping {
-	return []diagnostic.Mapping{
-		{DiagnosticID: "S1030", Tool: diagnostic.Staticcheck, HasFix: true},
-	}
-}
 
 var preferCopyStringImpl = template.NewRecipe(
 	template.RecipeName("org.openrewrite.golang.codequality.PreferCopyString$Impl"),

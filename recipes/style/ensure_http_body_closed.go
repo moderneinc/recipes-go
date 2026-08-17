@@ -6,6 +6,7 @@ package style
 
 import (
 	"github.com/google/uuid"
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -26,6 +27,12 @@ func (r *EnsureHttpBodyClosed) Description() string {
 	return "Find assignments of a `*http.Response`, as returned by `http.Get`, `http.Post`, `http.Head` or `client.Do`. Its body must be closed to avoid resource leaks."
 }
 func (r *EnsureHttpBodyClosed) Tags() []string { return []string{"style", "resource-management"} }
+
+func (r *EnsureHttpBodyClosed) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "bodyclose", Tool: diagnostic.GolangciLint, HasFix: false},
+	}
+}
 
 func (r *EnsureHttpBodyClosed) Editor() recipe.TreeVisitor {
 	return visitor.Init(&ensureHttpBodyClosedVisitor{})

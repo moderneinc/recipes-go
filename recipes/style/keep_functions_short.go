@@ -5,6 +5,7 @@
 package style
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -26,6 +27,13 @@ func (r *KeepFunctionsShort) Description() string {
 	return "Find functions with more than 20 statements. Long functions are harder to understand and maintain."
 }
 func (r *KeepFunctionsShort) Tags() []string { return []string{"style", "lint"} }
+
+func (r *KeepFunctionsShort) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "funlen", Tool: diagnostic.GolangciLint, HasFix: false},
+		{DiagnosticID: "function-length", Tool: diagnostic.GolangciLint, HasFix: true},
+	}
+}
 
 func (r *KeepFunctionsShort) Editor() recipe.TreeVisitor {
 	return visitor.Init(&keepFunctionsShortVisitor{})

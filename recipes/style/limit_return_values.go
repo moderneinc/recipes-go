@@ -5,6 +5,7 @@
 package style
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -26,6 +27,12 @@ func (r *LimitReturnValues) Description() string {
 	return "Find functions with more than 3 return values. Consider returning a struct instead."
 }
 func (r *LimitReturnValues) Tags() []string { return []string{"style", "lint"} }
+
+func (r *LimitReturnValues) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "function-result-limit", Tool: diagnostic.GolangciLint, HasFix: true},
+	}
+}
 
 func (r *LimitReturnValues) Editor() recipe.TreeVisitor {
 	return visitor.Init(&limitReturnValuesVisitor{})

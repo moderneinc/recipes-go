@@ -5,6 +5,7 @@
 package redundancy
 
 import (
+	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -25,6 +26,12 @@ func (r *RemoveRedundantBreak) Description() string {
 	return "Remove trailing `break` in switch case clauses. Go switch cases do not fall through by default."
 }
 func (r *RemoveRedundantBreak) Tags() []string { return []string{"cleanup", "simplification"} }
+
+func (r *RemoveRedundantBreak) DiagnosticMappings() []diagnostic.Mapping {
+	return []diagnostic.Mapping{
+		{DiagnosticID: "S1023", Tool: diagnostic.Staticcheck, HasFix: true},
+	}
+}
 
 func (r *RemoveRedundantBreak) Editor() recipe.TreeVisitor {
 	return visitor.Init(&removeRedundantBreakVisitor{})
