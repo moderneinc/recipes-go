@@ -6,17 +6,14 @@ package redundancy
 
 import (
 	"github.com/moderneinc/recipes-go/diagnostic"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
-// RemoveRedundantTypeConversion is a search-only recipe that finds
-// type conversions like `int(x)` where x is already the target type.
-// Without full type attribution, this recipe flags all single-arg
-// type conversions where the function name matches a builtin type
-// and the argument is a variable of the same name pattern.
-// Staticcheck: S1021
+// RemoveRedundantTypeConversion removes a conversion whose operand already has
+// the target type, such as `string(s)` for a `string` s.
 type RemoveRedundantTypeConversion struct {
 	recipe.Base
 }
@@ -25,10 +22,10 @@ func (r *RemoveRedundantTypeConversion) Name() string {
 	return "org.openrewrite.golang.codequality.RemoveRedundantTypeConversion"
 }
 func (r *RemoveRedundantTypeConversion) DisplayName() string {
-	return "Find potentially redundant type conversion"
+	return "Remove redundant type conversion"
 }
 func (r *RemoveRedundantTypeConversion) Description() string {
-	return "Find type conversions like `int(x)` that may be redundant if x is already the target type. Requires type attribution for full accuracy."
+	return "Remove a conversion whose operand already has the target type, such as `string(s)` where `s` is a `string`. Conversions to `int`, `int8`, `byte`, `rune`, `float64` and the complex types are left alone."
 }
 func (r *RemoveRedundantTypeConversion) Tags() []string { return []string{"cleanup"} }
 
@@ -49,40 +46,61 @@ type removeRedundantTypeConversionVisitor struct {
 func (v *removeRedundantTypeConversionVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
 	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
-	// Type conversions in Go look like function calls: int(x), string(b), etc.
-	// They have no Select (no receiver) and the Name is a builtin type.
+	// A conversion reads as a call with no receiver and one argument.
 	if mi.Select != nil {
 		return mi
 	}
-	if !isBuiltinType(mi.Name.Name) {
+	attributedType, convertible := unambiguousBuiltins[mi.Name.Name]
+	if !convertible {
 		return mi
 	}
 
-	// Must have exactly one argument
-	var argCount int
+	var operand java.Expression
 	for _, a := range mi.Arguments.Elements {
-		if _, isEmpty := a.Element.(*java.Empty); !isEmpty {
-			argCount++
+		if _, isEmpty := a.Element.(*java.Empty); isEmpty {
+			continue
 		}
+		if operand != nil {
+			return mi
+		}
+		operand = a.Element
 	}
-	if argCount != 1 {
+	if operand == nil {
 		return mi
 	}
 
-	// Mark as a potential redundant conversion (search only).
-	// Full accuracy requires type attribution to confirm the arg type matches.
-	mi = mi.WithMarkers(java.MarkupInfo(mi.Markers, "potentially redundant type conversion"))
+	// An untyped constant takes its type from the conversion, so the conversion
+	// is what gives it one.
+	if _, isLiteral := operand.(*java.Literal); isLiteral {
+		return mi
+	}
+	if matcher.GetFullyQualifiedName(matcher.TypeOfExpression(operand)) != attributedType {
+		return mi
+	}
+	// The operand inherits the conversion's prefix, which prependExprPrefix
+	// carries over for these forms.
+	switch operand.(type) {
+	case *java.Identifier, *java.FieldAccess, *java.MethodInvocation:
+		return prependExprPrefix(operand, mi.Prefix)
+	}
 	return mi
 }
 
-var builtinTypes = map[string]bool{
-	"int": true, "int8": true, "int16": true, "int32": true, "int64": true,
-	"uint": true, "uint8": true, "uint16": true, "uint32": true, "uint64": true,
-	"float32": true, "float64": true,
-	"string": true, "byte": true, "rune": true,
-	"bool": true, "uintptr": true,
-}
-
-func isBuiltinType(name string) bool {
-	return builtinTypes[name]
+// unambiguousBuiltins maps a Go builtin type to the type attributed to an
+// expression of that type. Only the builtins that own their attributed type
+// outright are listed: `int` shares one with `int32`, `byte` with `int8`, and
+// `float64` with the complex types, so a match there would not establish that
+// the operand and the conversion agree.
+var unambiguousBuiltins = map[string]string{
+	"string":  "String",
+	"bool":    "boolean",
+	"int16":   "short",
+	"int64":   "long",
+	"float32": "float",
+	"uint":    "uint",
+	"uint8":   "uint8",
+	"uint16":  "uint16",
+	"uint32":  "uint32",
+	"uint64":  "uint64",
+	"uintptr": "uintptr",
 }
