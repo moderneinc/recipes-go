@@ -79,6 +79,6 @@ func (v *preferOsReadDirVisitor) VisitMethodInvocation(mi *java.MethodInvocation
 	}
 
 	recipegolang.MaybeAddImport(v, "os", nil, false)
-	v.DoAfterVisit(recipe.Service[*recipegolang.ImportService](nil).RemoveUnusedImportsVisitor())
+	recipegolang.MaybeRemoveImport(v, "io/ioutil")
 	return newCall.WithPrefix(mi.GetPrefix())
 }

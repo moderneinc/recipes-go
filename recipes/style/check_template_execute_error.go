@@ -189,7 +189,9 @@ func buildIfInitErrCheck(mi *java.MethodInvocation) *golang.StatementWithInit {
 
 	// An `if init; cond` is modeled as a golang.StatementWithInit wrapping a plain
 	// java.If: the wrapper owns the keyword prefix and the init clause, and the
-	// inner If's condition is a ControlParentheses (Go elides the parens).
+	// inner If's condition is a ControlParentheses (Go elides the parens). The
+	// `;` between init and condition comes from a Semicolon marker on the
+	// init's padding.
 	innerIf := &java.If{
 		ID: uuid.New(),
 		Condition: &java.ControlParentheses{
@@ -200,9 +202,15 @@ func buildIfInitErrCheck(mi *java.MethodInvocation) *golang.StatementWithInit {
 	}
 
 	return &golang.StatementWithInit{
-		ID:        uuid.New(),
-		Prefix:    prefix,
-		Init:      java.RightPadded[java.Statement]{Element: initAssign},
+		ID:     uuid.New(),
+		Prefix: prefix,
+		Init: java.RightPadded[java.Statement]{
+			Element: initAssign,
+			Markers: java.Markers{
+				ID:      uuid.New(),
+				Entries: []java.Marker{golang.NewSemicolon()},
+			},
+		},
 		Statement: innerIf,
 	}
 }

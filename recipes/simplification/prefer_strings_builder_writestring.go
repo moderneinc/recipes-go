@@ -74,6 +74,6 @@ func (v *preferStringsBuilderWriteStringVisitor) VisitMethodInvocation(mi *java.
 	if !ok {
 		return mi
 	}
-	v.DoAfterVisit(recipe.Service[*recipegolang.ImportService](nil).RemoveUnusedImportsVisitor())
+	recipegolang.MaybeRemoveImport(v, "fmt")
 	return replaced.WithPrefix(mi.GetPrefix())
 }

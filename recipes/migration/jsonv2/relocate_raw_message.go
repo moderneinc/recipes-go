@@ -72,8 +72,10 @@ func (v *relocateRawMessageVisitor) VisitCompilationUnit(cu *golang.CompilationU
 		queueImportSwapToV2(v)
 	} else {
 		// RawMessage is the only usage and becomes jsontext.Value, so the
-		// encoding/json import would be left unused and is dropped instead.
-		v.DoAfterVisit((&recipegolang.RemoveImport{PackagePath: "encoding/json"}).Editor())
+		// encoding/json import is dropped rather than swapped. Force is needed
+		// because the rewritten field keeps encoding/json type attribution,
+		// which RemoveImport's own reference check reads as a live use.
+		v.DoAfterVisit((&recipegolang.RemoveImport{PackagePath: "encoding/json", Force: true}).Editor())
 	}
 
 	cu = v.GoVisitor.VisitCompilationUnit(cu, p).(*golang.CompilationUnit)

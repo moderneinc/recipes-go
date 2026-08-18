@@ -56,6 +56,6 @@ func (v *simplifyRedundantErrorWrapVisitor) VisitMethodInvocation(mi *java.Metho
 		return mi
 	}
 
-	v.DoAfterVisit(recipe.Service[*recipegolang.ImportService](nil).RemoveUnusedImportsVisitor())
+	recipegolang.MaybeRemoveImport(v, "fmt")
 	return setExprPrefixLocal(stripExprPrefix(arg), mi.GetPrefix())
 }

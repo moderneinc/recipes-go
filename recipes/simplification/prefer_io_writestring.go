@@ -70,6 +70,6 @@ func (v *preferIoWriteStringVisitor) VisitMethodInvocation(mi *java.MethodInvoca
 		return mi
 	}
 	recipegolang.MaybeAddImport(v, "io", nil, false)
-	v.DoAfterVisit(recipe.Service[*recipegolang.ImportService](nil).RemoveUnusedImportsVisitor())
+	recipegolang.MaybeRemoveImport(v, "fmt")
 	return replaced.WithPrefix(mi.GetPrefix())
 }

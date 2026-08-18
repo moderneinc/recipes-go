@@ -55,8 +55,10 @@ type useStrongHashVisitor struct {
 func (v *useStrongHashVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
 	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
+	replacedPkg := "crypto/md5"
 	match := md5NewPattern.Match(mi, nil)
 	if match == nil {
+		replacedPkg = "crypto/sha1"
 		match = sha1NewPattern.Match(mi, nil)
 	}
 	if match == nil {
@@ -69,6 +71,6 @@ func (v *useStrongHashVisitor) VisitMethodInvocation(mi *java.MethodInvocation, 
 	}
 
 	recipegolang.MaybeAddImport(v, "crypto/sha256", nil, false)
-	v.DoAfterVisit(recipe.Service[*recipegolang.ImportService](nil).RemoveUnusedImportsVisitor())
+	recipegolang.MaybeRemoveImport(v, replacedPkg)
 	return replaced.WithPrefix(mi.GetPrefix())
 }

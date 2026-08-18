@@ -89,6 +89,6 @@ func (v *preferStringsNewReaderVisitor) VisitMethodInvocation(mi *java.MethodInv
 	}
 
 	recipegolang.MaybeAddImport(v, "strings", nil, false)
-	v.DoAfterVisit(recipe.Service[*recipegolang.ImportService](nil).RemoveUnusedImportsVisitor())
+	recipegolang.MaybeRemoveImport(v, "bytes")
 	return newCall.WithPrefix(mi.GetPrefix())
 }

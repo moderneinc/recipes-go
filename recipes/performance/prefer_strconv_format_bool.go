@@ -75,6 +75,6 @@ func (v *preferStrconvFormatBoolVisitor) VisitMethodInvocation(mi *java.MethodIn
 		return mi
 	}
 	recipegolang.MaybeAddImport(v, "strconv", nil, false)
-	v.DoAfterVisit(recipe.Service[*recipegolang.ImportService](nil).RemoveUnusedImportsVisitor())
+	recipegolang.MaybeRemoveImport(v, "fmt")
 	return replaced.WithPrefix(mi.GetPrefix())
 }

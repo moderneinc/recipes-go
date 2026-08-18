@@ -7,7 +7,6 @@ package errorhandling
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -34,15 +33,6 @@ func (r *UseErrorMethod) Editor() recipe.TreeVisitor {
 
 type useErrorMethodVisitor struct {
 	visitor.GoVisitor
-	changed bool
-}
-
-func (v *useErrorMethodVisitor) VisitCompilationUnit(cu *golang.CompilationUnit, p any) java.J {
-	cu = v.GoVisitor.VisitCompilationUnit(cu, p).(*golang.CompilationUnit)
-	if v.changed {
-		v.DoAfterVisit((&recipegolang.RemoveUnusedImports{}).Editor())
-	}
-	return cu
 }
 
 func (v *useErrorMethodVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
@@ -77,8 +67,9 @@ func (v *useErrorMethodVisitor) VisitMethodInvocation(mi *java.MethodInvocation,
 		return mi
 	}
 
+	recipegolang.MaybeRemoveImport(v, "fmt")
+
 	// Build err.Error() as a replacement, preserving the original leading prefix.
-	v.changed = true
 	errIdent := argIdent.WithPrefix(ident.Prefix)
 	errorName := &java.Identifier{Name: "Error"}
 	return &java.MethodInvocation{

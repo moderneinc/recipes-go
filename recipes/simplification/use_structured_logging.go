@@ -109,6 +109,6 @@ func (v *findStdLogVisitor) toSlogInfo(mi *java.MethodInvocation) java.J {
 		return nil
 	}
 	recipegolang.MaybeAddImport(v, "log/slog", nil, false)
-	v.DoAfterVisit(recipe.Service[*recipegolang.ImportService](nil).RemoveUnusedImportsVisitor())
+	recipegolang.MaybeRemoveImport(v, "log")
 	return replaced.WithPrefix(mi.GetPrefix())
 }

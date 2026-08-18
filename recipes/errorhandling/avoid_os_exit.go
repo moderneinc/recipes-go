@@ -7,7 +7,6 @@ package errorhandling
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -34,15 +33,6 @@ func (r *AvoidOsExit) Editor() recipe.TreeVisitor {
 
 type avoidOsExitVisitor struct {
 	visitor.GoVisitor
-	changed bool
-}
-
-func (v *avoidOsExitVisitor) VisitCompilationUnit(cu *golang.CompilationUnit, p any) java.J {
-	cu = v.GoVisitor.VisitCompilationUnit(cu, p).(*golang.CompilationUnit)
-	if v.changed {
-		v.DoAfterVisit((&recipegolang.RemoveUnusedImports{}).Editor())
-	}
-	return cu
 }
 
 func (v *avoidOsExitVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
@@ -65,7 +55,7 @@ func (v *avoidOsExitVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p 
 	args := mi.Arguments.Elements
 	if len(args) == 1 {
 		if lit, ok := args[0].Element.(*java.Literal); ok && lit.Source == "0" {
-			v.changed = true
+			recipegolang.MaybeRemoveImport(v, "os")
 			return &java.Empty{}
 		}
 	}

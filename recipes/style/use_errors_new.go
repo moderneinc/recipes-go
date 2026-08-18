@@ -47,7 +47,6 @@ func (r *UseErrorsNewForSimpleErrors) Editor() recipe.TreeVisitor {
 
 type useErrorsNewVisitor struct {
 	visitor.GoVisitor
-	changed bool
 }
 
 func (v *useErrorsNewVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
@@ -78,17 +77,7 @@ func (v *useErrorsNewVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p
 		return mi
 	}
 
-	// The rewrite strands the now-unused `fmt` import and introduces a reference
-	// to `errors`. Queue the unused-import cleanup BEFORE adding `errors`:
-	// RemoveUnusedImports derives referenced packages from type-attributed
-	// identifiers, so it cannot see the freshly built (untyped) `errors`
-	// reference and would drop the import if it ran afterwards. Queued first it
-	// runs first — removing only the stranded `fmt` — then the unconditional
-	// AddImport adds `errors`.
-	if !v.changed {
-		v.DoAfterVisit((&recipegolang.RemoveUnusedImports{}).Editor())
-		v.changed = true
-	}
+	recipegolang.MaybeRemoveImport(v, "fmt")
 	recipegolang.MaybeAddImport(v, "errors", nil, false)
 
 	// Build: errors.New(same literal)

@@ -76,7 +76,7 @@ func (v *preferHexEncodingVisitor) VisitMethodInvocation(mi *java.MethodInvocati
 		return mi
 	}
 	recipegolang.MaybeAddImport(v, "encoding/hex", nil, false)
-	v.DoAfterVisit(recipe.Service[*recipegolang.ImportService](nil).RemoveUnusedImportsVisitor())
+	recipegolang.MaybeRemoveImport(v, "fmt")
 	return replaced.WithPrefix(mi.GetPrefix())
 }
 
