@@ -12,6 +12,7 @@ import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -88,7 +89,7 @@ func withLeadingPrefix(e java.Expression, p java.Space) java.Expression {
 		return n.WithPrefix(p)
 	case *java.ArrayAccess:
 		return n.WithPrefix(p)
-	case *java.TypeCast:
+	case *golang.TypeAssertion:
 		return n.WithPrefix(p)
 	}
 	return e
