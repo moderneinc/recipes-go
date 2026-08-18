@@ -80,6 +80,9 @@ func (v *relocateRawMessageVisitor) VisitCompilationUnit(cu *golang.CompilationU
 	return drainQueuedImports(v, cu, p)
 }
 
+// The type the rewritten nodes carry.
+var jsontextValueType = &java.JavaTypeClass{FullyQualifiedName: "encoding/json/jsontext.Value", Kind: "Class"}
+
 // Rewrites a json.RawMessage type reference to jsontext.Value, keeping the
 // original whitespace.
 func (v *relocateRawMessageVisitor) VisitFieldAccess(fa *java.FieldAccess, p any) java.J {
@@ -95,8 +98,44 @@ func (v *relocateRawMessageVisitor) VisitFieldAccess(fa *java.FieldAccess, p any
 		Before:  fa.Name.Before,
 		Element: &java.Identifier{Prefix: fa.Name.Element.Prefix, Name: "Value"},
 	}
-	c.Type = nil
+	c.Type = jsontextValueType
 	return &c
+}
+
+// A field keeps the type it was attributed at parse, so the declaration has to
+// be re-attributed too: left alone it still reads as encoding/json.RawMessage,
+// and RemoveImport rightly keeps an import the tree says is in use.
+func (v *relocateRawMessageVisitor) VisitVariableDeclarations(vd *java.VariableDeclarations, p any) java.J {
+	vd = v.GoVisitor.VisitVariableDeclarations(vd, p).(*java.VariableDeclarations)
+	if !isJsontextValue(vd.TypeExpr) {
+		return vd
+	}
+	c := *vd
+	c.Variables = make([]java.RightPadded[*java.VariableDeclarator], len(vd.Variables))
+	copy(c.Variables, vd.Variables)
+	for i, rp := range c.Variables {
+		if rp.Element == nil || rp.Element.Name == nil || rp.Element.Name.Type == jsontextValueType {
+			continue
+		}
+		declarator := *rp.Element
+		name := *declarator.Name
+		name.Type = jsontextValueType
+		declarator.Name = &name
+		c.Variables[i] = java.RightPadded[*java.VariableDeclarator]{
+			Element: &declarator, After: rp.After, Markers: rp.Markers,
+		}
+	}
+	return &c
+}
+
+// isJsontextValue reports whether expr is the `jsontext.Value` this recipe writes.
+func isJsontextValue(expr java.Expression) bool {
+	fa, ok := expr.(*java.FieldAccess)
+	if !ok || fa.Name.Element == nil || fa.Name.Element.Name != "Value" {
+		return false
+	}
+	target, ok := fa.Target.(*java.Identifier)
+	return ok && target.Name == "jsontext"
 }
 
 // Rewrites a json.RawMessage(x) conversion to jsontext.Value(x).
@@ -116,6 +155,7 @@ func (v *relocateRawMessageVisitor) VisitMethodInvocation(mi *java.MethodInvocat
 		After:   mi.Select.After,
 	}
 	c.Name = &java.Identifier{Prefix: mi.Name.Prefix, Name: "Value"}
+	c.MethodType = nil
 	return &c
 }
 
