@@ -97,15 +97,7 @@ func (v *preferErrorfWrapVerbVisitor) VisitMethodInvocation(mi *java.MethodInvoc
 		Markers: args[0].Markers,
 	}
 
-	newArgContainer := mi.Arguments
-	newArgContainer.Elements = newArgs
-
-	return &java.MethodInvocation{
-		ID:        mi.ID,
-		Prefix:    mi.Prefix,
-		Markers:   mi.Markers,
-		Select:    mi.Select,
-		Name:      mi.Name,
-		Arguments: newArgContainer,
-	}
+	c := *mi
+	c.Arguments.Elements = newArgs
+	return &c
 }

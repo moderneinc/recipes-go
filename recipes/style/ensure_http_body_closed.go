@@ -7,6 +7,7 @@ package style
 import (
 	"github.com/google/uuid"
 	"github.com/moderneinc/recipes-go/diagnostic"
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -46,7 +47,7 @@ func (v *ensureHttpBodyClosedVisitor) VisitBlock(block *java.Block, p any) java.
 	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
 	return insertDefer(block, isHttpResponse, hasDeferBodyCloseAfter,
 		func(a acquisition, acquire java.Statement) *golang.Defer {
-			return buildDeferBodyClose(a.varName, acquire)
+			return buildDeferBodyClose(a, acquire)
 		})
 }
 
@@ -93,14 +94,17 @@ func matchesDeferBodyClose(d *golang.Defer, varName string) bool {
 	return ident.Name == varName
 }
 
-// buildDeferBodyClose builds `defer varName.Body.Close()`.
-func buildDeferBodyClose(varName string, originalStmt java.Statement) *golang.Defer {
+// buildDeferBodyClose builds `defer varName.Body.Close()`. The response type
+// resolves the Body field, and Body's own type the Close method.
+func buildDeferBodyClose(a acquisition, originalStmt java.Statement) *golang.Defer {
 	prefix := stmtPrefix(originalStmt)
 
 	respIdent := &java.Identifier{
 		ID:   uuid.New(),
-		Name: varName,
+		Name: a.varName,
+		Type: a.varType,
 	}
+	bodyType := lstutil.FieldOn(a.varType, "Body")
 	bodyAccess := &java.FieldAccess{
 		ID:     uuid.New(),
 		Target: respIdent,
@@ -108,8 +112,10 @@ func buildDeferBodyClose(varName string, originalStmt java.Statement) *golang.De
 			Element: &java.Identifier{
 				ID:   uuid.New(),
 				Name: "Body",
+				Type: bodyType,
 			},
 		},
+		Type: bodyType,
 	}
 	closeIdent := &java.Identifier{
 		ID:   uuid.New(),
@@ -123,6 +129,7 @@ func buildDeferBodyClose(varName string, originalStmt java.Statement) *golang.De
 		Arguments: java.Container[java.Expression]{
 			Before: java.EmptySpace,
 		},
+		MethodType: lstutil.MethodOn(bodyType, "Close"),
 	}
 	return &golang.Defer{
 		ID:     uuid.New(),

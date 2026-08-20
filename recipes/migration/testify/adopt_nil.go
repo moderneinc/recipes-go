@@ -99,5 +99,5 @@ func (v *nilVisitor) matchNil(ifStmt *java.If) *java.MethodInvocation {
 	if call == nil {
 		return nil
 	}
-	return finishAssertion(ifStmt.GetPrefix(), v.pkg, recv.Name, assertion, call, []java.Expression{operand}, identSet(operand), nil)
+	return finishAssertion(ifStmt.GetPrefix(), v.pkg, v.importPath, recv, assertion, call, []java.Expression{operand}, identSet(operand), nil)
 }

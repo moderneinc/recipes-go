@@ -7,6 +7,7 @@ package errorhandling
 import (
 	"github.com/google/uuid"
 	"github.com/moderneinc/recipes-go/diagnostic"
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
@@ -216,12 +217,14 @@ func buildErrorsAsIf(origIf *java.If, prefix java.Space, errExpr java.Expression
 				ID:     uuid.New(),
 				Prefix: java.SingleSpace,
 				Name:   "errors",
+				Type:   lstutil.NamedType("errors"),
 			},
 		},
 		Name: &java.Identifier{
 			ID:   uuid.New(),
 			Name: "As",
 		},
+		MethodType: lstutil.FuncType("errors", "As", lstutil.BoolType),
 		Arguments: java.Container[java.Expression]{
 			Elements: []java.RightPadded[java.Expression]{
 				{

@@ -138,7 +138,7 @@ func (v *equalityVisitor) matchEquality(ifStmt *java.If) *java.MethodInvocation 
 	}
 
 	expected, actual := orderExpectedActual(bin.Left, bin.Right)
-	return finishAssertion(ifStmt.GetPrefix(), v.pkg, recv.Name, assertion, call, []java.Expression{expected, actual}, identSet(bin.Left, bin.Right), nil)
+	return finishAssertion(ifStmt.GetPrefix(), v.pkg, v.importPath, recv, assertion, call, []java.Expression{expected, actual}, identSet(bin.Left, bin.Right), nil)
 }
 
 // valueComparable reports whether an operand is safe for testify's value

@@ -85,17 +85,9 @@ func (v *auditMultipleErrorWrapsVisitor) VisitMethodInvocation(mi *java.MethodIn
 		Markers: args[0].Markers,
 	}
 
-	newArgContainer := mi.Arguments
-	newArgContainer.Elements = newArgs
-
-	return &java.MethodInvocation{
-		ID:        mi.ID,
-		Prefix:    mi.Prefix,
-		Markers:   mi.Markers,
-		Select:    mi.Select,
-		Name:      mi.Name,
-		Arguments: newArgContainer,
-	}
+	c := *mi
+	c.Arguments.Elements = newArgs
+	return &c
 }
 
 // replaceExtraW replaces all occurrences of "%w" after the first with "%v".

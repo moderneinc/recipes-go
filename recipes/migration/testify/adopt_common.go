@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -92,22 +93,24 @@ func isComparison(expr java.Expression) bool {
 // identifiers the assertion already shows (their dumps are redundant); forbidden
 // are identifiers that will not exist after the rewrite (the inline-init
 // variable).
-func finishAssertion(prefix java.Space, pkg, recvName, assertion string, call *java.MethodInvocation, coreArgs []java.Expression, surv, forbidden map[string]bool) *java.MethodInvocation {
+func finishAssertion(prefix java.Space, pkg, importPath string, recv *java.Identifier, assertion string, call *java.MethodInvocation, coreArgs []java.Expression, surv, forbidden map[string]bool) *java.MethodInvocation {
 	msgArgs, useF := messageArgs(call, forbidden, surv)
-	return buildAssertionCall(prefix, pkg, recvName, assertion, useF, coreArgs, msgArgs)
+	return buildAssertionCall(prefix, pkg, importPath, recv, assertion, useF, coreArgs, msgArgs)
 }
 
 // buildAssertionCall constructs `<pkg>.<assertion>[f](<recv>, <coreArgs...>, <msgArgs...>)`,
 // indented to sit where the original statement did. useF appends the `f` suffix
 // (the format-string assertion variant).
-func buildAssertionCall(prefix java.Space, pkg, recvName, assertion string, useF bool, coreArgs, msgArgs []java.Expression) *java.MethodInvocation {
+func buildAssertionCall(prefix java.Space, pkg, importPath string, recv *java.Identifier, assertion string, useF bool, coreArgs, msgArgs []java.Expression) *java.MethodInvocation {
 	name := assertion
 	if useF {
 		name += "f"
 	}
 	elements := make([]java.RightPadded[java.Expression], 0, len(coreArgs)+len(msgArgs)+1)
 	elements = append(elements, java.RightPadded[java.Expression]{
-		Element: &java.Identifier{ID: uuid.New(), Name: recvName},
+		// The reporter receiver becomes the assertion's first argument, keeping
+		// the testing.T type it carries.
+		Element: &java.Identifier{ID: uuid.New(), Name: recv.Name, Type: recv.Type},
 	})
 	for _, a := range coreArgs {
 		elements = append(elements, java.RightPadded[java.Expression]{Element: withPrefix(a, java.SingleSpace)})
@@ -119,11 +122,22 @@ func buildAssertionCall(prefix java.Space, pkg, recvName, assertion string, useF
 		ID:     uuid.New(),
 		Prefix: prefix,
 		Select: &java.RightPadded[java.Expression]{
-			Element: &java.Identifier{ID: uuid.New(), Name: pkg},
+			Element: &java.Identifier{ID: uuid.New(), Name: pkg, Type: lstutil.NamedType(importPath)},
 		},
-		Name:      &java.Identifier{ID: uuid.New(), Name: name},
-		Arguments: java.Container[java.Expression]{Elements: elements},
+		Name: &java.Identifier{ID: uuid.New(), Name: name},
+		// The import path, not the qualifier, is what RemoveUnusedImports reads.
+		MethodType: lstutil.FuncType(importPath, name, assertionReturnType(pkg)),
+		Arguments:  java.Container[java.Expression]{Elements: elements},
 	}
+}
+
+// An assert.* assertion reports failure and returns whether it passed; a
+// require.* one aborts the test and returns nothing.
+func assertionReturnType(pkg string) java.JavaType {
+	if pkg == assertPkg {
+		return lstutil.BoolType
+	}
+	return lstutil.VoidType
 }
 
 // identSet returns the set of value-identifier names referenced across exprs.

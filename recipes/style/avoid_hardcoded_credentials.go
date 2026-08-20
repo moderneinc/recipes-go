@@ -5,9 +5,10 @@
 package style
 
 import (
-	"github.com/moderneinc/recipes-go/diagnostic"
 	"strings"
 
+	"github.com/moderneinc/recipes-go/diagnostic"
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
@@ -101,6 +102,7 @@ func (v *avoidHardcodedCredentialsVisitor) VisitVariableDeclarator(vd *java.Vari
 	osIdent := &java.Identifier{
 		Prefix: lit.Prefix,
 		Name:   "os",
+		Type:   lstutil.NamedType("os"),
 	}
 
 	getenvIdent := &java.Identifier{
@@ -112,8 +114,9 @@ func (v *avoidHardcodedCredentialsVisitor) VisitVariableDeclarator(vd *java.Vari
 	}
 
 	getenvCall := &java.MethodInvocation{
-		Select: &java.RightPadded[java.Expression]{Element: osIdent},
-		Name:   getenvIdent,
+		Select:     &java.RightPadded[java.Expression]{Element: osIdent},
+		Name:       getenvIdent,
+		MethodType: lstutil.FuncType("os", "Getenv", lstutil.StringType),
 		Arguments: java.Container[java.Expression]{
 			Elements: []java.RightPadded[java.Expression]{
 				{Element: envLit},
