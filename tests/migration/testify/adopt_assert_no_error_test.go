@@ -35,6 +35,7 @@ func TestAdoptAssertNoErrorFromErrorf(t *testing.T) {
 
 			import (
 				"testing"
+
 				"github.com/stretchr/testify/assert"
 			)
 

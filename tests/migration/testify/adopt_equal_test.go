@@ -35,6 +35,7 @@ func TestAdoptRequireEqualFromNotEqual(t *testing.T) {
 
 			import (
 				"testing"
+
 				"github.com/stretchr/testify/require"
 			)
 
@@ -71,6 +72,7 @@ func TestAdoptAssertNotEqualFromEqual(t *testing.T) {
 
 			import (
 				"testing"
+
 				"github.com/stretchr/testify/assert"
 			)
 
@@ -103,6 +105,7 @@ func TestAdoptRequireEqualLiteralExpectedFirst(t *testing.T) {
 
 			import (
 				"testing"
+
 				"github.com/stretchr/testify/require"
 			)
 
@@ -182,6 +185,7 @@ func TestAdoptRequireEqualPreservesContextMessage(t *testing.T) {
 
 			import (
 				"testing"
+
 				"github.com/stretchr/testify/require"
 			)
 

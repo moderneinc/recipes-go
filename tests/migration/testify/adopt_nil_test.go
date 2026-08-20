@@ -33,6 +33,7 @@ func TestAdoptRequireNilFromNotEqual(t *testing.T) {
 
 			import (
 				"testing"
+
 				"github.com/stretchr/testify/require"
 			)
 
@@ -68,6 +69,7 @@ func TestAdoptAssertNotNilFromEqual(t *testing.T) {
 
 			import (
 				"testing"
+
 				"github.com/stretchr/testify/assert"
 			)
 

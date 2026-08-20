@@ -37,6 +37,7 @@ func TestPreserveMessageDropsGotClauseNil(t *testing.T) {
 
 			import (
 				"testing"
+
 				"github.com/stretchr/testify/assert"
 			)
 
@@ -78,6 +79,7 @@ func TestPreserveMessageDropsGotClauseLen(t *testing.T) {
 
 			import (
 				"testing"
+
 				"github.com/stretchr/testify/require"
 			)
 
@@ -116,6 +118,7 @@ func TestPreserveMessageBalancesParens(t *testing.T) {
 
 			import (
 				"testing"
+
 				"github.com/stretchr/testify/require"
 			)
 
@@ -153,6 +156,7 @@ func TestPreserveMessageKeepsComplexFormat(t *testing.T) {
 
 			import (
 				"testing"
+
 				"github.com/stretchr/testify/require"
 			)
 
