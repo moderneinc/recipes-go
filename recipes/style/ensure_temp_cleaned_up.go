@@ -6,6 +6,7 @@ package style
 
 import (
 	"github.com/google/uuid"
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -39,7 +40,7 @@ func (v *ensureTempCleanedUpVisitor) VisitBlock(block *java.Block, p any) java.J
 	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
 	return insertDefer(block, isOsCreateTemp, hasDeferRemoveAfter,
 		func(a acquisition, acquire java.Statement) *golang.Defer {
-			return buildDeferOsRemove(a.varName, acquire)
+			return buildDeferOsRemove(a, acquire)
 		})
 }
 
@@ -96,24 +97,25 @@ func matchesDeferOsRemove(d *golang.Defer, varName string) bool {
 }
 
 // buildDeferOsRemove builds `defer os.Remove(varName.Name())`.
-func buildDeferOsRemove(varName string, originalStmt java.Statement) *golang.Defer {
+func buildDeferOsRemove(a acquisition, originalStmt java.Statement) *golang.Defer {
 	prefix := stmtPrefix(originalStmt)
 
 	// Build varName.Name()
 	nameCall := &java.MethodInvocation{
 		ID:     uuid.New(),
-		Select: &java.RightPadded[java.Expression]{Element: &java.Identifier{ID: uuid.New(), Name: varName}},
+		Select: &java.RightPadded[java.Expression]{Element: &java.Identifier{ID: uuid.New(), Name: a.varName, Type: a.varType}},
 		Name:   &java.Identifier{ID: uuid.New(), Name: "Name"},
 		Arguments: java.Container[java.Expression]{
 			Before: java.EmptySpace,
 		},
+		MethodType: lstutil.MethodOn(a.varType, "Name"),
 	}
 
 	// Build os.Remove(varName.Name())
 	removeCall := &java.MethodInvocation{
 		ID:     uuid.New(),
 		Prefix: java.SingleSpace,
-		Select: &java.RightPadded[java.Expression]{Element: &java.Identifier{ID: uuid.New(), Name: "os"}},
+		Select: &java.RightPadded[java.Expression]{Element: &java.Identifier{ID: uuid.New(), Name: "os", Type: lstutil.NamedType("os")}},
 		Name:   &java.Identifier{ID: uuid.New(), Name: "Remove"},
 		Arguments: java.Container[java.Expression]{
 			Before: java.EmptySpace,
@@ -121,6 +123,7 @@ func buildDeferOsRemove(varName string, originalStmt java.Statement) *golang.Def
 				{Element: nameCall},
 			},
 		},
+		MethodType: lstutil.FuncType("os", "Remove", lstutil.ErrorType),
 	}
 	return &golang.Defer{
 		ID:     uuid.New(),

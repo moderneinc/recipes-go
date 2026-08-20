@@ -154,6 +154,14 @@ rewriter := template.Rewrite(pat, tmpl)
 - Short var decls (`:=`) are `*tree.Assignment` with a `ShortVarDecl` marker
 - The `VisitX` method should call `v.GoVisitor.VisitX(...)` first to recurse
 
+### Type Attribution
+
+A hand-written visitor that changes what a node *is* must re-attribute it. `RemoveImport` and `RemoveUnusedImports` answer "is this package still referenced?" from `Identifier.Type` and `MethodInvocation.MethodType.DeclaringType`, so a rewrite that leaves parse-time types in place misleads every later type-based match. Setting the type on the node you replaced is not enough: the enclosing declaration carries one of its own, as does each other reference to the value.
+
+`recipes/internal/lstutil` has the pieces: `MethodOn(recv, name)` reads a method's signature off the receiver's own attribution and is the first choice; `NamedType` / `FuncType` state one the recipe has to name itself. A template attributes the calls it spells out, but not one whose receiver is a capture (`%s.String()`), and only for packages the toolchain resolves — `encoding/json/v2` and `encoding/json/jsontext` sit behind `GOEXPERIMENT=jsonv2`, so the jsonv2 recipes attribute by hand.
+
+`TestRewrittenTreesStayAttributed` in `tests/attribution_test.go` sweeps every registered recipe over the suite's own snippets and fails on a call the parser would have typed. `RewriteRun` compares printed source, so nothing else catches this.
+
 ### Diagnostic Mapping
 
 Recipes that correspond to staticcheck/golangci-lint diagnostics implement `diagnostic.HasMappings`:

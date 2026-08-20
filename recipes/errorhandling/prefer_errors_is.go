@@ -8,7 +8,6 @@ import (
 	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -51,10 +50,8 @@ func (v *preferErrorsIsVisitor) VisitBinary(bin *java.Binary, p any) java.J {
 		return bin
 	}
 
-	// Check if one side looks like an error sentinel (Err* identifier or io.EOF etc.)
-	// and the other side is a variable (likely an err variable).
-	// Without type attribution, we match: any comparison where one side starts with "Err"
-	// or is a known error sentinel like io.EOF.
+	// The name narrows the candidates; rewriteToErrorsIs has the last word, since
+	// it requires both operands to be error values.
 	leftIsErr := isErrorSentinel(bin.Left)
 	rightIsErr := isErrorSentinel(bin.Right)
 
@@ -76,47 +73,7 @@ func (v *preferErrorsIsVisitor) VisitBinary(bin *java.Binary, p any) java.J {
 		return bin
 	}
 
-	// errors.Is requires both operands to be error values; skip a comparison that
-	// only matched by the Err* name, such as an int constant named ErrLevel.
-	if !isErrorAssignable(errExpr) || !isErrorAssignable(sentinel) {
-		return bin
-	}
-
-	// The rewrite introduces a reference to the `errors` package; ensure it is imported.
-	recipegolang.MaybeAddImport(v, "errors", nil, false)
-
-	// Build errors.Is(err, sentinel) or !errors.Is(err, sentinel). The leading
-	// whitespace lives on the outermost element, so carry the binary's prefix
-	// onto whichever node ends up outermost (the call, or the negating unary).
-	prefix := getLeadingPrefixExpr(bin)
-
-	errorsIdent := &java.Identifier{Name: "errors"}
-	isIdent := &java.Identifier{Name: "Is"}
-
-	errArg := stripExprPrefix(errExpr)
-	sentinelArg := stripExprPrefix(sentinel)
-	// Add space before second argument (after comma)
-	sentinelArgWithSpace := setExprPrefixLocal(sentinelArg, java.Space{Whitespace: " "})
-
-	isCall := &java.MethodInvocation{
-		Select: &java.RightPadded[java.Expression]{Element: errorsIdent},
-		Name:   isIdent,
-		Arguments: java.Container[java.Expression]{
-			Elements: []java.RightPadded[java.Expression]{
-				{Element: errArg},
-				{Element: sentinelArgWithSpace},
-			},
-		},
-	}
-
-	if bin.Operator.Element == java.NotEqual {
-		return &java.Unary{
-			Prefix:   prefix,
-			Operator: java.LeftPadded[java.UnaryOperator]{Element: java.Not},
-			Operand:  isCall,
-		}
-	}
-	return isCall.WithPrefix(prefix)
+	return rewriteToErrorsIs(v, bin, errExpr, sentinel)
 }
 
 // Reports whether expr is a value assignable to error, which errors.Is requires

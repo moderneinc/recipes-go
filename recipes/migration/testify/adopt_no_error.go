@@ -130,7 +130,7 @@ func (v *errGuardVisitor) matchNilGuard(ifStmt *java.If) *java.MethodInvocation 
 	if call == nil {
 		return nil
 	}
-	return finishAssertion(ifStmt.GetPrefix(), v.pkg, recv.Name, v.assertion, call, []java.Expression{errExpr}, identSet(errExpr), nil)
+	return finishAssertion(ifStmt.GetPrefix(), v.pkg, v.importPath, recv, v.assertion, call, []java.Expression{errExpr}, identSet(errExpr), nil)
 }
 
 // matchInlineInitGuard returns the replacement for the inline-init form
@@ -163,7 +163,7 @@ func (v *errGuardVisitor) matchInlineInitGuard(swi *golang.StatementWithInit) *j
 	surv := identSet(valueExpr)
 	surv[varIdent.Name] = true
 	forbidden := map[string]bool{varIdent.Name: true}
-	return finishAssertion(swi.GetPrefix(), v.pkg, recv.Name, v.assertion, call, []java.Expression{valueExpr}, surv, forbidden)
+	return finishAssertion(swi.GetPrefix(), v.pkg, v.importPath, recv, v.assertion, call, []java.Expression{valueExpr}, surv, forbidden)
 }
 
 func isFatalReporter(name string) bool {

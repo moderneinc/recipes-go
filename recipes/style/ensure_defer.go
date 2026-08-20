@@ -140,7 +140,7 @@ func insertDeferMethodCall(block *java.Block, match func(acquisition) bool, meth
 			return hasDeferAfter(stmts, from, varName, method)
 		},
 		func(a acquisition, acquire java.Statement) *golang.Defer {
-			return buildDeferMethodCall(a.varName, method, acquire)
+			return buildDeferMethodCall(a, method, acquire)
 		})
 }
 
@@ -179,11 +179,13 @@ func matchesDeferCall(d *golang.Defer, varName, methodName string) bool {
 }
 
 // buildDeferMethodCall builds a `defer varName.methodName()` statement,
-// copying the indentation prefix from the original statement.
-func buildDeferMethodCall(varName, methodName string, originalStmt java.Statement) *golang.Defer {
+// copying the indentation prefix from the original statement. The receiver's
+// resolved type supplies both the qualifier's type and the method's.
+func buildDeferMethodCall(a acquisition, methodName string, originalStmt java.Statement) *golang.Defer {
 	selectIdent := &java.Identifier{
 		ID:   uuid.New(),
-		Name: varName,
+		Name: a.varName,
+		Type: a.varType,
 	}
 	methodIdent := &java.Identifier{
 		ID:   uuid.New(),
@@ -197,6 +199,7 @@ func buildDeferMethodCall(varName, methodName string, originalStmt java.Statemen
 		Arguments: java.Container[java.Expression]{
 			Before: java.EmptySpace,
 		},
+		MethodType: lstutil.MethodOn(a.varType, methodName),
 	}
 	return &golang.Defer{
 		ID:     uuid.New(),

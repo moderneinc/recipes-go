@@ -5,6 +5,7 @@
 package errorhandling
 
 import (
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -27,7 +28,7 @@ func rewriteToErrorsIs(v visitor.AfterVisitsProvider, bin *java.Binary, errExpr,
 
 	sentinelArg := setExprPrefixLocal(stripExprPrefix(sentinel), java.Space{Whitespace: " "})
 	isCall := &java.MethodInvocation{
-		Select: &java.RightPadded[java.Expression]{Element: &java.Identifier{Name: "errors"}},
+		Select: &java.RightPadded[java.Expression]{Element: &java.Identifier{Name: "errors", Type: lstutil.NamedType("errors")}},
 		Name:   &java.Identifier{Name: "Is"},
 		Arguments: java.Container[java.Expression]{
 			Elements: []java.RightPadded[java.Expression]{
@@ -35,6 +36,7 @@ func rewriteToErrorsIs(v visitor.AfterVisitsProvider, bin *java.Binary, errExpr,
 				{Element: sentinelArg},
 			},
 		},
+		MethodType: lstutil.FuncType("errors", "Is", lstutil.BoolType),
 	}
 
 	if bin.Operator.Element == java.NotEqual {

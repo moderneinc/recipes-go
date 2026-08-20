@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/moderneinc/recipes-go/diagnostic"
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
@@ -78,13 +79,8 @@ func (v *useErrorsNewVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p
 		return mi
 	}
 
-	// The rewrite strands the now-unused `fmt` import and introduces a reference
-	// to `errors`. Queue the unused-import cleanup BEFORE adding `errors`:
-	// RemoveUnusedImports derives referenced packages from type-attributed
-	// identifiers, so it cannot see the freshly built (untyped) `errors`
-	// reference and would drop the import if it ran afterwards. Queued first it
-	// runs first — removing only the stranded `fmt` — then the unconditional
-	// AddImport adds `errors`.
+	// The rewrite strands `fmt` when it was imported only for Errorf, so the file
+	// needs one unused-import cleanup pass alongside the `errors` it introduces.
 	if !v.changed {
 		v.DoAfterVisit((&recipegolang.RemoveUnusedImports{}).Editor())
 		v.changed = true
@@ -96,6 +92,7 @@ func (v *useErrorsNewVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p
 	// so carry the original invocation's prefix onto the replacement.
 	errorsIdent := &java.Identifier{
 		Name: "errors",
+		Type: lstutil.NamedType("errors"),
 	}
 
 	newName := &java.Identifier{
@@ -103,10 +100,11 @@ func (v *useErrorsNewVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p
 	}
 
 	return &java.MethodInvocation{
-		Prefix:    mi.Prefix,
-		Select:    &java.RightPadded[java.Expression]{Element: errorsIdent, After: mi.Select.After},
-		Name:      newName,
-		Arguments: mi.Arguments,
+		Prefix:     mi.Prefix,
+		Select:     &java.RightPadded[java.Expression]{Element: errorsIdent, After: mi.Select.After},
+		Name:       newName,
+		Arguments:  mi.Arguments,
+		MethodType: lstutil.FuncType("errors", "New", lstutil.ErrorType),
 	}
 }
 

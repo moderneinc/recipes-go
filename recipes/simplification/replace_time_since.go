@@ -6,6 +6,7 @@ package simplification
 
 import (
 	"github.com/moderneinc/recipes-go/diagnostic"
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -76,6 +77,7 @@ func (v *replaceTimeSinceVisitor) VisitMethodInvocation(mi *java.MethodInvocatio
 	// so carry the original invocation's prefix onto the replacement.
 	newTimeIdent := &java.Identifier{
 		Name: "time",
+		Type: lstutil.NamedType("time"),
 	}
 
 	sinceIdent := &java.Identifier{
@@ -83,10 +85,11 @@ func (v *replaceTimeSinceVisitor) VisitMethodInvocation(mi *java.MethodInvocatio
 	}
 
 	return &java.MethodInvocation{
-		Prefix:    mi.Prefix,
-		Select:    &java.RightPadded[java.Expression]{Element: newTimeIdent, After: mi.Select.After},
-		Name:      sinceIdent,
-		Arguments: mi.Arguments, // reuse the argument list (contains the original arg)
+		Prefix:     mi.Prefix,
+		Select:     &java.RightPadded[java.Expression]{Element: newTimeIdent, After: mi.Select.After},
+		Name:       sinceIdent,
+		Arguments:  mi.Arguments, // reuse the argument list (contains the original arg)
+		MethodType: lstutil.FuncType("time", "Since", lstutil.ReturnTypeOf(mi)),
 	}
 }
 

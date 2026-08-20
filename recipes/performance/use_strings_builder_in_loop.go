@@ -6,6 +6,7 @@ package performance
 
 import (
 	"github.com/google/uuid"
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
@@ -182,6 +183,10 @@ func findStringConcats(body *java.Block) []stringConcatInfo {
 	return results
 }
 
+// The accumulator this recipe introduces. It declares the type itself, so no
+// parsed node carries one to copy.
+var builderType = lstutil.NamedType("strings.Builder")
+
 // buildBuilderVarDecl constructs: var builder strings.Builder
 func buildBuilderVarDecl(prefix java.Space) *java.VariableDeclarations {
 	typeExpr := &java.FieldAccess{
@@ -190,18 +195,22 @@ func buildBuilderVarDecl(prefix java.Space) *java.VariableDeclarations {
 		Target: &java.Identifier{
 			ID:   uuid.New(),
 			Name: "strings",
+			Type: lstutil.NamedType("strings"),
 		},
 		Name: java.LeftPadded[*java.Identifier]{
 			Element: &java.Identifier{
 				ID:   uuid.New(),
 				Name: "Builder",
+				Type: builderType,
 			},
 		},
+		Type: builderType,
 	}
 
 	nameIdent := &java.Identifier{
 		ID:   uuid.New(),
 		Name: "builder",
+		Type: builderType,
 	}
 
 	declarator := &java.VariableDeclarator{
@@ -231,6 +240,7 @@ func buildBuilderStringAssign(variable java.Expression, prefix java.Space) *java
 				ID:     uuid.New(),
 				Prefix: java.SingleSpace,
 				Name:   "builder",
+				Type:   builderType,
 			},
 		},
 		Name: &java.Identifier{
@@ -240,6 +250,7 @@ func buildBuilderStringAssign(variable java.Expression, prefix java.Space) *java
 		Arguments: java.Container[java.Expression]{
 			Before: java.EmptySpace,
 		},
+		MethodType: lstutil.FuncType(builderType.FullyQualifiedName, "String", lstutil.StringType),
 	}
 
 	// For expression-based statements (Assignment), the leading whitespace
@@ -289,6 +300,7 @@ func replaceAddAssignInBody(body *java.Block, sc stringConcatInfo) *java.Block {
 			Element: &java.Identifier{
 				ID:   uuid.New(),
 				Name: "builder",
+				Type: builderType,
 			},
 		},
 		Name: &java.Identifier{
@@ -301,6 +313,7 @@ func replaceAddAssignInBody(body *java.Block, sc stringConcatInfo) *java.Block {
 				{Element: setExprPrefix(sc.rhs, java.EmptySpace)},
 			},
 		},
+		MethodType: lstutil.FuncType(builderType.FullyQualifiedName, "WriteString", nil),
 	}
 
 	newStmts[sc.stmtIdx] = java.RightPadded[java.Statement]{Element: writeCall, After: rp.After}
