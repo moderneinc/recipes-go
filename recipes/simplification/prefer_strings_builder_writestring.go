@@ -7,6 +7,7 @@ package simplification
 import (
 	"fmt"
 
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
@@ -74,6 +75,9 @@ func (v *preferStringsBuilderWriteStringVisitor) VisitMethodInvocation(mi *java.
 	if !ok {
 		return mi
 	}
+	// A template leaves a capture-receiver call bare; the builder types it.
+	builder, _ := match.GetCapture(sbwB).(java.Expression)
+	replaced.MethodType = lstutil.MethodOn(matcher.TypeOfExpression(builder), "WriteString")
 	v.DoAfterVisit(recipe.Service[*recipegolang.ImportService](nil).RemoveUnusedImportsVisitor())
 	return replaced.WithPrefix(mi.GetPrefix())
 }

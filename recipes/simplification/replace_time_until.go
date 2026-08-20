@@ -6,6 +6,7 @@ package simplification
 
 import (
 	"github.com/moderneinc/recipes-go/diagnostic"
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -76,7 +77,7 @@ func (v *replaceTimeUntilVisitor) VisitMethodInvocation(mi *java.MethodInvocatio
 	// The receiver (mi.Select) is the time value `t` to pass to time.Until(t)
 	receiver := mi.Select.Element
 
-	newTimeIdent := &java.Identifier{Name: "time"}
+	newTimeIdent := &java.Identifier{Name: "time", Type: lstutil.NamedType("time")}
 	untilIdent := &java.Identifier{Name: "Until"}
 
 	// Build argument list with the receiver as the arg
@@ -89,10 +90,11 @@ func (v *replaceTimeUntilVisitor) VisitMethodInvocation(mi *java.MethodInvocatio
 	// The leading whitespace lives on the outermost element (the invocation),
 	// so carry the original invocation's prefix onto the replacement.
 	return &java.MethodInvocation{
-		Prefix:    mi.Prefix,
-		Select:    &java.RightPadded[java.Expression]{Element: newTimeIdent, After: mi.Select.After},
-		Name:      untilIdent,
-		Arguments: newArgs,
+		Prefix:     mi.Prefix,
+		Select:     &java.RightPadded[java.Expression]{Element: newTimeIdent, After: mi.Select.After},
+		Name:       untilIdent,
+		Arguments:  newArgs,
+		MethodType: lstutil.FuncType("time", "Until", lstutil.ReturnTypeOf(mi)),
 	}
 }
 

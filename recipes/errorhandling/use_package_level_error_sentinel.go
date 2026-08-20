@@ -9,6 +9,7 @@ import (
 	"unicode"
 
 	"github.com/google/uuid"
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -216,6 +217,7 @@ func buildVarDecls(entries []*errNewEntry) []java.RightPadded[java.Statement] {
 		selectIdent := &java.Identifier{
 			ID:   uuid.New(),
 			Name: "errors",
+			Type: lstutil.NamedType("errors"),
 		}
 		methodName := &java.Identifier{
 			ID:   uuid.New(),
@@ -237,6 +239,7 @@ func buildVarDecls(entries []*errNewEntry) []java.RightPadded[java.Statement] {
 					{Element: argLit},
 				},
 			},
+			MethodType: lstutil.FuncType("errors", "New", lstutil.ErrorType),
 		}
 
 		declarator := &java.VariableDeclarator{

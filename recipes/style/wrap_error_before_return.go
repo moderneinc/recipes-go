@@ -5,6 +5,7 @@
 package style
 
 import (
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -74,6 +75,7 @@ func (v *wrapErrorBeforeReturnVisitor) VisitGoReturn(ret *golang.Return, p any) 
 	// Build: fmt.Errorf("funcName: %w", err)
 	fmtIdent := &java.Identifier{
 		Name: "fmt",
+		Type: lstutil.NamedType("fmt"),
 	}
 
 	errorfIdent := &java.Identifier{
@@ -84,15 +86,14 @@ func (v *wrapErrorBeforeReturnVisitor) VisitGoReturn(ret *golang.Return, p any) 
 		Source: `"` + v.funcName + `: %w"`,
 	}
 
-	errIdent := &java.Identifier{
-		Prefix: java.SingleSpace,
-		Name:   "err",
-	}
+	// Reuse the wrapped identifier so the argument keeps its error type.
+	errIdent := lastIdent.WithPrefix(java.SingleSpace)
 
 	errorfCall := &java.MethodInvocation{
-		Prefix: lastIdent.Prefix,
-		Select: &java.RightPadded[java.Expression]{Element: fmtIdent},
-		Name:   errorfIdent,
+		Prefix:     lastIdent.Prefix,
+		Select:     &java.RightPadded[java.Expression]{Element: fmtIdent},
+		Name:       errorfIdent,
+		MethodType: lstutil.FuncType("fmt", "Errorf", lstutil.ErrorType),
 		Arguments: java.Container[java.Expression]{
 			Elements: []java.RightPadded[java.Expression]{
 				{Element: formatLit},

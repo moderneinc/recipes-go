@@ -5,6 +5,7 @@
 package errorhandling
 
 import (
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -83,6 +84,7 @@ func (v *wrapErrorWithContextVisitor) VisitReturn(ret *java.Return, p any) java.
 	//   }
 	fmtIdent := &java.Identifier{
 		Name: "fmt",
+		Type: lstutil.NamedType("fmt"),
 	}
 
 	errorfIdent := &java.Identifier{
@@ -93,15 +95,14 @@ func (v *wrapErrorWithContextVisitor) VisitReturn(ret *java.Return, p any) java.
 		Source: `"` + v.funcName + `: %w"`,
 	}
 
-	errIdent := &java.Identifier{
-		Prefix: java.SingleSpace,
-		Name:   "err",
-	}
+	// Reuse the wrapped identifier so the argument keeps its error type.
+	errIdent := ident.WithPrefix(java.SingleSpace)
 
 	errorfCall := &java.MethodInvocation{
-		Prefix: java.SingleSpace,
-		Select: &java.RightPadded[java.Expression]{Element: fmtIdent},
-		Name:   errorfIdent,
+		Prefix:     java.SingleSpace,
+		Select:     &java.RightPadded[java.Expression]{Element: fmtIdent},
+		Name:       errorfIdent,
+		MethodType: lstutil.FuncType("fmt", "Errorf", lstutil.ErrorType),
 		Arguments: java.Container[java.Expression]{
 			Elements: []java.RightPadded[java.Expression]{
 				{Element: formatLit, After: java.Space{}},

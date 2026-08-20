@@ -78,7 +78,7 @@ func (v *lenVisitor) matchLen(ifStmt *java.If) *java.MethodInvocation {
 	if call == nil {
 		return nil
 	}
-	return finishAssertion(ifStmt.GetPrefix(), v.pkg, recv.Name, "Len", call, []java.Expression{collection, count}, identSet(collection, count), nil)
+	return finishAssertion(ifStmt.GetPrefix(), v.pkg, v.importPath, recv, "Len", call, []java.Expression{collection, count}, identSet(collection, count), nil)
 }
 
 // lenOperands returns (collection, count) when exactly one of left/right is a

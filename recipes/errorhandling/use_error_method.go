@@ -5,6 +5,7 @@
 package errorhandling
 
 import (
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
@@ -82,10 +83,11 @@ func (v *useErrorMethodVisitor) VisitMethodInvocation(mi *java.MethodInvocation,
 	errIdent := argIdent.WithPrefix(ident.Prefix)
 	errorName := &java.Identifier{Name: "Error"}
 	return &java.MethodInvocation{
-		Prefix:    mi.Prefix,
-		Select:    &java.RightPadded[java.Expression]{Element: errIdent},
-		Name:      errorName,
-		Arguments: java.Container[java.Expression]{},
+		Prefix:     mi.Prefix,
+		Select:     &java.RightPadded[java.Expression]{Element: errIdent},
+		Name:       errorName,
+		Arguments:  java.Container[java.Expression]{},
+		MethodType: lstutil.MethodOn(argIdent.Type, "Error"),
 	}
 }
 
