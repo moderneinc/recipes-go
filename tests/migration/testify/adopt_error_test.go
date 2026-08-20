@@ -35,6 +35,7 @@ func TestAdoptRequireErrorFromFatal(t *testing.T) {
 
 			import (
 				"testing"
+
 				"github.com/stretchr/testify/require"
 			)
 
@@ -72,6 +73,7 @@ func TestAdoptAssertErrorFromError(t *testing.T) {
 
 			import (
 				"testing"
+
 				"github.com/stretchr/testify/assert"
 			)
 

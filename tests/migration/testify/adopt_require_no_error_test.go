@@ -35,6 +35,7 @@ func TestAdoptRequireNoErrorFatal(t *testing.T) {
 
 			import (
 				"testing"
+
 				"github.com/stretchr/testify/require"
 			)
 
@@ -72,6 +73,7 @@ func TestAdoptRequireNoErrorFatalf(t *testing.T) {
 
 			import (
 				"testing"
+
 				"github.com/stretchr/testify/require"
 			)
 
@@ -112,6 +114,7 @@ func TestAdoptRequireNoErrorSubtestReceiver(t *testing.T) {
 
 			import (
 				"testing"
+
 				"github.com/stretchr/testify/require"
 			)
 
@@ -151,6 +154,7 @@ func TestAdoptRequireNoErrorInlineInit(t *testing.T) {
 
 			import (
 				"testing"
+
 				"github.com/stretchr/testify/require"
 			)
 
@@ -253,6 +257,7 @@ func TestAdoptRequireNoErrorPreservesContextMessage(t *testing.T) {
 
 			import (
 				"testing"
+
 				"github.com/stretchr/testify/require"
 			)
 

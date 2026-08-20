@@ -33,6 +33,7 @@ func TestAdoptRequireTrueFromNegation(t *testing.T) {
 
 			import (
 				"testing"
+
 				"github.com/stretchr/testify/require"
 			)
 
@@ -68,6 +69,7 @@ func TestAdoptAssertFalseFromCondition(t *testing.T) {
 
 			import (
 				"testing"
+
 				"github.com/stretchr/testify/assert"
 			)
 
