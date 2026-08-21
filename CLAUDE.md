@@ -41,10 +41,10 @@ The Go-side dependency on `github.com/openrewrite/rewrite/rewrite-go` requires u
 For local cross-repo dev, re-add the `replace` directive to the root `go.mod`:
 
 ```
-replace github.com/openrewrite/rewrite/rewrite-go => ../../../openrewrite/rewrite/rewrite-go
+replace github.com/openrewrite/rewrite/rewrite-go => ../../openrewrite/rewrite/rewrite-go
 ```
 
-(It's removed from the committed `go.mod` so CI can resolve the dep from the Go module proxy. Don't commit the replace back.)
+The path is relative to the `go.mod` holding it, so a worktree under `.worktrees/<name>/` sits two levels deeper and an absolute path is easier. It's removed from the committed `go.mod` so CI can resolve the dep from the Go module proxy — don't commit the replace back.
 
 ### Full dev loop (recipes-go → rewrite-go → CLI)
 
@@ -52,19 +52,19 @@ When changing the rewrite-go RPC/parser/visitor layer alongside recipes:
 
 ```bash
 # 1. Edit rewrite-go (parser, RPC, visitors, etc.)
-#    at ../../../openrewrite/rewrite/rewrite-go/rewrite/
+#    at ../../openrewrite/rewrite/rewrite-go/pkg/
 
 # 2. Run rewrite-go integration tests
-cd ../../../openrewrite/rewrite
+cd ../../openrewrite/rewrite
 ./gradlew :rewrite-go:integTest
 
 # 3. Recipe unit tests pick up rewrite-go changes automatically via replace directive
 go test ./... -count=1
 
 # 4. To test through the CLI (mod build / mod run), publish rewrite-go and rebuild the fat jar
-cd ../../../openrewrite/rewrite
+cd ../../openrewrite/rewrite
 ./gradlew :rewrite-go:publishToMavenLocal
-cd ../../../moderneinc/moderne-cli
+cd ../../moderneinc/moderne-cli
 ./gradlew :mod:devFatJar --offline
 
 # 5. Build LSTs and run recipes via CLI
@@ -81,10 +81,12 @@ build.steps:
 
 ## License
 
-Moderne Proprietary. All source files use the single-line license header:
+Moderne Proprietary. Hand-written source files carry the single-line header:
 ```
 Moderne Proprietary. Only for use by Moderne customers under the terms of a commercial contract.
 ```
+
+`licenseGo` in `build.gradle.kts` checks them, excluding generated files, which carry a `DO NOT EDIT` banner and would lose the header on regeneration.
 
 ## Writing Go Recipes
 
