@@ -5,13 +5,14 @@
 package style
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/moderneinc/recipes-go/diagnostic"
-	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -97,32 +98,12 @@ func (v *avoidHardcodedCredentialsVisitor) VisitVariableDeclarator(vd *java.Vari
 	recipegolang.MaybeAddImport(v, "os", nil, false)
 
 	// Build os.Getenv("VAR_NAME") to replace the string literal.
-	envName := envVarName(vd.Name.Name)
-
-	osIdent := &java.Identifier{
-		Prefix: lit.Prefix,
-		Name:   "os",
-		Type:   lstutil.NamedType("os"),
+	envLit := &java.Literal{Source: `"` + envVarName(vd.Name.Name) + `"`}
+	instantiated := getenvTmpl.Instantiate(template.NewMatchResult().Bind(getenvName, envLit))
+	if instantiated == nil {
+		return vd
 	}
-
-	getenvIdent := &java.Identifier{
-		Name: "Getenv",
-	}
-
-	envLit := &java.Literal{
-		Source: `"` + envName + `"`,
-	}
-
-	getenvCall := &java.MethodInvocation{
-		Select:     &java.RightPadded[java.Expression]{Element: osIdent},
-		Name:       getenvIdent,
-		MethodType: lstutil.FuncType("os", "Getenv", lstutil.StringType),
-		Arguments: java.Container[java.Expression]{
-			Elements: []java.RightPadded[java.Expression]{
-				{Element: envLit},
-			},
-		},
-	}
+	getenvCall := instantiated.(*java.MethodInvocation).WithPrefix(lit.Prefix)
 
 	c := *vd
 	c.Initializer = &java.LeftPadded[java.Expression]{
@@ -131,3 +112,11 @@ func (v *avoidHardcodedCredentialsVisitor) VisitVariableDeclarator(vd *java.Vari
 	}
 	return &c
 }
+
+var (
+	getenvName = template.Expr("name").WithType("string")
+	getenvTmpl = template.ExpressionTemplate(fmt.Sprintf("os.Getenv(%s)", getenvName)).
+			Captures(getenvName).
+			Imports("os").
+			Build()
+)

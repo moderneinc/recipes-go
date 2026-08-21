@@ -118,8 +118,12 @@ func insertDefer(block *java.Block,
 		if !ok || !match(a) || present(block.Statements, i, a.varName) {
 			continue
 		}
+		d := build(a, rp.Element)
+		if d == nil {
+			continue
+		}
 		at := deferIndex(block.Statements, i, a.errName)
-		pending[at] = append(pending[at], java.RightPadded[java.Statement]{Element: build(a, rp.Element)})
+		pending[at] = append(pending[at], java.RightPadded[java.Statement]{Element: d})
 	}
 	if len(pending) == 0 {
 		return block

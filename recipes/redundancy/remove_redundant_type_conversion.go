@@ -43,47 +43,40 @@ type removeRedundantTypeConversionVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *removeRedundantTypeConversionVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
-	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
+func (v *removeRedundantTypeConversionVisitor) VisitTypeCast(tc *java.TypeCast, p any) java.J {
+	tc = v.GoVisitor.VisitTypeCast(tc, p).(*java.TypeCast)
 
-	// A conversion reads as a call with no receiver and one argument.
-	if mi.Select != nil {
-		return mi
+	if tc.Clazz == nil {
+		return tc
 	}
-	attributedType, convertible := unambiguousBuiltins[mi.Name.Name]
+	target, isBuiltin := tc.Clazz.Tree.Element.(*java.Identifier)
+	if !isBuiltin {
+		return tc
+	}
+	attributedType, convertible := unambiguousBuiltins[target.Name]
 	if !convertible {
-		return mi
+		return tc
 	}
 
-	var operand java.Expression
-	for _, a := range mi.Arguments.Elements {
-		if _, isEmpty := a.Element.(*java.Empty); isEmpty {
-			continue
-		}
-		if operand != nil {
-			return mi
-		}
-		operand = a.Element
-	}
+	operand := tc.Expr
 	if operand == nil {
-		return mi
+		return tc
 	}
-
 	// An untyped constant takes its type from the conversion, so the conversion
 	// is what gives it one.
 	if _, isLiteral := operand.(*java.Literal); isLiteral {
-		return mi
+		return tc
 	}
 	if matcher.GetFullyQualifiedName(matcher.TypeOfExpression(operand)) != attributedType {
-		return mi
+		return tc
 	}
 	// The operand inherits the conversion's prefix, which prependExprPrefix
 	// carries over for these forms.
 	switch operand.(type) {
 	case *java.Identifier, *java.FieldAccess, *java.MethodInvocation:
-		return prependExprPrefix(operand, mi.Prefix)
+		return prependExprPrefix(operand, tc.Prefix)
 	}
-	return mi
+	return tc
 }
 
 // unambiguousBuiltins maps a Go builtin type to the type attributed to an

@@ -45,18 +45,15 @@ type findSingleCaseSelectVisitor struct {
 	visitor.GoVisitor
 }
 
-// isSingleCaseSelect returns the single CommClause if sw is a select with
-// exactly one communication clause and no default, or nil otherwise.
-func isSingleCaseSelect(sw *java.Switch) *golang.CommClause {
-	if !java.HasMarker[golang.SelectStmt](sw.Markers) {
-		return nil
-	}
-	if sw.Body == nil {
+// isSingleCaseSelect returns the single CommClause if sel has exactly one
+// communication clause and no default, or nil otherwise.
+func isSingleCaseSelect(sel *golang.Select) *golang.CommClause {
+	if sel.Body == nil {
 		return nil
 	}
 	var theClause *golang.CommClause
 	clauses := 0
-	for _, stmt := range sw.Body.Statements {
+	for _, stmt := range sel.Body.Statements {
 		if cc, ok := stmt.Element.(*golang.CommClause); ok {
 			clauses++
 			if cc.Comm == nil {
@@ -81,13 +78,13 @@ func (v *findSingleCaseSelectVisitor) VisitBlock(block *java.Block, p any) java.
 	dedent := visitor.Init(&selectSingleDedentVisitor{})
 
 	for _, rp := range block.Statements {
-		sw, ok := rp.Element.(*java.Switch)
+		sel, ok := rp.Element.(*golang.Select)
 		if !ok {
 			newStmts = append(newStmts, rp)
 			continue
 		}
 
-		clause := isSingleCaseSelect(sw)
+		clause := isSingleCaseSelect(sel)
 		if clause == nil {
 			newStmts = append(newStmts, rp)
 			continue
@@ -100,7 +97,7 @@ func (v *findSingleCaseSelectVisitor) VisitBlock(block *java.Block, p any) java.
 		// Replace the entire leading whitespace of the comm with the
 		// select statement's prefix (e.g., "\n\t") so it sits at the right
 		// indentation level.
-		commFixed := replaceLeadingPrefix(clause.Comm, sw.Prefix)
+		commFixed := replaceLeadingPrefix(clause.Comm, sel.Prefix)
 		newStmts = append(newStmts, java.RightPadded[java.Statement]{Element: commFixed})
 
 		// Body statements are indented for the case body (2 levels deeper

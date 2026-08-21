@@ -283,29 +283,3 @@ func isTestingReceiver(recv *java.Identifier) bool {
 	}
 	return false
 }
-
-// withPrefix returns expr with its leading whitespace reset to prefix.
-func withPrefix(expr java.Expression, prefix java.Space) java.Expression {
-	switch e := expr.(type) {
-	case *java.Identifier:
-		return e.WithPrefix(prefix)
-	case *java.Literal:
-		return e.WithPrefix(prefix)
-	case *java.FieldAccess:
-		return e.WithPrefix(prefix)
-	case *java.MethodInvocation:
-		return e.WithPrefix(prefix)
-	case *java.Binary:
-		return e.WithPrefix(prefix)
-	case *java.Unary:
-		return e.WithPrefix(prefix)
-	case *golang.Unary:
-		return e.WithPrefix(prefix)
-	case *java.Parentheses:
-		return e.WithPrefix(prefix)
-	case *java.ControlParentheses:
-		return e.WithPrefix(prefix)
-	default:
-		return expr
-	}
-}

@@ -5,10 +5,12 @@
 package simplification
 
 import (
+	"fmt"
+
 	"github.com/moderneinc/recipes-go/diagnostic"
-	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -74,39 +76,18 @@ func (v *replaceTimeUntilVisitor) VisitMethodInvocation(mi *java.MethodInvocatio
 		return mi
 	}
 
-	// The receiver (mi.Select) is the time value `t` to pass to time.Until(t)
-	receiver := mi.Select.Element
-
-	newTimeIdent := &java.Identifier{Name: "time", Type: lstutil.NamedType("time")}
-	untilIdent := &java.Identifier{Name: "Until"}
-
-	// Build argument list with the receiver as the arg
-	receiverWithNoPrefix := setExprPrefixOf(receiver, java.Space{})
-	newArgs := java.Container[java.Expression]{
-		Before:   mi.Arguments.Before,
-		Elements: []java.RightPadded[java.Expression]{{Element: receiverWithNoPrefix}},
+	// The receiver (mi.Select) is the time value `t` to pass to time.Until(t).
+	replaced := timeUntilTmpl.Apply(v.Cursor(), template.NewMatchResult().Bind(timeUntilArg, mi.Select.Element))
+	if replaced == nil {
+		return mi
 	}
-
-	// The leading whitespace lives on the outermost element (the invocation),
-	// so carry the original invocation's prefix onto the replacement.
-	return &java.MethodInvocation{
-		Prefix:     mi.Prefix,
-		Select:     &java.RightPadded[java.Expression]{Element: newTimeIdent, After: mi.Select.After},
-		Name:       untilIdent,
-		Arguments:  newArgs,
-		MethodType: lstutil.FuncType("time", "Until", lstutil.ReturnTypeOf(mi)),
-	}
+	return replaced
 }
 
-func setExprPrefixOf(expr java.Expression, prefix java.Space) java.Expression {
-	switch n := expr.(type) {
-	case *java.Identifier:
-		return n.WithPrefix(prefix)
-	case *java.FieldAccess:
-		return n.WithPrefix(prefix)
-	case *java.MethodInvocation:
-		return n.WithPrefix(prefix)
-	default:
-		return expr
-	}
-}
+var (
+	timeUntilArg  = template.Expr("t").WithType("time.Time")
+	timeUntilTmpl = template.ExpressionTemplate(fmt.Sprintf("time.Until(%s)", timeUntilArg)).
+			Captures(timeUntilArg).
+			Imports("time").
+			Build()
+)

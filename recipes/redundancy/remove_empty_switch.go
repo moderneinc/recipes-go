@@ -6,7 +6,6 @@ package redundancy
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -36,11 +35,6 @@ type removeEmptySwitchVisitor struct {
 
 func (v *removeEmptySwitchVisitor) VisitSwitch(sw *java.Switch, p any) java.J {
 	sw = v.GoVisitor.VisitSwitch(sw, p).(*java.Switch)
-
-	// Skip select statements.
-	if java.HasMarker[golang.SelectStmt](sw.Markers) {
-		return sw
-	}
 
 	// Body must exist but contain no real statements.
 	if sw.Body == nil {

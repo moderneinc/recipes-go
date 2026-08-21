@@ -5,13 +5,14 @@
 package style
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/moderneinc/recipes-go/diagnostic"
-	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -87,26 +88,20 @@ func (v *useErrorsNewVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p
 	}
 	recipegolang.MaybeAddImport(v, "errors", nil, false)
 
-	// Build: errors.New(same literal)
-	// The leading whitespace lives on the outermost element (the invocation),
-	// so carry the original invocation's prefix onto the replacement.
-	errorsIdent := &java.Identifier{
-		Name: "errors",
-		Type: lstutil.NamedType("errors"),
+	replaced := errorsNewTmpl.Apply(v.Cursor(), template.NewMatchResult().Bind(errorsNewMsg, lit))
+	if replaced == nil {
+		return mi
 	}
-
-	newName := &java.Identifier{
-		Name: "New",
-	}
-
-	return &java.MethodInvocation{
-		Prefix:     mi.Prefix,
-		Select:     &java.RightPadded[java.Expression]{Element: errorsIdent, After: mi.Select.After},
-		Name:       newName,
-		Arguments:  mi.Arguments,
-		MethodType: lstutil.FuncType("errors", "New", lstutil.ErrorType),
-	}
+	return replaced
 }
+
+var (
+	errorsNewMsg  = template.Expr("msg").WithType("string")
+	errorsNewTmpl = template.ExpressionTemplate(fmt.Sprintf("errors.New(%s)", errorsNewMsg)).
+			Captures(errorsNewMsg).
+			Imports("errors").
+			Build()
+)
 
 // hasFormatVerb checks if a Go string literal source (including quotes) contains
 // a format verb like %s, %d, %v, %w, etc.

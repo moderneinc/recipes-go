@@ -126,6 +126,8 @@ func setExprPrefixLocal(expr java.Expression, prefix java.Space) java.Expression
 		return n.WithPrefix(prefix)
 	case *java.MethodInvocation:
 		return n.WithPrefix(prefix)
+	case *java.Unary:
+		return n.WithPrefix(prefix)
 	default:
 		return expr
 	}

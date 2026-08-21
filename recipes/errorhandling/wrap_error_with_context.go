@@ -5,9 +5,11 @@
 package errorhandling
 
 import (
-	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
+	"fmt"
+
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -74,44 +76,24 @@ func (v *wrapErrorWithContextVisitor) VisitReturn(ret *java.Return, p any) java.
 	// The rewrite introduces a reference to the `fmt` package; ensure it is imported.
 	recipegolang.MaybeAddImport(v, "fmt", nil, false)
 
-	// Build: return fmt.Errorf("funcName: %w", err)
-	//
-	// AST structure:
-	//   MethodInvocation {
-	//     Select: "fmt"
-	//     Name:   "Errorf"
-	//     Args:   [ Literal("funcName: %w"), Identifier("err") ]
-	//   }
-	fmtIdent := &java.Identifier{
-		Name: "fmt",
-		Type: lstutil.NamedType("fmt"),
-	}
-
-	errorfIdent := &java.Identifier{
-		Name: "Errorf",
-	}
-
-	formatLit := &java.Literal{
-		Source: `"` + v.funcName + `: %w"`,
-	}
-
 	// Reuse the wrapped identifier so the argument keeps its error type.
-	errIdent := ident.WithPrefix(java.SingleSpace)
-
-	errorfCall := &java.MethodInvocation{
-		Prefix:     java.SingleSpace,
-		Select:     &java.RightPadded[java.Expression]{Element: fmtIdent},
-		Name:       errorfIdent,
-		MethodType: lstutil.FuncType("fmt", "Errorf", lstutil.ErrorType),
-		Arguments: java.Container[java.Expression]{
-			Elements: []java.RightPadded[java.Expression]{
-				{Element: formatLit, After: java.Space{}},
-				{Element: errIdent, After: java.Space{}},
-			},
-		},
+	errorfCall := wrapErrorTmpl.Instantiate(template.NewMatchResult().
+		Bind(wrapErrorFormat, &java.Literal{Source: `"` + v.funcName + `: %w"`}).
+		Bind(wrapErrorErr, ident))
+	if errorfCall == nil {
+		return ret
 	}
 
 	c := *ret
-	c.Expression = errorfCall
+	c.Expression = errorfCall.(*java.MethodInvocation).WithPrefix(java.SingleSpace)
 	return &c
 }
+
+var (
+	wrapErrorFormat = template.Expr("format").WithType("string")
+	wrapErrorErr    = template.Expr("err").WithType("error")
+	wrapErrorTmpl   = template.ExpressionTemplate(fmt.Sprintf("fmt.Errorf(%s, %s)", wrapErrorFormat, wrapErrorErr)).
+			Captures(wrapErrorFormat, wrapErrorErr).
+			Imports("fmt").
+			Build()
+)

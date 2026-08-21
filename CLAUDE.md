@@ -153,12 +153,19 @@ rewriter := template.Rewrite(pat, tmpl)
 - Binary.Prefix is often empty — the leading whitespace is on Binary.Left
 - Short var decls (`:=`) are `*tree.Assignment` with a `ShortVarDecl` marker
 - The `VisitX` method should call `v.GoVisitor.VisitX(...)` first to recurse
+- A conversion such as `string(s)` is a `*tree.TypeCast`, not a call with no receiver
+
+### Returning the original when nothing changed
+
+`RewriteRun` fails a no-change test with "the visitor must return the original pointer when nothing changed". The trap is rebuilding a child slice: `WithStatements` / `WithEntries` / `WithValues` guard on `java.SameSlice`, which compares backing arrays (`&a[0] == &b[0]`), so a freshly allocated slice always counts as a change however its elements compare. Collect into the new slice, track whether any element actually moved, and return the receiver untouched when none did.
 
 ### Type Attribution
 
 A hand-written visitor that changes what a node *is* must re-attribute it. `RemoveImport` and `RemoveUnusedImports` answer "is this package still referenced?" from `Identifier.Type` and `MethodInvocation.MethodType.DeclaringType`, so a rewrite that leaves parse-time types in place misleads every later type-based match. Setting the type on the node you replaced is not enough: the enclosing declaration carries one of its own, as does each other reference to the value.
 
-`recipes/internal/lstutil` has the pieces: `MethodOn(recv, name)` reads a method's signature off the receiver's own attribution and is the first choice; `NamedType` / `FuncType` state one the recipe has to name itself. A template attributes the calls it spells out, but not one whose receiver is a capture (`%s.String()`), and only for packages the toolchain resolves — `encoding/json/v2` and `encoding/json/jsontext` sit behind `GOEXPERIMENT=jsonv2`, so the jsonv2 recipes attribute by hand.
+`recipes/internal/lstutil` has the pieces: `MethodOn(recv, name)` reads a method's signature off the receiver's own attribution and is the first choice; `NamedType` / `FuncType` state one the recipe has to name itself. A template attributes the calls it spells out, but not one whose receiver is a capture (`%s.String()`).
+
+A template resolves the stdlib on its own; anything else needs the package's compiler export data shipped alongside and passed to `.ExportData(...)`. `recipes/migration/testify/testifyexportdata` is generated that way, by `go run github.com/openrewrite/rewrite/rewrite-go/cmd/goexportdata -o <dir> <import paths>`. The jsonv2 recipes attribute by hand instead.
 
 `TestRewrittenTreesStayAttributed` in `tests/attribution_test.go` sweeps every registered recipe over the suite's own snippets and fails on a call the parser would have typed. `RewriteRun` compares printed source, so nothing else catches this.
 

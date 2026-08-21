@@ -56,7 +56,9 @@ type ChangeGoVersionVisitor struct {
 func (v *ChangeGoVersionVisitor) VisitGoModDirective(d *golang.GoModDirective, p any) java.Tree {
 	d = v.GoVisitor.VisitGoModDirective(d, p).(*golang.GoModDirective)
 	if d.Keyword == "go" && len(d.Values) == 1 {
-		d = d.WithValues([]*golang.GoModValue{d.Values[0].WithText(v.NewVersion)})
+		if updated := d.Values[0].WithText(v.NewVersion); updated != d.Values[0] {
+			d = d.WithValues([]*golang.GoModValue{updated})
+		}
 	}
 	return d
 }
