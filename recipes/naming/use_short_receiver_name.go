@@ -15,8 +15,9 @@ import (
 )
 
 // UseShortReceiverName renames method receivers longer than 2 characters to the
-// first lowercase letter of the type name. Go convention is to use short,
-// one-letter receiver names derived from the type.
+// first lowercase letter of the type name, leaving alone any whose short name is
+// already bound in the method. Go convention is to use short, one-letter receiver
+// names derived from the type.
 type UseShortReceiverName struct {
 	recipe.Base
 }
@@ -26,7 +27,7 @@ func (r *UseShortReceiverName) Name() string {
 }
 func (r *UseShortReceiverName) DisplayName() string { return "Use short receiver name" }
 func (r *UseShortReceiverName) Description() string {
-	return "Rename method receivers longer than 2 characters to the first lowercase letter of the type name."
+	return "Rename method receivers longer than 2 characters to the first lowercase letter of the type name, unless that name is already bound in the method."
 }
 func (r *UseShortReceiverName) Tags() []string { return []string{"naming"} }
 
@@ -71,6 +72,12 @@ func (v *useShortReceiverNameVisitor) VisitGoMethodDeclaration(md *golang.Method
 		return md
 	}
 	newName := strings.ToLower(string([]rune(typeName)[0:1]))
+
+	// Renaming onto a name the method already binds would either fail to compile
+	// or silently rebind the body's references to it, so leave the receiver alone.
+	if boundNames(md, typeName)[newName] {
+		return md
+	}
 
 	// Rename receiver param.
 	newNameIdent := nameIdent.WithName(newName)
@@ -117,6 +124,63 @@ func extractTypeName(expr java.Expression) string {
 		return ident.Name
 	}
 	return ""
+}
+
+// boundNames returns every name bound in md's scope other than the receiver
+// itself: the receiver's type name, parameters, named results, and locals
+// declared anywhere in the body.
+func boundNames(md *golang.MethodDeclaration, typeName string) map[string]bool {
+	names := map[string]bool{typeName: true}
+	decl := md.Declaration
+	if decl == nil {
+		return names
+	}
+	collector := visitor.Init(&boundNameVisitor{names: names})
+	for _, param := range decl.Parameters.Elements {
+		collector.Visit(param.Element, nil)
+	}
+	if decl.ReturnType != nil {
+		collector.Visit(decl.ReturnType, nil)
+	}
+	if decl.Body != nil {
+		collector.Visit(decl.Body, nil)
+	}
+	return names
+}
+
+type boundNameVisitor struct {
+	visitor.GoVisitor
+	names map[string]bool
+}
+
+// Parameters, named results and `var` declarations all share this node.
+func (v *boundNameVisitor) VisitVariableDeclarations(vd *java.VariableDeclarations, p any) java.J {
+	for _, variable := range vd.Variables {
+		if name := variable.Element.Name; name != nil {
+			v.names[name.Name] = true
+		}
+	}
+	return v.GoVisitor.VisitVariableDeclarations(vd, p)
+}
+
+// An assignment target is recorded whether it declares (`:=`) or merely writes
+// (`=`), since a plain write names something the receiver would shadow too.
+func (v *boundNameVisitor) VisitAssignment(assign *java.Assignment, p any) java.J {
+	v.recordIdentifier(assign.Variable)
+	return v.GoVisitor.VisitAssignment(assign, p)
+}
+
+func (v *boundNameVisitor) VisitMultiAssignment(ma *golang.MultiAssignment, p any) java.J {
+	for _, variable := range ma.Variables {
+		v.recordIdentifier(variable.Element)
+	}
+	return v.GoVisitor.VisitMultiAssignment(ma, p)
+}
+
+func (v *boundNameVisitor) recordIdentifier(expr java.Expression) {
+	if ident, ok := expr.(*java.Identifier); ok {
+		v.names[ident.Name] = true
+	}
 }
 
 // receiverRenameVisitor renames identifiers matching the old receiver name.
