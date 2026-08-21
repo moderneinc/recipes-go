@@ -116,6 +116,8 @@ func (v *myRecipeVisitor) VisitBinary(bin *java.Binary, p any) java.J {
 }
 ```
 
+`codequality` is the default namespace; `migration` covers a version or library move, `testify` the testify adoption family.
+
 ### Scanning Recipes
 
 A recipe whose answer spans files embeds `recipe.ScanningBase` and runs in two phases: `Scanner(acc)` visits every file collecting into the accumulator, then `EditorWithData(acc)` rewrites. `UsePackageLevelErrorSentinel` is the worked example — one sentinel name per package, so it cannot decide anything until it has seen the package.
@@ -127,6 +129,16 @@ func (r *MyRecipe) EditorWithData(a any) recipe.TreeVisitor   { return visitor.I
 ```
 
 Resolve the plan once when `EditorWithData` is called, not per file, so the editor only reads it. Files arrive in no guaranteed order, so anything decided while editing is decided by that order.
+
+### When not to rewrite
+
+The hard part of a Go recipe is the guard, not the rewrite — a recipe that fires too eagerly is worse than no recipe. Three ways that happens, each with a worked guard to read:
+
+- **The output does not compile.** `PreferRegexpMustCompile` (`recipes/style/prefer_regexp_mustcompile.go`) fires only where the call is the sole RHS of a two-variable short declaration, since `MustCompile` returns one value and the assignment expects two.
+- **It compiles here and breaks elsewhere.** `RemoveEmptyFunction` (`recipes/style/remove_empty_function.go`) leaves methods alone, since an empty one may satisfy an interface, and leaves functions with a return type alone, since callers use it.
+- **It compiles and means something else.** `RemoveRedundantTypeConversion` (`recipes/redundancy/remove_redundant_type_conversion.go`) skips a literal operand, since an untyped constant takes its type from the conversion.
+
+The guard belongs in the visitor, not the description: a recipe that documents a limitation it does not enforce still emits the broken rewrite.
 
 ### Testing Pattern
 
@@ -145,7 +157,7 @@ func TestMyRecipe(t *testing.T) {
 }
 ```
 
-Omit the second argument for no-change tests.
+Omit the second argument for a no-change test. Write one for every case the guard is meant to reject — they are what stops a later change quietly widening the recipe, and they are close to half of this suite.
 
 ### GoTemplate (upstream in rewrite-go)
 
