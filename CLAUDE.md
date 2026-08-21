@@ -107,8 +107,8 @@ type myRecipeVisitor struct {
     visitor.GoVisitor
 }
 
-func (v *myRecipeVisitor) VisitBinary(bin *tree.Binary, p any) tree.J {
-    bin = v.GoVisitor.VisitBinary(bin, p).(*tree.Binary) // recurse first
+func (v *myRecipeVisitor) VisitBinary(bin *java.Binary, p any) java.J {
+    bin = v.GoVisitor.VisitBinary(bin, p).(*java.Binary) // recurse first
     // ... transformation logic
     return bin
 }
@@ -135,7 +135,7 @@ Omit the second argument for no-change tests.
 
 ### GoTemplate (upstream in rewrite-go)
 
-For template-based matching and replacement:
+A template parses its code, so go/types attributes what it emits. Prefer one over a hand-built node. Pattern and template come in matching `Expression` / `Statement` / `TopLevel` flavours:
 
 ```go
 expr := template.Expr("expr")
@@ -146,14 +146,28 @@ tmpl := template.ExpressionTemplate(fmt.Sprintf("log.Println(%s)", expr)).
 rewriter := template.Rewrite(pat, tmpl)
 ```
 
+A recipe that decides for itself binds captures by hand, with `Bind` for one subtree and `BindList` for a run of them (`Elems` widens, since Go converts no `[]java.Expression` to `[]java.J`). A bound subtree keeps its own attribution across the splice, and a runtime-computed literal or name goes in as a bare `&java.Literal{Source: ...}` / `&java.Identifier{Name: ...}`:
+
+```go
+values := template.NewMatchResult().
+    Bind(name, &java.Identifier{Name: varName}).
+    BindList(args, template.Elems([]java.Expression{recv}, rest))
+```
+
+Then `Apply(v.Cursor(), values)` when replacing the node being visited — it takes that node's prefix, parenthesizes and formats — or `Instantiate(values)` when inserting somewhere new, which returns a detached node the caller positions. Both are nil when a capture is unbound or a bound node has no slot, so check before using the result.
+
 ### Go-specific AST Notes
 
-- `true`/`false` are `*tree.Identifier` (predeclared identifiers), not `*tree.Literal`
-- `nil` is also `*tree.Identifier`
-- Binary.Prefix is often empty — the leading whitespace is on Binary.Left
-- Short var decls (`:=`) are `*tree.Assignment` with a `ShortVarDecl` marker
+Nodes live in `pkg/tree/java` (`java.Binary`, `java.J`) and `pkg/tree/golang` (`golang.Select`) — there is no `tree` package.
+
+- `true`/`false` are `*java.Identifier` (predeclared identifiers), not `*java.Literal`
+- `nil` is also `*java.Identifier`
+- A node's leading whitespace is its own `Prefix`, including compound nodes: a `java.Binary` at `x := a + b` has prefix `" "` and its `Left` has `""`
+- Short var decls (`:=`) are `*java.Assignment` with a `ShortVarDecl` marker
 - The `VisitX` method should call `v.GoVisitor.VisitX(...)` first to recurse
-- A conversion such as `string(s)` is a `*tree.TypeCast`, not a call with no receiver
+- A conversion such as `string(s)` is a `*java.TypeCast` (`Clazz` and `Expr`), not a call with no receiver
+- `select` is `*golang.Select`, a statement whose `Body` holds `golang.CommClause`; a `java.Switch` is never one
+- `Literal.Value` carries the type the source wrote: `int64` for an integer or rune, `float64` for a float, and `*big.Int` past int64
 
 ### Returning the original when nothing changed
 
@@ -166,6 +180,8 @@ A hand-written visitor that changes what a node *is* must re-attribute it. `Remo
 `recipes/internal/lstutil` has the pieces: `MethodOn(recv, name)` reads a method's signature off the receiver's own attribution and is the first choice; `NamedType` / `FuncType` state one the recipe has to name itself. A template attributes the calls it spells out, but not one whose receiver is a capture (`%s.String()`).
 
 A template resolves the stdlib on its own; anything else needs the package's compiler export data shipped alongside and passed to `.ExportData(...)`. `recipes/migration/testify/testifyexportdata` is generated that way, by `go run github.com/openrewrite/rewrite/rewrite-go/cmd/goexportdata -o <dir> <import paths>`. The jsonv2 recipes attribute by hand instead.
+
+Swapping a package under a preserved qualifier is the case a template does not cover: it attributes what it emits, while every reference the rewrite left alone still names the old package. Such a recipe walks the file afterwards remapping `Identifier.Type`, `FieldAccess.Type` and `MethodInvocation.MethodType.DeclaringType`, skipping symbols the new version dropped, since those are rewritten at their own sites and would be overwritten.
 
 `TestRewrittenTreesStayAttributed` in `tests/attribution_test.go` sweeps every registered recipe over the suite's own snippets and fails on a call the parser would have typed. `RewriteRun` compares printed source, so nothing else catches this.
 
