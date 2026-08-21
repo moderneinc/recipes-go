@@ -89,20 +89,81 @@ func declaringType(mi *java.MethodInvocation) (string, bool) {
 }
 
 // deferIndex gives the position in stmts at which the cleanup for the
-// acquisition at index i belongs: after the `if err != nil` block guarding it,
-// since the resource is only valid once that check has passed.
-func deferIndex(stmts []java.RightPadded[java.Statement], i int, errName string) int {
-	if errName == "" || i+1 >= len(stmts) {
-		return i + 1
+// acquisition at index i belongs: after the guards that establish the resource,
+// which is only valid once those have passed, and past any defer sitting
+// between them. It reports false where the block tests the resource against
+// nil, since a cleanup call on a nil one panics.
+func deferIndex(stmts []java.RightPadded[java.Statement], i int, a acquisition) (int, bool) {
+	at := i + 1
+	for j := i + 1; j < len(stmts); j++ {
+		if _, isDefer := stmts[j].Element.(*golang.Defer); isDefer {
+			continue
+		}
+		ifStmt, ok := stmts[j].Element.(*java.If)
+		if !ok || ifStmt.Condition == nil {
+			break
+		}
+		cond := ifStmt.Condition.Tree.Element
+		if a.errName != "" && lstutil.IsNotNilCheck(cond, a.errName) {
+			at = j + 1
+			continue
+		}
+		if lstutil.IsNilCheck(cond, a.varName) && thenPartReturns(ifStmt) {
+			return j + 1, true
+		}
+		break
 	}
-	ifStmt, ok := stmts[i+1].Element.(*java.If)
-	if !ok || ifStmt.Condition == nil {
-		return i + 1
+	if testsForNil(stmts, at, a.varName) {
+		return 0, false
 	}
-	if !lstutil.IsNotNilCheck(ifStmt.Condition.Tree.Element, errName) {
-		return i + 1
+	return at, true
+}
+
+// thenPartReturns reports whether the branch always returns, which leaves the
+// statements below the `if` reachable only when its condition was false. A
+// multi-value `return` parses to a golang.Return, any other to a java.Return.
+func thenPartReturns(ifStmt *java.If) bool {
+	last := ifStmt.ThenPart.Element
+	if block, ok := last.(*java.Block); ok {
+		if len(block.Statements) == 0 {
+			return false
+		}
+		last = block.Statements[len(block.Statements)-1].Element
 	}
-	return i + 2
+	switch last.(type) {
+	case *java.Return, *golang.Return:
+		return true
+	}
+	return false
+}
+
+// testsForNil reports whether any `if` from index i on compares varName with nil.
+func testsForNil(stmts []java.RightPadded[java.Statement], i int, varName string) bool {
+	for j := i; j < len(stmts); j++ {
+		ifStmt, ok := stmts[j].Element.(*java.If)
+		if !ok || ifStmt.Condition == nil {
+			continue
+		}
+		if comparesToNil(ifStmt.Condition.Tree.Element, varName) {
+			return true
+		}
+	}
+	return false
+}
+
+// comparesToNil finds a nil comparison of varName anywhere in a condition,
+// including one operand of a larger `&&` or `||`.
+func comparesToNil(expr java.Expression, varName string) bool {
+	if lstutil.IsNilCheck(expr, varName) || lstutil.IsNotNilCheck(expr, varName) {
+		return true
+	}
+	switch e := expr.(type) {
+	case *java.Binary:
+		return comparesToNil(e.Left, varName) || comparesToNil(e.Right, varName)
+	case *java.Parentheses:
+		return comparesToNil(e.Tree.Element, varName)
+	}
+	return false
 }
 
 // insertDefer adds a cleanup statement for every acquisition in the block that
@@ -118,7 +179,10 @@ func insertDefer(block *java.Block,
 		if !ok || !match(a) || present(block.Statements, i, a.varName) {
 			continue
 		}
-		at := deferIndex(block.Statements, i, a.errName)
+		at, safe := deferIndex(block.Statements, i, a)
+		if !safe {
+			continue
+		}
 		pending[at] = append(pending[at], java.RightPadded[java.Statement]{Element: build(a, rp.Element)})
 	}
 	if len(pending) == 0 {

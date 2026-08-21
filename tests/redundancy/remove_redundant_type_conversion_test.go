@@ -115,3 +115,75 @@ func TestRemoveRedundantTypeConversionKeepsLiteralConversion(t *testing.T) {
 		`),
 	)
 }
+
+func TestRemoveRedundantTypeConversionKeepsQualifiedUntypedConstConversion(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&redundancy.RemoveRedundantTypeConversion{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "math"
+
+			func sink(v any) {}
+
+			func f() {
+				sink(uint16(math.MaxUint16))
+			}
+		`),
+	)
+}
+
+func TestRemoveRedundantTypeConversionKeepsPackageUntypedConstConversion(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&redundancy.RemoveRedundantTypeConversion{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			const maxU16 = 1<<16 - 1
+
+			func sink(v any) {}
+
+			func f() {
+				sink(uint16(maxU16))
+			}
+		`),
+	)
+}
+
+func TestRemoveRedundantTypeConversionKeepsNumericLiteralConversion(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&redundancy.RemoveRedundantTypeConversion{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			func sink(v any) {}
+
+			func f() {
+				sink(uint16(65535))
+			}
+		`),
+	)
+}
+
+func TestRemoveRedundantTypeConversionTypedConst(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&redundancy.RemoveRedundantTypeConversion{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			const maxU16 uint16 = 1<<16 - 1
+
+			func f() uint16 {
+				return uint16(maxU16)
+			}
+		`, `
+			package main
+
+			const maxU16 uint16 = 1<<16 - 1
+
+			func f() uint16 {
+				return maxU16
+			}
+		`),
+	)
+}

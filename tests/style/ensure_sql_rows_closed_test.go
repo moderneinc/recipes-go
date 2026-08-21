@@ -157,3 +157,22 @@ func TestEnsureSqlRowsClosedAlreadyDeferred(t *testing.T) {
 		`),
 	)
 }
+
+// The guard scan is shared with the rest of the Ensure* family.
+func TestEnsureSqlRowsClosedNoChangeWhenRowsMayBeNil(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.EnsureSqlRowsClosed{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "database/sql"
+
+			func f(db *sql.DB) {
+				rows, _ := db.Query("SELECT 1")
+				if rows != nil {
+					_ = rows
+				}
+			}
+		`),
+	)
+}
