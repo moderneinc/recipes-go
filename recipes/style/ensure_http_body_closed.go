@@ -15,7 +15,8 @@ import (
 )
 
 // EnsureHttpBodyClosed finds assignments of a `*http.Response` and inserts
-// `defer resp.Body.Close()` after the assignment.
+// `defer resp.Body.Close()` once the response is known to be non-nil, unless a
+// defer already releases it.
 type EnsureHttpBodyClosed struct {
 	recipe.Base
 }
@@ -55,43 +56,38 @@ func isHttpResponse(a acquisition) bool {
 	return typeIs(a.varType, "net/http.Response")
 }
 
-// hasDeferBodyCloseAfter checks if any statement after index i is
-// defer varName.Body.Close().
+// hasDeferBodyCloseAfter reports whether any statement after index i defers
+// something naming varName, wherever that defer sits. A bare Close, a closure
+// around one and a helper such as `closeResponse(resp)` are all the author's own
+// cleanup, and a close added on top of one of them is redundant at best.
 func hasDeferBodyCloseAfter(stmts []java.RightPadded[java.Statement], i int, varName string) bool {
 	for j := i + 1; j < len(stmts); j++ {
-		d, ok := stmts[j].Element.(*golang.Defer)
-		if !ok {
-			continue
-		}
-		if matchesDeferBodyClose(d, varName) {
+		found := false
+		visitor.Walk(stmts[j].Element, func(t java.Tree) bool {
+			d, isDefer := t.(*golang.Defer)
+			if !isDefer {
+				return true
+			}
+			found = referencesVar(d, varName)
+			return !found
+		})
+		if found {
 			return true
 		}
 	}
 	return false
 }
 
-// matchesDeferBodyClose returns true if the defer calls varName.Body.Close().
-func matchesDeferBodyClose(d *golang.Defer, varName string) bool {
-	mi, ok := d.Expr.(*java.MethodInvocation)
-	if !ok || mi.Name.Name != "Close" {
-		return false
-	}
-	if mi.Select == nil {
-		return false
-	}
-	// The select should be varName.Body (a FieldAccess)
-	fa, ok := mi.Select.Element.(*java.FieldAccess)
-	if !ok {
-		return false
-	}
-	if fa.Name.Element.Name != "Body" {
-		return false
-	}
-	ident, ok := fa.Target.(*java.Identifier)
-	if !ok {
-		return false
-	}
-	return ident.Name == varName
+// referencesVar reports whether varName appears anywhere in t.
+func referencesVar(t java.Tree, varName string) bool {
+	found := false
+	visitor.Walk(t, func(n java.Tree) bool {
+		if id, ok := n.(*java.Identifier); ok && id.Name == varName {
+			found = true
+		}
+		return !found
+	})
+	return found
 }
 
 // buildDeferBodyClose builds `defer varName.Body.Close()`. The response type
