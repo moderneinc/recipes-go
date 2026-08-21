@@ -116,6 +116,18 @@ func (v *myRecipeVisitor) VisitBinary(bin *java.Binary, p any) java.J {
 }
 ```
 
+### Scanning Recipes
+
+A recipe whose answer spans files embeds `recipe.ScanningBase` and runs in two phases: `Scanner(acc)` visits every file collecting into the accumulator, then `EditorWithData(acc)` rewrites. `UsePackageLevelErrorSentinel` is the worked example — one sentinel name per package, so it cannot decide anything until it has seen the package.
+
+```go
+func (r *MyRecipe) InitialValue(*recipe.ExecutionContext) any { return &acc{} }
+func (r *MyRecipe) Scanner(a any) recipe.TreeVisitor          { return visitor.Init(&scanner{acc: a.(*acc)}) }
+func (r *MyRecipe) EditorWithData(a any) recipe.TreeVisitor   { return visitor.Init(&editor{acc: a.(*acc)}) }
+```
+
+Resolve the plan once when `EditorWithData` is called, not per file, so the editor only reads it. Files arrive in no guaranteed order, so anything decided while editing is decided by that order.
+
 ### Testing Pattern
 
 ```go
@@ -186,6 +198,10 @@ A template resolves the stdlib on its own; anything else needs the package's com
 Swapping a package under a preserved qualifier works the same way, as long as the recipe rewrites the references. A template carrying the new package's export data attributes both the call and its qualifier to that package, which is what lets `RemoveUnusedImports` drop the superseded import even though the two bind the same name. A recipe that swaps the import while leaving the calls textually untouched emits nothing, so those references keep naming the old package and it has to remap `Identifier.Type`, `FieldAccess.Type` and `MethodInvocation.MethodType.DeclaringType` itself — skipping symbols the new version dropped, since those are rewritten at their own sites and would be overwritten.
 
 `TestRewrittenTreesStayAttributed` in `tests/attribution_test.go` sweeps every registered recipe over the suite's own snippets and fails on a call the parser would have typed. `RewriteRun` compares printed source, so nothing else catches this.
+
+### The rest of the framework
+
+`rewrite-go/doc/recipe-authoring.md` documents the shared surface: `goProject`/`goMod` test wrappers for multi-file recipes, `MaybeAddImport` and `DoAfterVisit` for import side effects, the cursor message map, how module context determines attribution depth, and shipped export data.
 
 ### Diagnostic Mapping
 
