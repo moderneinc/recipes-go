@@ -90,11 +90,15 @@ func declaringType(mi *java.MethodInvocation) (string, bool) {
 
 // deferIndex gives the position in stmts at which the cleanup for the
 // acquisition at index i belongs: after the guards that establish the resource,
-// which is only valid once those have passed. It reports false where the block
-// tests the resource against nil, since a cleanup call on a nil one panics.
+// which is only valid once those have passed, and past any defer sitting
+// between them. It reports false where the block tests the resource against
+// nil, since a cleanup call on a nil one panics.
 func deferIndex(stmts []java.RightPadded[java.Statement], i int, a acquisition) (int, bool) {
 	at := i + 1
 	for j := i + 1; j < len(stmts); j++ {
+		if _, isDefer := stmts[j].Element.(*golang.Defer); isDefer {
+			continue
+		}
 		ifStmt, ok := stmts[j].Element.(*java.If)
 		if !ok || ifStmt.Condition == nil {
 			break
