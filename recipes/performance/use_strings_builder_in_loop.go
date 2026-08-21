@@ -9,6 +9,7 @@ import (
 	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -44,7 +45,6 @@ func (r *UseStringsBuilderInLoop) Editor() recipe.TreeVisitor {
 
 type useStringsBuilderInLoopVisitor struct {
 	visitor.GoVisitor
-	needsStringsImport bool
 }
 
 // stringConcatInfo records a string += found in a loop body.
@@ -52,64 +52,6 @@ type stringConcatInfo struct {
 	stmtIdx  int             // index in loop body statement list
 	variable java.Expression // the LHS variable (e.g. "s")
 	rhs      java.Expression // the RHS expression (e.g. "item")
-}
-
-func (v *useStringsBuilderInLoopVisitor) VisitCompilationUnit(cu *golang.CompilationUnit, p any) java.J {
-	v.needsStringsImport = false
-	cu = v.GoVisitor.VisitCompilationUnit(cu, p).(*golang.CompilationUnit)
-
-	if !v.needsStringsImport {
-		return cu
-	}
-
-	// Check if "strings" is already imported.
-	if cu.Imports != nil {
-		for _, rp := range cu.Imports.Elements {
-			if lit, ok := rp.Element.Qualid.(*java.Literal); ok {
-				if lit.Source == `"strings"` {
-					return cu
-				}
-			}
-		}
-	}
-
-	if cu.Imports != nil {
-		// Append to existing grouped imports.
-		newImport := &java.Import{
-			ID:     uuid.New(),
-			Prefix: java.Space{Whitespace: "\n\t"},
-			Qualid: &java.Literal{
-				ID:     uuid.New(),
-				Prefix: java.SingleSpace,
-				Source: `"strings"`,
-				Value:  "strings",
-			},
-		}
-		imports := *cu.Imports
-		imports.Elements = append(imports.Elements, java.RightPadded[*java.Import]{Element: newImport})
-		cu = cu.WithImports(&imports)
-	} else {
-		// No imports exist yet: create a standalone import "strings".
-		// Container.Before = space before the `import` keyword.
-		// Import has no prefix; Qualid.Prefix = space between `import` and path.
-		standaloneImport := &java.Import{
-			ID: uuid.New(),
-			Qualid: &java.Literal{
-				ID:     uuid.New(),
-				Prefix: java.SingleSpace,
-				Source: `"strings"`,
-				Value:  "strings",
-			},
-		}
-		cu = cu.WithImports(&java.Container[*java.Import]{
-			Before: java.Space{Whitespace: "\n\n"},
-			Elements: []java.RightPadded[*java.Import]{
-				{Element: standaloneImport},
-			},
-		})
-	}
-
-	return cu
 }
 
 func (v *useStringsBuilderInLoopVisitor) VisitBlock(block *java.Block, p any) java.J {
@@ -149,7 +91,7 @@ func (v *useStringsBuilderInLoopVisitor) VisitBlock(block *java.Block, p any) ja
 		newStmts = append(newStmts, java.RightPadded[java.Statement]{Element: assignStmt})
 
 		changed = true
-		v.needsStringsImport = true
+		recipegolang.MaybeAddImport(v, "strings", nil, false)
 	}
 
 	if changed {

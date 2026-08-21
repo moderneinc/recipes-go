@@ -105,3 +105,80 @@ func TestStringConcatNoChangeNumeric(t *testing.T) {
 		`),
 	)
 }
+
+func TestUseBuilderWithGroupedImports(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&performance.UseStringsBuilderInLoop{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package sample
+
+			import (
+				"fmt"
+
+				"github.com/stretchr/testify/assert"
+			)
+
+			func f(items []string) string {
+				s := ""
+				for _, item := range items {
+					s += item
+				}
+				fmt.Println(assert.ObjectsAreEqual(s, "x"))
+				return s
+			}
+		`, `
+			package sample
+
+			import (
+				"fmt"
+				"strings"
+
+				"github.com/stretchr/testify/assert"
+			)
+
+			func f(items []string) string {
+				s := ""
+				var builder strings.Builder
+				for _, item := range items {
+					builder.WriteString(item)
+				}
+				s = builder.String()
+				fmt.Println(assert.ObjectsAreEqual(s, "x"))
+				return s
+			}
+		`),
+	)
+}
+
+func TestUseBuilderWithStringsAlreadyImported(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&performance.UseStringsBuilderInLoop{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "strings"
+
+			func f(items []string) string {
+				s := ""
+				for _, item := range items {
+					s += strings.TrimSpace(item)
+				}
+				return s
+			}
+		`, `
+			package main
+
+			import "strings"
+
+			func f(items []string) string {
+				s := ""
+				var builder strings.Builder
+				for _, item := range items {
+					builder.WriteString(strings.TrimSpace(item))
+				}
+				s = builder.String()
+				return s
+			}
+		`),
+	)
+}
