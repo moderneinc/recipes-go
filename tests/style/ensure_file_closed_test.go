@@ -171,3 +171,33 @@ func TestEnsureFileClosedAlreadyDeferred(t *testing.T) {
 		`),
 	)
 }
+
+func TestEnsureFileClosedKeepsCommentOnAcquisition(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.EnsureFileClosed{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "os"
+
+			func f() {
+				// Open the input file.
+				f, err := os.Open("file")
+				_ = err
+				_ = f
+			}
+		`, `
+			package main
+
+			import "os"
+
+			func f() {
+				// Open the input file.
+				f, err := os.Open("file")
+				defer f.Close()
+				_ = err
+				_ = f
+			}
+		`),
+	)
+}

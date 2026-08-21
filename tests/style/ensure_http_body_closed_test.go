@@ -383,3 +383,43 @@ func TestEnsureHttpBodyClosedNoChangeWhenNilCheckDoesNotReturn(t *testing.T) {
 		`),
 	)
 }
+
+func TestEnsureHttpBodyClosedKeepsCommentOnAcquisition(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.EnsureHttpBodyClosed{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "net/http"
+
+			func f() error {
+				_ = 1
+
+				// Execute GET on the endpoint.
+				resp, err := http.Get("http://example.com")
+				if err != nil {
+					return err
+				}
+				_ = resp
+				return nil
+			}
+		`, `
+			package main
+
+			import "net/http"
+
+			func f() error {
+				_ = 1
+
+				// Execute GET on the endpoint.
+				resp, err := http.Get("http://example.com")
+				if err != nil {
+					return err
+				}
+				defer resp.Body.Close()
+				_ = resp
+				return nil
+			}
+		`),
+	)
+}
