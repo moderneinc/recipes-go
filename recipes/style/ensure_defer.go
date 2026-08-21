@@ -208,27 +208,27 @@ func buildDeferMethodCall(a acquisition, methodName string, originalStmt java.St
 	}
 }
 
-// stmtPrefix extracts the leading whitespace from a statement.
-// In Go's AST the indentation lives on the first token of the statement,
-// not on the statement node's own Prefix field.
+// stmtPrefix returns a prefix that puts a synthesized statement on its own line
+// at the indentation of stmt. In Go's AST that indentation lives on the first
+// token of the statement, not on the statement node's own Prefix field.
 func stmtPrefix(stmt java.Statement) java.Space {
 	switch s := stmt.(type) {
 	case *java.Assignment:
 		if id, ok := s.Variable.(*java.Identifier); ok && id.Prefix.Whitespace != "" {
-			return id.Prefix
+			return lstutil.IndentPrefix(id.Prefix)
 		}
-		return s.Prefix
+		return lstutil.IndentPrefix(s.Prefix)
 	case *golang.MultiAssignment:
 		if len(s.Variables) > 0 {
 			if id, ok := s.Variables[0].Element.(*java.Identifier); ok && id.Prefix.Whitespace != "" {
-				return id.Prefix
+				return lstutil.IndentPrefix(id.Prefix)
 			}
 		}
-		return s.Prefix
+		return lstutil.IndentPrefix(s.Prefix)
 	case *golang.Defer:
-		return s.Prefix
+		return lstutil.IndentPrefix(s.Prefix)
 	case *java.MethodInvocation:
-		return s.Prefix
+		return lstutil.IndentPrefix(s.Prefix)
 	default:
 		return java.Space{Whitespace: "\n\t"}
 	}

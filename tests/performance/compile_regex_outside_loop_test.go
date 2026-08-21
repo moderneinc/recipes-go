@@ -127,3 +127,35 @@ func TestNoChangeOutsideLoop(t *testing.T) {
 		`),
 	)
 }
+
+func TestHoistMustCompileKeepsCommentOnLoop(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&performance.CompileRegexOutsideLoop{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "regexp"
+
+			func f(inputs []string) {
+				// Match every input.
+				for _, s := range inputs {
+					re := regexp.MustCompile("\\d+")
+					_ = re.MatchString(s)
+				}
+			}
+		`, `
+			package main
+
+			import "regexp"
+
+			func f(inputs []string) {
+				var compiledRegex0 = regexp.MustCompile("\\d+")
+				// Match every input.
+				for _, s := range inputs {
+					re := compiledRegex0
+					_ = re.MatchString(s)
+				}
+			}
+		`),
+	)
+}

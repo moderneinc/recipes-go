@@ -149,3 +149,37 @@ func TestEnsureHttpBodyClosedAlreadyDeferred(t *testing.T) {
 		`),
 	)
 }
+
+func TestEnsureHttpBodyClosedKeepsCommentOnAcquisition(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.EnsureHttpBodyClosed{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "net/http"
+
+			func f() {
+				_ = 1
+
+				// Execute GET on the endpoint.
+				resp, err := http.Get("http://example.com")
+				_ = err
+				_ = resp
+			}
+		`, `
+			package main
+
+			import "net/http"
+
+			func f() {
+				_ = 1
+
+				// Execute GET on the endpoint.
+				resp, err := http.Get("http://example.com")
+				defer resp.Body.Close()
+				_ = err
+				_ = resp
+			}
+		`),
+	)
+}

@@ -28,13 +28,24 @@ func IsFunctionBodyBlock(c *visitor.Cursor) bool {
 	return false
 }
 
-// Returns the indentation (text after the last newline) of a Space.
+// Returns the indentation (text after the last newline) of a Space. When the
+// Space holds comments, that indentation sits in the last comment's suffix.
 func BaseIndent(space java.Space) string {
 	ws := space.Whitespace
+	if n := len(space.Comments); n > 0 {
+		ws = space.Comments[n-1].Suffix
+	}
 	if idx := strings.LastIndex(ws, "\n"); idx >= 0 {
 		return ws[idx+1:]
 	}
 	return ws
+}
+
+// Returns a prefix that starts a new line at the indentation of space, dropping
+// its comments: a comment belongs to the statement it was written above, so a
+// synthesized statement must not carry it.
+func IndentPrefix(space java.Space) java.Space {
+	return java.Space{Whitespace: "\n" + BaseIndent(space)}
 }
 
 // Reports whether the If at the cursor is the inner statement of a

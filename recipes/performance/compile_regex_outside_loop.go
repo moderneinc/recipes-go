@@ -9,6 +9,7 @@ import (
 	"github.com/moderneinc/recipes-go/diagnostic"
 
 	"github.com/google/uuid"
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -320,13 +321,14 @@ func getLoopBody(stmt java.Statement) *java.Block {
 	return nil
 }
 
-// stmtPrefix extracts the prefix Space from a statement.
+// stmtPrefix returns a prefix that puts a synthesized statement on its own line
+// at the indentation of stmt.
 func stmtPrefix(stmt java.Statement) java.Space {
 	switch s := stmt.(type) {
 	case *java.ForLoop:
-		return s.Prefix
+		return lstutil.IndentPrefix(s.Prefix)
 	case *java.ForEachLoop:
-		return s.Prefix
+		return lstutil.IndentPrefix(s.Prefix)
 	default:
 		return java.Space{}
 	}
