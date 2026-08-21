@@ -55,8 +55,17 @@ func IsErrNotNil(expr java.Expression) bool {
 
 // Reports whether an expression is `<name> != nil`.
 func IsNotNilCheck(expr java.Expression, name string) bool {
+	return isNilComparison(expr, name, java.NotEqual)
+}
+
+// Reports whether an expression is `<name> == nil`.
+func IsNilCheck(expr java.Expression, name string) bool {
+	return isNilComparison(expr, name, java.Equal)
+}
+
+func isNilComparison(expr java.Expression, name string, op java.BinaryOperator) bool {
 	bin, ok := expr.(*java.Binary)
-	if !ok || bin.Operator.Element != java.NotEqual {
+	if !ok || bin.Operator.Element != op {
 		return false
 	}
 	leftIdent, leftOk := bin.Left.(*java.Identifier)

@@ -262,3 +262,124 @@ func TestEnsureHttpBodyClosedAlreadyDeferredInBranch(t *testing.T) {
 		`),
 	)
 }
+
+func TestEnsureHttpBodyClosedAfterNilResponseCheck(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.EnsureHttpBodyClosed{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"errors"
+				"net/http"
+			)
+
+			func f(client *http.Client, req *http.Request) (int, error) {
+				resp, err := client.Do(req)
+				if err != nil {
+					return 0, err
+				}
+				if resp == nil {
+					return 0, errors.New("empty response")
+				}
+				return resp.StatusCode, nil
+			}
+		`, `
+			package main
+
+			import (
+				"errors"
+				"net/http"
+			)
+
+			func f(client *http.Client, req *http.Request) (int, error) {
+				resp, err := client.Do(req)
+				if err != nil {
+					return 0, err
+				}
+				if resp == nil {
+					return 0, errors.New("empty response")
+				}
+				defer resp.Body.Close()
+				return resp.StatusCode, nil
+			}
+		`),
+	)
+}
+
+func TestEnsureHttpBodyClosedAfterNilResponseCheckWithoutErrorCheck(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.EnsureHttpBodyClosed{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "net/http"
+
+			func f(client *http.Client, req *http.Request) {
+				resp, _ := client.Do(req)
+				if resp == nil {
+					return
+				}
+				_ = resp
+			}
+		`, `
+			package main
+
+			import "net/http"
+
+			func f(client *http.Client, req *http.Request) {
+				resp, _ := client.Do(req)
+				if resp == nil {
+					return
+				}
+				defer resp.Body.Close()
+				_ = resp
+			}
+		`),
+	)
+}
+
+// `resp.Body.Close()` panics when the response is nil.
+func TestEnsureHttpBodyClosedNoChangeWhenResponseMayBeNil(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.EnsureHttpBodyClosed{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "net/http"
+
+			func f(client *http.Client, req *http.Request) {
+				resp, _ := client.Do(req)
+				if resp != nil && resp.StatusCode != http.StatusOK {
+					_ = resp
+				}
+			}
+		`),
+	)
+}
+
+// A nil check that falls through leaves the response nil below it.
+func TestEnsureHttpBodyClosedNoChangeWhenNilCheckDoesNotReturn(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.EnsureHttpBodyClosed{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"log"
+				"net/http"
+			)
+
+			func f(client *http.Client, req *http.Request) {
+				resp, err := client.Do(req)
+				if err != nil {
+					return
+				}
+				if resp == nil {
+					log.Println("no response")
+				}
+				_ = resp
+			}
+		`),
+	)
+}
