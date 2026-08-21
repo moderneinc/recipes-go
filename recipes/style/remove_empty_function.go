@@ -5,17 +5,17 @@
 package style
 
 import (
+	"unicode"
+
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
-// RemoveEmptyFunction removes free functions with empty bodies and no return
-// type. These are dead code -- they do nothing when called. Methods (functions
-// with receivers) are left alone because they may satisfy an interface.
-// Functions with return types are left alone because removing them would break
-// callers.
+// RemoveEmptyFunction removes unexported free functions with empty bodies and
+// no return type. These are dead code -- they do nothing when called. Functions
+// with return types are left alone because removing them would break callers.
 type RemoveEmptyFunction struct {
 	recipe.Base
 }
@@ -25,7 +25,10 @@ func (r *RemoveEmptyFunction) Name() string {
 }
 func (r *RemoveEmptyFunction) DisplayName() string { return "Remove empty functions" }
 func (r *RemoveEmptyFunction) Description() string {
-	return "Remove free functions with empty bodies and no return type. Methods with receivers are preserved because they may implement an interface."
+	return "Remove unexported free functions with empty bodies and no return type. " +
+		"`main` in `package main` and `init` are preserved because the runtime invokes them rather than other code. " +
+		"Methods with receivers are preserved because they may implement an interface. " +
+		"Exported functions are preserved because removing one breaks importers."
 }
 func (r *RemoveEmptyFunction) Tags() []string { return []string{"style", "lint"} }
 
@@ -48,7 +51,8 @@ func (v *removeEmptyFunctionVisitor) VisitMethodDeclaration(md *java.MethodDecla
 	// method nests inside the golang.MethodDeclaration carrying its receiver and
 	// may implement an interface, and a function literal nests inside the
 	// expression whose operand it is.
-	if _, isTopLevel := v.Cursor().Parent().Value().(*golang.CompilationUnit); !isTopLevel {
+	cu, isTopLevel := v.Cursor().Parent().Value().(*golang.CompilationUnit)
+	if !isTopLevel {
 		return md
 	}
 
@@ -57,13 +61,35 @@ func (v *removeEmptyFunctionVisitor) VisitMethodDeclaration(md *java.MethodDecla
 		return md
 	}
 
-	// Check if the body has any real statements (not just Empty sentinels).
-	for _, stmt := range md.Body.Statements {
-		if _, isEmpty := stmt.Element.(*java.Empty); !isEmpty {
-			return md
-		}
+	name := md.Name.Name
+	inPackageMain := cu.PackageDecl != nil && cu.PackageDecl.Element.Name == "main"
+	// The runtime invokes `main` and `init` directly; a `package main` that
+	// declares no `main` does not link.
+	if countRealElements(md.Parameters.Elements) == 0 &&
+		(name == "init" || (name == "main" && inPackageMain)) {
+		return md
+	}
+
+	// Skip exported functions -- removing one is an API break for importers.
+	if len(name) > 0 && unicode.IsUpper([]rune(name)[0]) {
+		return md
+	}
+
+	if countRealElements(md.Body.Statements) > 0 {
+		return md
 	}
 
 	// Remove the empty function.
 	return &java.Empty{}
+}
+
+// An empty parameter list or block is represented by a single java.Empty sentinel.
+func countRealElements(elements []java.RightPadded[java.Statement]) int {
+	count := 0
+	for _, e := range elements {
+		if _, isEmpty := e.Element.(*java.Empty); !isEmpty {
+			count++
+		}
+	}
+	return count
 }
