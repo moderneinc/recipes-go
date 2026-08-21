@@ -90,19 +90,26 @@ func declaringType(mi *java.MethodInvocation) (string, bool) {
 
 // deferIndex gives the position in stmts at which the cleanup for the
 // acquisition at index i belongs: after the `if err != nil` block guarding it,
-// since the resource is only valid once that check has passed.
+// since the resource is only valid once that check has passed. Only defers may
+// sit between the acquisition and its guard.
 func deferIndex(stmts []java.RightPadded[java.Statement], i int, errName string) int {
-	if errName == "" || i+1 >= len(stmts) {
+	if errName == "" {
 		return i + 1
 	}
-	ifStmt, ok := stmts[i+1].Element.(*java.If)
-	if !ok || ifStmt.Condition == nil {
-		return i + 1
+	for j := i + 1; j < len(stmts); j++ {
+		if _, isDefer := stmts[j].Element.(*golang.Defer); isDefer {
+			continue
+		}
+		ifStmt, ok := stmts[j].Element.(*java.If)
+		if !ok || ifStmt.Condition == nil {
+			break
+		}
+		if !lstutil.IsNotNilCheck(ifStmt.Condition.Tree.Element, errName) {
+			break
+		}
+		return j + 1
 	}
-	if !lstutil.IsNotNilCheck(ifStmt.Condition.Tree.Element, errName) {
-		return i + 1
-	}
-	return i + 2
+	return i + 1
 }
 
 // insertDefer adds a cleanup statement for every acquisition in the block that

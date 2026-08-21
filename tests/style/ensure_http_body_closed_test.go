@@ -149,3 +149,116 @@ func TestEnsureHttpBodyClosedAlreadyDeferred(t *testing.T) {
 		`),
 	)
 }
+
+// The guard, not the call, is what makes the response non-nil.
+func TestEnsureHttpBodyClosedAfterErrorCheckPastDefer(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.EnsureHttpBodyClosed{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "net/http"
+
+			func f(cancel func()) error {
+				resp, err := http.Get("http://example.com")
+				defer cancel()
+				if err != nil {
+					return err
+				}
+				_ = resp
+				return nil
+			}
+		`, `
+			package main
+
+			import "net/http"
+
+			func f(cancel func()) error {
+				resp, err := http.Get("http://example.com")
+				defer cancel()
+				if err != nil {
+					return err
+				}
+				defer resp.Body.Close()
+				_ = resp
+				return nil
+			}
+		`),
+	)
+}
+
+func TestEnsureHttpBodyClosedAlreadyDeferredInClosure(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.EnsureHttpBodyClosed{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "net/http"
+
+			func f() error {
+				resp, err := http.Get("http://example.com")
+				if err != nil {
+					return err
+				}
+				defer func() { _ = resp.Body.Close() }()
+				return nil
+			}
+		`),
+	)
+}
+
+func TestEnsureHttpBodyClosedAlreadyDeferredViaHelper(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.EnsureHttpBodyClosed{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "net/http"
+
+			func closeResponse(resp *http.Response) {
+				if resp != nil && resp.Body != nil {
+					_ = resp.Body.Close()
+				}
+			}
+
+			func f() error {
+				resp, err := http.Get("http://example.com")
+				defer closeResponse(resp)
+				if err != nil {
+					return err
+				}
+				_ = resp
+				return nil
+			}
+		`),
+	)
+}
+
+// A helper deferred from a branch releases the response all the same.
+func TestEnsureHttpBodyClosedAlreadyDeferredInBranch(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.EnsureHttpBodyClosed{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import "net/http"
+
+			func closeResponse(resp *http.Response) {
+				if resp != nil && resp.Body != nil {
+					_ = resp.Body.Close()
+				}
+			}
+
+			func f() error {
+				resp, err := http.Get("http://example.com")
+				if resp != nil {
+					defer closeResponse(resp)
+				}
+				if err != nil {
+					return err
+				}
+				return nil
+			}
+		`),
+	)
+}
