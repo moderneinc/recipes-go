@@ -26,6 +26,8 @@ import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/printer"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/test"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
 // realWorldEnv gates the sweep, which reaches the network and takes longer than
@@ -216,8 +218,9 @@ func sweepFile(p *parser.GoParser, recipes []recipe.Recipe, repoDir, goFile stri
 	res.spaceIssues = test.ValidateSpaces(cu)
 
 	for _, r := range recipes {
-		editor := r.Editor()
-		if editor == nil {
+		ctx := recipe.NewExecutionContext()
+		editors := editorsOf(r, ctx)
+		if len(editors) == 0 {
 			continue
 		}
 		func() {
@@ -227,9 +230,12 @@ func sweepFile(p *parser.GoParser, recipes []recipe.Recipe, repoDir, goFile stri
 				}
 			}()
 
-			result := editor.Visit(cu, recipe.NewExecutionContext())
-			if result == nil {
-				return
+			var result java.Tree = cu
+			for _, editor := range editors {
+				if next := editor.Visit(result, ctx); next != nil {
+					result = next
+				}
+				result = visitor.DrainAfterVisits(editor, result, ctx)
 			}
 
 			after := printer.Print(result)
