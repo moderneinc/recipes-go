@@ -5,6 +5,7 @@
 package errorhandling
 
 import (
+	"fmt"
 	"path"
 	"sort"
 	"strings"
@@ -14,6 +15,7 @@ import (
 	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -79,11 +81,12 @@ type fileInfo struct {
 type messageBinding struct{ source, varName string }
 
 // sentinel is what a message resolves to: the name every call site in the
-// package refers to, and the file that declares it. declareIn is empty when the
-// declaration already exists.
+// package refers to, and the file that declares it. declareIn is empty and decl
+// nil when the declaration already exists.
 type sentinel struct {
 	varName   string
 	declareIn string
+	decl      java.Statement
 }
 
 func (a *sentinelAcc) packageOf(cu *golang.CompilationUnit) *packageInfo {
@@ -229,8 +232,12 @@ func (p *packageInfo) resolve() {
 		if home == "" {
 			continue
 		}
+		decl := sentinelDecl(name, p.files[home].literals[source])
+		if decl == nil {
+			continue
+		}
 		taken[name] = true
-		p.plan[source] = &sentinel{varName: name, declareIn: home}
+		p.plan[source] = &sentinel{varName: name, declareIn: home, decl: decl}
 	}
 }
 
@@ -339,48 +346,23 @@ func (e *sentinelEditor) declarations() []java.RightPadded[java.Statement] {
 	var out []java.RightPadded[java.Statement]
 	for _, source := range f.inline {
 		if s := e.pkg.plan[source]; s != nil && s.declareIn == e.path {
-			out = append(out, java.RightPadded[java.Statement]{Element: sentinelDecl(s.varName, f.literals[source])})
+			out = append(out, java.RightPadded[java.Statement]{Element: s.decl})
 		}
 	}
 	return out
 }
 
-func sentinelDecl(varName string, message *java.Literal) *java.VariableDeclarations {
-	arg := *message
-	arg.ID = uuid.New()
-	arg.Prefix = java.EmptySpace
-
-	initCall := &java.MethodInvocation{
-		ID:     uuid.New(),
-		Prefix: java.SingleSpace,
-		Select: &java.RightPadded[java.Expression]{Element: &java.Identifier{
-			ID:   uuid.New(),
-			Name: "errors",
-			Type: lstutil.NamedType("errors"),
-		}},
-		Name: &java.Identifier{ID: uuid.New(), Name: "New"},
-		Arguments: java.Container[java.Expression]{
-			Before:   java.EmptySpace,
-			Elements: []java.RightPadded[java.Expression]{{Element: &arg}},
-		},
-		MethodType: lstutil.FuncType("errors", "New", lstutil.ErrorType),
+// sentinelDecl builds `var ErrFoo = errors.New("msg")`. Parsing it as a template
+// is what types the call; the message goes in as its own literal source, so a
+// raw string literal stays raw.
+func sentinelDecl(varName string, message *java.Literal) java.Statement {
+	tmpl := template.TopLevelTemplate(fmt.Sprintf("var %s = errors.New(%s)", varName, message.Source)).
+		Imports("errors").Build()
+	decl, ok := tmpl.Apply(nil, nil).(*java.VariableDeclarations)
+	if !ok {
+		return nil
 	}
-
-	return &java.VariableDeclarations{
-		ID:      uuid.New(),
-		Prefix:  java.Space{Whitespace: "\n\n"},
-		Markers: java.Markers{ID: uuid.New(), Entries: []java.Marker{golang.VarKeyword{Ident: uuid.New()}}},
-		Variables: []java.RightPadded[*java.VariableDeclarator]{{Element: &java.VariableDeclarator{
-			ID: uuid.New(),
-			Name: &java.Identifier{
-				ID:     uuid.New(),
-				Prefix: java.SingleSpace,
-				Name:   varName,
-				Type:   lstutil.ErrorType,
-			},
-			Initializer: &java.LeftPadded[java.Expression]{Before: java.SingleSpace, Element: initCall},
-		}}},
-	}
+	return decl.WithPrefix(java.Space{Whitespace: "\n\n"})
 }
 
 // errorsNewLiteral returns the message literal of an `errors.New("...")` call.
