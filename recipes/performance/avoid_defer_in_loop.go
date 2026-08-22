@@ -7,6 +7,7 @@ package performance
 import (
 	"github.com/google/uuid"
 	"github.com/moderneinc/recipes-go/diagnostic"
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -113,7 +114,7 @@ func buildIIFEBlock(originalBody *java.Block) *java.Block {
 	innerStmts := make([]java.RightPadded[java.Statement], len(originalBody.Statements))
 	for i, rp := range originalBody.Statements {
 		innerStmts[i] = java.RightPadded[java.Statement]{
-			Element: setStmtPrefix(rp.Element, java.Space{Whitespace: deeperIndent}),
+			Element: lstutil.SetStmtPrefix(rp.Element, java.Space{Whitespace: deeperIndent}),
 			After:   rp.After,
 		}
 	}
@@ -186,35 +187,4 @@ func extractStmtIndent(body *java.Block) string {
 // it lives directly on the statement.
 func getStmtWhitespace(stmt java.Statement) string {
 	return stmt.GetPrefix().Whitespace
-}
-
-// setStmtPrefix sets the leading whitespace on a statement's own (outermost)
-// prefix.
-func setStmtPrefix(stmt java.Statement, prefix java.Space) java.Statement {
-	switch s := stmt.(type) {
-	case *golang.Defer:
-		return s.WithPrefix(prefix)
-	case *java.Return:
-		return s.WithPrefix(prefix)
-	case *golang.Return:
-		return s.WithPrefix(prefix)
-	case *java.ForLoop:
-		return s.WithPrefix(prefix)
-	case *java.ForEachLoop:
-		return s.WithPrefix(prefix)
-	case *java.If:
-		return s.WithPrefix(prefix)
-	case *java.VariableDeclarations:
-		return s.WithPrefix(prefix)
-	case *java.AssignmentOperation:
-		return s.WithPrefix(prefix)
-	case *java.Assignment:
-		return s.WithPrefix(prefix)
-	case *golang.MultiAssignment:
-		return s.WithPrefix(prefix)
-	case *java.MethodInvocation:
-		return s.WithPrefix(prefix)
-	default:
-		return stmt
-	}
 }

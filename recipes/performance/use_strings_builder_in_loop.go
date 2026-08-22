@@ -218,7 +218,7 @@ func replaceAddAssignInBody(body *java.Block, sc stringConcatInfo) *java.Block {
 		Arguments: java.Container[java.Expression]{
 			Before: java.EmptySpace,
 			Elements: []java.RightPadded[java.Expression]{
-				{Element: setExprPrefix(sc.rhs, java.EmptySpace)},
+				{Element: lstutil.SetExprPrefix(sc.rhs, java.EmptySpace)},
 			},
 		},
 		MethodType: lstutil.MethodOn(builderType, "WriteString"),
@@ -238,22 +238,4 @@ func cloneIdentWithPrefix(expr java.Expression, prefix java.Space) java.Expressi
 		}
 	}
 	return expr
-}
-
-// setExprPrefix sets the prefix on an expression.
-func setExprPrefix(expr java.Expression, prefix java.Space) java.Expression {
-	switch n := expr.(type) {
-	case *java.Identifier:
-		return n.WithPrefix(prefix)
-	case *java.Literal:
-		return n.WithPrefix(prefix)
-	case *java.MethodInvocation:
-		return n.WithPrefix(prefix)
-	case *java.FieldAccess:
-		return n.WithPrefix(prefix)
-	case *java.MethodDeclaration:
-		return n.WithPrefix(prefix)
-	default:
-		return expr
-	}
 }

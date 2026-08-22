@@ -266,6 +266,8 @@ func setExprPrefix(expr java.Expression, prefix java.Space) java.Expression {
 }
 
 // setStmtLeadingPrefix sets the leading prefix on a statement node.
+// Sets the prefix on a child for the compound kinds it lists, which is what
+// these call sites need; lstutil.SetExprPrefix sets the node's own.
 func setStmtLeadingPrefix(stmt java.Statement, prefix java.Space) java.Statement {
 	switch s := stmt.(type) {
 	case *java.Assignment:

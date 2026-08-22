@@ -6,9 +6,9 @@ package redundancy
 
 import (
 	"github.com/moderneinc/recipes-go/diagnostic"
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/printer"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -101,7 +101,7 @@ func removeDuplicateBranches(ifStmt *java.If) *java.If {
 }
 
 func printCondition(expr java.Expression) string {
-	return printer.Print(setCondPrefix(expr, java.Space{}))
+	return printer.Print(lstutil.SetExprPrefix(expr, java.Space{}))
 }
 
 func containsStr(slice []string, s string) bool {
@@ -111,34 +111,4 @@ func containsStr(slice []string, s string) bool {
 		}
 	}
 	return false
-}
-
-// setCondPrefix sets the leading whitespace prefix on an expression.
-func setCondPrefix(expr java.Expression, prefix java.Space) java.Expression {
-	switch n := expr.(type) {
-	case *java.Identifier:
-		return n.WithPrefix(prefix)
-	case *java.Literal:
-		return n.WithPrefix(prefix)
-	case *java.Parentheses:
-		return n.WithPrefix(prefix)
-	case *java.Binary:
-		return &java.Binary{
-			ID: n.ID, Prefix: n.Prefix, Markers: n.Markers,
-			Left: setCondPrefix(n.Left, prefix), Operator: n.Operator, Right: n.Right, Type: n.Type,
-		}
-	case *java.Unary:
-		return &java.Unary{
-			ID: n.ID, Prefix: prefix, Markers: n.Markers,
-			Operator: n.Operator, Operand: n.Operand, Type: n.Type,
-		}
-	case *golang.Unary:
-		return n.WithPrefix(prefix)
-	case *java.FieldAccess:
-		return n.WithPrefix(prefix)
-	case *java.MethodInvocation:
-		return n.WithPrefix(prefix)
-	default:
-		return expr
-	}
 }

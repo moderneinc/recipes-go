@@ -6,6 +6,7 @@ package errorhandling
 
 import (
 	"fmt"
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
@@ -38,7 +39,7 @@ func rewriteToErrorsIs(v visitor.AfterVisitsProvider, bin *java.Binary, errExpr,
 	if !ok {
 		return bin
 	}
-	return setExprPrefixLocal(isCall, prefix)
+	return lstutil.SetExprPrefix(isCall, prefix)
 }
 
 var (

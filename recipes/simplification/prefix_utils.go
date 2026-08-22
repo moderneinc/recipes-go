@@ -23,6 +23,8 @@ func exprPrefix(expr java.Expression) java.Space {
 	return expr.GetPrefix()
 }
 
+// Sets the prefix on a child for the compound kinds it lists, which is what
+// these call sites need; lstutil.SetExprPrefix sets the node's own.
 func setExprPrefix(expr java.Expression, prefix java.Space) java.Expression {
 	switch n := expr.(type) {
 	case *java.Identifier:

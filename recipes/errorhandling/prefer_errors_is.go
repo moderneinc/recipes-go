@@ -6,6 +6,7 @@ package errorhandling
 
 import (
 	"github.com/moderneinc/recipes-go/diagnostic"
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -113,22 +114,5 @@ func getLeadingPrefixExpr(bin *java.Binary) java.Space {
 }
 
 func stripExprPrefix(expr java.Expression) java.Expression {
-	return setExprPrefixLocal(expr, java.Space{})
-}
-
-func setExprPrefixLocal(expr java.Expression, prefix java.Space) java.Expression {
-	switch n := expr.(type) {
-	case *java.Identifier:
-		return n.WithPrefix(prefix)
-	case *java.Literal:
-		return n.WithPrefix(prefix)
-	case *java.FieldAccess:
-		return n.WithPrefix(prefix)
-	case *java.MethodInvocation:
-		return n.WithPrefix(prefix)
-	case *java.Unary:
-		return n.WithPrefix(prefix)
-	default:
-		return expr
-	}
+	return lstutil.SetExprPrefix(expr, java.Space{})
 }

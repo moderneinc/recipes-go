@@ -6,6 +6,7 @@ package errorhandling
 
 import (
 	"fmt"
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
@@ -57,5 +58,5 @@ func (v *simplifyRedundantErrorWrapVisitor) VisitMethodInvocation(mi *java.Metho
 	}
 
 	v.DoAfterVisit(recipe.Service[*recipegolang.ImportService](nil).RemoveUnusedImportsVisitor())
-	return setExprPrefixLocal(stripExprPrefix(arg), mi.GetPrefix())
+	return lstutil.SetExprPrefix(stripExprPrefix(arg), mi.GetPrefix())
 }

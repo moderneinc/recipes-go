@@ -6,6 +6,7 @@ package errorhandling
 
 import (
 	"fmt"
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 
 	"github.com/google/uuid"
 	"github.com/moderneinc/recipes-go/diagnostic"
@@ -194,7 +195,7 @@ func buildVarDecl(varName string, typeExpr java.Expression, prefix java.Space) *
 			ID:      uuid.New(),
 			Entries: []java.Marker{golang.VarKeyword{Ident: uuid.New()}},
 		},
-		TypeExpr: setExprPrefix(typeExpr, java.SingleSpace),
+		TypeExpr: lstutil.SetExprPrefix(typeExpr, java.SingleSpace),
 		Variables: []java.RightPadded[*java.VariableDeclarator]{
 			{
 				Element: &java.VariableDeclarator{
@@ -218,7 +219,7 @@ func buildErrorsAsIf(origIf *java.If, prefix java.Space, errExpr java.Expression
 	if instantiated == nil {
 		return origIf
 	}
-	errorsAsCall := setExprPrefix(instantiated.(java.Expression), java.SingleSpace)
+	errorsAsCall := lstutil.SetExprPrefix(instantiated.(java.Expression), java.SingleSpace)
 
 	return &java.If{
 		ID:     uuid.New(),
@@ -229,26 +230,6 @@ func buildErrorsAsIf(origIf *java.If, prefix java.Space, errExpr java.Expression
 		},
 		ThenPart: origIf.ThenPart,
 		ElsePart: origIf.ElsePart,
-	}
-}
-
-// setExprPrefix sets the prefix on an expression node.
-func setExprPrefix(expr java.Expression, prefix java.Space) java.Expression {
-	switch e := expr.(type) {
-	case *java.Identifier:
-		return e.WithPrefix(prefix)
-	case *java.Unary:
-		return e.WithPrefix(prefix)
-	case *golang.Unary:
-		return e.WithPrefix(prefix)
-	case *java.MethodInvocation:
-		return e.WithPrefix(prefix)
-	case *java.FieldAccess:
-		c := *e
-		c.Target = setExprPrefix(c.Target, prefix).(java.Expression)
-		return &c
-	default:
-		return expr
 	}
 }
 
