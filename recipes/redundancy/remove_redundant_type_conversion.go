@@ -6,6 +6,7 @@ package redundancy
 
 import (
 	"github.com/moderneinc/recipes-go/diagnostic"
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -25,7 +26,7 @@ func (r *RemoveRedundantTypeConversion) DisplayName() string {
 	return "Remove redundant type conversion"
 }
 func (r *RemoveRedundantTypeConversion) Description() string {
-	return "Remove a conversion whose operand already has the target type, such as `string(s)` where `s` is a `string`. Conversions to `int`, `int8`, `byte`, `rune`, `float64` and the complex types are left alone."
+	return "Remove a conversion whose operand already has the target type, such as `string(s)` where `s` is a `string`. `byte` and `uint8` name one type, as do `rune` and `int32`, so a conversion between either pair is removed too."
 }
 func (r *RemoveRedundantTypeConversion) Tags() []string { return []string{"cleanup"} }
 
@@ -53,8 +54,7 @@ func (v *removeRedundantTypeConversionVisitor) VisitTypeCast(tc *java.TypeCast, 
 	if !isBuiltin {
 		return tc
 	}
-	attributedType, convertible := unambiguousBuiltins[target.Name]
-	if !convertible {
+	if !lstutil.GoBasicTypes[target.Name] {
 		return tc
 	}
 
@@ -62,12 +62,10 @@ func (v *removeRedundantTypeConversionVisitor) VisitTypeCast(tc *java.TypeCast, 
 	if operand == nil {
 		return tc
 	}
-	// An untyped constant takes its type from the conversion, so the conversion
-	// is what gives it one.
-	if _, isLiteral := operand.(*java.Literal); isLiteral {
-		return tc
-	}
-	if matcher.GetFullyQualifiedName(matcher.TypeOfExpression(operand)) != attributedType {
+	// IsSameGoType resolves `byte`/`uint8` and `rune`/`int32` to one type, and
+	// answers false for a literal, whose untyped constant takes its type from
+	// the conversion being removed.
+	if !matcher.IsSameGoType(target.Type, matcher.TypeOfExpression(operand)) {
 		return tc
 	}
 	// The operand inherits the conversion's prefix, which prependExprPrefix
@@ -77,23 +75,4 @@ func (v *removeRedundantTypeConversionVisitor) VisitTypeCast(tc *java.TypeCast, 
 		return prependExprPrefix(operand, tc.Prefix)
 	}
 	return tc
-}
-
-// unambiguousBuiltins maps a Go builtin type to the type attributed to an
-// expression of that type. Only the builtins that own their attributed type
-// outright are listed: `int` shares one with `int32`, `byte` with `int8`, and
-// `float64` with the complex types, so a match there would not establish that
-// the operand and the conversion agree.
-var unambiguousBuiltins = map[string]string{
-	"string":  "String",
-	"bool":    "boolean",
-	"int16":   "short",
-	"int64":   "long",
-	"float32": "float",
-	"uint":    "uint",
-	"uint8":   "uint8",
-	"uint16":  "uint16",
-	"uint32":  "uint32",
-	"uint64":  "uint64",
-	"uintptr": "uintptr",
 }

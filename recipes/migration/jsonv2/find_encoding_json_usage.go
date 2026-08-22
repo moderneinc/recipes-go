@@ -5,6 +5,7 @@
 package jsonv2
 
 import (
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"strings"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
@@ -405,19 +406,30 @@ func classifyJsonType(name string) (category, suggestion string) {
 func classifyOmitempty(fieldType java.JavaType) string {
 	base := "v2 omits empty JSON values, not Go zero values"
 	if fq, ok := fieldType.(java.FullyQualified); ok {
-		switch fq.GetFullyQualifiedName() {
+		name := fq.GetFullyQualifiedName()
+		switch name {
 		case "time.Time", "time.Duration":
-			return base + "; " + fq.GetFullyQualifiedName() + " is a known divergence, switch to omitzero"
+			return base + "; " + name + " is a known divergence, switch to omitzero"
 		}
-		return base + "; the named type " + fq.GetFullyQualifiedName() + " may diverge (structs and custom marshalers), verify and consider omitzero"
+		// A predeclared type is attributed by its Go name, so it reaches here as
+		// a FullyQualified rather than as a primitive.
+		if lstutil.GoBasicTypes[name] {
+			return basicOmitempty(base, name)
+		}
+		return base + "; the named type " + name + " may diverge (structs and custom marshalers), verify and consider omitzero"
 	}
 	if pr, ok := fieldType.(*java.JavaTypePrimitive); ok {
-		if pr.Keyword == "String" {
-			return base + ", but a string field is unaffected (both omit \"\")"
-		}
-		return base + "; a bool or number field diverges (v2 keeps false/0), switch to omitzero"
+		return basicOmitempty(base, strings.ToLower(pr.Keyword))
 	}
 	return base + "; verify this field and consider omitzero"
+}
+
+// basicOmitempty tailors the suggestion for a predeclared field type.
+func basicOmitempty(base, name string) string {
+	if name == "string" {
+		return base + ", but a string field is unaffected (both omit \"\")"
+	}
+	return base + "; a bool or number field diverges (v2 keeps false/0), switch to omitzero"
 }
 
 // The v1 encoding/json types whose jsonv2 definitions are aliases into other

@@ -87,9 +87,7 @@ func TestRemoveRedundantTypeConversionKeepsRealConversions(t *testing.T) {
 	)
 }
 
-// int and float64 share their attributed type with int32 and complex128, so a
-// conversion to either is left alone even when it looks redundant.
-func TestRemoveRedundantTypeConversionSkipsAmbiguousTargets(t *testing.T) {
+func TestRemoveRedundantTypeConversionIntAndFloat(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&redundancy.RemoveRedundantTypeConversion{})
 	spec.RewriteRun(t,
 		test.Golang(`
@@ -97,6 +95,32 @@ func TestRemoveRedundantTypeConversionSkipsAmbiguousTargets(t *testing.T) {
 
 			func f(i int, d float64) (int, float64) {
 				return int(i), float64(d)
+			}
+		`, `
+			package main
+
+			func f(i int, d float64) (int, float64) {
+				return i, d
+			}
+		`),
+	)
+}
+
+// byte and uint8 name one type, as do rune and int32.
+func TestRemoveRedundantTypeConversionAliasPair(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&redundancy.RemoveRedundantTypeConversion{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			func f(u uint8, i int32) (byte, rune) {
+				return byte(u), rune(i)
+			}
+		`, `
+			package main
+
+			func f(u uint8, i int32) (byte, rune) {
+				return u, i
 			}
 		`),
 	)
