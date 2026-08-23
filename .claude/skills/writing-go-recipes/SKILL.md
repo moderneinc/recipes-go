@@ -112,7 +112,13 @@ id := template.Ident("name")      // identifier position
 
 - Capture names must be **globally unique** within a Go package — use distinctive prefixes (e.g., `hpS`, `beA`)
 - `capture.String()` returns `__plh_name__` — use with `fmt.Sprintf` to embed in template strings
-- Captures match any subtree at their syntactic position
+- A capture matches any subtree at its syntactic position, unless it declares a type
+
+```go
+e := template.Expr("e").WithType("error")   // matches only an error-assignable operand
+```
+
+`WithType` filters the **match** path: `Matches` and `Apply` refuse a candidate of the wrong type, and an interface is satisfied structurally from the candidate's method set. It does not filter `Bind` — binding an int literal to a capture declared `string` instantiates `errors.New(42)` and says nothing, which `RewriteRun` will not catch either, since it compares printed source. Only an expression capture may declare a type; `WithType` panics on any other kind.
 
 ### Multiple Before Patterns (Refaster anyOf)
 
@@ -194,6 +200,17 @@ func (v *myVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java
 }
 ```
 
+**Prefer this to comparing an identifier's name.** A qualifier read as text matches anything spelled that way, including a local that shadows the package:
+
+```go
+ident, ok := mi.Select.Element.(*java.Identifier)
+if !ok || ident.Name != "context" { return mi }   // also matches:
+                                                  //   context := fake{}
+                                                  //   context.Background()
+```
+
+The matcher resolves the receiver through the type system, so it answers no there. Recipes here predating the matcher still do the name check; a new one should not.
+
 **Pattern format**: `"DeclaringType MethodName(ArgType1, ..)"` where:
 - `*` matches any single name
 - `*..*` matches any type in any package
@@ -212,7 +229,15 @@ matcher.IsString(t)                       // is string type
 matcher.TypeOfExpression(expr)            // get type from expression
 matcher.DeclaringTypeFQN(mi)             // get declaring type of method call
 matcher.AsClass(t)                        // safe cast to *JavaTypeClass
+matcher.IsSameGoType(a, b)                // same Go type: folds byte/uint8 and rune/int32,
+                                          // and refuses a literal, whose keyword names a class
+                                          // of Go types rather than one
+matcher.IsAssignableToType(from, to)      // usable where `to` is wanted; an interface is
+                                          // answered from the method set, so it misses a
+                                          // method promoted from an embedded field
 ```
+
+Compare two attributed types with `IsSameGoType` rather than their names: the names distinguish `byte` from `uint8`, which are one type.
 
 ## Markup Levels
 
@@ -278,6 +303,9 @@ Swapping a package under a preserved qualifier works the same way, as long as th
 ### A conversion is a `java.TypeCast`
 `string(s)` is `*java.TypeCast` with `Clazz` (the target type, in `ControlParentheses`) and `Expr` (the operand) — not a call with no receiver.
 
+### A basic type is a `JavaTypeClass` named for the Go type
+`string` attributes as `JavaTypeClass{string}`, not a `JavaTypePrimitive` keyword, and `int`, `int32`, `byte` and `int8` are each distinct. A `J.Literal` still carries a primitive keyword, so a literal's type and a variable's are different kinds.
+
 ### `Literal.Value` carries the type the source wrote
 `int64` for an integer or rune, `float64` for a float, and `*big.Int` past int64. Code assuming `int64` panics on a wide constant.
 
@@ -328,8 +356,10 @@ fa.Name.Element.Name  // get the field name string
 ### Prefix preservation for replacements
 Carry the replaced node's own prefix onto the replacement. `template.Apply(v.Cursor(), values)` does this for you, along with parenthesization and formatting, and is the reason to prefer it over hand-building:
 ```go
-// Hand-built replacements set the node's own prefix:
+expr = lstutil.SetExprPrefix(expr, prefix) // and SetStmtPrefix for a statement
 ```
+
+Both wrap `format.WithPrefix`, which reaches the `Prefix` field reflectively. A hand-rolled type switch over node kinds silently leaves the whitespace unapplied for a kind it does not list.
 
 ## Testing
 
