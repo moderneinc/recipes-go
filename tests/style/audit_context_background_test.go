@@ -51,3 +51,20 @@ func TestAuditContextBackgroundNoChangeTodo(t *testing.T) {
 		`),
 	)
 }
+
+// A local named `context` with a Background method is not the context package.
+func TestAuditContextBackgroundIgnoresShadowingLocal(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.AuditContextBackground{})
+	spec.RewriteRun(t, test.Golang(`
+		package main
+
+		type fake struct{}
+
+		func (fake) Background() {}
+
+		func f() {
+			context := fake{}
+			context.Background()
+		}
+	`))
+}
