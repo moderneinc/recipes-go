@@ -182,3 +182,36 @@ func TestUseBuilderWithStringsAlreadyImported(t *testing.T) {
 		`),
 	)
 }
+
+func TestUseBuilderKeepsCommentOnLoop(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&performance.UseStringsBuilderInLoop{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			func f(items []string) string {
+				s := ""
+				// Concatenate every item.
+				for _, item := range items {
+					s += item
+				}
+				return s
+			}
+		`, `
+			package main
+
+			import "strings"
+
+			func f(items []string) string {
+				s := ""
+				var builder strings.Builder
+				// Concatenate every item.
+				for _, item := range items {
+					builder.WriteString(item)
+				}
+				s = builder.String()
+				return s
+			}
+		`),
+	)
+}

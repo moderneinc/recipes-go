@@ -26,7 +26,7 @@ func (r *RemoveRedundantTypeConversion) DisplayName() string {
 	return "Remove redundant type conversion"
 }
 func (r *RemoveRedundantTypeConversion) Description() string {
-	return "Remove a conversion whose operand already has the target type, such as `string(s)` where `s` is a `string`. `byte` and `uint8` name one type, as do `rune` and `int32`, so a conversion between either pair is removed too."
+	return "Remove a conversion whose operand already has the target type, such as `string(s)` where `s` is a `string`. `byte` and `uint8` name one type, as do `rune` and `int32`, so a conversion between either pair is removed too. A conversion of an untyped constant is what gives the constant its type, so it stays."
 }
 func (r *RemoveRedundantTypeConversion) Tags() []string { return []string{"cleanup"} }
 
@@ -65,7 +65,7 @@ func (v *removeRedundantTypeConversionVisitor) VisitTypeCast(tc *java.TypeCast, 
 	// IsSameGoType resolves `byte`/`uint8` and `rune`/`int32` to one type, and
 	// answers false for a literal, whose untyped constant takes its type from
 	// the conversion being removed.
-	if !matcher.IsSameGoType(target.Type, matcher.TypeOfExpression(operand)) {
+	if !matcher.IsSameGoType(target.Type, declaredTypeOf(operand)) {
 		return tc
 	}
 	// The operand inherits the conversion's prefix, which prependExprPrefix
@@ -75,4 +75,15 @@ func (v *removeRedundantTypeConversionVisitor) VisitTypeCast(tc *java.TypeCast, 
 		return prependExprPrefix(operand, tc.Prefix)
 	}
 	return tc
+}
+
+// declaredTypeOf is the type an expression owns. TypeOfExpression gives a
+// qualified constant (`math.MaxUint16`) the type its context converted it to;
+// the selected identifier carries the constant's own, untyped for a constant
+// declared without one.
+func declaredTypeOf(expr java.Expression) java.JavaType {
+	if fa, isFieldAccess := expr.(*java.FieldAccess); isFieldAccess && fa.Name.Element != nil {
+		return fa.Name.Element.Type
+	}
+	return matcher.TypeOfExpression(expr)
 }

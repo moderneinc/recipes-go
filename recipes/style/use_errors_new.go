@@ -49,7 +49,6 @@ func (r *UseErrorsNewForSimpleErrors) Editor() recipe.TreeVisitor {
 
 type useErrorsNewVisitor struct {
 	visitor.GoVisitor
-	changed bool
 }
 
 func (v *useErrorsNewVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
@@ -80,12 +79,9 @@ func (v *useErrorsNewVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p
 		return mi
 	}
 
-	// The rewrite strands `fmt` when it was imported only for Errorf, so the file
-	// needs one unused-import cleanup pass alongside the `errors` it introduces.
-	if !v.changed {
-		v.DoAfterVisit((&recipegolang.RemoveUnusedImports{}).Editor())
-		v.changed = true
-	}
+	// Removing `fmt` ahead of adding `errors` keeps the one-line `import "errors"`
+	// for a file whose only import was `fmt`; the other order yields a block.
+	recipegolang.MaybeRemoveImport(v, "fmt")
 	recipegolang.MaybeAddImport(v, "errors", nil, false)
 
 	replaced := errorsNewTmpl.Apply(v.Cursor(), template.NewMatchResult().Bind(errorsNewMsg, lit))
