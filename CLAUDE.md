@@ -41,10 +41,10 @@ The Go-side dependency on `github.com/openrewrite/rewrite/rewrite-go` requires u
 For local cross-repo dev, re-add the `replace` directive to the root `go.mod`:
 
 ```
-replace github.com/openrewrite/rewrite/rewrite-go => ../../../openrewrite/rewrite/rewrite-go
+replace github.com/openrewrite/rewrite/rewrite-go => ../../openrewrite/rewrite/rewrite-go
 ```
 
-(It's removed from the committed `go.mod` so CI can resolve the dep from the Go module proxy. Don't commit the replace back.)
+The path is relative to the `go.mod` holding it, so a worktree under `.worktrees/<name>/` sits two levels deeper and an absolute path is easier. It's removed from the committed `go.mod` so CI can resolve the dep from the Go module proxy — don't commit the replace back.
 
 ### Full dev loop (recipes-go → rewrite-go → CLI)
 
@@ -52,19 +52,19 @@ When changing the rewrite-go RPC/parser/visitor layer alongside recipes:
 
 ```bash
 # 1. Edit rewrite-go (parser, RPC, visitors, etc.)
-#    at ../../../openrewrite/rewrite/rewrite-go/rewrite/
+#    at ../../openrewrite/rewrite/rewrite-go/pkg/
 
 # 2. Run rewrite-go integration tests
-cd ../../../openrewrite/rewrite
+cd ../../openrewrite/rewrite
 ./gradlew :rewrite-go:integTest
 
 # 3. Recipe unit tests pick up rewrite-go changes automatically via replace directive
 go test ./... -count=1
 
 # 4. To test through the CLI (mod build / mod run), publish rewrite-go and rebuild the fat jar
-cd ../../../openrewrite/rewrite
+cd ../../openrewrite/rewrite
 ./gradlew :rewrite-go:publishToMavenLocal
-cd ../../../moderneinc/moderne-cli
+cd ../../moderneinc/moderne-cli
 ./gradlew :mod:devFatJar --offline
 
 # 5. Build LSTs and run recipes via CLI
@@ -81,98 +81,21 @@ build.steps:
 
 ## License
 
-Moderne Proprietary. All source files use the single-line license header:
+Moderne Proprietary. Hand-written source files carry the single-line header:
 ```
 Moderne Proprietary. Only for use by Moderne customers under the terms of a commercial contract.
 ```
 
+`licenseGo` in `build.gradle.kts` checks them, excluding generated files, which carry a `DO NOT EDIT` banner and would lose the header on regeneration.
+
 ## Writing Go Recipes
 
-### Recipe Pattern
+The `writing-go-recipes` skill in `.claude/skills/` is the guide: recipe and scanning-recipe structure, templates and type attribution, the Go-specific AST shapes, when a rewrite is unsafe, and the testing conventions. Invoke it before writing or changing a recipe.
 
-```go
-type MyRecipe struct {
-    recipe.Base
-}
+Two gates a recipe has to clear before it is done, both cheap to forget:
 
-func (r *MyRecipe) Name() string        { return "org.openrewrite.golang.codequality.MyRecipe" }
-func (r *MyRecipe) DisplayName() string { return "My recipe" }
-func (r *MyRecipe) Description() string { return "..." }
-
-func (r *MyRecipe) Editor() recipe.TreeVisitor {
-    return visitor.Init(&myRecipeVisitor{})
-}
-
-type myRecipeVisitor struct {
-    visitor.GoVisitor
-}
-
-func (v *myRecipeVisitor) VisitBinary(bin *tree.Binary, p any) tree.J {
-    bin = v.GoVisitor.VisitBinary(bin, p).(*tree.Binary) // recurse first
-    // ... transformation logic
-    return bin
-}
-```
-
-### Testing Pattern
-
-```go
-func TestMyRecipe(t *testing.T) {
-    spec := test.NewRecipeSpec().WithRecipe(&MyRecipe{})
-    spec.RewriteRun(t,
-        test.Golang(`
-            package main
-            // before code
-        `, `
-            package main
-            // after code
-        `),
-    )
-}
-```
-
-Omit the second argument for no-change tests.
-
-### GoTemplate (upstream in rewrite-go)
-
-For template-based matching and replacement:
-
-```go
-expr := template.Expr("expr")
-pat := template.Expression(fmt.Sprintf("fmt.Println(%s)", expr)).
-    Captures(expr).Imports("fmt").Build()
-tmpl := template.ExpressionTemplate(fmt.Sprintf("log.Println(%s)", expr)).
-    Captures(expr).Imports("log").Build()
-rewriter := template.Rewrite(pat, tmpl)
-```
-
-### Go-specific AST Notes
-
-- `true`/`false` are `*tree.Identifier` (predeclared identifiers), not `*tree.Literal`
-- `nil` is also `*tree.Identifier`
-- Binary.Prefix is often empty — the leading whitespace is on Binary.Left
-- Short var decls (`:=`) are `*tree.Assignment` with a `ShortVarDecl` marker
-- The `VisitX` method should call `v.GoVisitor.VisitX(...)` first to recurse
-
-### Type Attribution
-
-A hand-written visitor that changes what a node *is* must re-attribute it. `RemoveImport` and `RemoveUnusedImports` answer "is this package still referenced?" from `Identifier.Type` and `MethodInvocation.MethodType.DeclaringType`, so a rewrite that leaves parse-time types in place misleads every later type-based match. Setting the type on the node you replaced is not enough: the enclosing declaration carries one of its own, as does each other reference to the value.
-
-`recipes/internal/lstutil` has the pieces: `MethodOn(recv, name)` reads a method's signature off the receiver's own attribution and is the first choice; `NamedType` / `FuncType` state one the recipe has to name itself. A template attributes the calls it spells out, but not one whose receiver is a capture (`%s.String()`), and only for packages the toolchain resolves — `encoding/json/v2` and `encoding/json/jsontext` sit behind `GOEXPERIMENT=jsonv2`, so the jsonv2 recipes attribute by hand.
-
-`TestRewrittenTreesStayAttributed` in `tests/attribution_test.go` sweeps every registered recipe over the suite's own snippets and fails on a call the parser would have typed. `RewriteRun` compares printed source, so nothing else catches this.
-
-### Diagnostic Mapping
-
-Recipes that correspond to staticcheck/golangci-lint diagnostics implement `diagnostic.HasMappings`:
-
-```go
-func (r *MyRecipe) DiagnosticMappings() []diagnostic.Mapping {
-    return []diagnostic.Mapping{
-        {DiagnosticID: "S1023", Tool: diagnostic.Staticcheck, HasFix: true},
-    }
-}
-```
+- `TestRewrittenTreesStayAttributed` (`tests/attribution_test.go`) — fails on a call the recipe emitted without the type a parsed one would carry. `RewriteRun` compares printed source, so nothing else catches it.
+- `TestNoChangeMeansSamePointer` (`tests/identity_sweep_test.go`) — fails when a recipe rebuilds a tree it did not change, which `RewriteRun` only catches where a no-change test happens to exist.
 
 <!-- prethink-context -->
 ## Moderne Prethink Context

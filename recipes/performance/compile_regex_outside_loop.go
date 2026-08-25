@@ -7,9 +7,9 @@ package performance
 import (
 	"fmt"
 	"github.com/moderneinc/recipes-go/diagnostic"
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 
 	"github.com/google/uuid"
-	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -208,7 +208,7 @@ func buildVarDecl(name string, call *java.MethodInvocation, prefix java.Space) *
 	cleanCall.Prefix = java.Space{Whitespace: " "}
 	if call.Select != nil {
 		sel := *call.Select
-		sel.Element = setMISelectPrefix(sel.Element, java.EmptySpace)
+		sel.Element = lstutil.SetExprPrefix(sel.Element, java.EmptySpace)
 		cleanCall.Select = &sel
 	}
 	// Promote Compile to MustCompile for the hoisted call.
@@ -331,17 +331,5 @@ func stmtPrefix(stmt java.Statement) java.Space {
 		return lstutil.IndentPrefix(s.Prefix)
 	default:
 		return java.Space{}
-	}
-}
-
-// setMISelectPrefix sets the prefix of a method invocation's select expression.
-func setMISelectPrefix(expr java.Expression, prefix java.Space) java.Expression {
-	switch n := expr.(type) {
-	case *java.Identifier:
-		return n.WithPrefix(prefix)
-	case *java.FieldAccess:
-		return n.WithTarget(setMISelectPrefix(n.Target, prefix))
-	default:
-		return expr
 	}
 }

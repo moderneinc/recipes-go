@@ -6,7 +6,6 @@ package simplification
 
 import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -37,11 +36,6 @@ type simplifySwitchTrueVisitor struct {
 
 func (v *simplifySwitchTrueVisitor) VisitSwitch(sw *java.Switch, p any) java.J {
 	sw = v.GoVisitor.VisitSwitch(sw, p).(*java.Switch)
-
-	// Skip select statements
-	if java.HasMarker[golang.SelectStmt](sw.Markers) {
-		return sw
-	}
 
 	// Must have a tag expression
 	if sw.Tag == nil {

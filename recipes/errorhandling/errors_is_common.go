@@ -5,8 +5,11 @@
 package errorhandling
 
 import (
+	"fmt"
 	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
+
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -26,28 +29,31 @@ func rewriteToErrorsIs(v visitor.AfterVisitsProvider, bin *java.Binary, errExpr,
 	// binary's prefix onto whichever node ends up outermost.
 	prefix := getLeadingPrefixExpr(bin)
 
-	sentinelArg := setExprPrefixLocal(stripExprPrefix(sentinel), java.Space{Whitespace: " "})
-	isCall := &java.MethodInvocation{
-		Select: &java.RightPadded[java.Expression]{Element: &java.Identifier{Name: "errors", Type: lstutil.NamedType("errors")}},
-		Name:   &java.Identifier{Name: "Is"},
-		Arguments: java.Container[java.Expression]{
-			Elements: []java.RightPadded[java.Expression]{
-				{Element: stripExprPrefix(errExpr)},
-				{Element: sentinelArg},
-			},
-		},
-		MethodType: lstutil.FuncType("errors", "Is", lstutil.BoolType),
-	}
-
+	tmpl := errorsIsTmpl
 	if bin.Operator.Element == java.NotEqual {
-		return &java.Unary{
-			Prefix:   prefix,
-			Operator: java.LeftPadded[java.UnaryOperator]{Element: java.Not},
-			Operand:  isCall,
-		}
+		tmpl = notErrorsIsTmpl
 	}
-	return isCall.WithPrefix(prefix)
+	isCall, ok := tmpl.Instantiate(template.NewMatchResult().
+		Bind(errorsIsErr, errExpr).
+		Bind(errorsIsSentinel, sentinel)).(java.Expression)
+	if !ok {
+		return bin
+	}
+	return lstutil.SetExprPrefix(isCall, prefix)
 }
+
+var (
+	errorsIsErr      = template.Expr("err").WithType("error")
+	errorsIsSentinel = template.Expr("sentinel").WithType("error")
+	errorsIsTmpl     = template.ExpressionTemplate(fmt.Sprintf("errors.Is(%s, %s)", errorsIsErr, errorsIsSentinel)).
+				Captures(errorsIsErr, errorsIsSentinel).
+				Imports("errors").
+				Build()
+	notErrorsIsTmpl = template.ExpressionTemplate(fmt.Sprintf("!errors.Is(%s, %s)", errorsIsErr, errorsIsSentinel)).
+			Captures(errorsIsErr, errorsIsSentinel).
+			Imports("errors").
+			Build()
+)
 
 // matchSentinel returns (errExpr, sentinel, true) when one side of bin is the
 // package-qualified sentinel `pkg.name` (e.g. io.EOF), with the other side as

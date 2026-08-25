@@ -61,30 +61,47 @@ type fixIndirectEditor struct {
 func (v *fixIndirectEditor) VisitGoMod(gm *golang.GoMod, p any) java.Tree {
 	directImported := directlyImportedModules(gm, v.acc.imports)
 
+	changed := false
 	statements := make([]java.RightPadded[golang.GoModStatement], len(gm.Statements))
 	for i, rp := range gm.Statements {
 		switch el := rp.Element.(type) {
 		case *golang.GoModDirective:
 			if el.Keyword == "require" {
-				rp.After = setIndirect(rp.After, !directImported[firstValueText(el)])
+				if after := setIndirect(rp.After, !directImported[firstValueText(el)]); !java.SpaceEqual(after, rp.After) {
+					rp.After = after
+					changed = true
+				}
 			}
 		case *golang.GoModBlock:
 			if el.Keyword == "require" {
-				rp.Element = fixRequireBlock(el, directImported)
+				if fixed := fixRequireBlock(el, directImported); fixed != el {
+					rp.Element = fixed
+					changed = true
+				}
 			}
 		}
 		statements[i] = rp
+	}
+	if !changed {
+		return gm
 	}
 	return gm.WithStatements(statements)
 }
 
 func fixRequireBlock(b *golang.GoModBlock, directImported map[string]bool) *golang.GoModBlock {
+	changed := false
 	entries := make([]java.RightPadded[golang.GoModStatement], len(b.Entries))
 	for i, e := range b.Entries {
 		if d, ok := e.Element.(*golang.GoModDirective); ok {
-			e.After = setIndirect(e.After, !directImported[firstValueText(d)])
+			if after := setIndirect(e.After, !directImported[firstValueText(d)]); !java.SpaceEqual(after, e.After) {
+				e.After = after
+				changed = true
+			}
 		}
 		entries[i] = e
+	}
+	if !changed {
+		return b
 	}
 	return b.WithEntries(entries)
 }

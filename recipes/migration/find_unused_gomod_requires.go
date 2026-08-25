@@ -59,30 +59,43 @@ type findUnusedRequiresEditor struct {
 func (v *findUnusedRequiresEditor) VisitGoMod(gm *golang.GoMod, p any) java.Tree {
 	imported := directlyImportedModules(gm, v.acc.imports)
 
+	changed := false
 	statements := make([]java.RightPadded[golang.GoModStatement], len(gm.Statements))
 	for i, rp := range gm.Statements {
 		switch el := rp.Element.(type) {
 		case *golang.GoModDirective:
 			if el.Keyword == "require" && !hasIndirectComment(rp.After) && !imported[firstValueText(el)] {
 				rp.Element = markUnused(el)
+				changed = true
 			}
 		case *golang.GoModBlock:
 			if el.Keyword == "require" {
-				rp.Element = markUnusedBlockEntries(el, imported)
+				if marked := markUnusedBlockEntries(el, imported); marked != el {
+					rp.Element = marked
+					changed = true
+				}
 			}
 		}
 		statements[i] = rp
+	}
+	if !changed {
+		return gm
 	}
 	return gm.WithStatements(statements)
 }
 
 func markUnusedBlockEntries(b *golang.GoModBlock, imported map[string]bool) *golang.GoModBlock {
+	changed := false
 	entries := make([]java.RightPadded[golang.GoModStatement], len(b.Entries))
 	for i, e := range b.Entries {
 		if d, ok := e.Element.(*golang.GoModDirective); ok && !hasIndirectComment(e.After) && !imported[firstValueText(d)] {
 			e.Element = markUnused(d)
+			changed = true
 		}
 		entries[i] = e
+	}
+	if !changed {
+		return b
 	}
 	return b.WithEntries(entries)
 }

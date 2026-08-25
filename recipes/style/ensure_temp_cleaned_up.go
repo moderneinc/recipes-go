@@ -5,9 +5,12 @@
 package style
 
 import (
+	"fmt"
+
 	"github.com/google/uuid"
 	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -111,23 +114,23 @@ func buildDeferOsRemove(a acquisition, originalStmt java.Statement) *golang.Defe
 		MethodType: lstutil.MethodOn(a.varType, "Name"),
 	}
 
-	// Build os.Remove(varName.Name())
-	removeCall := &java.MethodInvocation{
-		ID:     uuid.New(),
-		Prefix: java.SingleSpace,
-		Select: &java.RightPadded[java.Expression]{Element: &java.Identifier{ID: uuid.New(), Name: "os", Type: lstutil.NamedType("os")}},
-		Name:   &java.Identifier{ID: uuid.New(), Name: "Remove"},
-		Arguments: java.Container[java.Expression]{
-			Before: java.EmptySpace,
-			Elements: []java.RightPadded[java.Expression]{
-				{Element: nameCall},
-			},
-		},
-		MethodType: lstutil.FuncType("os", "Remove", lstutil.ErrorType),
+	// A capture receiver gets no signature from the template, so `.Name()` is
+	// attributed off the variable's own type.
+	instantiated := osRemoveTmpl.Instantiate(template.NewMatchResult().Bind(osRemovePath, nameCall))
+	if instantiated == nil {
+		return nil
 	}
 	return &golang.Defer{
 		ID:     uuid.New(),
 		Prefix: prefix,
-		Expr:   removeCall,
+		Expr:   instantiated.(*java.MethodInvocation).WithPrefix(java.SingleSpace),
 	}
 }
+
+var (
+	osRemovePath = template.Expr("path").WithType("string")
+	osRemoveTmpl = template.ExpressionTemplate(fmt.Sprintf("os.Remove(%s)", osRemovePath)).
+			Captures(osRemovePath).
+			Imports("os").
+			Build()
+)

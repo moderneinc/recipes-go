@@ -10,7 +10,7 @@ import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -125,51 +125,17 @@ func findStringConcats(body *java.Block) []stringConcatInfo {
 	return results
 }
 
-// The accumulator this recipe introduces. It declares the type itself, so no
-// parsed node carries one to copy.
-var builderType = lstutil.NamedType("strings.Builder")
+// The accumulator this recipe introduces. Its type comes off the template's own
+// declaration, so `builder.String()` and `builder.WriteString()` carry the
+// signatures go/types recorded for strings.Builder.
+var (
+	builderDeclTmpl = template.StatementTemplate("var builder strings.Builder").Imports("strings").Build()
+	builderType     = buildBuilderVarDecl(java.EmptySpace).Variables[0].Element.Name.Type
+)
 
 // buildBuilderVarDecl constructs: var builder strings.Builder
 func buildBuilderVarDecl(prefix java.Space) *java.VariableDeclarations {
-	typeExpr := &java.FieldAccess{
-		ID:     uuid.New(),
-		Prefix: java.SingleSpace,
-		Target: &java.Identifier{
-			ID:   uuid.New(),
-			Name: "strings",
-			Type: lstutil.NamedType("strings"),
-		},
-		Name: java.LeftPadded[*java.Identifier]{
-			Element: &java.Identifier{
-				ID:   uuid.New(),
-				Name: "Builder",
-				Type: builderType,
-			},
-		},
-		Type: builderType,
-	}
-
-	nameIdent := &java.Identifier{
-		ID:   uuid.New(),
-		Name: "builder",
-		Type: builderType,
-	}
-
-	declarator := &java.VariableDeclarator{
-		ID:     uuid.New(),
-		Prefix: java.SingleSpace,
-		Name:   nameIdent,
-	}
-
-	return &java.VariableDeclarations{
-		ID:       uuid.New(),
-		Prefix:   prefix,
-		Markers:  java.Markers{ID: uuid.New(), Entries: []java.Marker{golang.VarKeyword{Ident: uuid.New()}}},
-		TypeExpr: typeExpr,
-		Variables: []java.RightPadded[*java.VariableDeclarator]{
-			{Element: declarator},
-		},
-	}
+	return builderDeclTmpl.Instantiate(template.NewMatchResult()).(*java.VariableDeclarations).WithPrefix(prefix)
 }
 
 // buildBuilderStringAssign constructs: s = builder.String()
@@ -192,7 +158,7 @@ func buildBuilderStringAssign(variable java.Expression, prefix java.Space) *java
 		Arguments: java.Container[java.Expression]{
 			Before: java.EmptySpace,
 		},
-		MethodType: lstutil.FuncType(builderType.FullyQualifiedName, "String", lstutil.StringType),
+		MethodType: lstutil.MethodOn(builderType, "String"),
 	}
 
 	// For expression-based statements (Assignment), the leading whitespace
@@ -252,10 +218,10 @@ func replaceAddAssignInBody(body *java.Block, sc stringConcatInfo) *java.Block {
 		Arguments: java.Container[java.Expression]{
 			Before: java.EmptySpace,
 			Elements: []java.RightPadded[java.Expression]{
-				{Element: setExprPrefix(sc.rhs, java.EmptySpace)},
+				{Element: lstutil.SetExprPrefix(sc.rhs, java.EmptySpace)},
 			},
 		},
-		MethodType: lstutil.FuncType(builderType.FullyQualifiedName, "WriteString", nil),
+		MethodType: lstutil.MethodOn(builderType, "WriteString"),
 	}
 
 	newStmts[sc.stmtIdx] = java.RightPadded[java.Statement]{Element: writeCall, After: rp.After}
@@ -272,22 +238,4 @@ func cloneIdentWithPrefix(expr java.Expression, prefix java.Space) java.Expressi
 		}
 	}
 	return expr
-}
-
-// setExprPrefix sets the prefix on an expression.
-func setExprPrefix(expr java.Expression, prefix java.Space) java.Expression {
-	switch n := expr.(type) {
-	case *java.Identifier:
-		return n.WithPrefix(prefix)
-	case *java.Literal:
-		return n.WithPrefix(prefix)
-	case *java.MethodInvocation:
-		return n.WithPrefix(prefix)
-	case *java.FieldAccess:
-		return n.WithPrefix(prefix)
-	case *java.MethodDeclaration:
-		return n.WithPrefix(prefix)
-	default:
-		return expr
-	}
 }

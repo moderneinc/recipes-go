@@ -37,40 +37,35 @@ type simplifySelectDefaultOnlyVisitor struct {
 	visitor.GoVisitor
 }
 
-func (v *simplifySelectDefaultOnlyVisitor) VisitSwitch(sw *java.Switch, p any) java.J {
-	sw = v.GoVisitor.VisitSwitch(sw, p).(*java.Switch)
+func (v *simplifySelectDefaultOnlyVisitor) VisitSelect(sel *golang.Select, p any) java.J {
+	sel = v.GoVisitor.VisitSelect(sel, p).(*golang.Select)
 
-	// Only select statements (Switch with SelectStmt marker)
-	if !java.HasMarker[golang.SelectStmt](sw.Markers) {
-		return sw
-	}
-
-	if sw.Body == nil {
-		return sw
+	if sel.Body == nil {
+		return sel
 	}
 
 	// Find the single default CommClause.
 	var defaultClause *golang.CommClause
 	clauses := 0
-	for _, stmt := range sw.Body.Statements {
+	for _, stmt := range sel.Body.Statements {
 		cc, ok := stmt.Element.(*golang.CommClause)
 		if !ok {
 			continue
 		}
 		clauses++
 		if cc.Comm != nil {
-			return sw // has a real communication case; leave as-is
+			return sel // has a real communication case; leave as-is
 		}
 		defaultClause = cc
 	}
 
 	if clauses != 1 || defaultClause == nil {
-		return sw
+		return sel
 	}
 
 	// Extract the body statements from the default clause.
 	if len(defaultClause.Body) == 0 {
-		return &java.Empty{Prefix: sw.Prefix}
+		return &java.Empty{Prefix: sel.Prefix}
 	}
 
 	// Dedent the body statements since they are being lifted out of the select block.
@@ -94,7 +89,7 @@ func (v *simplifySelectDefaultOnlyVisitor) VisitSwitch(sw *java.Switch, p any) j
 		}
 	}
 	return &java.Block{
-		Prefix:     sw.Prefix,
+		Prefix:     sel.Prefix,
 		Statements: stmts,
 	}
 }

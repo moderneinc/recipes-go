@@ -5,10 +5,12 @@
 package simplification
 
 import (
+	"fmt"
+
 	"github.com/moderneinc/recipes-go/diagnostic"
-	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -72,26 +74,20 @@ func (v *replaceTimeSinceVisitor) VisitMethodInvocation(mi *java.MethodInvocatio
 		return mi
 	}
 
-	// Build: time.Since(arg)
-	// The leading whitespace lives on the outermost element (the invocation),
-	// so carry the original invocation's prefix onto the replacement.
-	newTimeIdent := &java.Identifier{
-		Name: "time",
-		Type: lstutil.NamedType("time"),
+	replaced := timeSinceTmpl.Apply(v.Cursor(), template.NewMatchResult().Bind(timeSinceArg, subArg))
+	if replaced == nil {
+		return mi
 	}
-
-	sinceIdent := &java.Identifier{
-		Name: "Since",
-	}
-
-	return &java.MethodInvocation{
-		Prefix:     mi.Prefix,
-		Select:     &java.RightPadded[java.Expression]{Element: newTimeIdent, After: mi.Select.After},
-		Name:       sinceIdent,
-		Arguments:  mi.Arguments, // reuse the argument list (contains the original arg)
-		MethodType: lstutil.FuncType("time", "Since", lstutil.ReturnTypeOf(mi)),
-	}
+	return replaced
 }
+
+var (
+	timeSinceArg  = template.Expr("t").WithType("time.Time")
+	timeSinceTmpl = template.ExpressionTemplate(fmt.Sprintf("time.Since(%s)", timeSinceArg)).
+			Captures(timeSinceArg).
+			Imports("time").
+			Build()
+)
 
 // getOnlyArg returns the single real argument from the argument list,
 // skipping any Empty sentinel. Returns nil if there isn't exactly one arg.

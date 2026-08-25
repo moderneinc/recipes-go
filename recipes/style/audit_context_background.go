@@ -5,6 +5,7 @@
 package style
 
 import (
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -30,6 +31,10 @@ func (r *AuditContextBackground) Editor() recipe.TreeVisitor {
 	return visitor.Init(&auditContextBackgroundVisitor{})
 }
 
+// The matcher resolves the receiver through the type system, so a local named
+// `context` with a Background method of its own is not a match.
+var contextBackgroundMatcher = matcher.NewMethodMatcher("context Background()")
+
 type auditContextBackgroundVisitor struct {
 	visitor.GoVisitor
 }
@@ -37,16 +42,7 @@ type auditContextBackgroundVisitor struct {
 func (v *auditContextBackgroundVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
 	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
 
-	if mi.Select == nil {
-		return mi
-	}
-
-	ident, ok := mi.Select.Element.(*java.Identifier)
-	if !ok || ident.Name != "context" {
-		return mi
-	}
-
-	if mi.Name.Name != "Background" {
+	if !contextBackgroundMatcher.Matches(mi) {
 		return mi
 	}
 

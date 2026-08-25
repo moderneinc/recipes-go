@@ -5,12 +5,15 @@
 package testify
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
+	"sync"
 
 	"github.com/google/uuid"
-	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
+	"github.com/moderneinc/recipes-go/recipes/migration/testify/testifyexportdata"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -100,44 +103,46 @@ func finishAssertion(prefix java.Space, pkg, importPath string, recv *java.Ident
 
 // buildAssertionCall constructs `<pkg>.<assertion>[f](<recv>, <coreArgs...>, <msgArgs...>)`,
 // indented to sit where the original statement did. useF appends the `f` suffix
-// (the format-string assertion variant).
+// (the format-string assertion variant). A nil return leaves the guard as it was.
 func buildAssertionCall(prefix java.Space, pkg, importPath string, recv *java.Identifier, assertion string, useF bool, coreArgs, msgArgs []java.Expression) *java.MethodInvocation {
 	name := assertion
 	if useF {
 		name += "f"
 	}
-	elements := make([]java.RightPadded[java.Expression], 0, len(coreArgs)+len(msgArgs)+1)
-	elements = append(elements, java.RightPadded[java.Expression]{
-		// The reporter receiver becomes the assertion's first argument, keeping
-		// the testing.T type it carries.
-		Element: &java.Identifier{ID: uuid.New(), Name: recv.Name, Type: recv.Type},
-	})
-	for _, a := range coreArgs {
-		elements = append(elements, java.RightPadded[java.Expression]{Element: withPrefix(a, java.SingleSpace)})
+	args := template.Elems([]java.Expression{recv}, coreArgs, msgArgs)
+	call, ok := assertionTmpl(pkg, importPath, name).
+		Instantiate(template.NewMatchResult().BindList(assertionArgs, args)).(*java.MethodInvocation)
+	if !ok {
+		return nil
 	}
-	for _, a := range msgArgs {
-		elements = append(elements, java.RightPadded[java.Expression]{Element: withPrefix(a, java.SingleSpace)})
-	}
-	return &java.MethodInvocation{
-		ID:     uuid.New(),
-		Prefix: prefix,
-		Select: &java.RightPadded[java.Expression]{
-			Element: &java.Identifier{ID: uuid.New(), Name: pkg, Type: lstutil.NamedType(importPath)},
-		},
-		Name: &java.Identifier{ID: uuid.New(), Name: name},
-		// The import path, not the qualifier, is what RemoveUnusedImports reads.
-		MethodType: lstutil.FuncType(importPath, name, assertionReturnType(pkg)),
-		Arguments:  java.Container[java.Expression]{Elements: elements},
-	}
+	return call.WithPrefix(prefix)
 }
 
-// An assert.* assertion reports failure and returns whether it passed; a
-// require.* one aborts the test and returns nothing.
-func assertionReturnType(pkg string) java.JavaType {
-	if pkg == assertPkg {
-		return lstutil.BoolType
+var (
+	assertionArgs   = template.Expr("args").Variadic(1, -1)
+	assertionTmplMu sync.Mutex
+	assertionTmpls  = map[string]*template.GoTemplate{}
+)
+
+// assertionTmpl returns the template for `<pkg>.<name>(args...)`, which has to
+// spell the assertion out for go/types to reach it, and carries the export data
+// that types a non-stdlib import.
+func assertionTmpl(pkg, importPath, name string) *template.GoTemplate {
+	key := importPath + "." + name
+
+	assertionTmplMu.Lock()
+	defer assertionTmplMu.Unlock()
+	if tmpl := assertionTmpls[key]; tmpl != nil {
+		return tmpl
 	}
-	return lstutil.VoidType
+
+	tmpl := template.ExpressionTemplate(fmt.Sprintf("%s.%s(%s)", pkg, name, assertionArgs)).
+		Captures(assertionArgs).
+		Imports(importPath).
+		ExportData(testifyexportdata.FS).
+		Build()
+	assertionTmpls[key] = tmpl
+	return tmpl
 }
 
 // identSet returns the set of value-identifier names referenced across exprs.

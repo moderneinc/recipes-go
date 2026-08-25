@@ -183,7 +183,11 @@ func insertDefer(block *java.Block,
 		if !safe {
 			continue
 		}
-		pending[at] = append(pending[at], java.RightPadded[java.Statement]{Element: build(a, rp.Element)})
+		d := build(a, rp.Element)
+		if d == nil {
+			continue
+		}
+		pending[at] = append(pending[at], java.RightPadded[java.Statement]{Element: d})
 	}
 	if len(pending) == 0 {
 		return block

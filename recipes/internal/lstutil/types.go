@@ -69,3 +69,15 @@ func FieldOn(recv java.JavaType, name string) java.JavaType {
 	}
 	return nil
 }
+
+// GoBasicTypes are Go's predeclared value types, which the parser attributes by
+// their Go name rather than as a primitive keyword. Use `matcher.IsSameGoType`
+// to compare two of them: it resolves the `byte`/`uint8` and `rune`/`int32`
+// spellings, which are attributed distinctly.
+var GoBasicTypes = map[string]bool{
+	"bool": true, "string": true,
+	"int": true, "int8": true, "int16": true, "int32": true, "int64": true,
+	"uint": true, "uint8": true, "uint16": true, "uint32": true, "uint64": true, "uintptr": true,
+	"byte": true, "rune": true,
+	"float32": true, "float64": true, "complex64": true, "complex128": true,
+}

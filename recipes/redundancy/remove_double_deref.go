@@ -5,11 +5,11 @@
 package redundancy
 
 import (
+	"fmt"
+
 	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 )
 
 // RemoveDoubleDeref removes `*&x` patterns where taking the address of a variable
@@ -35,40 +35,11 @@ func (r *RemoveDoubleDeref) DiagnosticMappings() []diagnostic.Mapping {
 }
 
 func (r *RemoveDoubleDeref) Editor() recipe.TreeVisitor {
-	return visitor.Init(&removeDoubleDerefVisitor{})
+	return template.Rewrite(doubleDerefPattern, doubleDerefTemplate)
 }
 
-type removeDoubleDerefVisitor struct {
-	visitor.GoVisitor
-}
-
-func (v *removeDoubleDerefVisitor) VisitGoUnary(unary *golang.Unary, p any) java.J {
-	unary = v.GoVisitor.VisitGoUnary(unary, p).(*golang.Unary)
-
-	// Outer operator must be Indirection (*).
-	if unary.Operator.Element != golang.Indirection {
-		return unary
-	}
-
-	// Operand must be another Unary with operator AddressOf (&).
-	inner, ok := unary.Expression.(*golang.Unary)
-	if !ok || inner.Operator.Element != golang.AddressOf {
-		return unary
-	}
-
-	// Replace *&x with x, preserving the outer unary's prefix.
-	switch operand := inner.Expression.(type) {
-	case *java.Identifier:
-		return operand.WithPrefix(unary.Prefix)
-	case *java.MethodInvocation:
-		return operand.WithPrefix(unary.Prefix)
-	case *java.FieldAccess:
-		return operand.WithPrefix(unary.Prefix)
-	case *java.Literal:
-		return operand.WithPrefix(unary.Prefix)
-	case *java.Parentheses:
-		return operand.WithPrefix(unary.Prefix)
-	default:
-		return inner.Expression
-	}
-}
+var (
+	doubleDerefOperand  = template.Expr("x")
+	doubleDerefPattern  = template.Expression(fmt.Sprintf("*&%s", doubleDerefOperand)).Captures(doubleDerefOperand).Build()
+	doubleDerefTemplate = template.ExpressionTemplate(doubleDerefOperand.String()).Captures(doubleDerefOperand).Build()
+)

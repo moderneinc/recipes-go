@@ -5,12 +5,15 @@
 package errorhandling
 
 import (
+	"fmt"
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
+
 	"github.com/google/uuid"
 	"github.com/moderneinc/recipes-go/diagnostic"
-	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -192,7 +195,7 @@ func buildVarDecl(varName string, typeExpr java.Expression, prefix java.Space) *
 			ID:      uuid.New(),
 			Entries: []java.Marker{golang.VarKeyword{Ident: uuid.New()}},
 		},
-		TypeExpr: setExprPrefix(typeExpr, java.SingleSpace),
+		TypeExpr: lstutil.SetExprPrefix(typeExpr, java.SingleSpace),
 		Variables: []java.RightPadded[*java.VariableDeclarator]{
 			{
 				Element: &java.VariableDeclarator{
@@ -210,40 +213,13 @@ func buildVarDecl(varName string, typeExpr java.Expression, prefix java.Space) *
 
 // buildErrorsAsIf constructs: if errors.As(errExpr, &varName) { <original body> }
 func buildErrorsAsIf(origIf *java.If, prefix java.Space, errExpr java.Expression, varName string) *java.If {
-	errorsAsCall := &java.MethodInvocation{
-		ID: uuid.New(),
-		Select: &java.RightPadded[java.Expression]{
-			Element: &java.Identifier{
-				ID:     uuid.New(),
-				Prefix: java.SingleSpace,
-				Name:   "errors",
-				Type:   lstutil.NamedType("errors"),
-			},
-		},
-		Name: &java.Identifier{
-			ID:   uuid.New(),
-			Name: "As",
-		},
-		MethodType: lstutil.FuncType("errors", "As", lstutil.BoolType),
-		Arguments: java.Container[java.Expression]{
-			Elements: []java.RightPadded[java.Expression]{
-				{
-					Element: setExprPrefix(errExpr, java.EmptySpace),
-				},
-				{
-					Element: &golang.Unary{
-						ID:       uuid.New(),
-						Prefix:   java.SingleSpace,
-						Operator: java.LeftPadded[golang.UnaryOperator]{Element: golang.AddressOf},
-						Expression: &java.Identifier{
-							ID:   uuid.New(),
-							Name: varName,
-						},
-					},
-				},
-			},
-		},
+	instantiated := errorsAsTmpl.Instantiate(template.NewMatchResult().
+		Bind(errorsAsErr, errExpr).
+		Bind(errorsAsTarget, &java.Identifier{ID: uuid.New(), Name: varName}))
+	if instantiated == nil {
+		return origIf
 	}
+	errorsAsCall := lstutil.SetExprPrefix(instantiated.(java.Expression), java.SingleSpace)
 
 	return &java.If{
 		ID:     uuid.New(),
@@ -257,20 +233,12 @@ func buildErrorsAsIf(origIf *java.If, prefix java.Space, errExpr java.Expression
 	}
 }
 
-// setExprPrefix sets the prefix on an expression node.
-func setExprPrefix(expr java.Expression, prefix java.Space) java.Expression {
-	switch e := expr.(type) {
-	case *java.Identifier:
-		return e.WithPrefix(prefix)
-	case *java.Unary:
-		return e.WithPrefix(prefix)
-	case *golang.Unary:
-		return e.WithPrefix(prefix)
-	case *java.FieldAccess:
-		c := *e
-		c.Target = setExprPrefix(c.Target, prefix).(java.Expression)
-		return &c
-	default:
-		return expr
-	}
-}
+var (
+	errorsAsErr    = template.Expr("err").WithType("error")
+	errorsAsTarget = template.Ident("target")
+	errorsAsTmpl   = template.ExpressionTemplate(
+		fmt.Sprintf("errors.As(%s, &%s)", errorsAsErr, errorsAsTarget)).
+		Captures(errorsAsErr, errorsAsTarget).
+		Imports("errors").
+		Build()
+)

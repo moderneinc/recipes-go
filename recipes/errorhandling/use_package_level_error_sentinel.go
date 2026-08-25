@@ -352,13 +352,23 @@ func (e *sentinelEditor) declarations() []java.RightPadded[java.Statement] {
 	return out
 }
 
-// sentinelDecl builds `var ErrFoo = errors.New("msg")`. Parsing it as a template
-// is what types the call; the message goes in as its own literal source, so a
-// raw string literal stays raw.
+var (
+	sentinelVarCap = template.Ident("name")
+	sentinelMsgCap = template.Expr("msg").WithType("string")
+	sentinelTmpl   = template.TopLevelTemplate(
+		fmt.Sprintf("var %s = errors.New(%s)", sentinelVarCap, sentinelMsgCap)).
+		Captures(sentinelVarCap, sentinelMsgCap).
+		Imports("errors").
+		Build()
+)
+
+// sentinelDecl builds `var ErrFoo = errors.New("msg")`. The template types the
+// call from go/types; the message splices in as its own literal, so a raw string
+// literal stays raw.
 func sentinelDecl(varName string, message *java.Literal) java.Statement {
-	tmpl := template.TopLevelTemplate(fmt.Sprintf("var %s = errors.New(%s)", varName, message.Source)).
-		Imports("errors").Build()
-	decl, ok := tmpl.Apply(nil, nil).(*java.VariableDeclarations)
+	decl, ok := sentinelTmpl.Instantiate(template.NewMatchResult().
+		Bind(sentinelVarCap, &java.Identifier{Name: varName}).
+		Bind(sentinelMsgCap, message)).(*java.VariableDeclarations)
 	if !ok {
 		return nil
 	}

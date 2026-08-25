@@ -9,6 +9,8 @@ package lstutil
 import (
 	"strings"
 
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/format"
+
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -85,4 +87,22 @@ func isNilComparison(expr java.Expression, name string, op java.BinaryOperator) 
 		return false
 	}
 	return leftIdent.Name == name && rightIdent.Name == "nil"
+}
+
+// SetExprPrefix returns expr carrying prefix as its leading whitespace, which
+// for every node kind is its own Prefix. It reaches that field reflectively, so
+// a node kind never silently keeps the whitespace it had.
+func SetExprPrefix(expr java.Expression, prefix java.Space) java.Expression {
+	if out, ok := format.WithPrefix(expr, prefix).(java.Expression); ok {
+		return out
+	}
+	return expr
+}
+
+// SetStmtPrefix is SetExprPrefix for a statement.
+func SetStmtPrefix(stmt java.Statement, prefix java.Space) java.Statement {
+	if out, ok := format.WithPrefix(stmt, prefix).(java.Statement); ok {
+		return out
+	}
+	return stmt
 }
