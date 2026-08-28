@@ -79,6 +79,68 @@ func (v *allBranchesIdenticalVisitor) VisitIf(ifStmt *java.If, p any) java.J {
 	return thenBlock.WithPrefix(ifStmt.Prefix)
 }
 
+// VisitBlock handles the case VisitIf leaves untouched: a two-branch if/else
+// with identical bodies whose condition is a bare call. The call's value is
+// dead but its evaluation is not, so rather than bail we hoist the call to a
+// statement before the body, preserving the side effect.
+func (v *allBranchesIdenticalVisitor) VisitBlock(block *java.Block, p any) java.J {
+	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
+
+	var newStmts []java.RightPadded[java.Statement]
+	changed := false
+
+	for _, rp := range block.Statements {
+		ifStmt, ok := rp.Element.(*java.If)
+		if !ok {
+			newStmts = append(newStmts, rp)
+			continue
+		}
+		thenBlock, call, ok := hoistableIdenticalIf(ifStmt)
+		if !ok {
+			newStmts = append(newStmts, rp)
+			continue
+		}
+		newStmts = append(newStmts,
+			java.RightPadded[java.Statement]{Element: call.WithPrefix(ifStmt.Prefix)},
+			java.RightPadded[java.Statement]{Element: thenBlock.WithPrefix(ifStmt.Prefix), After: rp.After},
+		)
+		changed = true
+	}
+
+	if changed {
+		return block.WithStatements(newStmts)
+	}
+	return block
+}
+
+// hoistableIdenticalIf recognises a simple two-branch if/else (no else-if
+// chain) whose branches are identical and whose condition is a bare call.
+// It returns the shared body block and the call to hoist.
+func hoistableIdenticalIf(ifStmt *java.If) (*java.Block, *java.MethodInvocation, bool) {
+	if ifStmt.ElsePart == nil {
+		return nil, nil, false
+	}
+	thenBlock, ok := ifStmt.ThenPart.Element.(*java.Block)
+	if !ok {
+		return nil, nil, false
+	}
+	elseBlock, ok := ifStmt.ElsePart.Body.Element.(*java.Block)
+	if !ok {
+		return nil, nil, false
+	}
+	if printBlockNormalized(thenBlock) != printBlockNormalized(elseBlock) {
+		return nil, nil, false
+	}
+	if ifStmt.Condition == nil {
+		return nil, nil, false
+	}
+	call, ok := ifStmt.Condition.Tree.Element.(*java.MethodInvocation)
+	if !ok {
+		return nil, nil, false
+	}
+	return thenBlock, call, true
+}
+
 // allBranchBodiesIdentical walks the if/else-if/else chain and returns true
 // only when a final else clause exists and every branch body is identical.
 func allBranchBodiesIdentical(ifStmt *java.If) bool {

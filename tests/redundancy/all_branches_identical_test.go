@@ -64,6 +64,8 @@ func TestAllBranchesIdenticalThreeBranches(t *testing.T) {
 }
 
 func TestAllBranchesIdenticalConditionHasSideEffect(t *testing.T) {
+	// given a bare call condition whose value is dead but whose evaluation
+	// has a side effect, the call is hoisted before the body instead of dropped.
 	spec := test.NewRecipeSpec().WithRecipe(&redundancy.AllBranchesIdentical{})
 	spec.RewriteRun(t,
 		test.Golang(`
@@ -78,6 +80,20 @@ func TestAllBranchesIdenticalConditionHasSideEffect(t *testing.T) {
 				if consume() {
 					println("hello")
 				} else {
+					println("hello")
+				}
+			}
+		`, `
+			package main
+
+			func consume() bool {
+				println("side effect")
+				return true
+			}
+
+			func f() {
+				consume()
+				{
 					println("hello")
 				}
 			}
