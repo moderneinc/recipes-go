@@ -8,6 +8,7 @@ import (
 	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/printer"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
@@ -56,6 +57,15 @@ type allBranchesIdenticalVisitor struct {
 func (v *allBranchesIdenticalVisitor) VisitIf(ifStmt *java.If, p any) java.J {
 	ifStmt = v.GoVisitor.VisitIf(ifStmt, p).(*java.If)
 
+	// An `if init; cond {}` runs its init unconditionally and may declare a
+	// variable the body relies on, so collapsing the chain would drop that
+	// statement and change behavior (or stop compiling).
+	if parent := v.Cursor().Parent(); parent != nil {
+		if _, wrapped := parent.Value().(*golang.StatementWithInit); wrapped {
+			return ifStmt
+		}
+	}
+
 	if !allBranchBodiesIdentical(ifStmt) {
 		return ifStmt
 	}
@@ -69,6 +79,68 @@ func (v *allBranchesIdenticalVisitor) VisitIf(ifStmt *java.If, p any) java.J {
 	return thenBlock.WithPrefix(ifStmt.Prefix)
 }
 
+// VisitBlock handles the case VisitIf leaves untouched: a two-branch if/else
+// with identical bodies whose condition is a bare call. The call's value is
+// dead but its evaluation is not, so rather than bail we hoist the call to a
+// statement before the body, preserving the side effect.
+func (v *allBranchesIdenticalVisitor) VisitBlock(block *java.Block, p any) java.J {
+	block = v.GoVisitor.VisitBlock(block, p).(*java.Block)
+
+	var newStmts []java.RightPadded[java.Statement]
+	changed := false
+
+	for _, rp := range block.Statements {
+		ifStmt, ok := rp.Element.(*java.If)
+		if !ok {
+			newStmts = append(newStmts, rp)
+			continue
+		}
+		thenBlock, call, ok := hoistableIdenticalIf(ifStmt)
+		if !ok {
+			newStmts = append(newStmts, rp)
+			continue
+		}
+		newStmts = append(newStmts,
+			java.RightPadded[java.Statement]{Element: call.WithPrefix(ifStmt.Prefix)},
+			java.RightPadded[java.Statement]{Element: thenBlock.WithPrefix(ifStmt.Prefix), After: rp.After},
+		)
+		changed = true
+	}
+
+	if changed {
+		return block.WithStatements(newStmts)
+	}
+	return block
+}
+
+// hoistableIdenticalIf recognises a simple two-branch if/else (no else-if
+// chain) whose branches are identical and whose condition is a bare call.
+// It returns the shared body block and the call to hoist.
+func hoistableIdenticalIf(ifStmt *java.If) (*java.Block, *java.MethodInvocation, bool) {
+	if ifStmt.ElsePart == nil {
+		return nil, nil, false
+	}
+	thenBlock, ok := ifStmt.ThenPart.Element.(*java.Block)
+	if !ok {
+		return nil, nil, false
+	}
+	elseBlock, ok := ifStmt.ElsePart.Body.Element.(*java.Block)
+	if !ok {
+		return nil, nil, false
+	}
+	if printBlockNormalized(thenBlock) != printBlockNormalized(elseBlock) {
+		return nil, nil, false
+	}
+	if ifStmt.Condition == nil {
+		return nil, nil, false
+	}
+	call, ok := ifStmt.Condition.Tree.Element.(*java.MethodInvocation)
+	if !ok {
+		return nil, nil, false
+	}
+	return thenBlock, call, true
+}
+
 // allBranchBodiesIdentical walks the if/else-if/else chain and returns true
 // only when a final else clause exists and every branch body is identical.
 func allBranchBodiesIdentical(ifStmt *java.If) bool {
@@ -80,6 +152,12 @@ func allBranchBodiesIdentical(ifStmt *java.If) bool {
 	current := ifStmt
 
 	for {
+		// Collapsing the chain stops evaluating this condition, which is only
+		// safe when the condition is pure.
+		if conditionMayHaveSideEffects(current.Condition) {
+			return false
+		}
+
 		if current.ElsePart == nil {
 			// No final else -- not all paths are covered.
 			return false
@@ -102,4 +180,40 @@ func allBranchBodiesIdentical(ifStmt *java.If) bool {
 
 func printBlockNormalized(block *java.Block) string {
 	return printer.Print(block.WithPrefix(java.Space{}))
+}
+
+// conditionMayHaveSideEffects reports whether evaluating a condition might
+// mutate state, perform I/O, or communicate on a channel. In Go an expression
+// can only do any of those through a function or method call (every call, incl.
+// generic instantiations and calls through function values, is a
+// MethodInvocation) or a channel receive, so flagging those two is complete for
+// that class -- conversions (TypeCast) and composite literals are pure and are
+// correctly left alone. Panic ordering (a nil deref, out-of-range index, failed
+// type assertion or integer division by zero in the condition) is not treated
+// as a side effect here, matching the upstream rewrite-static-analysis recipe.
+func conditionMayHaveSideEffects(cond *java.ControlParentheses) bool {
+	if cond == nil {
+		return false
+	}
+	scan := &sideEffectScanner{}
+	scan.Self = scan
+	scan.Visit(cond.Tree.Element, nil)
+	return scan.found
+}
+
+type sideEffectScanner struct {
+	visitor.GoVisitor
+	found bool
+}
+
+func (s *sideEffectScanner) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	s.found = true
+	return mi
+}
+
+func (s *sideEffectScanner) VisitGoUnary(unary *golang.Unary, p any) java.J {
+	if unary.Operator.Element == golang.Receive {
+		s.found = true
+	}
+	return s.GoVisitor.VisitGoUnary(unary, p)
 }

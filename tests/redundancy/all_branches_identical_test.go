@@ -63,6 +63,106 @@ func TestAllBranchesIdenticalThreeBranches(t *testing.T) {
 	)
 }
 
+func TestAllBranchesIdenticalConditionHasSideEffect(t *testing.T) {
+	// given a bare call condition whose value is dead but whose evaluation
+	// has a side effect, the call is hoisted before the body instead of dropped.
+	spec := test.NewRecipeSpec().WithRecipe(&redundancy.AllBranchesIdentical{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			func consume() bool {
+				println("side effect")
+				return true
+			}
+
+			func f() {
+				if consume() {
+					println("hello")
+				} else {
+					println("hello")
+				}
+			}
+		`, `
+			package main
+
+			func consume() bool {
+				println("side effect")
+				return true
+			}
+
+			func f() {
+				consume()
+				{
+					println("hello")
+				}
+			}
+		`),
+	)
+}
+
+func TestAllBranchesIdenticalElseIfConditionHasSideEffect(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&redundancy.AllBranchesIdentical{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			func consume() bool {
+				println("side effect")
+				return true
+			}
+
+			func f(a bool) {
+				if a {
+					println("hello")
+				} else if consume() {
+					println("hello")
+				} else {
+					println("hello")
+				}
+			}
+		`),
+	)
+}
+
+func TestAllBranchesIdenticalConditionReceivesFromChannel(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&redundancy.AllBranchesIdentical{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			func f(ch chan bool) {
+				if <-ch {
+					println("hello")
+				} else {
+					println("hello")
+				}
+			}
+		`),
+	)
+}
+
+func TestAllBranchesIdenticalInitStatement(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&redundancy.AllBranchesIdentical{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			func lookup() (int, bool) {
+				return 1, true
+			}
+
+			func f() {
+				if v, ok := lookup(); ok {
+					println(v)
+				} else {
+					println(v)
+				}
+			}
+		`),
+	)
+}
+
 func TestAllBranchesIdenticalNoElse(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&redundancy.AllBranchesIdentical{})
 	spec.RewriteRun(t,
