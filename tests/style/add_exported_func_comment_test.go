@@ -90,3 +90,40 @@ func TestExportedFuncWithDocComment(t *testing.T) {
 		`),
 	)
 }
+
+func TestExportedFuncWithMultiLineDocComment(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.AddExportedFuncComment{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			// Hello does something.
+			//
+			// It has more to say about it.
+			func Hello() {
+			}
+		`),
+	)
+}
+
+func TestCommentDetachedByBlankLineIsNotADocComment(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&style.AddExportedFuncComment{})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package main
+
+			// Hello used to be declared here.
+
+			func Hello() {
+			}
+		`, `
+			package main
+
+			// Hello used to be declared here.
+
+			// Hello ...
+			func Hello() {
+			}
+		`),
+	)
+}
