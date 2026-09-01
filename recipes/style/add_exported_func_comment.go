@@ -96,14 +96,8 @@ func addDocComment(name string, prefix java.Space) (java.Space, bool) {
 		return prefix, false
 	}
 
-	// A proper doc comment is the last comment before the `func` keyword and
-	// starts with "// Name".
-	comments := prefix.Comments
-	if len(comments) > 0 {
-		lastComment := comments[len(comments)-1]
-		if strings.HasPrefix(lastComment.Text, "// "+name) {
-			return prefix, false
-		}
+	if doc, ok := docBlock(prefix.Comments); ok && strings.HasPrefix(doc.Text, "// "+name) {
+		return prefix, false
 	}
 
 	// Add a stub doc comment: // Name ...
@@ -118,4 +112,23 @@ func addDocComment(name string, prefix java.Space) (java.Space, bool) {
 		Whitespace: prefix.Whitespace,
 		Comments:   append(prefix.Comments, comment),
 	}, true
+}
+
+// docBlock returns the first comment of the run directly above the declaration
+// with no blank line inside it or before the declaration. Go attaches
+// documentation only to such a run, so a comment above a blank line documents
+// nothing.
+func docBlock(comments []java.Comment) (java.Comment, bool) {
+	if len(comments) == 0 || separatedByBlankLine(comments[len(comments)-1].Suffix) {
+		return java.Comment{}, false
+	}
+	first := len(comments) - 1
+	for first > 0 && !separatedByBlankLine(comments[first-1].Suffix) {
+		first--
+	}
+	return comments[first], true
+}
+
+func separatedByBlankLine(suffix string) bool {
+	return strings.Count(suffix, "\n") > 1
 }
