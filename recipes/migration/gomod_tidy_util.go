@@ -183,7 +183,7 @@ func directlyImportedModules(gm *golang.GoMod, imports map[string]struct{}) map[
 	return direct
 }
 
-const indirectComment = "// indirect"
+const indirectComment = "indirect"
 
 // hasIndirectComment reports whether after carries a trailing `// indirect`
 // comment.
@@ -229,6 +229,6 @@ func withIndirectComment(after java.Space) java.Space {
 		ws = ws[:i]
 	}
 	ws += " "
-	comment := java.Comment{Kind: java.LineComment, Text: indirectComment, Suffix: suffix}
+	comment := java.Comment{Text: " " + indirectComment, Suffix: suffix}
 	return java.Space{Whitespace: ws, Comments: append(append([]java.Comment{}, after.Comments...), comment)}
 }

@@ -5,6 +5,8 @@
 package simplification
 
 import (
+	"github.com/google/uuid"
+
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -37,20 +39,24 @@ type simplifySwitchTrueVisitor struct {
 func (v *simplifySwitchTrueVisitor) VisitSwitch(sw *java.Switch, p any) java.J {
 	sw = v.GoVisitor.VisitSwitch(sw, p).(*java.Switch)
 
-	// Must have a tag expression
-	if sw.Tag == nil {
+	if sw.Selector == nil {
 		return sw
 	}
 
-	// Tag must be the identifier `true`
-	ident, ok := sw.Tag.Element.(*java.Identifier)
+	// The tag must be the identifier `true`.
+	ident, ok := sw.Selector.Tree.Element.(*java.Identifier)
 	if !ok || ident.Name != "true" {
 		return sw
 	}
 
-	// Remove the `true` tag. The space after the tag (before `{`) is in Tag.After,
-	// which becomes unnecessary. The body block already has its own prefix.
+	// Replace the selector with the empty one the parser emits for a tagless
+	// `switch {}`: an Empty inner element and no leading space (the space before
+	// `{` lives on the body's prefix).
 	c := *sw
-	c.Tag = nil
+	c.Selector = &java.ControlParentheses{
+		ID:      uuid.New(),
+		Markers: java.Markers{ID: uuid.New()},
+		Tree:    java.RightPadded[java.Expression]{Element: &java.Empty{ID: uuid.New(), Markers: java.Markers{ID: uuid.New()}}},
+	}
 	return &c
 }

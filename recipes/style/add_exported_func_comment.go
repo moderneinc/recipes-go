@@ -96,7 +96,7 @@ func addDocComment(name string, prefix java.Space) (java.Space, bool) {
 		return prefix, false
 	}
 
-	if doc, ok := docBlock(prefix.Comments); ok && strings.HasPrefix(doc.Text, "// "+name) {
+	if doc, ok := docBlock(prefix.Comments); ok && strings.HasPrefix(doc.Text, " "+name) {
 		return prefix, false
 	}
 
@@ -105,9 +105,9 @@ func addDocComment(name string, prefix java.Space) (java.Space, bool) {
 	// After the last comment's suffix, the node keyword (`func`) follows.
 	// We need the comment on its own line, indented the same as the func keyword.
 	// The comment suffix is "\n" + indent so the func keyword starts at the correct column.
-	commentText := "// " + name + " ..."
+	commentText := " " + name + " ..."
 	indent := prefix.Indent()
-	comment := java.Comment{Kind: java.LineComment, Text: commentText, Suffix: "\n" + indent}
+	comment := java.Comment{Text: commentText, Suffix: "\n" + indent}
 	return java.Space{
 		Whitespace: prefix.Whitespace,
 		Comments:   append(prefix.Comments, comment),
