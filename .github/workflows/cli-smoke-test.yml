@@ -51,8 +51,9 @@ jobs:
       - name: Install Moderne CLI (latest release)
         shell: bash
         run: |
-          CLI_VERSION=$(curl -s https://repo1.maven.org/maven2/io/moderne/moderne-cli/maven-metadata.xml | grep '<release>' | sed 's/.*<release>\(.*\)<\/release>.*/\1/')
-          curl -sSL -o mod.jar "https://repo1.maven.org/maven2/io/moderne/moderne-cli/${CLI_VERSION}/moderne-cli-${CLI_VERSION}.jar"
+          CLI_REPO=https://artifacts.codegenomeproject.org/maven/io/moderne/moderne-cli
+          CLI_VERSION=$(curl -sSL "$CLI_REPO/maven-metadata.xml" | grep '<release>' | sed 's/.*<release>\(.*\)<\/release>.*/\1/')
+          curl -sSL -o mod.jar "$CLI_REPO/${CLI_VERSION}/moderne-cli-${CLI_VERSION}.jar"
           printf '#!/usr/bin/env bash\njava -jar "%s/mod.jar" "$@"\n' "$GITHUB_WORKSPACE" > mod
           chmod +x mod
           echo "$GITHUB_WORKSPACE" >> "$GITHUB_PATH"
