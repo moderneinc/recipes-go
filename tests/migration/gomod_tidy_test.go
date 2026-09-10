@@ -65,3 +65,42 @@ func TestGoModTidyComposite(t *testing.T) {
 		),
 	)
 }
+
+func TestGoModTidyNoEditWhenResolutionIncomplete(t *testing.T) {
+	// given resolution ran (the build list is present) but the package->module map
+	// was withheld because a module could not be fetched, so PackageModules is empty;
+	// go-shared-libraries is imported (used) and unused/mod is an unreachable removal
+	// candidate that a complete map would drop.
+	spec := test.NewRecipeSpec().WithRecipe(&migration.GoModTidy{})
+	resolved := []golang.GoResolvedDependency{
+		{ModulePath: "example.com/app", Main: true},
+		{ModulePath: "github.com/cof-primary/go-shared-libraries", Version: "v1.2.3"},
+		{ModulePath: "github.com/unused/mod", Version: "v1.0.0", Indirect: true},
+	}
+
+	// when / then no edits at all: with no trustworthy map, nothing is removed, added, or re-marked.
+	spec.RewriteRun(t,
+		test.GoProject("app",
+			test.GoModGraph(
+				test.GoMod(`
+					module example.com/app
+
+					go 1.22
+
+					require (
+						github.com/cof-primary/go-shared-libraries v1.2.3
+						github.com/unused/mod v1.0.0 // indirect
+					)
+				`),
+				resolved, nil,
+			),
+			test.Golang(`
+				package main
+
+				import "github.com/cof-primary/go-shared-libraries/gotel"
+
+				func main() { _ = gotel.Name }
+			`),
+		),
+	)
+}
