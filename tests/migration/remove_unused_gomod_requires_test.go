@@ -34,7 +34,7 @@ func TestRemoveUnusedGoModRequiresDropsUnreachable(t *testing.T) {
 
 	// when / then c/c is removed; b/b is kept because a/a (imported) requires it
 	spec.RewriteRun(t,
-		test.GoModGraph(
+		resolvedGraph(
 			test.GoMod(`
 				module example.com/app
 
@@ -67,7 +67,7 @@ func TestRemoveUnusedGoModRequiresFixesFirstEntryDrop(t *testing.T) {
 
 	// when / then it is removed and the new first entry keeps its own line
 	spec.RewriteRun(t,
-		test.GoModGraph(
+		resolvedGraph(
 			test.GoMod(`
 				module example.com/app
 
@@ -104,7 +104,7 @@ func TestRemoveUnusedGoModRequiresDropsWholeBlock(t *testing.T) {
 
 	// when / then the empty block is removed entirely
 	spec.RewriteRun(t,
-		test.GoModGraph(
+		resolvedGraph(
 			test.GoMod(`
 				module example.com/app
 
@@ -137,7 +137,7 @@ func TestRemoveUnusedGoModRequiresSingleLine(t *testing.T) {
 
 	// when / then only the unused single-line require is dropped
 	spec.RewriteRun(t,
-		test.GoModGraph(
+		resolvedGraph(
 			test.GoMod(`
 				module example.com/app
 
@@ -174,7 +174,7 @@ func TestRemoveUnusedGoModRequiresKeepsTestOnlyDependency(t *testing.T) {
 
 	// when / then the test-only dependency is kept; only the dead module is dropped
 	spec.RewriteRun(t,
-		test.GoModGraph(
+		resolvedGraph(
 			test.GoMod(`
 				module example.com/app
 
