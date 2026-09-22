@@ -1,0 +1,3158 @@
+C S3
+S AbortMultipartUploadInput
+S AbortMultipartUploadOutput
+S AuthResolverParameters
+S AuthSchemeResolver
+S BucketExistsWaiter
+S BucketExistsWaiterOptions
+S BucketNotExistsWaiter
+S BucketNotExistsWaiterOptions
+S ChecksumValidationMetadata
+S Client
+S CompleteMultipartUploadInput
+S CompleteMultipartUploadOutput
+S ComputedInputChecksumsMetadata
+S CopyObjectInput
+S CopyObjectOutput
+S CreateBucketInput
+S CreateBucketMetadataConfigurationInput
+S CreateBucketMetadataConfigurationOutput
+S CreateBucketMetadataTableConfigurationInput
+S CreateBucketMetadataTableConfigurationOutput
+S CreateBucketOutput
+S CreateMultipartUploadInput
+S CreateMultipartUploadOutput
+S CreateSessionInput
+S CreateSessionOutput
+S DeleteBucketAnalyticsConfigurationInput
+S DeleteBucketAnalyticsConfigurationOutput
+S DeleteBucketCorsInput
+S DeleteBucketCorsOutput
+S DeleteBucketEncryptionInput
+S DeleteBucketEncryptionOutput
+S DeleteBucketInput
+S DeleteBucketIntelligentTieringConfigurationInput
+S DeleteBucketIntelligentTieringConfigurationOutput
+S DeleteBucketInventoryConfigurationInput
+S DeleteBucketInventoryConfigurationOutput
+S DeleteBucketLifecycleInput
+S DeleteBucketLifecycleOutput
+S DeleteBucketMetadataConfigurationInput
+S DeleteBucketMetadataConfigurationOutput
+S DeleteBucketMetadataTableConfigurationInput
+S DeleteBucketMetadataTableConfigurationOutput
+S DeleteBucketMetricsConfigurationInput
+S DeleteBucketMetricsConfigurationOutput
+S DeleteBucketOutput
+S DeleteBucketOwnershipControlsInput
+S DeleteBucketOwnershipControlsOutput
+S DeleteBucketPolicyInput
+S DeleteBucketPolicyOutput
+S DeleteBucketReplicationInput
+S DeleteBucketReplicationOutput
+S DeleteBucketTaggingInput
+S DeleteBucketTaggingOutput
+S DeleteBucketWebsiteInput
+S DeleteBucketWebsiteOutput
+S DeleteObjectAnnotationInput
+S DeleteObjectAnnotationOutput
+S DeleteObjectInput
+S DeleteObjectOutput
+S DeleteObjectTaggingInput
+S DeleteObjectTaggingOutput
+S DeleteObjectsInput
+S DeleteObjectsOutput
+S DeletePublicAccessBlockInput
+S DeletePublicAccessBlockOutput
+S EndpointParameters
+S EndpointResolver
+S EndpointResolverFromURL
+S EndpointResolverFunc
+S EndpointResolverOptions
+S EndpointResolverV2
+S ExpressCredentialsProvider
+S GetBucketAbacInput
+S GetBucketAbacOutput
+S GetBucketAccelerateConfigurationInput
+S GetBucketAccelerateConfigurationOutput
+S GetBucketAclInput
+S GetBucketAclOutput
+S GetBucketAnalyticsConfigurationInput
+S GetBucketAnalyticsConfigurationOutput
+S GetBucketCorsInput
+S GetBucketCorsOutput
+S GetBucketEncryptionInput
+S GetBucketEncryptionOutput
+S GetBucketIntelligentTieringConfigurationInput
+S GetBucketIntelligentTieringConfigurationOutput
+S GetBucketInventoryConfigurationInput
+S GetBucketInventoryConfigurationOutput
+S GetBucketLifecycleConfigurationInput
+S GetBucketLifecycleConfigurationOutput
+S GetBucketLocationInput
+S GetBucketLocationOutput
+S GetBucketLoggingInput
+S GetBucketLoggingOutput
+S GetBucketMetadataConfigurationInput
+S GetBucketMetadataConfigurationOutput
+S GetBucketMetadataTableConfigurationInput
+S GetBucketMetadataTableConfigurationOutput
+S GetBucketMetricsConfigurationInput
+S GetBucketMetricsConfigurationOutput
+S GetBucketNotificationConfigurationInput
+S GetBucketNotificationConfigurationOutput
+S GetBucketOwnershipControlsInput
+S GetBucketOwnershipControlsOutput
+S GetBucketPolicyInput
+S GetBucketPolicyOutput
+S GetBucketPolicyStatusInput
+S GetBucketPolicyStatusOutput
+S GetBucketReplicationInput
+S GetBucketReplicationOutput
+S GetBucketRequestPaymentInput
+S GetBucketRequestPaymentOutput
+S GetBucketTaggingInput
+S GetBucketTaggingOutput
+S GetBucketVersioningInput
+S GetBucketVersioningOutput
+S GetBucketWebsiteInput
+S GetBucketWebsiteOutput
+S GetChecksumValidationMetadata
+S GetComputedInputChecksumsMetadata
+S GetHostIDMetadata
+S GetObjectAclInput
+S GetObjectAclOutput
+S GetObjectAnnotationInput
+S GetObjectAnnotationOutput
+S GetObjectAttributesInput
+S GetObjectAttributesOutput
+S GetObjectInput
+S GetObjectLegalHoldInput
+S GetObjectLegalHoldOutput
+S GetObjectLockConfigurationInput
+S GetObjectLockConfigurationOutput
+S GetObjectOutput
+S GetObjectRetentionInput
+S GetObjectRetentionOutput
+S GetObjectTaggingInput
+S GetObjectTaggingOutput
+S GetObjectTorrentInput
+S GetObjectTorrentOutput
+S GetPublicAccessBlockInput
+S GetPublicAccessBlockOutput
+S HTTPClient
+S HTTPPresignerV4
+S HTTPSignerV4
+S HeadBucketAPIClient
+S HeadBucketInput
+S HeadBucketOutput
+S HeadObjectAPIClient
+S HeadObjectInput
+S HeadObjectOutput
+S IdempotencyTokenProvider
+S ListBucketAnalyticsConfigurationsInput
+S ListBucketAnalyticsConfigurationsOutput
+S ListBucketIntelligentTieringConfigurationsInput
+S ListBucketIntelligentTieringConfigurationsOutput
+S ListBucketInventoryConfigurationsInput
+S ListBucketInventoryConfigurationsOutput
+S ListBucketMetricsConfigurationsInput
+S ListBucketMetricsConfigurationsOutput
+S ListBucketsAPIClient
+S ListBucketsInput
+S ListBucketsOutput
+S ListBucketsPaginator
+S ListBucketsPaginatorOptions
+S ListDirectoryBucketsAPIClient
+S ListDirectoryBucketsInput
+S ListDirectoryBucketsOutput
+S ListDirectoryBucketsPaginator
+S ListDirectoryBucketsPaginatorOptions
+S ListMultipartUploadsAPIClient
+S ListMultipartUploadsInput
+S ListMultipartUploadsOutput
+S ListMultipartUploadsPaginator
+S ListMultipartUploadsPaginatorOptions
+S ListObjectAnnotationsAPIClient
+S ListObjectAnnotationsInput
+S ListObjectAnnotationsOutput
+S ListObjectAnnotationsPaginator
+S ListObjectAnnotationsPaginatorOptions
+S ListObjectVersionsAPIClient
+S ListObjectVersionsInput
+S ListObjectVersionsOutput
+S ListObjectVersionsPaginator
+S ListObjectVersionsPaginatorOptions
+S ListObjectsInput
+S ListObjectsOutput
+S ListObjectsV2APIClient
+S ListObjectsV2Input
+S ListObjectsV2Output
+S ListObjectsV2Paginator
+S ListObjectsV2PaginatorOptions
+S ListPartsAPIClient
+S ListPartsInput
+S ListPartsOutput
+S ListPartsPaginator
+S ListPartsPaginatorOptions
+S New
+S NewBucketExistsWaiter
+S NewBucketNotExistsWaiter
+S NewDefaultEndpointResolver
+S NewDefaultEndpointResolverV2
+S NewFromConfig
+S NewListBucketsPaginator
+S NewListDirectoryBucketsPaginator
+S NewListMultipartUploadsPaginator
+S NewListObjectAnnotationsPaginator
+S NewListObjectVersionsPaginator
+S NewListObjectsV2Paginator
+S NewListPartsPaginator
+S NewObjectExistsWaiter
+S NewObjectNotExistsWaiter
+S NewPresignClient
+S NewSelectObjectContentEventStream
+S ObjectExistsWaiter
+S ObjectExistsWaiterOptions
+S ObjectNotExistsWaiter
+S ObjectNotExistsWaiterOptions
+S Options
+S PresignClient
+S PresignOptions
+S PresignPost
+S PresignPostOptions
+S PresignedPostRequest
+S PutBucketAbacInput
+S PutBucketAbacOutput
+S PutBucketAccelerateConfigurationInput
+S PutBucketAccelerateConfigurationOutput
+S PutBucketAclInput
+S PutBucketAclOutput
+S PutBucketAnalyticsConfigurationInput
+S PutBucketAnalyticsConfigurationOutput
+S PutBucketCorsInput
+S PutBucketCorsOutput
+S PutBucketEncryptionInput
+S PutBucketEncryptionOutput
+S PutBucketIntelligentTieringConfigurationInput
+S PutBucketIntelligentTieringConfigurationOutput
+S PutBucketInventoryConfigurationInput
+S PutBucketInventoryConfigurationOutput
+S PutBucketLifecycleConfigurationInput
+S PutBucketLifecycleConfigurationOutput
+S PutBucketLoggingInput
+S PutBucketLoggingOutput
+S PutBucketMetricsConfigurationInput
+S PutBucketMetricsConfigurationOutput
+S PutBucketNotificationConfigurationInput
+S PutBucketNotificationConfigurationOutput
+S PutBucketOwnershipControlsInput
+S PutBucketOwnershipControlsOutput
+S PutBucketPolicyInput
+S PutBucketPolicyOutput
+S PutBucketReplicationInput
+S PutBucketReplicationOutput
+S PutBucketRequestPaymentInput
+S PutBucketRequestPaymentOutput
+S PutBucketTaggingInput
+S PutBucketTaggingOutput
+S PutBucketVersioningInput
+S PutBucketVersioningOutput
+S PutBucketWebsiteInput
+S PutBucketWebsiteOutput
+S PutObjectAclInput
+S PutObjectAclOutput
+S PutObjectAnnotationInput
+S PutObjectAnnotationOutput
+S PutObjectInput
+S PutObjectLegalHoldInput
+S PutObjectLegalHoldOutput
+S PutObjectLockConfigurationInput
+S PutObjectLockConfigurationOutput
+S PutObjectOutput
+S PutObjectRetentionInput
+S PutObjectRetentionOutput
+S PutObjectTaggingInput
+S PutObjectTaggingOutput
+S PutPublicAccessBlockInput
+S PutPublicAccessBlockOutput
+S RenameObjectInput
+S RenameObjectOutput
+S ResolveEndpoint
+S ResponseError
+S RestoreObjectInput
+S RestoreObjectOutput
+S SelectObjectContentEventStream
+S SelectObjectContentEventStreamReader
+S SelectObjectContentInput
+S SelectObjectContentOutput
+S ServiceAPIVersion
+S ServiceID
+S UnknownEventMessageError
+S UpdateBucketMetadataAnnotationTableConfigurationInput
+S UpdateBucketMetadataAnnotationTableConfigurationOutput
+S UpdateBucketMetadataInventoryTableConfigurationInput
+S UpdateBucketMetadataInventoryTableConfigurationOutput
+S UpdateBucketMetadataJournalTableConfigurationInput
+S UpdateBucketMetadataJournalTableConfigurationOutput
+S UpdateObjectEncryptionInput
+S UpdateObjectEncryptionOutput
+S UploadPartCopyInput
+S UploadPartCopyOutput
+S UploadPartInput
+S UploadPartOutput
+S WithAPIOptions
+S WithEndpointResolver
+S WithEndpointResolverV2
+S WithPresignClientFromClientOptions
+S WithPresignExpires
+S WithSigV4ASigningRegions
+S WithSigV4SigningName
+S WithSigV4SigningRegion
+S WriteGetObjectResponseInput
+S WriteGetObjectResponseOutput
+O AbortMultipartUpload
+O CompleteMultipartUpload
+O CopyObject
+O CreateBucket
+O CreateBucketMetadataConfiguration
+O CreateBucketMetadataTableConfiguration
+O CreateMultipartUpload
+O CreateSession
+O DeleteBucket
+O DeleteBucketAnalyticsConfiguration
+O DeleteBucketCors
+O DeleteBucketEncryption
+O DeleteBucketIntelligentTieringConfiguration
+O DeleteBucketInventoryConfiguration
+O DeleteBucketLifecycle
+O DeleteBucketMetadataConfiguration
+O DeleteBucketMetadataTableConfiguration
+O DeleteBucketMetricsConfiguration
+O DeleteBucketOwnershipControls
+O DeleteBucketPolicy
+O DeleteBucketReplication
+O DeleteBucketTagging
+O DeleteBucketWebsite
+O DeleteObject
+O DeleteObjectAnnotation
+O DeleteObjectTagging
+O DeleteObjects
+O DeletePublicAccessBlock
+O GetBucketAbac
+O GetBucketAccelerateConfiguration
+O GetBucketAcl
+O GetBucketAnalyticsConfiguration
+O GetBucketCors
+O GetBucketEncryption
+O GetBucketIntelligentTieringConfiguration
+O GetBucketInventoryConfiguration
+O GetBucketLifecycleConfiguration
+O GetBucketLocation
+O GetBucketLogging
+O GetBucketMetadataConfiguration
+O GetBucketMetadataTableConfiguration
+O GetBucketMetricsConfiguration
+O GetBucketNotificationConfiguration
+O GetBucketOwnershipControls
+O GetBucketPolicy
+O GetBucketPolicyStatus
+O GetBucketReplication
+O GetBucketRequestPayment
+O GetBucketTagging
+O GetBucketVersioning
+O GetBucketWebsite
+O GetObject
+O GetObjectAcl
+O GetObjectAnnotation
+O GetObjectAttributes
+O GetObjectLegalHold
+O GetObjectLockConfiguration
+O GetObjectRetention
+O GetObjectTagging
+O GetObjectTorrent
+O GetPublicAccessBlock
+O HeadBucket
+O HeadObject
+O ListBucketAnalyticsConfigurations
+O ListBucketIntelligentTieringConfigurations
+O ListBucketInventoryConfigurations
+O ListBucketMetricsConfigurations
+O ListBuckets
+O ListDirectoryBuckets
+O ListMultipartUploads
+O ListObjectAnnotations
+O ListObjectVersions
+O ListObjects
+O ListObjectsV2
+O ListParts
+O PutBucketAbac
+O PutBucketAccelerateConfiguration
+O PutBucketAcl
+O PutBucketAnalyticsConfiguration
+O PutBucketCors
+O PutBucketEncryption
+O PutBucketIntelligentTieringConfiguration
+O PutBucketInventoryConfiguration
+O PutBucketLifecycleConfiguration
+O PutBucketLogging
+O PutBucketMetricsConfiguration
+O PutBucketNotificationConfiguration
+O PutBucketOwnershipControls
+O PutBucketPolicy
+O PutBucketReplication
+O PutBucketRequestPayment
+O PutBucketTagging
+O PutBucketVersioning
+O PutBucketWebsite
+O PutObject
+O PutObjectAcl
+O PutObjectAnnotation
+O PutObjectLegalHold
+O PutObjectLockConfiguration
+O PutObjectRetention
+O PutObjectTagging
+O PutPublicAccessBlock
+O RenameObject
+O RestoreObject
+O SelectObjectContent
+O UpdateBucketMetadataAnnotationTableConfiguration
+O UpdateBucketMetadataInventoryTableConfiguration
+O UpdateBucketMetadataJournalTableConfiguration
+O UpdateObjectEncryption
+O UploadPart
+O UploadPartCopy
+O WriteGetObjectResponse
+X ErrCodeBucketAlreadyExists BucketAlreadyExists
+X ErrCodeBucketAlreadyOwnedByYou BucketAlreadyOwnedByYou
+X ErrCodeInvalidObjectState InvalidObjectState
+X ErrCodeNoSuchBucket NoSuchBucket
+X ErrCodeNoSuchKey NoSuchKey
+X ErrCodeNoSuchUpload NoSuchUpload
+X ErrCodeObjectAlreadyInActiveTierError ObjectAlreadyInActiveTierError
+X ErrCodeObjectNotInActiveTierError ObjectNotInActiveTierError
+I AbortIncompleteMultipartUpload.DaysAfterInitiation int64 int32
+I CORSRule.MaxAgeSeconds int64 int32
+I CompletedPart.PartNumber int64 int32
+I DefaultRetention.Days int64 int32
+I DefaultRetention.Years int64 int32
+I GetObjectAttributesInput.MaxParts int64 int32
+I GetObjectAttributesInput.PartNumberMarker int64 string
+I GetObjectAttributesParts.MaxParts int64 int32
+I GetObjectAttributesParts.NextPartNumberMarker int64 string
+I GetObjectAttributesParts.PartNumberMarker int64 string
+I GetObjectAttributesParts.TotalPartsCount int64 int32
+I GetObjectInput.PartNumber int64 int32
+I GetObjectOutput.MissingMeta int64 int32
+I GetObjectOutput.PartsCount int64 int32
+I GetObjectOutput.TagCount int64 int32
+I HeadObjectInput.PartNumber int64 int32
+I HeadObjectOutput.MissingMeta int64 int32
+I HeadObjectOutput.PartsCount int64 int32
+I LifecycleExpiration.Days int64 int32
+I ListDirectoryBucketsInput.MaxDirectoryBuckets int64 int32
+I ListMultipartUploadsInput.MaxUploads int64 int32
+I ListMultipartUploadsOutput.MaxUploads int64 int32
+I ListObjectVersionsInput.MaxKeys int64 int32
+I ListObjectVersionsOutput.MaxKeys int64 int32
+I ListObjectsInput.MaxKeys int64 int32
+I ListObjectsOutput.MaxKeys int64 int32
+I ListObjectsV2Input.MaxKeys int64 int32
+I ListObjectsV2Output.KeyCount int64 int32
+I ListObjectsV2Output.MaxKeys int64 int32
+I ListPartsInput.MaxParts int64 int32
+I ListPartsInput.PartNumberMarker int64 string
+I ListPartsOutput.MaxParts int64 int32
+I ListPartsOutput.NextPartNumberMarker int64 string
+I ListPartsOutput.PartNumberMarker int64 string
+I NoncurrentVersionExpiration.NewerNoncurrentVersions int64 int32
+I NoncurrentVersionExpiration.NoncurrentDays int64 int32
+I NoncurrentVersionTransition.NewerNoncurrentVersions int64 int32
+I NoncurrentVersionTransition.NoncurrentDays int64 int32
+I ObjectPart.PartNumber int64 int32
+I Part.PartNumber int64 int32
+I ReplicationRule.Priority int64 int32
+I ReplicationTimeValue.Minutes int64 int32
+I RestoreRequest.Days int64 int32
+I Tiering.Days int64 int32
+I Transition.Days int64 int32
+I UploadPartCopyInput.PartNumber int64 int32
+I UploadPartInput.PartNumber int64 int32
+I WriteGetObjectResponseInput.MissingMeta int64 int32
+I WriteGetObjectResponseInput.PartsCount int64 int32
+I WriteGetObjectResponseInput.StatusCode int64 int32
+I WriteGetObjectResponseInput.TagCount int64 int32
+R AccessControlPolicy.Owner Owner
+R AnalyticsConfiguration.StorageClassAnalysis StorageClassAnalysis
+R AnalyticsExportDestination.S3BucketDestination AnalyticsS3BucketDestination
+R AnnotationTableConfiguration.EncryptionConfiguration MetadataTableEncryptionConfiguration
+R AnnotationTableConfigurationResult.Error ErrorDetails
+R AnnotationTableConfigurationUpdates.EncryptionConfiguration MetadataTableEncryptionConfiguration
+R BucketLoggingStatus.LoggingEnabled LoggingEnabled
+R CompleteMultipartUploadInput.MultipartUpload CompletedMultipartUpload
+R CopyObjectOutput.CopyObjectResult CopyObjectResult
+R CreateBucketConfiguration.Bucket BucketInfo
+R CreateBucketConfiguration.Location LocationInfo
+R CreateBucketInput.CreateBucketConfiguration CreateBucketConfiguration
+R CreateBucketMetadataConfigurationInput.MetadataConfiguration MetadataConfiguration
+R CreateBucketMetadataTableConfigurationInput.MetadataTableConfiguration MetadataTableConfiguration
+R CreateSessionOutput.Credentials SessionCredentials
+R DefaultRetention.DefaultEventHold EventHoldDuration
+R DeleteMarkerEntry.Owner Owner
+R DeleteObjectsInput.Delete Delete
+R Destination.AccessControlTranslation AccessControlTranslation
+R Destination.EncryptionConfiguration EncryptionConfiguration
+R Destination.Metrics Metrics
+R Destination.ReplicationTime ReplicationTime
+R GetBucketAbacOutput.AbacStatus AbacStatus
+R GetBucketAclOutput.Owner Owner
+R GetBucketAnalyticsConfigurationOutput.AnalyticsConfiguration AnalyticsConfiguration
+R GetBucketEncryptionOutput.ServerSideEncryptionConfiguration ServerSideEncryptionConfiguration
+R GetBucketIntelligentTieringConfigurationOutput.IntelligentTieringConfiguration IntelligentTieringConfiguration
+R GetBucketInventoryConfigurationOutput.InventoryConfiguration InventoryConfiguration
+R GetBucketLoggingOutput.LoggingEnabled LoggingEnabled
+R GetBucketMetadataConfigurationOutput.GetBucketMetadataConfigurationResult GetBucketMetadataConfigurationResult
+R GetBucketMetadataConfigurationResult.MetadataConfigurationResult MetadataConfigurationResult
+R GetBucketMetadataTableConfigurationOutput.GetBucketMetadataTableConfigurationResult GetBucketMetadataTableConfigurationResult
+R GetBucketMetadataTableConfigurationResult.Error ErrorDetails
+R GetBucketMetadataTableConfigurationResult.MetadataTableConfigurationResult MetadataTableConfigurationResult
+R GetBucketMetricsConfigurationOutput.MetricsConfiguration MetricsConfiguration
+R GetBucketNotificationConfigurationOutput.EventBridgeConfiguration EventBridgeConfiguration
+R GetBucketOwnershipControlsOutput.OwnershipControls OwnershipControls
+R GetBucketPolicyStatusOutput.PolicyStatus PolicyStatus
+R GetBucketReplicationOutput.ReplicationConfiguration ReplicationConfiguration
+R GetBucketWebsiteOutput.ErrorDocument ErrorDocument
+R GetBucketWebsiteOutput.IndexDocument IndexDocument
+R GetBucketWebsiteOutput.RedirectAllRequestsTo RedirectAllRequestsTo
+R GetObjectAclOutput.Owner Owner
+R GetObjectAttributesOutput.Checksum Checksum
+R GetObjectAttributesOutput.ObjectParts GetObjectAttributesParts
+R GetObjectLegalHoldOutput.LegalHold ObjectLockLegalHold
+R GetObjectLockConfigurationOutput.ObjectLockConfiguration ObjectLockConfiguration
+R GetObjectRetentionOutput.Retention ObjectLockRetention
+R GetPublicAccessBlockOutput.PublicAccessBlockConfiguration PublicAccessBlockConfiguration
+R Grant.Grantee Grantee
+R InputSerialization.CSV CSVInput
+R InputSerialization.JSON JSONInput
+R InputSerialization.Parquet ParquetInput
+R IntelligentTieringConfiguration.Filter IntelligentTieringFilter
+R IntelligentTieringFilter.And IntelligentTieringAndOperator
+R IntelligentTieringFilter.Tag Tag
+R InventoryConfiguration.Destination InventoryDestination
+R InventoryConfiguration.Filter InventoryFilter
+R InventoryConfiguration.Schedule InventorySchedule
+R InventoryDestination.S3BucketDestination InventoryS3BucketDestination
+R InventoryEncryption.SSEKMS SSEKMS
+R InventoryEncryption.SSES3 SSES3
+R InventoryS3BucketDestination.Encryption InventoryEncryption
+R InventoryTableConfiguration.EncryptionConfiguration MetadataTableEncryptionConfiguration
+R InventoryTableConfigurationResult.Error ErrorDetails
+R InventoryTableConfigurationUpdates.EncryptionConfiguration MetadataTableEncryptionConfiguration
+R JournalTableConfiguration.EncryptionConfiguration MetadataTableEncryptionConfiguration
+R JournalTableConfiguration.RecordExpiration RecordExpiration
+R JournalTableConfigurationResult.Error ErrorDetails
+R JournalTableConfigurationResult.RecordExpiration RecordExpiration
+R JournalTableConfigurationUpdates.RecordExpiration RecordExpiration
+R LambdaFunctionConfiguration.Filter NotificationConfigurationFilter
+R LifecycleRule.AbortIncompleteMultipartUpload AbortIncompleteMultipartUpload
+R LifecycleRule.Expiration LifecycleExpiration
+R LifecycleRule.Filter LifecycleRuleFilter
+R LifecycleRule.NoncurrentVersionExpiration NoncurrentVersionExpiration
+R LifecycleRuleFilter.And LifecycleRuleAndOperator
+R LifecycleRuleFilter.Tag Tag
+R ListBucketsOutput.Owner Owner
+R ListPartsOutput.Initiator Initiator
+R ListPartsOutput.Owner Owner
+R LoggingEnabled.TargetObjectKeyFormat TargetObjectKeyFormat
+R MetadataConfiguration.AnnotationTableConfiguration AnnotationTableConfiguration
+R MetadataConfiguration.InventoryTableConfiguration InventoryTableConfiguration
+R MetadataConfiguration.JournalTableConfiguration JournalTableConfiguration
+R MetadataConfigurationResult.AnnotationTableConfigurationResult AnnotationTableConfigurationResult
+R MetadataConfigurationResult.DestinationResult DestinationResult
+R MetadataConfigurationResult.InventoryTableConfigurationResult InventoryTableConfigurationResult
+R MetadataConfigurationResult.JournalTableConfigurationResult JournalTableConfigurationResult
+R MetadataTableConfiguration.S3TablesDestination S3TablesDestination
+R MetadataTableConfigurationResult.S3TablesDestinationResult S3TablesDestinationResult
+R Metrics.EventThreshold ReplicationTimeValue
+R MultipartUpload.Initiator Initiator
+R MultipartUpload.Owner Owner
+R NotificationConfiguration.EventBridgeConfiguration EventBridgeConfiguration
+R NotificationConfigurationFilter.Key S3KeyFilter
+R Object.Owner Owner
+R Object.RestoreStatus RestoreStatus
+R ObjectLockConfiguration.Rule ObjectLockRule
+R ObjectLockRetention.EventHoldDuration EventHoldDuration
+R ObjectLockRule.DefaultRetention DefaultRetention
+R ObjectVersion.Owner Owner
+R ObjectVersion.RestoreStatus RestoreStatus
+R OutputLocation.S3 S3Location
+R OutputSerialization.CSV CSVOutput
+R OutputSerialization.JSON JSONOutput
+R ProgressEvent.Details Progress
+R PutBucketAbacInput.AbacStatus AbacStatus
+R PutBucketAccelerateConfigurationInput.AccelerateConfiguration AccelerateConfiguration
+R PutBucketAclInput.AccessControlPolicy AccessControlPolicy
+R PutBucketAnalyticsConfigurationInput.AnalyticsConfiguration AnalyticsConfiguration
+R PutBucketCorsInput.CORSConfiguration CORSConfiguration
+R PutBucketEncryptionInput.ServerSideEncryptionConfiguration ServerSideEncryptionConfiguration
+R PutBucketIntelligentTieringConfigurationInput.IntelligentTieringConfiguration IntelligentTieringConfiguration
+R PutBucketInventoryConfigurationInput.InventoryConfiguration InventoryConfiguration
+R PutBucketLifecycleConfigurationInput.LifecycleConfiguration BucketLifecycleConfiguration
+R PutBucketLoggingInput.BucketLoggingStatus BucketLoggingStatus
+R PutBucketMetricsConfigurationInput.MetricsConfiguration MetricsConfiguration
+R PutBucketNotificationConfigurationInput.NotificationConfiguration NotificationConfiguration
+R PutBucketOwnershipControlsInput.OwnershipControls OwnershipControls
+R PutBucketReplicationInput.ReplicationConfiguration ReplicationConfiguration
+R PutBucketRequestPaymentInput.RequestPaymentConfiguration RequestPaymentConfiguration
+R PutBucketTaggingInput.Tagging Tagging
+R PutBucketVersioningInput.VersioningConfiguration VersioningConfiguration
+R PutBucketWebsiteInput.WebsiteConfiguration WebsiteConfiguration
+R PutObjectAclInput.AccessControlPolicy AccessControlPolicy
+R PutObjectLegalHoldInput.LegalHold ObjectLockLegalHold
+R PutObjectLockConfigurationInput.ObjectLockConfiguration ObjectLockConfiguration
+R PutObjectRetentionInput.Retention ObjectLockRetention
+R PutObjectTaggingInput.Tagging Tagging
+R PutPublicAccessBlockInput.PublicAccessBlockConfiguration PublicAccessBlockConfiguration
+R QueueConfiguration.Filter NotificationConfigurationFilter
+R ReplicationRule.DeleteMarkerReplication DeleteMarkerReplication
+R ReplicationRule.Destination Destination
+R ReplicationRule.ExistingObjectReplication ExistingObjectReplication
+R ReplicationRule.Filter ReplicationRuleFilter
+R ReplicationRule.SourceSelectionCriteria SourceSelectionCriteria
+R ReplicationRuleFilter.And ReplicationRuleAndOperator
+R ReplicationRuleFilter.Tag Tag
+R ReplicationTime.Time ReplicationTimeValue
+R RestoreObjectInput.RestoreRequest RestoreRequest
+R RestoreRequest.GlacierJobParameters GlacierJobParameters
+R RestoreRequest.OutputLocation OutputLocation
+R RestoreRequest.SelectParameters SelectParameters
+R RoutingRule.Condition Condition
+R RoutingRule.Redirect Redirect
+R S3Location.Encryption Encryption
+R S3Location.Tagging Tagging
+R SelectObjectContentInput.InputSerialization InputSerialization
+R SelectObjectContentInput.OutputSerialization OutputSerialization
+R SelectObjectContentInput.RequestProgress RequestProgress
+R SelectObjectContentInput.ScanRange ScanRange
+R SelectParameters.InputSerialization InputSerialization
+R SelectParameters.OutputSerialization OutputSerialization
+R ServerSideEncryptionRule.ApplyServerSideEncryptionByDefault ServerSideEncryptionByDefault
+R ServerSideEncryptionRule.BlockedEncryptionTypes BlockedEncryptionTypes
+R SourceSelectionCriteria.ReplicaModifications ReplicaModifications
+R SourceSelectionCriteria.SseKmsEncryptedObjects SseKmsEncryptedObjects
+R StatsEvent.Details Stats
+R StorageClassAnalysis.DataExport StorageClassAnalysisDataExport
+R StorageClassAnalysisDataExport.Destination AnalyticsExportDestination
+R TargetGrant.Grantee Grantee
+R TargetObjectKeyFormat.PartitionedPrefix PartitionedPrefix
+R TargetObjectKeyFormat.SimplePrefix SimplePrefix
+R TopicConfiguration.Filter NotificationConfigurationFilter
+R UpdateBucketMetadataAnnotationTableConfigurationInput.AnnotationTableConfiguration AnnotationTableConfigurationUpdates
+R UpdateBucketMetadataInventoryTableConfigurationInput.InventoryTableConfiguration InventoryTableConfigurationUpdates
+R UpdateBucketMetadataJournalTableConfigurationInput.JournalTableConfiguration JournalTableConfigurationUpdates
+R UploadPartCopyOutput.CopyPartResult CopyPartResult
+R WebsiteConfiguration.ErrorDocument ErrorDocument
+R WebsiteConfiguration.IndexDocument IndexDocument
+R WebsiteConfiguration.RedirectAllRequestsTo RedirectAllRequestsTo
+V AbortIncompleteMultipartUpload.DaysAfterInitiation int32
+V AbortMultipartUploadInput.Bucket string
+V AbortMultipartUploadInput.ExpectedBucketOwner string
+V AbortMultipartUploadInput.Key string
+V AbortMultipartUploadInput.UploadId string
+V AccessDenied.ErrorCodeOverride string
+V AccessDenied.Message string
+V AnalyticsAndOperator.Prefix string
+V AnalyticsConfiguration.Id string
+V AnalyticsS3BucketDestination.Bucket string
+V AnalyticsS3BucketDestination.BucketAccountId string
+V AnalyticsS3BucketDestination.Prefix string
+V AnnotationEntry.AnnotationName string
+V AnnotationEntry.ETag string
+V AnnotationEntry.Size int64
+V AnnotationLimitExceeded.ErrorCodeOverride string
+V AnnotationLimitExceeded.Message string
+V AnnotationNameTooLong.ErrorCodeOverride string
+V AnnotationNameTooLong.Message string
+V AnnotationTableConfiguration.Role string
+V AnnotationTableConfigurationResult.Role string
+V AnnotationTableConfigurationResult.TableArn string
+V AnnotationTableConfigurationResult.TableName string
+V AnnotationTableConfigurationResult.TableStatus string
+V AnnotationTableConfigurationUpdates.Role string
+V Bucket.BucketArn string
+V Bucket.BucketRegion string
+V Bucket.Name string
+V BucketAlreadyExists.ErrorCodeOverride string
+V BucketAlreadyExists.Message string
+V BucketAlreadyOwnedByYou.ErrorCodeOverride string
+V BucketAlreadyOwnedByYou.Message string
+V CORSRule.ID string
+V CORSRule.MaxAgeSeconds int32
+V CSVInput.AllowQuotedRecordDelimiter bool
+V CSVInput.Comments string
+V CSVInput.FieldDelimiter string
+V CSVInput.QuoteCharacter string
+V CSVInput.QuoteEscapeCharacter string
+V CSVInput.RecordDelimiter string
+V CSVOutput.FieldDelimiter string
+V CSVOutput.QuoteCharacter string
+V CSVOutput.QuoteEscapeCharacter string
+V CSVOutput.RecordDelimiter string
+V Checksum.ChecksumCRC32 string
+V Checksum.ChecksumCRC32C string
+V Checksum.ChecksumCRC64NVME string
+V Checksum.ChecksumMD5 string
+V Checksum.ChecksumSHA1 string
+V Checksum.ChecksumSHA256 string
+V Checksum.ChecksumSHA512 string
+V Checksum.ChecksumXXHASH128 string
+V Checksum.ChecksumXXHASH3 string
+V Checksum.ChecksumXXHASH64 string
+V CommonPrefix.Prefix string
+V CompleteMultipartUploadInput.Bucket string
+V CompleteMultipartUploadInput.ChecksumCRC32 string
+V CompleteMultipartUploadInput.ChecksumCRC32C string
+V CompleteMultipartUploadInput.ChecksumCRC64NVME string
+V CompleteMultipartUploadInput.ChecksumMD5 string
+V CompleteMultipartUploadInput.ChecksumSHA1 string
+V CompleteMultipartUploadInput.ChecksumSHA256 string
+V CompleteMultipartUploadInput.ChecksumSHA512 string
+V CompleteMultipartUploadInput.ChecksumXXHASH128 string
+V CompleteMultipartUploadInput.ChecksumXXHASH3 string
+V CompleteMultipartUploadInput.ChecksumXXHASH64 string
+V CompleteMultipartUploadInput.ExpectedBucketOwner string
+V CompleteMultipartUploadInput.IfMatch string
+V CompleteMultipartUploadInput.IfNoneMatch string
+V CompleteMultipartUploadInput.Key string
+V CompleteMultipartUploadInput.MpuObjectSize int64
+V CompleteMultipartUploadInput.SSECustomerAlgorithm string
+V CompleteMultipartUploadInput.SSECustomerKey string
+V CompleteMultipartUploadInput.SSECustomerKeyMD5 string
+V CompleteMultipartUploadInput.UploadId string
+V CompleteMultipartUploadOutput.Bucket string
+V CompleteMultipartUploadOutput.BucketKeyEnabled bool
+V CompleteMultipartUploadOutput.ChecksumCRC32 string
+V CompleteMultipartUploadOutput.ChecksumCRC32C string
+V CompleteMultipartUploadOutput.ChecksumCRC64NVME string
+V CompleteMultipartUploadOutput.ChecksumMD5 string
+V CompleteMultipartUploadOutput.ChecksumSHA1 string
+V CompleteMultipartUploadOutput.ChecksumSHA256 string
+V CompleteMultipartUploadOutput.ChecksumSHA512 string
+V CompleteMultipartUploadOutput.ChecksumXXHASH128 string
+V CompleteMultipartUploadOutput.ChecksumXXHASH3 string
+V CompleteMultipartUploadOutput.ChecksumXXHASH64 string
+V CompleteMultipartUploadOutput.ETag string
+V CompleteMultipartUploadOutput.Expiration string
+V CompleteMultipartUploadOutput.Key string
+V CompleteMultipartUploadOutput.Location string
+V CompleteMultipartUploadOutput.SSEKMSKeyId string
+V CompleteMultipartUploadOutput.VersionId string
+V CompletedPart.ChecksumCRC32 string
+V CompletedPart.ChecksumCRC32C string
+V CompletedPart.ChecksumCRC64NVME string
+V CompletedPart.ChecksumMD5 string
+V CompletedPart.ChecksumSHA1 string
+V CompletedPart.ChecksumSHA256 string
+V CompletedPart.ChecksumSHA512 string
+V CompletedPart.ChecksumXXHASH128 string
+V CompletedPart.ChecksumXXHASH3 string
+V CompletedPart.ChecksumXXHASH64 string
+V CompletedPart.ETag string
+V CompletedPart.PartNumber int32
+V Condition.HttpErrorCodeReturnedEquals string
+V Condition.KeyPrefixEquals string
+V CopyObjectInput.Bucket string
+V CopyObjectInput.BucketKeyEnabled bool
+V CopyObjectInput.CacheControl string
+V CopyObjectInput.ContentDisposition string
+V CopyObjectInput.ContentEncoding string
+V CopyObjectInput.ContentLanguage string
+V CopyObjectInput.ContentType string
+V CopyObjectInput.CopySource string
+V CopyObjectInput.CopySourceIfMatch string
+V CopyObjectInput.CopySourceIfNoneMatch string
+V CopyObjectInput.CopySourceSSECustomerAlgorithm string
+V CopyObjectInput.CopySourceSSECustomerKey string
+V CopyObjectInput.CopySourceSSECustomerKeyMD5 string
+V CopyObjectInput.ExpectedBucketOwner string
+V CopyObjectInput.ExpectedSourceBucketOwner string
+V CopyObjectInput.GrantFullControl string
+V CopyObjectInput.GrantRead string
+V CopyObjectInput.GrantReadACP string
+V CopyObjectInput.GrantWriteACP string
+V CopyObjectInput.IfMatch string
+V CopyObjectInput.IfNoneMatch string
+V CopyObjectInput.Key string
+V CopyObjectInput.ObjectLockEventHoldDurationDays int32
+V CopyObjectInput.ObjectLockEventHoldDurationYears int32
+V CopyObjectInput.SSECustomerAlgorithm string
+V CopyObjectInput.SSECustomerKey string
+V CopyObjectInput.SSECustomerKeyMD5 string
+V CopyObjectInput.SSEKMSEncryptionContext string
+V CopyObjectInput.SSEKMSKeyId string
+V CopyObjectInput.Tagging string
+V CopyObjectInput.WebsiteRedirectLocation string
+V CopyObjectOutput.BucketKeyEnabled bool
+V CopyObjectOutput.CopySourceVersionId string
+V CopyObjectOutput.Expiration string
+V CopyObjectOutput.SSECustomerAlgorithm string
+V CopyObjectOutput.SSECustomerKeyMD5 string
+V CopyObjectOutput.SSEKMSEncryptionContext string
+V CopyObjectOutput.SSEKMSKeyId string
+V CopyObjectOutput.VersionId string
+V CopyObjectResult.ChecksumCRC32 string
+V CopyObjectResult.ChecksumCRC32C string
+V CopyObjectResult.ChecksumCRC64NVME string
+V CopyObjectResult.ChecksumMD5 string
+V CopyObjectResult.ChecksumSHA1 string
+V CopyObjectResult.ChecksumSHA256 string
+V CopyObjectResult.ChecksumSHA512 string
+V CopyObjectResult.ChecksumXXHASH128 string
+V CopyObjectResult.ChecksumXXHASH3 string
+V CopyObjectResult.ChecksumXXHASH64 string
+V CopyObjectResult.ETag string
+V CopyPartResult.ChecksumCRC32 string
+V CopyPartResult.ChecksumCRC32C string
+V CopyPartResult.ChecksumCRC64NVME string
+V CopyPartResult.ChecksumMD5 string
+V CopyPartResult.ChecksumSHA1 string
+V CopyPartResult.ChecksumSHA256 string
+V CopyPartResult.ChecksumSHA512 string
+V CopyPartResult.ChecksumXXHASH128 string
+V CopyPartResult.ChecksumXXHASH3 string
+V CopyPartResult.ChecksumXXHASH64 string
+V CopyPartResult.ETag string
+V CreateBucketInput.Bucket string
+V CreateBucketInput.GrantFullControl string
+V CreateBucketInput.GrantRead string
+V CreateBucketInput.GrantReadACP string
+V CreateBucketInput.GrantWrite string
+V CreateBucketInput.GrantWriteACP string
+V CreateBucketInput.ObjectLockEnabledForBucket bool
+V CreateBucketMetadataConfigurationInput.Bucket string
+V CreateBucketMetadataConfigurationInput.ContentMD5 string
+V CreateBucketMetadataConfigurationInput.ExpectedBucketOwner string
+V CreateBucketMetadataTableConfigurationInput.Bucket string
+V CreateBucketMetadataTableConfigurationInput.ContentMD5 string
+V CreateBucketMetadataTableConfigurationInput.ExpectedBucketOwner string
+V CreateBucketOutput.BucketArn string
+V CreateBucketOutput.Location string
+V CreateMultipartUploadInput.Bucket string
+V CreateMultipartUploadInput.BucketKeyEnabled bool
+V CreateMultipartUploadInput.CacheControl string
+V CreateMultipartUploadInput.ContentDisposition string
+V CreateMultipartUploadInput.ContentEncoding string
+V CreateMultipartUploadInput.ContentLanguage string
+V CreateMultipartUploadInput.ContentType string
+V CreateMultipartUploadInput.ExpectedBucketOwner string
+V CreateMultipartUploadInput.GrantFullControl string
+V CreateMultipartUploadInput.GrantRead string
+V CreateMultipartUploadInput.GrantReadACP string
+V CreateMultipartUploadInput.GrantWriteACP string
+V CreateMultipartUploadInput.Key string
+V CreateMultipartUploadInput.ObjectLockEventHoldDurationDays int32
+V CreateMultipartUploadInput.ObjectLockEventHoldDurationYears int32
+V CreateMultipartUploadInput.SSECustomerAlgorithm string
+V CreateMultipartUploadInput.SSECustomerKey string
+V CreateMultipartUploadInput.SSECustomerKeyMD5 string
+V CreateMultipartUploadInput.SSEKMSEncryptionContext string
+V CreateMultipartUploadInput.SSEKMSKeyId string
+V CreateMultipartUploadInput.Tagging string
+V CreateMultipartUploadInput.WebsiteRedirectLocation string
+V CreateMultipartUploadOutput.AbortRuleId string
+V CreateMultipartUploadOutput.Bucket string
+V CreateMultipartUploadOutput.BucketKeyEnabled bool
+V CreateMultipartUploadOutput.Key string
+V CreateMultipartUploadOutput.SSECustomerAlgorithm string
+V CreateMultipartUploadOutput.SSECustomerKeyMD5 string
+V CreateMultipartUploadOutput.SSEKMSEncryptionContext string
+V CreateMultipartUploadOutput.SSEKMSKeyId string
+V CreateMultipartUploadOutput.UploadId string
+V CreateSessionInput.Bucket string
+V CreateSessionInput.BucketKeyEnabled bool
+V CreateSessionInput.SSEKMSEncryptionContext string
+V CreateSessionInput.SSEKMSKeyId string
+V CreateSessionOutput.BucketKeyEnabled bool
+V CreateSessionOutput.SSEKMSEncryptionContext string
+V CreateSessionOutput.SSEKMSKeyId string
+V DefaultRetention.Days int32
+V DefaultRetention.Years int32
+V Delete.Quiet bool
+V DeleteBucketAnalyticsConfigurationInput.Bucket string
+V DeleteBucketAnalyticsConfigurationInput.ExpectedBucketOwner string
+V DeleteBucketAnalyticsConfigurationInput.Id string
+V DeleteBucketCorsInput.Bucket string
+V DeleteBucketCorsInput.ExpectedBucketOwner string
+V DeleteBucketEncryptionInput.Bucket string
+V DeleteBucketEncryptionInput.ExpectedBucketOwner string
+V DeleteBucketInput.Bucket string
+V DeleteBucketInput.ExpectedBucketOwner string
+V DeleteBucketIntelligentTieringConfigurationInput.Bucket string
+V DeleteBucketIntelligentTieringConfigurationInput.ExpectedBucketOwner string
+V DeleteBucketIntelligentTieringConfigurationInput.Id string
+V DeleteBucketInventoryConfigurationInput.Bucket string
+V DeleteBucketInventoryConfigurationInput.ExpectedBucketOwner string
+V DeleteBucketInventoryConfigurationInput.Id string
+V DeleteBucketLifecycleInput.Bucket string
+V DeleteBucketLifecycleInput.ExpectedBucketOwner string
+V DeleteBucketMetadataConfigurationInput.Bucket string
+V DeleteBucketMetadataConfigurationInput.ExpectedBucketOwner string
+V DeleteBucketMetadataTableConfigurationInput.Bucket string
+V DeleteBucketMetadataTableConfigurationInput.ExpectedBucketOwner string
+V DeleteBucketMetricsConfigurationInput.Bucket string
+V DeleteBucketMetricsConfigurationInput.ExpectedBucketOwner string
+V DeleteBucketMetricsConfigurationInput.Id string
+V DeleteBucketOwnershipControlsInput.Bucket string
+V DeleteBucketOwnershipControlsInput.ExpectedBucketOwner string
+V DeleteBucketPolicyInput.Bucket string
+V DeleteBucketPolicyInput.ExpectedBucketOwner string
+V DeleteBucketReplicationInput.Bucket string
+V DeleteBucketReplicationInput.ExpectedBucketOwner string
+V DeleteBucketTaggingInput.Bucket string
+V DeleteBucketTaggingInput.ExpectedBucketOwner string
+V DeleteBucketWebsiteInput.Bucket string
+V DeleteBucketWebsiteInput.ExpectedBucketOwner string
+V DeleteMarkerEntry.IsLatest bool
+V DeleteMarkerEntry.Key string
+V DeleteMarkerEntry.VersionId string
+V DeleteObjectAnnotationInput.AnnotationName string
+V DeleteObjectAnnotationInput.Bucket string
+V DeleteObjectAnnotationInput.ExpectedBucketOwner string
+V DeleteObjectAnnotationInput.Key string
+V DeleteObjectAnnotationInput.ObjectIfMatch string
+V DeleteObjectAnnotationInput.VersionId string
+V DeleteObjectAnnotationOutput.ObjectVersionId string
+V DeleteObjectInput.Bucket string
+V DeleteObjectInput.BypassGovernanceRetention bool
+V DeleteObjectInput.ExpectedBucketOwner string
+V DeleteObjectInput.IfMatch string
+V DeleteObjectInput.IfMatchSize int64
+V DeleteObjectInput.Key string
+V DeleteObjectInput.MFA string
+V DeleteObjectInput.VersionId string
+V DeleteObjectOutput.DeleteMarker bool
+V DeleteObjectOutput.VersionId string
+V DeleteObjectTaggingInput.Bucket string
+V DeleteObjectTaggingInput.ExpectedBucketOwner string
+V DeleteObjectTaggingInput.Key string
+V DeleteObjectTaggingInput.VersionId string
+V DeleteObjectTaggingOutput.VersionId string
+V DeleteObjectsInput.Bucket string
+V DeleteObjectsInput.BypassGovernanceRetention bool
+V DeleteObjectsInput.ExpectedBucketOwner string
+V DeleteObjectsInput.MFA string
+V DeletePublicAccessBlockInput.Bucket string
+V DeletePublicAccessBlockInput.ExpectedBucketOwner string
+V DeletedObject.DeleteMarker bool
+V DeletedObject.DeleteMarkerVersionId string
+V DeletedObject.Key string
+V DeletedObject.VersionId string
+V Destination.Account string
+V Destination.Bucket string
+V DestinationResult.TableBucketArn string
+V DestinationResult.TableNamespace string
+V Encryption.KMSContext string
+V Encryption.KMSKeyId string
+V EncryptionConfiguration.ReplicaKmsKeyID string
+V EncryptionTypeMismatch.ErrorCodeOverride string
+V EncryptionTypeMismatch.Message string
+V EndpointParameters.Accelerate bool
+V EndpointParameters.Bucket string
+V EndpointParameters.CopySource string
+V EndpointParameters.DisableAccessPoints bool
+V EndpointParameters.DisableMultiRegionAccessPoints bool
+V EndpointParameters.DisableS3ExpressSessionAuth bool
+V EndpointParameters.Endpoint string
+V EndpointParameters.ForcePathStyle bool
+V EndpointParameters.Key string
+V EndpointParameters.Prefix string
+V EndpointParameters.Region string
+V EndpointParameters.UseArnRegion bool
+V EndpointParameters.UseDualStack bool
+V EndpointParameters.UseFIPS bool
+V EndpointParameters.UseGlobalEndpoint bool
+V EndpointParameters.UseObjectLambdaEndpoint bool
+V EndpointParameters.UseS3ExpressControlEndpoint bool
+V Error.Code string
+V Error.Key string
+V Error.Message string
+V Error.VersionId string
+V ErrorDetails.ErrorCode string
+V ErrorDetails.ErrorMessage string
+V ErrorDocument.Key string
+V EventHoldDuration.Days int32
+V EventHoldDuration.Years int32
+V FilterRule.Value string
+V GetBucketAbacInput.Bucket string
+V GetBucketAbacInput.ExpectedBucketOwner string
+V GetBucketAccelerateConfigurationInput.Bucket string
+V GetBucketAccelerateConfigurationInput.ExpectedBucketOwner string
+V GetBucketAclInput.Bucket string
+V GetBucketAclInput.ExpectedBucketOwner string
+V GetBucketAnalyticsConfigurationInput.Bucket string
+V GetBucketAnalyticsConfigurationInput.ExpectedBucketOwner string
+V GetBucketAnalyticsConfigurationInput.Id string
+V GetBucketCorsInput.Bucket string
+V GetBucketCorsInput.ExpectedBucketOwner string
+V GetBucketEncryptionInput.Bucket string
+V GetBucketEncryptionInput.ExpectedBucketOwner string
+V GetBucketIntelligentTieringConfigurationInput.Bucket string
+V GetBucketIntelligentTieringConfigurationInput.ExpectedBucketOwner string
+V GetBucketIntelligentTieringConfigurationInput.Id string
+V GetBucketInventoryConfigurationInput.Bucket string
+V GetBucketInventoryConfigurationInput.ExpectedBucketOwner string
+V GetBucketInventoryConfigurationInput.Id string
+V GetBucketLifecycleConfigurationInput.Bucket string
+V GetBucketLifecycleConfigurationInput.ExpectedBucketOwner string
+V GetBucketLocationInput.Bucket string
+V GetBucketLocationInput.ExpectedBucketOwner string
+V GetBucketLoggingInput.Bucket string
+V GetBucketLoggingInput.ExpectedBucketOwner string
+V GetBucketMetadataConfigurationInput.Bucket string
+V GetBucketMetadataConfigurationInput.ExpectedBucketOwner string
+V GetBucketMetadataTableConfigurationInput.Bucket string
+V GetBucketMetadataTableConfigurationInput.ExpectedBucketOwner string
+V GetBucketMetadataTableConfigurationResult.Status string
+V GetBucketMetricsConfigurationInput.Bucket string
+V GetBucketMetricsConfigurationInput.ExpectedBucketOwner string
+V GetBucketMetricsConfigurationInput.Id string
+V GetBucketNotificationConfigurationInput.Bucket string
+V GetBucketNotificationConfigurationInput.ExpectedBucketOwner string
+V GetBucketOwnershipControlsInput.Bucket string
+V GetBucketOwnershipControlsInput.ExpectedBucketOwner string
+V GetBucketPolicyInput.Bucket string
+V GetBucketPolicyInput.ExpectedBucketOwner string
+V GetBucketPolicyOutput.Policy string
+V GetBucketPolicyStatusInput.Bucket string
+V GetBucketPolicyStatusInput.ExpectedBucketOwner string
+V GetBucketReplicationInput.Bucket string
+V GetBucketReplicationInput.ExpectedBucketOwner string
+V GetBucketRequestPaymentInput.Bucket string
+V GetBucketRequestPaymentInput.ExpectedBucketOwner string
+V GetBucketTaggingInput.Bucket string
+V GetBucketTaggingInput.ExpectedBucketOwner string
+V GetBucketVersioningInput.Bucket string
+V GetBucketVersioningInput.ExpectedBucketOwner string
+V GetBucketWebsiteInput.Bucket string
+V GetBucketWebsiteInput.ExpectedBucketOwner string
+V GetObjectAclInput.Bucket string
+V GetObjectAclInput.ExpectedBucketOwner string
+V GetObjectAclInput.Key string
+V GetObjectAclInput.VersionId string
+V GetObjectAnnotationInput.AnnotationName string
+V GetObjectAnnotationInput.Bucket string
+V GetObjectAnnotationInput.ExpectedBucketOwner string
+V GetObjectAnnotationInput.Key string
+V GetObjectAnnotationInput.VersionId string
+V GetObjectAnnotationOutput.ChecksumCRC32 string
+V GetObjectAnnotationOutput.ChecksumCRC32C string
+V GetObjectAnnotationOutput.ChecksumCRC64NVME string
+V GetObjectAnnotationOutput.ChecksumMD5 string
+V GetObjectAnnotationOutput.ChecksumSHA1 string
+V GetObjectAnnotationOutput.ChecksumSHA256 string
+V GetObjectAnnotationOutput.ChecksumSHA512 string
+V GetObjectAnnotationOutput.ChecksumXXHASH128 string
+V GetObjectAnnotationOutput.ChecksumXXHASH3 string
+V GetObjectAnnotationOutput.ChecksumXXHASH64 string
+V GetObjectAnnotationOutput.ContentLength int64
+V GetObjectAnnotationOutput.ETag string
+V GetObjectAnnotationOutput.ObjectVersionId string
+V GetObjectAttributesInput.Bucket string
+V GetObjectAttributesInput.ExpectedBucketOwner string
+V GetObjectAttributesInput.Key string
+V GetObjectAttributesInput.MaxParts int32
+V GetObjectAttributesInput.PartNumberMarker string
+V GetObjectAttributesInput.SSECustomerAlgorithm string
+V GetObjectAttributesInput.SSECustomerKey string
+V GetObjectAttributesInput.SSECustomerKeyMD5 string
+V GetObjectAttributesInput.VersionId string
+V GetObjectAttributesOutput.DeleteMarker bool
+V GetObjectAttributesOutput.ETag string
+V GetObjectAttributesOutput.ObjectSize int64
+V GetObjectAttributesOutput.VersionId string
+V GetObjectAttributesParts.IsTruncated bool
+V GetObjectAttributesParts.MaxParts int32
+V GetObjectAttributesParts.NextPartNumberMarker string
+V GetObjectAttributesParts.PartNumberMarker string
+V GetObjectAttributesParts.TotalPartsCount int32
+V GetObjectInput.Bucket string
+V GetObjectInput.ExpectedBucketOwner string
+V GetObjectInput.IfMatch string
+V GetObjectInput.IfNoneMatch string
+V GetObjectInput.Key string
+V GetObjectInput.PartNumber int32
+V GetObjectInput.Range string
+V GetObjectInput.ResponseCacheControl string
+V GetObjectInput.ResponseContentDisposition string
+V GetObjectInput.ResponseContentEncoding string
+V GetObjectInput.ResponseContentLanguage string
+V GetObjectInput.ResponseContentType string
+V GetObjectInput.SSECustomerAlgorithm string
+V GetObjectInput.SSECustomerKey string
+V GetObjectInput.SSECustomerKeyMD5 string
+V GetObjectInput.VersionId string
+V GetObjectLegalHoldInput.Bucket string
+V GetObjectLegalHoldInput.ExpectedBucketOwner string
+V GetObjectLegalHoldInput.Key string
+V GetObjectLegalHoldInput.VersionId string
+V GetObjectLockConfigurationInput.Bucket string
+V GetObjectLockConfigurationInput.ExpectedBucketOwner string
+V GetObjectOutput.AcceptRanges string
+V GetObjectOutput.BucketKeyEnabled bool
+V GetObjectOutput.CacheControl string
+V GetObjectOutput.ChecksumCRC32 string
+V GetObjectOutput.ChecksumCRC32C string
+V GetObjectOutput.ChecksumCRC64NVME string
+V GetObjectOutput.ChecksumMD5 string
+V GetObjectOutput.ChecksumSHA1 string
+V GetObjectOutput.ChecksumSHA256 string
+V GetObjectOutput.ChecksumSHA512 string
+V GetObjectOutput.ChecksumXXHASH128 string
+V GetObjectOutput.ChecksumXXHASH3 string
+V GetObjectOutput.ChecksumXXHASH64 string
+V GetObjectOutput.ContentDisposition string
+V GetObjectOutput.ContentEncoding string
+V GetObjectOutput.ContentLanguage string
+V GetObjectOutput.ContentLength int64
+V GetObjectOutput.ContentRange string
+V GetObjectOutput.ContentType string
+V GetObjectOutput.DeleteMarker bool
+V GetObjectOutput.ETag string
+V GetObjectOutput.Expiration string
+V GetObjectOutput.ExpiresString string
+V GetObjectOutput.MissingMeta int32
+V GetObjectOutput.ObjectLockEventHoldDurationDays int32
+V GetObjectOutput.ObjectLockEventHoldDurationYears int32
+V GetObjectOutput.PartsCount int32
+V GetObjectOutput.Restore string
+V GetObjectOutput.SSECustomerAlgorithm string
+V GetObjectOutput.SSECustomerKeyMD5 string
+V GetObjectOutput.SSEKMSKeyId string
+V GetObjectOutput.TagCount int32
+V GetObjectOutput.VersionId string
+V GetObjectOutput.WebsiteRedirectLocation string
+V GetObjectRetentionInput.Bucket string
+V GetObjectRetentionInput.ExpectedBucketOwner string
+V GetObjectRetentionInput.Key string
+V GetObjectRetentionInput.VersionId string
+V GetObjectTaggingInput.Bucket string
+V GetObjectTaggingInput.ExpectedBucketOwner string
+V GetObjectTaggingInput.Key string
+V GetObjectTaggingInput.VersionId string
+V GetObjectTaggingOutput.VersionId string
+V GetObjectTorrentInput.Bucket string
+V GetObjectTorrentInput.ExpectedBucketOwner string
+V GetObjectTorrentInput.Key string
+V GetPublicAccessBlockInput.Bucket string
+V GetPublicAccessBlockInput.ExpectedBucketOwner string
+V Grantee.DisplayName string
+V Grantee.EmailAddress string
+V Grantee.ID string
+V Grantee.URI string
+V HeadBucketInput.Bucket string
+V HeadBucketInput.ExpectedBucketOwner string
+V HeadBucketOutput.AccessPointAlias bool
+V HeadBucketOutput.BucketArn string
+V HeadBucketOutput.BucketLocationName string
+V HeadBucketOutput.BucketRegion string
+V HeadObjectInput.Bucket string
+V HeadObjectInput.ExpectedBucketOwner string
+V HeadObjectInput.IfMatch string
+V HeadObjectInput.IfNoneMatch string
+V HeadObjectInput.Key string
+V HeadObjectInput.PartNumber int32
+V HeadObjectInput.Range string
+V HeadObjectInput.ResponseCacheControl string
+V HeadObjectInput.ResponseContentDisposition string
+V HeadObjectInput.ResponseContentEncoding string
+V HeadObjectInput.ResponseContentLanguage string
+V HeadObjectInput.ResponseContentType string
+V HeadObjectInput.SSECustomerAlgorithm string
+V HeadObjectInput.SSECustomerKey string
+V HeadObjectInput.SSECustomerKeyMD5 string
+V HeadObjectInput.VersionId string
+V HeadObjectOutput.AcceptRanges string
+V HeadObjectOutput.BucketKeyEnabled bool
+V HeadObjectOutput.CacheControl string
+V HeadObjectOutput.ChecksumCRC32 string
+V HeadObjectOutput.ChecksumCRC32C string
+V HeadObjectOutput.ChecksumCRC64NVME string
+V HeadObjectOutput.ChecksumMD5 string
+V HeadObjectOutput.ChecksumSHA1 string
+V HeadObjectOutput.ChecksumSHA256 string
+V HeadObjectOutput.ChecksumSHA512 string
+V HeadObjectOutput.ChecksumXXHASH128 string
+V HeadObjectOutput.ChecksumXXHASH3 string
+V HeadObjectOutput.ChecksumXXHASH64 string
+V HeadObjectOutput.ContentDisposition string
+V HeadObjectOutput.ContentEncoding string
+V HeadObjectOutput.ContentLanguage string
+V HeadObjectOutput.ContentLength int64
+V HeadObjectOutput.ContentRange string
+V HeadObjectOutput.ContentType string
+V HeadObjectOutput.DeleteMarker bool
+V HeadObjectOutput.ETag string
+V HeadObjectOutput.Expiration string
+V HeadObjectOutput.ExpiresString string
+V HeadObjectOutput.MissingMeta int32
+V HeadObjectOutput.ObjectLockEventHoldDurationDays int32
+V HeadObjectOutput.ObjectLockEventHoldDurationYears int32
+V HeadObjectOutput.PartsCount int32
+V HeadObjectOutput.Restore string
+V HeadObjectOutput.SSECustomerAlgorithm string
+V HeadObjectOutput.SSECustomerKeyMD5 string
+V HeadObjectOutput.SSEKMSKeyId string
+V HeadObjectOutput.TagCount int32
+V HeadObjectOutput.VersionId string
+V HeadObjectOutput.WebsiteRedirectLocation string
+V IdempotencyParameterMismatch.ErrorCodeOverride string
+V IdempotencyParameterMismatch.Message string
+V IndexDocument.Suffix string
+V Initiator.DisplayName string
+V Initiator.ID string
+V IntelligentTieringAndOperator.Prefix string
+V IntelligentTieringConfiguration.Id string
+V IntelligentTieringFilter.Prefix string
+V InvalidAnnotationName.ErrorCodeOverride string
+V InvalidAnnotationName.Message string
+V InvalidObjectState.ErrorCodeOverride string
+V InvalidObjectState.Message string
+V InvalidPrefix.ErrorCodeOverride string
+V InvalidPrefix.Message string
+V InvalidRequest.ErrorCodeOverride string
+V InvalidRequest.Message string
+V InvalidWriteOffset.ErrorCodeOverride string
+V InvalidWriteOffset.Message string
+V InventoryConfiguration.Id string
+V InventoryConfiguration.IsEnabled bool
+V InventoryFilter.Prefix string
+V InventoryS3BucketDestination.AccountId string
+V InventoryS3BucketDestination.Bucket string
+V InventoryS3BucketDestination.Prefix string
+V InventoryTableConfigurationResult.TableArn string
+V InventoryTableConfigurationResult.TableName string
+V InventoryTableConfigurationResult.TableStatus string
+V JSONOutput.RecordDelimiter string
+V JournalTableConfigurationResult.TableArn string
+V JournalTableConfigurationResult.TableName string
+V JournalTableConfigurationResult.TableStatus string
+V LambdaFunctionConfiguration.Id string
+V LambdaFunctionConfiguration.LambdaFunctionArn string
+V LifecycleExpiration.Days int32
+V LifecycleExpiration.ExpiredObjectDeleteMarker bool
+V LifecycleRule.ID string
+V LifecycleRule.Prefix string
+V LifecycleRuleAndOperator.ObjectSizeGreaterThan int64
+V LifecycleRuleAndOperator.ObjectSizeLessThan int64
+V LifecycleRuleAndOperator.Prefix string
+V LifecycleRuleFilter.ObjectSizeGreaterThan int64
+V LifecycleRuleFilter.ObjectSizeLessThan int64
+V LifecycleRuleFilter.Prefix string
+V ListBucketAnalyticsConfigurationsInput.Bucket string
+V ListBucketAnalyticsConfigurationsInput.ContinuationToken string
+V ListBucketAnalyticsConfigurationsInput.ExpectedBucketOwner string
+V ListBucketAnalyticsConfigurationsOutput.ContinuationToken string
+V ListBucketAnalyticsConfigurationsOutput.IsTruncated bool
+V ListBucketAnalyticsConfigurationsOutput.NextContinuationToken string
+V ListBucketIntelligentTieringConfigurationsInput.Bucket string
+V ListBucketIntelligentTieringConfigurationsInput.ContinuationToken string
+V ListBucketIntelligentTieringConfigurationsInput.ExpectedBucketOwner string
+V ListBucketIntelligentTieringConfigurationsOutput.ContinuationToken string
+V ListBucketIntelligentTieringConfigurationsOutput.IsTruncated bool
+V ListBucketIntelligentTieringConfigurationsOutput.NextContinuationToken string
+V ListBucketInventoryConfigurationsInput.Bucket string
+V ListBucketInventoryConfigurationsInput.ContinuationToken string
+V ListBucketInventoryConfigurationsInput.ExpectedBucketOwner string
+V ListBucketInventoryConfigurationsOutput.ContinuationToken string
+V ListBucketInventoryConfigurationsOutput.IsTruncated bool
+V ListBucketInventoryConfigurationsOutput.NextContinuationToken string
+V ListBucketMetricsConfigurationsInput.Bucket string
+V ListBucketMetricsConfigurationsInput.ContinuationToken string
+V ListBucketMetricsConfigurationsInput.ExpectedBucketOwner string
+V ListBucketMetricsConfigurationsOutput.ContinuationToken string
+V ListBucketMetricsConfigurationsOutput.IsTruncated bool
+V ListBucketMetricsConfigurationsOutput.NextContinuationToken string
+V ListBucketsInput.BucketRegion string
+V ListBucketsInput.ContinuationToken string
+V ListBucketsInput.MaxBuckets int32
+V ListBucketsInput.Prefix string
+V ListBucketsOutput.ContinuationToken string
+V ListBucketsOutput.Prefix string
+V ListDirectoryBucketsInput.ContinuationToken string
+V ListDirectoryBucketsInput.MaxDirectoryBuckets int32
+V ListDirectoryBucketsOutput.ContinuationToken string
+V ListMultipartUploadsInput.Bucket string
+V ListMultipartUploadsInput.Delimiter string
+V ListMultipartUploadsInput.ExpectedBucketOwner string
+V ListMultipartUploadsInput.KeyMarker string
+V ListMultipartUploadsInput.MaxUploads int32
+V ListMultipartUploadsInput.Prefix string
+V ListMultipartUploadsInput.UploadIdMarker string
+V ListMultipartUploadsOutput.Bucket string
+V ListMultipartUploadsOutput.Delimiter string
+V ListMultipartUploadsOutput.IsTruncated bool
+V ListMultipartUploadsOutput.KeyMarker string
+V ListMultipartUploadsOutput.MaxUploads int32
+V ListMultipartUploadsOutput.NextKeyMarker string
+V ListMultipartUploadsOutput.NextUploadIdMarker string
+V ListMultipartUploadsOutput.Prefix string
+V ListMultipartUploadsOutput.UploadIdMarker string
+V ListObjectAnnotationsInput.AnnotationPrefix string
+V ListObjectAnnotationsInput.Bucket string
+V ListObjectAnnotationsInput.ContinuationToken string
+V ListObjectAnnotationsInput.ExpectedBucketOwner string
+V ListObjectAnnotationsInput.Key string
+V ListObjectAnnotationsInput.MaxAnnotationResults int32
+V ListObjectAnnotationsInput.VersionId string
+V ListObjectAnnotationsOutput.AnnotationCount int32
+V ListObjectAnnotationsOutput.AnnotationPrefix string
+V ListObjectAnnotationsOutput.Bucket string
+V ListObjectAnnotationsOutput.ContinuationToken string
+V ListObjectAnnotationsOutput.Key string
+V ListObjectAnnotationsOutput.MaxAnnotationResults int32
+V ListObjectAnnotationsOutput.NextContinuationToken string
+V ListObjectAnnotationsOutput.ObjectVersionId string
+V ListObjectVersionsInput.Bucket string
+V ListObjectVersionsInput.Delimiter string
+V ListObjectVersionsInput.ExpectedBucketOwner string
+V ListObjectVersionsInput.KeyMarker string
+V ListObjectVersionsInput.MaxKeys int32
+V ListObjectVersionsInput.Prefix string
+V ListObjectVersionsInput.VersionIdMarker string
+V ListObjectVersionsOutput.Delimiter string
+V ListObjectVersionsOutput.IsTruncated bool
+V ListObjectVersionsOutput.KeyMarker string
+V ListObjectVersionsOutput.MaxKeys int32
+V ListObjectVersionsOutput.Name string
+V ListObjectVersionsOutput.NextKeyMarker string
+V ListObjectVersionsOutput.NextVersionIdMarker string
+V ListObjectVersionsOutput.Prefix string
+V ListObjectVersionsOutput.VersionIdMarker string
+V ListObjectsInput.Bucket string
+V ListObjectsInput.Delimiter string
+V ListObjectsInput.ExpectedBucketOwner string
+V ListObjectsInput.Marker string
+V ListObjectsInput.MaxKeys int32
+V ListObjectsInput.Prefix string
+V ListObjectsOutput.Delimiter string
+V ListObjectsOutput.IsTruncated bool
+V ListObjectsOutput.Marker string
+V ListObjectsOutput.MaxKeys int32
+V ListObjectsOutput.Name string
+V ListObjectsOutput.NextMarker string
+V ListObjectsOutput.Prefix string
+V ListObjectsV2Input.Bucket string
+V ListObjectsV2Input.ContinuationToken string
+V ListObjectsV2Input.Delimiter string
+V ListObjectsV2Input.ExpectedBucketOwner string
+V ListObjectsV2Input.FetchOwner bool
+V ListObjectsV2Input.MaxKeys int32
+V ListObjectsV2Input.Prefix string
+V ListObjectsV2Input.StartAfter string
+V ListObjectsV2Output.ContinuationToken string
+V ListObjectsV2Output.Delimiter string
+V ListObjectsV2Output.IsTruncated bool
+V ListObjectsV2Output.KeyCount int32
+V ListObjectsV2Output.MaxKeys int32
+V ListObjectsV2Output.Name string
+V ListObjectsV2Output.NextContinuationToken string
+V ListObjectsV2Output.Prefix string
+V ListObjectsV2Output.StartAfter string
+V ListPartsInput.Bucket string
+V ListPartsInput.ExpectedBucketOwner string
+V ListPartsInput.Key string
+V ListPartsInput.MaxParts int32
+V ListPartsInput.PartNumberMarker string
+V ListPartsInput.SSECustomerAlgorithm string
+V ListPartsInput.SSECustomerKey string
+V ListPartsInput.SSECustomerKeyMD5 string
+V ListPartsInput.UploadId string
+V ListPartsOutput.AbortRuleId string
+V ListPartsOutput.Bucket string
+V ListPartsOutput.IsTruncated bool
+V ListPartsOutput.Key string
+V ListPartsOutput.MaxParts int32
+V ListPartsOutput.NextPartNumberMarker string
+V ListPartsOutput.PartNumberMarker string
+V ListPartsOutput.UploadId string
+V LocationInfo.Name string
+V LoggingEnabled.TargetBucket string
+V LoggingEnabled.TargetPrefix string
+V MetadataEntry.Name string
+V MetadataEntry.Value string
+V MetadataTableEncryptionConfiguration.KmsKeyArn string
+V MetricsAndOperator.AccessPointArn string
+V MetricsAndOperator.Prefix string
+V MetricsConfiguration.Id string
+V MultipartUpload.Key string
+V MultipartUpload.UploadId string
+V NoSuchAnnotation.ErrorCodeOverride string
+V NoSuchAnnotation.Message string
+V NoSuchBucket.ErrorCodeOverride string
+V NoSuchBucket.Message string
+V NoSuchKey.ErrorCodeOverride string
+V NoSuchKey.Message string
+V NoSuchUpload.ErrorCodeOverride string
+V NoSuchUpload.Message string
+V NoncurrentVersionExpiration.NewerNoncurrentVersions int32
+V NoncurrentVersionExpiration.NoncurrentDays int32
+V NoncurrentVersionTransition.NewerNoncurrentVersions int32
+V NoncurrentVersionTransition.NoncurrentDays int32
+V NotFound.ErrorCodeOverride string
+V NotFound.Message string
+V Object.ETag string
+V Object.Key string
+V Object.Size int64
+V ObjectAlreadyInActiveTierError.ErrorCodeOverride string
+V ObjectAlreadyInActiveTierError.Message string
+V ObjectIdentifier.ETag string
+V ObjectIdentifier.Key string
+V ObjectIdentifier.Size int64
+V ObjectIdentifier.VersionId string
+V ObjectNotInActiveTierError.ErrorCodeOverride string
+V ObjectNotInActiveTierError.Message string
+V ObjectPart.ChecksumCRC32 string
+V ObjectPart.ChecksumCRC32C string
+V ObjectPart.ChecksumCRC64NVME string
+V ObjectPart.ChecksumMD5 string
+V ObjectPart.ChecksumSHA1 string
+V ObjectPart.ChecksumSHA256 string
+V ObjectPart.ChecksumSHA512 string
+V ObjectPart.ChecksumXXHASH128 string
+V ObjectPart.ChecksumXXHASH3 string
+V ObjectPart.ChecksumXXHASH64 string
+V ObjectPart.PartNumber int32
+V ObjectPart.Size int64
+V ObjectVersion.ETag string
+V ObjectVersion.IsLatest bool
+V ObjectVersion.Key string
+V ObjectVersion.Size int64
+V ObjectVersion.VersionId string
+V Options.BaseEndpoint string
+V Options.DisableS3ExpressSessionAuth bool
+V Owner.DisplayName string
+V Owner.ID string
+V Part.ChecksumCRC32 string
+V Part.ChecksumCRC32C string
+V Part.ChecksumCRC64NVME string
+V Part.ChecksumMD5 string
+V Part.ChecksumSHA1 string
+V Part.ChecksumSHA256 string
+V Part.ChecksumSHA512 string
+V Part.ChecksumXXHASH128 string
+V Part.ChecksumXXHASH3 string
+V Part.ChecksumXXHASH64 string
+V Part.ETag string
+V Part.PartNumber int32
+V Part.Size int64
+V PolicyStatus.IsPublic bool
+V Progress.BytesProcessed int64
+V Progress.BytesReturned int64
+V Progress.BytesScanned int64
+V PublicAccessBlockConfiguration.BlockPublicAcls bool
+V PublicAccessBlockConfiguration.BlockPublicPolicy bool
+V PublicAccessBlockConfiguration.IgnorePublicAcls bool
+V PublicAccessBlockConfiguration.RestrictPublicBuckets bool
+V PutBucketAbacInput.Bucket string
+V PutBucketAbacInput.ContentMD5 string
+V PutBucketAbacInput.ExpectedBucketOwner string
+V PutBucketAccelerateConfigurationInput.Bucket string
+V PutBucketAccelerateConfigurationInput.ExpectedBucketOwner string
+V PutBucketAclInput.Bucket string
+V PutBucketAclInput.ContentMD5 string
+V PutBucketAclInput.ExpectedBucketOwner string
+V PutBucketAclInput.GrantFullControl string
+V PutBucketAclInput.GrantRead string
+V PutBucketAclInput.GrantReadACP string
+V PutBucketAclInput.GrantWrite string
+V PutBucketAclInput.GrantWriteACP string
+V PutBucketAnalyticsConfigurationInput.Bucket string
+V PutBucketAnalyticsConfigurationInput.ExpectedBucketOwner string
+V PutBucketAnalyticsConfigurationInput.Id string
+V PutBucketCorsInput.Bucket string
+V PutBucketCorsInput.ContentMD5 string
+V PutBucketCorsInput.ExpectedBucketOwner string
+V PutBucketEncryptionInput.Bucket string
+V PutBucketEncryptionInput.ContentMD5 string
+V PutBucketEncryptionInput.ExpectedBucketOwner string
+V PutBucketIntelligentTieringConfigurationInput.Bucket string
+V PutBucketIntelligentTieringConfigurationInput.ExpectedBucketOwner string
+V PutBucketIntelligentTieringConfigurationInput.Id string
+V PutBucketInventoryConfigurationInput.Bucket string
+V PutBucketInventoryConfigurationInput.ExpectedBucketOwner string
+V PutBucketInventoryConfigurationInput.Id string
+V PutBucketLifecycleConfigurationInput.Bucket string
+V PutBucketLifecycleConfigurationInput.ExpectedBucketOwner string
+V PutBucketLoggingInput.Bucket string
+V PutBucketLoggingInput.ContentMD5 string
+V PutBucketLoggingInput.ExpectedBucketOwner string
+V PutBucketMetricsConfigurationInput.Bucket string
+V PutBucketMetricsConfigurationInput.ExpectedBucketOwner string
+V PutBucketMetricsConfigurationInput.Id string
+V PutBucketNotificationConfigurationInput.Bucket string
+V PutBucketNotificationConfigurationInput.ExpectedBucketOwner string
+V PutBucketNotificationConfigurationInput.SkipDestinationValidation bool
+V PutBucketOwnershipControlsInput.Bucket string
+V PutBucketOwnershipControlsInput.ContentMD5 string
+V PutBucketOwnershipControlsInput.ExpectedBucketOwner string
+V PutBucketPolicyInput.Bucket string
+V PutBucketPolicyInput.ConfirmRemoveSelfBucketAccess bool
+V PutBucketPolicyInput.ContentMD5 string
+V PutBucketPolicyInput.ExpectedBucketOwner string
+V PutBucketPolicyInput.Policy string
+V PutBucketReplicationInput.Bucket string
+V PutBucketReplicationInput.ContentMD5 string
+V PutBucketReplicationInput.ExpectedBucketOwner string
+V PutBucketReplicationInput.Token string
+V PutBucketRequestPaymentInput.Bucket string
+V PutBucketRequestPaymentInput.ContentMD5 string
+V PutBucketRequestPaymentInput.ExpectedBucketOwner string
+V PutBucketTaggingInput.Bucket string
+V PutBucketTaggingInput.ContentMD5 string
+V PutBucketTaggingInput.ExpectedBucketOwner string
+V PutBucketVersioningInput.Bucket string
+V PutBucketVersioningInput.ContentMD5 string
+V PutBucketVersioningInput.ExpectedBucketOwner string
+V PutBucketVersioningInput.MFA string
+V PutBucketWebsiteInput.Bucket string
+V PutBucketWebsiteInput.ContentMD5 string
+V PutBucketWebsiteInput.ExpectedBucketOwner string
+V PutObjectAclInput.Bucket string
+V PutObjectAclInput.ContentMD5 string
+V PutObjectAclInput.ExpectedBucketOwner string
+V PutObjectAclInput.GrantFullControl string
+V PutObjectAclInput.GrantRead string
+V PutObjectAclInput.GrantReadACP string
+V PutObjectAclInput.GrantWrite string
+V PutObjectAclInput.GrantWriteACP string
+V PutObjectAclInput.Key string
+V PutObjectAclInput.VersionId string
+V PutObjectAnnotationInput.AnnotationName string
+V PutObjectAnnotationInput.Bucket string
+V PutObjectAnnotationInput.ChecksumCRC32 string
+V PutObjectAnnotationInput.ChecksumCRC32C string
+V PutObjectAnnotationInput.ChecksumCRC64NVME string
+V PutObjectAnnotationInput.ChecksumMD5 string
+V PutObjectAnnotationInput.ChecksumSHA1 string
+V PutObjectAnnotationInput.ChecksumSHA256 string
+V PutObjectAnnotationInput.ChecksumSHA512 string
+V PutObjectAnnotationInput.ChecksumXXHASH128 string
+V PutObjectAnnotationInput.ChecksumXXHASH3 string
+V PutObjectAnnotationInput.ChecksumXXHASH64 string
+V PutObjectAnnotationInput.ContentMD5 string
+V PutObjectAnnotationInput.ExpectedBucketOwner string
+V PutObjectAnnotationInput.Key string
+V PutObjectAnnotationInput.ObjectIfMatch string
+V PutObjectAnnotationInput.VersionId string
+V PutObjectAnnotationOutput.AnnotationName string
+V PutObjectAnnotationOutput.ChecksumCRC32 string
+V PutObjectAnnotationOutput.ChecksumCRC32C string
+V PutObjectAnnotationOutput.ChecksumCRC64NVME string
+V PutObjectAnnotationOutput.ChecksumMD5 string
+V PutObjectAnnotationOutput.ChecksumSHA1 string
+V PutObjectAnnotationOutput.ChecksumSHA256 string
+V PutObjectAnnotationOutput.ChecksumSHA512 string
+V PutObjectAnnotationOutput.ChecksumXXHASH128 string
+V PutObjectAnnotationOutput.ChecksumXXHASH3 string
+V PutObjectAnnotationOutput.ChecksumXXHASH64 string
+V PutObjectAnnotationOutput.ETag string
+V PutObjectAnnotationOutput.Key string
+V PutObjectAnnotationOutput.ObjectVersionId string
+V PutObjectInput.Bucket string
+V PutObjectInput.BucketKeyEnabled bool
+V PutObjectInput.CacheControl string
+V PutObjectInput.ChecksumCRC32 string
+V PutObjectInput.ChecksumCRC32C string
+V PutObjectInput.ChecksumCRC64NVME string
+V PutObjectInput.ChecksumMD5 string
+V PutObjectInput.ChecksumSHA1 string
+V PutObjectInput.ChecksumSHA256 string
+V PutObjectInput.ChecksumSHA512 string
+V PutObjectInput.ChecksumXXHASH128 string
+V PutObjectInput.ChecksumXXHASH3 string
+V PutObjectInput.ChecksumXXHASH64 string
+V PutObjectInput.ContentDisposition string
+V PutObjectInput.ContentEncoding string
+V PutObjectInput.ContentLanguage string
+V PutObjectInput.ContentLength int64
+V PutObjectInput.ContentMD5 string
+V PutObjectInput.ContentType string
+V PutObjectInput.ExpectedBucketOwner string
+V PutObjectInput.GrantFullControl string
+V PutObjectInput.GrantRead string
+V PutObjectInput.GrantReadACP string
+V PutObjectInput.GrantWriteACP string
+V PutObjectInput.IfMatch string
+V PutObjectInput.IfNoneMatch string
+V PutObjectInput.Key string
+V PutObjectInput.ObjectLockEventHoldDurationDays int32
+V PutObjectInput.ObjectLockEventHoldDurationYears int32
+V PutObjectInput.SSECustomerAlgorithm string
+V PutObjectInput.SSECustomerKey string
+V PutObjectInput.SSECustomerKeyMD5 string
+V PutObjectInput.SSEKMSEncryptionContext string
+V PutObjectInput.SSEKMSKeyId string
+V PutObjectInput.Tagging string
+V PutObjectInput.WebsiteRedirectLocation string
+V PutObjectInput.WriteOffsetBytes int64
+V PutObjectLegalHoldInput.Bucket string
+V PutObjectLegalHoldInput.ContentMD5 string
+V PutObjectLegalHoldInput.ExpectedBucketOwner string
+V PutObjectLegalHoldInput.Key string
+V PutObjectLegalHoldInput.VersionId string
+V PutObjectLockConfigurationInput.Bucket string
+V PutObjectLockConfigurationInput.ContentMD5 string
+V PutObjectLockConfigurationInput.ExpectedBucketOwner string
+V PutObjectLockConfigurationInput.Token string
+V PutObjectOutput.BucketKeyEnabled bool
+V PutObjectOutput.ChecksumCRC32 string
+V PutObjectOutput.ChecksumCRC32C string
+V PutObjectOutput.ChecksumCRC64NVME string
+V PutObjectOutput.ChecksumMD5 string
+V PutObjectOutput.ChecksumSHA1 string
+V PutObjectOutput.ChecksumSHA256 string
+V PutObjectOutput.ChecksumSHA512 string
+V PutObjectOutput.ChecksumXXHASH128 string
+V PutObjectOutput.ChecksumXXHASH3 string
+V PutObjectOutput.ChecksumXXHASH64 string
+V PutObjectOutput.ETag string
+V PutObjectOutput.Expiration string
+V PutObjectOutput.SSECustomerAlgorithm string
+V PutObjectOutput.SSECustomerKeyMD5 string
+V PutObjectOutput.SSEKMSEncryptionContext string
+V PutObjectOutput.SSEKMSKeyId string
+V PutObjectOutput.Size int64
+V PutObjectOutput.VersionId string
+V PutObjectRetentionInput.Bucket string
+V PutObjectRetentionInput.BypassGovernanceRetention bool
+V PutObjectRetentionInput.ContentMD5 string
+V PutObjectRetentionInput.ExpectedBucketOwner string
+V PutObjectRetentionInput.Key string
+V PutObjectRetentionInput.VersionId string
+V PutObjectTaggingInput.Bucket string
+V PutObjectTaggingInput.ContentMD5 string
+V PutObjectTaggingInput.ExpectedBucketOwner string
+V PutObjectTaggingInput.Key string
+V PutObjectTaggingInput.VersionId string
+V PutObjectTaggingOutput.VersionId string
+V PutPublicAccessBlockInput.Bucket string
+V PutPublicAccessBlockInput.ContentMD5 string
+V PutPublicAccessBlockInput.ExpectedBucketOwner string
+V QueueConfiguration.Id string
+V QueueConfiguration.QueueArn string
+V RecordExpiration.Days int32
+V Redirect.HostName string
+V Redirect.HttpRedirectCode string
+V Redirect.ReplaceKeyPrefixWith string
+V Redirect.ReplaceKeyWith string
+V RedirectAllRequestsTo.HostName string
+V RenameObjectInput.Bucket string
+V RenameObjectInput.ClientToken string
+V RenameObjectInput.DestinationIfMatch string
+V RenameObjectInput.DestinationIfNoneMatch string
+V RenameObjectInput.Key string
+V RenameObjectInput.RenameSource string
+V RenameObjectInput.SourceIfMatch string
+V RenameObjectInput.SourceIfNoneMatch string
+V ReplicationConfiguration.Role string
+V ReplicationRule.ID string
+V ReplicationRule.Prefix string
+V ReplicationRule.Priority int32
+V ReplicationRuleAndOperator.Prefix string
+V ReplicationRuleFilter.Prefix string
+V ReplicationTimeValue.Minutes int32
+V RequestProgress.Enabled bool
+V RestoreObjectInput.Bucket string
+V RestoreObjectInput.ExpectedBucketOwner string
+V RestoreObjectInput.Key string
+V RestoreObjectInput.VersionId string
+V RestoreObjectOutput.RestoreOutputPath string
+V RestoreRequest.Days int32
+V RestoreRequest.Description string
+V RestoreStatus.IsRestoreInProgress bool
+V S3Location.BucketName string
+V S3Location.Prefix string
+V S3TablesDestination.TableBucketArn string
+V S3TablesDestination.TableName string
+V S3TablesDestinationResult.TableArn string
+V S3TablesDestinationResult.TableBucketArn string
+V S3TablesDestinationResult.TableName string
+V S3TablesDestinationResult.TableNamespace string
+V SSEKMS.KeyId string
+V SSEKMSEncryption.BucketKeyEnabled bool
+V SSEKMSEncryption.KMSKeyArn string
+V ScanRange.End int64
+V ScanRange.Start int64
+V SelectObjectContentInput.Bucket string
+V SelectObjectContentInput.ExpectedBucketOwner string
+V SelectObjectContentInput.Expression string
+V SelectObjectContentInput.Key string
+V SelectObjectContentInput.SSECustomerAlgorithm string
+V SelectObjectContentInput.SSECustomerKey string
+V SelectObjectContentInput.SSECustomerKeyMD5 string
+V SelectParameters.Expression string
+V ServerSideEncryptionByDefault.KMSMasterKeyID string
+V ServerSideEncryptionRule.BucketKeyEnabled bool
+V SessionCredentials.AccessKeyId string
+V SessionCredentials.SecretAccessKey string
+V SessionCredentials.SessionToken string
+V Stats.BytesProcessed int64
+V Stats.BytesReturned int64
+V Stats.BytesScanned int64
+V Tag.Key string
+V Tag.Value string
+V Tiering.Days int32
+V TooManyParts.ErrorCodeOverride string
+V TooManyParts.Message string
+V TopicConfiguration.Id string
+V TopicConfiguration.TopicArn string
+V Transition.Days int32
+V UnsupportedMediaType.ErrorCodeOverride string
+V UnsupportedMediaType.Message string
+V UpdateBucketMetadataAnnotationTableConfigurationInput.Bucket string
+V UpdateBucketMetadataAnnotationTableConfigurationInput.ContentMD5 string
+V UpdateBucketMetadataAnnotationTableConfigurationInput.ExpectedBucketOwner string
+V UpdateBucketMetadataInventoryTableConfigurationInput.Bucket string
+V UpdateBucketMetadataInventoryTableConfigurationInput.ContentMD5 string
+V UpdateBucketMetadataInventoryTableConfigurationInput.ExpectedBucketOwner string
+V UpdateBucketMetadataJournalTableConfigurationInput.Bucket string
+V UpdateBucketMetadataJournalTableConfigurationInput.ContentMD5 string
+V UpdateBucketMetadataJournalTableConfigurationInput.ExpectedBucketOwner string
+V UpdateObjectEncryptionInput.Bucket string
+V UpdateObjectEncryptionInput.ContentMD5 string
+V UpdateObjectEncryptionInput.ExpectedBucketOwner string
+V UpdateObjectEncryptionInput.Key string
+V UpdateObjectEncryptionInput.VersionId string
+V UploadPartCopyInput.Bucket string
+V UploadPartCopyInput.CopySource string
+V UploadPartCopyInput.CopySourceIfMatch string
+V UploadPartCopyInput.CopySourceIfNoneMatch string
+V UploadPartCopyInput.CopySourceRange string
+V UploadPartCopyInput.CopySourceSSECustomerAlgorithm string
+V UploadPartCopyInput.CopySourceSSECustomerKey string
+V UploadPartCopyInput.CopySourceSSECustomerKeyMD5 string
+V UploadPartCopyInput.ExpectedBucketOwner string
+V UploadPartCopyInput.ExpectedSourceBucketOwner string
+V UploadPartCopyInput.Key string
+V UploadPartCopyInput.PartNumber int32
+V UploadPartCopyInput.SSECustomerAlgorithm string
+V UploadPartCopyInput.SSECustomerKey string
+V UploadPartCopyInput.SSECustomerKeyMD5 string
+V UploadPartCopyInput.UploadId string
+V UploadPartCopyOutput.BucketKeyEnabled bool
+V UploadPartCopyOutput.CopySourceVersionId string
+V UploadPartCopyOutput.SSECustomerAlgorithm string
+V UploadPartCopyOutput.SSECustomerKeyMD5 string
+V UploadPartCopyOutput.SSEKMSKeyId string
+V UploadPartInput.Bucket string
+V UploadPartInput.ChecksumCRC32 string
+V UploadPartInput.ChecksumCRC32C string
+V UploadPartInput.ChecksumCRC64NVME string
+V UploadPartInput.ChecksumMD5 string
+V UploadPartInput.ChecksumSHA1 string
+V UploadPartInput.ChecksumSHA256 string
+V UploadPartInput.ChecksumSHA512 string
+V UploadPartInput.ChecksumXXHASH128 string
+V UploadPartInput.ChecksumXXHASH3 string
+V UploadPartInput.ChecksumXXHASH64 string
+V UploadPartInput.ContentLength int64
+V UploadPartInput.ContentMD5 string
+V UploadPartInput.ExpectedBucketOwner string
+V UploadPartInput.Key string
+V UploadPartInput.PartNumber int32
+V UploadPartInput.SSECustomerAlgorithm string
+V UploadPartInput.SSECustomerKey string
+V UploadPartInput.SSECustomerKeyMD5 string
+V UploadPartInput.UploadId string
+V UploadPartOutput.BucketKeyEnabled bool
+V UploadPartOutput.ChecksumCRC32 string
+V UploadPartOutput.ChecksumCRC32C string
+V UploadPartOutput.ChecksumCRC64NVME string
+V UploadPartOutput.ChecksumMD5 string
+V UploadPartOutput.ChecksumSHA1 string
+V UploadPartOutput.ChecksumSHA256 string
+V UploadPartOutput.ChecksumSHA512 string
+V UploadPartOutput.ChecksumXXHASH128 string
+V UploadPartOutput.ChecksumXXHASH3 string
+V UploadPartOutput.ChecksumXXHASH64 string
+V UploadPartOutput.ETag string
+V UploadPartOutput.SSECustomerAlgorithm string
+V UploadPartOutput.SSECustomerKeyMD5 string
+V UploadPartOutput.SSEKMSKeyId string
+V WriteGetObjectResponseInput.AcceptRanges string
+V WriteGetObjectResponseInput.BucketKeyEnabled bool
+V WriteGetObjectResponseInput.CacheControl string
+V WriteGetObjectResponseInput.ChecksumCRC32 string
+V WriteGetObjectResponseInput.ChecksumCRC32C string
+V WriteGetObjectResponseInput.ChecksumCRC64NVME string
+V WriteGetObjectResponseInput.ChecksumMD5 string
+V WriteGetObjectResponseInput.ChecksumSHA1 string
+V WriteGetObjectResponseInput.ChecksumSHA256 string
+V WriteGetObjectResponseInput.ChecksumSHA512 string
+V WriteGetObjectResponseInput.ChecksumXXHASH128 string
+V WriteGetObjectResponseInput.ChecksumXXHASH3 string
+V WriteGetObjectResponseInput.ChecksumXXHASH64 string
+V WriteGetObjectResponseInput.ContentDisposition string
+V WriteGetObjectResponseInput.ContentEncoding string
+V WriteGetObjectResponseInput.ContentLanguage string
+V WriteGetObjectResponseInput.ContentLength int64
+V WriteGetObjectResponseInput.ContentRange string
+V WriteGetObjectResponseInput.ContentType string
+V WriteGetObjectResponseInput.DeleteMarker bool
+V WriteGetObjectResponseInput.ETag string
+V WriteGetObjectResponseInput.ErrorCode string
+V WriteGetObjectResponseInput.ErrorMessage string
+V WriteGetObjectResponseInput.Expiration string
+V WriteGetObjectResponseInput.MissingMeta int32
+V WriteGetObjectResponseInput.PartsCount int32
+V WriteGetObjectResponseInput.RequestRoute string
+V WriteGetObjectResponseInput.RequestToken string
+V WriteGetObjectResponseInput.Restore string
+V WriteGetObjectResponseInput.SSECustomerAlgorithm string
+V WriteGetObjectResponseInput.SSECustomerKeyMD5 string
+V WriteGetObjectResponseInput.SSEKMSKeyId string
+V WriteGetObjectResponseInput.StatusCode int32
+V WriteGetObjectResponseInput.TagCount int32
+V WriteGetObjectResponseInput.VersionId string
+Q CopyObjectInput.Metadata
+Q CreateMultipartUploadInput.Metadata
+Q GetObjectOutput.Metadata
+Q HeadObjectOutput.Metadata
+Q PutObjectInput.Metadata
+Q WriteGetObjectResponseInput.Metadata
+L AccessControlPolicy.Grants Grant
+L AnalyticsAndOperator.Tags Tag
+L BucketLifecycleConfiguration.Rules LifecycleRule
+L CORSConfiguration.CORSRules CORSRule
+L CORSRule.AllowedHeaders -
+L CORSRule.AllowedMethods -
+L CORSRule.AllowedOrigins -
+L CORSRule.ExposeHeaders -
+L CompletedMultipartUpload.Parts CompletedPart
+L Delete.Objects ObjectIdentifier
+L DeleteObjectsOutput.Deleted DeletedObject
+L DeleteObjectsOutput.Errors Error
+L GetBucketAclOutput.Grants Grant
+L GetBucketCorsOutput.CORSRules CORSRule
+L GetBucketLifecycleConfigurationOutput.Rules LifecycleRule
+L GetBucketTaggingOutput.TagSet Tag
+L GetBucketWebsiteOutput.RoutingRules RoutingRule
+L GetObjectAclOutput.Grants Grant
+L GetObjectAttributesInput.ObjectAttributes ObjectAttributes
+L GetObjectAttributesParts.Parts ObjectPart
+L GetObjectTaggingOutput.TagSet Tag
+L IntelligentTieringAndOperator.Tags Tag
+L IntelligentTieringConfiguration.Tierings Tiering
+L InventoryConfiguration.OptionalFields InventoryOptionalField
+L LambdaFunctionConfiguration.Events Event
+L LifecycleRule.NoncurrentVersionTransitions NoncurrentVersionTransition
+L LifecycleRule.Transitions Transition
+L LifecycleRuleAndOperator.Tags Tag
+L ListBucketAnalyticsConfigurationsOutput.AnalyticsConfigurationList AnalyticsConfiguration
+L ListBucketIntelligentTieringConfigurationsOutput.IntelligentTieringConfigurationList IntelligentTieringConfiguration
+L ListBucketInventoryConfigurationsOutput.InventoryConfigurationList InventoryConfiguration
+L ListBucketMetricsConfigurationsOutput.MetricsConfigurationList MetricsConfiguration
+L ListBucketsOutput.Buckets Bucket
+L ListDirectoryBucketsOutput.Buckets Bucket
+L ListMultipartUploadsOutput.CommonPrefixes CommonPrefix
+L ListMultipartUploadsOutput.Uploads MultipartUpload
+L ListObjectVersionsInput.OptionalObjectAttributes OptionalObjectAttributes
+L ListObjectVersionsOutput.CommonPrefixes CommonPrefix
+L ListObjectVersionsOutput.DeleteMarkers DeleteMarkerEntry
+L ListObjectVersionsOutput.Versions ObjectVersion
+L ListObjectsInput.OptionalObjectAttributes OptionalObjectAttributes
+L ListObjectsOutput.CommonPrefixes CommonPrefix
+L ListObjectsOutput.Contents Object
+L ListObjectsV2Input.OptionalObjectAttributes OptionalObjectAttributes
+L ListObjectsV2Output.CommonPrefixes CommonPrefix
+L ListObjectsV2Output.Contents Object
+L ListPartsOutput.Parts Part
+L LoggingEnabled.TargetGrants TargetGrant
+L MetricsAndOperator.Tags Tag
+L NotificationConfiguration.LambdaFunctionConfigurations LambdaFunctionConfiguration
+L NotificationConfiguration.QueueConfigurations QueueConfiguration
+L NotificationConfiguration.TopicConfigurations TopicConfiguration
+L Object.ChecksumAlgorithm ChecksumAlgorithm
+L ObjectVersion.ChecksumAlgorithm ChecksumAlgorithm
+L OwnershipControls.Rules OwnershipControlsRule
+L QueueConfiguration.Events Event
+L ReplicationConfiguration.Rules ReplicationRule
+L ReplicationRuleAndOperator.Tags Tag
+L ServerSideEncryptionConfiguration.Rules ServerSideEncryptionRule
+L Tagging.TagSet Tag
+L TopicConfiguration.Events Event
+L WebsiteConfiguration.RoutingRules RoutingRule
+F AbacStatus.Status BucketAbacStatus
+F AbortMultipartUploadInput.RequestPayer RequestPayer
+F AbortMultipartUploadOutput.RequestCharged RequestCharged
+F AccelerateConfiguration.Status BucketAccelerateStatus
+F AccessControlTranslation.Owner OwnerOverride
+F AnalyticsS3BucketDestination.Format AnalyticsS3ExportFileFormat
+F AnnotationEntry.ChecksumAlgorithm ChecksumAlgorithm
+F AnnotationEntry.ReplicationStatus ReplicationStatus
+F AnnotationTableConfiguration.ConfigurationState AnnotationConfigurationState
+F AnnotationTableConfigurationResult.ConfigurationState AnnotationConfigurationState
+F AnnotationTableConfigurationUpdates.ConfigurationState AnnotationConfigurationState
+F BlockedEncryptionTypes.EncryptionType EncryptionType
+F BucketInfo.DataRedundancy DataRedundancy
+F BucketInfo.Type BucketType
+F CSVInput.FileHeaderInfo FileHeaderInfo
+F CSVOutput.QuoteFields QuoteFields
+F Checksum.ChecksumType ChecksumType
+F CompleteMultipartUploadInput.ChecksumType ChecksumType
+F CompleteMultipartUploadInput.RequestPayer RequestPayer
+F CompleteMultipartUploadOutput.ChecksumType ChecksumType
+F CompleteMultipartUploadOutput.RequestCharged RequestCharged
+F CompleteMultipartUploadOutput.ServerSideEncryption ServerSideEncryption
+F CopyObjectInput.ACL ObjectCannedACL
+F CopyObjectInput.AnnotationDirective AnnotationDirective
+F CopyObjectInput.ChecksumAlgorithm ChecksumAlgorithm
+F CopyObjectInput.MetadataDirective MetadataDirective
+F CopyObjectInput.ObjectLockEventHold ObjectLockEventHold
+F CopyObjectInput.ObjectLockLegalHoldStatus ObjectLockLegalHoldStatus
+F CopyObjectInput.ObjectLockMode ObjectLockMode
+F CopyObjectInput.RequestPayer RequestPayer
+F CopyObjectInput.ServerSideEncryption ServerSideEncryption
+F CopyObjectInput.StorageClass StorageClass
+F CopyObjectInput.TaggingDirective TaggingDirective
+F CopyObjectOutput.RequestCharged RequestCharged
+F CopyObjectOutput.ServerSideEncryption ServerSideEncryption
+F CopyObjectResult.ChecksumType ChecksumType
+F CreateBucketConfiguration.LocationConstraint BucketLocationConstraint
+F CreateBucketInput.ACL BucketCannedACL
+F CreateBucketInput.BucketNamespace BucketNamespace
+F CreateBucketInput.ObjectOwnership ObjectOwnership
+F CreateBucketMetadataConfigurationInput.ChecksumAlgorithm ChecksumAlgorithm
+F CreateBucketMetadataTableConfigurationInput.ChecksumAlgorithm ChecksumAlgorithm
+F CreateMultipartUploadInput.ACL ObjectCannedACL
+F CreateMultipartUploadInput.ChecksumAlgorithm ChecksumAlgorithm
+F CreateMultipartUploadInput.ChecksumType ChecksumType
+F CreateMultipartUploadInput.ObjectLockEventHold ObjectLockEventHold
+F CreateMultipartUploadInput.ObjectLockLegalHoldStatus ObjectLockLegalHoldStatus
+F CreateMultipartUploadInput.ObjectLockMode ObjectLockMode
+F CreateMultipartUploadInput.RequestPayer RequestPayer
+F CreateMultipartUploadInput.ServerSideEncryption ServerSideEncryption
+F CreateMultipartUploadInput.StorageClass StorageClass
+F CreateMultipartUploadOutput.ChecksumAlgorithm ChecksumAlgorithm
+F CreateMultipartUploadOutput.ChecksumType ChecksumType
+F CreateMultipartUploadOutput.RequestCharged RequestCharged
+F CreateMultipartUploadOutput.ServerSideEncryption ServerSideEncryption
+F CreateSessionInput.ServerSideEncryption ServerSideEncryption
+F CreateSessionInput.SessionMode SessionMode
+F CreateSessionOutput.ServerSideEncryption ServerSideEncryption
+F DefaultRetention.Mode ObjectLockRetentionMode
+F DeleteMarkerReplication.Status DeleteMarkerReplicationStatus
+F DeleteObjectAnnotationInput.RequestPayer RequestPayer
+F DeleteObjectAnnotationOutput.RequestCharged RequestCharged
+F DeleteObjectInput.RequestPayer RequestPayer
+F DeleteObjectOutput.RequestCharged RequestCharged
+F DeleteObjectsInput.ChecksumAlgorithm ChecksumAlgorithm
+F DeleteObjectsInput.RequestPayer RequestPayer
+F DeleteObjectsOutput.RequestCharged RequestCharged
+F Destination.StorageClass StorageClass
+F DestinationResult.TableBucketType S3TablesBucketType
+F Encryption.EncryptionType ServerSideEncryption
+F ExistingObjectReplication.Status ExistingObjectReplicationStatus
+F FilterRule.Name FilterRuleName
+F GetBucketAccelerateConfigurationInput.RequestPayer RequestPayer
+F GetBucketAccelerateConfigurationOutput.RequestCharged RequestCharged
+F GetBucketAccelerateConfigurationOutput.Status BucketAccelerateStatus
+F GetBucketLifecycleConfigurationOutput.TransitionDefaultMinimumObjectSize TransitionDefaultMinimumObjectSize
+F GetBucketLocationOutput.LocationConstraint BucketLocationConstraint
+F GetBucketRequestPaymentOutput.Payer Payer
+F GetBucketVersioningOutput.MFADelete MFADeleteStatus
+F GetBucketVersioningOutput.Status BucketVersioningStatus
+F GetObjectAclInput.RequestPayer RequestPayer
+F GetObjectAclOutput.RequestCharged RequestCharged
+F GetObjectAnnotationInput.ChecksumMode ChecksumMode
+F GetObjectAnnotationInput.RequestPayer RequestPayer
+F GetObjectAnnotationOutput.ChecksumType ChecksumType
+F GetObjectAnnotationOutput.ReplicationStatus ReplicationStatus
+F GetObjectAnnotationOutput.RequestCharged RequestCharged
+F GetObjectAnnotationOutput.ServerSideEncryption ServerSideEncryption
+F GetObjectAttributesInput.ObjectAttributes ObjectAttributes
+F GetObjectAttributesInput.RequestPayer RequestPayer
+F GetObjectAttributesOutput.RequestCharged RequestCharged
+F GetObjectAttributesOutput.StorageClass StorageClass
+F GetObjectInput.ChecksumMode ChecksumMode
+F GetObjectInput.RequestPayer RequestPayer
+F GetObjectLegalHoldInput.RequestPayer RequestPayer
+F GetObjectOutput.ChecksumType ChecksumType
+F GetObjectOutput.ObjectLockEventHold ObjectLockEventHold
+F GetObjectOutput.ObjectLockLegalHoldStatus ObjectLockLegalHoldStatus
+F GetObjectOutput.ObjectLockMode ObjectLockMode
+F GetObjectOutput.ReplicationStatus ReplicationStatus
+F GetObjectOutput.RequestCharged RequestCharged
+F GetObjectOutput.ServerSideEncryption ServerSideEncryption
+F GetObjectOutput.StorageClass StorageClass
+F GetObjectRetentionInput.RequestPayer RequestPayer
+F GetObjectTaggingInput.RequestPayer RequestPayer
+F GetObjectTorrentInput.RequestPayer RequestPayer
+F GetObjectTorrentOutput.RequestCharged RequestCharged
+F GlacierJobParameters.Tier Tier
+F Grant.Permission Permission
+F Grantee.Type Type
+F HeadBucketOutput.BucketLocationType LocationType
+F HeadObjectInput.ChecksumMode ChecksumMode
+F HeadObjectInput.RequestPayer RequestPayer
+F HeadObjectOutput.ArchiveStatus ArchiveStatus
+F HeadObjectOutput.ChecksumType ChecksumType
+F HeadObjectOutput.ObjectLockEventHold ObjectLockEventHold
+F HeadObjectOutput.ObjectLockLegalHoldStatus ObjectLockLegalHoldStatus
+F HeadObjectOutput.ObjectLockMode ObjectLockMode
+F HeadObjectOutput.ReplicationStatus ReplicationStatus
+F HeadObjectOutput.RequestCharged RequestCharged
+F HeadObjectOutput.ServerSideEncryption ServerSideEncryption
+F HeadObjectOutput.StorageClass StorageClass
+F InputSerialization.CompressionType CompressionType
+F IntelligentTieringConfiguration.Status IntelligentTieringStatus
+F InvalidObjectState.AccessTier IntelligentTieringAccessTier
+F InvalidObjectState.StorageClass StorageClass
+F InventoryConfiguration.IncludedObjectVersions InventoryIncludedObjectVersions
+F InventoryConfiguration.OptionalFields InventoryOptionalField
+F InventoryS3BucketDestination.Format InventoryFormat
+F InventorySchedule.Frequency InventoryFrequency
+F InventoryTableConfiguration.ConfigurationState InventoryConfigurationState
+F InventoryTableConfigurationResult.ConfigurationState InventoryConfigurationState
+F InventoryTableConfigurationUpdates.ConfigurationState InventoryConfigurationState
+F JSONInput.Type JSONType
+F LambdaFunctionConfiguration.Events Event
+F LifecycleRule.Status ExpirationStatus
+F ListMultipartUploadsInput.EncodingType EncodingType
+F ListMultipartUploadsInput.RequestPayer RequestPayer
+F ListMultipartUploadsOutput.EncodingType EncodingType
+F ListMultipartUploadsOutput.RequestCharged RequestCharged
+F ListObjectAnnotationsInput.RequestPayer RequestPayer
+F ListObjectAnnotationsOutput.RequestCharged RequestCharged
+F ListObjectVersionsInput.EncodingType EncodingType
+F ListObjectVersionsInput.OptionalObjectAttributes OptionalObjectAttributes
+F ListObjectVersionsInput.RequestPayer RequestPayer
+F ListObjectVersionsOutput.EncodingType EncodingType
+F ListObjectVersionsOutput.RequestCharged RequestCharged
+F ListObjectsInput.EncodingType EncodingType
+F ListObjectsInput.OptionalObjectAttributes OptionalObjectAttributes
+F ListObjectsInput.RequestPayer RequestPayer
+F ListObjectsOutput.EncodingType EncodingType
+F ListObjectsOutput.RequestCharged RequestCharged
+F ListObjectsV2Input.EncodingType EncodingType
+F ListObjectsV2Input.OptionalObjectAttributes OptionalObjectAttributes
+F ListObjectsV2Input.RequestPayer RequestPayer
+F ListObjectsV2Output.EncodingType EncodingType
+F ListObjectsV2Output.RequestCharged RequestCharged
+F ListPartsInput.RequestPayer RequestPayer
+F ListPartsOutput.ChecksumAlgorithm ChecksumAlgorithm
+F ListPartsOutput.ChecksumType ChecksumType
+F ListPartsOutput.RequestCharged RequestCharged
+F ListPartsOutput.StorageClass StorageClass
+F LocationInfo.Type LocationType
+F MetadataTableEncryptionConfiguration.SseAlgorithm TableSseAlgorithm
+F Metrics.Status MetricsStatus
+F MultipartUpload.ChecksumAlgorithm ChecksumAlgorithm
+F MultipartUpload.ChecksumType ChecksumType
+F MultipartUpload.StorageClass StorageClass
+F NoncurrentVersionTransition.StorageClass TransitionStorageClass
+F Object.ChecksumAlgorithm ChecksumAlgorithm
+F Object.ChecksumType ChecksumType
+F Object.StorageClass ObjectStorageClass
+F ObjectLockConfiguration.ObjectLockEnabled ObjectLockEnabled
+F ObjectLockLegalHold.Status ObjectLockLegalHoldStatus
+F ObjectLockRetention.EventHold ObjectLockEventHold
+F ObjectLockRetention.Mode ObjectLockRetentionMode
+F ObjectVersion.ChecksumAlgorithm ChecksumAlgorithm
+F ObjectVersion.ChecksumType ChecksumType
+F ObjectVersion.StorageClass ObjectVersionStorageClass
+F OwnershipControlsRule.ObjectOwnership ObjectOwnership
+F PartitionedPrefix.PartitionDateSource PartitionDateSource
+F PutBucketAbacInput.ChecksumAlgorithm ChecksumAlgorithm
+F PutBucketAccelerateConfigurationInput.ChecksumAlgorithm ChecksumAlgorithm
+F PutBucketAclInput.ACL BucketCannedACL
+F PutBucketAclInput.ChecksumAlgorithm ChecksumAlgorithm
+F PutBucketCorsInput.ChecksumAlgorithm ChecksumAlgorithm
+F PutBucketEncryptionInput.ChecksumAlgorithm ChecksumAlgorithm
+F PutBucketLifecycleConfigurationInput.ChecksumAlgorithm ChecksumAlgorithm
+F PutBucketLifecycleConfigurationInput.TransitionDefaultMinimumObjectSize TransitionDefaultMinimumObjectSize
+F PutBucketLifecycleConfigurationOutput.TransitionDefaultMinimumObjectSize TransitionDefaultMinimumObjectSize
+F PutBucketLoggingInput.ChecksumAlgorithm ChecksumAlgorithm
+F PutBucketOwnershipControlsInput.ChecksumAlgorithm ChecksumAlgorithm
+F PutBucketPolicyInput.ChecksumAlgorithm ChecksumAlgorithm
+F PutBucketReplicationInput.ChecksumAlgorithm ChecksumAlgorithm
+F PutBucketRequestPaymentInput.ChecksumAlgorithm ChecksumAlgorithm
+F PutBucketTaggingInput.ChecksumAlgorithm ChecksumAlgorithm
+F PutBucketVersioningInput.ChecksumAlgorithm ChecksumAlgorithm
+F PutBucketWebsiteInput.ChecksumAlgorithm ChecksumAlgorithm
+F PutObjectAclInput.ACL ObjectCannedACL
+F PutObjectAclInput.ChecksumAlgorithm ChecksumAlgorithm
+F PutObjectAclInput.RequestPayer RequestPayer
+F PutObjectAclOutput.RequestCharged RequestCharged
+F PutObjectAnnotationInput.ChecksumAlgorithm ChecksumAlgorithm
+F PutObjectAnnotationInput.RequestPayer RequestPayer
+F PutObjectAnnotationOutput.ChecksumType ChecksumType
+F PutObjectAnnotationOutput.RequestCharged RequestCharged
+F PutObjectAnnotationOutput.ServerSideEncryption ServerSideEncryption
+F PutObjectInput.ACL ObjectCannedACL
+F PutObjectInput.ChecksumAlgorithm ChecksumAlgorithm
+F PutObjectInput.ObjectLockEventHold ObjectLockEventHold
+F PutObjectInput.ObjectLockLegalHoldStatus ObjectLockLegalHoldStatus
+F PutObjectInput.ObjectLockMode ObjectLockMode
+F PutObjectInput.RequestPayer RequestPayer
+F PutObjectInput.ServerSideEncryption ServerSideEncryption
+F PutObjectInput.StorageClass StorageClass
+F PutObjectLegalHoldInput.ChecksumAlgorithm ChecksumAlgorithm
+F PutObjectLegalHoldInput.RequestPayer RequestPayer
+F PutObjectLegalHoldOutput.RequestCharged RequestCharged
+F PutObjectLockConfigurationInput.ChecksumAlgorithm ChecksumAlgorithm
+F PutObjectLockConfigurationInput.RequestPayer RequestPayer
+F PutObjectLockConfigurationOutput.RequestCharged RequestCharged
+F PutObjectOutput.ChecksumType ChecksumType
+F PutObjectOutput.RequestCharged RequestCharged
+F PutObjectOutput.ServerSideEncryption ServerSideEncryption
+F PutObjectRetentionInput.ChecksumAlgorithm ChecksumAlgorithm
+F PutObjectRetentionInput.RequestPayer RequestPayer
+F PutObjectRetentionOutput.RequestCharged RequestCharged
+F PutObjectTaggingInput.ChecksumAlgorithm ChecksumAlgorithm
+F PutObjectTaggingInput.RequestPayer RequestPayer
+F PutPublicAccessBlockInput.ChecksumAlgorithm ChecksumAlgorithm
+F QueueConfiguration.Events Event
+F RecordExpiration.Expiration ExpirationState
+F Redirect.Protocol Protocol
+F RedirectAllRequestsTo.Protocol Protocol
+F ReplicaModifications.Status ReplicaModificationsStatus
+F ReplicationRule.Status ReplicationRuleStatus
+F ReplicationTime.Status ReplicationTimeStatus
+F RequestPaymentConfiguration.Payer Payer
+F RestoreObjectInput.ChecksumAlgorithm ChecksumAlgorithm
+F RestoreObjectInput.RequestPayer RequestPayer
+F RestoreObjectOutput.RequestCharged RequestCharged
+F RestoreRequest.Tier Tier
+F RestoreRequest.Type RestoreRequestType
+F S3Location.CannedACL ObjectCannedACL
+F S3Location.StorageClass StorageClass
+F SelectObjectContentInput.ExpressionType ExpressionType
+F SelectParameters.ExpressionType ExpressionType
+F ServerSideEncryptionByDefault.SSEAlgorithm ServerSideEncryption
+F SseKmsEncryptedObjects.Status SseKmsEncryptedObjectsStatus
+F StorageClassAnalysisDataExport.OutputSchemaVersion StorageClassAnalysisSchemaVersion
+F TargetGrant.Permission BucketLogsPermission
+F Tiering.AccessTier IntelligentTieringAccessTier
+F TopicConfiguration.Events Event
+F Transition.StorageClass TransitionStorageClass
+F UpdateBucketMetadataAnnotationTableConfigurationInput.ChecksumAlgorithm ChecksumAlgorithm
+F UpdateBucketMetadataInventoryTableConfigurationInput.ChecksumAlgorithm ChecksumAlgorithm
+F UpdateBucketMetadataJournalTableConfigurationInput.ChecksumAlgorithm ChecksumAlgorithm
+F UpdateObjectEncryptionInput.ChecksumAlgorithm ChecksumAlgorithm
+F UpdateObjectEncryptionInput.RequestPayer RequestPayer
+F UpdateObjectEncryptionOutput.RequestCharged RequestCharged
+F UploadPartCopyInput.RequestPayer RequestPayer
+F UploadPartCopyOutput.RequestCharged RequestCharged
+F UploadPartCopyOutput.ServerSideEncryption ServerSideEncryption
+F UploadPartInput.ChecksumAlgorithm ChecksumAlgorithm
+F UploadPartInput.RequestPayer RequestPayer
+F UploadPartOutput.RequestCharged RequestCharged
+F UploadPartOutput.ServerSideEncryption ServerSideEncryption
+F VersioningConfiguration.MFADelete MFADelete
+F VersioningConfiguration.Status BucketVersioningStatus
+F WriteGetObjectResponseInput.ObjectLockLegalHoldStatus ObjectLockLegalHoldStatus
+F WriteGetObjectResponseInput.ObjectLockMode ObjectLockMode
+F WriteGetObjectResponseInput.ReplicationStatus ReplicationStatus
+F WriteGetObjectResponseInput.RequestCharged RequestCharged
+F WriteGetObjectResponseInput.ServerSideEncryption ServerSideEncryption
+F WriteGetObjectResponseInput.StorageClass StorageClass
+N APIOptions
+N AbacStatus
+N AbortDate
+N AbortIncompleteMultipartUpload
+N AbortRuleId
+N Accelerate
+N AccelerateConfiguration
+N AcceptRanges
+N AccessControlList
+N AccessControlPolicy
+N AccessControlTranslation
+N AccessKeyId
+N AccessPointAlias
+N AccessPointArn
+N Account
+N AccountId
+N AlgorithmsUsed
+N AllowQuotedRecordDelimiter
+N AllowedHeaders
+N AllowedMethods
+N AllowedOrigins
+N AnalyticsConfiguration
+N AnalyticsConfigurationList
+N And
+N AnnotationCount
+N AnnotationName
+N AnnotationPayload
+N AnnotationPrefix
+N AnnotationTableConfiguration
+N AnnotationTableConfigurationResult
+N Annotations
+N AppID
+N ApplyServerSideEncryptionByDefault
+N AuthSchemePreference
+N AuthSchemeResolver
+N AuthSchemes
+N BaseEndpoint
+N BlockPublicAcls
+N BlockPublicPolicy
+N BlockedEncryptionTypes
+N Body
+N Bucket
+N BucketAccountId
+N BucketArn
+N BucketKeyEnabled
+N BucketLocationName
+N BucketLoggingStatus
+N BucketName
+N BucketRegion
+N Buckets
+N BypassGovernanceRetention
+N BytesProcessed
+N BytesReturned
+N BytesScanned
+N CORSConfiguration
+N CORSRules
+N CSV
+N CacheControl
+N Checksum
+N ChecksumCRC32
+N ChecksumCRC32C
+N ChecksumCRC64NVME
+N ChecksumMD5
+N ChecksumSHA1
+N ChecksumSHA256
+N ChecksumSHA512
+N ChecksumXXHASH128
+N ChecksumXXHASH3
+N ChecksumXXHASH64
+N ClientLogMode
+N ClientOptions
+N ClientToken
+N Code
+N Comments
+N CommonPrefixes
+N ComputedChecksums
+N Condition
+N Conditions
+N ConfirmRemoveSelfBucketAccess
+N ContentDisposition
+N ContentEncoding
+N ContentLanguage
+N ContentLength
+N ContentMD5
+N ContentRange
+N ContentType
+N Contents
+N ContinuationToken
+N ContinueHeaderThresholdBytes
+N CopyObjectResult
+N CopyPartResult
+N CopySource
+N CopySourceIfMatch
+N CopySourceIfModifiedSince
+N CopySourceIfNoneMatch
+N CopySourceIfUnmodifiedSince
+N CopySourceRange
+N CopySourceSSECustomerAlgorithm
+N CopySourceSSECustomerKey
+N CopySourceSSECustomerKeyMD5
+N CopySourceVersionId
+N CreateBucketConfiguration
+N CreationDate
+N Credentials
+N DataExport
+N Date
+N Days
+N DaysAfterInitiation
+N DefaultEventHold
+N DefaultRetention
+N DefaultsMode
+N Delete
+N DeleteMarker
+N DeleteMarkerReplication
+N DeleteMarkerVersionId
+N DeleteMarkers
+N Deleted
+N Delimiter
+N Description
+N Destination
+N DestinationIfMatch
+N DestinationIfModifiedSince
+N DestinationIfNoneMatch
+N DestinationIfUnmodifiedSince
+N DestinationResult
+N Details
+N DisableAccessPoints
+N DisableClockSkewCorrection
+N DisableHTTPS
+N DisableLogOutputChecksumValidationSkipped
+N DisableMultiRegionAccessPoints
+N DisableS3ExpressSessionAuth
+N DisplayName
+N ETag
+N EmailAddress
+N Enabled
+N Encryption
+N EncryptionConfiguration
+N End
+N Endpoint
+N EndpointOptions
+N EndpointResolver
+N EndpointResolverV2
+N Error
+N ErrorCode
+N ErrorCodeOverride
+N ErrorDocument
+N ErrorMessage
+N Errors
+N EventBridgeConfiguration
+N EventHoldDuration
+N EventThreshold
+N ExistingObjectReplication
+N ExpectedBucketOwner
+N ExpectedSourceBucketOwner
+N Expiration
+N ExpiredObjectDeleteMarker
+N Expires
+N ExpiresString
+N ExposeHeaders
+N ExpressCredentials
+N Expression
+N FetchOwner
+N FieldDelimiter
+N Filter
+N FilterRules
+N ForcePathStyle
+N GetBucketMetadataConfigurationResult
+N GetBucketMetadataTableConfigurationResult
+N GlacierJobParameters
+N GrantFullControl
+N GrantRead
+N GrantReadACP
+N GrantWrite
+N GrantWriteACP
+N Grantee
+N Grants
+N HTTPClient
+N HTTPSignerV4
+N HostName
+N HttpErrorCodeReturnedEquals
+N HttpRedirectCode
+N ID
+N Id
+N IdempotencyTokenProvider
+N IfMatch
+N IfMatchInitiatedTime
+N IfMatchLastModifiedTime
+N IfMatchSize
+N IfModifiedSince
+N IfNoneMatch
+N IfUnmodifiedSince
+N IgnorePublicAcls
+N IndexDocument
+N Initiated
+N Initiator
+N InputSerialization
+N IntelligentTieringConfiguration
+N IntelligentTieringConfigurationList
+N Interceptors
+N InventoryConfiguration
+N InventoryConfigurationList
+N InventoryTableConfiguration
+N InventoryTableConfigurationResult
+N IsEnabled
+N IsLatest
+N IsPublic
+N IsRestoreInProgress
+N IsTruncated
+N JSON
+N JournalTableConfiguration
+N JournalTableConfigurationResult
+N KMSContext
+N KMSKeyArn
+N KMSKeyId
+N KMSMasterKeyID
+N Key
+N KeyCount
+N KeyId
+N KeyMarker
+N KeyPrefixEquals
+N KmsKeyArn
+N LambdaFunctionArn
+N LambdaFunctionConfigurations
+N LastModified
+N LastModifiedTime
+N LegalHold
+N LifecycleConfiguration
+N Limit
+N Location
+N LogDeprecated
+N LogWaitAttempts
+N Logger
+N LoggingEnabled
+N MFA
+N Marker
+N MaxAgeSeconds
+N MaxAnnotationResults
+N MaxBuckets
+N MaxDelay
+N MaxDirectoryBuckets
+N MaxKeys
+N MaxParts
+N MaxUploads
+N Message
+N Metadata
+N MetadataConfiguration
+N MetadataConfigurationResult
+N MetadataTableConfiguration
+N MetadataTableConfigurationResult
+N MeterProvider
+N Metrics
+N MetricsConfiguration
+N MetricsConfigurationList
+N MinDelay
+N Minutes
+N MissingMeta
+N MpuObjectSize
+N MultipartUpload
+N Name
+N NewerNoncurrentVersions
+N NextContinuationToken
+N NextKeyMarker
+N NextMarker
+N NextPartNumberMarker
+N NextUploadIdMarker
+N NextVersionIdMarker
+N NoncurrentDays
+N NoncurrentVersionExpiration
+N NoncurrentVersionTransitions
+N NotificationConfiguration
+N ObjectEncryption
+N ObjectIfMatch
+N ObjectLockConfiguration
+N ObjectLockEnabledForBucket
+N ObjectLockEventHoldDurationDays
+N ObjectLockEventHoldDurationYears
+N ObjectLockRetainUntilDate
+N ObjectParts
+N ObjectSize
+N ObjectSizeGreaterThan
+N ObjectSizeLessThan
+N ObjectVersionId
+N Objects
+N Operation
+N Options
+N OutputLocation
+N OutputSerialization
+N Owner
+N OwnershipControls
+N Parquet
+N PartNumber
+N PartNumberMarker
+N PartitionedPrefix
+N Parts
+N PartsCount
+N Payload
+N Policy
+N PolicyStatus
+N PostPresigner
+N Prefix
+N Presigner
+N Priority
+N PublicAccessBlockConfiguration
+N QueueArn
+N QueueConfigurations
+N Quiet
+N QuoteCharacter
+N QuoteEscapeCharacter
+N Range
+N Reader
+N RecordDelimiter
+N RecordExpiration
+N Redirect
+N RedirectAllRequestsTo
+N Region
+N RenameSource
+N ReplaceKeyPrefixWith
+N ReplaceKeyWith
+N ReplicaKmsKeyID
+N ReplicaModifications
+N ReplicationConfiguration
+N ReplicationTime
+N RequestChecksumCalculation
+N RequestPaymentConfiguration
+N RequestProgress
+N RequestRoute
+N RequestToken
+N ResolvedRegion
+N Resolver
+N ResponseCacheControl
+N ResponseChecksumValidation
+N ResponseContentDisposition
+N ResponseContentEncoding
+N ResponseContentLanguage
+N ResponseContentType
+N ResponseExpires
+N Restore
+N RestoreExpiryDate
+N RestoreOutputPath
+N RestoreRequest
+N RestoreStatus
+N RestrictPublicBuckets
+N ResultMetadata
+N RetainUntilDate
+N Retention
+N RetryMaxAttempts
+N RetryMode
+N Retryable
+N Retryer
+N Role
+N RoutingRules
+N Rule
+N Rules
+N RuntimeEnvironment
+N S3
+N S3BucketDestination
+N S3TablesDestination
+N S3TablesDestinationResult
+N SSECustomerAlgorithm
+N SSECustomerKey
+N SSECustomerKeyMD5
+N SSEKMS
+N SSEKMSEncryptionContext
+N SSEKMSKeyId
+N SSES3
+N ScanRange
+N Schedule
+N SecretAccessKey
+N SelectParameters
+N ServerSideEncryptionConfiguration
+N SessionToken
+N SimplePrefix
+N Size
+N SkipDestinationValidation
+N SourceIfMatch
+N SourceIfModifiedSince
+N SourceIfNoneMatch
+N SourceIfUnmodifiedSince
+N SourceSelectionCriteria
+N SseKmsEncryptedObjects
+N Start
+N StartAfter
+N Status
+N StatusCode
+N StopOnDuplicateToken
+N StorageClassAnalysis
+N Suffix
+N TableArn
+N TableBucketArn
+N TableName
+N TableNamespace
+N TableStatus
+N Tag
+N TagCount
+N TagSet
+N Tagging
+N Tags
+N TargetBucket
+N TargetGrants
+N TargetObjectKeyFormat
+N TargetPrefix
+N Tierings
+N Time
+N Token
+N TopicArn
+N TopicConfigurations
+N TotalPartsCount
+N TracerProvider
+N Transitions
+N Type
+N URI
+N URL
+N UploadId
+N UploadIdMarker
+N Uploads
+N UseARNRegion
+N UseAccelerate
+N UseArnRegion
+N UseDualStack
+N UseDualStackEndpoint
+N UseDualstack
+N UseFIPS
+N UseFIPSEndpoint
+N UseGlobalEndpoint
+N UseObjectLambdaEndpoint
+N UsePathStyle
+N UseS3ExpressControlEndpoint
+N UserMetadata
+N Value
+N Values
+N VersionId
+N VersionIdMarker
+N VersioningConfiguration
+N Versions
+N WebsiteConfiguration
+N WebsiteRedirectLocation
+N WriteOffsetBytes
+N Years
+T AbacStatus
+T AbortIncompleteMultipartUpload
+T AccelerateConfiguration
+T AccessControlPolicy
+T AccessControlTranslation
+T AccessDenied
+T AnalyticsAndOperator
+T AnalyticsConfiguration
+T AnalyticsExportDestination
+T AnalyticsFilter
+T AnalyticsFilterMemberAnd
+T AnalyticsFilterMemberPrefix
+T AnalyticsFilterMemberTag
+T AnalyticsS3BucketDestination
+T AnalyticsS3ExportFileFormat
+T AnnotationConfigurationState
+T AnnotationDirective
+T AnnotationEntry
+T AnnotationLimitExceeded
+T AnnotationNameTooLong
+T AnnotationTableConfiguration
+T AnnotationTableConfigurationResult
+T AnnotationTableConfigurationUpdates
+T ArchiveStatus
+T BlockedEncryptionTypes
+T Bucket
+T BucketAbacStatus
+T BucketAccelerateStatus
+T BucketAlreadyExists
+T BucketAlreadyOwnedByYou
+T BucketCannedACL
+T BucketInfo
+T BucketLifecycleConfiguration
+T BucketLocationConstraint
+T BucketLoggingStatus
+T BucketLogsPermission
+T BucketNamespace
+T BucketType
+T BucketVersioningStatus
+T CORSConfiguration
+T CORSRule
+T CSVInput
+T CSVOutput
+T Checksum
+T ChecksumAlgorithm
+T ChecksumMode
+T ChecksumType
+T CommonPrefix
+T CompletedMultipartUpload
+T CompletedPart
+T CompressionType
+T Condition
+T ContinuationEvent
+T CopyObjectResult
+T CopyPartResult
+T CreateBucketConfiguration
+T DataRedundancy
+T DefaultRetention
+T Delete
+T DeleteMarkerEntry
+T DeleteMarkerReplication
+T DeleteMarkerReplicationStatus
+T DeletedObject
+T Destination
+T DestinationResult
+T EncodingType
+T Encryption
+T EncryptionConfiguration
+T EncryptionType
+T EncryptionTypeMismatch
+T EndEvent
+T Error
+T ErrorDetails
+T ErrorDocument
+T Event
+T EventBridgeConfiguration
+T EventHoldDuration
+T ExistingObjectReplication
+T ExistingObjectReplicationStatus
+T ExpirationState
+T ExpirationStatus
+T ExpressionType
+T FileHeaderInfo
+T FilterRule
+T FilterRuleName
+T GetBucketMetadataConfigurationResult
+T GetBucketMetadataTableConfigurationResult
+T GetObjectAttributesParts
+T GlacierJobParameters
+T Grant
+T Grantee
+T IdempotencyParameterMismatch
+T IndexDocument
+T Initiator
+T InputSerialization
+T IntelligentTieringAccessTier
+T IntelligentTieringAndOperator
+T IntelligentTieringConfiguration
+T IntelligentTieringFilter
+T IntelligentTieringStatus
+T InvalidAnnotationName
+T InvalidObjectState
+T InvalidPrefix
+T InvalidRequest
+T InvalidWriteOffset
+T InventoryConfiguration
+T InventoryConfigurationState
+T InventoryDestination
+T InventoryEncryption
+T InventoryFilter
+T InventoryFormat
+T InventoryFrequency
+T InventoryIncludedObjectVersions
+T InventoryOptionalField
+T InventoryS3BucketDestination
+T InventorySchedule
+T InventoryTableConfiguration
+T InventoryTableConfigurationResult
+T InventoryTableConfigurationUpdates
+T JSONInput
+T JSONOutput
+T JSONType
+T JournalTableConfiguration
+T JournalTableConfigurationResult
+T JournalTableConfigurationUpdates
+T LambdaFunctionConfiguration
+T LifecycleExpiration
+T LifecycleRule
+T LifecycleRuleAndOperator
+T LifecycleRuleFilter
+T LocationInfo
+T LocationType
+T LoggingEnabled
+T MFADelete
+T MFADeleteStatus
+T MetadataConfiguration
+T MetadataConfigurationResult
+T MetadataDirective
+T MetadataEntry
+T MetadataTableConfiguration
+T MetadataTableConfigurationResult
+T MetadataTableEncryptionConfiguration
+T Metrics
+T MetricsAndOperator
+T MetricsConfiguration
+T MetricsFilter
+T MetricsFilterMemberAccessPointArn
+T MetricsFilterMemberAnd
+T MetricsFilterMemberPrefix
+T MetricsFilterMemberTag
+T MetricsStatus
+T MultipartUpload
+T NoSuchAnnotation
+T NoSuchBucket
+T NoSuchKey
+T NoSuchUpload
+T NoncurrentVersionExpiration
+T NoncurrentVersionTransition
+T NotFound
+T NotificationConfiguration
+T NotificationConfigurationFilter
+T Object
+T ObjectAlreadyInActiveTierError
+T ObjectAttributes
+T ObjectCannedACL
+T ObjectEncryption
+T ObjectEncryptionMemberSSEKMS
+T ObjectIdentifier
+T ObjectLockConfiguration
+T ObjectLockEnabled
+T ObjectLockEventHold
+T ObjectLockLegalHold
+T ObjectLockLegalHoldStatus
+T ObjectLockMode
+T ObjectLockRetention
+T ObjectLockRetentionMode
+T ObjectLockRule
+T ObjectNotInActiveTierError
+T ObjectOwnership
+T ObjectPart
+T ObjectStorageClass
+T ObjectVersion
+T ObjectVersionStorageClass
+T OptionalObjectAttributes
+T OutputLocation
+T OutputSerialization
+T Owner
+T OwnerOverride
+T OwnershipControls
+T OwnershipControlsRule
+T ParquetInput
+T Part
+T PartitionDateSource
+T PartitionedPrefix
+T Payer
+T Permission
+T PolicyStatus
+T Progress
+T ProgressEvent
+T Protocol
+T PublicAccessBlockConfiguration
+T QueueConfiguration
+T QuoteFields
+T RecordExpiration
+T RecordsEvent
+T Redirect
+T RedirectAllRequestsTo
+T ReplicaModifications
+T ReplicaModificationsStatus
+T ReplicationConfiguration
+T ReplicationRule
+T ReplicationRuleAndOperator
+T ReplicationRuleFilter
+T ReplicationRuleStatus
+T ReplicationStatus
+T ReplicationTime
+T ReplicationTimeStatus
+T ReplicationTimeValue
+T RequestCharged
+T RequestPayer
+T RequestPaymentConfiguration
+T RequestProgress
+T RestoreRequest
+T RestoreRequestType
+T RestoreStatus
+T RoutingRule
+T S3KeyFilter
+T S3Location
+T S3TablesBucketType
+T S3TablesDestination
+T S3TablesDestinationResult
+T SSEKMS
+T SSEKMSEncryption
+T SSES3
+T ScanRange
+T SelectObjectContentEventStream
+T SelectObjectContentEventStreamMemberCont
+T SelectObjectContentEventStreamMemberEnd
+T SelectObjectContentEventStreamMemberProgress
+T SelectObjectContentEventStreamMemberRecords
+T SelectObjectContentEventStreamMemberStats
+T SelectParameters
+T ServerSideEncryption
+T ServerSideEncryptionByDefault
+T ServerSideEncryptionConfiguration
+T ServerSideEncryptionRule
+T SessionCredentials
+T SessionMode
+T SimplePrefix
+T SourceSelectionCriteria
+T SseKmsEncryptedObjects
+T SseKmsEncryptedObjectsStatus
+T Stats
+T StatsEvent
+T StorageClass
+T StorageClassAnalysis
+T StorageClassAnalysisDataExport
+T StorageClassAnalysisSchemaVersion
+T TableSseAlgorithm
+T Tag
+T Tagging
+T TaggingDirective
+T TargetGrant
+T TargetObjectKeyFormat
+T Tier
+T Tiering
+T TooManyParts
+T TopicConfiguration
+T Transition
+T TransitionDefaultMinimumObjectSize
+T TransitionStorageClass
+T Type
+T UnknownUnionMember
+T UnsupportedMediaType
+T VersioningConfiguration
+T WebsiteConfiguration
+E AnalyticsS3ExportFileFormatCsv AnalyticsS3ExportFileFormat
+E AnnotationConfigurationStateDisabled AnnotationConfigurationState
+E AnnotationConfigurationStateEnabled AnnotationConfigurationState
+E AnnotationDirectiveCopy AnnotationDirective
+E AnnotationDirectiveExclude AnnotationDirective
+E ArchiveStatusArchiveAccess ArchiveStatus
+E ArchiveStatusDeepArchiveAccess ArchiveStatus
+E BucketAbacStatusDisabled BucketAbacStatus
+E BucketAbacStatusEnabled BucketAbacStatus
+E BucketAccelerateStatusEnabled BucketAccelerateStatus
+E BucketAccelerateStatusSuspended BucketAccelerateStatus
+E BucketCannedACLAuthenticatedRead BucketCannedACL
+E BucketCannedACLPrivate BucketCannedACL
+E BucketCannedACLPublicRead BucketCannedACL
+E BucketCannedACLPublicReadWrite BucketCannedACL
+E BucketLocationConstraintAfSouth1 BucketLocationConstraint
+E BucketLocationConstraintApEast1 BucketLocationConstraint
+E BucketLocationConstraintApEast2 BucketLocationConstraint
+E BucketLocationConstraintApNortheast1 BucketLocationConstraint
+E BucketLocationConstraintApNortheast2 BucketLocationConstraint
+E BucketLocationConstraintApNortheast3 BucketLocationConstraint
+E BucketLocationConstraintApSouth1 BucketLocationConstraint
+E BucketLocationConstraintApSouth2 BucketLocationConstraint
+E BucketLocationConstraintApSoutheast1 BucketLocationConstraint
+E BucketLocationConstraintApSoutheast2 BucketLocationConstraint
+E BucketLocationConstraintApSoutheast3 BucketLocationConstraint
+E BucketLocationConstraintApSoutheast4 BucketLocationConstraint
+E BucketLocationConstraintApSoutheast5 BucketLocationConstraint
+E BucketLocationConstraintApSoutheast6 BucketLocationConstraint
+E BucketLocationConstraintApSoutheast7 BucketLocationConstraint
+E BucketLocationConstraintCaCentral1 BucketLocationConstraint
+E BucketLocationConstraintCaWest1 BucketLocationConstraint
+E BucketLocationConstraintCnNorth1 BucketLocationConstraint
+E BucketLocationConstraintCnNorthwest1 BucketLocationConstraint
+E BucketLocationConstraintEu BucketLocationConstraint
+E BucketLocationConstraintEuCentral1 BucketLocationConstraint
+E BucketLocationConstraintEuCentral2 BucketLocationConstraint
+E BucketLocationConstraintEuNorth1 BucketLocationConstraint
+E BucketLocationConstraintEuSouth1 BucketLocationConstraint
+E BucketLocationConstraintEuSouth2 BucketLocationConstraint
+E BucketLocationConstraintEuWest1 BucketLocationConstraint
+E BucketLocationConstraintEuWest2 BucketLocationConstraint
+E BucketLocationConstraintEuWest3 BucketLocationConstraint
+E BucketLocationConstraintIlCentral1 BucketLocationConstraint
+E BucketLocationConstraintMeCentral1 BucketLocationConstraint
+E BucketLocationConstraintMeSouth1 BucketLocationConstraint
+E BucketLocationConstraintMxCentral1 BucketLocationConstraint
+E BucketLocationConstraintSaEast1 BucketLocationConstraint
+E BucketLocationConstraintUsEast2 BucketLocationConstraint
+E BucketLocationConstraintUsGovEast1 BucketLocationConstraint
+E BucketLocationConstraintUsGovWest1 BucketLocationConstraint
+E BucketLocationConstraintUsWest1 BucketLocationConstraint
+E BucketLocationConstraintUsWest2 BucketLocationConstraint
+E BucketLogsPermissionFullControl BucketLogsPermission
+E BucketLogsPermissionRead BucketLogsPermission
+E BucketLogsPermissionWrite BucketLogsPermission
+E BucketNamespaceAccountRegional BucketNamespace
+E BucketNamespaceGlobal BucketNamespace
+E BucketTypeDirectory BucketType
+E BucketVersioningStatusEnabled BucketVersioningStatus
+E BucketVersioningStatusSuspended BucketVersioningStatus
+E ChecksumAlgorithmCrc32 ChecksumAlgorithm
+E ChecksumAlgorithmCrc32c ChecksumAlgorithm
+E ChecksumAlgorithmCrc64nvme ChecksumAlgorithm
+E ChecksumAlgorithmMd5 ChecksumAlgorithm
+E ChecksumAlgorithmSha1 ChecksumAlgorithm
+E ChecksumAlgorithmSha256 ChecksumAlgorithm
+E ChecksumAlgorithmSha512 ChecksumAlgorithm
+E ChecksumAlgorithmXxhash128 ChecksumAlgorithm
+E ChecksumAlgorithmXxhash3 ChecksumAlgorithm
+E ChecksumAlgorithmXxhash64 ChecksumAlgorithm
+E ChecksumModeEnabled ChecksumMode
+E ChecksumTypeComposite ChecksumType
+E ChecksumTypeFullObject ChecksumType
+E CompressionTypeBzip2 CompressionType
+E CompressionTypeGzip CompressionType
+E CompressionTypeNone CompressionType
+E DataRedundancySingleAvailabilityZone DataRedundancy
+E DataRedundancySingleLocalZone DataRedundancy
+E DeleteMarkerReplicationStatusDisabled DeleteMarkerReplicationStatus
+E DeleteMarkerReplicationStatusEnabled DeleteMarkerReplicationStatus
+E EncodingTypeUrl EncodingType
+E EncryptionTypeNone EncryptionType
+E EncryptionTypeSseC EncryptionType
+E EventS3IntelligentTiering Event
+E EventS3LifecycleExpiration Event
+E EventS3LifecycleExpirationDelete Event
+E EventS3LifecycleExpirationDeleteMarkerCreated Event
+E EventS3LifecycleTransition Event
+E EventS3ObjectAclPut Event
+E EventS3ObjectAnnotation Event
+E EventS3ObjectAnnotationDelete Event
+E EventS3ObjectAnnotationPut Event
+E EventS3ObjectCreated Event
+E EventS3ObjectCreatedCompleteMultipartUpload Event
+E EventS3ObjectCreatedCopy Event
+E EventS3ObjectCreatedPost Event
+E EventS3ObjectCreatedPut Event
+E EventS3ObjectRemoved Event
+E EventS3ObjectRemovedDelete Event
+E EventS3ObjectRemovedDeleteMarkerCreated Event
+E EventS3ObjectRestore Event
+E EventS3ObjectRestoreCompleted Event
+E EventS3ObjectRestoreDelete Event
+E EventS3ObjectRestorePost Event
+E EventS3ObjectRetentionPut Event
+E EventS3ObjectTagging Event
+E EventS3ObjectTaggingDelete Event
+E EventS3ObjectTaggingPut Event
+E EventS3ReducedRedundancyLostObject Event
+E EventS3Replication Event
+E EventS3ReplicationOperationFailedReplication Event
+E EventS3ReplicationOperationMissedThreshold Event
+E EventS3ReplicationOperationNotTracked Event
+E EventS3ReplicationOperationReplicatedAfterThreshold Event
+E ExistingObjectReplicationStatusDisabled ExistingObjectReplicationStatus
+E ExistingObjectReplicationStatusEnabled ExistingObjectReplicationStatus
+E ExpirationStateDisabled ExpirationState
+E ExpirationStateEnabled ExpirationState
+E ExpirationStatusDisabled ExpirationStatus
+E ExpirationStatusEnabled ExpirationStatus
+E ExpressionTypeSql ExpressionType
+E FileHeaderInfoIgnore FileHeaderInfo
+E FileHeaderInfoNone FileHeaderInfo
+E FileHeaderInfoUse FileHeaderInfo
+E FilterRuleNamePrefix FilterRuleName
+E FilterRuleNameSuffix FilterRuleName
+E IntelligentTieringAccessTierArchiveAccess IntelligentTieringAccessTier
+E IntelligentTieringAccessTierDeepArchiveAccess IntelligentTieringAccessTier
+E IntelligentTieringStatusDisabled IntelligentTieringStatus
+E IntelligentTieringStatusEnabled IntelligentTieringStatus
+E InventoryConfigurationStateDisabled InventoryConfigurationState
+E InventoryConfigurationStateEnabled InventoryConfigurationState
+E InventoryFormatCsv InventoryFormat
+E InventoryFormatOrc InventoryFormat
+E InventoryFormatParquet InventoryFormat
+E InventoryFrequencyDaily InventoryFrequency
+E InventoryFrequencyWeekly InventoryFrequency
+E InventoryIncludedObjectVersionsAll InventoryIncludedObjectVersions
+E InventoryIncludedObjectVersionsCurrent InventoryIncludedObjectVersions
+E InventoryOptionalFieldBucketKeyStatus InventoryOptionalField
+E InventoryOptionalFieldChecksumAlgorithm InventoryOptionalField
+E InventoryOptionalFieldETag InventoryOptionalField
+E InventoryOptionalFieldEncryptionStatus InventoryOptionalField
+E InventoryOptionalFieldIntelligentTieringAccessTier InventoryOptionalField
+E InventoryOptionalFieldIsMultipartUploaded InventoryOptionalField
+E InventoryOptionalFieldLastModifiedDate InventoryOptionalField
+E InventoryOptionalFieldLifecycleExpirationDate InventoryOptionalField
+E InventoryOptionalFieldObjectAccessControlList InventoryOptionalField
+E InventoryOptionalFieldObjectLockEventHoldDuration InventoryOptionalField
+E InventoryOptionalFieldObjectLockEventHoldStatus InventoryOptionalField
+E InventoryOptionalFieldObjectLockLegalHoldStatus InventoryOptionalField
+E InventoryOptionalFieldObjectLockMode InventoryOptionalField
+E InventoryOptionalFieldObjectLockRetainUntilDate InventoryOptionalField
+E InventoryOptionalFieldObjectOwner InventoryOptionalField
+E InventoryOptionalFieldReplicationStatus InventoryOptionalField
+E InventoryOptionalFieldSize InventoryOptionalField
+E InventoryOptionalFieldStorageClass InventoryOptionalField
+E JSONTypeDocument JSONType
+E JSONTypeLines JSONType
+E LocationTypeAvailabilityZone LocationType
+E LocationTypeLocalZone LocationType
+E MFADeleteDisabled MFADelete
+E MFADeleteEnabled MFADelete
+E MFADeleteStatusDisabled MFADeleteStatus
+E MFADeleteStatusEnabled MFADeleteStatus
+E MetadataDirectiveCopy MetadataDirective
+E MetadataDirectiveReplace MetadataDirective
+E MetricsStatusDisabled MetricsStatus
+E MetricsStatusEnabled MetricsStatus
+E ObjectAttributesChecksum ObjectAttributes
+E ObjectAttributesEtag ObjectAttributes
+E ObjectAttributesObjectParts ObjectAttributes
+E ObjectAttributesObjectSize ObjectAttributes
+E ObjectAttributesStorageClass ObjectAttributes
+E ObjectCannedACLAuthenticatedRead ObjectCannedACL
+E ObjectCannedACLAwsExecRead ObjectCannedACL
+E ObjectCannedACLBucketOwnerFullControl ObjectCannedACL
+E ObjectCannedACLBucketOwnerRead ObjectCannedACL
+E ObjectCannedACLPrivate ObjectCannedACL
+E ObjectCannedACLPublicRead ObjectCannedACL
+E ObjectCannedACLPublicReadWrite ObjectCannedACL
+E ObjectLockEnabledEnabled ObjectLockEnabled
+E ObjectLockEventHoldOff ObjectLockEventHold
+E ObjectLockEventHoldOn ObjectLockEventHold
+E ObjectLockLegalHoldStatusOff ObjectLockLegalHoldStatus
+E ObjectLockLegalHoldStatusOn ObjectLockLegalHoldStatus
+E ObjectLockModeCompliance ObjectLockMode
+E ObjectLockModeGovernance ObjectLockMode
+E ObjectLockRetentionModeCompliance ObjectLockRetentionMode
+E ObjectLockRetentionModeGovernance ObjectLockRetentionMode
+E ObjectOwnershipBucketOwnerEnforced ObjectOwnership
+E ObjectOwnershipBucketOwnerPreferred ObjectOwnership
+E ObjectOwnershipObjectWriter ObjectOwnership
+E ObjectStorageClassAwsBackupLowCostWarm ObjectStorageClass
+E ObjectStorageClassAwsBackupWarm ObjectStorageClass
+E ObjectStorageClassDeepArchive ObjectStorageClass
+E ObjectStorageClassExpressOnezone ObjectStorageClass
+E ObjectStorageClassFsxOntap ObjectStorageClass
+E ObjectStorageClassFsxOpenzfs ObjectStorageClass
+E ObjectStorageClassGlacier ObjectStorageClass
+E ObjectStorageClassGlacierIr ObjectStorageClass
+E ObjectStorageClassIntelligentTiering ObjectStorageClass
+E ObjectStorageClassOnezoneIa ObjectStorageClass
+E ObjectStorageClassOutposts ObjectStorageClass
+E ObjectStorageClassReducedRedundancy ObjectStorageClass
+E ObjectStorageClassSnow ObjectStorageClass
+E ObjectStorageClassStandard ObjectStorageClass
+E ObjectStorageClassStandardIa ObjectStorageClass
+E ObjectVersionStorageClassStandard ObjectVersionStorageClass
+E OptionalObjectAttributesRestoreStatus OptionalObjectAttributes
+E OwnerOverrideDestination OwnerOverride
+E PartitionDateSourceDeliveryTime PartitionDateSource
+E PartitionDateSourceEventTime PartitionDateSource
+E PayerBucketOwner Payer
+E PayerRequester Payer
+E PermissionFullControl Permission
+E PermissionRead Permission
+E PermissionReadAcp Permission
+E PermissionWrite Permission
+E PermissionWriteAcp Permission
+E ProtocolHttp Protocol
+E ProtocolHttps Protocol
+E QuoteFieldsAlways QuoteFields
+E QuoteFieldsAsneeded QuoteFields
+E ReplicaModificationsStatusDisabled ReplicaModificationsStatus
+E ReplicaModificationsStatusEnabled ReplicaModificationsStatus
+E ReplicationRuleStatusDisabled ReplicationRuleStatus
+E ReplicationRuleStatusEnabled ReplicationRuleStatus
+E ReplicationStatusComplete ReplicationStatus
+E ReplicationStatusCompleted ReplicationStatus
+E ReplicationStatusFailed ReplicationStatus
+E ReplicationStatusPending ReplicationStatus
+E ReplicationStatusReplica ReplicationStatus
+E ReplicationTimeStatusDisabled ReplicationTimeStatus
+E ReplicationTimeStatusEnabled ReplicationTimeStatus
+E RequestChargedRequester RequestCharged
+E RequestPayerRequester RequestPayer
+E RestoreRequestTypeSelect RestoreRequestType
+E S3TablesBucketTypeAws S3TablesBucketType
+E S3TablesBucketTypeCustomer S3TablesBucketType
+E ServerSideEncryptionAes256 ServerSideEncryption
+E ServerSideEncryptionAwsBackup ServerSideEncryption
+E ServerSideEncryptionAwsFsx ServerSideEncryption
+E ServerSideEncryptionAwsKms ServerSideEncryption
+E ServerSideEncryptionAwsKmsDsse ServerSideEncryption
+E SessionModeReadOnly SessionMode
+E SessionModeReadWrite SessionMode
+E SseKmsEncryptedObjectsStatusDisabled SseKmsEncryptedObjectsStatus
+E SseKmsEncryptedObjectsStatusEnabled SseKmsEncryptedObjectsStatus
+E StorageClassAnalysisSchemaVersionV1 StorageClassAnalysisSchemaVersion
+E StorageClassAwsBackupLowCostWarm StorageClass
+E StorageClassAwsBackupWarm StorageClass
+E StorageClassDeepArchive StorageClass
+E StorageClassExpressOnezone StorageClass
+E StorageClassFsxOntap StorageClass
+E StorageClassFsxOpenzfs StorageClass
+E StorageClassGlacier StorageClass
+E StorageClassGlacierIr StorageClass
+E StorageClassIntelligentTiering StorageClass
+E StorageClassOnezoneIa StorageClass
+E StorageClassOutposts StorageClass
+E StorageClassReducedRedundancy StorageClass
+E StorageClassSnow StorageClass
+E StorageClassStandard StorageClass
+E StorageClassStandardIa StorageClass
+E TableSseAlgorithmAes256 TableSseAlgorithm
+E TableSseAlgorithmAwsKms TableSseAlgorithm
+E TaggingDirectiveCopy TaggingDirective
+E TaggingDirectiveReplace TaggingDirective
+E TierBulk Tier
+E TierExpedited Tier
+E TierStandard Tier
+E TransitionDefaultMinimumObjectSizeAllStorageClasses128k TransitionDefaultMinimumObjectSize
+E TransitionDefaultMinimumObjectSizeVariesByStorageClass TransitionDefaultMinimumObjectSize
+E TransitionStorageClassDeepArchive TransitionStorageClass
+E TransitionStorageClassGlacier TransitionStorageClass
+E TransitionStorageClassGlacierIr TransitionStorageClass
+E TransitionStorageClassIntelligentTiering TransitionStorageClass
+E TransitionStorageClassOnezoneIa TransitionStorageClass
+E TransitionStorageClassStandardIa TransitionStorageClass
+E TypeAmazonCustomerByEmail Type
+E TypeCanonicalUser Type
+E TypeGroup Type

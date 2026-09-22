@@ -1,0 +1,1331 @@
+C Athena
+S AuthResolverParameters
+S AuthSchemeResolver
+S BatchGetNamedQueryInput
+S BatchGetNamedQueryOutput
+S BatchGetPreparedStatementInput
+S BatchGetPreparedStatementOutput
+S BatchGetQueryExecutionInput
+S BatchGetQueryExecutionOutput
+S CancelCapacityReservationInput
+S CancelCapacityReservationOutput
+S Client
+S CreateCapacityReservationInput
+S CreateCapacityReservationOutput
+S CreateDataCatalogInput
+S CreateDataCatalogOutput
+S CreateNamedQueryInput
+S CreateNamedQueryOutput
+S CreateNotebookInput
+S CreateNotebookOutput
+S CreatePreparedStatementInput
+S CreatePreparedStatementOutput
+S CreatePresignedNotebookUrlInput
+S CreatePresignedNotebookUrlOutput
+S CreateWorkGroupInput
+S CreateWorkGroupOutput
+S DeleteCapacityReservationInput
+S DeleteCapacityReservationOutput
+S DeleteDataCatalogInput
+S DeleteDataCatalogOutput
+S DeleteNamedQueryInput
+S DeleteNamedQueryOutput
+S DeleteNotebookInput
+S DeleteNotebookOutput
+S DeletePreparedStatementInput
+S DeletePreparedStatementOutput
+S DeleteWorkGroupInput
+S DeleteWorkGroupOutput
+S EndpointParameters
+S EndpointResolver
+S EndpointResolverFromURL
+S EndpointResolverFunc
+S EndpointResolverOptions
+S EndpointResolverV2
+S ExportNotebookInput
+S ExportNotebookOutput
+S GetCalculationExecutionCodeInput
+S GetCalculationExecutionCodeOutput
+S GetCalculationExecutionInput
+S GetCalculationExecutionOutput
+S GetCalculationExecutionStatusInput
+S GetCalculationExecutionStatusOutput
+S GetCapacityAssignmentConfigurationInput
+S GetCapacityAssignmentConfigurationOutput
+S GetCapacityReservationInput
+S GetCapacityReservationOutput
+S GetDataCatalogInput
+S GetDataCatalogOutput
+S GetDatabaseInput
+S GetDatabaseOutput
+S GetNamedQueryInput
+S GetNamedQueryOutput
+S GetNotebookMetadataInput
+S GetNotebookMetadataOutput
+S GetPreparedStatementInput
+S GetPreparedStatementOutput
+S GetQueryExecutionInput
+S GetQueryExecutionOutput
+S GetQueryResultsAPIClient
+S GetQueryResultsInput
+S GetQueryResultsOutput
+S GetQueryResultsPaginator
+S GetQueryResultsPaginatorOptions
+S GetQueryRuntimeStatisticsInput
+S GetQueryRuntimeStatisticsOutput
+S GetResourceDashboardInput
+S GetResourceDashboardOutput
+S GetSessionEndpointInput
+S GetSessionEndpointOutput
+S GetSessionInput
+S GetSessionOutput
+S GetSessionStatusInput
+S GetSessionStatusOutput
+S GetTableMetadataInput
+S GetTableMetadataOutput
+S GetWorkGroupInput
+S GetWorkGroupOutput
+S HTTPClient
+S HTTPSignerV4
+S IdempotencyTokenProvider
+S ImportNotebookInput
+S ImportNotebookOutput
+S ListApplicationDPUSizesAPIClient
+S ListApplicationDPUSizesInput
+S ListApplicationDPUSizesOutput
+S ListApplicationDPUSizesPaginator
+S ListApplicationDPUSizesPaginatorOptions
+S ListCalculationExecutionsAPIClient
+S ListCalculationExecutionsInput
+S ListCalculationExecutionsOutput
+S ListCalculationExecutionsPaginator
+S ListCalculationExecutionsPaginatorOptions
+S ListCapacityReservationsAPIClient
+S ListCapacityReservationsInput
+S ListCapacityReservationsOutput
+S ListCapacityReservationsPaginator
+S ListCapacityReservationsPaginatorOptions
+S ListDataCatalogsAPIClient
+S ListDataCatalogsInput
+S ListDataCatalogsOutput
+S ListDataCatalogsPaginator
+S ListDataCatalogsPaginatorOptions
+S ListDatabasesAPIClient
+S ListDatabasesInput
+S ListDatabasesOutput
+S ListDatabasesPaginator
+S ListDatabasesPaginatorOptions
+S ListEngineVersionsAPIClient
+S ListEngineVersionsInput
+S ListEngineVersionsOutput
+S ListEngineVersionsPaginator
+S ListEngineVersionsPaginatorOptions
+S ListExecutorsAPIClient
+S ListExecutorsInput
+S ListExecutorsOutput
+S ListExecutorsPaginator
+S ListExecutorsPaginatorOptions
+S ListNamedQueriesAPIClient
+S ListNamedQueriesInput
+S ListNamedQueriesOutput
+S ListNamedQueriesPaginator
+S ListNamedQueriesPaginatorOptions
+S ListNotebookMetadataInput
+S ListNotebookMetadataOutput
+S ListNotebookSessionsInput
+S ListNotebookSessionsOutput
+S ListPreparedStatementsAPIClient
+S ListPreparedStatementsInput
+S ListPreparedStatementsOutput
+S ListPreparedStatementsPaginator
+S ListPreparedStatementsPaginatorOptions
+S ListQueryExecutionsAPIClient
+S ListQueryExecutionsInput
+S ListQueryExecutionsOutput
+S ListQueryExecutionsPaginator
+S ListQueryExecutionsPaginatorOptions
+S ListSessionsAPIClient
+S ListSessionsInput
+S ListSessionsOutput
+S ListSessionsPaginator
+S ListSessionsPaginatorOptions
+S ListTableMetadataAPIClient
+S ListTableMetadataInput
+S ListTableMetadataOutput
+S ListTableMetadataPaginator
+S ListTableMetadataPaginatorOptions
+S ListTagsForResourceAPIClient
+S ListTagsForResourceInput
+S ListTagsForResourceOutput
+S ListTagsForResourcePaginator
+S ListTagsForResourcePaginatorOptions
+S ListWorkGroupsAPIClient
+S ListWorkGroupsInput
+S ListWorkGroupsOutput
+S ListWorkGroupsPaginator
+S ListWorkGroupsPaginatorOptions
+S New
+S NewDefaultEndpointResolver
+S NewDefaultEndpointResolverV2
+S NewFromConfig
+S NewGetQueryResultsPaginator
+S NewListApplicationDPUSizesPaginator
+S NewListCalculationExecutionsPaginator
+S NewListCapacityReservationsPaginator
+S NewListDataCatalogsPaginator
+S NewListDatabasesPaginator
+S NewListEngineVersionsPaginator
+S NewListExecutorsPaginator
+S NewListNamedQueriesPaginator
+S NewListPreparedStatementsPaginator
+S NewListQueryExecutionsPaginator
+S NewListSessionsPaginator
+S NewListTableMetadataPaginator
+S NewListTagsForResourcePaginator
+S NewListWorkGroupsPaginator
+S Options
+S PutCapacityAssignmentConfigurationInput
+S PutCapacityAssignmentConfigurationOutput
+S ResolveEndpoint
+S ServiceAPIVersion
+S ServiceID
+S StartCalculationExecutionInput
+S StartCalculationExecutionOutput
+S StartQueryExecutionInput
+S StartQueryExecutionOutput
+S StartSessionInput
+S StartSessionOutput
+S StopCalculationExecutionInput
+S StopCalculationExecutionOutput
+S StopQueryExecutionInput
+S StopQueryExecutionOutput
+S TagResourceInput
+S TagResourceOutput
+S TerminateSessionInput
+S TerminateSessionOutput
+S TypeRegistry
+S UntagResourceInput
+S UntagResourceOutput
+S UpdateCapacityReservationInput
+S UpdateCapacityReservationOutput
+S UpdateDataCatalogInput
+S UpdateDataCatalogOutput
+S UpdateNamedQueryInput
+S UpdateNamedQueryOutput
+S UpdateNotebookInput
+S UpdateNotebookMetadataInput
+S UpdateNotebookMetadataOutput
+S UpdateNotebookOutput
+S UpdatePreparedStatementInput
+S UpdatePreparedStatementOutput
+S UpdateWorkGroupInput
+S UpdateWorkGroupOutput
+S WithAPIOptions
+S WithEndpointResolver
+S WithEndpointResolverV2
+S WithSigV4SigningName
+S WithSigV4SigningRegion
+O BatchGetNamedQuery
+O BatchGetPreparedStatement
+O BatchGetQueryExecution
+O CancelCapacityReservation
+O CreateCapacityReservation
+O CreateDataCatalog
+O CreateNamedQuery
+O CreateNotebook
+O CreatePreparedStatement
+O CreatePresignedNotebookUrl
+O CreateWorkGroup
+O DeleteCapacityReservation
+O DeleteDataCatalog
+O DeleteNamedQuery
+O DeleteNotebook
+O DeletePreparedStatement
+O DeleteWorkGroup
+O ExportNotebook
+O GetCalculationExecution
+O GetCalculationExecutionCode
+O GetCalculationExecutionStatus
+O GetCapacityAssignmentConfiguration
+O GetCapacityReservation
+O GetDataCatalog
+O GetDatabase
+O GetNamedQuery
+O GetNotebookMetadata
+O GetPreparedStatement
+O GetQueryExecution
+O GetQueryResults
+O GetQueryRuntimeStatistics
+O GetResourceDashboard
+O GetSession
+O GetSessionEndpoint
+O GetSessionStatus
+O GetTableMetadata
+O GetWorkGroup
+O ImportNotebook
+O ListApplicationDPUSizes
+O ListCalculationExecutions
+O ListCapacityReservations
+O ListDataCatalogs
+O ListDatabases
+O ListEngineVersions
+O ListExecutors
+O ListNamedQueries
+O ListNotebookMetadata
+O ListNotebookSessions
+O ListPreparedStatements
+O ListQueryExecutions
+O ListSessions
+O ListTableMetadata
+O ListTagsForResource
+O ListWorkGroups
+O PutCapacityAssignmentConfiguration
+O StartCalculationExecution
+O StartQueryExecution
+O StartSession
+O StopCalculationExecution
+O StopQueryExecution
+O TagResource
+O TerminateSession
+O UntagResource
+O UpdateCapacityReservation
+O UpdateDataCatalog
+O UpdateNamedQuery
+O UpdateNotebook
+O UpdateNotebookMetadata
+O UpdatePreparedStatement
+O UpdateWorkGroup
+X ErrCodeInternalServerException InternalServerException
+X ErrCodeInvalidRequestException InvalidRequestException
+X ErrCodeMetadataException MetadataException
+X ErrCodeResourceNotFoundException ResourceNotFoundException
+X ErrCodeSessionAlreadyExistsException SessionAlreadyExistsException
+X ErrCodeTooManyRequestsException TooManyRequestsException
+I AthenaError.ErrorCategory int64 int32
+I AthenaError.ErrorType int64 int32
+I CapacityReservation.AllocatedDpus int64 int32
+I CapacityReservation.TargetDpus int64 int32
+I CreateCapacityReservationInput.TargetDpus int64 int32
+I EngineConfiguration.CoordinatorDpuSize int64 int32
+I EngineConfiguration.DefaultExecutorDpuSize int64 int32
+I EngineConfiguration.MaxConcurrentDpus int64 int32
+I GetQueryResultsInput.MaxResults int64 int32
+I ListApplicationDPUSizesInput.MaxResults int64 int32
+I ListCalculationExecutionsInput.MaxResults int64 int32
+I ListCapacityReservationsInput.MaxResults int64 int32
+I ListDataCatalogsInput.MaxResults int64 int32
+I ListDatabasesInput.MaxResults int64 int32
+I ListEngineVersionsInput.MaxResults int64 int32
+I ListExecutorsInput.MaxResults int64 int32
+I ListNamedQueriesInput.MaxResults int64 int32
+I ListNotebookMetadataInput.MaxResults int64 int32
+I ListNotebookSessionsInput.MaxResults int64 int32
+I ListPreparedStatementsInput.MaxResults int64 int32
+I ListQueryExecutionsInput.MaxResults int64 int32
+I ListSessionsInput.MaxResults int64 int32
+I ListTableMetadataInput.MaxResults int64 int32
+I ListTagsForResourceInput.MaxResults int64 int32
+I ListWorkGroupsInput.MaxResults int64 int32
+I ResultReuseByAgeConfiguration.MaxAgeInMinutes int64 int32
+I StartSessionInput.SessionIdleTimeoutInMinutes int64 int32
+I UpdateCapacityReservationInput.TargetDpus int64 int32
+R CalculationSummary.Status CalculationStatus
+R CapacityReservation.LastAllocation CapacityAllocation
+R CreateDataCatalogOutput.DataCatalog DataCatalog
+R CreateWorkGroupInput.Configuration WorkGroupConfiguration
+R DeleteDataCatalogOutput.DataCatalog DataCatalog
+R ExportNotebookOutput.NotebookMetadata NotebookMetadata
+R GetCalculationExecutionOutput.Result CalculationResult
+R GetCalculationExecutionOutput.Statistics CalculationStatistics
+R GetCalculationExecutionOutput.Status CalculationStatus
+R GetCalculationExecutionStatusOutput.Statistics CalculationStatistics
+R GetCalculationExecutionStatusOutput.Status CalculationStatus
+R GetCapacityAssignmentConfigurationOutput.CapacityAssignmentConfiguration CapacityAssignmentConfiguration
+R GetCapacityReservationOutput.CapacityReservation CapacityReservation
+R GetDataCatalogOutput.DataCatalog DataCatalog
+R GetDatabaseOutput.Database Database
+R GetNamedQueryOutput.NamedQuery NamedQuery
+R GetNotebookMetadataOutput.NotebookMetadata NotebookMetadata
+R GetPreparedStatementOutput.PreparedStatement PreparedStatement
+R GetQueryExecutionOutput.QueryExecution QueryExecution
+R GetQueryResultsOutput.ResultSet ResultSet
+R GetQueryRuntimeStatisticsOutput.QueryRuntimeStatistics QueryRuntimeStatistics
+R GetSessionOutput.EngineConfiguration EngineConfiguration
+R GetSessionOutput.MonitoringConfiguration MonitoringConfiguration
+R GetSessionOutput.SessionConfiguration SessionConfiguration
+R GetSessionOutput.Statistics SessionStatistics
+R GetSessionOutput.Status SessionStatus
+R GetSessionStatusOutput.Status SessionStatus
+R GetTableMetadataOutput.TableMetadata TableMetadata
+R GetWorkGroupOutput.WorkGroup WorkGroup
+R ListNotebookMetadataInput.Filters FilterDefinition
+R ManagedQueryResultsConfiguration.EncryptionConfiguration ManagedQueryResultsEncryptionConfiguration
+R ManagedQueryResultsConfigurationUpdates.EncryptionConfiguration ManagedQueryResultsEncryptionConfiguration
+R MonitoringConfiguration.CloudWatchLoggingConfiguration CloudWatchLoggingConfiguration
+R MonitoringConfiguration.ManagedLoggingConfiguration ManagedLoggingConfiguration
+R MonitoringConfiguration.S3LoggingConfiguration S3LoggingConfiguration
+R QueryExecution.EngineVersion EngineVersion
+R QueryExecution.ManagedQueryResultsConfiguration ManagedQueryResultsConfiguration
+R QueryExecution.QueryExecutionContext QueryExecutionContext
+R QueryExecution.QueryResultsS3AccessGrantsConfiguration QueryResultsS3AccessGrantsConfiguration
+R QueryExecution.ResultConfiguration ResultConfiguration
+R QueryExecution.ResultReuseConfiguration ResultReuseConfiguration
+R QueryExecution.Statistics QueryExecutionStatistics
+R QueryExecution.Status QueryExecutionStatus
+R QueryExecutionStatistics.ResultReuseInformation ResultReuseInformation
+R QueryExecutionStatus.AthenaError AthenaError
+R QueryRuntimeStatistics.OutputStage QueryStage
+R QueryRuntimeStatistics.Rows QueryRuntimeStatisticsRows
+R QueryRuntimeStatistics.Timeline QueryRuntimeStatisticsTimeline
+R QueryStage.QueryStagePlan QueryStagePlanNode
+R ResultConfiguration.AclConfiguration AclConfiguration
+R ResultConfiguration.EncryptionConfiguration EncryptionConfiguration
+R ResultConfigurationUpdates.AclConfiguration AclConfiguration
+R ResultConfigurationUpdates.EncryptionConfiguration EncryptionConfiguration
+R ResultReuseConfiguration.ResultReuseByAgeConfiguration ResultReuseByAgeConfiguration
+R ResultSet.ResultSetMetadata ResultSetMetadata
+R SessionConfiguration.EncryptionConfiguration EncryptionConfiguration
+R SessionSummary.EngineVersion EngineVersion
+R SessionSummary.Status SessionStatus
+R StartCalculationExecutionInput.CalculationConfiguration CalculationConfiguration
+R StartQueryExecutionInput.EngineConfiguration EngineConfiguration
+R StartQueryExecutionInput.QueryExecutionContext QueryExecutionContext
+R StartQueryExecutionInput.ResultConfiguration ResultConfiguration
+R StartQueryExecutionInput.ResultReuseConfiguration ResultReuseConfiguration
+R StartSessionInput.EngineConfiguration EngineConfiguration
+R StartSessionInput.MonitoringConfiguration MonitoringConfiguration
+R UpdateWorkGroupInput.ConfigurationUpdates WorkGroupConfigurationUpdates
+R WorkGroup.Configuration WorkGroupConfiguration
+R WorkGroupConfiguration.CustomerContentEncryptionConfiguration CustomerContentEncryptionConfiguration
+R WorkGroupConfiguration.EngineConfiguration EngineConfiguration
+R WorkGroupConfiguration.EngineVersion EngineVersion
+R WorkGroupConfiguration.IdentityCenterConfiguration IdentityCenterConfiguration
+R WorkGroupConfiguration.ManagedQueryResultsConfiguration ManagedQueryResultsConfiguration
+R WorkGroupConfiguration.MonitoringConfiguration MonitoringConfiguration
+R WorkGroupConfiguration.QueryResultsS3AccessGrantsConfiguration QueryResultsS3AccessGrantsConfiguration
+R WorkGroupConfiguration.ResultConfiguration ResultConfiguration
+R WorkGroupConfigurationUpdates.CustomerContentEncryptionConfiguration CustomerContentEncryptionConfiguration
+R WorkGroupConfigurationUpdates.EngineConfiguration EngineConfiguration
+R WorkGroupConfigurationUpdates.EngineVersion EngineVersion
+R WorkGroupConfigurationUpdates.ManagedQueryResultsConfigurationUpdates ManagedQueryResultsConfigurationUpdates
+R WorkGroupConfigurationUpdates.MonitoringConfiguration MonitoringConfiguration
+R WorkGroupConfigurationUpdates.QueryResultsS3AccessGrantsConfiguration QueryResultsS3AccessGrantsConfiguration
+R WorkGroupConfigurationUpdates.ResultConfigurationUpdates ResultConfigurationUpdates
+R WorkGroupSummary.EngineVersion EngineVersion
+V ApplicationDPUSizes.ApplicationRuntimeId string
+V AthenaError.ErrorCategory int32
+V AthenaError.ErrorMessage string
+V AthenaError.ErrorType int32
+V BatchGetPreparedStatementInput.WorkGroup string
+V CalculationConfiguration.CodeBlock string
+V CalculationResult.ResultS3Uri string
+V CalculationResult.ResultType string
+V CalculationResult.StdErrorS3Uri string
+V CalculationResult.StdOutS3Uri string
+V CalculationStatistics.DpuExecutionInMillis int64
+V CalculationStatistics.Progress string
+V CalculationStatus.StateChangeReason string
+V CalculationSummary.CalculationExecutionId string
+V CalculationSummary.Description string
+V CancelCapacityReservationInput.Name string
+V CapacityAllocation.StatusMessage string
+V CapacityAssignmentConfiguration.CapacityReservationName string
+V CapacityReservation.AllocatedDpus int32
+V CapacityReservation.Name string
+V CapacityReservation.TargetDpus int32
+V Classification.Name string
+V CloudWatchLoggingConfiguration.Enabled bool
+V CloudWatchLoggingConfiguration.LogGroup string
+V CloudWatchLoggingConfiguration.LogStreamNamePrefix string
+V Column.Comment string
+V Column.Name string
+V Column.Type string
+V ColumnInfo.CatalogName string
+V ColumnInfo.Label string
+V ColumnInfo.Name string
+V ColumnInfo.SchemaName string
+V ColumnInfo.TableName string
+V ColumnInfo.Type string
+V CreateCapacityReservationInput.Name string
+V CreateCapacityReservationInput.TargetDpus int32
+V CreateDataCatalogInput.Description string
+V CreateDataCatalogInput.Name string
+V CreateNamedQueryInput.ClientRequestToken string
+V CreateNamedQueryInput.Database string
+V CreateNamedQueryInput.Description string
+V CreateNamedQueryInput.Name string
+V CreateNamedQueryInput.QueryString string
+V CreateNamedQueryInput.WorkGroup string
+V CreateNamedQueryOutput.NamedQueryId string
+V CreateNotebookInput.ClientRequestToken string
+V CreateNotebookInput.Name string
+V CreateNotebookInput.WorkGroup string
+V CreateNotebookOutput.NotebookId string
+V CreatePreparedStatementInput.Description string
+V CreatePreparedStatementInput.QueryStatement string
+V CreatePreparedStatementInput.StatementName string
+V CreatePreparedStatementInput.WorkGroup string
+V CreatePresignedNotebookUrlInput.SessionId string
+V CreatePresignedNotebookUrlOutput.AuthToken string
+V CreatePresignedNotebookUrlOutput.AuthTokenExpirationTime int64
+V CreatePresignedNotebookUrlOutput.NotebookUrl string
+V CreateWorkGroupInput.Description string
+V CreateWorkGroupInput.Name string
+V CustomerContentEncryptionConfiguration.KmsKey string
+V DataCatalog.Description string
+V DataCatalog.Error string
+V DataCatalog.Name string
+V DataCatalogSummary.CatalogName string
+V DataCatalogSummary.Error string
+V Database.Description string
+V Database.Name string
+V Datum.VarCharValue string
+V DeleteCapacityReservationInput.Name string
+V DeleteDataCatalogInput.Name string
+V DeleteNamedQueryInput.NamedQueryId string
+V DeleteNotebookInput.NotebookId string
+V DeletePreparedStatementInput.StatementName string
+V DeletePreparedStatementInput.WorkGroup string
+V DeleteWorkGroupInput.RecursiveDeleteOption bool
+V DeleteWorkGroupInput.WorkGroup string
+V EncryptionConfiguration.KmsKey string
+V EndpointParameters.Endpoint string
+V EndpointParameters.Region string
+V EndpointParameters.UseDualStack bool
+V EndpointParameters.UseFIPS bool
+V EngineConfiguration.CoordinatorDpuSize int32
+V EngineConfiguration.DefaultExecutorDpuSize int32
+V EngineConfiguration.MaxConcurrentDpus int32
+V EngineVersion.EffectiveEngineVersion string
+V EngineVersion.SelectedEngineVersion string
+V ExecutorsSummary.ExecutorId string
+V ExecutorsSummary.ExecutorSize int64
+V ExecutorsSummary.StartDateTime int64
+V ExecutorsSummary.TerminationDateTime int64
+V ExportNotebookInput.NotebookId string
+V ExportNotebookOutput.Payload string
+V FilterDefinition.Name string
+V GetCalculationExecutionCodeInput.CalculationExecutionId string
+V GetCalculationExecutionCodeOutput.CodeBlock string
+V GetCalculationExecutionInput.CalculationExecutionId string
+V GetCalculationExecutionOutput.CalculationExecutionId string
+V GetCalculationExecutionOutput.Description string
+V GetCalculationExecutionOutput.SessionId string
+V GetCalculationExecutionOutput.WorkingDirectory string
+V GetCalculationExecutionStatusInput.CalculationExecutionId string
+V GetCapacityAssignmentConfigurationInput.CapacityReservationName string
+V GetCapacityReservationInput.Name string
+V GetDataCatalogInput.Name string
+V GetDataCatalogInput.WorkGroup string
+V GetDatabaseInput.CatalogName string
+V GetDatabaseInput.DatabaseName string
+V GetDatabaseInput.WorkGroup string
+V GetNamedQueryInput.NamedQueryId string
+V GetNotebookMetadataInput.NotebookId string
+V GetPreparedStatementInput.StatementName string
+V GetPreparedStatementInput.WorkGroup string
+V GetQueryExecutionInput.QueryExecutionId string
+V GetQueryResultsInput.MaxResults int32
+V GetQueryResultsInput.NextToken string
+V GetQueryResultsInput.QueryExecutionId string
+V GetQueryResultsOutput.NextToken string
+V GetQueryResultsOutput.UpdateCount int64
+V GetQueryRuntimeStatisticsInput.QueryExecutionId string
+V GetResourceDashboardInput.ResourceARN string
+V GetResourceDashboardOutput.Url string
+V GetSessionEndpointInput.SessionId string
+V GetSessionEndpointOutput.AuthToken string
+V GetSessionEndpointOutput.EndpointUrl string
+V GetSessionInput.SessionId string
+V GetSessionOutput.Description string
+V GetSessionOutput.EngineVersion string
+V GetSessionOutput.NotebookVersion string
+V GetSessionOutput.SessionId string
+V GetSessionOutput.WorkGroup string
+V GetSessionStatusInput.SessionId string
+V GetSessionStatusOutput.SessionId string
+V GetTableMetadataInput.CatalogName string
+V GetTableMetadataInput.DatabaseName string
+V GetTableMetadataInput.TableName string
+V GetTableMetadataInput.WorkGroup string
+V GetWorkGroupInput.WorkGroup string
+V IdentityCenterConfiguration.EnableIdentityCenter bool
+V IdentityCenterConfiguration.IdentityCenterInstanceArn string
+V ImportNotebookInput.ClientRequestToken string
+V ImportNotebookInput.Name string
+V ImportNotebookInput.NotebookS3LocationUri string
+V ImportNotebookInput.Payload string
+V ImportNotebookInput.WorkGroup string
+V ImportNotebookOutput.NotebookId string
+V InternalServerException.ErrorCodeOverride string
+V InternalServerException.Message string
+V InvalidRequestException.AthenaErrorCode string
+V InvalidRequestException.ErrorCodeOverride string
+V InvalidRequestException.Message string
+V ListApplicationDPUSizesInput.MaxResults int32
+V ListApplicationDPUSizesInput.NextToken string
+V ListApplicationDPUSizesOutput.NextToken string
+V ListCalculationExecutionsInput.MaxResults int32
+V ListCalculationExecutionsInput.NextToken string
+V ListCalculationExecutionsInput.SessionId string
+V ListCalculationExecutionsOutput.NextToken string
+V ListCapacityReservationsInput.MaxResults int32
+V ListCapacityReservationsInput.NextToken string
+V ListCapacityReservationsOutput.NextToken string
+V ListDataCatalogsInput.MaxResults int32
+V ListDataCatalogsInput.NextToken string
+V ListDataCatalogsInput.WorkGroup string
+V ListDataCatalogsOutput.NextToken string
+V ListDatabasesInput.CatalogName string
+V ListDatabasesInput.MaxResults int32
+V ListDatabasesInput.NextToken string
+V ListDatabasesInput.WorkGroup string
+V ListDatabasesOutput.NextToken string
+V ListEngineVersionsInput.MaxResults int32
+V ListEngineVersionsInput.NextToken string
+V ListEngineVersionsOutput.NextToken string
+V ListExecutorsInput.MaxResults int32
+V ListExecutorsInput.NextToken string
+V ListExecutorsInput.SessionId string
+V ListExecutorsOutput.NextToken string
+V ListExecutorsOutput.SessionId string
+V ListNamedQueriesInput.MaxResults int32
+V ListNamedQueriesInput.NextToken string
+V ListNamedQueriesInput.WorkGroup string
+V ListNamedQueriesOutput.NextToken string
+V ListNotebookMetadataInput.MaxResults int32
+V ListNotebookMetadataInput.NextToken string
+V ListNotebookMetadataInput.WorkGroup string
+V ListNotebookMetadataOutput.NextToken string
+V ListNotebookSessionsInput.MaxResults int32
+V ListNotebookSessionsInput.NextToken string
+V ListNotebookSessionsInput.NotebookId string
+V ListNotebookSessionsOutput.NextToken string
+V ListPreparedStatementsInput.MaxResults int32
+V ListPreparedStatementsInput.NextToken string
+V ListPreparedStatementsInput.WorkGroup string
+V ListPreparedStatementsOutput.NextToken string
+V ListQueryExecutionsInput.MaxResults int32
+V ListQueryExecutionsInput.NextToken string
+V ListQueryExecutionsInput.WorkGroup string
+V ListQueryExecutionsOutput.NextToken string
+V ListSessionsInput.MaxResults int32
+V ListSessionsInput.NextToken string
+V ListSessionsInput.WorkGroup string
+V ListSessionsOutput.NextToken string
+V ListTableMetadataInput.CatalogName string
+V ListTableMetadataInput.DatabaseName string
+V ListTableMetadataInput.Expression string
+V ListTableMetadataInput.MaxResults int32
+V ListTableMetadataInput.NextToken string
+V ListTableMetadataInput.WorkGroup string
+V ListTableMetadataOutput.NextToken string
+V ListTagsForResourceInput.MaxResults int32
+V ListTagsForResourceInput.NextToken string
+V ListTagsForResourceInput.ResourceARN string
+V ListTagsForResourceOutput.NextToken string
+V ListWorkGroupsInput.MaxResults int32
+V ListWorkGroupsInput.NextToken string
+V ListWorkGroupsOutput.NextToken string
+V ManagedLoggingConfiguration.Enabled bool
+V ManagedLoggingConfiguration.KmsKey string
+V ManagedQueryResultsConfigurationUpdates.Enabled bool
+V ManagedQueryResultsConfigurationUpdates.RemoveEncryptionConfiguration bool
+V ManagedQueryResultsEncryptionConfiguration.KmsKey string
+V MetadataException.ErrorCodeOverride string
+V MetadataException.Message string
+V NamedQuery.Database string
+V NamedQuery.Description string
+V NamedQuery.Name string
+V NamedQuery.NamedQueryId string
+V NamedQuery.QueryString string
+V NamedQuery.WorkGroup string
+V NotebookMetadata.Name string
+V NotebookMetadata.NotebookId string
+V NotebookMetadata.WorkGroup string
+V NotebookSessionSummary.SessionId string
+V Options.BaseEndpoint string
+V PreparedStatement.Description string
+V PreparedStatement.QueryStatement string
+V PreparedStatement.StatementName string
+V PreparedStatement.WorkGroupName string
+V PreparedStatementSummary.StatementName string
+V PutCapacityAssignmentConfigurationInput.CapacityReservationName string
+V QueryExecution.Query string
+V QueryExecution.QueryExecutionId string
+V QueryExecution.SubstatementType string
+V QueryExecution.WorkGroup string
+V QueryExecutionContext.Catalog string
+V QueryExecutionContext.Database string
+V QueryExecutionStatistics.DataManifestLocation string
+V QueryExecutionStatistics.DataScannedInBytes int64
+V QueryExecutionStatistics.DpuCount float64
+V QueryExecutionStatistics.EngineExecutionTimeInMillis int64
+V QueryExecutionStatistics.QueryPlanningTimeInMillis int64
+V QueryExecutionStatistics.QueryQueueTimeInMillis int64
+V QueryExecutionStatistics.ServicePreProcessingTimeInMillis int64
+V QueryExecutionStatistics.ServiceProcessingTimeInMillis int64
+V QueryExecutionStatistics.TotalExecutionTimeInMillis int64
+V QueryExecutionStatus.StateChangeReason string
+V QueryResultsS3AccessGrantsConfiguration.CreateUserLevelPrefix bool
+V QueryResultsS3AccessGrantsConfiguration.EnableS3AccessGrants bool
+V QueryRuntimeStatisticsRows.InputBytes int64
+V QueryRuntimeStatisticsRows.InputRows int64
+V QueryRuntimeStatisticsRows.OutputBytes int64
+V QueryRuntimeStatisticsRows.OutputRows int64
+V QueryRuntimeStatisticsTimeline.EngineExecutionTimeInMillis int64
+V QueryRuntimeStatisticsTimeline.QueryPlanningTimeInMillis int64
+V QueryRuntimeStatisticsTimeline.QueryQueueTimeInMillis int64
+V QueryRuntimeStatisticsTimeline.ServicePreProcessingTimeInMillis int64
+V QueryRuntimeStatisticsTimeline.ServiceProcessingTimeInMillis int64
+V QueryRuntimeStatisticsTimeline.TotalExecutionTimeInMillis int64
+V QueryStage.ExecutionTime int64
+V QueryStage.InputBytes int64
+V QueryStage.InputRows int64
+V QueryStage.OutputBytes int64
+V QueryStage.OutputRows int64
+V QueryStage.StageId int64
+V QueryStage.State string
+V QueryStagePlanNode.Identifier string
+V QueryStagePlanNode.Name string
+V ResourceNotFoundException.ErrorCodeOverride string
+V ResourceNotFoundException.Message string
+V ResourceNotFoundException.ResourceName string
+V ResultConfiguration.ExpectedBucketOwner string
+V ResultConfiguration.OutputLocation string
+V ResultConfigurationUpdates.ExpectedBucketOwner string
+V ResultConfigurationUpdates.OutputLocation string
+V ResultConfigurationUpdates.RemoveAclConfiguration bool
+V ResultConfigurationUpdates.RemoveEncryptionConfiguration bool
+V ResultConfigurationUpdates.RemoveExpectedBucketOwner bool
+V ResultConfigurationUpdates.RemoveOutputLocation bool
+V ResultReuseByAgeConfiguration.MaxAgeInMinutes int32
+V S3LoggingConfiguration.Enabled bool
+V S3LoggingConfiguration.KmsKey string
+V S3LoggingConfiguration.LogLocation string
+V SessionAlreadyExistsException.ErrorCodeOverride string
+V SessionAlreadyExistsException.Message string
+V SessionConfiguration.ExecutionRole string
+V SessionConfiguration.IdleTimeoutSeconds int64
+V SessionConfiguration.SessionIdleTimeoutInMinutes int32
+V SessionConfiguration.WorkingDirectory string
+V SessionStatistics.DpuExecutionInMillis int64
+V SessionStatus.StateChangeReason string
+V SessionSummary.Description string
+V SessionSummary.NotebookVersion string
+V SessionSummary.SessionId string
+V StartCalculationExecutionInput.ClientRequestToken string
+V StartCalculationExecutionInput.CodeBlock string
+V StartCalculationExecutionInput.Description string
+V StartCalculationExecutionInput.SessionId string
+V StartCalculationExecutionOutput.CalculationExecutionId string
+V StartQueryExecutionInput.ClientRequestToken string
+V StartQueryExecutionInput.QueryString string
+V StartQueryExecutionInput.WorkGroup string
+V StartQueryExecutionOutput.QueryExecutionId string
+V StartSessionInput.ClientRequestToken string
+V StartSessionInput.CopyWorkGroupTags bool
+V StartSessionInput.Description string
+V StartSessionInput.ExecutionRole string
+V StartSessionInput.NotebookVersion string
+V StartSessionInput.SessionIdleTimeoutInMinutes int32
+V StartSessionInput.WorkGroup string
+V StartSessionOutput.SessionId string
+V StopCalculationExecutionInput.CalculationExecutionId string
+V StopQueryExecutionInput.QueryExecutionId string
+V TableMetadata.Name string
+V TableMetadata.TableType string
+V Tag.Key string
+V Tag.Value string
+V TagResourceInput.ResourceARN string
+V TerminateSessionInput.SessionId string
+V TooManyRequestsException.ErrorCodeOverride string
+V TooManyRequestsException.Message string
+V UnprocessedNamedQueryId.ErrorCode string
+V UnprocessedNamedQueryId.ErrorMessage string
+V UnprocessedNamedQueryId.NamedQueryId string
+V UnprocessedPreparedStatementName.ErrorCode string
+V UnprocessedPreparedStatementName.ErrorMessage string
+V UnprocessedPreparedStatementName.StatementName string
+V UnprocessedQueryExecutionId.ErrorCode string
+V UnprocessedQueryExecutionId.ErrorMessage string
+V UnprocessedQueryExecutionId.QueryExecutionId string
+V UntagResourceInput.ResourceARN string
+V UpdateCapacityReservationInput.Name string
+V UpdateCapacityReservationInput.TargetDpus int32
+V UpdateDataCatalogInput.Description string
+V UpdateDataCatalogInput.Name string
+V UpdateNamedQueryInput.Description string
+V UpdateNamedQueryInput.Name string
+V UpdateNamedQueryInput.NamedQueryId string
+V UpdateNamedQueryInput.QueryString string
+V UpdateNotebookInput.ClientRequestToken string
+V UpdateNotebookInput.NotebookId string
+V UpdateNotebookInput.Payload string
+V UpdateNotebookInput.SessionId string
+V UpdateNotebookMetadataInput.ClientRequestToken string
+V UpdateNotebookMetadataInput.Name string
+V UpdateNotebookMetadataInput.NotebookId string
+V UpdatePreparedStatementInput.Description string
+V UpdatePreparedStatementInput.QueryStatement string
+V UpdatePreparedStatementInput.StatementName string
+V UpdatePreparedStatementInput.WorkGroup string
+V UpdateWorkGroupInput.Description string
+V UpdateWorkGroupInput.WorkGroup string
+V WorkGroup.Description string
+V WorkGroup.IdentityCenterApplicationArn string
+V WorkGroup.Name string
+V WorkGroupConfiguration.AdditionalConfiguration string
+V WorkGroupConfiguration.BytesScannedCutoffPerQuery int64
+V WorkGroupConfiguration.EnableMinimumEncryptionConfiguration bool
+V WorkGroupConfiguration.EnforceWorkGroupConfiguration bool
+V WorkGroupConfiguration.ExecutionRole string
+V WorkGroupConfiguration.PublishCloudWatchMetricsEnabled bool
+V WorkGroupConfiguration.RequesterPaysEnabled bool
+V WorkGroupConfigurationUpdates.AdditionalConfiguration string
+V WorkGroupConfigurationUpdates.BytesScannedCutoffPerQuery int64
+V WorkGroupConfigurationUpdates.EnableMinimumEncryptionConfiguration bool
+V WorkGroupConfigurationUpdates.EnforceWorkGroupConfiguration bool
+V WorkGroupConfigurationUpdates.ExecutionRole string
+V WorkGroupConfigurationUpdates.PublishCloudWatchMetricsEnabled bool
+V WorkGroupConfigurationUpdates.RemoveBytesScannedCutoffPerQuery bool
+V WorkGroupConfigurationUpdates.RemoveCustomerContentEncryptionConfiguration bool
+V WorkGroupConfigurationUpdates.RequesterPaysEnabled bool
+V WorkGroupSummary.Description string
+V WorkGroupSummary.IdentityCenterApplicationArn string
+V WorkGroupSummary.Name string
+Q CreateDataCatalogInput.Parameters
+Q DataCatalog.Parameters
+Q Database.Parameters
+Q EngineConfiguration.AdditionalConfigs
+Q EngineConfiguration.SparkProperties
+Q TableMetadata.Parameters
+Q UpdateDataCatalogInput.Parameters
+D AthenaError.Retryable bool
+D ColumnInfo.CaseSensitive bool
+D ResultReuseByAgeConfiguration.Enabled bool
+D ResultReuseInformation.ReusedPreviousResult bool
+L ApplicationDPUSizes.SupportedDPUSizes -
+L BatchGetNamedQueryInput.NamedQueryIds -
+L BatchGetNamedQueryOutput.NamedQueries NamedQuery
+L BatchGetNamedQueryOutput.UnprocessedNamedQueryIds UnprocessedNamedQueryId
+L BatchGetPreparedStatementInput.PreparedStatementNames -
+L BatchGetPreparedStatementOutput.PreparedStatements PreparedStatement
+L BatchGetPreparedStatementOutput.UnprocessedPreparedStatementNames UnprocessedPreparedStatementName
+L BatchGetQueryExecutionInput.QueryExecutionIds -
+L BatchGetQueryExecutionOutput.QueryExecutions QueryExecution
+L BatchGetQueryExecutionOutput.UnprocessedQueryExecutionIds UnprocessedQueryExecutionId
+L CapacityAssignment.WorkGroupNames -
+L CapacityAssignmentConfiguration.CapacityAssignments CapacityAssignment
+L CreateCapacityReservationInput.Tags Tag
+L CreateDataCatalogInput.Tags Tag
+L CreateWorkGroupInput.Tags Tag
+L ListApplicationDPUSizesOutput.ApplicationDPUSizes ApplicationDPUSizes
+L ListCalculationExecutionsOutput.Calculations CalculationSummary
+L ListCapacityReservationsOutput.CapacityReservations CapacityReservation
+L ListDataCatalogsOutput.DataCatalogsSummary DataCatalogSummary
+L ListDatabasesOutput.DatabaseList Database
+L ListEngineVersionsOutput.EngineVersions EngineVersion
+L ListExecutorsOutput.ExecutorsSummary ExecutorsSummary
+L ListNamedQueriesOutput.NamedQueryIds -
+L ListNotebookMetadataOutput.NotebookMetadataList NotebookMetadata
+L ListNotebookSessionsOutput.NotebookSessionsList NotebookSessionSummary
+L ListPreparedStatementsOutput.PreparedStatements PreparedStatementSummary
+L ListQueryExecutionsOutput.QueryExecutionIds -
+L ListSessionsOutput.Sessions SessionSummary
+L ListTableMetadataOutput.TableMetadataList TableMetadata
+L ListTagsForResourceOutput.Tags Tag
+L ListWorkGroupsOutput.WorkGroups WorkGroupSummary
+L PutCapacityAssignmentConfigurationInput.CapacityAssignments CapacityAssignment
+L QueryExecution.ExecutionParameters -
+L QueryStage.SubStages QueryStage
+L QueryStagePlanNode.Children QueryStagePlanNode
+L QueryStagePlanNode.RemoteSources -
+L ResultSet.Rows Row
+L ResultSetMetadata.ColumnInfo ColumnInfo
+L Row.Data Datum
+L StartQueryExecutionInput.ExecutionParameters -
+L TableMetadata.Columns Column
+L TableMetadata.PartitionKeys Column
+L TagResourceInput.Tags Tag
+L UntagResourceInput.TagKeys -
+F AclConfiguration.S3AclOption S3AclOption
+F CalculationStatus.State CalculationExecutionState
+F CapacityAllocation.Status CapacityAllocationStatus
+F CapacityReservation.Status CapacityReservationStatus
+F ColumnInfo.Nullable ColumnNullable
+F CreateDataCatalogInput.Type DataCatalogType
+F DataCatalog.ConnectionType ConnectionType
+F DataCatalog.Status DataCatalogStatus
+F DataCatalog.Type DataCatalogType
+F DataCatalogSummary.ConnectionType ConnectionType
+F DataCatalogSummary.Status DataCatalogStatus
+F DataCatalogSummary.Type DataCatalogType
+F EncryptionConfiguration.EncryptionOption EncryptionOption
+F ExecutorsSummary.ExecutorState ExecutorState
+F ExecutorsSummary.ExecutorType ExecutorType
+F GetQueryResultsInput.QueryResultType QueryResultType
+F ImportNotebookInput.Type NotebookType
+F ListCalculationExecutionsInput.StateFilter CalculationExecutionState
+F ListExecutorsInput.ExecutorStateFilter ExecutorState
+F ListSessionsInput.StateFilter SessionState
+F NotebookMetadata.Type NotebookType
+F QueryExecution.StatementType StatementType
+F QueryExecutionStatus.State QueryExecutionState
+F QueryResultsS3AccessGrantsConfiguration.AuthenticationType AuthenticationType
+F SessionStatus.State SessionState
+F StartCalculationExecutionOutput.State CalculationExecutionState
+F StartSessionOutput.State SessionState
+F StopCalculationExecutionOutput.State CalculationExecutionState
+F TerminateSessionOutput.State SessionState
+F TooManyRequestsException.Reason ThrottleReason
+F UpdateDataCatalogInput.Type DataCatalogType
+F UpdateNotebookInput.Type NotebookType
+F UpdateWorkGroupInput.State WorkGroupState
+F WorkGroup.State WorkGroupState
+F WorkGroupSummary.State WorkGroupState
+N APIOptions
+N AclConfiguration
+N AdditionalConfigs
+N AdditionalConfiguration
+N AllocatedDpus
+N AppID
+N ApplicationDPUSizes
+N ApplicationRuntimeId
+N AthenaError
+N AthenaErrorCode
+N AuthSchemePreference
+N AuthSchemeResolver
+N AuthSchemes
+N AuthToken
+N AuthTokenExpirationTime
+N BaseEndpoint
+N BytesScannedCutoffPerQuery
+N CalculationConfiguration
+N CalculationExecutionId
+N Calculations
+N CapacityAssignmentConfiguration
+N CapacityAssignments
+N CapacityReservation
+N CapacityReservationName
+N CapacityReservations
+N CaseSensitive
+N Catalog
+N CatalogName
+N Children
+N Classifications
+N ClientLogMode
+N ClientRequestToken
+N CloudWatchLoggingConfiguration
+N CodeBlock
+N ColumnInfo
+N Columns
+N Comment
+N CompletionDateTime
+N Configuration
+N ConfigurationUpdates
+N CoordinatorDpuSize
+N CopyWorkGroupTags
+N CreateTime
+N CreateUserLevelPrefix
+N CreationTime
+N Credentials
+N CustomerContentEncryptionConfiguration
+N Data
+N DataCatalog
+N DataCatalogsSummary
+N DataManifestLocation
+N DataScannedInBytes
+N Database
+N DatabaseList
+N DatabaseName
+N DefaultExecutorDpuSize
+N DefaultsMode
+N DeleteCatalogOnly
+N Description
+N DisableClockSkewCorrection
+N DisableHTTPS
+N DpuCount
+N DpuExecutionInMillis
+N EffectiveEngineVersion
+N EnableIdentityCenter
+N EnableMinimumEncryptionConfiguration
+N EnableS3AccessGrants
+N Enabled
+N EncryptionConfiguration
+N EndDateTime
+N Endpoint
+N EndpointOptions
+N EndpointResolver
+N EndpointResolverV2
+N EndpointUrl
+N EnforceWorkGroupConfiguration
+N EngineConfiguration
+N EngineExecutionTimeInMillis
+N EngineVersion
+N EngineVersions
+N Error
+N ErrorCategory
+N ErrorCode
+N ErrorCodeOverride
+N ErrorMessage
+N ErrorType
+N ExecutionParameters
+N ExecutionRole
+N ExecutionTime
+N ExecutorId
+N ExecutorSize
+N ExecutorsSummary
+N ExpectedBucketOwner
+N Expression
+N Filters
+N HTTPClient
+N HTTPSignerV4
+N IdempotencyTokenProvider
+N Identifier
+N IdentityCenterApplicationArn
+N IdentityCenterConfiguration
+N IdentityCenterInstanceArn
+N IdleSinceDateTime
+N IdleTimeoutSeconds
+N InputBytes
+N InputRows
+N Interceptors
+N Key
+N KmsKey
+N Label
+N LastAccessTime
+N LastAllocation
+N LastModifiedDateTime
+N LastModifiedTime
+N LastSuccessfulAllocationTime
+N Limit
+N LogDeprecated
+N LogGroup
+N LogLocation
+N LogStreamNamePrefix
+N LogTypes
+N Logger
+N ManagedLoggingConfiguration
+N ManagedQueryResultsConfiguration
+N ManagedQueryResultsConfigurationUpdates
+N MaxAgeInMinutes
+N MaxConcurrentDpus
+N MaxResults
+N Message
+N MeterProvider
+N MonitoringConfiguration
+N Name
+N NamedQueries
+N NamedQuery
+N NamedQueryId
+N NamedQueryIds
+N NextToken
+N NotebookId
+N NotebookMetadata
+N NotebookMetadataList
+N NotebookS3LocationUri
+N NotebookSessionsList
+N NotebookUrl
+N NotebookVersion
+N Operation
+N Options
+N OutputBytes
+N OutputLocation
+N OutputRows
+N OutputStage
+N Parameters
+N PartitionKeys
+N Payload
+N Precision
+N PreparedStatement
+N PreparedStatementNames
+N PreparedStatements
+N Progress
+N Properties
+N Protocol
+N PublishCloudWatchMetricsEnabled
+N Query
+N QueryExecution
+N QueryExecutionContext
+N QueryExecutionId
+N QueryExecutionIds
+N QueryExecutions
+N QueryPlanningTimeInMillis
+N QueryQueueTimeInMillis
+N QueryResultsS3AccessGrantsConfiguration
+N QueryRuntimeStatistics
+N QueryStagePlan
+N QueryStatement
+N QueryString
+N RecursiveDeleteOption
+N Region
+N RemoteSources
+N RemoveAclConfiguration
+N RemoveBytesScannedCutoffPerQuery
+N RemoveCustomerContentEncryptionConfiguration
+N RemoveEncryptionConfiguration
+N RemoveExpectedBucketOwner
+N RemoveOutputLocation
+N RequestCompletionTime
+N RequestTime
+N RequesterPaysEnabled
+N ResolvedRegion
+N Resolver
+N ResourceARN
+N ResourceName
+N Result
+N ResultConfiguration
+N ResultConfigurationUpdates
+N ResultMetadata
+N ResultReuseByAgeConfiguration
+N ResultReuseConfiguration
+N ResultReuseInformation
+N ResultS3Uri
+N ResultSet
+N ResultSetMetadata
+N ResultType
+N RetryMaxAttempts
+N RetryMode
+N Retryable
+N Retryer
+N ReusedPreviousResult
+N Rows
+N RuntimeEnvironment
+N S3LoggingConfiguration
+N Scale
+N SchemaName
+N SelectedEngineVersion
+N ServicePreProcessingTimeInMillis
+N ServiceProcessingTimeInMillis
+N SessionConfiguration
+N SessionId
+N SessionIdleTimeoutInMinutes
+N Sessions
+N SparkProperties
+N StageId
+N StartDateTime
+N State
+N StateChangeReason
+N StatementName
+N Statistics
+N Status
+N StatusMessage
+N StdErrorS3Uri
+N StdOutS3Uri
+N StopOnDuplicateToken
+N SubStages
+N SubmissionDateTime
+N SubstatementType
+N SupportedDPUSizes
+N TableMetadata
+N TableMetadataList
+N TableName
+N TableType
+N TagKeys
+N Tags
+N TargetDpus
+N TerminationDateTime
+N Timeline
+N TotalExecutionTimeInMillis
+N TracerProvider
+N Type
+N UnprocessedNamedQueryIds
+N UnprocessedPreparedStatementNames
+N UnprocessedQueryExecutionIds
+N UpdateCount
+N Url
+N UseDualStack
+N UseDualStackEndpoint
+N UseFIPS
+N UseFIPSEndpoint
+N Value
+N VarCharValue
+N WorkGroup
+N WorkGroupName
+N WorkGroupNames
+N WorkGroups
+N WorkingDirectory
+T AclConfiguration
+T ApplicationDPUSizes
+T AthenaError
+T AuthenticationType
+T CalculationConfiguration
+T CalculationExecutionState
+T CalculationResult
+T CalculationStatistics
+T CalculationStatus
+T CalculationSummary
+T CapacityAllocation
+T CapacityAllocationStatus
+T CapacityAssignment
+T CapacityAssignmentConfiguration
+T CapacityReservation
+T CapacityReservationStatus
+T Classification
+T CloudWatchLoggingConfiguration
+T Column
+T ColumnInfo
+T ColumnNullable
+T ConnectionType
+T CustomerContentEncryptionConfiguration
+T DataCatalog
+T DataCatalogStatus
+T DataCatalogSummary
+T DataCatalogType
+T Database
+T Datum
+T EncryptionConfiguration
+T EncryptionOption
+T EngineConfiguration
+T EngineVersion
+T ExecutorState
+T ExecutorType
+T ExecutorsSummary
+T FilterDefinition
+T IdentityCenterConfiguration
+T InternalServerException
+T InvalidRequestException
+T ManagedLoggingConfiguration
+T ManagedQueryResultsConfiguration
+T ManagedQueryResultsConfigurationUpdates
+T ManagedQueryResultsEncryptionConfiguration
+T MetadataException
+T MonitoringConfiguration
+T NamedQuery
+T NotebookMetadata
+T NotebookSessionSummary
+T NotebookType
+T PreparedStatement
+T PreparedStatementSummary
+T QueryExecution
+T QueryExecutionContext
+T QueryExecutionState
+T QueryExecutionStatistics
+T QueryExecutionStatus
+T QueryResultType
+T QueryResultsS3AccessGrantsConfiguration
+T QueryRuntimeStatistics
+T QueryRuntimeStatisticsRows
+T QueryRuntimeStatisticsTimeline
+T QueryStage
+T QueryStagePlanNode
+T ResourceNotFoundException
+T ResultConfiguration
+T ResultConfigurationUpdates
+T ResultReuseByAgeConfiguration
+T ResultReuseConfiguration
+T ResultReuseInformation
+T ResultSet
+T ResultSetMetadata
+T Row
+T S3AclOption
+T S3LoggingConfiguration
+T SessionAlreadyExistsException
+T SessionConfiguration
+T SessionState
+T SessionStatistics
+T SessionStatus
+T SessionSummary
+T StatementType
+T TableMetadata
+T Tag
+T ThrottleReason
+T TooManyRequestsException
+T UnprocessedNamedQueryId
+T UnprocessedPreparedStatementName
+T UnprocessedQueryExecutionId
+T WorkGroup
+T WorkGroupConfiguration
+T WorkGroupConfigurationUpdates
+T WorkGroupState
+T WorkGroupSummary
+E AuthenticationTypeDirectoryIdentity AuthenticationType
+E CalculationExecutionStateCanceled CalculationExecutionState
+E CalculationExecutionStateCanceling CalculationExecutionState
+E CalculationExecutionStateCompleted CalculationExecutionState
+E CalculationExecutionStateCreated CalculationExecutionState
+E CalculationExecutionStateCreating CalculationExecutionState
+E CalculationExecutionStateFailed CalculationExecutionState
+E CalculationExecutionStateQueued CalculationExecutionState
+E CalculationExecutionStateRunning CalculationExecutionState
+E CapacityAllocationStatusFailed CapacityAllocationStatus
+E CapacityAllocationStatusPending CapacityAllocationStatus
+E CapacityAllocationStatusSucceeded CapacityAllocationStatus
+E CapacityReservationStatusActive CapacityReservationStatus
+E CapacityReservationStatusCancelled CapacityReservationStatus
+E CapacityReservationStatusCancelling CapacityReservationStatus
+E CapacityReservationStatusFailed CapacityReservationStatus
+E CapacityReservationStatusPending CapacityReservationStatus
+E CapacityReservationStatusUpdatePending CapacityReservationStatus
+E ColumnNullableNotNull ColumnNullable
+E ColumnNullableNullable ColumnNullable
+E ColumnNullableUnknown ColumnNullable
+E ConnectionTypeBigquery ConnectionType
+E ConnectionTypeCmdb ConnectionType
+E ConnectionTypeDatalakegen2 ConnectionType
+E ConnectionTypeDb2 ConnectionType
+E ConnectionTypeDb2as400 ConnectionType
+E ConnectionTypeDocumentdb ConnectionType
+E ConnectionTypeDynamodb ConnectionType
+E ConnectionTypeGooglecloudstorage ConnectionType
+E ConnectionTypeHbase ConnectionType
+E ConnectionTypeMysql ConnectionType
+E ConnectionTypeOpensearch ConnectionType
+E ConnectionTypeOracle ConnectionType
+E ConnectionTypePostgresql ConnectionType
+E ConnectionTypeRedshift ConnectionType
+E ConnectionTypeSaphana ConnectionType
+E ConnectionTypeSnowflake ConnectionType
+E ConnectionTypeSqlserver ConnectionType
+E ConnectionTypeSynapse ConnectionType
+E ConnectionTypeTimestream ConnectionType
+E ConnectionTypeTpcds ConnectionType
+E DataCatalogStatusCreateComplete DataCatalogStatus
+E DataCatalogStatusCreateFailed DataCatalogStatus
+E DataCatalogStatusCreateFailedCleanupComplete DataCatalogStatus
+E DataCatalogStatusCreateFailedCleanupFailed DataCatalogStatus
+E DataCatalogStatusCreateFailedCleanupInProgress DataCatalogStatus
+E DataCatalogStatusCreateInProgress DataCatalogStatus
+E DataCatalogStatusDeleteComplete DataCatalogStatus
+E DataCatalogStatusDeleteFailed DataCatalogStatus
+E DataCatalogStatusDeleteInProgress DataCatalogStatus
+E DataCatalogTypeFederated DataCatalogType
+E DataCatalogTypeGlue DataCatalogType
+E DataCatalogTypeHive DataCatalogType
+E DataCatalogTypeLambda DataCatalogType
+E EncryptionOptionCseKms EncryptionOption
+E EncryptionOptionSseKms EncryptionOption
+E EncryptionOptionSseS3 EncryptionOption
+E ExecutorStateCreated ExecutorState
+E ExecutorStateCreating ExecutorState
+E ExecutorStateFailed ExecutorState
+E ExecutorStateRegistered ExecutorState
+E ExecutorStateTerminated ExecutorState
+E ExecutorStateTerminating ExecutorState
+E ExecutorTypeCoordinator ExecutorType
+E ExecutorTypeGateway ExecutorType
+E ExecutorTypeWorker ExecutorType
+E NotebookTypeIpynb NotebookType
+E QueryExecutionStateCancelled QueryExecutionState
+E QueryExecutionStateFailed QueryExecutionState
+E QueryExecutionStateQueued QueryExecutionState
+E QueryExecutionStateRunning QueryExecutionState
+E QueryExecutionStateSucceeded QueryExecutionState
+E QueryResultTypeDataManifest QueryResultType
+E QueryResultTypeDataRows QueryResultType
+E S3AclOptionBucketOwnerFullControl S3AclOption
+E SessionStateBusy SessionState
+E SessionStateCreated SessionState
+E SessionStateCreating SessionState
+E SessionStateDegraded SessionState
+E SessionStateFailed SessionState
+E SessionStateIdle SessionState
+E SessionStateTerminated SessionState
+E SessionStateTerminating SessionState
+E StatementTypeDdl StatementType
+E StatementTypeDml StatementType
+E StatementTypeUtility StatementType
+E ThrottleReasonConcurrentQueryLimitExceeded ThrottleReason
+E WorkGroupStateDisabled WorkGroupState
+E WorkGroupStateEnabled WorkGroupState

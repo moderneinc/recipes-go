@@ -1,0 +1,326 @@
+C STS
+S AssumeRoleInput
+S AssumeRoleOutput
+S AssumeRoleWithSAMLInput
+S AssumeRoleWithSAMLOutput
+S AssumeRoleWithWebIdentityInput
+S AssumeRoleWithWebIdentityOutput
+S AssumeRootInput
+S AssumeRootOutput
+S AuthResolverParameters
+S AuthSchemeResolver
+S Client
+S DecodeAuthorizationMessageInput
+S DecodeAuthorizationMessageOutput
+S EndpointParameters
+S EndpointResolver
+S EndpointResolverFromURL
+S EndpointResolverFunc
+S EndpointResolverOptions
+S EndpointResolverV2
+S GetAccessKeyInfoInput
+S GetAccessKeyInfoOutput
+S GetCallerIdentityInput
+S GetCallerIdentityOutput
+S GetDelegatedAccessTokenInput
+S GetDelegatedAccessTokenOutput
+S GetFederationTokenInput
+S GetFederationTokenOutput
+S GetSessionTokenInput
+S GetSessionTokenOutput
+S GetWebIdentityTokenInput
+S GetWebIdentityTokenOutput
+S HTTPClient
+S HTTPPresignerV4
+S HTTPSignerV4
+S New
+S NewDefaultEndpointResolver
+S NewDefaultEndpointResolverV2
+S NewFromConfig
+S NewPresignClient
+S Options
+S PresignClient
+S PresignOptions
+S ResolveEndpoint
+S ServiceAPIVersion
+S ServiceID
+S WithAPIOptions
+S WithEndpointResolver
+S WithEndpointResolverV2
+S WithPresignClientFromClientOptions
+S WithSigV4ASigningRegions
+S WithSigV4SigningName
+S WithSigV4SigningRegion
+O AssumeRole
+O AssumeRoleWithSAML
+O AssumeRoleWithWebIdentity
+O AssumeRoot
+O DecodeAuthorizationMessage
+O GetAccessKeyInfo
+O GetCallerIdentity
+O GetDelegatedAccessToken
+O GetFederationToken
+O GetSessionToken
+O GetWebIdentityToken
+X ErrCodeExpiredTokenException ExpiredTokenException
+X ErrCodeIDPCommunicationErrorException IDPCommunicationError
+X ErrCodeIDPRejectedClaimException IDPRejectedClaim
+X ErrCodeInvalidAuthorizationMessageException InvalidAuthorizationMessageException
+X ErrCodeInvalidIdentityTokenException InvalidIdentityToken
+X ErrCodeMalformedPolicyDocumentException MalformedPolicyDocument
+X ErrCodePackedPolicyTooLargeException PackedPolicyTooLarge
+X ErrCodeRegionDisabledException RegionDisabledException
+I AssumeRoleInput.DurationSeconds int64 int32
+I AssumeRoleOutput.PackedPolicySize int64 int32
+I AssumeRoleWithSAMLInput.DurationSeconds int64 int32
+I AssumeRoleWithSAMLOutput.PackedPolicySize int64 int32
+I AssumeRoleWithWebIdentityInput.DurationSeconds int64 int32
+I AssumeRoleWithWebIdentityOutput.PackedPolicySize int64 int32
+I GetFederationTokenInput.DurationSeconds int64 int32
+I GetFederationTokenOutput.PackedPolicySize int64 int32
+I GetSessionTokenInput.DurationSeconds int64 int32
+R AssumeRoleOutput.AssumedRoleUser AssumedRoleUser
+R AssumeRoleOutput.Credentials Credentials
+R AssumeRoleWithSAMLOutput.AssumedRoleUser AssumedRoleUser
+R AssumeRoleWithSAMLOutput.Credentials Credentials
+R AssumeRoleWithWebIdentityOutput.AssumedRoleUser AssumedRoleUser
+R AssumeRoleWithWebIdentityOutput.Credentials Credentials
+R AssumeRootInput.TaskPolicyArn PolicyDescriptorType
+R AssumeRootOutput.Credentials Credentials
+R GetDelegatedAccessTokenOutput.Credentials Credentials
+R GetFederationTokenOutput.Credentials Credentials
+R GetFederationTokenOutput.FederatedUser FederatedUser
+R GetSessionTokenOutput.Credentials Credentials
+V AssumeRoleInput.DurationSeconds int32
+V AssumeRoleInput.ExternalId string
+V AssumeRoleInput.MinimumSessionTokenSize int32
+V AssumeRoleInput.Policy string
+V AssumeRoleInput.RoleArn string
+V AssumeRoleInput.RoleSessionName string
+V AssumeRoleInput.SerialNumber string
+V AssumeRoleInput.SourceIdentity string
+V AssumeRoleInput.TokenCode string
+V AssumeRoleOutput.PackedPolicySize int32
+V AssumeRoleOutput.SessionTokenSize int32
+V AssumeRoleOutput.SessionTokenUtilization int32
+V AssumeRoleOutput.SourceIdentity string
+V AssumeRoleWithSAMLInput.DurationSeconds int32
+V AssumeRoleWithSAMLInput.MinimumSessionTokenSize int32
+V AssumeRoleWithSAMLInput.Policy string
+V AssumeRoleWithSAMLInput.PrincipalArn string
+V AssumeRoleWithSAMLInput.RoleArn string
+V AssumeRoleWithSAMLInput.SAMLAssertion string
+V AssumeRoleWithSAMLOutput.Audience string
+V AssumeRoleWithSAMLOutput.Issuer string
+V AssumeRoleWithSAMLOutput.NameQualifier string
+V AssumeRoleWithSAMLOutput.PackedPolicySize int32
+V AssumeRoleWithSAMLOutput.SessionTokenSize int32
+V AssumeRoleWithSAMLOutput.SessionTokenUtilization int32
+V AssumeRoleWithSAMLOutput.SourceIdentity string
+V AssumeRoleWithSAMLOutput.Subject string
+V AssumeRoleWithSAMLOutput.SubjectType string
+V AssumeRoleWithWebIdentityInput.DurationSeconds int32
+V AssumeRoleWithWebIdentityInput.MinimumSessionTokenSize int32
+V AssumeRoleWithWebIdentityInput.Policy string
+V AssumeRoleWithWebIdentityInput.ProviderId string
+V AssumeRoleWithWebIdentityInput.RoleArn string
+V AssumeRoleWithWebIdentityInput.RoleSessionName string
+V AssumeRoleWithWebIdentityInput.WebIdentityToken string
+V AssumeRoleWithWebIdentityOutput.Audience string
+V AssumeRoleWithWebIdentityOutput.PackedPolicySize int32
+V AssumeRoleWithWebIdentityOutput.Provider string
+V AssumeRoleWithWebIdentityOutput.SessionTokenSize int32
+V AssumeRoleWithWebIdentityOutput.SessionTokenUtilization int32
+V AssumeRoleWithWebIdentityOutput.SourceIdentity string
+V AssumeRoleWithWebIdentityOutput.SubjectFromWebIdentityToken string
+V AssumeRootInput.DurationSeconds int32
+V AssumeRootInput.MinimumSessionTokenSize int32
+V AssumeRootInput.TargetPrincipal string
+V AssumeRootOutput.SessionTokenSize int32
+V AssumeRootOutput.SessionTokenUtilization int32
+V AssumeRootOutput.SourceIdentity string
+V AssumedRoleUser.Arn string
+V AssumedRoleUser.AssumedRoleId string
+V Credentials.AccessKeyId string
+V Credentials.SecretAccessKey string
+V Credentials.SessionToken string
+V DecodeAuthorizationMessageInput.EncodedMessage string
+V DecodeAuthorizationMessageOutput.DecodedMessage string
+V EndpointParameters.Endpoint string
+V EndpointParameters.Region string
+V EndpointParameters.UseDualStack bool
+V EndpointParameters.UseFIPS bool
+V EndpointParameters.UseGlobalEndpoint bool
+V ExpiredTokenException.ErrorCodeOverride string
+V ExpiredTokenException.Message string
+V ExpiredTradeInTokenException.ErrorCodeOverride string
+V ExpiredTradeInTokenException.Message string
+V FederatedUser.Arn string
+V FederatedUser.FederatedUserId string
+V GetAccessKeyInfoInput.AccessKeyId string
+V GetAccessKeyInfoOutput.Account string
+V GetCallerIdentityOutput.Account string
+V GetCallerIdentityOutput.Arn string
+V GetCallerIdentityOutput.UserId string
+V GetDelegatedAccessTokenInput.TradeInToken string
+V GetDelegatedAccessTokenOutput.AssumedPrincipal string
+V GetDelegatedAccessTokenOutput.PackedPolicySize int32
+V GetFederationTokenInput.DurationSeconds int32
+V GetFederationTokenInput.MinimumSessionTokenSize int32
+V GetFederationTokenInput.Name string
+V GetFederationTokenInput.Policy string
+V GetFederationTokenOutput.PackedPolicySize int32
+V GetFederationTokenOutput.SessionTokenSize int32
+V GetFederationTokenOutput.SessionTokenUtilization int32
+V GetSessionTokenInput.DurationSeconds int32
+V GetSessionTokenInput.MinimumSessionTokenSize int32
+V GetSessionTokenInput.SerialNumber string
+V GetSessionTokenInput.TokenCode string
+V GetSessionTokenOutput.SessionTokenSize int32
+V GetSessionTokenOutput.SessionTokenUtilization int32
+V GetWebIdentityTokenInput.DurationSeconds int32
+V GetWebIdentityTokenInput.SigningAlgorithm string
+V GetWebIdentityTokenOutput.WebIdentityToken string
+V IDPCommunicationErrorException.ErrorCodeOverride string
+V IDPCommunicationErrorException.Message string
+V IDPRejectedClaimException.ErrorCodeOverride string
+V IDPRejectedClaimException.Message string
+V InvalidAuthorizationMessageException.ErrorCodeOverride string
+V InvalidAuthorizationMessageException.Message string
+V InvalidIdentityTokenException.ErrorCodeOverride string
+V InvalidIdentityTokenException.Message string
+V JWTPayloadSizeExceededException.ErrorCodeOverride string
+V JWTPayloadSizeExceededException.Message string
+V MalformedPolicyDocumentException.ErrorCodeOverride string
+V MalformedPolicyDocumentException.Message string
+V Options.BaseEndpoint string
+V OutboundWebIdentityFederationDisabledException.ErrorCodeOverride string
+V OutboundWebIdentityFederationDisabledException.Message string
+V PackedPolicyTooLargeException.ErrorCodeOverride string
+V PackedPolicyTooLargeException.Message string
+V PolicyDescriptorType.Arn string
+V ProvidedContext.ContextAssertion string
+V ProvidedContext.ProviderArn string
+V RegionDisabledException.ErrorCodeOverride string
+V RegionDisabledException.Message string
+V SessionDurationEscalationException.ErrorCodeOverride string
+V SessionDurationEscalationException.Message string
+V Tag.Key string
+V Tag.Value string
+L AssumeRoleInput.PolicyArns PolicyDescriptorType
+L AssumeRoleInput.ProvidedContexts ProvidedContext
+L AssumeRoleInput.Tags Tag
+L AssumeRoleInput.TransitiveTagKeys -
+L AssumeRoleWithSAMLInput.PolicyArns PolicyDescriptorType
+L AssumeRoleWithWebIdentityInput.PolicyArns PolicyDescriptorType
+L GetFederationTokenInput.PolicyArns PolicyDescriptorType
+L GetFederationTokenInput.Tags Tag
+N APIOptions
+N AccessKeyId
+N Account
+N AppID
+N Arn
+N AssumedPrincipal
+N AssumedRoleId
+N AssumedRoleUser
+N Audience
+N AuthSchemePreference
+N AuthSchemeResolver
+N AuthSchemes
+N BaseEndpoint
+N ClientLogMode
+N ClientOptions
+N ContextAssertion
+N Credentials
+N DecodedMessage
+N DefaultsMode
+N DisableClockSkewCorrection
+N DisableHTTPS
+N DurationSeconds
+N EncodedMessage
+N Endpoint
+N EndpointOptions
+N EndpointResolver
+N EndpointResolverV2
+N ErrorCodeOverride
+N Expiration
+N ExternalId
+N FederatedUser
+N FederatedUserId
+N HTTPClient
+N HTTPSignerV4
+N Interceptors
+N Issuer
+N Key
+N LogDeprecated
+N Logger
+N Message
+N MeterProvider
+N MinimumSessionTokenSize
+N Name
+N NameQualifier
+N Operation
+N Options
+N PackedPolicySize
+N Policy
+N PolicyArns
+N Presigner
+N PrincipalArn
+N ProvidedContexts
+N Provider
+N ProviderArn
+N ProviderId
+N Region
+N ResolvedRegion
+N Resolver
+N ResultMetadata
+N RetryMaxAttempts
+N RetryMode
+N Retryer
+N RoleArn
+N RoleSessionName
+N RuntimeEnvironment
+N SAMLAssertion
+N SecretAccessKey
+N SerialNumber
+N SessionToken
+N SessionTokenSize
+N SessionTokenUtilization
+N SigningAlgorithm
+N SourceIdentity
+N Subject
+N SubjectFromWebIdentityToken
+N SubjectType
+N Tags
+N TargetPrincipal
+N TaskPolicyArn
+N TokenCode
+N TracerProvider
+N TradeInToken
+N TransitiveTagKeys
+N UseDualStack
+N UseDualStackEndpoint
+N UseFIPS
+N UseFIPSEndpoint
+N UseGlobalEndpoint
+N UserId
+N Value
+N WebIdentityToken
+T AssumedRoleUser
+T Credentials
+T ExpiredTokenException
+T ExpiredTradeInTokenException
+T FederatedUser
+T IDPCommunicationErrorException
+T IDPRejectedClaimException
+T InvalidAuthorizationMessageException
+T InvalidIdentityTokenException
+T JWTPayloadSizeExceededException
+T MalformedPolicyDocumentException
+T OutboundWebIdentityFederationDisabledException
+T PackedPolicyTooLargeException
+T PolicyDescriptorType
+T ProvidedContext
+T RegionDisabledException
+T SessionDurationEscalationException
+T Tag

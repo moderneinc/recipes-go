@@ -268,6 +268,8 @@ func (r *MyRecipe) EditorWithData(a any) recipe.TreeVisitor   { return visitor.I
 
 Resolve the plan once when `EditorWithData` is called, not per file, so the editor only reads it. Files arrive in no guaranteed order, so anything decided while editing is decided by that order.
 
+A scanning recipe inside a `RecipeList` must not decide anything from what an earlier sub-recipe wrote. `pkg/test` walks the list in order over one progressively-edited set of trees, so its scan sees those edits; the Moderne CLI scans before the list's edits are applied and sees none of them. A composite that rewrites source and then syncs go.mod from the rewritten imports therefore passes its own test and does nothing through `mod run`. Key the scan on something invariant instead — `recipes/migration/internal/depswap` asks "which side of the migration will this file end up on", probing the source recipe's own editor to answer it for a file that has not been rewritten yet.
+
 ## When not to rewrite
 
 The hard part of a Go recipe is the guard, not the rewrite — a recipe that fires too eagerly is worse than no recipe. Three ways that happens, each with a worked guard to read:
@@ -309,6 +311,40 @@ Swapping a package under a preserved qualifier works the same way, as long as th
 ### `Literal.Value` carries the type the source wrote
 `int64` for an integer or rune, `float64` for a float, and `*big.Int` past int64. Code assuming `int64` panics on a wide constant.
 
+
+### A directive comment is an Annotation, not a comment
+`//go:generate`, `//go:build` and `//nolint` parse to `*java.Annotation`, not to a `Comment` in some node's `Space`. The directive names the annotation type and the rest of the line is a single `Literal` argument, with the space between them on `Arguments.Before`:
+```go
+ann.AnnotationType.(*java.Identifier).Name        // "go:generate"
+ann.Arguments.Elements[0].Element.(*java.Literal) // Source: "go run ./mockgen -source=x.go"
+```
+A recipe that reaches for these through `VisitSpace` silently matches nothing — `VisitSpace` only sees ordinary comments.
+
+### A function literal in expression position is wrapped
+`java.MethodDeclaration` is a Statement, so one used as an argument, an assigned value or a return value is wrapped in a `*golang.StatementExpression`. Asserting an argument straight to `*java.MethodDeclaration` misses every closure:
+```go
+// WRONG — never matches slices.SortFunc(s, func(a, b T) int { … })
+lit, ok := arg.(*java.MethodDeclaration)
+
+// RIGHT
+if se, ok := arg.(*golang.StatementExpression); ok {
+    lit, ok := se.Statement.(*java.MethodDeclaration)
+}
+```
+
+### A call standing alone is not wrapped
+The mirror of the above: `java.MethodInvocation` is a Statement too, so `h.Record(x)` on its own line sits directly in `Block.Statements`. `golang.ExpressionStatement` only appears for an expression the J model has no statement node for, like `(h())`. A recipe replacing a call statement with a different kind of statement does it in `VisitBlock` — returning a non-expression from `VisitMethodInvocation` would also fire where the call is in expression position.
+
+### A composite literal's fields are KeyValues in its Elements
+`telemetry.Count{Name: n, Value: v}` is a `*golang.Composite` whose `TypeExpr` is the `FieldAccess` naming the type and whose `Elements.Elements` hold `*golang.KeyValue`. The field name is `kv.Key.(*java.Identifier).Name` for a struct literal and a `*java.Literal` for a map literal; the value is `kv.Value.Element`.
+
+### A type in an unresolved package has no type
+Where a package cannot be resolved — any third-party import in a unit-test snippet — the qualifier identifier still carries the package's fully qualified name, but a `FieldAccess` naming a type in it does not:
+```go
+gomock.Controller      // Target identifier: JavaTypeClass{github.com/golang/mock/gomock}
+                       // FieldAccess.Type:  JavaTypeUnknown
+```
+So match a third-party type through its qualifier's attribution rather than the reference's own, and expect `MethodInvocation.MethodType` to be nil for its calls.
 
 ### `true`, `false`, `nil` are Identifiers, not Literals
 ```go

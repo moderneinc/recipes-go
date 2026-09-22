@@ -1,0 +1,1178 @@
+C CloudWatch
+S AlarmExistsWaiter
+S AlarmExistsWaiterOptions
+S AlarmMuteRuleExistsWaiter
+S AlarmMuteRuleExistsWaiterOptions
+S AssociateDatasetKmsKeyInput
+S AssociateDatasetKmsKeyOutput
+S AuthResolverParameters
+S AuthSchemeResolver
+S Client
+S CompositeAlarmExistsWaiter
+S CompositeAlarmExistsWaiterOptions
+S DeleteAlarmMuteRuleInput
+S DeleteAlarmMuteRuleOutput
+S DeleteAlarmsInput
+S DeleteAlarmsOutput
+S DeleteAnomalyDetectorInput
+S DeleteAnomalyDetectorOutput
+S DeleteDashboardsInput
+S DeleteDashboardsOutput
+S DeleteInsightRulesInput
+S DeleteInsightRulesOutput
+S DeleteMetricStreamInput
+S DeleteMetricStreamOutput
+S DescribeAlarmContributorsInput
+S DescribeAlarmContributorsOutput
+S DescribeAlarmHistoryAPIClient
+S DescribeAlarmHistoryInput
+S DescribeAlarmHistoryOutput
+S DescribeAlarmHistoryPaginator
+S DescribeAlarmHistoryPaginatorOptions
+S DescribeAlarmsAPIClient
+S DescribeAlarmsForMetricInput
+S DescribeAlarmsForMetricOutput
+S DescribeAlarmsInput
+S DescribeAlarmsOutput
+S DescribeAlarmsPaginator
+S DescribeAlarmsPaginatorOptions
+S DescribeAnomalyDetectorsAPIClient
+S DescribeAnomalyDetectorsInput
+S DescribeAnomalyDetectorsOutput
+S DescribeAnomalyDetectorsPaginator
+S DescribeAnomalyDetectorsPaginatorOptions
+S DescribeInsightRulesAPIClient
+S DescribeInsightRulesInput
+S DescribeInsightRulesOutput
+S DescribeInsightRulesPaginator
+S DescribeInsightRulesPaginatorOptions
+S DisableAlarmActionsInput
+S DisableAlarmActionsOutput
+S DisableInsightRulesInput
+S DisableInsightRulesOutput
+S DisassociateDatasetKmsKeyInput
+S DisassociateDatasetKmsKeyOutput
+S EnableAlarmActionsInput
+S EnableAlarmActionsOutput
+S EnableInsightRulesInput
+S EnableInsightRulesOutput
+S EndpointParameters
+S EndpointResolver
+S EndpointResolverFromURL
+S EndpointResolverFunc
+S EndpointResolverOptions
+S EndpointResolverV2
+S GetAlarmMuteRuleAPIClient
+S GetAlarmMuteRuleInput
+S GetAlarmMuteRuleOutput
+S GetDashboardInput
+S GetDashboardOutput
+S GetDatasetInput
+S GetDatasetOutput
+S GetInsightRuleReportInput
+S GetInsightRuleReportOutput
+S GetMetricDataAPIClient
+S GetMetricDataInput
+S GetMetricDataOutput
+S GetMetricDataPaginator
+S GetMetricDataPaginatorOptions
+S GetMetricStatisticsInput
+S GetMetricStatisticsOutput
+S GetMetricStreamInput
+S GetMetricStreamOutput
+S GetMetricWidgetImageInput
+S GetMetricWidgetImageOutput
+S GetOTelEnrichmentInput
+S GetOTelEnrichmentOutput
+S HTTPClient
+S HTTPSignerV4
+S ListAlarmMuteRulesAPIClient
+S ListAlarmMuteRulesInput
+S ListAlarmMuteRulesOutput
+S ListAlarmMuteRulesPaginator
+S ListAlarmMuteRulesPaginatorOptions
+S ListDashboardsAPIClient
+S ListDashboardsInput
+S ListDashboardsOutput
+S ListDashboardsPaginator
+S ListDashboardsPaginatorOptions
+S ListManagedInsightRulesAPIClient
+S ListManagedInsightRulesInput
+S ListManagedInsightRulesOutput
+S ListManagedInsightRulesPaginator
+S ListManagedInsightRulesPaginatorOptions
+S ListMetricStreamsAPIClient
+S ListMetricStreamsInput
+S ListMetricStreamsOutput
+S ListMetricStreamsPaginator
+S ListMetricStreamsPaginatorOptions
+S ListMetricsAPIClient
+S ListMetricsInput
+S ListMetricsOutput
+S ListMetricsPaginator
+S ListMetricsPaginatorOptions
+S ListTagsForResourceInput
+S ListTagsForResourceOutput
+S LogAlarmExistsWaiter
+S LogAlarmExistsWaiterOptions
+S New
+S NewAlarmExistsWaiter
+S NewAlarmMuteRuleExistsWaiter
+S NewCompositeAlarmExistsWaiter
+S NewDefaultEndpointResolver
+S NewDefaultEndpointResolverV2
+S NewDescribeAlarmHistoryPaginator
+S NewDescribeAlarmsPaginator
+S NewDescribeAnomalyDetectorsPaginator
+S NewDescribeInsightRulesPaginator
+S NewFromConfig
+S NewGetMetricDataPaginator
+S NewListAlarmMuteRulesPaginator
+S NewListDashboardsPaginator
+S NewListManagedInsightRulesPaginator
+S NewListMetricStreamsPaginator
+S NewListMetricsPaginator
+S NewLogAlarmExistsWaiter
+S Options
+S PutAlarmMuteRuleInput
+S PutAlarmMuteRuleOutput
+S PutAnomalyDetectorInput
+S PutAnomalyDetectorOutput
+S PutCompositeAlarmInput
+S PutCompositeAlarmOutput
+S PutDashboardInput
+S PutDashboardOutput
+S PutInsightRuleInput
+S PutInsightRuleOutput
+S PutLogAlarmInput
+S PutLogAlarmOutput
+S PutManagedInsightRulesInput
+S PutManagedInsightRulesOutput
+S PutMetricAlarmInput
+S PutMetricAlarmOutput
+S PutMetricDataInput
+S PutMetricDataOutput
+S PutMetricStreamInput
+S PutMetricStreamOutput
+S ResolveEndpoint
+S ServiceAPIVersion
+S ServiceID
+S SetAlarmStateInput
+S SetAlarmStateOutput
+S StartMetricStreamsInput
+S StartMetricStreamsOutput
+S StartOTelEnrichmentInput
+S StartOTelEnrichmentOutput
+S StopMetricStreamsInput
+S StopMetricStreamsOutput
+S StopOTelEnrichmentInput
+S StopOTelEnrichmentOutput
+S TagResourceInput
+S TagResourceOutput
+S TypeRegistry
+S UntagResourceInput
+S UntagResourceOutput
+S WithAPIOptions
+S WithEndpointResolver
+S WithEndpointResolverV2
+S WithSigV4SigningName
+S WithSigV4SigningRegion
+O AssociateDatasetKmsKey
+O DeleteAlarmMuteRule
+O DeleteAlarms
+O DeleteAnomalyDetector
+O DeleteDashboards
+O DeleteInsightRules
+O DeleteMetricStream
+O DescribeAlarmContributors
+O DescribeAlarmHistory
+O DescribeAlarms
+O DescribeAlarmsForMetric
+O DescribeAnomalyDetectors
+O DescribeInsightRules
+O DisableAlarmActions
+O DisableInsightRules
+O DisassociateDatasetKmsKey
+O EnableAlarmActions
+O EnableInsightRules
+O GetAlarmMuteRule
+O GetDashboard
+O GetDataset
+O GetInsightRuleReport
+O GetMetricData
+O GetMetricStatistics
+O GetMetricStream
+O GetMetricWidgetImage
+O GetOTelEnrichment
+O ListAlarmMuteRules
+O ListDashboards
+O ListManagedInsightRules
+O ListMetricStreams
+O ListMetrics
+O ListTagsForResource
+O PutAlarmMuteRule
+O PutAnomalyDetector
+O PutCompositeAlarm
+O PutDashboard
+O PutInsightRule
+O PutLogAlarm
+O PutManagedInsightRules
+O PutMetricAlarm
+O PutMetricData
+O PutMetricStream
+O SetAlarmState
+O StartMetricStreams
+O StartOTelEnrichment
+O StopMetricStreams
+O StopOTelEnrichment
+O TagResource
+O UntagResource
+X ErrCodeConcurrentModificationException ConcurrentModificationException
+X ErrCodeDashboardInvalidInputError InvalidParameterInput
+X ErrCodeDashboardNotFoundError ResourceNotFound
+X ErrCodeInternalServiceFault InternalServiceError
+X ErrCodeInvalidFormatFault InvalidFormat
+X ErrCodeInvalidNextToken InvalidNextToken
+X ErrCodeInvalidParameterCombinationException InvalidParameterCombination
+X ErrCodeInvalidParameterValueException InvalidParameterValue
+X ErrCodeLimitExceededException LimitExceededException
+X ErrCodeLimitExceededFault LimitExceeded
+X ErrCodeMissingRequiredParameterException MissingParameter
+X ErrCodeResourceNotFound ResourceNotFound
+X ErrCodeResourceNotFoundException ResourceNotFoundException
+I CompositeAlarm.ActionsSuppressorExtensionPeriod int64 int32
+I CompositeAlarm.ActionsSuppressorWaitPeriod int64 int32
+I DescribeAlarmHistoryInput.MaxRecords int64 int32
+I DescribeAlarmsForMetricInput.Period int64 int32
+I DescribeAlarmsInput.MaxRecords int64 int32
+I DescribeAnomalyDetectorsInput.MaxResults int64 int32
+I DescribeInsightRulesInput.MaxResults int64 int32
+I GetInsightRuleReportInput.MaxContributorCount int64 int32
+I GetInsightRuleReportInput.Period int64 int32
+I GetMetricDataInput.MaxDatapoints int64 int32
+I GetMetricStatisticsInput.Period int64 int32
+I ListManagedInsightRulesInput.MaxResults int64 int32
+I ListMetricStreamsInput.MaxResults int64 int32
+I MetricAlarm.DatapointsToAlarm int64 int32
+I MetricAlarm.EvaluationPeriods int64 int32
+I MetricAlarm.Period int64 int32
+I MetricDataQuery.Period int64 int32
+I MetricDatum.StorageResolution int64 int32
+I MetricStat.Period int64 int32
+I PutCompositeAlarmInput.ActionsSuppressorExtensionPeriod int64 int32
+I PutCompositeAlarmInput.ActionsSuppressorWaitPeriod int64 int32
+I PutMetricAlarmInput.DatapointsToAlarm int64 int32
+I PutMetricAlarmInput.EvaluationPeriods int64 int32
+I PutMetricAlarmInput.Period int64 int32
+R AnomalyDetector.Configuration AnomalyDetectorConfiguration
+R AnomalyDetector.MetricCharacteristics MetricCharacteristics
+R AnomalyDetector.MetricMathAnomalyDetector MetricMathAnomalyDetector
+R AnomalyDetector.SingleMetricAnomalyDetector SingleMetricAnomalyDetector
+R DeleteAnomalyDetectorInput.MetricMathAnomalyDetector MetricMathAnomalyDetector
+R DeleteAnomalyDetectorInput.SingleMetricAnomalyDetector SingleMetricAnomalyDetector
+R EntityMetricData.Entity Entity
+R GetAlarmMuteRuleOutput.MuteTargets MuteTargets
+R GetAlarmMuteRuleOutput.Rule Rule
+R GetMetricDataInput.LabelOptions LabelOptions
+R LogAlarm.ScheduledQueryConfiguration ScheduledQueryConfiguration
+R LogAlarm.WarmUpConfiguration WarmUpConfiguration
+R ManagedRuleDescription.RuleState ManagedRuleState
+R MetricAlarm.WarmUpConfiguration WarmUpConfiguration
+R MetricDataQuery.MetricStat MetricStat
+R MetricDatum.StatisticValues StatisticSet
+R MetricStat.Metric Metric
+R PutAlarmMuteRuleInput.MuteTargets MuteTargets
+R PutAlarmMuteRuleInput.Rule Rule
+R PutAnomalyDetectorInput.Configuration AnomalyDetectorConfiguration
+R PutAnomalyDetectorInput.MetricCharacteristics MetricCharacteristics
+R PutAnomalyDetectorInput.MetricMathAnomalyDetector MetricMathAnomalyDetector
+R PutAnomalyDetectorInput.SingleMetricAnomalyDetector SingleMetricAnomalyDetector
+R PutLogAlarmInput.ScheduledQueryConfiguration ScheduledQueryConfiguration
+R PutLogAlarmInput.WarmUpConfiguration WarmUpConfiguration
+R PutMetricAlarmInput.WarmUpConfiguration WarmUpConfiguration
+R Rule.Schedule Schedule
+R ScheduledQueryConfiguration.ScheduleConfiguration ScheduleConfiguration
+V AlarmContributor.ContributorId string
+V AlarmContributor.StateReason string
+V AlarmHistoryItem.AlarmContributorId string
+V AlarmHistoryItem.AlarmName string
+V AlarmHistoryItem.HistoryData string
+V AlarmHistoryItem.HistorySummary string
+V AlarmMuteRuleSummary.AlarmMuteRuleArn string
+V AlarmMuteRuleSummary.MuteType string
+V AlarmPromQLCriteria.PendingPeriod int32
+V AlarmPromQLCriteria.Query string
+V AlarmPromQLCriteria.RecoveryPeriod int32
+V AnomalyDetector.AnomalyDetectorId string
+V AnomalyDetector.MetricName string
+V AnomalyDetector.Namespace string
+V AnomalyDetector.Stat string
+V AnomalyDetectorConfiguration.MetricTimezone string
+V AssociateDatasetKmsKeyInput.DatasetIdentifier string
+V AssociateDatasetKmsKeyInput.KmsKeyArn string
+V CompositeAlarm.ActionsEnabled bool
+V CompositeAlarm.ActionsSuppressedReason string
+V CompositeAlarm.ActionsSuppressor string
+V CompositeAlarm.ActionsSuppressorExtensionPeriod int32
+V CompositeAlarm.ActionsSuppressorWaitPeriod int32
+V CompositeAlarm.AlarmArn string
+V CompositeAlarm.AlarmDescription string
+V CompositeAlarm.AlarmName string
+V CompositeAlarm.AlarmRule string
+V CompositeAlarm.StateReason string
+V CompositeAlarm.StateReasonData string
+V ConcurrentModificationException.ErrorCodeOverride string
+V ConcurrentModificationException.Message string
+V ConflictException.ErrorCodeOverride string
+V ConflictException.Message string
+V DashboardEntry.DashboardArn string
+V DashboardEntry.DashboardName string
+V DashboardEntry.Size int64
+V DashboardInvalidInputError.ErrorCodeOverride string
+V DashboardInvalidInputError.Message string
+V DashboardNotFoundError.ErrorCodeOverride string
+V DashboardNotFoundError.Message string
+V DashboardValidationMessage.DataPath string
+V DashboardValidationMessage.Message string
+V Datapoint.Average float64
+V Datapoint.Maximum float64
+V Datapoint.Minimum float64
+V Datapoint.SampleCount float64
+V Datapoint.Sum float64
+V DeleteAlarmMuteRuleInput.AlarmMuteRuleName string
+V DeleteAnomalyDetectorInput.AnomalyDetectorId string
+V DeleteAnomalyDetectorInput.MetricName string
+V DeleteAnomalyDetectorInput.Namespace string
+V DeleteAnomalyDetectorInput.Stat string
+V DeleteMetricStreamInput.Name string
+V DescribeAlarmContributorsInput.AlarmName string
+V DescribeAlarmContributorsInput.NextToken string
+V DescribeAlarmContributorsOutput.NextToken string
+V DescribeAlarmHistoryInput.AlarmContributorId string
+V DescribeAlarmHistoryInput.AlarmName string
+V DescribeAlarmHistoryInput.MaxRecords int32
+V DescribeAlarmHistoryInput.NextToken string
+V DescribeAlarmHistoryOutput.NextToken string
+V DescribeAlarmsForMetricInput.ExtendedStatistic string
+V DescribeAlarmsForMetricInput.MetricName string
+V DescribeAlarmsForMetricInput.Namespace string
+V DescribeAlarmsForMetricInput.Period int32
+V DescribeAlarmsInput.ActionPrefix string
+V DescribeAlarmsInput.AlarmNamePrefix string
+V DescribeAlarmsInput.ChildrenOfAlarmName string
+V DescribeAlarmsInput.MaxRecords int32
+V DescribeAlarmsInput.NextToken string
+V DescribeAlarmsInput.ParentsOfAlarmName string
+V DescribeAlarmsOutput.NextToken string
+V DescribeAnomalyDetectorsInput.MaxResults int32
+V DescribeAnomalyDetectorsInput.MetricName string
+V DescribeAnomalyDetectorsInput.Namespace string
+V DescribeAnomalyDetectorsInput.NextToken string
+V DescribeAnomalyDetectorsOutput.NextToken string
+V DescribeInsightRulesInput.MaxResults int32
+V DescribeInsightRulesInput.NextToken string
+V DescribeInsightRulesOutput.NextToken string
+V Dimension.Name string
+V Dimension.Value string
+V DimensionFilter.Name string
+V DimensionFilter.Value string
+V DisassociateDatasetKmsKeyInput.DatasetIdentifier string
+V EndpointParameters.Endpoint string
+V EndpointParameters.Region string
+V EndpointParameters.UseDualStack bool
+V EndpointParameters.UseFIPS bool
+V GetAlarmMuteRuleInput.AlarmMuteRuleName string
+V GetAlarmMuteRuleOutput.AlarmMuteRuleArn string
+V GetAlarmMuteRuleOutput.Description string
+V GetAlarmMuteRuleOutput.MuteType string
+V GetAlarmMuteRuleOutput.Name string
+V GetDashboardInput.DashboardName string
+V GetDashboardOutput.DashboardArn string
+V GetDashboardOutput.DashboardBody string
+V GetDashboardOutput.DashboardName string
+V GetDatasetInput.DatasetIdentifier string
+V GetDatasetOutput.Arn string
+V GetDatasetOutput.DatasetId string
+V GetDatasetOutput.KmsKeyArn string
+V GetInsightRuleReportInput.MaxContributorCount int32
+V GetInsightRuleReportInput.OrderBy string
+V GetInsightRuleReportInput.Period int32
+V GetInsightRuleReportInput.RuleName string
+V GetInsightRuleReportOutput.AggregateValue float64
+V GetInsightRuleReportOutput.AggregationStatistic string
+V GetInsightRuleReportOutput.ApproximateUniqueCount int64
+V GetMetricDataInput.MaxDatapoints int32
+V GetMetricDataInput.NextToken string
+V GetMetricDataOutput.NextToken string
+V GetMetricStatisticsInput.MetricName string
+V GetMetricStatisticsInput.Namespace string
+V GetMetricStatisticsInput.Period int32
+V GetMetricStatisticsOutput.Label string
+V GetMetricStreamInput.Name string
+V GetMetricStreamOutput.Arn string
+V GetMetricStreamOutput.FirehoseArn string
+V GetMetricStreamOutput.IncludeLinkedAccountsMetrics bool
+V GetMetricStreamOutput.Name string
+V GetMetricStreamOutput.RoleArn string
+V GetMetricStreamOutput.State string
+V GetMetricWidgetImageInput.MetricWidget string
+V GetMetricWidgetImageInput.OutputFormat string
+V InsightRule.ApplyOnTransformedLogs bool
+V InsightRule.Definition string
+V InsightRule.ManagedRule bool
+V InsightRule.Name string
+V InsightRule.Schema string
+V InsightRule.State string
+V InsightRuleContributor.ApproximateAggregateValue float64
+V InsightRuleContributorDatapoint.ApproximateValue float64
+V InsightRuleMetricDatapoint.Average float64
+V InsightRuleMetricDatapoint.MaxContributorValue float64
+V InsightRuleMetricDatapoint.Maximum float64
+V InsightRuleMetricDatapoint.Minimum float64
+V InsightRuleMetricDatapoint.SampleCount float64
+V InsightRuleMetricDatapoint.Sum float64
+V InsightRuleMetricDatapoint.UniqueContributors float64
+V InternalServiceFault.ErrorCodeOverride string
+V InternalServiceFault.Message string
+V InvalidFormatFault.ErrorCodeOverride string
+V InvalidFormatFault.Message string
+V InvalidNextToken.ErrorCodeOverride string
+V InvalidNextToken.Message string
+V InvalidParameterCombinationException.ErrorCodeOverride string
+V InvalidParameterCombinationException.Message string
+V InvalidParameterValueException.ErrorCodeOverride string
+V InvalidParameterValueException.Message string
+V KmsAccessDeniedException.ErrorCodeOverride string
+V KmsAccessDeniedException.Message string
+V KmsKeyDisabledException.ErrorCodeOverride string
+V KmsKeyDisabledException.Message string
+V KmsKeyNotFoundException.ErrorCodeOverride string
+V KmsKeyNotFoundException.Message string
+V LabelOptions.Timezone string
+V LimitExceededException.ErrorCodeOverride string
+V LimitExceededException.Message string
+V LimitExceededFault.ErrorCodeOverride string
+V LimitExceededFault.Message string
+V ListAlarmMuteRulesInput.AlarmName string
+V ListAlarmMuteRulesInput.MaxRecords int32
+V ListAlarmMuteRulesInput.NextToken string
+V ListAlarmMuteRulesOutput.NextToken string
+V ListDashboardsInput.DashboardNamePrefix string
+V ListDashboardsInput.NextToken string
+V ListDashboardsOutput.NextToken string
+V ListManagedInsightRulesInput.MaxResults int32
+V ListManagedInsightRulesInput.NextToken string
+V ListManagedInsightRulesInput.ResourceARN string
+V ListManagedInsightRulesOutput.NextToken string
+V ListMetricStreamsInput.MaxResults int32
+V ListMetricStreamsInput.NextToken string
+V ListMetricStreamsOutput.NextToken string
+V ListMetricsInput.IncludeLinkedAccounts bool
+V ListMetricsInput.MetricName string
+V ListMetricsInput.Namespace string
+V ListMetricsInput.NextToken string
+V ListMetricsInput.OwningAccount string
+V ListMetricsOutput.NextToken string
+V ListTagsForResourceInput.ResourceARN string
+V LogAlarm.ActionLogLineCount int32
+V LogAlarm.ActionLogLineRoleArn string
+V LogAlarm.ActionsEnabled bool
+V LogAlarm.AlarmArn string
+V LogAlarm.AlarmDescription string
+V LogAlarm.AlarmName string
+V LogAlarm.QueryResultsToAlarm int32
+V LogAlarm.QueryResultsToEvaluate int32
+V LogAlarm.StateReason string
+V LogAlarm.StateReasonData string
+V LogAlarm.Threshold float64
+V LogAlarm.TreatMissingData string
+V ManagedRule.ResourceARN string
+V ManagedRule.TemplateName string
+V ManagedRuleDescription.ResourceARN string
+V ManagedRuleDescription.TemplateName string
+V ManagedRuleState.RuleName string
+V ManagedRuleState.State string
+V MessageData.Code string
+V MessageData.Value string
+V Metric.MetricName string
+V Metric.Namespace string
+V MetricAlarm.ActionsEnabled bool
+V MetricAlarm.AlarmArn string
+V MetricAlarm.AlarmDescription string
+V MetricAlarm.AlarmName string
+V MetricAlarm.DatapointsToAlarm int32
+V MetricAlarm.EvaluateLowSampleCountPercentile string
+V MetricAlarm.EvaluationInterval int32
+V MetricAlarm.EvaluationPeriods int32
+V MetricAlarm.ExtendedStatistic string
+V MetricAlarm.MetricName string
+V MetricAlarm.Namespace string
+V MetricAlarm.Period int32
+V MetricAlarm.StateReason string
+V MetricAlarm.StateReasonData string
+V MetricAlarm.Threshold float64
+V MetricAlarm.ThresholdMetricId string
+V MetricAlarm.TreatMissingData string
+V MetricCharacteristics.PeriodicSpikes bool
+V MetricDataQuery.AccountId string
+V MetricDataQuery.Expression string
+V MetricDataQuery.Id string
+V MetricDataQuery.Label string
+V MetricDataQuery.Period int32
+V MetricDataQuery.ReturnData bool
+V MetricDataResult.Id string
+V MetricDataResult.Label string
+V MetricDatum.MetricName string
+V MetricDatum.StorageResolution int32
+V MetricDatum.Value float64
+V MetricStat.Period int32
+V MetricStat.Stat string
+V MetricStreamEntry.Arn string
+V MetricStreamEntry.FirehoseArn string
+V MetricStreamEntry.Name string
+V MetricStreamEntry.State string
+V MetricStreamFilter.Namespace string
+V MetricStreamStatisticsMetric.MetricName string
+V MetricStreamStatisticsMetric.Namespace string
+V MissingRequiredParameterException.ErrorCodeOverride string
+V MissingRequiredParameterException.Message string
+V Options.BaseEndpoint string
+V PartialFailure.ExceptionType string
+V PartialFailure.FailureCode string
+V PartialFailure.FailureDescription string
+V PartialFailure.FailureResource string
+V PutAlarmMuteRuleInput.Description string
+V PutAlarmMuteRuleInput.Name string
+V PutAnomalyDetectorInput.MetricName string
+V PutAnomalyDetectorInput.Namespace string
+V PutAnomalyDetectorInput.Stat string
+V PutAnomalyDetectorOutput.AnomalyDetectorId string
+V PutCompositeAlarmInput.ActionsEnabled bool
+V PutCompositeAlarmInput.ActionsSuppressor string
+V PutCompositeAlarmInput.ActionsSuppressorExtensionPeriod int32
+V PutCompositeAlarmInput.ActionsSuppressorWaitPeriod int32
+V PutCompositeAlarmInput.AlarmDescription string
+V PutCompositeAlarmInput.AlarmName string
+V PutCompositeAlarmInput.AlarmRule string
+V PutDashboardInput.DashboardBody string
+V PutDashboardInput.DashboardName string
+V PutInsightRuleInput.ApplyOnTransformedLogs bool
+V PutInsightRuleInput.RuleDefinition string
+V PutInsightRuleInput.RuleName string
+V PutInsightRuleInput.RuleState string
+V PutLogAlarmInput.ActionLogLineCount int32
+V PutLogAlarmInput.ActionLogLineRoleArn string
+V PutLogAlarmInput.ActionsEnabled bool
+V PutLogAlarmInput.AlarmDescription string
+V PutLogAlarmInput.AlarmName string
+V PutLogAlarmInput.QueryResultsToAlarm int32
+V PutLogAlarmInput.QueryResultsToEvaluate int32
+V PutLogAlarmInput.Threshold float64
+V PutLogAlarmInput.TreatMissingData string
+V PutMetricAlarmInput.ActionsEnabled bool
+V PutMetricAlarmInput.AlarmDescription string
+V PutMetricAlarmInput.AlarmName string
+V PutMetricAlarmInput.DatapointsToAlarm int32
+V PutMetricAlarmInput.EvaluateLowSampleCountPercentile string
+V PutMetricAlarmInput.EvaluationInterval int32
+V PutMetricAlarmInput.EvaluationPeriods int32
+V PutMetricAlarmInput.ExtendedStatistic string
+V PutMetricAlarmInput.MetricName string
+V PutMetricAlarmInput.Namespace string
+V PutMetricAlarmInput.Period int32
+V PutMetricAlarmInput.Threshold float64
+V PutMetricAlarmInput.ThresholdMetricId string
+V PutMetricAlarmInput.TreatMissingData string
+V PutMetricDataInput.Namespace string
+V PutMetricDataInput.StrictEntityValidation bool
+V PutMetricStreamInput.FirehoseArn string
+V PutMetricStreamInput.IncludeLinkedAccountsMetrics bool
+V PutMetricStreamInput.Name string
+V PutMetricStreamInput.RoleArn string
+V PutMetricStreamOutput.Arn string
+V ResourceConflict.ErrorCodeOverride string
+V ResourceConflict.Message string
+V ResourceNotFound.ErrorCodeOverride string
+V ResourceNotFound.Message string
+V ResourceNotFoundException.ErrorCodeOverride string
+V ResourceNotFoundException.Message string
+V ResourceNotFoundException.ResourceId string
+V ResourceNotFoundException.ResourceType string
+V Schedule.Duration string
+V Schedule.Expression string
+V Schedule.Timezone string
+V ScheduleConfiguration.EndTimeOffset int64
+V ScheduleConfiguration.ScheduleExpression string
+V ScheduleConfiguration.StartTimeOffset int64
+V ScheduledQueryConfiguration.AggregationExpression string
+V ScheduledQueryConfiguration.QueryARN string
+V ScheduledQueryConfiguration.QueryString string
+V ScheduledQueryConfiguration.ScheduledQueryRoleARN string
+V SetAlarmStateInput.AlarmName string
+V SetAlarmStateInput.StateReason string
+V SetAlarmStateInput.StateReasonData string
+V SingleMetricAnomalyDetector.AccountId string
+V SingleMetricAnomalyDetector.MetricName string
+V SingleMetricAnomalyDetector.Namespace string
+V SingleMetricAnomalyDetector.Stat string
+V StatisticSet.Maximum float64
+V StatisticSet.Minimum float64
+V StatisticSet.SampleCount float64
+V StatisticSet.Sum float64
+V Tag.Key string
+V Tag.Value string
+V TagResourceInput.ResourceARN string
+V UntagResourceInput.ResourceARN string
+V WallClockWindow.Timezone string
+V WarmUpConfiguration.OnlyStartEvaluatingAfterWarmUpPeriodEnds bool
+V WarmUpConfiguration.WarmUpPeriodDurationInMinutes int32
+Q Datapoint.ExtendedStatistics
+L AnomalyDetector.Dimensions Dimension
+L AnomalyDetectorConfiguration.ExcludedTimeRanges Range
+L CompositeAlarm.AlarmActions -
+L CompositeAlarm.InsufficientDataActions -
+L CompositeAlarm.OKActions -
+L DeleteAlarmsInput.AlarmNames -
+L DeleteAnomalyDetectorInput.Dimensions Dimension
+L DeleteDashboardsInput.DashboardNames -
+L DeleteInsightRulesInput.RuleNames -
+L DeleteInsightRulesOutput.Failures PartialFailure
+L DescribeAlarmHistoryInput.AlarmTypes AlarmType
+L DescribeAlarmHistoryOutput.AlarmHistoryItems AlarmHistoryItem
+L DescribeAlarmsForMetricInput.Dimensions Dimension
+L DescribeAlarmsForMetricOutput.MetricAlarms MetricAlarm
+L DescribeAlarmsInput.AlarmNames -
+L DescribeAlarmsInput.AlarmTypes AlarmType
+L DescribeAlarmsOutput.CompositeAlarms CompositeAlarm
+L DescribeAlarmsOutput.MetricAlarms MetricAlarm
+L DescribeAnomalyDetectorsInput.AnomalyDetectorTypes AnomalyDetectorType
+L DescribeAnomalyDetectorsInput.Dimensions Dimension
+L DescribeAnomalyDetectorsOutput.AnomalyDetectors AnomalyDetector
+L DescribeInsightRulesOutput.InsightRules InsightRule
+L DisableAlarmActionsInput.AlarmNames -
+L DisableInsightRulesInput.RuleNames -
+L DisableInsightRulesOutput.Failures PartialFailure
+L EnableAlarmActionsInput.AlarmNames -
+L EnableInsightRulesInput.RuleNames -
+L EnableInsightRulesOutput.Failures PartialFailure
+L GetInsightRuleReportInput.Metrics -
+L GetInsightRuleReportOutput.Contributors InsightRuleContributor
+L GetInsightRuleReportOutput.KeyLabels -
+L GetInsightRuleReportOutput.MetricDatapoints InsightRuleMetricDatapoint
+L GetMetricDataInput.MetricDataQueries MetricDataQuery
+L GetMetricDataOutput.Messages MessageData
+L GetMetricDataOutput.MetricDataResults MetricDataResult
+L GetMetricStatisticsInput.Dimensions Dimension
+L GetMetricStatisticsInput.ExtendedStatistics -
+L GetMetricStatisticsInput.Statistics Statistic
+L GetMetricStatisticsOutput.Datapoints Datapoint
+L GetMetricStreamOutput.ExcludeFilters MetricStreamFilter
+L GetMetricStreamOutput.IncludeFilters MetricStreamFilter
+L GetMetricStreamOutput.StatisticsConfigurations MetricStreamStatisticsConfiguration
+L InsightRuleContributor.Datapoints InsightRuleContributorDatapoint
+L InsightRuleContributor.Keys -
+L ListDashboardsOutput.DashboardEntries DashboardEntry
+L ListManagedInsightRulesOutput.ManagedRules ManagedRuleDescription
+L ListMetricStreamsOutput.Entries MetricStreamEntry
+L ListMetricsInput.Dimensions DimensionFilter
+L ListMetricsOutput.Metrics Metric
+L ListMetricsOutput.OwningAccounts -
+L ListTagsForResourceOutput.Tags Tag
+L ManagedRule.Tags Tag
+L Metric.Dimensions Dimension
+L MetricAlarm.AlarmActions -
+L MetricAlarm.Dimensions Dimension
+L MetricAlarm.InsufficientDataActions -
+L MetricAlarm.Metrics MetricDataQuery
+L MetricAlarm.OKActions -
+L MetricDataResult.Messages MessageData
+L MetricDataResult.Timestamps Time
+L MetricDataResult.Values -
+L MetricDatum.Counts -
+L MetricDatum.Dimensions Dimension
+L MetricDatum.Values -
+L MetricMathAnomalyDetector.MetricDataQueries MetricDataQuery
+L MetricStreamFilter.MetricNames -
+L MetricStreamStatisticsConfiguration.AdditionalStatistics -
+L MetricStreamStatisticsConfiguration.IncludeMetrics MetricStreamStatisticsMetric
+L PutAnomalyDetectorInput.Dimensions Dimension
+L PutCompositeAlarmInput.AlarmActions -
+L PutCompositeAlarmInput.InsufficientDataActions -
+L PutCompositeAlarmInput.OKActions -
+L PutCompositeAlarmInput.Tags Tag
+L PutDashboardOutput.DashboardValidationMessages DashboardValidationMessage
+L PutInsightRuleInput.Tags Tag
+L PutManagedInsightRulesInput.ManagedRules ManagedRule
+L PutManagedInsightRulesOutput.Failures PartialFailure
+L PutMetricAlarmInput.AlarmActions -
+L PutMetricAlarmInput.Dimensions Dimension
+L PutMetricAlarmInput.InsufficientDataActions -
+L PutMetricAlarmInput.Metrics MetricDataQuery
+L PutMetricAlarmInput.OKActions -
+L PutMetricAlarmInput.Tags Tag
+L PutMetricDataInput.MetricData MetricDatum
+L PutMetricStreamInput.ExcludeFilters MetricStreamFilter
+L PutMetricStreamInput.IncludeFilters MetricStreamFilter
+L PutMetricStreamInput.StatisticsConfigurations MetricStreamStatisticsConfiguration
+L PutMetricStreamInput.Tags Tag
+L SingleMetricAnomalyDetector.Dimensions Dimension
+L StartMetricStreamsInput.Names -
+L StopMetricStreamsInput.Names -
+L TagResourceInput.Tags Tag
+L UntagResourceInput.TagKeys -
+F AlarmHistoryItem.AlarmType AlarmType
+F AlarmHistoryItem.HistoryItemType HistoryItemType
+F AlarmMuteRuleSummary.Status AlarmMuteRuleStatus
+F AnomalyDetector.StateValue AnomalyDetectorStateValue
+F CompositeAlarm.ActionsSuppressedBy ActionsSuppressedBy
+F CompositeAlarm.StateValue StateValue
+F Datapoint.Unit StandardUnit
+F DescribeAlarmHistoryInput.AlarmTypes AlarmType
+F DescribeAlarmHistoryInput.HistoryItemType HistoryItemType
+F DescribeAlarmHistoryInput.ScanBy ScanBy
+F DescribeAlarmsForMetricInput.Statistic Statistic
+F DescribeAlarmsForMetricInput.Unit StandardUnit
+F DescribeAlarmsInput.AlarmTypes AlarmType
+F DescribeAlarmsInput.StateValue StateValue
+F DescribeAnomalyDetectorsInput.AnomalyDetectorTypes AnomalyDetectorType
+F GetAlarmMuteRuleOutput.Status AlarmMuteRuleStatus
+F GetMetricDataInput.ScanBy ScanBy
+F GetMetricStatisticsInput.Statistics Statistic
+F GetMetricStatisticsInput.Unit StandardUnit
+F GetMetricStreamOutput.OutputFormat MetricStreamOutputFormat
+F GetOTelEnrichmentOutput.Status OTelEnrichmentStatus
+F ListAlarmMuteRulesInput.Statuses AlarmMuteRuleStatus
+F ListMetricsInput.RecentlyActive RecentlyActive
+F LogAlarm.ComparisonOperator ComparisonOperator
+F LogAlarm.EvaluationState EvaluationState
+F LogAlarm.StateValue StateValue
+F MetricAlarm.ComparisonOperator ComparisonOperator
+F MetricAlarm.EvaluationState EvaluationState
+F MetricAlarm.StateValue StateValue
+F MetricAlarm.Statistic Statistic
+F MetricAlarm.Unit StandardUnit
+F MetricDataResult.StatusCode StatusCode
+F MetricDatum.Unit StandardUnit
+F MetricStat.Unit StandardUnit
+F MetricStreamEntry.OutputFormat MetricStreamOutputFormat
+F PutLogAlarmInput.ComparisonOperator ComparisonOperator
+F PutMetricAlarmInput.ComparisonOperator ComparisonOperator
+F PutMetricAlarmInput.Statistic Statistic
+F PutMetricAlarmInput.Unit StandardUnit
+F PutMetricStreamInput.OutputFormat MetricStreamOutputFormat
+F SetAlarmStateInput.StateValue StateValue
+N APIOptions
+N AccountId
+N ActionLogLineCount
+N ActionLogLineRoleArn
+N ActionPrefix
+N ActionsEnabled
+N ActionsSuppressedReason
+N ActionsSuppressor
+N ActionsSuppressorExtensionPeriod
+N ActionsSuppressorWaitPeriod
+N AdditionalStatistics
+N AggregateValue
+N AggregationExpression
+N AggregationStatistic
+N AlarmActions
+N AlarmArn
+N AlarmConfigurationUpdatedTimestamp
+N AlarmContributorAttributes
+N AlarmContributorId
+N AlarmContributors
+N AlarmDescription
+N AlarmHistoryItems
+N AlarmMuteRuleArn
+N AlarmMuteRuleName
+N AlarmMuteRuleSummaries
+N AlarmName
+N AlarmNamePrefix
+N AlarmNames
+N AlarmRule
+N AnomalyDetectorId
+N AnomalyDetectorIds
+N AnomalyDetectors
+N AppID
+N ApplyOnTransformedLogs
+N ApproximateAggregateValue
+N ApproximateUniqueCount
+N ApproximateValue
+N Arn
+N Attributes
+N AuthSchemePreference
+N AuthSchemeResolver
+N AuthSchemes
+N Average
+N BaseEndpoint
+N ChildrenOfAlarmName
+N ClientLogMode
+N ClientOptions
+N Code
+N CompositeAlarms
+N Configuration
+N ContributorAttributes
+N ContributorId
+N Contributors
+N Counts
+N CreationDate
+N Credentials
+N DashboardArn
+N DashboardBody
+N DashboardEntries
+N DashboardName
+N DashboardNamePrefix
+N DashboardNames
+N DashboardValidationMessages
+N DataPath
+N Datapoints
+N DatapointsToAlarm
+N DatasetId
+N DatasetIdentifier
+N DefaultsMode
+N Definition
+N Description
+N Dimensions
+N DisableClockSkewCorrection
+N DisableHTTPS
+N DisableRequestCompression
+N Duration
+N EndDate
+N EndTime
+N EndTimeOffset
+N Endpoint
+N EndpointOptions
+N EndpointResolver
+N EndpointResolverV2
+N Entity
+N EntityMetricData
+N Entries
+N ErrorCodeOverride
+N EvaluateLowSampleCountPercentile
+N EvaluationCriteria
+N EvaluationInterval
+N EvaluationPeriods
+N EvaluationWindow
+N ExceptionType
+N ExcludeFilters
+N ExcludedTimeRanges
+N ExpireDate
+N Expression
+N ExtendedStatistic
+N ExtendedStatistics
+N FailureCode
+N FailureDescription
+N FailureResource
+N Failures
+N FirehoseArn
+N HTTPClient
+N HTTPSignerV4
+N HistoryData
+N HistorySummary
+N Id
+N IncludeFilters
+N IncludeLinkedAccounts
+N IncludeLinkedAccountsMetrics
+N IncludeMetrics
+N InsightRules
+N InsufficientDataActions
+N Interceptors
+N Key
+N KeyAttributes
+N KeyLabels
+N Keys
+N KmsKeyArn
+N Label
+N LabelOptions
+N LastModified
+N LastUpdateDate
+N LastUpdatedTimestamp
+N Limit
+N LogAlarms
+N LogDeprecated
+N LogGroupIdentifiers
+N LogWaitAttempts
+N Logger
+N ManagedRule
+N ManagedRules
+N MaxContributorCount
+N MaxContributorValue
+N MaxDatapoints
+N MaxDelay
+N MaxRecords
+N MaxResults
+N Maximum
+N Message
+N Messages
+N MeterProvider
+N Metric
+N MetricAlarms
+N MetricCharacteristics
+N MetricData
+N MetricDataQueries
+N MetricDataResults
+N MetricDatapoints
+N MetricMathAnomalyDetector
+N MetricName
+N MetricNames
+N MetricStat
+N MetricTimezone
+N MetricWidget
+N MetricWidgetImage
+N Metrics
+N MinDelay
+N Minimum
+N MuteTargets
+N MuteType
+N Name
+N Names
+N Namespace
+N NextToken
+N OKActions
+N OnlyStartEvaluatingAfterWarmUpPeriodEnds
+N Operation
+N Options
+N OrderBy
+N OutputFormat
+N OwningAccount
+N OwningAccounts
+N ParentsOfAlarmName
+N PendingPeriod
+N Period
+N PeriodicSpikes
+N Protocol
+N Query
+N QueryARN
+N QueryResultsToAlarm
+N QueryResultsToEvaluate
+N QueryString
+N RecoveryPeriod
+N Region
+N RequestMinCompressSizeBytes
+N ResolvedRegion
+N Resolver
+N ResourceARN
+N ResourceId
+N ResourceType
+N ResultMetadata
+N RetryMaxAttempts
+N RetryMode
+N Retryable
+N Retryer
+N ReturnData
+N RoleArn
+N Rule
+N RuleDefinition
+N RuleName
+N RuleNames
+N RuleState
+N RuntimeEnvironment
+N SampleCount
+N Schedule
+N ScheduleConfiguration
+N ScheduleExpression
+N ScheduledQueryConfiguration
+N ScheduledQueryRoleARN
+N Schema
+N SingleMetricAnomalyDetector
+N Size
+N StartDate
+N StartTime
+N StartTimeOffset
+N Stat
+N State
+N StateReason
+N StateReasonData
+N StateTransitionedTimestamp
+N StateUpdatedTimestamp
+N StatisticValues
+N StatisticsConfigurations
+N StopOnDuplicateToken
+N StorageResolution
+N StrictEntityValidation
+N Sum
+N Tag
+N TagKeys
+N Tags
+N TemplateName
+N Threshold
+N ThresholdMetricId
+N Timestamp
+N Timestamps
+N Timezone
+N TracerProvider
+N TreatMissingData
+N UniqueContributors
+N UseDualStack
+N UseDualStackEndpoint
+N UseFIPS
+N UseFIPSEndpoint
+N Value
+N Values
+N WarmUpConfiguration
+N WarmUpPeriodDurationInMinutes
+T ActionsSuppressedBy
+T AlarmContributor
+T AlarmHistoryItem
+T AlarmMuteRuleStatus
+T AlarmMuteRuleSummary
+T AlarmPromQLCriteria
+T AlarmType
+T AnomalyDetector
+T AnomalyDetectorConfiguration
+T AnomalyDetectorStateValue
+T AnomalyDetectorType
+T ComparisonOperator
+T CompositeAlarm
+T ConcurrentModificationException
+T ConflictException
+T DashboardEntry
+T DashboardInvalidInputError
+T DashboardNotFoundError
+T DashboardValidationMessage
+T Datapoint
+T Dimension
+T DimensionFilter
+T Entity
+T EntityMetricData
+T EvaluationCriteria
+T EvaluationCriteriaMemberPromQLCriteria
+T EvaluationState
+T EvaluationWindow
+T EvaluationWindowMemberSlidingWindow
+T EvaluationWindowMemberWallClockWindow
+T HistoryItemType
+T InsightRule
+T InsightRuleContributor
+T InsightRuleContributorDatapoint
+T InsightRuleMetricDatapoint
+T InternalServiceFault
+T InvalidFormatFault
+T InvalidNextToken
+T InvalidParameterCombinationException
+T InvalidParameterValueException
+T KmsAccessDeniedException
+T KmsKeyDisabledException
+T KmsKeyNotFoundException
+T LabelOptions
+T LimitExceededException
+T LimitExceededFault
+T LogAlarm
+T ManagedRule
+T ManagedRuleDescription
+T ManagedRuleState
+T MessageData
+T Metric
+T MetricAlarm
+T MetricCharacteristics
+T MetricDataQuery
+T MetricDataResult
+T MetricDatum
+T MetricMathAnomalyDetector
+T MetricStat
+T MetricStreamEntry
+T MetricStreamFilter
+T MetricStreamOutputFormat
+T MetricStreamStatisticsConfiguration
+T MetricStreamStatisticsMetric
+T MissingRequiredParameterException
+T MuteTargets
+T OTelEnrichmentStatus
+T PartialFailure
+T Range
+T RecentlyActive
+T ResourceConflict
+T ResourceNotFound
+T ResourceNotFoundException
+T Rule
+T ScanBy
+T Schedule
+T ScheduleConfiguration
+T ScheduledQueryConfiguration
+T SingleMetricAnomalyDetector
+T SlidingWindow
+T StandardUnit
+T StateValue
+T Statistic
+T StatisticSet
+T StatusCode
+T Tag
+T UnknownUnionMember
+T WallClockWindow
+T WarmUpConfiguration
+E ActionsSuppressedByAlarm ActionsSuppressedBy
+E ActionsSuppressedByExtensionPeriod ActionsSuppressedBy
+E ActionsSuppressedByWaitPeriod ActionsSuppressedBy
+E AlarmMuteRuleStatusActive AlarmMuteRuleStatus
+E AlarmMuteRuleStatusExpired AlarmMuteRuleStatus
+E AlarmMuteRuleStatusScheduled AlarmMuteRuleStatus
+E AlarmTypeCompositeAlarm AlarmType
+E AlarmTypeLogAlarm AlarmType
+E AlarmTypeMetricAlarm AlarmType
+E AnomalyDetectorStateValuePendingTraining AnomalyDetectorStateValue
+E AnomalyDetectorStateValueTrained AnomalyDetectorStateValue
+E AnomalyDetectorStateValueTrainedInsufficientData AnomalyDetectorStateValue
+E AnomalyDetectorTypeMetricMath AnomalyDetectorType
+E AnomalyDetectorTypeSingleMetric AnomalyDetectorType
+E ComparisonOperatorGreaterThanOrEqualToThreshold ComparisonOperator
+E ComparisonOperatorGreaterThanThreshold ComparisonOperator
+E ComparisonOperatorGreaterThanUpperThreshold ComparisonOperator
+E ComparisonOperatorLessThanLowerOrGreaterThanUpperThreshold ComparisonOperator
+E ComparisonOperatorLessThanLowerThreshold ComparisonOperator
+E ComparisonOperatorLessThanOrEqualToThreshold ComparisonOperator
+E ComparisonOperatorLessThanThreshold ComparisonOperator
+E EvaluationStateEvaluationError EvaluationState
+E EvaluationStateEvaluationFailure EvaluationState
+E EvaluationStatePartialData EvaluationState
+E HistoryItemTypeAction HistoryItemType
+E HistoryItemTypeAlarmContributorAction HistoryItemType
+E HistoryItemTypeAlarmContributorStateUpdate HistoryItemType
+E HistoryItemTypeConfigurationUpdate HistoryItemType
+E HistoryItemTypeStateUpdate HistoryItemType
+E MetricStreamOutputFormatJson MetricStreamOutputFormat
+E MetricStreamOutputFormatOpenTelemetry07 MetricStreamOutputFormat
+E MetricStreamOutputFormatOpenTelemetry10 MetricStreamOutputFormat
+E OTelEnrichmentStatusRunning OTelEnrichmentStatus
+E OTelEnrichmentStatusStopped OTelEnrichmentStatus
+E RecentlyActivePt3h RecentlyActive
+E ScanByTimestampAscending ScanBy
+E ScanByTimestampDescending ScanBy
+E StandardUnitBits StandardUnit
+E StandardUnitBitsSecond StandardUnit
+E StandardUnitBytes StandardUnit
+E StandardUnitBytesSecond StandardUnit
+E StandardUnitCount StandardUnit
+E StandardUnitCountSecond StandardUnit
+E StandardUnitGigabits StandardUnit
+E StandardUnitGigabitsSecond StandardUnit
+E StandardUnitGigabytes StandardUnit
+E StandardUnitGigabytesSecond StandardUnit
+E StandardUnitKilobits StandardUnit
+E StandardUnitKilobitsSecond StandardUnit
+E StandardUnitKilobytes StandardUnit
+E StandardUnitKilobytesSecond StandardUnit
+E StandardUnitMegabits StandardUnit
+E StandardUnitMegabitsSecond StandardUnit
+E StandardUnitMegabytes StandardUnit
+E StandardUnitMegabytesSecond StandardUnit
+E StandardUnitMicroseconds StandardUnit
+E StandardUnitMilliseconds StandardUnit
+E StandardUnitNone StandardUnit
+E StandardUnitPercent StandardUnit
+E StandardUnitSeconds StandardUnit
+E StandardUnitTerabits StandardUnit
+E StandardUnitTerabitsSecond StandardUnit
+E StandardUnitTerabytes StandardUnit
+E StandardUnitTerabytesSecond StandardUnit
+E StateValueAlarm StateValue
+E StateValueInsufficientData StateValue
+E StateValueOk StateValue
+E StatisticAverage Statistic
+E StatisticMaximum Statistic
+E StatisticMinimum Statistic
+E StatisticSampleCount Statistic
+E StatisticSum Statistic
+E StatusCodeComplete StatusCode
+E StatusCodeForbidden StatusCode
+E StatusCodeInternalError StatusCode
+E StatusCodePartialData StatusCode

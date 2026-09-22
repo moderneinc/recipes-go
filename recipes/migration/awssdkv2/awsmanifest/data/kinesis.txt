@@ -1,0 +1,940 @@
+C Kinesis
+S AddTagsToStreamInput
+S AddTagsToStreamOutput
+S AuthResolverParameters
+S AuthSchemeResolver
+S ChannelActiveWaiter
+S ChannelActiveWaiterOptions
+S Client
+S CreateChannelInput
+S CreateChannelOutput
+S CreateStreamInput
+S CreateStreamOutput
+S DecreaseStreamRetentionPeriodInput
+S DecreaseStreamRetentionPeriodOutput
+S DeleteChannelInput
+S DeleteChannelOutput
+S DeleteResourcePolicyInput
+S DeleteResourcePolicyOutput
+S DeleteStreamInput
+S DeleteStreamOutput
+S DeregisterStreamConsumerInput
+S DeregisterStreamConsumerOutput
+S DescribeAccountSettingsInput
+S DescribeAccountSettingsOutput
+S DescribeChannelAPIClient
+S DescribeChannelInput
+S DescribeChannelOutput
+S DescribeLimitsInput
+S DescribeLimitsOutput
+S DescribeStreamAPIClient
+S DescribeStreamConsumerInput
+S DescribeStreamConsumerOutput
+S DescribeStreamInput
+S DescribeStreamOutput
+S DescribeStreamPaginator
+S DescribeStreamPaginatorOptions
+S DescribeStreamSummaryInput
+S DescribeStreamSummaryOutput
+S DisableEnhancedMonitoringInput
+S DisableEnhancedMonitoringOutput
+S EnableEnhancedMonitoringInput
+S EnableEnhancedMonitoringOutput
+S EndpointParameters
+S EndpointResolver
+S EndpointResolverFromURL
+S EndpointResolverFunc
+S EndpointResolverOptions
+S EndpointResolverV2
+S GetRecordsInput
+S GetRecordsOutput
+S GetResourcePolicyInput
+S GetResourcePolicyOutput
+S GetShardIteratorInput
+S GetShardIteratorOutput
+S HTTPClient
+S HTTPSignerV4
+S IncreaseStreamRetentionPeriodInput
+S IncreaseStreamRetentionPeriodOutput
+S ListChannelsAPIClient
+S ListChannelsInput
+S ListChannelsOutput
+S ListChannelsPaginator
+S ListChannelsPaginatorOptions
+S ListShardsInput
+S ListShardsOutput
+S ListStreamConsumersAPIClient
+S ListStreamConsumersInput
+S ListStreamConsumersOutput
+S ListStreamConsumersPaginator
+S ListStreamConsumersPaginatorOptions
+S ListStreamsAPIClient
+S ListStreamsInput
+S ListStreamsOutput
+S ListStreamsPaginator
+S ListStreamsPaginatorOptions
+S ListTagsForResourceInput
+S ListTagsForResourceOutput
+S ListTagsForStreamInput
+S ListTagsForStreamOutput
+S MergeShardsInput
+S MergeShardsOutput
+S New
+S NewChannelActiveWaiter
+S NewDefaultEndpointResolver
+S NewDefaultEndpointResolverV2
+S NewDescribeStreamPaginator
+S NewFromConfig
+S NewListChannelsPaginator
+S NewListStreamConsumersPaginator
+S NewListStreamsPaginator
+S NewStreamExistsWaiter
+S NewStreamNotExistsWaiter
+S NewSubscribeToShardEventStream
+S Options
+S PutRecordInput
+S PutRecordOutput
+S PutRecordsInput
+S PutRecordsOutput
+S PutResourcePolicyInput
+S PutResourcePolicyOutput
+S RegisterStreamConsumerInput
+S RegisterStreamConsumerOutput
+S RemoveTagsFromStreamInput
+S RemoveTagsFromStreamOutput
+S ResolveEndpoint
+S ServiceAPIVersion
+S ServiceID
+S SplitShardInput
+S SplitShardOutput
+S StartStreamEncryptionInput
+S StartStreamEncryptionOutput
+S StopStreamEncryptionInput
+S StopStreamEncryptionOutput
+S StreamExistsWaiter
+S StreamExistsWaiterOptions
+S StreamNotExistsWaiter
+S StreamNotExistsWaiterOptions
+S SubscribeToShardEventStream
+S SubscribeToShardEventStreamReader
+S SubscribeToShardInput
+S SubscribeToShardOutput
+S TagResourceInput
+S TagResourceOutput
+S TypeRegistry
+S UnknownEventMessageError
+S UntagResourceInput
+S UntagResourceOutput
+S UpdateAccountSettingsInput
+S UpdateAccountSettingsOutput
+S UpdateChannelInput
+S UpdateChannelOutput
+S UpdateMaxRecordSizeInput
+S UpdateMaxRecordSizeOutput
+S UpdateShardCountInput
+S UpdateShardCountOutput
+S UpdateStreamModeInput
+S UpdateStreamModeOutput
+S UpdateStreamWarmThroughputInput
+S UpdateStreamWarmThroughputOutput
+S WithAPIOptions
+S WithEndpointResolver
+S WithEndpointResolverV2
+S WithSigV4SigningName
+S WithSigV4SigningRegion
+O AddTagsToStream
+O CreateChannel
+O CreateStream
+O DecreaseStreamRetentionPeriod
+O DeleteChannel
+O DeleteResourcePolicy
+O DeleteStream
+O DeregisterStreamConsumer
+O DescribeAccountSettings
+O DescribeChannel
+O DescribeLimits
+O DescribeStream
+O DescribeStreamConsumer
+O DescribeStreamSummary
+O DisableEnhancedMonitoring
+O EnableEnhancedMonitoring
+O GetRecords
+O GetResourcePolicy
+O GetShardIterator
+O IncreaseStreamRetentionPeriod
+O ListChannels
+O ListShards
+O ListStreamConsumers
+O ListStreams
+O ListTagsForResource
+O ListTagsForStream
+O MergeShards
+O PutRecord
+O PutRecords
+O PutResourcePolicy
+O RegisterStreamConsumer
+O RemoveTagsFromStream
+O SplitShard
+O StartStreamEncryption
+O StopStreamEncryption
+O SubscribeToShard
+O TagResource
+O UntagResource
+O UpdateAccountSettings
+O UpdateChannel
+O UpdateMaxRecordSize
+O UpdateShardCount
+O UpdateStreamMode
+O UpdateStreamWarmThroughput
+X ErrCodeAccessDeniedException AccessDeniedException
+X ErrCodeExpiredIteratorException ExpiredIteratorException
+X ErrCodeExpiredNextTokenException ExpiredNextTokenException
+X ErrCodeInternalFailureException InternalFailureException
+X ErrCodeInvalidArgumentException InvalidArgumentException
+X ErrCodeKMSAccessDeniedException KMSAccessDeniedException
+X ErrCodeKMSDisabledException KMSDisabledException
+X ErrCodeKMSInvalidStateException KMSInvalidStateException
+X ErrCodeKMSNotFoundException KMSNotFoundException
+X ErrCodeKMSOptInRequired KMSOptInRequired
+X ErrCodeKMSThrottlingException KMSThrottlingException
+X ErrCodeLimitExceededException LimitExceededException
+X ErrCodeProvisionedThroughputExceededException ProvisionedThroughputExceededException
+X ErrCodeResourceInUseException ResourceInUseException
+X ErrCodeResourceNotFoundException ResourceNotFoundException
+X ErrCodeValidationException ValidationException
+I CreateStreamInput.ShardCount int64 int32
+I DecreaseStreamRetentionPeriodInput.RetentionPeriodHours int64 int32
+I DescribeLimitsOutput.OnDemandStreamCount int64 int32
+I DescribeLimitsOutput.OnDemandStreamCountLimit int64 int32
+I DescribeLimitsOutput.OpenShardCount int64 int32
+I DescribeLimitsOutput.ShardLimit int64 int32
+I DescribeStreamInput.Limit int64 int32
+I GetRecordsInput.Limit int64 int32
+I IncreaseStreamRetentionPeriodInput.RetentionPeriodHours int64 int32
+I ListShardsInput.MaxResults int64 int32
+I ListStreamConsumersInput.MaxResults int64 int32
+I ListStreamsInput.Limit int64 int32
+I ListTagsForStreamInput.Limit int64 int32
+I PutRecordsOutput.FailedRecordCount int64 int32
+I StreamDescription.RetentionPeriodHours int64 int32
+I StreamDescriptionSummary.ConsumerCount int64 int32
+I StreamDescriptionSummary.OpenShardCount int64 int32
+I StreamDescriptionSummary.RetentionPeriodHours int64 int32
+I UpdateShardCountInput.TargetShardCount int64 int32
+I UpdateShardCountOutput.CurrentShardCount int64 int32
+I UpdateShardCountOutput.TargetShardCount int64 int32
+R ChannelDescription.EncryptionConfiguration ChannelEncryptionConfiguration
+R ChannelDescription.LoggingConfiguration ChannelLoggingConfiguration
+R ChannelDescription.S3DestinationConfiguration S3DestinationDescription
+R ChannelDescription.S3TablesDestinationConfiguration S3TablesDestinationDescription
+R ChannelLoggingConfiguration.CloudWatchLogs CloudWatchLogs
+R ChannelLoggingUpdateInput.CloudWatchLogs CloudWatchLogsUpdateInput
+R ChannelStreamConfiguration.RecordConfiguration RecordConfiguration
+R ChannelStreamDescription.RecordConfiguration RecordConfiguration
+R ChildShard.HashKeyRange HashKeyRange
+R CreateChannelInput.EncryptionConfiguration ChannelEncryptionConfiguration
+R CreateChannelInput.LoggingConfiguration ChannelLoggingConfiguration
+R CreateChannelInput.S3DestinationConfiguration S3DestinationConfiguration
+R CreateChannelInput.S3TablesDestinationConfiguration S3TablesDestinationConfiguration
+R CreateChannelOutput.ChannelDescription ChannelDescription
+R CreateStreamInput.StreamModeDetails StreamModeDetails
+R DescribeAccountSettingsOutput.MinimumThroughputBillingCommitment MinimumThroughputBillingCommitmentOutput
+R DescribeChannelOutput.ChannelDescription ChannelDescription
+R DescribeStreamConsumerOutput.ConsumerDescription ConsumerDescription
+R DescribeStreamOutput.StreamDescription StreamDescription
+R DescribeStreamSummaryOutput.StreamDescriptionSummary StreamDescriptionSummary
+R ListShardsInput.ShardFilter ShardFilter
+R RegisterStreamConsumerOutput.Consumer Consumer
+R S3DestinationConfiguration.DeadLetterQueueS3Configuration DeadLetterQueueS3Configuration
+R S3DestinationConfiguration.StorageConfiguration S3StorageConfiguration
+R S3DestinationDescription.DeadLetterQueueS3Configuration DeadLetterQueueS3Configuration
+R S3DestinationDescription.StorageConfiguration S3StorageConfiguration
+R S3TablesConfiguration.PartitionSpec PartitionSpec
+R S3TablesDestinationConfiguration.DeadLetterQueueS3Configuration DeadLetterQueueS3Configuration
+R S3TablesDestinationDescription.DeadLetterQueueS3Configuration DeadLetterQueueS3Configuration
+R Shard.HashKeyRange HashKeyRange
+R Shard.SequenceNumberRange SequenceNumberRange
+R StreamDescription.StreamModeDetails StreamModeDetails
+R StreamDescriptionSummary.StreamModeDetails StreamModeDetails
+R StreamDescriptionSummary.WarmThroughput WarmThroughputObject
+R StreamSummary.StreamModeDetails StreamModeDetails
+R SubscribeToShardInput.StartingPosition StartingPosition
+R UpdateAccountSettingsInput.MinimumThroughputBillingCommitment MinimumThroughputBillingCommitmentInput
+R UpdateAccountSettingsOutput.MinimumThroughputBillingCommitment MinimumThroughputBillingCommitmentOutput
+R UpdateChannelInput.LoggingConfiguration ChannelLoggingUpdateInput
+R UpdateChannelInput.S3DestinationConfiguration S3DestinationUpdateInput
+R UpdateChannelInput.S3TablesDestinationConfiguration S3TablesDestinationUpdateInput
+R UpdateChannelOutput.ChannelDescription ChannelDescription
+R UpdateStreamModeInput.StreamModeDetails StreamModeDetails
+R UpdateStreamWarmThroughputOutput.WarmThroughput WarmThroughputObject
+V AccessDeniedException.ErrorCodeOverride string
+V AccessDeniedException.Message string
+V AddTagsToStreamInput.StreamARN string
+V AddTagsToStreamInput.StreamId string
+V AddTagsToStreamInput.StreamName string
+V ChannelDescription.ChannelARN string
+V ChannelDescription.ChannelId string
+V ChannelDescription.ChannelName string
+V ChannelDescription.ChannelStatusReason string
+V ChannelDescription.ServiceExecutionRoleARN string
+V ChannelEncryptionConfiguration.KeyId string
+V ChannelStreamConfiguration.StreamARN string
+V ChannelStreamDescription.StreamARN string
+V ChannelStreamIdentifier.StreamARN string
+V ChannelSummary.ChannelARN string
+V ChannelSummary.ChannelId string
+V ChannelSummary.ChannelName string
+V ChannelSummary.ChannelStatusReason string
+V ChildShard.ShardId string
+V CloudWatchLogs.Enabled bool
+V CloudWatchLogs.LogGroupName string
+V CloudWatchLogs.LogStreamName string
+V CloudWatchLogsUpdateInput.Enabled bool
+V CloudWatchLogsUpdateInput.LogGroupName string
+V CloudWatchLogsUpdateInput.LogStreamName string
+V Consumer.ConsumerARN string
+V Consumer.ConsumerName string
+V ConsumerDescription.ConsumerARN string
+V ConsumerDescription.ConsumerName string
+V ConsumerDescription.StreamARN string
+V CreateChannelInput.ChannelName string
+V CreateChannelInput.ServiceExecutionRoleARN string
+V CreateStreamInput.MaxRecordSizeInKiB int32
+V CreateStreamInput.ShardCount int32
+V CreateStreamInput.StreamName string
+V CreateStreamInput.WarmThroughputMiBps int32
+V DeadLetterQueueS3Configuration.BucketARN string
+V DeadLetterQueueS3Configuration.ErrorOutputPrefix string
+V DeadLetterQueueS3Configuration.ExpectedBucketOwner string
+V DecreaseStreamRetentionPeriodInput.RetentionPeriodHours int32
+V DecreaseStreamRetentionPeriodInput.StreamARN string
+V DecreaseStreamRetentionPeriodInput.StreamId string
+V DecreaseStreamRetentionPeriodInput.StreamName string
+V DeleteChannelInput.ChannelARN string
+V DeleteResourcePolicyInput.ResourceARN string
+V DeleteResourcePolicyInput.StreamId string
+V DeleteStreamInput.EnforceConsumerDeletion bool
+V DeleteStreamInput.StreamARN string
+V DeleteStreamInput.StreamId string
+V DeleteStreamInput.StreamName string
+V DeregisterStreamConsumerInput.ConsumerARN string
+V DeregisterStreamConsumerInput.ConsumerName string
+V DeregisterStreamConsumerInput.StreamARN string
+V DeregisterStreamConsumerInput.StreamId string
+V DescribeChannelInput.ChannelARN string
+V DescribeLimitsOutput.ChannelCount int32
+V DescribeLimitsOutput.ChannelCountLimit int32
+V DescribeLimitsOutput.OnDemandStreamCount int32
+V DescribeLimitsOutput.OnDemandStreamCountLimit int32
+V DescribeLimitsOutput.OpenShardCount int32
+V DescribeLimitsOutput.ShardLimit int32
+V DescribeStreamConsumerInput.ConsumerARN string
+V DescribeStreamConsumerInput.ConsumerName string
+V DescribeStreamConsumerInput.StreamARN string
+V DescribeStreamConsumerInput.StreamId string
+V DescribeStreamInput.ExclusiveStartShardId string
+V DescribeStreamInput.Limit int32
+V DescribeStreamInput.StreamARN string
+V DescribeStreamInput.StreamId string
+V DescribeStreamInput.StreamName string
+V DescribeStreamPaginatorOptions.Limit int32
+V DescribeStreamSummaryInput.StreamARN string
+V DescribeStreamSummaryInput.StreamId string
+V DescribeStreamSummaryInput.StreamName string
+V DisableEnhancedMonitoringInput.StreamARN string
+V DisableEnhancedMonitoringInput.StreamId string
+V DisableEnhancedMonitoringInput.StreamName string
+V DisableEnhancedMonitoringOutput.StreamARN string
+V DisableEnhancedMonitoringOutput.StreamName string
+V DryRunOperationException.ErrorCodeOverride string
+V DryRunOperationException.Message string
+V EnableEnhancedMonitoringInput.StreamARN string
+V EnableEnhancedMonitoringInput.StreamId string
+V EnableEnhancedMonitoringInput.StreamName string
+V EnableEnhancedMonitoringOutput.StreamARN string
+V EnableEnhancedMonitoringOutput.StreamName string
+V EndpointParameters.AccountId string
+V EndpointParameters.AccountIdEndpointMode string
+V EndpointParameters.ChannelARN string
+V EndpointParameters.ConsumerARN string
+V EndpointParameters.Endpoint string
+V EndpointParameters.OperationType string
+V EndpointParameters.Region string
+V EndpointParameters.ResourceARN string
+V EndpointParameters.StreamARN string
+V EndpointParameters.StreamId string
+V EndpointParameters.UseDualStack bool
+V EndpointParameters.UseFIPS bool
+V ExpiredIteratorException.ErrorCodeOverride string
+V ExpiredIteratorException.Message string
+V ExpiredNextTokenException.ErrorCodeOverride string
+V ExpiredNextTokenException.Message string
+V GetRecordsInput.DryRun bool
+V GetRecordsInput.Limit int32
+V GetRecordsInput.ShardIterator string
+V GetRecordsInput.StreamARN string
+V GetRecordsInput.StreamId string
+V GetRecordsOutput.MillisBehindLatest int64
+V GetRecordsOutput.NextShardIterator string
+V GetResourcePolicyInput.ResourceARN string
+V GetResourcePolicyInput.StreamId string
+V GetResourcePolicyOutput.Policy string
+V GetShardIteratorInput.DryRun bool
+V GetShardIteratorInput.ShardId string
+V GetShardIteratorInput.StartingSequenceNumber string
+V GetShardIteratorInput.StreamARN string
+V GetShardIteratorInput.StreamId string
+V GetShardIteratorInput.StreamName string
+V GetShardIteratorOutput.ShardIterator string
+V HashKeyRange.EndingHashKey string
+V HashKeyRange.StartingHashKey string
+V IncreaseStreamRetentionPeriodInput.RetentionPeriodHours int32
+V IncreaseStreamRetentionPeriodInput.StreamARN string
+V IncreaseStreamRetentionPeriodInput.StreamId string
+V IncreaseStreamRetentionPeriodInput.StreamName string
+V InternalFailureException.ErrorCodeOverride string
+V InternalFailureException.Message string
+V InvalidArgumentException.ErrorCodeOverride string
+V InvalidArgumentException.Message string
+V KMSAccessDeniedException.ErrorCodeOverride string
+V KMSAccessDeniedException.Message string
+V KMSDisabledException.ErrorCodeOverride string
+V KMSDisabledException.Message string
+V KMSInvalidStateException.ErrorCodeOverride string
+V KMSInvalidStateException.Message string
+V KMSNotFoundException.ErrorCodeOverride string
+V KMSNotFoundException.Message string
+V KMSOptInRequired.ErrorCodeOverride string
+V KMSOptInRequired.Message string
+V KMSThrottlingException.ErrorCodeOverride string
+V KMSThrottlingException.Message string
+V LimitExceededException.ErrorCodeOverride string
+V LimitExceededException.Message string
+V ListChannelsInput.MaxResults int32
+V ListChannelsInput.NextToken string
+V ListChannelsOutput.NextToken string
+V ListShardsInput.ExclusiveStartShardId string
+V ListShardsInput.MaxResults int32
+V ListShardsInput.NextToken string
+V ListShardsInput.StreamARN string
+V ListShardsInput.StreamId string
+V ListShardsInput.StreamName string
+V ListShardsOutput.NextToken string
+V ListStreamConsumersInput.MaxResults int32
+V ListStreamConsumersInput.NextToken string
+V ListStreamConsumersInput.StreamARN string
+V ListStreamConsumersInput.StreamId string
+V ListStreamConsumersOutput.NextToken string
+V ListStreamsInput.ExclusiveStartStreamName string
+V ListStreamsInput.Limit int32
+V ListStreamsInput.NextToken string
+V ListStreamsOutput.HasMoreStreams bool
+V ListStreamsOutput.NextToken string
+V ListTagsForResourceInput.ResourceARN string
+V ListTagsForResourceInput.StreamId string
+V ListTagsForStreamInput.ExclusiveStartTagKey string
+V ListTagsForStreamInput.Limit int32
+V ListTagsForStreamInput.StreamARN string
+V ListTagsForStreamInput.StreamId string
+V ListTagsForStreamInput.StreamName string
+V ListTagsForStreamOutput.HasMoreTags bool
+V MergeShardsInput.AdjacentShardToMerge string
+V MergeShardsInput.ShardToMerge string
+V MergeShardsInput.StreamARN string
+V MergeShardsInput.StreamId string
+V MergeShardsInput.StreamName string
+V Options.BaseEndpoint string
+V PartitionField.SourceName string
+V ProvisionedThroughputExceededException.ErrorCodeOverride string
+V ProvisionedThroughputExceededException.Message string
+V PutRecordInput.DryRun bool
+V PutRecordInput.ExplicitHashKey string
+V PutRecordInput.PartitionKey string
+V PutRecordInput.SequenceNumberForOrdering string
+V PutRecordInput.StreamARN string
+V PutRecordInput.StreamId string
+V PutRecordInput.StreamName string
+V PutRecordOutput.SequenceNumber string
+V PutRecordOutput.ShardId string
+V PutRecordsInput.DryRun bool
+V PutRecordsInput.StreamARN string
+V PutRecordsInput.StreamId string
+V PutRecordsInput.StreamName string
+V PutRecordsOutput.FailedRecordCount int32
+V PutRecordsRequestEntry.ExplicitHashKey string
+V PutRecordsRequestEntry.PartitionKey string
+V PutRecordsResultEntry.ErrorCode string
+V PutRecordsResultEntry.ErrorMessage string
+V PutRecordsResultEntry.SequenceNumber string
+V PutRecordsResultEntry.ShardId string
+V PutResourcePolicyInput.Policy string
+V PutResourcePolicyInput.ResourceARN string
+V PutResourcePolicyInput.StreamId string
+V Record.PartitionKey string
+V Record.SequenceNumber string
+V RecordConfiguration.GSRSchemaARN string
+V RegisterStreamConsumerInput.ConsumerName string
+V RegisterStreamConsumerInput.StreamARN string
+V RegisterStreamConsumerInput.StreamId string
+V RemoveTagsFromStreamInput.StreamARN string
+V RemoveTagsFromStreamInput.StreamId string
+V RemoveTagsFromStreamInput.StreamName string
+V ResourceInUseException.ErrorCodeOverride string
+V ResourceInUseException.Message string
+V ResourceNotFoundException.ErrorCodeOverride string
+V ResourceNotFoundException.Message string
+V S3DestinationConfiguration.DataFreshnessInSeconds int32
+V S3DestinationDescription.DataFreshnessInSeconds int32
+V S3DestinationUpdateInput.DataFreshnessInSeconds int32
+V S3StorageConfiguration.BucketARN string
+V S3StorageConfiguration.ExpectedBucketOwner string
+V S3StorageConfiguration.OutputKeyTemplate string
+V S3TablesConfiguration.Namespace string
+V S3TablesConfiguration.TableBucketARN string
+V S3TablesConfiguration.TableName string
+V S3TablesDestinationConfiguration.DataFreshnessInSeconds int32
+V S3TablesDestinationDescription.DataFreshnessInSeconds int32
+V S3TablesDestinationUpdateInput.DataFreshnessInSeconds int32
+V SequenceNumberRange.EndingSequenceNumber string
+V SequenceNumberRange.StartingSequenceNumber string
+V Shard.AdjacentParentShardId string
+V Shard.ParentShardId string
+V Shard.ShardId string
+V ShardFilter.ShardId string
+V SplitShardInput.NewStartingHashKey string
+V SplitShardInput.ShardToSplit string
+V SplitShardInput.StreamARN string
+V SplitShardInput.StreamId string
+V SplitShardInput.StreamName string
+V StartStreamEncryptionInput.KeyId string
+V StartStreamEncryptionInput.StreamARN string
+V StartStreamEncryptionInput.StreamId string
+V StartStreamEncryptionInput.StreamName string
+V StartingPosition.SequenceNumber string
+V StopStreamEncryptionInput.KeyId string
+V StopStreamEncryptionInput.StreamARN string
+V StopStreamEncryptionInput.StreamId string
+V StopStreamEncryptionInput.StreamName string
+V StreamDescription.HasMoreShards bool
+V StreamDescription.KeyId string
+V StreamDescription.RetentionPeriodHours int32
+V StreamDescription.StreamARN string
+V StreamDescription.StreamName string
+V StreamDescriptionSummary.ChannelCount int32
+V StreamDescriptionSummary.ConsumerCount int32
+V StreamDescriptionSummary.KeyId string
+V StreamDescriptionSummary.MaxRecordSizeInKiB int32
+V StreamDescriptionSummary.OpenShardCount int32
+V StreamDescriptionSummary.RetentionPeriodHours int32
+V StreamDescriptionSummary.StreamARN string
+V StreamDescriptionSummary.StreamId string
+V StreamDescriptionSummary.StreamName string
+V StreamFilter.StreamARN string
+V StreamSummary.StreamARN string
+V StreamSummary.StreamName string
+V SubscribeToShardEvent.ContinuationSequenceNumber string
+V SubscribeToShardEvent.MillisBehindLatest int64
+V SubscribeToShardInput.ConsumerARN string
+V SubscribeToShardInput.DryRun bool
+V SubscribeToShardInput.ShardId string
+V SubscribeToShardInput.StreamId string
+V Tag.Key string
+V Tag.Value string
+V TagResourceInput.ResourceARN string
+V TagResourceInput.StreamId string
+V UntagResourceInput.ResourceARN string
+V UntagResourceInput.StreamId string
+V UpdateChannelInput.ChannelARN string
+V UpdateMaxRecordSizeInput.MaxRecordSizeInKiB int32
+V UpdateMaxRecordSizeInput.StreamARN string
+V UpdateMaxRecordSizeInput.StreamId string
+V UpdateShardCountInput.StreamARN string
+V UpdateShardCountInput.StreamId string
+V UpdateShardCountInput.StreamName string
+V UpdateShardCountInput.TargetShardCount int32
+V UpdateShardCountOutput.CurrentShardCount int32
+V UpdateShardCountOutput.StreamARN string
+V UpdateShardCountOutput.StreamName string
+V UpdateShardCountOutput.TargetShardCount int32
+V UpdateStreamModeInput.StreamARN string
+V UpdateStreamModeInput.StreamId string
+V UpdateStreamModeInput.WarmThroughputMiBps int32
+V UpdateStreamWarmThroughputInput.StreamARN string
+V UpdateStreamWarmThroughputInput.StreamId string
+V UpdateStreamWarmThroughputInput.StreamName string
+V UpdateStreamWarmThroughputInput.WarmThroughputMiBps int32
+V UpdateStreamWarmThroughputOutput.StreamARN string
+V UpdateStreamWarmThroughputOutput.StreamName string
+V ValidationException.ErrorCodeOverride string
+V ValidationException.Message string
+V WarmThroughputObject.CurrentMiBps int32
+V WarmThroughputObject.TargetMiBps int32
+Q AddTagsToStreamInput.Tags
+L ChildShard.ParentShards -
+L DisableEnhancedMonitoringInput.ShardLevelMetrics MetricsName
+L EnableEnhancedMonitoringInput.ShardLevelMetrics MetricsName
+L EnhancedMetrics.ShardLevelMetrics MetricsName
+L GetRecordsOutput.ChildShards ChildShard
+L GetRecordsOutput.Records Record
+L ListShardsOutput.Shards Shard
+L ListStreamConsumersOutput.Consumers Consumer
+L ListStreamsOutput.StreamNames -
+L ListStreamsOutput.StreamSummaries StreamSummary
+L ListTagsForStreamOutput.Tags Tag
+L PutRecordsInput.Records PutRecordsRequestEntry
+L PutRecordsOutput.Records PutRecordsResultEntry
+L RemoveTagsFromStreamInput.TagKeys -
+L StreamDescription.EnhancedMonitoring EnhancedMetrics
+L StreamDescription.Shards Shard
+L StreamDescriptionSummary.EnhancedMonitoring EnhancedMetrics
+L SubscribeToShardEvent.ChildShards ChildShard
+L SubscribeToShardEvent.Records Record
+F ChannelDescription.ChannelStatus ChannelStatus
+F ChannelEncryptionConfiguration.EncryptionType ChannelEncryptionType
+F ChannelSummary.ChannelDestinationType ChannelDestinationType
+F ChannelSummary.ChannelStatus ChannelStatus
+F Consumer.ConsumerStatus ConsumerStatus
+F ConsumerDescription.ConsumerStatus ConsumerStatus
+F DisableEnhancedMonitoringInput.ShardLevelMetrics MetricsName
+F DisableEnhancedMonitoringOutput.CurrentShardLevelMetrics MetricsName
+F DisableEnhancedMonitoringOutput.DesiredShardLevelMetrics MetricsName
+F EnableEnhancedMonitoringInput.ShardLevelMetrics MetricsName
+F EnableEnhancedMonitoringOutput.CurrentShardLevelMetrics MetricsName
+F EnableEnhancedMonitoringOutput.DesiredShardLevelMetrics MetricsName
+F EnhancedMetrics.ShardLevelMetrics MetricsName
+F GetShardIteratorInput.ShardIteratorType ShardIteratorType
+F MinimumThroughputBillingCommitmentInput.Status MinimumThroughputBillingCommitmentInputStatus
+F MinimumThroughputBillingCommitmentOutput.Status MinimumThroughputBillingCommitmentOutputStatus
+F PartitionField.Transform PartitionTransform
+F PutRecordOutput.EncryptionType EncryptionType
+F PutRecordsOutput.EncryptionType EncryptionType
+F Record.EncryptionType EncryptionType
+F RecordConfiguration.RecordFormatType RecordFormatType
+F S3StorageConfiguration.CompressionType S3CompressionType
+F S3StorageConfiguration.StorageClass S3StorageClass
+F S3TablesConfiguration.CompressionType S3TablesCompressionType
+F ShardFilter.Type ShardFilterType
+F StartStreamEncryptionInput.EncryptionType EncryptionType
+F StartingPosition.Type ShardIteratorType
+F StopStreamEncryptionInput.EncryptionType EncryptionType
+F StreamDescription.EncryptionType EncryptionType
+F StreamDescription.StreamStatus StreamStatus
+F StreamDescriptionSummary.EncryptionType EncryptionType
+F StreamDescriptionSummary.StreamStatus StreamStatus
+F StreamModeDetails.StreamMode StreamMode
+F StreamSummary.StreamStatus StreamStatus
+F UpdateShardCountInput.ScalingType ScalingType
+N APIOptions
+N AccountIDEndpointMode
+N AccountId
+N AccountIdEndpointMode
+N AdjacentParentShardId
+N AdjacentShardToMerge
+N AppID
+N ApproximateArrivalTimestamp
+N AuthSchemePreference
+N AuthSchemeResolver
+N AuthSchemes
+N BaseEndpoint
+N BucketARN
+N ChannelARN
+N ChannelCount
+N ChannelCountLimit
+N ChannelCreationTimestamp
+N ChannelDescription
+N ChannelId
+N ChannelName
+N ChannelStatusReason
+N ChannelSummaries
+N ChildShards
+N ClientLogMode
+N ClientOptions
+N CloudWatchLogs
+N Consumer
+N ConsumerARN
+N ConsumerCount
+N ConsumerCreationTimestamp
+N ConsumerDescription
+N ConsumerName
+N Consumers
+N ContinuationSequenceNumber
+N Credentials
+N CurrentMiBps
+N CurrentShardCount
+N Data
+N DataFreshnessInSeconds
+N DeadLetterQueueS3Configuration
+N DefaultsMode
+N DisableClockSkewCorrection
+N DisableHTTPS
+N DryRun
+N EarliestAllowedEndAt
+N Enabled
+N EncryptionConfiguration
+N EndedAt
+N EndingHashKey
+N EndingSequenceNumber
+N Endpoint
+N EndpointOptions
+N EndpointResolver
+N EndpointResolverV2
+N EnforceConsumerDeletion
+N EnhancedMonitoring
+N ErrorCode
+N ErrorCodeOverride
+N ErrorMessage
+N ErrorOutputPrefix
+N ExclusiveStartShardId
+N ExclusiveStartStreamName
+N ExclusiveStartTagKey
+N ExpectedBucketOwner
+N ExplicitHashKey
+N FailedRecordCount
+N GSRSchemaARN
+N HTTPClient
+N HTTPSignerV4
+N HasMoreShards
+N HasMoreStreams
+N HasMoreTags
+N HashKeyRange
+N Interceptors
+N Key
+N KeyId
+N Limit
+N LogDeprecated
+N LogGroupName
+N LogStreamName
+N LogWaitAttempts
+N Logger
+N LoggingConfiguration
+N MaxDelay
+N MaxRecordSizeInKiB
+N MaxResults
+N Message
+N MeterProvider
+N MillisBehindLatest
+N MinDelay
+N MinimumThroughputBillingCommitment
+N Namespace
+N NewStartingHashKey
+N NextShardIterator
+N NextToken
+N OnDemandStreamCount
+N OnDemandStreamCountLimit
+N OpenShardCount
+N Operation
+N OperationType
+N Options
+N OutputKeyTemplate
+N ParentShardId
+N ParentShards
+N PartitionFields
+N PartitionKey
+N PartitionSpec
+N Policy
+N Protocol
+N Reader
+N RecordConfiguration
+N Records
+N Region
+N ResolvedRegion
+N Resolver
+N ResourceARN
+N ResultMetadata
+N RetentionPeriodHours
+N RetryMaxAttempts
+N RetryMode
+N Retryable
+N Retryer
+N RuntimeEnvironment
+N S3DestinationConfiguration
+N S3TablesConfigurationList
+N S3TablesDestinationConfiguration
+N SequenceNumber
+N SequenceNumberForOrdering
+N SequenceNumberRange
+N ServiceExecutionRoleARN
+N ShardCount
+N ShardFilter
+N ShardId
+N ShardIterator
+N ShardLimit
+N ShardToMerge
+N ShardToSplit
+N Shards
+N SourceName
+N StartedAt
+N StartingHashKey
+N StartingPosition
+N StartingSequenceNumber
+N StopOnDuplicateToken
+N StorageConfiguration
+N StreamARN
+N StreamConfigurationList
+N StreamCreationTimestamp
+N StreamDescription
+N StreamDescriptionSummary
+N StreamFilter
+N StreamId
+N StreamModeDetails
+N StreamName
+N StreamNames
+N StreamSummaries
+N Streams
+N TableBucketARN
+N TableName
+N Tag
+N TagKeys
+N Tags
+N TargetMiBps
+N TargetShardCount
+N Timestamp
+N TracerProvider
+N Type
+N UseDualStack
+N UseDualStackEndpoint
+N UseFIPS
+N UseFIPSEndpoint
+N Value
+N WarmThroughput
+N WarmThroughputMiBps
+T AccessDeniedException
+T ChannelDescription
+T ChannelDestinationType
+T ChannelEncryptionConfiguration
+T ChannelEncryptionType
+T ChannelLoggingConfiguration
+T ChannelLoggingUpdateInput
+T ChannelStatus
+T ChannelStreamConfiguration
+T ChannelStreamDescription
+T ChannelStreamIdentifier
+T ChannelSummary
+T ChildShard
+T CloudWatchLogs
+T CloudWatchLogsUpdateInput
+T Consumer
+T ConsumerDescription
+T ConsumerStatus
+T DeadLetterQueueS3Configuration
+T DryRunOperationException
+T EncryptionType
+T EnhancedMetrics
+T ExpiredIteratorException
+T ExpiredNextTokenException
+T HashKeyRange
+T InternalFailureException
+T InvalidArgumentException
+T KMSAccessDeniedException
+T KMSDisabledException
+T KMSInvalidStateException
+T KMSNotFoundException
+T KMSOptInRequired
+T KMSThrottlingException
+T LimitExceededException
+T MetricsName
+T MinimumThroughputBillingCommitmentInput
+T MinimumThroughputBillingCommitmentInputStatus
+T MinimumThroughputBillingCommitmentOutput
+T MinimumThroughputBillingCommitmentOutputStatus
+T PartitionField
+T PartitionSpec
+T PartitionTransform
+T ProvisionedThroughputExceededException
+T PutRecordsRequestEntry
+T PutRecordsResultEntry
+T Record
+T RecordConfiguration
+T RecordFormatType
+T ResourceInUseException
+T ResourceNotFoundException
+T S3CompressionType
+T S3DestinationConfiguration
+T S3DestinationDescription
+T S3DestinationUpdateInput
+T S3StorageClass
+T S3StorageConfiguration
+T S3TablesCompressionType
+T S3TablesConfiguration
+T S3TablesDestinationConfiguration
+T S3TablesDestinationDescription
+T S3TablesDestinationUpdateInput
+T ScalingType
+T SequenceNumberRange
+T Shard
+T ShardFilter
+T ShardFilterType
+T ShardIteratorType
+T StartingPosition
+T StreamDescription
+T StreamDescriptionSummary
+T StreamFilter
+T StreamMode
+T StreamModeDetails
+T StreamStatus
+T StreamSummary
+T SubscribeToShardEvent
+T SubscribeToShardEventStream
+T SubscribeToShardEventStreamMemberSubscribeToShardEvent
+T Tag
+T UnknownUnionMember
+T ValidationException
+T WarmThroughputObject
+E ChannelDestinationTypeS3 ChannelDestinationType
+E ChannelDestinationTypeS3Tables ChannelDestinationType
+E ChannelEncryptionTypeKms ChannelEncryptionType
+E ChannelStatusActive ChannelStatus
+E ChannelStatusCreating ChannelStatus
+E ChannelStatusDeleting ChannelStatus
+E ChannelStatusFailed ChannelStatus
+E ChannelStatusUpdating ChannelStatus
+E ConsumerStatusActive ConsumerStatus
+E ConsumerStatusCreating ConsumerStatus
+E ConsumerStatusDeleting ConsumerStatus
+E EncryptionTypeKms EncryptionType
+E EncryptionTypeNone EncryptionType
+E MetricsNameAll MetricsName
+E MetricsNameIncomingBytes MetricsName
+E MetricsNameIncomingRecords MetricsName
+E MetricsNameIteratorAgeMilliseconds MetricsName
+E MetricsNameOutgoingBytes MetricsName
+E MetricsNameOutgoingRecords MetricsName
+E MetricsNameReadProvisionedThroughputExceeded MetricsName
+E MetricsNameWriteProvisionedThroughputExceeded MetricsName
+E MinimumThroughputBillingCommitmentInputStatusDisabled MinimumThroughputBillingCommitmentInputStatus
+E MinimumThroughputBillingCommitmentInputStatusEnabled MinimumThroughputBillingCommitmentInputStatus
+E MinimumThroughputBillingCommitmentOutputStatusDisabled MinimumThroughputBillingCommitmentOutputStatus
+E MinimumThroughputBillingCommitmentOutputStatusEnabled MinimumThroughputBillingCommitmentOutputStatus
+E MinimumThroughputBillingCommitmentOutputStatusEnabledUntilEarliestAllowedEnd MinimumThroughputBillingCommitmentOutputStatus
+E PartitionTransformTimeHour PartitionTransform
+E RecordFormatTypeByteArray RecordFormatType
+E RecordFormatTypeGsrJson RecordFormatType
+E RecordFormatTypeJson RecordFormatType
+E RecordFormatTypeString RecordFormatType
+E S3CompressionTypeGzip S3CompressionType
+E S3CompressionTypeNone S3CompressionType
+E S3CompressionTypeZstd S3CompressionType
+E S3StorageClassGlacierIr S3StorageClass
+E S3StorageClassIntelligentTiering S3StorageClass
+E S3StorageClassStandard S3StorageClass
+E S3TablesCompressionTypeNone S3TablesCompressionType
+E S3TablesCompressionTypeSnappy S3TablesCompressionType
+E S3TablesCompressionTypeZstd S3TablesCompressionType
+E ScalingTypeUniformScaling ScalingType
+E ShardFilterTypeAfterShardId ShardFilterType
+E ShardFilterTypeAtLatest ShardFilterType
+E ShardFilterTypeAtTimestamp ShardFilterType
+E ShardFilterTypeAtTrimHorizon ShardFilterType
+E ShardFilterTypeFromTimestamp ShardFilterType
+E ShardFilterTypeFromTrimHorizon ShardFilterType
+E ShardIteratorTypeAfterSequenceNumber ShardIteratorType
+E ShardIteratorTypeAtSequenceNumber ShardIteratorType
+E ShardIteratorTypeAtTimestamp ShardIteratorType
+E ShardIteratorTypeLatest ShardIteratorType
+E ShardIteratorTypeTrimHorizon ShardIteratorType
+E StreamModeOnDemand StreamMode
+E StreamModeProvisioned StreamMode
+E StreamStatusActive StreamStatus
+E StreamStatusCreating StreamStatus
+E StreamStatusDeleting StreamStatus
+E StreamStatusUpdating StreamStatus

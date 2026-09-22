@@ -1,0 +1,2032 @@
+C APIGateway
+S AuthResolverParameters
+S AuthSchemeResolver
+S Client
+S CreateApiKeyInput
+S CreateApiKeyOutput
+S CreateAuthorizerInput
+S CreateAuthorizerOutput
+S CreateBasePathMappingInput
+S CreateBasePathMappingOutput
+S CreateDeploymentInput
+S CreateDeploymentOutput
+S CreateDocumentationPartInput
+S CreateDocumentationPartOutput
+S CreateDocumentationVersionInput
+S CreateDocumentationVersionOutput
+S CreateDomainNameAccessAssociationInput
+S CreateDomainNameAccessAssociationOutput
+S CreateDomainNameInput
+S CreateDomainNameOutput
+S CreateModelInput
+S CreateModelOutput
+S CreateRequestValidatorInput
+S CreateRequestValidatorOutput
+S CreateResourceInput
+S CreateResourceOutput
+S CreateRestApiInput
+S CreateRestApiOutput
+S CreateStageInput
+S CreateStageOutput
+S CreateUsagePlanInput
+S CreateUsagePlanKeyInput
+S CreateUsagePlanKeyOutput
+S CreateUsagePlanOutput
+S CreateVpcLinkInput
+S CreateVpcLinkOutput
+S DeleteApiKeyInput
+S DeleteApiKeyOutput
+S DeleteAuthorizerInput
+S DeleteAuthorizerOutput
+S DeleteBasePathMappingInput
+S DeleteBasePathMappingOutput
+S DeleteClientCertificateInput
+S DeleteClientCertificateOutput
+S DeleteDeploymentInput
+S DeleteDeploymentOutput
+S DeleteDocumentationPartInput
+S DeleteDocumentationPartOutput
+S DeleteDocumentationVersionInput
+S DeleteDocumentationVersionOutput
+S DeleteDomainNameAccessAssociationInput
+S DeleteDomainNameAccessAssociationOutput
+S DeleteDomainNameInput
+S DeleteDomainNameOutput
+S DeleteGatewayResponseInput
+S DeleteGatewayResponseOutput
+S DeleteIntegrationInput
+S DeleteIntegrationOutput
+S DeleteIntegrationResponseInput
+S DeleteIntegrationResponseOutput
+S DeleteMethodInput
+S DeleteMethodOutput
+S DeleteMethodResponseInput
+S DeleteMethodResponseOutput
+S DeleteModelInput
+S DeleteModelOutput
+S DeleteRequestValidatorInput
+S DeleteRequestValidatorOutput
+S DeleteResourceInput
+S DeleteResourceOutput
+S DeleteRestApiInput
+S DeleteRestApiOutput
+S DeleteStageInput
+S DeleteStageOutput
+S DeleteUsagePlanInput
+S DeleteUsagePlanKeyInput
+S DeleteUsagePlanKeyOutput
+S DeleteUsagePlanOutput
+S DeleteVpcLinkInput
+S DeleteVpcLinkOutput
+S EndpointParameters
+S EndpointResolver
+S EndpointResolverFromURL
+S EndpointResolverFunc
+S EndpointResolverOptions
+S EndpointResolverV2
+S FlushStageAuthorizersCacheInput
+S FlushStageAuthorizersCacheOutput
+S FlushStageCacheInput
+S FlushStageCacheOutput
+S GenerateClientCertificateInput
+S GenerateClientCertificateOutput
+S GetAccountInput
+S GetAccountOutput
+S GetApiKeyInput
+S GetApiKeyOutput
+S GetApiKeysAPIClient
+S GetApiKeysInput
+S GetApiKeysOutput
+S GetApiKeysPaginator
+S GetApiKeysPaginatorOptions
+S GetAuthorizerInput
+S GetAuthorizerOutput
+S GetAuthorizersInput
+S GetAuthorizersOutput
+S GetBasePathMappingInput
+S GetBasePathMappingOutput
+S GetBasePathMappingsAPIClient
+S GetBasePathMappingsInput
+S GetBasePathMappingsOutput
+S GetBasePathMappingsPaginator
+S GetBasePathMappingsPaginatorOptions
+S GetClientCertificateInput
+S GetClientCertificateOutput
+S GetClientCertificatesAPIClient
+S GetClientCertificatesInput
+S GetClientCertificatesOutput
+S GetClientCertificatesPaginator
+S GetClientCertificatesPaginatorOptions
+S GetDeploymentInput
+S GetDeploymentOutput
+S GetDeploymentsAPIClient
+S GetDeploymentsInput
+S GetDeploymentsOutput
+S GetDeploymentsPaginator
+S GetDeploymentsPaginatorOptions
+S GetDocumentationPartInput
+S GetDocumentationPartOutput
+S GetDocumentationPartsInput
+S GetDocumentationPartsOutput
+S GetDocumentationVersionInput
+S GetDocumentationVersionOutput
+S GetDocumentationVersionsInput
+S GetDocumentationVersionsOutput
+S GetDomainNameAccessAssociationsInput
+S GetDomainNameAccessAssociationsOutput
+S GetDomainNameInput
+S GetDomainNameOutput
+S GetDomainNamesAPIClient
+S GetDomainNamesInput
+S GetDomainNamesOutput
+S GetDomainNamesPaginator
+S GetDomainNamesPaginatorOptions
+S GetExportInput
+S GetExportOutput
+S GetGatewayResponseInput
+S GetGatewayResponseOutput
+S GetGatewayResponsesInput
+S GetGatewayResponsesOutput
+S GetIntegrationInput
+S GetIntegrationOutput
+S GetIntegrationResponseInput
+S GetIntegrationResponseOutput
+S GetMethodInput
+S GetMethodOutput
+S GetMethodResponseInput
+S GetMethodResponseOutput
+S GetModelInput
+S GetModelOutput
+S GetModelTemplateInput
+S GetModelTemplateOutput
+S GetModelsAPIClient
+S GetModelsInput
+S GetModelsOutput
+S GetModelsPaginator
+S GetModelsPaginatorOptions
+S GetRequestValidatorInput
+S GetRequestValidatorOutput
+S GetRequestValidatorsInput
+S GetRequestValidatorsOutput
+S GetResourceInput
+S GetResourceOutput
+S GetResourcesAPIClient
+S GetResourcesInput
+S GetResourcesOutput
+S GetResourcesPaginator
+S GetResourcesPaginatorOptions
+S GetRestApiInput
+S GetRestApiOutput
+S GetRestApisAPIClient
+S GetRestApisInput
+S GetRestApisOutput
+S GetRestApisPaginator
+S GetRestApisPaginatorOptions
+S GetSdkInput
+S GetSdkOutput
+S GetSdkTypeInput
+S GetSdkTypeOutput
+S GetSdkTypesInput
+S GetSdkTypesOutput
+S GetStageInput
+S GetStageOutput
+S GetStagesInput
+S GetStagesOutput
+S GetTagsInput
+S GetTagsOutput
+S GetUsageAPIClient
+S GetUsageInput
+S GetUsageOutput
+S GetUsagePaginator
+S GetUsagePaginatorOptions
+S GetUsagePlanInput
+S GetUsagePlanKeyInput
+S GetUsagePlanKeyOutput
+S GetUsagePlanKeysAPIClient
+S GetUsagePlanKeysInput
+S GetUsagePlanKeysOutput
+S GetUsagePlanKeysPaginator
+S GetUsagePlanKeysPaginatorOptions
+S GetUsagePlanOutput
+S GetUsagePlansAPIClient
+S GetUsagePlansInput
+S GetUsagePlansOutput
+S GetUsagePlansPaginator
+S GetUsagePlansPaginatorOptions
+S GetVpcLinkInput
+S GetVpcLinkOutput
+S GetVpcLinksAPIClient
+S GetVpcLinksInput
+S GetVpcLinksOutput
+S GetVpcLinksPaginator
+S GetVpcLinksPaginatorOptions
+S HTTPClient
+S HTTPSignerV4
+S ImportApiKeysInput
+S ImportApiKeysOutput
+S ImportDocumentationPartsInput
+S ImportDocumentationPartsOutput
+S ImportRestApiInput
+S ImportRestApiOutput
+S New
+S NewDefaultEndpointResolver
+S NewDefaultEndpointResolverV2
+S NewFromConfig
+S NewGetApiKeysPaginator
+S NewGetBasePathMappingsPaginator
+S NewGetClientCertificatesPaginator
+S NewGetDeploymentsPaginator
+S NewGetDomainNamesPaginator
+S NewGetModelsPaginator
+S NewGetResourcesPaginator
+S NewGetRestApisPaginator
+S NewGetUsagePaginator
+S NewGetUsagePlanKeysPaginator
+S NewGetUsagePlansPaginator
+S NewGetVpcLinksPaginator
+S Options
+S PutGatewayResponseInput
+S PutGatewayResponseOutput
+S PutIntegrationInput
+S PutIntegrationOutput
+S PutIntegrationResponseInput
+S PutIntegrationResponseOutput
+S PutMethodInput
+S PutMethodOutput
+S PutMethodResponseInput
+S PutMethodResponseOutput
+S PutRestApiInput
+S PutRestApiOutput
+S RejectDomainNameAccessAssociationInput
+S RejectDomainNameAccessAssociationOutput
+S ResolveEndpoint
+S ServiceAPIVersion
+S ServiceID
+S TagResourceInput
+S TagResourceOutput
+S TestInvokeAuthorizerInput
+S TestInvokeAuthorizerOutput
+S TestInvokeMethodInput
+S TestInvokeMethodOutput
+S TypeRegistry
+S UntagResourceInput
+S UntagResourceOutput
+S UpdateAccountInput
+S UpdateAccountOutput
+S UpdateApiKeyInput
+S UpdateApiKeyOutput
+S UpdateAuthorizerInput
+S UpdateAuthorizerOutput
+S UpdateBasePathMappingInput
+S UpdateBasePathMappingOutput
+S UpdateClientCertificateInput
+S UpdateClientCertificateOutput
+S UpdateDeploymentInput
+S UpdateDeploymentOutput
+S UpdateDocumentationPartInput
+S UpdateDocumentationPartOutput
+S UpdateDocumentationVersionInput
+S UpdateDocumentationVersionOutput
+S UpdateDomainNameInput
+S UpdateDomainNameOutput
+S UpdateGatewayResponseInput
+S UpdateGatewayResponseOutput
+S UpdateIntegrationInput
+S UpdateIntegrationOutput
+S UpdateIntegrationResponseInput
+S UpdateIntegrationResponseOutput
+S UpdateMethodInput
+S UpdateMethodOutput
+S UpdateMethodResponseInput
+S UpdateMethodResponseOutput
+S UpdateModelInput
+S UpdateModelOutput
+S UpdateRequestValidatorInput
+S UpdateRequestValidatorOutput
+S UpdateResourceInput
+S UpdateResourceOutput
+S UpdateRestApiInput
+S UpdateRestApiOutput
+S UpdateStageInput
+S UpdateStageOutput
+S UpdateUsageInput
+S UpdateUsageOutput
+S UpdateUsagePlanInput
+S UpdateUsagePlanOutput
+S UpdateVpcLinkInput
+S UpdateVpcLinkOutput
+S WithAPIOptions
+S WithEndpointResolver
+S WithEndpointResolverV2
+S WithSigV4SigningName
+S WithSigV4SigningRegion
+O CreateApiKey
+O CreateAuthorizer
+O CreateBasePathMapping
+O CreateDeployment
+O CreateDocumentationPart
+O CreateDocumentationVersion
+O CreateDomainName
+O CreateDomainNameAccessAssociation
+O CreateModel
+O CreateRequestValidator
+O CreateResource
+O CreateRestApi
+O CreateStage
+O CreateUsagePlan
+O CreateUsagePlanKey
+O CreateVpcLink
+O DeleteApiKey
+O DeleteAuthorizer
+O DeleteBasePathMapping
+O DeleteClientCertificate
+O DeleteDeployment
+O DeleteDocumentationPart
+O DeleteDocumentationVersion
+O DeleteDomainName
+O DeleteDomainNameAccessAssociation
+O DeleteGatewayResponse
+O DeleteIntegration
+O DeleteIntegrationResponse
+O DeleteMethod
+O DeleteMethodResponse
+O DeleteModel
+O DeleteRequestValidator
+O DeleteResource
+O DeleteRestApi
+O DeleteStage
+O DeleteUsagePlan
+O DeleteUsagePlanKey
+O DeleteVpcLink
+O FlushStageAuthorizersCache
+O FlushStageCache
+O GenerateClientCertificate
+O GetAccount
+O GetApiKey
+O GetApiKeys
+O GetAuthorizer
+O GetAuthorizers
+O GetBasePathMapping
+O GetBasePathMappings
+O GetClientCertificate
+O GetClientCertificates
+O GetDeployment
+O GetDeployments
+O GetDocumentationPart
+O GetDocumentationParts
+O GetDocumentationVersion
+O GetDocumentationVersions
+O GetDomainName
+O GetDomainNameAccessAssociations
+O GetDomainNames
+O GetExport
+O GetGatewayResponse
+O GetGatewayResponses
+O GetIntegration
+O GetIntegrationResponse
+O GetMethod
+O GetMethodResponse
+O GetModel
+O GetModelTemplate
+O GetModels
+O GetRequestValidator
+O GetRequestValidators
+O GetResource
+O GetResources
+O GetRestApi
+O GetRestApis
+O GetSdk
+O GetSdkType
+O GetSdkTypes
+O GetStage
+O GetStages
+O GetTags
+O GetUsage
+O GetUsagePlan
+O GetUsagePlanKey
+O GetUsagePlanKeys
+O GetUsagePlans
+O GetVpcLink
+O GetVpcLinks
+O ImportApiKeys
+O ImportDocumentationParts
+O ImportRestApi
+O PutGatewayResponse
+O PutIntegration
+O PutIntegrationResponse
+O PutMethod
+O PutMethodResponse
+O PutRestApi
+O RejectDomainNameAccessAssociation
+O TagResource
+O TestInvokeAuthorizer
+O TestInvokeMethod
+O UntagResource
+O UpdateAccount
+O UpdateApiKey
+O UpdateAuthorizer
+O UpdateBasePathMapping
+O UpdateClientCertificate
+O UpdateDeployment
+O UpdateDocumentationPart
+O UpdateDocumentationVersion
+O UpdateDomainName
+O UpdateGatewayResponse
+O UpdateIntegration
+O UpdateIntegrationResponse
+O UpdateMethod
+O UpdateMethodResponse
+O UpdateModel
+O UpdateRequestValidator
+O UpdateResource
+O UpdateRestApi
+O UpdateStage
+O UpdateUsage
+O UpdateUsagePlan
+O UpdateVpcLink
+X ErrCodeBadRequestException BadRequestException
+X ErrCodeConflictException ConflictException
+X ErrCodeLimitExceededException LimitExceededException
+X ErrCodeNotFoundException NotFoundException
+X ErrCodeServiceUnavailableException ServiceUnavailableException
+X ErrCodeTooManyRequestsException TooManyRequestsException
+X ErrCodeUnauthorizedException UnauthorizedException
+I Authorizer.AuthorizerResultTtlInSeconds int64 int32
+I CreateAuthorizerInput.AuthorizerResultTtlInSeconds int64 int32
+I CreateRestApiInput.MinimumCompressionSize int64 int32
+I GetApiKeysInput.Limit int64 int32
+I GetAuthorizersInput.Limit int64 int32
+I GetBasePathMappingsInput.Limit int64 int32
+I GetClientCertificatesInput.Limit int64 int32
+I GetDeploymentsInput.Limit int64 int32
+I GetDocumentationPartsInput.Limit int64 int32
+I GetDocumentationVersionsInput.Limit int64 int32
+I GetDomainNamesInput.Limit int64 int32
+I GetGatewayResponsesInput.Limit int64 int32
+I GetModelsInput.Limit int64 int32
+I GetRequestValidatorsInput.Limit int64 int32
+I GetResourcesInput.Limit int64 int32
+I GetRestApisInput.Limit int64 int32
+I GetSdkTypesInput.Limit int64 int32
+I GetTagsInput.Limit int64 int32
+I GetUsageInput.Limit int64 int32
+I GetUsagePlanKeysInput.Limit int64 int32
+I GetUsagePlansInput.Limit int64 int32
+I GetVpcLinksInput.Limit int64 int32
+I PutIntegrationInput.TimeoutInMillis int64 int32
+I RestApi.MinimumCompressionSize int64 int32
+R CreateDeploymentInput.CanarySettings DeploymentCanarySettings
+R CreateDocumentationPartInput.Location DocumentationPartLocation
+R CreateDocumentationPartOutput.Location DocumentationPartLocation
+R CreateDomainNameInput.EndpointConfiguration EndpointConfiguration
+R CreateDomainNameInput.MutualTlsAuthentication MutualTlsAuthenticationInput
+R CreateDomainNameOutput.EndpointConfiguration EndpointConfiguration
+R CreateDomainNameOutput.MutualTlsAuthentication MutualTlsAuthentication
+R CreateRestApiInput.EndpointConfiguration EndpointConfiguration
+R CreateRestApiOutput.EndpointConfiguration EndpointConfiguration
+R CreateStageInput.CanarySettings CanarySettings
+R CreateStageOutput.AccessLogSettings AccessLogSettings
+R CreateStageOutput.CanarySettings CanarySettings
+R CreateUsagePlanInput.Quota QuotaSettings
+R CreateUsagePlanInput.Throttle ThrottleSettings
+R CreateUsagePlanOutput.Quota QuotaSettings
+R CreateUsagePlanOutput.Throttle ThrottleSettings
+R DocumentationPart.Location DocumentationPartLocation
+R DomainName.EndpointConfiguration EndpointConfiguration
+R DomainName.MutualTlsAuthentication MutualTlsAuthentication
+R GetAccountOutput.ThrottleSettings ThrottleSettings
+R GetDocumentationPartOutput.Location DocumentationPartLocation
+R GetDomainNameOutput.EndpointConfiguration EndpointConfiguration
+R GetDomainNameOutput.MutualTlsAuthentication MutualTlsAuthentication
+R GetIntegrationOutput.TlsConfig TlsConfig
+R GetMethodOutput.MethodIntegration Integration
+R GetRestApiOutput.EndpointConfiguration EndpointConfiguration
+R GetStageOutput.AccessLogSettings AccessLogSettings
+R GetStageOutput.CanarySettings CanarySettings
+R GetUsagePlanOutput.Quota QuotaSettings
+R GetUsagePlanOutput.Throttle ThrottleSettings
+R ImportRestApiOutput.EndpointConfiguration EndpointConfiguration
+R Integration.TlsConfig TlsConfig
+R Method.MethodIntegration Integration
+R PutIntegrationInput.TlsConfig TlsConfig
+R PutIntegrationOutput.TlsConfig TlsConfig
+R PutMethodOutput.MethodIntegration Integration
+R PutRestApiOutput.EndpointConfiguration EndpointConfiguration
+R RestApi.EndpointConfiguration EndpointConfiguration
+R Stage.AccessLogSettings AccessLogSettings
+R Stage.CanarySettings CanarySettings
+R UpdateAccountOutput.ThrottleSettings ThrottleSettings
+R UpdateDocumentationPartOutput.Location DocumentationPartLocation
+R UpdateDomainNameOutput.EndpointConfiguration EndpointConfiguration
+R UpdateDomainNameOutput.MutualTlsAuthentication MutualTlsAuthentication
+R UpdateIntegrationOutput.TlsConfig TlsConfig
+R UpdateMethodOutput.MethodIntegration Integration
+R UpdateRestApiOutput.EndpointConfiguration EndpointConfiguration
+R UpdateStageOutput.AccessLogSettings AccessLogSettings
+R UpdateStageOutput.CanarySettings CanarySettings
+R UpdateUsagePlanOutput.Quota QuotaSettings
+R UpdateUsagePlanOutput.Throttle ThrottleSettings
+R UsagePlan.Quota QuotaSettings
+R UsagePlan.Throttle ThrottleSettings
+V AccessLogSettings.DestinationArn string
+V AccessLogSettings.Format string
+V ApiKey.CustomerId string
+V ApiKey.Description string
+V ApiKey.Id string
+V ApiKey.Name string
+V ApiKey.Value string
+V ApiStage.ApiId string
+V ApiStage.Stage string
+V Authorizer.AuthType string
+V Authorizer.AuthorizerCredentials string
+V Authorizer.AuthorizerResultTtlInSeconds int32
+V Authorizer.AuthorizerUri string
+V Authorizer.Id string
+V Authorizer.IdentitySource string
+V Authorizer.IdentityValidationExpression string
+V Authorizer.Name string
+V BadRequestException.ErrorCodeOverride string
+V BadRequestException.Message string
+V BasePathMapping.BasePath string
+V BasePathMapping.RestApiId string
+V BasePathMapping.Stage string
+V CanarySettings.DeploymentId string
+V ClientCertificate.ClientCertificateId string
+V ClientCertificate.Description string
+V ClientCertificate.PemEncodedCertificate string
+V ConflictException.ErrorCodeOverride string
+V ConflictException.Message string
+V CreateApiKeyInput.CustomerId string
+V CreateApiKeyInput.Description string
+V CreateApiKeyInput.Name string
+V CreateApiKeyInput.Value string
+V CreateApiKeyOutput.CustomerId string
+V CreateApiKeyOutput.Description string
+V CreateApiKeyOutput.Id string
+V CreateApiKeyOutput.Name string
+V CreateApiKeyOutput.Value string
+V CreateAuthorizerInput.AuthType string
+V CreateAuthorizerInput.AuthorizerCredentials string
+V CreateAuthorizerInput.AuthorizerResultTtlInSeconds int32
+V CreateAuthorizerInput.AuthorizerUri string
+V CreateAuthorizerInput.IdentitySource string
+V CreateAuthorizerInput.IdentityValidationExpression string
+V CreateAuthorizerInput.Name string
+V CreateAuthorizerInput.RestApiId string
+V CreateAuthorizerOutput.AuthType string
+V CreateAuthorizerOutput.AuthorizerCredentials string
+V CreateAuthorizerOutput.AuthorizerResultTtlInSeconds int32
+V CreateAuthorizerOutput.AuthorizerUri string
+V CreateAuthorizerOutput.Id string
+V CreateAuthorizerOutput.IdentitySource string
+V CreateAuthorizerOutput.IdentityValidationExpression string
+V CreateAuthorizerOutput.Name string
+V CreateBasePathMappingInput.BasePath string
+V CreateBasePathMappingInput.DomainName string
+V CreateBasePathMappingInput.DomainNameId string
+V CreateBasePathMappingInput.RestApiId string
+V CreateBasePathMappingInput.Stage string
+V CreateBasePathMappingOutput.BasePath string
+V CreateBasePathMappingOutput.RestApiId string
+V CreateBasePathMappingOutput.Stage string
+V CreateDeploymentInput.CacheClusterEnabled bool
+V CreateDeploymentInput.Description string
+V CreateDeploymentInput.RestApiId string
+V CreateDeploymentInput.StageDescription string
+V CreateDeploymentInput.StageName string
+V CreateDeploymentInput.TracingEnabled bool
+V CreateDeploymentOutput.Description string
+V CreateDeploymentOutput.Id string
+V CreateDocumentationPartInput.Properties string
+V CreateDocumentationPartInput.RestApiId string
+V CreateDocumentationPartOutput.Id string
+V CreateDocumentationPartOutput.Properties string
+V CreateDocumentationVersionInput.Description string
+V CreateDocumentationVersionInput.DocumentationVersion string
+V CreateDocumentationVersionInput.RestApiId string
+V CreateDocumentationVersionInput.StageName string
+V CreateDocumentationVersionOutput.Description string
+V CreateDocumentationVersionOutput.Version string
+V CreateDomainNameAccessAssociationInput.AccessAssociationSource string
+V CreateDomainNameAccessAssociationInput.DomainNameArn string
+V CreateDomainNameAccessAssociationOutput.AccessAssociationSource string
+V CreateDomainNameAccessAssociationOutput.DomainNameAccessAssociationArn string
+V CreateDomainNameAccessAssociationOutput.DomainNameArn string
+V CreateDomainNameInput.CertificateArn string
+V CreateDomainNameInput.CertificateBody string
+V CreateDomainNameInput.CertificateChain string
+V CreateDomainNameInput.CertificateName string
+V CreateDomainNameInput.CertificatePrivateKey string
+V CreateDomainNameInput.DomainName string
+V CreateDomainNameInput.OwnershipVerificationCertificateArn string
+V CreateDomainNameInput.Policy string
+V CreateDomainNameInput.RegionalCertificateArn string
+V CreateDomainNameInput.RegionalCertificateName string
+V CreateDomainNameOutput.CertificateArn string
+V CreateDomainNameOutput.CertificateName string
+V CreateDomainNameOutput.DistributionDomainName string
+V CreateDomainNameOutput.DistributionHostedZoneId string
+V CreateDomainNameOutput.DomainName string
+V CreateDomainNameOutput.DomainNameArn string
+V CreateDomainNameOutput.DomainNameId string
+V CreateDomainNameOutput.DomainNameStatusMessage string
+V CreateDomainNameOutput.ManagementPolicy string
+V CreateDomainNameOutput.OwnershipVerificationCertificateArn string
+V CreateDomainNameOutput.Policy string
+V CreateDomainNameOutput.RegionalCertificateArn string
+V CreateDomainNameOutput.RegionalCertificateName string
+V CreateDomainNameOutput.RegionalDomainName string
+V CreateDomainNameOutput.RegionalHostedZoneId string
+V CreateModelInput.ContentType string
+V CreateModelInput.Description string
+V CreateModelInput.Name string
+V CreateModelInput.RestApiId string
+V CreateModelInput.Schema string
+V CreateModelOutput.ContentType string
+V CreateModelOutput.Description string
+V CreateModelOutput.Id string
+V CreateModelOutput.Name string
+V CreateModelOutput.Schema string
+V CreateRequestValidatorInput.Name string
+V CreateRequestValidatorInput.RestApiId string
+V CreateRequestValidatorOutput.Id string
+V CreateRequestValidatorOutput.Name string
+V CreateResourceInput.ParentId string
+V CreateResourceInput.PathPart string
+V CreateResourceInput.RestApiId string
+V CreateResourceOutput.Id string
+V CreateResourceOutput.ParentId string
+V CreateResourceOutput.Path string
+V CreateResourceOutput.PathPart string
+V CreateRestApiInput.CloneFrom string
+V CreateRestApiInput.Description string
+V CreateRestApiInput.MinimumCompressionSize int32
+V CreateRestApiInput.Name string
+V CreateRestApiInput.Policy string
+V CreateRestApiInput.Version string
+V CreateRestApiOutput.ApiStatusMessage string
+V CreateRestApiOutput.Description string
+V CreateRestApiOutput.Id string
+V CreateRestApiOutput.MinimumCompressionSize int32
+V CreateRestApiOutput.Name string
+V CreateRestApiOutput.Policy string
+V CreateRestApiOutput.RootResourceId string
+V CreateRestApiOutput.Version string
+V CreateStageInput.DeploymentId string
+V CreateStageInput.Description string
+V CreateStageInput.DocumentationVersion string
+V CreateStageInput.RestApiId string
+V CreateStageInput.StageName string
+V CreateStageOutput.ClientCertificateId string
+V CreateStageOutput.DeploymentId string
+V CreateStageOutput.Description string
+V CreateStageOutput.DocumentationVersion string
+V CreateStageOutput.StageName string
+V CreateStageOutput.WebAclArn string
+V CreateUsagePlanInput.Description string
+V CreateUsagePlanInput.Name string
+V CreateUsagePlanKeyInput.KeyId string
+V CreateUsagePlanKeyInput.KeyType string
+V CreateUsagePlanKeyInput.UsagePlanId string
+V CreateUsagePlanKeyOutput.Id string
+V CreateUsagePlanKeyOutput.Name string
+V CreateUsagePlanKeyOutput.Type string
+V CreateUsagePlanKeyOutput.Value string
+V CreateUsagePlanOutput.Description string
+V CreateUsagePlanOutput.Id string
+V CreateUsagePlanOutput.Name string
+V CreateUsagePlanOutput.ProductCode string
+V CreateVpcLinkInput.Description string
+V CreateVpcLinkInput.Name string
+V CreateVpcLinkOutput.Description string
+V CreateVpcLinkOutput.Id string
+V CreateVpcLinkOutput.Name string
+V CreateVpcLinkOutput.StatusMessage string
+V DeleteApiKeyInput.ApiKey string
+V DeleteAuthorizerInput.AuthorizerId string
+V DeleteAuthorizerInput.RestApiId string
+V DeleteBasePathMappingInput.BasePath string
+V DeleteBasePathMappingInput.DomainName string
+V DeleteBasePathMappingInput.DomainNameId string
+V DeleteClientCertificateInput.ClientCertificateId string
+V DeleteDeploymentInput.DeploymentId string
+V DeleteDeploymentInput.RestApiId string
+V DeleteDocumentationPartInput.DocumentationPartId string
+V DeleteDocumentationPartInput.RestApiId string
+V DeleteDocumentationVersionInput.DocumentationVersion string
+V DeleteDocumentationVersionInput.RestApiId string
+V DeleteDomainNameAccessAssociationInput.DomainNameAccessAssociationArn string
+V DeleteDomainNameInput.DomainName string
+V DeleteDomainNameInput.DomainNameId string
+V DeleteGatewayResponseInput.RestApiId string
+V DeleteIntegrationInput.HttpMethod string
+V DeleteIntegrationInput.ResourceId string
+V DeleteIntegrationInput.RestApiId string
+V DeleteIntegrationResponseInput.HttpMethod string
+V DeleteIntegrationResponseInput.ResourceId string
+V DeleteIntegrationResponseInput.RestApiId string
+V DeleteIntegrationResponseInput.StatusCode string
+V DeleteMethodInput.HttpMethod string
+V DeleteMethodInput.ResourceId string
+V DeleteMethodInput.RestApiId string
+V DeleteMethodResponseInput.HttpMethod string
+V DeleteMethodResponseInput.ResourceId string
+V DeleteMethodResponseInput.RestApiId string
+V DeleteMethodResponseInput.StatusCode string
+V DeleteModelInput.ModelName string
+V DeleteModelInput.RestApiId string
+V DeleteRequestValidatorInput.RequestValidatorId string
+V DeleteRequestValidatorInput.RestApiId string
+V DeleteResourceInput.ResourceId string
+V DeleteResourceInput.RestApiId string
+V DeleteRestApiInput.RestApiId string
+V DeleteStageInput.RestApiId string
+V DeleteStageInput.StageName string
+V DeleteUsagePlanInput.UsagePlanId string
+V DeleteUsagePlanKeyInput.KeyId string
+V DeleteUsagePlanKeyInput.UsagePlanId string
+V DeleteVpcLinkInput.VpcLinkId string
+V Deployment.Description string
+V Deployment.Id string
+V DocumentationPart.Id string
+V DocumentationPart.Properties string
+V DocumentationPartLocation.Method string
+V DocumentationPartLocation.Name string
+V DocumentationPartLocation.Path string
+V DocumentationPartLocation.StatusCode string
+V DocumentationVersion.Description string
+V DocumentationVersion.Version string
+V DomainName.CertificateArn string
+V DomainName.CertificateName string
+V DomainName.DistributionDomainName string
+V DomainName.DistributionHostedZoneId string
+V DomainName.DomainName string
+V DomainName.DomainNameArn string
+V DomainName.DomainNameId string
+V DomainName.DomainNameStatusMessage string
+V DomainName.ManagementPolicy string
+V DomainName.OwnershipVerificationCertificateArn string
+V DomainName.Policy string
+V DomainName.RegionalCertificateArn string
+V DomainName.RegionalCertificateName string
+V DomainName.RegionalDomainName string
+V DomainName.RegionalHostedZoneId string
+V DomainNameAccessAssociation.AccessAssociationSource string
+V DomainNameAccessAssociation.DomainNameAccessAssociationArn string
+V DomainNameAccessAssociation.DomainNameArn string
+V EndpointParameters.Endpoint string
+V EndpointParameters.Region string
+V EndpointParameters.UseDualStack bool
+V EndpointParameters.UseFIPS bool
+V FlushStageAuthorizersCacheInput.RestApiId string
+V FlushStageAuthorizersCacheInput.StageName string
+V FlushStageCacheInput.RestApiId string
+V FlushStageCacheInput.StageName string
+V GatewayResponse.StatusCode string
+V GenerateClientCertificateInput.Description string
+V GenerateClientCertificateOutput.ClientCertificateId string
+V GenerateClientCertificateOutput.Description string
+V GenerateClientCertificateOutput.PemEncodedCertificate string
+V GetAccountOutput.ApiKeyVersion string
+V GetAccountOutput.CloudwatchRoleArn string
+V GetApiKeyInput.ApiKey string
+V GetApiKeyInput.IncludeValue bool
+V GetApiKeyOutput.CustomerId string
+V GetApiKeyOutput.Description string
+V GetApiKeyOutput.Id string
+V GetApiKeyOutput.Name string
+V GetApiKeyOutput.Value string
+V GetApiKeysInput.CustomerId string
+V GetApiKeysInput.IncludeValues bool
+V GetApiKeysInput.Limit int32
+V GetApiKeysInput.NameQuery string
+V GetApiKeysInput.Position string
+V GetApiKeysOutput.Position string
+V GetAuthorizerInput.AuthorizerId string
+V GetAuthorizerInput.RestApiId string
+V GetAuthorizerOutput.AuthType string
+V GetAuthorizerOutput.AuthorizerCredentials string
+V GetAuthorizerOutput.AuthorizerResultTtlInSeconds int32
+V GetAuthorizerOutput.AuthorizerUri string
+V GetAuthorizerOutput.Id string
+V GetAuthorizerOutput.IdentitySource string
+V GetAuthorizerOutput.IdentityValidationExpression string
+V GetAuthorizerOutput.Name string
+V GetAuthorizersInput.Limit int32
+V GetAuthorizersInput.Position string
+V GetAuthorizersInput.RestApiId string
+V GetAuthorizersOutput.Position string
+V GetBasePathMappingInput.BasePath string
+V GetBasePathMappingInput.DomainName string
+V GetBasePathMappingInput.DomainNameId string
+V GetBasePathMappingOutput.BasePath string
+V GetBasePathMappingOutput.RestApiId string
+V GetBasePathMappingOutput.Stage string
+V GetBasePathMappingsInput.DomainName string
+V GetBasePathMappingsInput.DomainNameId string
+V GetBasePathMappingsInput.Limit int32
+V GetBasePathMappingsInput.Position string
+V GetBasePathMappingsOutput.Position string
+V GetClientCertificateInput.ClientCertificateId string
+V GetClientCertificateOutput.ClientCertificateId string
+V GetClientCertificateOutput.Description string
+V GetClientCertificateOutput.PemEncodedCertificate string
+V GetClientCertificatesInput.Limit int32
+V GetClientCertificatesInput.Position string
+V GetClientCertificatesOutput.Position string
+V GetDeploymentInput.DeploymentId string
+V GetDeploymentInput.RestApiId string
+V GetDeploymentOutput.Description string
+V GetDeploymentOutput.Id string
+V GetDeploymentsInput.Limit int32
+V GetDeploymentsInput.Position string
+V GetDeploymentsInput.RestApiId string
+V GetDeploymentsOutput.Position string
+V GetDocumentationPartInput.DocumentationPartId string
+V GetDocumentationPartInput.RestApiId string
+V GetDocumentationPartOutput.Id string
+V GetDocumentationPartOutput.Properties string
+V GetDocumentationPartsInput.Limit int32
+V GetDocumentationPartsInput.NameQuery string
+V GetDocumentationPartsInput.Path string
+V GetDocumentationPartsInput.Position string
+V GetDocumentationPartsInput.RestApiId string
+V GetDocumentationPartsOutput.Position string
+V GetDocumentationVersionInput.DocumentationVersion string
+V GetDocumentationVersionInput.RestApiId string
+V GetDocumentationVersionOutput.Description string
+V GetDocumentationVersionOutput.Version string
+V GetDocumentationVersionsInput.Limit int32
+V GetDocumentationVersionsInput.Position string
+V GetDocumentationVersionsInput.RestApiId string
+V GetDocumentationVersionsOutput.Position string
+V GetDomainNameAccessAssociationsInput.Limit int32
+V GetDomainNameAccessAssociationsInput.Position string
+V GetDomainNameAccessAssociationsOutput.Position string
+V GetDomainNameInput.DomainName string
+V GetDomainNameInput.DomainNameId string
+V GetDomainNameOutput.CertificateArn string
+V GetDomainNameOutput.CertificateName string
+V GetDomainNameOutput.DistributionDomainName string
+V GetDomainNameOutput.DistributionHostedZoneId string
+V GetDomainNameOutput.DomainName string
+V GetDomainNameOutput.DomainNameArn string
+V GetDomainNameOutput.DomainNameId string
+V GetDomainNameOutput.DomainNameStatusMessage string
+V GetDomainNameOutput.ManagementPolicy string
+V GetDomainNameOutput.OwnershipVerificationCertificateArn string
+V GetDomainNameOutput.Policy string
+V GetDomainNameOutput.RegionalCertificateArn string
+V GetDomainNameOutput.RegionalCertificateName string
+V GetDomainNameOutput.RegionalDomainName string
+V GetDomainNameOutput.RegionalHostedZoneId string
+V GetDomainNamesInput.Limit int32
+V GetDomainNamesInput.Position string
+V GetDomainNamesOutput.Position string
+V GetExportInput.Accepts string
+V GetExportInput.ExportType string
+V GetExportInput.RestApiId string
+V GetExportInput.StageName string
+V GetExportOutput.ContentDisposition string
+V GetExportOutput.ContentType string
+V GetGatewayResponseInput.RestApiId string
+V GetGatewayResponseOutput.StatusCode string
+V GetGatewayResponsesInput.Limit int32
+V GetGatewayResponsesInput.Position string
+V GetGatewayResponsesInput.RestApiId string
+V GetGatewayResponsesOutput.Position string
+V GetIntegrationInput.HttpMethod string
+V GetIntegrationInput.ResourceId string
+V GetIntegrationInput.RestApiId string
+V GetIntegrationOutput.CacheNamespace string
+V GetIntegrationOutput.ConnectionId string
+V GetIntegrationOutput.Credentials string
+V GetIntegrationOutput.HttpMethod string
+V GetIntegrationOutput.IntegrationTarget string
+V GetIntegrationOutput.PassthroughBehavior string
+V GetIntegrationOutput.Uri string
+V GetIntegrationResponseInput.HttpMethod string
+V GetIntegrationResponseInput.ResourceId string
+V GetIntegrationResponseInput.RestApiId string
+V GetIntegrationResponseInput.StatusCode string
+V GetIntegrationResponseOutput.SelectionPattern string
+V GetIntegrationResponseOutput.StatusCode string
+V GetMethodInput.HttpMethod string
+V GetMethodInput.ResourceId string
+V GetMethodInput.RestApiId string
+V GetMethodOutput.ApiKeyRequired bool
+V GetMethodOutput.AuthorizationType string
+V GetMethodOutput.AuthorizerId string
+V GetMethodOutput.HttpMethod string
+V GetMethodOutput.OperationName string
+V GetMethodOutput.RequestValidatorId string
+V GetMethodResponseInput.HttpMethod string
+V GetMethodResponseInput.ResourceId string
+V GetMethodResponseInput.RestApiId string
+V GetMethodResponseInput.StatusCode string
+V GetMethodResponseOutput.StatusCode string
+V GetModelInput.ModelName string
+V GetModelInput.RestApiId string
+V GetModelOutput.ContentType string
+V GetModelOutput.Description string
+V GetModelOutput.Id string
+V GetModelOutput.Name string
+V GetModelOutput.Schema string
+V GetModelTemplateInput.ModelName string
+V GetModelTemplateInput.RestApiId string
+V GetModelTemplateOutput.Value string
+V GetModelsInput.Limit int32
+V GetModelsInput.Position string
+V GetModelsInput.RestApiId string
+V GetModelsOutput.Position string
+V GetRequestValidatorInput.RequestValidatorId string
+V GetRequestValidatorInput.RestApiId string
+V GetRequestValidatorOutput.Id string
+V GetRequestValidatorOutput.Name string
+V GetRequestValidatorsInput.Limit int32
+V GetRequestValidatorsInput.Position string
+V GetRequestValidatorsInput.RestApiId string
+V GetRequestValidatorsOutput.Position string
+V GetResourceInput.ResourceId string
+V GetResourceInput.RestApiId string
+V GetResourceOutput.Id string
+V GetResourceOutput.ParentId string
+V GetResourceOutput.Path string
+V GetResourceOutput.PathPart string
+V GetResourcesInput.Limit int32
+V GetResourcesInput.Position string
+V GetResourcesInput.RestApiId string
+V GetResourcesOutput.Position string
+V GetRestApiInput.RestApiId string
+V GetRestApiOutput.ApiStatusMessage string
+V GetRestApiOutput.Description string
+V GetRestApiOutput.Id string
+V GetRestApiOutput.MinimumCompressionSize int32
+V GetRestApiOutput.Name string
+V GetRestApiOutput.Policy string
+V GetRestApiOutput.RootResourceId string
+V GetRestApiOutput.Version string
+V GetRestApisInput.Limit int32
+V GetRestApisInput.Position string
+V GetRestApisOutput.Position string
+V GetSdkInput.RestApiId string
+V GetSdkInput.SdkType string
+V GetSdkInput.StageName string
+V GetSdkOutput.ContentDisposition string
+V GetSdkOutput.ContentType string
+V GetSdkTypeInput.Id string
+V GetSdkTypeOutput.Description string
+V GetSdkTypeOutput.FriendlyName string
+V GetSdkTypeOutput.Id string
+V GetSdkTypesInput.Limit int32
+V GetSdkTypesInput.Position string
+V GetStageInput.RestApiId string
+V GetStageInput.StageName string
+V GetStageOutput.ClientCertificateId string
+V GetStageOutput.DeploymentId string
+V GetStageOutput.Description string
+V GetStageOutput.DocumentationVersion string
+V GetStageOutput.StageName string
+V GetStageOutput.WebAclArn string
+V GetStagesInput.DeploymentId string
+V GetStagesInput.RestApiId string
+V GetTagsInput.Limit int32
+V GetTagsInput.Position string
+V GetTagsInput.ResourceArn string
+V GetUsageInput.EndDate string
+V GetUsageInput.KeyId string
+V GetUsageInput.Limit int32
+V GetUsageInput.Position string
+V GetUsageInput.StartDate string
+V GetUsageInput.UsagePlanId string
+V GetUsageOutput.EndDate string
+V GetUsageOutput.Position string
+V GetUsageOutput.StartDate string
+V GetUsageOutput.UsagePlanId string
+V GetUsagePlanInput.UsagePlanId string
+V GetUsagePlanKeyInput.KeyId string
+V GetUsagePlanKeyInput.UsagePlanId string
+V GetUsagePlanKeyOutput.Id string
+V GetUsagePlanKeyOutput.Name string
+V GetUsagePlanKeyOutput.Type string
+V GetUsagePlanKeyOutput.Value string
+V GetUsagePlanKeysInput.Limit int32
+V GetUsagePlanKeysInput.NameQuery string
+V GetUsagePlanKeysInput.Position string
+V GetUsagePlanKeysInput.UsagePlanId string
+V GetUsagePlanKeysOutput.Position string
+V GetUsagePlanOutput.Description string
+V GetUsagePlanOutput.Id string
+V GetUsagePlanOutput.Name string
+V GetUsagePlanOutput.ProductCode string
+V GetUsagePlansInput.KeyId string
+V GetUsagePlansInput.Limit int32
+V GetUsagePlansInput.Position string
+V GetUsagePlansOutput.Position string
+V GetVpcLinkInput.VpcLinkId string
+V GetVpcLinkOutput.Description string
+V GetVpcLinkOutput.Id string
+V GetVpcLinkOutput.Name string
+V GetVpcLinkOutput.StatusMessage string
+V GetVpcLinksInput.Limit int32
+V GetVpcLinksInput.Position string
+V GetVpcLinksOutput.Position string
+V ImportDocumentationPartsInput.RestApiId string
+V ImportRestApiOutput.ApiStatusMessage string
+V ImportRestApiOutput.Description string
+V ImportRestApiOutput.Id string
+V ImportRestApiOutput.MinimumCompressionSize int32
+V ImportRestApiOutput.Name string
+V ImportRestApiOutput.Policy string
+V ImportRestApiOutput.RootResourceId string
+V ImportRestApiOutput.Version string
+V Integration.CacheNamespace string
+V Integration.ConnectionId string
+V Integration.Credentials string
+V Integration.HttpMethod string
+V Integration.IntegrationTarget string
+V Integration.PassthroughBehavior string
+V Integration.Uri string
+V IntegrationResponse.SelectionPattern string
+V IntegrationResponse.StatusCode string
+V LimitExceededException.ErrorCodeOverride string
+V LimitExceededException.Message string
+V LimitExceededException.RetryAfterSeconds string
+V Method.ApiKeyRequired bool
+V Method.AuthorizationType string
+V Method.AuthorizerId string
+V Method.HttpMethod string
+V Method.OperationName string
+V Method.RequestValidatorId string
+V MethodResponse.StatusCode string
+V MethodSetting.LoggingLevel string
+V MethodSnapshot.AuthorizationType string
+V Model.ContentType string
+V Model.Description string
+V Model.Id string
+V Model.Name string
+V Model.Schema string
+V MutualTlsAuthentication.TruststoreUri string
+V MutualTlsAuthentication.TruststoreVersion string
+V MutualTlsAuthenticationInput.TruststoreUri string
+V MutualTlsAuthenticationInput.TruststoreVersion string
+V NotFoundException.ErrorCodeOverride string
+V NotFoundException.Message string
+V Options.BaseEndpoint string
+V PatchOperation.From string
+V PatchOperation.Path string
+V PatchOperation.Value string
+V PutGatewayResponseInput.RestApiId string
+V PutGatewayResponseInput.StatusCode string
+V PutGatewayResponseOutput.StatusCode string
+V PutIntegrationInput.CacheNamespace string
+V PutIntegrationInput.ConnectionId string
+V PutIntegrationInput.Credentials string
+V PutIntegrationInput.HttpMethod string
+V PutIntegrationInput.IntegrationHttpMethod string
+V PutIntegrationInput.IntegrationTarget string
+V PutIntegrationInput.PassthroughBehavior string
+V PutIntegrationInput.ResourceId string
+V PutIntegrationInput.RestApiId string
+V PutIntegrationInput.TimeoutInMillis int32
+V PutIntegrationInput.Uri string
+V PutIntegrationOutput.CacheNamespace string
+V PutIntegrationOutput.ConnectionId string
+V PutIntegrationOutput.Credentials string
+V PutIntegrationOutput.HttpMethod string
+V PutIntegrationOutput.IntegrationTarget string
+V PutIntegrationOutput.PassthroughBehavior string
+V PutIntegrationOutput.Uri string
+V PutIntegrationResponseInput.HttpMethod string
+V PutIntegrationResponseInput.ResourceId string
+V PutIntegrationResponseInput.RestApiId string
+V PutIntegrationResponseInput.SelectionPattern string
+V PutIntegrationResponseInput.StatusCode string
+V PutIntegrationResponseOutput.SelectionPattern string
+V PutIntegrationResponseOutput.StatusCode string
+V PutMethodInput.AuthorizationType string
+V PutMethodInput.AuthorizerId string
+V PutMethodInput.HttpMethod string
+V PutMethodInput.OperationName string
+V PutMethodInput.RequestValidatorId string
+V PutMethodInput.ResourceId string
+V PutMethodInput.RestApiId string
+V PutMethodOutput.ApiKeyRequired bool
+V PutMethodOutput.AuthorizationType string
+V PutMethodOutput.AuthorizerId string
+V PutMethodOutput.HttpMethod string
+V PutMethodOutput.OperationName string
+V PutMethodOutput.RequestValidatorId string
+V PutMethodResponseInput.HttpMethod string
+V PutMethodResponseInput.ResourceId string
+V PutMethodResponseInput.RestApiId string
+V PutMethodResponseInput.StatusCode string
+V PutMethodResponseOutput.StatusCode string
+V PutRestApiInput.RestApiId string
+V PutRestApiOutput.ApiStatusMessage string
+V PutRestApiOutput.Description string
+V PutRestApiOutput.Id string
+V PutRestApiOutput.MinimumCompressionSize int32
+V PutRestApiOutput.Name string
+V PutRestApiOutput.Policy string
+V PutRestApiOutput.RootResourceId string
+V PutRestApiOutput.Version string
+V RejectDomainNameAccessAssociationInput.DomainNameAccessAssociationArn string
+V RejectDomainNameAccessAssociationInput.DomainNameArn string
+V RequestValidator.Id string
+V RequestValidator.Name string
+V Resource.Id string
+V Resource.ParentId string
+V Resource.Path string
+V Resource.PathPart string
+V RestApi.ApiStatusMessage string
+V RestApi.Description string
+V RestApi.Id string
+V RestApi.MinimumCompressionSize int32
+V RestApi.Name string
+V RestApi.Policy string
+V RestApi.RootResourceId string
+V RestApi.Version string
+V SdkConfigurationProperty.DefaultValue string
+V SdkConfigurationProperty.Description string
+V SdkConfigurationProperty.FriendlyName string
+V SdkConfigurationProperty.Name string
+V SdkType.Description string
+V SdkType.FriendlyName string
+V SdkType.Id string
+V ServiceUnavailableException.ErrorCodeOverride string
+V ServiceUnavailableException.Message string
+V ServiceUnavailableException.RetryAfterSeconds string
+V Stage.ClientCertificateId string
+V Stage.DeploymentId string
+V Stage.Description string
+V Stage.DocumentationVersion string
+V Stage.StageName string
+V Stage.WebAclArn string
+V StageKey.RestApiId string
+V StageKey.StageName string
+V TagResourceInput.ResourceArn string
+V TestInvokeAuthorizerInput.AuthorizerId string
+V TestInvokeAuthorizerInput.Body string
+V TestInvokeAuthorizerInput.PathWithQueryString string
+V TestInvokeAuthorizerInput.RestApiId string
+V TestInvokeAuthorizerOutput.Log string
+V TestInvokeAuthorizerOutput.Policy string
+V TestInvokeAuthorizerOutput.PrincipalId string
+V TestInvokeMethodInput.Body string
+V TestInvokeMethodInput.ClientCertificateId string
+V TestInvokeMethodInput.HttpMethod string
+V TestInvokeMethodInput.PathWithQueryString string
+V TestInvokeMethodInput.ResourceId string
+V TestInvokeMethodInput.RestApiId string
+V TestInvokeMethodOutput.Body string
+V TestInvokeMethodOutput.Log string
+V TooManyRequestsException.ErrorCodeOverride string
+V TooManyRequestsException.Message string
+V TooManyRequestsException.RetryAfterSeconds string
+V UnauthorizedException.ErrorCodeOverride string
+V UnauthorizedException.Message string
+V UntagResourceInput.ResourceArn string
+V UpdateAccountOutput.ApiKeyVersion string
+V UpdateAccountOutput.CloudwatchRoleArn string
+V UpdateApiKeyInput.ApiKey string
+V UpdateApiKeyOutput.CustomerId string
+V UpdateApiKeyOutput.Description string
+V UpdateApiKeyOutput.Id string
+V UpdateApiKeyOutput.Name string
+V UpdateApiKeyOutput.Value string
+V UpdateAuthorizerInput.AuthorizerId string
+V UpdateAuthorizerInput.RestApiId string
+V UpdateAuthorizerOutput.AuthType string
+V UpdateAuthorizerOutput.AuthorizerCredentials string
+V UpdateAuthorizerOutput.AuthorizerResultTtlInSeconds int32
+V UpdateAuthorizerOutput.AuthorizerUri string
+V UpdateAuthorizerOutput.Id string
+V UpdateAuthorizerOutput.IdentitySource string
+V UpdateAuthorizerOutput.IdentityValidationExpression string
+V UpdateAuthorizerOutput.Name string
+V UpdateBasePathMappingInput.BasePath string
+V UpdateBasePathMappingInput.DomainName string
+V UpdateBasePathMappingInput.DomainNameId string
+V UpdateBasePathMappingOutput.BasePath string
+V UpdateBasePathMappingOutput.RestApiId string
+V UpdateBasePathMappingOutput.Stage string
+V UpdateClientCertificateInput.ClientCertificateId string
+V UpdateClientCertificateOutput.ClientCertificateId string
+V UpdateClientCertificateOutput.Description string
+V UpdateClientCertificateOutput.PemEncodedCertificate string
+V UpdateDeploymentInput.DeploymentId string
+V UpdateDeploymentInput.RestApiId string
+V UpdateDeploymentOutput.Description string
+V UpdateDeploymentOutput.Id string
+V UpdateDocumentationPartInput.DocumentationPartId string
+V UpdateDocumentationPartInput.RestApiId string
+V UpdateDocumentationPartOutput.Id string
+V UpdateDocumentationPartOutput.Properties string
+V UpdateDocumentationVersionInput.DocumentationVersion string
+V UpdateDocumentationVersionInput.RestApiId string
+V UpdateDocumentationVersionOutput.Description string
+V UpdateDocumentationVersionOutput.Version string
+V UpdateDomainNameInput.DomainName string
+V UpdateDomainNameInput.DomainNameId string
+V UpdateDomainNameOutput.CertificateArn string
+V UpdateDomainNameOutput.CertificateName string
+V UpdateDomainNameOutput.DistributionDomainName string
+V UpdateDomainNameOutput.DistributionHostedZoneId string
+V UpdateDomainNameOutput.DomainName string
+V UpdateDomainNameOutput.DomainNameArn string
+V UpdateDomainNameOutput.DomainNameId string
+V UpdateDomainNameOutput.DomainNameStatusMessage string
+V UpdateDomainNameOutput.ManagementPolicy string
+V UpdateDomainNameOutput.OwnershipVerificationCertificateArn string
+V UpdateDomainNameOutput.Policy string
+V UpdateDomainNameOutput.RegionalCertificateArn string
+V UpdateDomainNameOutput.RegionalCertificateName string
+V UpdateDomainNameOutput.RegionalDomainName string
+V UpdateDomainNameOutput.RegionalHostedZoneId string
+V UpdateGatewayResponseInput.RestApiId string
+V UpdateGatewayResponseOutput.StatusCode string
+V UpdateIntegrationInput.HttpMethod string
+V UpdateIntegrationInput.ResourceId string
+V UpdateIntegrationInput.RestApiId string
+V UpdateIntegrationOutput.CacheNamespace string
+V UpdateIntegrationOutput.ConnectionId string
+V UpdateIntegrationOutput.Credentials string
+V UpdateIntegrationOutput.HttpMethod string
+V UpdateIntegrationOutput.IntegrationTarget string
+V UpdateIntegrationOutput.PassthroughBehavior string
+V UpdateIntegrationOutput.Uri string
+V UpdateIntegrationResponseInput.HttpMethod string
+V UpdateIntegrationResponseInput.ResourceId string
+V UpdateIntegrationResponseInput.RestApiId string
+V UpdateIntegrationResponseInput.StatusCode string
+V UpdateIntegrationResponseOutput.SelectionPattern string
+V UpdateIntegrationResponseOutput.StatusCode string
+V UpdateMethodInput.HttpMethod string
+V UpdateMethodInput.ResourceId string
+V UpdateMethodInput.RestApiId string
+V UpdateMethodOutput.ApiKeyRequired bool
+V UpdateMethodOutput.AuthorizationType string
+V UpdateMethodOutput.AuthorizerId string
+V UpdateMethodOutput.HttpMethod string
+V UpdateMethodOutput.OperationName string
+V UpdateMethodOutput.RequestValidatorId string
+V UpdateMethodResponseInput.HttpMethod string
+V UpdateMethodResponseInput.ResourceId string
+V UpdateMethodResponseInput.RestApiId string
+V UpdateMethodResponseInput.StatusCode string
+V UpdateMethodResponseOutput.StatusCode string
+V UpdateModelInput.ModelName string
+V UpdateModelInput.RestApiId string
+V UpdateModelOutput.ContentType string
+V UpdateModelOutput.Description string
+V UpdateModelOutput.Id string
+V UpdateModelOutput.Name string
+V UpdateModelOutput.Schema string
+V UpdateRequestValidatorInput.RequestValidatorId string
+V UpdateRequestValidatorInput.RestApiId string
+V UpdateRequestValidatorOutput.Id string
+V UpdateRequestValidatorOutput.Name string
+V UpdateResourceInput.ResourceId string
+V UpdateResourceInput.RestApiId string
+V UpdateResourceOutput.Id string
+V UpdateResourceOutput.ParentId string
+V UpdateResourceOutput.Path string
+V UpdateResourceOutput.PathPart string
+V UpdateRestApiInput.RestApiId string
+V UpdateRestApiOutput.ApiStatusMessage string
+V UpdateRestApiOutput.Description string
+V UpdateRestApiOutput.Id string
+V UpdateRestApiOutput.MinimumCompressionSize int32
+V UpdateRestApiOutput.Name string
+V UpdateRestApiOutput.Policy string
+V UpdateRestApiOutput.RootResourceId string
+V UpdateRestApiOutput.Version string
+V UpdateStageInput.RestApiId string
+V UpdateStageInput.StageName string
+V UpdateStageOutput.ClientCertificateId string
+V UpdateStageOutput.DeploymentId string
+V UpdateStageOutput.Description string
+V UpdateStageOutput.DocumentationVersion string
+V UpdateStageOutput.StageName string
+V UpdateStageOutput.WebAclArn string
+V UpdateUsageInput.KeyId string
+V UpdateUsageInput.UsagePlanId string
+V UpdateUsageOutput.EndDate string
+V UpdateUsageOutput.Position string
+V UpdateUsageOutput.StartDate string
+V UpdateUsageOutput.UsagePlanId string
+V UpdateUsagePlanInput.UsagePlanId string
+V UpdateUsagePlanOutput.Description string
+V UpdateUsagePlanOutput.Id string
+V UpdateUsagePlanOutput.Name string
+V UpdateUsagePlanOutput.ProductCode string
+V UpdateVpcLinkInput.VpcLinkId string
+V UpdateVpcLinkOutput.Description string
+V UpdateVpcLinkOutput.Id string
+V UpdateVpcLinkOutput.Name string
+V UpdateVpcLinkOutput.StatusMessage string
+V UsagePlan.Description string
+V UsagePlan.Id string
+V UsagePlan.Name string
+V UsagePlan.ProductCode string
+V UsagePlanKey.Id string
+V UsagePlanKey.Name string
+V UsagePlanKey.Type string
+V UsagePlanKey.Value string
+V VpcLink.Description string
+V VpcLink.Id string
+V VpcLink.Name string
+V VpcLink.StatusMessage string
+Q ApiKey.Tags
+Q CanarySettings.StageVariableOverrides
+Q ClientCertificate.Tags
+Q CreateApiKeyInput.Tags
+Q CreateDeploymentInput.Variables
+Q CreateDomainNameInput.Tags
+Q CreateRestApiInput.Tags
+Q CreateStageInput.Tags
+Q CreateStageInput.Variables
+Q CreateUsagePlanInput.Tags
+Q CreateVpcLinkInput.Tags
+Q DeploymentCanarySettings.StageVariableOverrides
+Q DomainName.Tags
+Q GenerateClientCertificateInput.Tags
+Q GetExportInput.Parameters
+Q GetSdkInput.Parameters
+Q GetTagsOutput.Tags
+Q ImportRestApiInput.Parameters
+Q Integration.RequestParameters
+Q Integration.RequestTemplates
+Q IntegrationResponse.ResponseParameters
+Q IntegrationResponse.ResponseTemplates
+Q Method.RequestModels
+Q Method.RequestParameters
+Q MethodResponse.ResponseModels
+Q MethodResponse.ResponseParameters
+Q PutGatewayResponseInput.ResponseParameters
+Q PutGatewayResponseInput.ResponseTemplates
+Q PutIntegrationInput.RequestParameters
+Q PutIntegrationInput.RequestTemplates
+Q PutIntegrationResponseInput.ResponseParameters
+Q PutIntegrationResponseInput.ResponseTemplates
+Q PutMethodInput.RequestModels
+Q PutMethodInput.RequestParameters
+Q PutMethodResponseInput.ResponseModels
+Q PutMethodResponseInput.ResponseParameters
+Q PutRestApiInput.Parameters
+Q RestApi.Tags
+Q Stage.Tags
+Q Stage.Variables
+Q TagResourceInput.Tags
+Q TestInvokeAuthorizerInput.AdditionalContext
+Q TestInvokeAuthorizerInput.Headers
+Q TestInvokeAuthorizerInput.StageVariables
+Q TestInvokeAuthorizerOutput.Claims
+Q TestInvokeMethodInput.Headers
+Q TestInvokeMethodInput.StageVariables
+Q TestInvokeMethodOutput.Headers
+Q UpdateGatewayResponseOutput.ResponseParameters
+Q UpdateGatewayResponseOutput.ResponseTemplates
+Q UpdateVpcLinkOutput.Tags
+Q UsagePlan.Tags
+P TestInvokeAuthorizerInput.MultiValueHeaders
+P TestInvokeAuthorizerOutput.Authorization
+P TestInvokeMethodInput.MultiValueHeaders
+P TestInvokeMethodOutput.MultiValueHeaders
+D ApiKey.Enabled bool
+D CanarySettings.PercentTraffic float64
+D CanarySettings.UseStageCache bool
+D CreateApiKeyInput.Enabled bool
+D CreateApiKeyInput.GenerateDistinctId bool
+D CreateRequestValidatorInput.ValidateRequestBody bool
+D CreateRequestValidatorInput.ValidateRequestParameters bool
+D CreateRestApiInput.DisableExecuteApiEndpoint bool
+D CreateStageInput.CacheClusterEnabled bool
+D CreateStageInput.TracingEnabled bool
+D DeploymentCanarySettings.PercentTraffic float64
+D DeploymentCanarySettings.UseStageCache bool
+D GetModelInput.Flatten bool
+D ImportApiKeysInput.FailOnWarnings bool
+D ImportDocumentationPartsInput.FailOnWarnings bool
+D ImportRestApiInput.FailOnWarnings bool
+D MethodSetting.CacheDataEncrypted bool
+D MethodSetting.CachingEnabled bool
+D MethodSetting.DataTraceEnabled bool
+D MethodSetting.MetricsEnabled bool
+D MethodSetting.RequireAuthorizationForCacheControl bool
+D MethodSetting.ThrottlingRateLimit float64
+D MethodSnapshot.ApiKeyRequired bool
+D PutMethodInput.ApiKeyRequired bool
+D PutRestApiInput.FailOnWarnings bool
+D RestApi.DisableExecuteApiEndpoint bool
+D SdkConfigurationProperty.Required bool
+D Stage.CacheClusterEnabled bool
+D Stage.TracingEnabled bool
+D TestInvokeAuthorizerOutput.Latency int64
+D TestInvokeMethodOutput.Latency int64
+D ThrottleSettings.RateLimit float64
+D TlsConfig.InsecureSkipVerification bool
+D UpdateGatewayResponseOutput.DefaultResponse bool
+D UpdateRequestValidatorOutput.ValidateRequestBody bool
+D UpdateRequestValidatorOutput.ValidateRequestParameters bool
+L ApiKey.StageKeys -
+L Authorizer.ProviderARNs -
+L CreateApiKeyInput.StageKeys StageKey
+L CreateAuthorizerInput.ProviderARNs -
+L CreateRestApiInput.BinaryMediaTypes -
+L CreateUsagePlanInput.ApiStages ApiStage
+L CreateVpcLinkInput.TargetArns -
+L EndpointConfiguration.Types EndpointType
+L EndpointConfiguration.VpcEndpointIds -
+L GetApiKeysOutput.Items ApiKey
+L GetApiKeysOutput.Warnings -
+L GetAuthorizersOutput.Items Authorizer
+L GetBasePathMappingsOutput.Items BasePathMapping
+L GetClientCertificatesOutput.Items ClientCertificate
+L GetDeploymentInput.Embed -
+L GetDeploymentsOutput.Items Deployment
+L GetDocumentationPartsOutput.Items DocumentationPart
+L GetDocumentationVersionsOutput.Items DocumentationVersion
+L GetDomainNamesOutput.Items DomainName
+L GetGatewayResponsesOutput.Items GatewayResponse
+L GetModelsOutput.Items Model
+L GetRequestValidatorsOutput.Items RequestValidator
+L GetResourceInput.Embed -
+L GetResourcesInput.Embed -
+L GetResourcesOutput.Items Resource
+L GetRestApisOutput.Items RestApi
+L GetSdkTypesOutput.Items SdkType
+L GetStagesOutput.Item Stage
+L GetUsagePlanKeysOutput.Items UsagePlanKey
+L GetUsagePlansOutput.Items UsagePlan
+L GetVpcLinksOutput.Items VpcLink
+L ImportApiKeysOutput.Ids -
+L ImportApiKeysOutput.Warnings -
+L ImportDocumentationPartsOutput.Ids -
+L ImportDocumentationPartsOutput.Warnings -
+L Integration.CacheKeyParameters -
+L Method.AuthorizationScopes -
+L MutualTlsAuthentication.TruststoreWarnings -
+L PutIntegrationInput.CacheKeyParameters -
+L PutMethodInput.AuthorizationScopes -
+L RestApi.BinaryMediaTypes -
+L RestApi.Warnings -
+L SdkType.ConfigurationProperties SdkConfigurationProperty
+L UntagResourceInput.TagKeys -
+L UpdateAccountInput.PatchOperations PatchOperation
+L UpdateApiKeyInput.PatchOperations PatchOperation
+L UpdateAuthorizerInput.PatchOperations PatchOperation
+L UpdateBasePathMappingInput.PatchOperations PatchOperation
+L UpdateClientCertificateInput.PatchOperations PatchOperation
+L UpdateDeploymentInput.PatchOperations PatchOperation
+L UpdateDocumentationPartInput.PatchOperations PatchOperation
+L UpdateDocumentationVersionInput.PatchOperations PatchOperation
+L UpdateDomainNameInput.PatchOperations PatchOperation
+L UpdateGatewayResponseInput.PatchOperations PatchOperation
+L UpdateIntegrationInput.PatchOperations PatchOperation
+L UpdateIntegrationResponseInput.PatchOperations PatchOperation
+L UpdateMethodInput.PatchOperations PatchOperation
+L UpdateMethodResponseInput.PatchOperations PatchOperation
+L UpdateModelInput.PatchOperations PatchOperation
+L UpdateRequestValidatorInput.PatchOperations PatchOperation
+L UpdateResourceInput.PatchOperations PatchOperation
+L UpdateRestApiInput.PatchOperations PatchOperation
+L UpdateStageInput.PatchOperations PatchOperation
+L UpdateUsageInput.PatchOperations PatchOperation
+L UpdateUsagePlanInput.PatchOperations PatchOperation
+L UpdateVpcLinkInput.PatchOperations PatchOperation
+L UpdateVpcLinkOutput.TargetArns -
+L UsagePlan.ApiStages ApiStage
+F Authorizer.Type AuthorizerType
+F CreateAuthorizerInput.Type AuthorizerType
+F CreateAuthorizerOutput.Type AuthorizerType
+F CreateDeploymentInput.CacheClusterSize CacheClusterSize
+F CreateDomainNameAccessAssociationInput.AccessAssociationSourceType AccessAssociationSourceType
+F CreateDomainNameAccessAssociationOutput.AccessAssociationSourceType AccessAssociationSourceType
+F CreateDomainNameInput.EndpointAccessMode EndpointAccessMode
+F CreateDomainNameInput.RoutingMode RoutingMode
+F CreateDomainNameInput.SecurityPolicy SecurityPolicy
+F CreateDomainNameOutput.DomainNameStatus DomainNameStatus
+F CreateDomainNameOutput.EndpointAccessMode EndpointAccessMode
+F CreateDomainNameOutput.RoutingMode RoutingMode
+F CreateDomainNameOutput.SecurityPolicy SecurityPolicy
+F CreateRestApiInput.ApiKeySource ApiKeySourceType
+F CreateRestApiInput.EndpointAccessMode EndpointAccessMode
+F CreateRestApiInput.SecurityPolicy SecurityPolicy
+F CreateRestApiOutput.ApiKeySource ApiKeySourceType
+F CreateRestApiOutput.ApiStatus ApiStatus
+F CreateRestApiOutput.EndpointAccessMode EndpointAccessMode
+F CreateRestApiOutput.SecurityPolicy SecurityPolicy
+F CreateStageInput.CacheClusterSize CacheClusterSize
+F CreateStageOutput.CacheClusterSize CacheClusterSize
+F CreateStageOutput.CacheClusterStatus CacheClusterStatus
+F CreateVpcLinkOutput.Status VpcLinkStatus
+F DeleteGatewayResponseInput.ResponseType GatewayResponseType
+F DocumentationPartLocation.Type DocumentationPartType
+F DomainName.DomainNameStatus DomainNameStatus
+F DomainName.EndpointAccessMode EndpointAccessMode
+F DomainName.RoutingMode RoutingMode
+F DomainName.SecurityPolicy SecurityPolicy
+F DomainNameAccessAssociation.AccessAssociationSourceType AccessAssociationSourceType
+F EndpointConfiguration.IpAddressType IpAddressType
+F EndpointConfiguration.Types EndpointType
+F GatewayResponse.ResponseType GatewayResponseType
+F GetAuthorizerOutput.Type AuthorizerType
+F GetDocumentationPartsInput.LocationStatus LocationStatusType
+F GetDocumentationPartsInput.Type DocumentationPartType
+F GetDomainNameAccessAssociationsInput.ResourceOwner ResourceOwner
+F GetDomainNameOutput.DomainNameStatus DomainNameStatus
+F GetDomainNameOutput.EndpointAccessMode EndpointAccessMode
+F GetDomainNameOutput.RoutingMode RoutingMode
+F GetDomainNameOutput.SecurityPolicy SecurityPolicy
+F GetDomainNamesInput.ResourceOwner ResourceOwner
+F GetGatewayResponseInput.ResponseType GatewayResponseType
+F GetGatewayResponseOutput.ResponseType GatewayResponseType
+F GetIntegrationOutput.ConnectionType ConnectionType
+F GetIntegrationOutput.ContentHandling ContentHandlingStrategy
+F GetIntegrationOutput.ResponseTransferMode ResponseTransferMode
+F GetIntegrationOutput.Type IntegrationType
+F GetIntegrationResponseOutput.ContentHandling ContentHandlingStrategy
+F GetRestApiOutput.ApiKeySource ApiKeySourceType
+F GetRestApiOutput.ApiStatus ApiStatus
+F GetRestApiOutput.EndpointAccessMode EndpointAccessMode
+F GetRestApiOutput.SecurityPolicy SecurityPolicy
+F GetStageOutput.CacheClusterSize CacheClusterSize
+F GetStageOutput.CacheClusterStatus CacheClusterStatus
+F GetVpcLinkOutput.Status VpcLinkStatus
+F ImportApiKeysInput.Format ApiKeysFormat
+F ImportDocumentationPartsInput.Mode PutMode
+F ImportRestApiOutput.ApiKeySource ApiKeySourceType
+F ImportRestApiOutput.ApiStatus ApiStatus
+F ImportRestApiOutput.EndpointAccessMode EndpointAccessMode
+F ImportRestApiOutput.SecurityPolicy SecurityPolicy
+F Integration.ConnectionType ConnectionType
+F Integration.ContentHandling ContentHandlingStrategy
+F Integration.ResponseTransferMode ResponseTransferMode
+F Integration.Type IntegrationType
+F IntegrationResponse.ContentHandling ContentHandlingStrategy
+F MethodSetting.UnauthorizedCacheControlHeaderStrategy UnauthorizedCacheControlHeaderStrategy
+F PatchOperation.Op Op
+F PutGatewayResponseInput.ResponseType GatewayResponseType
+F PutGatewayResponseOutput.ResponseType GatewayResponseType
+F PutIntegrationInput.ConnectionType ConnectionType
+F PutIntegrationInput.ContentHandling ContentHandlingStrategy
+F PutIntegrationInput.ResponseTransferMode ResponseTransferMode
+F PutIntegrationInput.Type IntegrationType
+F PutIntegrationOutput.ConnectionType ConnectionType
+F PutIntegrationOutput.ContentHandling ContentHandlingStrategy
+F PutIntegrationOutput.ResponseTransferMode ResponseTransferMode
+F PutIntegrationOutput.Type IntegrationType
+F PutIntegrationResponseInput.ContentHandling ContentHandlingStrategy
+F PutIntegrationResponseOutput.ContentHandling ContentHandlingStrategy
+F PutRestApiInput.Mode PutMode
+F PutRestApiOutput.ApiKeySource ApiKeySourceType
+F PutRestApiOutput.ApiStatus ApiStatus
+F PutRestApiOutput.EndpointAccessMode EndpointAccessMode
+F PutRestApiOutput.SecurityPolicy SecurityPolicy
+F QuotaSettings.Period QuotaPeriodType
+F RestApi.ApiKeySource ApiKeySourceType
+F RestApi.ApiStatus ApiStatus
+F RestApi.EndpointAccessMode EndpointAccessMode
+F RestApi.SecurityPolicy SecurityPolicy
+F Stage.CacheClusterSize CacheClusterSize
+F Stage.CacheClusterStatus CacheClusterStatus
+F UpdateAuthorizerOutput.Type AuthorizerType
+F UpdateDomainNameOutput.DomainNameStatus DomainNameStatus
+F UpdateDomainNameOutput.EndpointAccessMode EndpointAccessMode
+F UpdateDomainNameOutput.RoutingMode RoutingMode
+F UpdateDomainNameOutput.SecurityPolicy SecurityPolicy
+F UpdateGatewayResponseInput.ResponseType GatewayResponseType
+F UpdateGatewayResponseOutput.ResponseType GatewayResponseType
+F UpdateIntegrationOutput.ConnectionType ConnectionType
+F UpdateIntegrationOutput.ContentHandling ContentHandlingStrategy
+F UpdateIntegrationOutput.ResponseTransferMode ResponseTransferMode
+F UpdateIntegrationOutput.Type IntegrationType
+F UpdateIntegrationResponseOutput.ContentHandling ContentHandlingStrategy
+F UpdateRestApiOutput.ApiKeySource ApiKeySourceType
+F UpdateRestApiOutput.ApiStatus ApiStatus
+F UpdateRestApiOutput.EndpointAccessMode EndpointAccessMode
+F UpdateRestApiOutput.SecurityPolicy SecurityPolicy
+F UpdateStageOutput.CacheClusterSize CacheClusterSize
+F UpdateStageOutput.CacheClusterStatus CacheClusterStatus
+F UpdateVpcLinkOutput.Status VpcLinkStatus
+F VpcLink.Status VpcLinkStatus
+N APIOptions
+N Accepts
+N AccessAssociationSource
+N AccessLogSettings
+N AdditionalContext
+N ApiId
+N ApiKey
+N ApiKeyRequired
+N ApiKeyVersion
+N ApiStages
+N ApiStatusMessage
+N ApiSummary
+N AppID
+N AuthSchemePreference
+N AuthSchemeResolver
+N AuthSchemes
+N AuthType
+N Authorization
+N AuthorizationScopes
+N AuthorizationType
+N AuthorizerCredentials
+N AuthorizerId
+N AuthorizerResultTtlInSeconds
+N AuthorizerUri
+N BaseEndpoint
+N BasePath
+N BinaryMediaTypes
+N Body
+N BurstLimit
+N CacheClusterEnabled
+N CacheDataEncrypted
+N CacheKeyParameters
+N CacheNamespace
+N CacheTtlInSeconds
+N CachingEnabled
+N CanarySettings
+N CertificateArn
+N CertificateBody
+N CertificateChain
+N CertificateName
+N CertificatePrivateKey
+N CertificateUploadDate
+N Claims
+N ClientCertificateId
+N ClientLogMode
+N ClientStatus
+N CloneFrom
+N CloudwatchRoleArn
+N ConfigurationProperties
+N ConnectionId
+N ContentDisposition
+N ContentType
+N CreatedDate
+N Credentials
+N CustomerId
+N DataTraceEnabled
+N DefaultResponse
+N DefaultValue
+N DefaultsMode
+N DeploymentId
+N Description
+N DestinationArn
+N DisableClockSkewCorrection
+N DisableExecuteApiEndpoint
+N DisableHTTPS
+N DistributionDomainName
+N DistributionHostedZoneId
+N DocumentationPartId
+N DocumentationVersion
+N DomainName
+N DomainNameAccessAssociationArn
+N DomainNameArn
+N DomainNameId
+N DomainNameStatusMessage
+N Embed
+N Enabled
+N EndDate
+N Endpoint
+N EndpointConfiguration
+N EndpointOptions
+N EndpointResolver
+N EndpointResolverV2
+N ErrorCodeOverride
+N ExpirationDate
+N ExportType
+N FailOnWarnings
+N Features
+N Flatten
+N Format
+N FriendlyName
+N From
+N GenerateDistinctId
+N HTTPClient
+N HTTPSignerV4
+N Headers
+N HttpMethod
+N Id
+N IdentitySource
+N IdentityValidationExpression
+N Ids
+N IncludeValue
+N IncludeValues
+N InsecureSkipVerification
+N IntegrationHttpMethod
+N IntegrationResponses
+N IntegrationTarget
+N Interceptors
+N Item
+N Items
+N KeyId
+N KeyType
+N LastUpdatedDate
+N Latency
+N Limit
+N Location
+N Log
+N LogDeprecated
+N Logger
+N LoggingLevel
+N ManagementPolicy
+N Message
+N MeterProvider
+N Method
+N MethodIntegration
+N MethodResponses
+N MethodSettings
+N MetricsEnabled
+N MinimumCompressionSize
+N ModelName
+N MultiValueHeaders
+N MutualTlsAuthentication
+N Name
+N NameQuery
+N Offset
+N Operation
+N OperationName
+N Options
+N OwnershipVerificationCertificateArn
+N Parameters
+N ParentId
+N PassthroughBehavior
+N PatchOperations
+N Path
+N PathPart
+N PathWithQueryString
+N PemEncodedCertificate
+N PercentTraffic
+N Policy
+N Position
+N PrincipalId
+N ProductCode
+N Properties
+N Protocol
+N ProviderARNs
+N Quota
+N RateLimit
+N Region
+N RegionalCertificateArn
+N RegionalCertificateName
+N RegionalDomainName
+N RegionalHostedZoneId
+N RequestModels
+N RequestParameters
+N RequestTemplates
+N RequestValidatorId
+N RequireAuthorizationForCacheControl
+N Required
+N ResolvedRegion
+N Resolver
+N ResourceArn
+N ResourceId
+N ResourceMethods
+N ResponseModels
+N ResponseParameters
+N ResponseTemplates
+N RestApiId
+N ResultMetadata
+N RetryAfterSeconds
+N RetryMaxAttempts
+N RetryMode
+N Retryer
+N RootResourceId
+N RuntimeEnvironment
+N Schema
+N SdkType
+N SelectionPattern
+N Stage
+N StageDescription
+N StageKeys
+N StageName
+N StageVariableOverrides
+N StageVariables
+N StartDate
+N Status
+N StatusCode
+N StatusMessage
+N StopOnDuplicateToken
+N TagKeys
+N Tags
+N TargetArns
+N Throttle
+N ThrottleSettings
+N ThrottlingBurstLimit
+N ThrottlingRateLimit
+N TimeoutInMillis
+N TlsConfig
+N TracerProvider
+N TracingEnabled
+N TruststoreUri
+N TruststoreVersion
+N TruststoreWarnings
+N Type
+N Uri
+N UsagePlanId
+N UseDualStack
+N UseDualStackEndpoint
+N UseFIPS
+N UseFIPSEndpoint
+N UseStageCache
+N ValidateRequestBody
+N ValidateRequestParameters
+N Value
+N Variables
+N Version
+N VpcEndpointIds
+N VpcLinkId
+N Warnings
+N WebAclArn
+T AccessAssociationSourceType
+T AccessLogSettings
+T ApiKey
+T ApiKeySourceType
+T ApiKeysFormat
+T ApiStage
+T ApiStatus
+T Authorizer
+T AuthorizerType
+T BadRequestException
+T BasePathMapping
+T CacheClusterSize
+T CacheClusterStatus
+T CanarySettings
+T ClientCertificate
+T ConflictException
+T ConnectionType
+T ContentHandlingStrategy
+T Deployment
+T DeploymentCanarySettings
+T DocumentationPart
+T DocumentationPartLocation
+T DocumentationPartType
+T DocumentationVersion
+T DomainName
+T DomainNameAccessAssociation
+T DomainNameStatus
+T EndpointAccessMode
+T EndpointConfiguration
+T EndpointType
+T GatewayResponse
+T GatewayResponseType
+T Integration
+T IntegrationResponse
+T IntegrationType
+T IpAddressType
+T LimitExceededException
+T LocationStatusType
+T Method
+T MethodResponse
+T MethodSetting
+T MethodSnapshot
+T Model
+T MutualTlsAuthentication
+T MutualTlsAuthenticationInput
+T NotFoundException
+T Op
+T PatchOperation
+T PutMode
+T QuotaPeriodType
+T QuotaSettings
+T RequestValidator
+T Resource
+T ResourceOwner
+T ResponseTransferMode
+T RestApi
+T RoutingMode
+T SdkConfigurationProperty
+T SdkType
+T SecurityPolicy
+T ServiceUnavailableException
+T Stage
+T StageKey
+T ThrottleSettings
+T TlsConfig
+T TooManyRequestsException
+T UnauthorizedCacheControlHeaderStrategy
+T UnauthorizedException
+T UsagePlan
+T UsagePlanKey
+T VpcLink
+T VpcLinkStatus
+E AccessAssociationSourceTypeVpce AccessAssociationSourceType
+E ApiKeySourceTypeAuthorizer ApiKeySourceType
+E ApiKeySourceTypeHeader ApiKeySourceType
+E ApiKeysFormatCsv ApiKeysFormat
+E ApiStatusAvailable ApiStatus
+E ApiStatusFailed ApiStatus
+E ApiStatusPending ApiStatus
+E ApiStatusUpdating ApiStatus
+E AuthorizerTypeCognitoUserPools AuthorizerType
+E AuthorizerTypeRequest AuthorizerType
+E AuthorizerTypeToken AuthorizerType
+E CacheClusterSizeSize0Point5Gb CacheClusterSize
+E CacheClusterSizeSize118Gb CacheClusterSize
+E CacheClusterSizeSize13Point5Gb CacheClusterSize
+E CacheClusterSizeSize1Point6Gb CacheClusterSize
+E CacheClusterSizeSize237Gb CacheClusterSize
+E CacheClusterSizeSize28Point4Gb CacheClusterSize
+E CacheClusterSizeSize58Point2Gb CacheClusterSize
+E CacheClusterSizeSize6Point1Gb CacheClusterSize
+E CacheClusterStatusAvailable CacheClusterStatus
+E CacheClusterStatusCreateInProgress CacheClusterStatus
+E CacheClusterStatusDeleteInProgress CacheClusterStatus
+E CacheClusterStatusFlushInProgress CacheClusterStatus
+E CacheClusterStatusNotAvailable CacheClusterStatus
+E ConnectionTypeInternet ConnectionType
+E ConnectionTypeVpcLink ConnectionType
+E ContentHandlingStrategyConvertToBinary ContentHandlingStrategy
+E ContentHandlingStrategyConvertToText ContentHandlingStrategy
+E DocumentationPartTypeApi DocumentationPartType
+E DocumentationPartTypeAuthorizer DocumentationPartType
+E DocumentationPartTypeMethod DocumentationPartType
+E DocumentationPartTypeModel DocumentationPartType
+E DocumentationPartTypePathParameter DocumentationPartType
+E DocumentationPartTypeQueryParameter DocumentationPartType
+E DocumentationPartTypeRequestBody DocumentationPartType
+E DocumentationPartTypeRequestHeader DocumentationPartType
+E DocumentationPartTypeResource DocumentationPartType
+E DocumentationPartTypeResponse DocumentationPartType
+E DocumentationPartTypeResponseBody DocumentationPartType
+E DocumentationPartTypeResponseHeader DocumentationPartType
+E DomainNameStatusAvailable DomainNameStatus
+E DomainNameStatusFailed DomainNameStatus
+E DomainNameStatusPending DomainNameStatus
+E DomainNameStatusPendingCertificateReimport DomainNameStatus
+E DomainNameStatusPendingOwnershipVerification DomainNameStatus
+E DomainNameStatusUpdating DomainNameStatus
+E EndpointAccessModeBasic EndpointAccessMode
+E EndpointAccessModeStrict EndpointAccessMode
+E EndpointTypeEdge EndpointType
+E EndpointTypePrivate EndpointType
+E EndpointTypeRegional EndpointType
+E GatewayResponseTypeAccessDenied GatewayResponseType
+E GatewayResponseTypeApiConfigurationError GatewayResponseType
+E GatewayResponseTypeAuthorizerConfigurationError GatewayResponseType
+E GatewayResponseTypeAuthorizerFailure GatewayResponseType
+E GatewayResponseTypeBadRequestBody GatewayResponseType
+E GatewayResponseTypeBadRequestParameters GatewayResponseType
+E GatewayResponseTypeDefault4xx GatewayResponseType
+E GatewayResponseTypeDefault5xx GatewayResponseType
+E GatewayResponseTypeExpiredToken GatewayResponseType
+E GatewayResponseTypeIntegrationFailure GatewayResponseType
+E GatewayResponseTypeIntegrationTimeout GatewayResponseType
+E GatewayResponseTypeInvalidApiKey GatewayResponseType
+E GatewayResponseTypeInvalidSignature GatewayResponseType
+E GatewayResponseTypeMissingAuthenticationToken GatewayResponseType
+E GatewayResponseTypeQuotaExceeded GatewayResponseType
+E GatewayResponseTypeRequestTooLarge GatewayResponseType
+E GatewayResponseTypeResourceNotFound GatewayResponseType
+E GatewayResponseTypeThrottled GatewayResponseType
+E GatewayResponseTypeUnauthorized GatewayResponseType
+E GatewayResponseTypeUnsupportedMediaType GatewayResponseType
+E GatewayResponseTypeWafFiltered GatewayResponseType
+E IntegrationTypeAws IntegrationType
+E IntegrationTypeAwsProxy IntegrationType
+E IntegrationTypeHttp IntegrationType
+E IntegrationTypeHttpProxy IntegrationType
+E IntegrationTypeMock IntegrationType
+E IpAddressTypeDualstack IpAddressType
+E IpAddressTypeIpv4 IpAddressType
+E LocationStatusTypeDocumented LocationStatusType
+E LocationStatusTypeUndocumented LocationStatusType
+E OpAdd Op
+E OpCopy Op
+E OpMove Op
+E OpRemove Op
+E OpReplace Op
+E OpTest Op
+E PutModeMerge PutMode
+E PutModeOverwrite PutMode
+E QuotaPeriodTypeDay QuotaPeriodType
+E QuotaPeriodTypeMonth QuotaPeriodType
+E QuotaPeriodTypeWeek QuotaPeriodType
+E ResourceOwnerOtherAccounts ResourceOwner
+E ResourceOwnerSelf ResourceOwner
+E ResponseTransferModeBuffered ResponseTransferMode
+E ResponseTransferModeStream ResponseTransferMode
+E RoutingModeBasePathMappingOnly RoutingMode
+E RoutingModeRoutingRuleOnly RoutingMode
+E RoutingModeRoutingRuleThenBasePathMapping RoutingMode
+E SecurityPolicySecurityPolicyTls122018Edge SecurityPolicy
+E SecurityPolicySecurityPolicyTls12Pfs2025Edge SecurityPolicy
+E SecurityPolicySecurityPolicyTls1312202106 SecurityPolicy
+E SecurityPolicySecurityPolicyTls1312FipsPfsPq202509 SecurityPolicy
+E SecurityPolicySecurityPolicyTls1312FipsPq202509 SecurityPolicy
+E SecurityPolicySecurityPolicyTls1312PfsPq202509 SecurityPolicy
+E SecurityPolicySecurityPolicyTls1312Pq202509 SecurityPolicy
+E SecurityPolicySecurityPolicyTls1313202509 SecurityPolicy
+E SecurityPolicySecurityPolicyTls1313Fips202509 SecurityPolicy
+E SecurityPolicySecurityPolicyTls132025Edge SecurityPolicy
+E SecurityPolicyTls10 SecurityPolicy
+E SecurityPolicyTls12 SecurityPolicy
+E UnauthorizedCacheControlHeaderStrategyFailWith403 UnauthorizedCacheControlHeaderStrategy
+E UnauthorizedCacheControlHeaderStrategySucceedWithResponseHeader UnauthorizedCacheControlHeaderStrategy
+E UnauthorizedCacheControlHeaderStrategySucceedWithoutResponseHeader UnauthorizedCacheControlHeaderStrategy
+E VpcLinkStatusAvailable VpcLinkStatus
+E VpcLinkStatusDeleting VpcLinkStatus
+E VpcLinkStatusFailed VpcLinkStatus
+E VpcLinkStatusPending VpcLinkStatus

@@ -1,0 +1,1590 @@
+C Route53
+S ActivateKeySigningKeyInput
+S ActivateKeySigningKeyOutput
+S AssociateVPCWithHostedZoneInput
+S AssociateVPCWithHostedZoneOutput
+S AuthResolverParameters
+S AuthSchemeResolver
+S ChangeCidrCollectionInput
+S ChangeCidrCollectionOutput
+S ChangeResourceRecordSetsInput
+S ChangeResourceRecordSetsOutput
+S ChangeTagsForResourceInput
+S ChangeTagsForResourceOutput
+S Client
+S CreateCidrCollectionInput
+S CreateCidrCollectionOutput
+S CreateHealthCheckInput
+S CreateHealthCheckOutput
+S CreateHostedZoneInput
+S CreateHostedZoneOutput
+S CreateKeySigningKeyInput
+S CreateKeySigningKeyOutput
+S CreateQueryLoggingConfigInput
+S CreateQueryLoggingConfigOutput
+S CreateReusableDelegationSetInput
+S CreateReusableDelegationSetOutput
+S CreateTrafficPolicyInput
+S CreateTrafficPolicyInstanceInput
+S CreateTrafficPolicyInstanceOutput
+S CreateTrafficPolicyOutput
+S CreateTrafficPolicyVersionInput
+S CreateTrafficPolicyVersionOutput
+S CreateVPCAssociationAuthorizationInput
+S CreateVPCAssociationAuthorizationOutput
+S DeactivateKeySigningKeyInput
+S DeactivateKeySigningKeyOutput
+S DeleteCidrCollectionInput
+S DeleteCidrCollectionOutput
+S DeleteHealthCheckInput
+S DeleteHealthCheckOutput
+S DeleteHostedZoneInput
+S DeleteHostedZoneOutput
+S DeleteKeySigningKeyInput
+S DeleteKeySigningKeyOutput
+S DeleteQueryLoggingConfigInput
+S DeleteQueryLoggingConfigOutput
+S DeleteReusableDelegationSetInput
+S DeleteReusableDelegationSetOutput
+S DeleteTrafficPolicyInput
+S DeleteTrafficPolicyInstanceInput
+S DeleteTrafficPolicyInstanceOutput
+S DeleteTrafficPolicyOutput
+S DeleteVPCAssociationAuthorizationInput
+S DeleteVPCAssociationAuthorizationOutput
+S DisableHostedZoneDNSSECInput
+S DisableHostedZoneDNSSECOutput
+S DisassociateVPCFromHostedZoneInput
+S DisassociateVPCFromHostedZoneOutput
+S EnableHostedZoneDNSSECInput
+S EnableHostedZoneDNSSECOutput
+S EndpointParameters
+S EndpointResolver
+S EndpointResolverFromURL
+S EndpointResolverFunc
+S EndpointResolverOptions
+S EndpointResolverV2
+S GetAccountLimitInput
+S GetAccountLimitOutput
+S GetChangeAPIClient
+S GetChangeInput
+S GetChangeOutput
+S GetCheckerIpRangesInput
+S GetCheckerIpRangesOutput
+S GetDNSSECInput
+S GetDNSSECOutput
+S GetGeoLocationInput
+S GetGeoLocationOutput
+S GetHealthCheckCountInput
+S GetHealthCheckCountOutput
+S GetHealthCheckInput
+S GetHealthCheckLastFailureReasonInput
+S GetHealthCheckLastFailureReasonOutput
+S GetHealthCheckOutput
+S GetHealthCheckStatusInput
+S GetHealthCheckStatusOutput
+S GetHostedZoneCountInput
+S GetHostedZoneCountOutput
+S GetHostedZoneInput
+S GetHostedZoneLimitInput
+S GetHostedZoneLimitOutput
+S GetHostedZoneOutput
+S GetQueryLoggingConfigInput
+S GetQueryLoggingConfigOutput
+S GetReusableDelegationSetInput
+S GetReusableDelegationSetLimitInput
+S GetReusableDelegationSetLimitOutput
+S GetReusableDelegationSetOutput
+S GetTrafficPolicyInput
+S GetTrafficPolicyInstanceCountInput
+S GetTrafficPolicyInstanceCountOutput
+S GetTrafficPolicyInstanceInput
+S GetTrafficPolicyInstanceOutput
+S GetTrafficPolicyOutput
+S HTTPClient
+S HTTPSignerV4
+S ListCidrBlocksAPIClient
+S ListCidrBlocksInput
+S ListCidrBlocksOutput
+S ListCidrBlocksPaginator
+S ListCidrBlocksPaginatorOptions
+S ListCidrCollectionsAPIClient
+S ListCidrCollectionsInput
+S ListCidrCollectionsOutput
+S ListCidrCollectionsPaginator
+S ListCidrCollectionsPaginatorOptions
+S ListCidrLocationsAPIClient
+S ListCidrLocationsInput
+S ListCidrLocationsOutput
+S ListCidrLocationsPaginator
+S ListCidrLocationsPaginatorOptions
+S ListGeoLocationsInput
+S ListGeoLocationsOutput
+S ListHealthChecksAPIClient
+S ListHealthChecksInput
+S ListHealthChecksOutput
+S ListHealthChecksPaginator
+S ListHealthChecksPaginatorOptions
+S ListHostedZonesAPIClient
+S ListHostedZonesByNameInput
+S ListHostedZonesByNameOutput
+S ListHostedZonesByVPCInput
+S ListHostedZonesByVPCOutput
+S ListHostedZonesInput
+S ListHostedZonesOutput
+S ListHostedZonesPaginator
+S ListHostedZonesPaginatorOptions
+S ListQueryLoggingConfigsAPIClient
+S ListQueryLoggingConfigsInput
+S ListQueryLoggingConfigsOutput
+S ListQueryLoggingConfigsPaginator
+S ListQueryLoggingConfigsPaginatorOptions
+S ListResourceRecordSetsAPIClient
+S ListResourceRecordSetsInput
+S ListResourceRecordSetsOutput
+S ListResourceRecordSetsPaginator
+S ListResourceRecordSetsPaginatorOptions
+S ListReusableDelegationSetsInput
+S ListReusableDelegationSetsOutput
+S ListTagsForResourceInput
+S ListTagsForResourceOutput
+S ListTagsForResourcesInput
+S ListTagsForResourcesOutput
+S ListTrafficPoliciesInput
+S ListTrafficPoliciesOutput
+S ListTrafficPolicyInstancesByHostedZoneInput
+S ListTrafficPolicyInstancesByHostedZoneOutput
+S ListTrafficPolicyInstancesByPolicyInput
+S ListTrafficPolicyInstancesByPolicyOutput
+S ListTrafficPolicyInstancesInput
+S ListTrafficPolicyInstancesOutput
+S ListTrafficPolicyVersionsInput
+S ListTrafficPolicyVersionsOutput
+S ListVPCAssociationAuthorizationsInput
+S ListVPCAssociationAuthorizationsOutput
+S New
+S NewDefaultEndpointResolver
+S NewDefaultEndpointResolverV2
+S NewFromConfig
+S NewListCidrBlocksPaginator
+S NewListCidrCollectionsPaginator
+S NewListCidrLocationsPaginator
+S NewListHealthChecksPaginator
+S NewListHostedZonesPaginator
+S NewListQueryLoggingConfigsPaginator
+S NewListResourceRecordSetsPaginator
+S NewResourceRecordSetsChangedWaiter
+S Options
+S ResolveEndpoint
+S ResourceRecordSetsChangedWaiter
+S ResourceRecordSetsChangedWaiterOptions
+S ServiceAPIVersion
+S ServiceID
+S TestDNSAnswerInput
+S TestDNSAnswerOutput
+S UpdateHealthCheckInput
+S UpdateHealthCheckOutput
+S UpdateHostedZoneCommentInput
+S UpdateHostedZoneCommentOutput
+S UpdateHostedZoneFeaturesInput
+S UpdateHostedZoneFeaturesOutput
+S UpdateTrafficPolicyCommentInput
+S UpdateTrafficPolicyCommentOutput
+S UpdateTrafficPolicyInstanceInput
+S UpdateTrafficPolicyInstanceOutput
+S WithAPIOptions
+S WithEndpointResolver
+S WithEndpointResolverV2
+S WithSigV4SigningName
+S WithSigV4SigningRegion
+O ActivateKeySigningKey
+O AssociateVPCWithHostedZone
+O ChangeCidrCollection
+O ChangeResourceRecordSets
+O ChangeTagsForResource
+O CreateCidrCollection
+O CreateHealthCheck
+O CreateHostedZone
+O CreateKeySigningKey
+O CreateQueryLoggingConfig
+O CreateReusableDelegationSet
+O CreateTrafficPolicy
+O CreateTrafficPolicyInstance
+O CreateTrafficPolicyVersion
+O CreateVPCAssociationAuthorization
+O DeactivateKeySigningKey
+O DeleteCidrCollection
+O DeleteHealthCheck
+O DeleteHostedZone
+O DeleteKeySigningKey
+O DeleteQueryLoggingConfig
+O DeleteReusableDelegationSet
+O DeleteTrafficPolicy
+O DeleteTrafficPolicyInstance
+O DeleteVPCAssociationAuthorization
+O DisableHostedZoneDNSSEC
+O DisassociateVPCFromHostedZone
+O EnableHostedZoneDNSSEC
+O GetAccountLimit
+O GetChange
+O GetCheckerIpRanges
+O GetDNSSEC
+O GetGeoLocation
+O GetHealthCheck
+O GetHealthCheckCount
+O GetHealthCheckLastFailureReason
+O GetHealthCheckStatus
+O GetHostedZone
+O GetHostedZoneCount
+O GetHostedZoneLimit
+O GetQueryLoggingConfig
+O GetReusableDelegationSet
+O GetReusableDelegationSetLimit
+O GetTrafficPolicy
+O GetTrafficPolicyInstance
+O GetTrafficPolicyInstanceCount
+O ListCidrBlocks
+O ListCidrCollections
+O ListCidrLocations
+O ListGeoLocations
+O ListHealthChecks
+O ListHostedZones
+O ListHostedZonesByName
+O ListHostedZonesByVPC
+O ListQueryLoggingConfigs
+O ListResourceRecordSets
+O ListReusableDelegationSets
+O ListTagsForResource
+O ListTagsForResources
+O ListTrafficPolicies
+O ListTrafficPolicyInstances
+O ListTrafficPolicyInstancesByHostedZone
+O ListTrafficPolicyInstancesByPolicy
+O ListTrafficPolicyVersions
+O ListVPCAssociationAuthorizations
+O TestDNSAnswer
+O UpdateHealthCheck
+O UpdateHostedZoneComment
+O UpdateHostedZoneFeatures
+O UpdateTrafficPolicyComment
+O UpdateTrafficPolicyInstance
+X ErrCodeCidrBlockInUseException CidrBlockInUseException
+X ErrCodeCidrCollectionAlreadyExistsException CidrCollectionAlreadyExistsException
+X ErrCodeCidrCollectionInUseException CidrCollectionInUseException
+X ErrCodeCidrCollectionVersionMismatchException CidrCollectionVersionMismatchException
+X ErrCodeConcurrentModification ConcurrentModification
+X ErrCodeConflictingDomainExists ConflictingDomainExists
+X ErrCodeConflictingTypes ConflictingTypes
+X ErrCodeDNSSECNotFound DNSSECNotFound
+X ErrCodeDelegationSetAlreadyCreated DelegationSetAlreadyCreated
+X ErrCodeDelegationSetAlreadyReusable DelegationSetAlreadyReusable
+X ErrCodeDelegationSetInUse DelegationSetInUse
+X ErrCodeDelegationSetNotAvailable DelegationSetNotAvailable
+X ErrCodeDelegationSetNotReusable DelegationSetNotReusable
+X ErrCodeHealthCheckAlreadyExists HealthCheckAlreadyExists
+X ErrCodeHealthCheckInUse HealthCheckInUse
+X ErrCodeHealthCheckVersionMismatch HealthCheckVersionMismatch
+X ErrCodeHostedZoneAlreadyExists HostedZoneAlreadyExists
+X ErrCodeHostedZoneNotEmpty HostedZoneNotEmpty
+X ErrCodeHostedZoneNotFound HostedZoneNotFound
+X ErrCodeHostedZoneNotPrivate HostedZoneNotPrivate
+X ErrCodeHostedZonePartiallyDelegated HostedZonePartiallyDelegated
+X ErrCodeIncompatibleVersion IncompatibleVersion
+X ErrCodeInsufficientCloudWatchLogsResourcePolicy InsufficientCloudWatchLogsResourcePolicy
+X ErrCodeInvalidArgument InvalidArgument
+X ErrCodeInvalidChangeBatch InvalidChangeBatch
+X ErrCodeInvalidDomainName InvalidDomainName
+X ErrCodeInvalidInput InvalidInput
+X ErrCodeInvalidKMSArn InvalidKMSArn
+X ErrCodeInvalidKeySigningKeyName InvalidKeySigningKeyName
+X ErrCodeInvalidKeySigningKeyStatus InvalidKeySigningKeyStatus
+X ErrCodeInvalidPaginationToken InvalidPaginationToken
+X ErrCodeInvalidSigningStatus InvalidSigningStatus
+X ErrCodeInvalidTrafficPolicyDocument InvalidTrafficPolicyDocument
+X ErrCodeInvalidVPCId InvalidVPCId
+X ErrCodeKeySigningKeyAlreadyExists KeySigningKeyAlreadyExists
+X ErrCodeKeySigningKeyInParentDSRecord KeySigningKeyInParentDSRecord
+X ErrCodeKeySigningKeyInUse KeySigningKeyInUse
+X ErrCodeKeySigningKeyWithActiveStatusNotFound KeySigningKeyWithActiveStatusNotFound
+X ErrCodeLastVPCAssociation LastVPCAssociation
+X ErrCodeLimitsExceeded LimitsExceeded
+X ErrCodeNoSuchChange NoSuchChange
+X ErrCodeNoSuchCidrCollectionException NoSuchCidrCollectionException
+X ErrCodeNoSuchCidrLocationException NoSuchCidrLocationException
+X ErrCodeNoSuchCloudWatchLogsLogGroup NoSuchCloudWatchLogsLogGroup
+X ErrCodeNoSuchDelegationSet NoSuchDelegationSet
+X ErrCodeNoSuchGeoLocation NoSuchGeoLocation
+X ErrCodeNoSuchHealthCheck NoSuchHealthCheck
+X ErrCodeNoSuchHostedZone NoSuchHostedZone
+X ErrCodeNoSuchKeySigningKey NoSuchKeySigningKey
+X ErrCodeNoSuchQueryLoggingConfig NoSuchQueryLoggingConfig
+X ErrCodeNoSuchTrafficPolicy NoSuchTrafficPolicy
+X ErrCodeNoSuchTrafficPolicyInstance NoSuchTrafficPolicyInstance
+X ErrCodeNotAuthorizedException NotAuthorizedException
+X ErrCodePriorRequestNotComplete PriorRequestNotComplete
+X ErrCodePublicZoneVPCAssociation PublicZoneVPCAssociation
+X ErrCodeQueryLoggingConfigAlreadyExists QueryLoggingConfigAlreadyExists
+X ErrCodeThrottlingException ThrottlingException
+X ErrCodeTooManyHealthChecks TooManyHealthChecks
+X ErrCodeTooManyHostedZones TooManyHostedZones
+X ErrCodeTooManyKeySigningKeys TooManyKeySigningKeys
+X ErrCodeTooManyTrafficPolicies TooManyTrafficPolicies
+X ErrCodeTooManyTrafficPolicyInstances TooManyTrafficPolicyInstances
+X ErrCodeTooManyTrafficPolicyVersionsForCurrentPolicy TooManyTrafficPolicyVersionsForCurrentPolicy
+X ErrCodeTooManyVPCAssociationAuthorizations TooManyVPCAssociationAuthorizations
+X ErrCodeTrafficPolicyAlreadyExists TrafficPolicyAlreadyExists
+X ErrCodeTrafficPolicyInUse TrafficPolicyInUse
+X ErrCodeTrafficPolicyInstanceAlreadyExists TrafficPolicyInstanceAlreadyExists
+X ErrCodeVPCAssociationAuthorizationNotFound VPCAssociationAuthorizationNotFound
+X ErrCodeVPCAssociationNotFound VPCAssociationNotFound
+I CloudWatchAlarmConfiguration.EvaluationPeriods int64 int32
+I CloudWatchAlarmConfiguration.Period int64 int32
+I CreateTrafficPolicyInstanceInput.TrafficPolicyVersion int64 int32
+I DeleteTrafficPolicyInput.Version int64 int32
+I GeoProximityLocation.Bias int64 int32
+I GetTrafficPolicyInput.Version int64 int32
+I GetTrafficPolicyInstanceCountOutput.TrafficPolicyInstanceCount int64 int32
+I HealthCheckConfig.FailureThreshold int64 int32
+I HealthCheckConfig.HealthThreshold int64 int32
+I HealthCheckConfig.Port int64 int32
+I HealthCheckConfig.RequestInterval int64 int32
+I ListCidrBlocksInput.MaxResults string int32
+I ListCidrCollectionsInput.MaxResults string int32
+I ListCidrLocationsInput.MaxResults string int32
+I ListGeoLocationsInput.MaxItems string int32
+I ListGeoLocationsOutput.MaxItems string int32
+I ListHealthChecksInput.MaxItems string int32
+I ListHealthChecksOutput.MaxItems string int32
+I ListHostedZonesByNameInput.MaxItems string int32
+I ListHostedZonesByNameOutput.MaxItems string int32
+I ListHostedZonesByVPCInput.MaxItems string int32
+I ListHostedZonesByVPCOutput.MaxItems string int32
+I ListHostedZonesInput.MaxItems string int32
+I ListHostedZonesOutput.MaxItems string int32
+I ListQueryLoggingConfigsInput.MaxResults string int32
+I ListResourceRecordSetsInput.MaxItems string int32
+I ListResourceRecordSetsOutput.MaxItems string int32
+I ListReusableDelegationSetsInput.MaxItems string int32
+I ListReusableDelegationSetsOutput.MaxItems string int32
+I ListTrafficPoliciesInput.MaxItems string int32
+I ListTrafficPoliciesOutput.MaxItems string int32
+I ListTrafficPolicyInstancesByHostedZoneInput.MaxItems string int32
+I ListTrafficPolicyInstancesByHostedZoneOutput.MaxItems string int32
+I ListTrafficPolicyInstancesByPolicyInput.MaxItems string int32
+I ListTrafficPolicyInstancesByPolicyInput.TrafficPolicyVersion int64 int32
+I ListTrafficPolicyInstancesByPolicyOutput.MaxItems string int32
+I ListTrafficPolicyInstancesInput.MaxItems string int32
+I ListTrafficPolicyInstancesOutput.MaxItems string int32
+I ListTrafficPolicyVersionsInput.MaxItems string int32
+I ListTrafficPolicyVersionsOutput.MaxItems string int32
+I ListVPCAssociationAuthorizationsInput.MaxResults string int32
+I TrafficPolicy.Version int64 int32
+I TrafficPolicyInstance.TrafficPolicyVersion int64 int32
+I TrafficPolicySummary.LatestVersion int64 int32
+I TrafficPolicySummary.TrafficPolicyCount int64 int32
+I UpdateHealthCheckInput.FailureThreshold int64 int32
+I UpdateHealthCheckInput.HealthThreshold int64 int32
+I UpdateHealthCheckInput.Port int64 int32
+I UpdateTrafficPolicyCommentInput.Version int64 int32
+I UpdateTrafficPolicyInstanceInput.TrafficPolicyVersion int64 int32
+R ActivateKeySigningKeyOutput.ChangeInfo ChangeInfo
+R AssociateVPCWithHostedZoneInput.VPC VPC
+R AssociateVPCWithHostedZoneOutput.ChangeInfo ChangeInfo
+R Change.ResourceRecordSet ResourceRecordSet
+R ChangeResourceRecordSetsInput.ChangeBatch ChangeBatch
+R ChangeResourceRecordSetsOutput.ChangeInfo ChangeInfo
+R CreateCidrCollectionOutput.Collection CidrCollection
+R CreateHealthCheckInput.HealthCheckConfig HealthCheckConfig
+R CreateHealthCheckOutput.HealthCheck HealthCheck
+R CreateHostedZoneInput.HostedZoneConfig HostedZoneConfig
+R CreateHostedZoneInput.VPC VPC
+R CreateHostedZoneOutput.ChangeInfo ChangeInfo
+R CreateHostedZoneOutput.DelegationSet DelegationSet
+R CreateHostedZoneOutput.HostedZone HostedZone
+R CreateHostedZoneOutput.VPC VPC
+R CreateKeySigningKeyOutput.ChangeInfo ChangeInfo
+R CreateKeySigningKeyOutput.KeySigningKey KeySigningKey
+R CreateQueryLoggingConfigOutput.QueryLoggingConfig QueryLoggingConfig
+R CreateReusableDelegationSetOutput.DelegationSet DelegationSet
+R CreateTrafficPolicyInstanceOutput.TrafficPolicyInstance TrafficPolicyInstance
+R CreateTrafficPolicyOutput.TrafficPolicy TrafficPolicy
+R CreateTrafficPolicyVersionOutput.TrafficPolicy TrafficPolicy
+R CreateVPCAssociationAuthorizationInput.VPC VPC
+R CreateVPCAssociationAuthorizationOutput.VPC VPC
+R DeactivateKeySigningKeyOutput.ChangeInfo ChangeInfo
+R DeleteHostedZoneOutput.ChangeInfo ChangeInfo
+R DeleteKeySigningKeyOutput.ChangeInfo ChangeInfo
+R DeleteVPCAssociationAuthorizationInput.VPC VPC
+R DisableHostedZoneDNSSECOutput.ChangeInfo ChangeInfo
+R DisassociateVPCFromHostedZoneInput.VPC VPC
+R DisassociateVPCFromHostedZoneOutput.ChangeInfo ChangeInfo
+R EnableHostedZoneDNSSECOutput.ChangeInfo ChangeInfo
+R GeoProximityLocation.Coordinates Coordinates
+R GetAccountLimitOutput.Limit AccountLimit
+R GetChangeOutput.ChangeInfo ChangeInfo
+R GetDNSSECOutput.Status DNSSECStatus
+R GetGeoLocationOutput.GeoLocationDetails GeoLocationDetails
+R GetHealthCheckOutput.HealthCheck HealthCheck
+R GetHostedZoneLimitOutput.Limit HostedZoneLimit
+R GetHostedZoneOutput.DelegationSet DelegationSet
+R GetHostedZoneOutput.HostedZone HostedZone
+R GetQueryLoggingConfigOutput.QueryLoggingConfig QueryLoggingConfig
+R GetReusableDelegationSetLimitOutput.Limit ReusableDelegationSetLimit
+R GetReusableDelegationSetOutput.DelegationSet DelegationSet
+R GetTrafficPolicyInstanceOutput.TrafficPolicyInstance TrafficPolicyInstance
+R GetTrafficPolicyOutput.TrafficPolicy TrafficPolicy
+R HealthCheck.CloudWatchAlarmConfiguration CloudWatchAlarmConfiguration
+R HealthCheck.HealthCheckConfig HealthCheckConfig
+R HealthCheck.LinkedService LinkedService
+R HealthCheckConfig.AlarmIdentifier AlarmIdentifier
+R HealthCheckObservation.StatusReport StatusReport
+R HostedZone.Config HostedZoneConfig
+R HostedZone.Features HostedZoneFeatures
+R HostedZone.LinkedService LinkedService
+R HostedZoneFeatures.FailureReasons HostedZoneFailureReasons
+R HostedZoneSummary.Owner HostedZoneOwner
+R ListTagsForResourceOutput.ResourceTagSet ResourceTagSet
+R ResourceRecordSet.AliasTarget AliasTarget
+R ResourceRecordSet.CidrRoutingConfig CidrRoutingConfig
+R ResourceRecordSet.GeoLocation GeoLocation
+R ResourceRecordSet.GeoProximityLocation GeoProximityLocation
+R UpdateHealthCheckInput.AlarmIdentifier AlarmIdentifier
+R UpdateHealthCheckOutput.HealthCheck HealthCheck
+R UpdateHostedZoneCommentOutput.HostedZone HostedZone
+R UpdateTrafficPolicyCommentOutput.TrafficPolicy TrafficPolicy
+R UpdateTrafficPolicyInstanceOutput.TrafficPolicyInstance TrafficPolicyInstance
+V AccountLimit.Value int64
+V ActivateKeySigningKeyInput.HostedZoneId string
+V ActivateKeySigningKeyInput.Name string
+V AlarmIdentifier.Name string
+V AliasTarget.DNSName string
+V AliasTarget.HostedZoneId string
+V AssociateVPCWithHostedZoneInput.Comment string
+V AssociateVPCWithHostedZoneInput.HostedZoneId string
+V ChangeBatch.Comment string
+V ChangeCidrCollectionInput.CollectionVersion int64
+V ChangeCidrCollectionInput.Id string
+V ChangeCidrCollectionOutput.Id string
+V ChangeInfo.Comment string
+V ChangeInfo.Id string
+V ChangeResourceRecordSetsInput.HostedZoneId string
+V ChangeTagsForResourceInput.ResourceId string
+V CidrBlockInUseException.ErrorCodeOverride string
+V CidrBlockInUseException.Message string
+V CidrBlockSummary.CidrBlock string
+V CidrBlockSummary.LocationName string
+V CidrCollection.Arn string
+V CidrCollection.Id string
+V CidrCollection.Name string
+V CidrCollection.Version int64
+V CidrCollectionAlreadyExistsException.ErrorCodeOverride string
+V CidrCollectionAlreadyExistsException.Message string
+V CidrCollectionChange.LocationName string
+V CidrCollectionInUseException.ErrorCodeOverride string
+V CidrCollectionInUseException.Message string
+V CidrCollectionVersionMismatchException.ErrorCodeOverride string
+V CidrCollectionVersionMismatchException.Message string
+V CidrRoutingConfig.CollectionId string
+V CidrRoutingConfig.LocationName string
+V CloudWatchAlarmConfiguration.EvaluationPeriods int32
+V CloudWatchAlarmConfiguration.MetricName string
+V CloudWatchAlarmConfiguration.Namespace string
+V CloudWatchAlarmConfiguration.Period int32
+V CloudWatchAlarmConfiguration.Threshold float64
+V CollectionSummary.Arn string
+V CollectionSummary.Id string
+V CollectionSummary.Name string
+V CollectionSummary.Version int64
+V ConcurrentModification.ErrorCodeOverride string
+V ConcurrentModification.Message string
+V ConflictingDomainExists.ErrorCodeOverride string
+V ConflictingDomainExists.Message string
+V ConflictingTypes.ErrorCodeOverride string
+V ConflictingTypes.Message string
+V Coordinates.Latitude string
+V Coordinates.Longitude string
+V CreateCidrCollectionInput.CallerReference string
+V CreateCidrCollectionInput.Name string
+V CreateCidrCollectionOutput.Location string
+V CreateHealthCheckInput.CallerReference string
+V CreateHealthCheckOutput.Location string
+V CreateHostedZoneInput.CallerReference string
+V CreateHostedZoneInput.DelegationSetId string
+V CreateHostedZoneInput.Name string
+V CreateHostedZoneOutput.Location string
+V CreateKeySigningKeyInput.CallerReference string
+V CreateKeySigningKeyInput.HostedZoneId string
+V CreateKeySigningKeyInput.KeyManagementServiceArn string
+V CreateKeySigningKeyInput.Name string
+V CreateKeySigningKeyInput.Status string
+V CreateKeySigningKeyOutput.Location string
+V CreateQueryLoggingConfigInput.CloudWatchLogsLogGroupArn string
+V CreateQueryLoggingConfigInput.HostedZoneId string
+V CreateQueryLoggingConfigOutput.Location string
+V CreateReusableDelegationSetInput.CallerReference string
+V CreateReusableDelegationSetInput.HostedZoneId string
+V CreateReusableDelegationSetOutput.Location string
+V CreateTrafficPolicyInput.Comment string
+V CreateTrafficPolicyInput.Document string
+V CreateTrafficPolicyInput.Name string
+V CreateTrafficPolicyInstanceInput.HostedZoneId string
+V CreateTrafficPolicyInstanceInput.Name string
+V CreateTrafficPolicyInstanceInput.TTL int64
+V CreateTrafficPolicyInstanceInput.TrafficPolicyId string
+V CreateTrafficPolicyInstanceInput.TrafficPolicyVersion int32
+V CreateTrafficPolicyInstanceOutput.Location string
+V CreateTrafficPolicyOutput.Location string
+V CreateTrafficPolicyVersionInput.Comment string
+V CreateTrafficPolicyVersionInput.Document string
+V CreateTrafficPolicyVersionInput.Id string
+V CreateTrafficPolicyVersionOutput.Location string
+V CreateVPCAssociationAuthorizationInput.HostedZoneId string
+V CreateVPCAssociationAuthorizationOutput.HostedZoneId string
+V DNSSECNotFound.ErrorCodeOverride string
+V DNSSECNotFound.Message string
+V DNSSECStatus.ServeSignature string
+V DNSSECStatus.StatusMessage string
+V DeactivateKeySigningKeyInput.HostedZoneId string
+V DeactivateKeySigningKeyInput.Name string
+V DelegationSet.CallerReference string
+V DelegationSet.Id string
+V DelegationSetAlreadyCreated.ErrorCodeOverride string
+V DelegationSetAlreadyCreated.Message string
+V DelegationSetAlreadyReusable.ErrorCodeOverride string
+V DelegationSetAlreadyReusable.Message string
+V DelegationSetInUse.ErrorCodeOverride string
+V DelegationSetInUse.Message string
+V DelegationSetNotAvailable.ErrorCodeOverride string
+V DelegationSetNotAvailable.Message string
+V DelegationSetNotReusable.ErrorCodeOverride string
+V DelegationSetNotReusable.Message string
+V DeleteCidrCollectionInput.Id string
+V DeleteHealthCheckInput.HealthCheckId string
+V DeleteHostedZoneInput.Id string
+V DeleteKeySigningKeyInput.HostedZoneId string
+V DeleteKeySigningKeyInput.Name string
+V DeleteQueryLoggingConfigInput.Id string
+V DeleteReusableDelegationSetInput.Id string
+V DeleteTrafficPolicyInput.Id string
+V DeleteTrafficPolicyInput.Version int32
+V DeleteTrafficPolicyInstanceInput.Id string
+V DeleteVPCAssociationAuthorizationInput.HostedZoneId string
+V Dimension.Name string
+V Dimension.Value string
+V DisableHostedZoneDNSSECInput.HostedZoneId string
+V DisassociateVPCFromHostedZoneInput.Comment string
+V DisassociateVPCFromHostedZoneInput.HostedZoneId string
+V EnableHostedZoneDNSSECInput.HostedZoneId string
+V EndpointParameters.Endpoint string
+V EndpointParameters.Region string
+V EndpointParameters.UseDualStack bool
+V EndpointParameters.UseFIPS bool
+V GeoLocation.ContinentCode string
+V GeoLocation.CountryCode string
+V GeoLocation.SubdivisionCode string
+V GeoLocationDetails.ContinentCode string
+V GeoLocationDetails.ContinentName string
+V GeoLocationDetails.CountryCode string
+V GeoLocationDetails.CountryName string
+V GeoLocationDetails.SubdivisionCode string
+V GeoLocationDetails.SubdivisionName string
+V GeoProximityLocation.AWSRegion string
+V GeoProximityLocation.Bias int32
+V GeoProximityLocation.LocalZoneGroup string
+V GetChangeInput.Id string
+V GetDNSSECInput.HostedZoneId string
+V GetGeoLocationInput.ContinentCode string
+V GetGeoLocationInput.CountryCode string
+V GetGeoLocationInput.SubdivisionCode string
+V GetHealthCheckCountOutput.HealthCheckCount int64
+V GetHealthCheckInput.HealthCheckId string
+V GetHealthCheckLastFailureReasonInput.HealthCheckId string
+V GetHealthCheckStatusInput.HealthCheckId string
+V GetHostedZoneCountOutput.HostedZoneCount int64
+V GetHostedZoneInput.Id string
+V GetHostedZoneLimitInput.HostedZoneId string
+V GetQueryLoggingConfigInput.Id string
+V GetReusableDelegationSetInput.Id string
+V GetReusableDelegationSetLimitInput.DelegationSetId string
+V GetTrafficPolicyInput.Id string
+V GetTrafficPolicyInput.Version int32
+V GetTrafficPolicyInstanceCountOutput.TrafficPolicyInstanceCount int32
+V GetTrafficPolicyInstanceInput.Id string
+V HealthCheck.CallerReference string
+V HealthCheck.HealthCheckVersion int64
+V HealthCheck.Id string
+V HealthCheckAlreadyExists.ErrorCodeOverride string
+V HealthCheckAlreadyExists.Message string
+V HealthCheckConfig.Disabled bool
+V HealthCheckConfig.EnableSNI bool
+V HealthCheckConfig.FailureThreshold int32
+V HealthCheckConfig.FullyQualifiedDomainName string
+V HealthCheckConfig.HealthThreshold int32
+V HealthCheckConfig.IPAddress string
+V HealthCheckConfig.Inverted bool
+V HealthCheckConfig.MeasureLatency bool
+V HealthCheckConfig.Port int32
+V HealthCheckConfig.RequestInterval int32
+V HealthCheckConfig.ResourcePath string
+V HealthCheckConfig.RoutingControlArn string
+V HealthCheckConfig.SearchString string
+V HealthCheckInUse.ErrorCodeOverride string
+V HealthCheckInUse.Message string
+V HealthCheckObservation.IPAddress string
+V HealthCheckVersionMismatch.ErrorCodeOverride string
+V HealthCheckVersionMismatch.Message string
+V HostedZone.CallerReference string
+V HostedZone.Id string
+V HostedZone.Name string
+V HostedZone.ResourceRecordSetCount int64
+V HostedZoneAlreadyExists.ErrorCodeOverride string
+V HostedZoneAlreadyExists.Message string
+V HostedZoneConfig.Comment string
+V HostedZoneFailureReasons.AcceleratedRecovery string
+V HostedZoneLimit.Value int64
+V HostedZoneNotEmpty.ErrorCodeOverride string
+V HostedZoneNotEmpty.Message string
+V HostedZoneNotFound.ErrorCodeOverride string
+V HostedZoneNotFound.Message string
+V HostedZoneNotPrivate.ErrorCodeOverride string
+V HostedZoneNotPrivate.Message string
+V HostedZoneOwner.OwningAccount string
+V HostedZoneOwner.OwningService string
+V HostedZonePartiallyDelegated.ErrorCodeOverride string
+V HostedZonePartiallyDelegated.Message string
+V HostedZoneSummary.HostedZoneId string
+V HostedZoneSummary.Name string
+V IncompatibleVersion.ErrorCodeOverride string
+V IncompatibleVersion.Message string
+V InsufficientCloudWatchLogsResourcePolicy.ErrorCodeOverride string
+V InsufficientCloudWatchLogsResourcePolicy.Message string
+V InvalidArgument.ErrorCodeOverride string
+V InvalidArgument.Message string
+V InvalidChangeBatch.ErrorCodeOverride string
+V InvalidChangeBatch.Message string
+V InvalidDomainName.ErrorCodeOverride string
+V InvalidDomainName.Message string
+V InvalidInput.ErrorCodeOverride string
+V InvalidInput.Message string
+V InvalidKMSArn.ErrorCodeOverride string
+V InvalidKMSArn.Message string
+V InvalidKeySigningKeyName.ErrorCodeOverride string
+V InvalidKeySigningKeyName.Message string
+V InvalidKeySigningKeyStatus.ErrorCodeOverride string
+V InvalidKeySigningKeyStatus.Message string
+V InvalidPaginationToken.ErrorCodeOverride string
+V InvalidPaginationToken.Message string
+V InvalidSigningStatus.ErrorCodeOverride string
+V InvalidSigningStatus.Message string
+V InvalidTrafficPolicyDocument.ErrorCodeOverride string
+V InvalidTrafficPolicyDocument.Message string
+V InvalidVPCId.ErrorCodeOverride string
+V InvalidVPCId.Message string
+V KeySigningKey.DNSKEYRecord string
+V KeySigningKey.DSRecord string
+V KeySigningKey.DigestAlgorithmMnemonic string
+V KeySigningKey.DigestValue string
+V KeySigningKey.KmsArn string
+V KeySigningKey.Name string
+V KeySigningKey.PublicKey string
+V KeySigningKey.SigningAlgorithmMnemonic string
+V KeySigningKey.Status string
+V KeySigningKey.StatusMessage string
+V KeySigningKeyAlreadyExists.ErrorCodeOverride string
+V KeySigningKeyAlreadyExists.Message string
+V KeySigningKeyInParentDSRecord.ErrorCodeOverride string
+V KeySigningKeyInParentDSRecord.Message string
+V KeySigningKeyInUse.ErrorCodeOverride string
+V KeySigningKeyInUse.Message string
+V KeySigningKeyWithActiveStatusNotFound.ErrorCodeOverride string
+V KeySigningKeyWithActiveStatusNotFound.Message string
+V LastVPCAssociation.ErrorCodeOverride string
+V LastVPCAssociation.Message string
+V LimitsExceeded.ErrorCodeOverride string
+V LimitsExceeded.Message string
+V LinkedService.Description string
+V LinkedService.ServicePrincipal string
+V ListCidrBlocksInput.CollectionId string
+V ListCidrBlocksInput.LocationName string
+V ListCidrBlocksInput.MaxResults int32
+V ListCidrBlocksInput.NextToken string
+V ListCidrBlocksOutput.NextToken string
+V ListCidrCollectionsInput.MaxResults int32
+V ListCidrCollectionsInput.NextToken string
+V ListCidrCollectionsOutput.NextToken string
+V ListCidrLocationsInput.CollectionId string
+V ListCidrLocationsInput.MaxResults int32
+V ListCidrLocationsInput.NextToken string
+V ListCidrLocationsOutput.NextToken string
+V ListGeoLocationsInput.MaxItems int32
+V ListGeoLocationsInput.StartContinentCode string
+V ListGeoLocationsInput.StartCountryCode string
+V ListGeoLocationsInput.StartSubdivisionCode string
+V ListGeoLocationsOutput.MaxItems int32
+V ListGeoLocationsOutput.NextContinentCode string
+V ListGeoLocationsOutput.NextCountryCode string
+V ListGeoLocationsOutput.NextSubdivisionCode string
+V ListHealthChecksInput.Marker string
+V ListHealthChecksInput.MaxItems int32
+V ListHealthChecksOutput.Marker string
+V ListHealthChecksOutput.MaxItems int32
+V ListHealthChecksOutput.NextMarker string
+V ListHostedZonesByNameInput.DNSName string
+V ListHostedZonesByNameInput.HostedZoneId string
+V ListHostedZonesByNameInput.MaxItems int32
+V ListHostedZonesByNameOutput.DNSName string
+V ListHostedZonesByNameOutput.HostedZoneId string
+V ListHostedZonesByNameOutput.MaxItems int32
+V ListHostedZonesByNameOutput.NextDNSName string
+V ListHostedZonesByNameOutput.NextHostedZoneId string
+V ListHostedZonesByVPCInput.MaxItems int32
+V ListHostedZonesByVPCInput.NextToken string
+V ListHostedZonesByVPCInput.VPCId string
+V ListHostedZonesByVPCOutput.MaxItems int32
+V ListHostedZonesByVPCOutput.NextToken string
+V ListHostedZonesInput.DelegationSetId string
+V ListHostedZonesInput.Marker string
+V ListHostedZonesInput.MaxItems int32
+V ListHostedZonesOutput.Marker string
+V ListHostedZonesOutput.MaxItems int32
+V ListHostedZonesOutput.NextMarker string
+V ListQueryLoggingConfigsInput.HostedZoneId string
+V ListQueryLoggingConfigsInput.MaxResults int32
+V ListQueryLoggingConfigsInput.NextToken string
+V ListQueryLoggingConfigsOutput.NextToken string
+V ListResourceRecordSetsInput.HostedZoneId string
+V ListResourceRecordSetsInput.MaxItems int32
+V ListResourceRecordSetsInput.StartRecordIdentifier string
+V ListResourceRecordSetsInput.StartRecordName string
+V ListResourceRecordSetsOutput.MaxItems int32
+V ListResourceRecordSetsOutput.NextRecordIdentifier string
+V ListResourceRecordSetsOutput.NextRecordName string
+V ListReusableDelegationSetsInput.Marker string
+V ListReusableDelegationSetsInput.MaxItems int32
+V ListReusableDelegationSetsOutput.Marker string
+V ListReusableDelegationSetsOutput.MaxItems int32
+V ListReusableDelegationSetsOutput.NextMarker string
+V ListTagsForResourceInput.ResourceId string
+V ListTrafficPoliciesInput.MaxItems int32
+V ListTrafficPoliciesInput.TrafficPolicyIdMarker string
+V ListTrafficPoliciesOutput.MaxItems int32
+V ListTrafficPoliciesOutput.TrafficPolicyIdMarker string
+V ListTrafficPolicyInstancesByHostedZoneInput.HostedZoneId string
+V ListTrafficPolicyInstancesByHostedZoneInput.MaxItems int32
+V ListTrafficPolicyInstancesByHostedZoneInput.TrafficPolicyInstanceNameMarker string
+V ListTrafficPolicyInstancesByHostedZoneOutput.MaxItems int32
+V ListTrafficPolicyInstancesByHostedZoneOutput.TrafficPolicyInstanceNameMarker string
+V ListTrafficPolicyInstancesByPolicyInput.HostedZoneIdMarker string
+V ListTrafficPolicyInstancesByPolicyInput.MaxItems int32
+V ListTrafficPolicyInstancesByPolicyInput.TrafficPolicyId string
+V ListTrafficPolicyInstancesByPolicyInput.TrafficPolicyInstanceNameMarker string
+V ListTrafficPolicyInstancesByPolicyInput.TrafficPolicyVersion int32
+V ListTrafficPolicyInstancesByPolicyOutput.HostedZoneIdMarker string
+V ListTrafficPolicyInstancesByPolicyOutput.MaxItems int32
+V ListTrafficPolicyInstancesByPolicyOutput.TrafficPolicyInstanceNameMarker string
+V ListTrafficPolicyInstancesInput.HostedZoneIdMarker string
+V ListTrafficPolicyInstancesInput.MaxItems int32
+V ListTrafficPolicyInstancesInput.TrafficPolicyInstanceNameMarker string
+V ListTrafficPolicyInstancesOutput.HostedZoneIdMarker string
+V ListTrafficPolicyInstancesOutput.MaxItems int32
+V ListTrafficPolicyInstancesOutput.TrafficPolicyInstanceNameMarker string
+V ListTrafficPolicyVersionsInput.Id string
+V ListTrafficPolicyVersionsInput.MaxItems int32
+V ListTrafficPolicyVersionsInput.TrafficPolicyVersionMarker string
+V ListTrafficPolicyVersionsOutput.MaxItems int32
+V ListTrafficPolicyVersionsOutput.TrafficPolicyVersionMarker string
+V ListVPCAssociationAuthorizationsInput.HostedZoneId string
+V ListVPCAssociationAuthorizationsInput.MaxResults int32
+V ListVPCAssociationAuthorizationsInput.NextToken string
+V ListVPCAssociationAuthorizationsOutput.HostedZoneId string
+V ListVPCAssociationAuthorizationsOutput.NextToken string
+V LocationSummary.LocationName string
+V NoSuchChange.ErrorCodeOverride string
+V NoSuchChange.Message string
+V NoSuchCidrCollectionException.ErrorCodeOverride string
+V NoSuchCidrCollectionException.Message string
+V NoSuchCidrLocationException.ErrorCodeOverride string
+V NoSuchCidrLocationException.Message string
+V NoSuchCloudWatchLogsLogGroup.ErrorCodeOverride string
+V NoSuchCloudWatchLogsLogGroup.Message string
+V NoSuchDelegationSet.ErrorCodeOverride string
+V NoSuchDelegationSet.Message string
+V NoSuchGeoLocation.ErrorCodeOverride string
+V NoSuchGeoLocation.Message string
+V NoSuchHealthCheck.ErrorCodeOverride string
+V NoSuchHealthCheck.Message string
+V NoSuchHostedZone.ErrorCodeOverride string
+V NoSuchHostedZone.Message string
+V NoSuchKeySigningKey.ErrorCodeOverride string
+V NoSuchKeySigningKey.Message string
+V NoSuchQueryLoggingConfig.ErrorCodeOverride string
+V NoSuchQueryLoggingConfig.Message string
+V NoSuchTrafficPolicy.ErrorCodeOverride string
+V NoSuchTrafficPolicy.Message string
+V NoSuchTrafficPolicyInstance.ErrorCodeOverride string
+V NoSuchTrafficPolicyInstance.Message string
+V NotAuthorizedException.ErrorCodeOverride string
+V NotAuthorizedException.Message string
+V Options.BaseEndpoint string
+V PriorRequestNotComplete.ErrorCodeOverride string
+V PriorRequestNotComplete.Message string
+V PublicZoneVPCAssociation.ErrorCodeOverride string
+V PublicZoneVPCAssociation.Message string
+V QueryLoggingConfig.CloudWatchLogsLogGroupArn string
+V QueryLoggingConfig.HostedZoneId string
+V QueryLoggingConfig.Id string
+V QueryLoggingConfigAlreadyExists.ErrorCodeOverride string
+V QueryLoggingConfigAlreadyExists.Message string
+V ResourceRecord.Value string
+V ResourceRecordSet.HealthCheckId string
+V ResourceRecordSet.MultiValueAnswer bool
+V ResourceRecordSet.Name string
+V ResourceRecordSet.SetIdentifier string
+V ResourceRecordSet.TTL int64
+V ResourceRecordSet.TrafficPolicyInstanceId string
+V ResourceRecordSet.Weight int64
+V ResourceTagSet.ResourceId string
+V ReusableDelegationSetLimit.Value int64
+V StatusReport.Status string
+V Tag.Key string
+V Tag.Value string
+V TestDNSAnswerInput.EDNS0ClientSubnetIP string
+V TestDNSAnswerInput.EDNS0ClientSubnetMask string
+V TestDNSAnswerInput.HostedZoneId string
+V TestDNSAnswerInput.RecordName string
+V TestDNSAnswerInput.ResolverIP string
+V TestDNSAnswerOutput.Nameserver string
+V TestDNSAnswerOutput.Protocol string
+V TestDNSAnswerOutput.RecordName string
+V TestDNSAnswerOutput.ResponseCode string
+V ThrottlingException.ErrorCodeOverride string
+V ThrottlingException.Message string
+V TooManyHealthChecks.ErrorCodeOverride string
+V TooManyHealthChecks.Message string
+V TooManyHostedZones.ErrorCodeOverride string
+V TooManyHostedZones.Message string
+V TooManyKeySigningKeys.ErrorCodeOverride string
+V TooManyKeySigningKeys.Message string
+V TooManyTrafficPolicies.ErrorCodeOverride string
+V TooManyTrafficPolicies.Message string
+V TooManyTrafficPolicyInstances.ErrorCodeOverride string
+V TooManyTrafficPolicyInstances.Message string
+V TooManyTrafficPolicyVersionsForCurrentPolicy.ErrorCodeOverride string
+V TooManyTrafficPolicyVersionsForCurrentPolicy.Message string
+V TooManyVPCAssociationAuthorizations.ErrorCodeOverride string
+V TooManyVPCAssociationAuthorizations.Message string
+V TrafficPolicy.Comment string
+V TrafficPolicy.Document string
+V TrafficPolicy.Id string
+V TrafficPolicy.Name string
+V TrafficPolicy.Version int32
+V TrafficPolicyAlreadyExists.ErrorCodeOverride string
+V TrafficPolicyAlreadyExists.Message string
+V TrafficPolicyInUse.ErrorCodeOverride string
+V TrafficPolicyInUse.Message string
+V TrafficPolicyInstance.HostedZoneId string
+V TrafficPolicyInstance.Id string
+V TrafficPolicyInstance.Message string
+V TrafficPolicyInstance.Name string
+V TrafficPolicyInstance.State string
+V TrafficPolicyInstance.TTL int64
+V TrafficPolicyInstance.TrafficPolicyId string
+V TrafficPolicyInstance.TrafficPolicyVersion int32
+V TrafficPolicyInstanceAlreadyExists.ErrorCodeOverride string
+V TrafficPolicyInstanceAlreadyExists.Message string
+V TrafficPolicySummary.Id string
+V TrafficPolicySummary.LatestVersion int32
+V TrafficPolicySummary.Name string
+V TrafficPolicySummary.TrafficPolicyCount int32
+V UpdateHealthCheckInput.Disabled bool
+V UpdateHealthCheckInput.EnableSNI bool
+V UpdateHealthCheckInput.FailureThreshold int32
+V UpdateHealthCheckInput.FullyQualifiedDomainName string
+V UpdateHealthCheckInput.HealthCheckId string
+V UpdateHealthCheckInput.HealthCheckVersion int64
+V UpdateHealthCheckInput.HealthThreshold int32
+V UpdateHealthCheckInput.IPAddress string
+V UpdateHealthCheckInput.Inverted bool
+V UpdateHealthCheckInput.Port int32
+V UpdateHealthCheckInput.ResourcePath string
+V UpdateHealthCheckInput.SearchString string
+V UpdateHostedZoneCommentInput.Comment string
+V UpdateHostedZoneCommentInput.Id string
+V UpdateHostedZoneFeaturesInput.EnableAcceleratedRecovery bool
+V UpdateHostedZoneFeaturesInput.HostedZoneId string
+V UpdateTrafficPolicyCommentInput.Comment string
+V UpdateTrafficPolicyCommentInput.Id string
+V UpdateTrafficPolicyCommentInput.Version int32
+V UpdateTrafficPolicyInstanceInput.Id string
+V UpdateTrafficPolicyInstanceInput.TTL int64
+V UpdateTrafficPolicyInstanceInput.TrafficPolicyId string
+V UpdateTrafficPolicyInstanceInput.TrafficPolicyVersion int32
+V VPC.VPCId string
+V VPCAssociationAuthorizationNotFound.ErrorCodeOverride string
+V VPCAssociationAuthorizationNotFound.Message string
+V VPCAssociationNotFound.ErrorCodeOverride string
+V VPCAssociationNotFound.Message string
+D AliasTarget.EvaluateTargetHealth bool
+D GetAccountLimitOutput.Count int64
+D GetHostedZoneLimitOutput.Count int64
+D GetReusableDelegationSetLimitOutput.Count int64
+D HostedZoneConfig.PrivateZone bool
+D ListGeoLocationsOutput.IsTruncated bool
+D ListHealthChecksOutput.IsTruncated bool
+D ListHostedZonesByNameOutput.IsTruncated bool
+D ListHostedZonesOutput.IsTruncated bool
+D ListResourceRecordSetsOutput.IsTruncated bool
+D ListReusableDelegationSetsOutput.IsTruncated bool
+D ListTrafficPoliciesOutput.IsTruncated bool
+D ListTrafficPolicyInstancesByHostedZoneOutput.IsTruncated bool
+D ListTrafficPolicyInstancesByPolicyOutput.IsTruncated bool
+D ListTrafficPolicyInstancesOutput.IsTruncated bool
+D ListTrafficPolicyVersionsOutput.IsTruncated bool
+L ChangeBatch.Changes Change
+L ChangeCidrCollectionInput.Changes CidrCollectionChange
+L ChangeTagsForResourceInput.AddTags Tag
+L ChangeTagsForResourceInput.RemoveTagKeys -
+L CidrCollectionChange.CidrList -
+L CloudWatchAlarmConfiguration.Dimensions Dimension
+L DelegationSet.NameServers -
+L GetCheckerIpRangesOutput.CheckerIpRanges -
+L GetDNSSECOutput.KeySigningKeys KeySigningKey
+L GetHealthCheckLastFailureReasonOutput.HealthCheckObservations HealthCheckObservation
+L GetHealthCheckStatusOutput.HealthCheckObservations HealthCheckObservation
+L GetHostedZoneOutput.VPCs VPC
+L HealthCheckConfig.ChildHealthChecks -
+L HealthCheckConfig.Regions HealthCheckRegion
+L ListCidrBlocksOutput.CidrBlocks CidrBlockSummary
+L ListCidrCollectionsOutput.CidrCollections CollectionSummary
+L ListCidrLocationsOutput.CidrLocations LocationSummary
+L ListGeoLocationsOutput.GeoLocationDetailsList GeoLocationDetails
+L ListHealthChecksOutput.HealthChecks HealthCheck
+L ListHostedZonesByNameOutput.HostedZones HostedZone
+L ListHostedZonesByVPCOutput.HostedZoneSummaries HostedZoneSummary
+L ListHostedZonesOutput.HostedZones HostedZone
+L ListQueryLoggingConfigsOutput.QueryLoggingConfigs QueryLoggingConfig
+L ListResourceRecordSetsOutput.ResourceRecordSets ResourceRecordSet
+L ListReusableDelegationSetsOutput.DelegationSets DelegationSet
+L ListTagsForResourcesInput.ResourceIds -
+L ListTagsForResourcesOutput.ResourceTagSets ResourceTagSet
+L ListTrafficPoliciesOutput.TrafficPolicySummaries TrafficPolicySummary
+L ListTrafficPolicyInstancesByHostedZoneOutput.TrafficPolicyInstances TrafficPolicyInstance
+L ListTrafficPolicyInstancesByPolicyOutput.TrafficPolicyInstances TrafficPolicyInstance
+L ListTrafficPolicyInstancesOutput.TrafficPolicyInstances TrafficPolicyInstance
+L ListTrafficPolicyVersionsOutput.TrafficPolicies TrafficPolicy
+L ListVPCAssociationAuthorizationsOutput.VPCs VPC
+L ResourceRecordSet.ResourceRecords ResourceRecord
+L ResourceTagSet.Tags Tag
+L TestDNSAnswerOutput.RecordData -
+L UpdateHealthCheckInput.ChildHealthChecks -
+L UpdateHealthCheckInput.Regions HealthCheckRegion
+L UpdateHealthCheckInput.ResetElements ResettableElementName
+F AccountLimit.Type AccountLimitType
+F AlarmIdentifier.Region CloudWatchRegion
+F Change.Action ChangeAction
+F ChangeInfo.Status ChangeStatus
+F ChangeTagsForResourceInput.ResourceType TagResourceType
+F CidrCollectionChange.Action CidrCollectionChangeAction
+F CloudWatchAlarmConfiguration.ComparisonOperator ComparisonOperator
+F CloudWatchAlarmConfiguration.Statistic Statistic
+F GetAccountLimitInput.Type AccountLimitType
+F GetHostedZoneLimitInput.Type HostedZoneLimitType
+F GetReusableDelegationSetLimitInput.Type ReusableDelegationSetLimitType
+F HealthCheckConfig.InsufficientDataHealthStatus InsufficientDataHealthStatus
+F HealthCheckConfig.Regions HealthCheckRegion
+F HealthCheckConfig.Type HealthCheckType
+F HealthCheckObservation.Region HealthCheckRegion
+F HostedZoneFeatures.AcceleratedRecoveryStatus AcceleratedRecoveryStatus
+F HostedZoneLimit.Type HostedZoneLimitType
+F ListHostedZonesByVPCInput.VPCRegion VPCRegion
+F ListHostedZonesInput.HostedZoneType HostedZoneType
+F ListResourceRecordSetsInput.StartRecordType RRType
+F ListResourceRecordSetsOutput.NextRecordType RRType
+F ListTagsForResourceInput.ResourceType TagResourceType
+F ListTagsForResourcesInput.ResourceType TagResourceType
+F ListTrafficPolicyInstancesByHostedZoneInput.TrafficPolicyInstanceTypeMarker RRType
+F ListTrafficPolicyInstancesByHostedZoneOutput.TrafficPolicyInstanceTypeMarker RRType
+F ListTrafficPolicyInstancesByPolicyInput.TrafficPolicyInstanceTypeMarker RRType
+F ListTrafficPolicyInstancesByPolicyOutput.TrafficPolicyInstanceTypeMarker RRType
+F ListTrafficPolicyInstancesInput.TrafficPolicyInstanceTypeMarker RRType
+F ListTrafficPolicyInstancesOutput.TrafficPolicyInstanceTypeMarker RRType
+F ResourceRecordSet.Failover ResourceRecordSetFailover
+F ResourceRecordSet.Region ResourceRecordSetRegion
+F ResourceRecordSet.Type RRType
+F ResourceTagSet.ResourceType TagResourceType
+F ReusableDelegationSetLimit.Type ReusableDelegationSetLimitType
+F TestDNSAnswerInput.RecordType RRType
+F TestDNSAnswerOutput.RecordType RRType
+F TrafficPolicy.Type RRType
+F TrafficPolicyInstance.TrafficPolicyType RRType
+F TrafficPolicySummary.Type RRType
+F UpdateHealthCheckInput.InsufficientDataHealthStatus InsufficientDataHealthStatus
+F UpdateHealthCheckInput.Regions HealthCheckRegion
+F UpdateHealthCheckInput.ResetElements ResettableElementName
+F VPC.VPCRegion VPCRegion
+N APIOptions
+N AWSRegion
+N AcceleratedRecovery
+N AddTags
+N AlarmIdentifier
+N AliasTarget
+N AppID
+N Arn
+N AuthSchemePreference
+N AuthSchemeResolver
+N AuthSchemes
+N BaseEndpoint
+N Bias
+N CallerReference
+N ChangeBatch
+N ChangeInfo
+N Changes
+N CheckedTime
+N CheckerIpRanges
+N ChildHealthChecks
+N CidrBlock
+N CidrBlocks
+N CidrCollections
+N CidrList
+N CidrLocations
+N CidrRoutingConfig
+N ClientLogMode
+N ClientOptions
+N CloudWatchAlarmConfiguration
+N CloudWatchLogsLogGroupArn
+N Collection
+N CollectionId
+N CollectionVersion
+N Comment
+N Config
+N ContinentCode
+N ContinentName
+N Coordinates
+N Count
+N CountryCode
+N CountryName
+N CreatedDate
+N Credentials
+N DNSKEYRecord
+N DNSName
+N DSRecord
+N DefaultsMode
+N DelegationSet
+N DelegationSetId
+N DelegationSets
+N Description
+N DigestAlgorithmMnemonic
+N DigestAlgorithmType
+N DigestValue
+N Dimensions
+N DisableClockSkewCorrection
+N DisableHTTPS
+N Disabled
+N Document
+N EDNS0ClientSubnetIP
+N EDNS0ClientSubnetMask
+N EnableAcceleratedRecovery
+N EnableSNI
+N Endpoint
+N EndpointOptions
+N EndpointResolver
+N EndpointResolverV2
+N ErrorCodeOverride
+N EvaluateTargetHealth
+N EvaluationPeriods
+N FailureReasons
+N FailureThreshold
+N Features
+N Flag
+N FullyQualifiedDomainName
+N GeoLocation
+N GeoLocationDetails
+N GeoLocationDetailsList
+N GeoProximityLocation
+N HTTPClient
+N HTTPSignerV4
+N HealthCheck
+N HealthCheckConfig
+N HealthCheckCount
+N HealthCheckId
+N HealthCheckObservations
+N HealthCheckVersion
+N HealthChecks
+N HealthThreshold
+N HostedZone
+N HostedZoneConfig
+N HostedZoneCount
+N HostedZoneId
+N HostedZoneIdMarker
+N HostedZoneSummaries
+N HostedZones
+N IPAddress
+N Id
+N Interceptors
+N Inverted
+N IsTruncated
+N Key
+N KeyManagementServiceArn
+N KeySigningKey
+N KeySigningKeys
+N KeyTag
+N KmsArn
+N LastModifiedDate
+N LatestVersion
+N Latitude
+N Limit
+N LinkedService
+N LocalZoneGroup
+N Location
+N LocationName
+N LogDeprecated
+N LogWaitAttempts
+N Logger
+N Longitude
+N Marker
+N MaxDelay
+N MaxItems
+N MaxResults
+N MeasureLatency
+N Message
+N Messages
+N MeterProvider
+N MetricName
+N MinDelay
+N MultiValueAnswer
+N Name
+N NameServers
+N Nameserver
+N Namespace
+N NextContinentCode
+N NextCountryCode
+N NextDNSName
+N NextHostedZoneId
+N NextMarker
+N NextRecordIdentifier
+N NextRecordName
+N NextSubdivisionCode
+N NextToken
+N Operation
+N Options
+N Owner
+N OwningAccount
+N OwningService
+N Period
+N Port
+N PrivateZone
+N Protocol
+N PublicKey
+N QueryLoggingConfig
+N QueryLoggingConfigs
+N RecordData
+N RecordName
+N Region
+N RemoveTagKeys
+N RequestInterval
+N ResolvedRegion
+N Resolver
+N ResolverIP
+N ResourceId
+N ResourceIds
+N ResourcePath
+N ResourceRecordSet
+N ResourceRecordSetCount
+N ResourceRecordSets
+N ResourceRecords
+N ResourceTagSet
+N ResourceTagSets
+N ResponseCode
+N ResultMetadata
+N RetryMaxAttempts
+N RetryMode
+N Retryable
+N Retryer
+N RoutingControlArn
+N RuntimeEnvironment
+N SearchString
+N ServeSignature
+N ServicePrincipal
+N SetIdentifier
+N SigningAlgorithmMnemonic
+N SigningAlgorithmType
+N StartContinentCode
+N StartCountryCode
+N StartRecordIdentifier
+N StartRecordName
+N StartSubdivisionCode
+N State
+N Status
+N StatusMessage
+N StatusReport
+N StopOnDuplicateToken
+N SubdivisionCode
+N SubdivisionName
+N SubmittedAt
+N TTL
+N Tags
+N Threshold
+N TracerProvider
+N TrafficPolicies
+N TrafficPolicy
+N TrafficPolicyCount
+N TrafficPolicyId
+N TrafficPolicyIdMarker
+N TrafficPolicyInstance
+N TrafficPolicyInstanceCount
+N TrafficPolicyInstanceId
+N TrafficPolicyInstanceNameMarker
+N TrafficPolicyInstances
+N TrafficPolicySummaries
+N TrafficPolicyVersion
+N TrafficPolicyVersionMarker
+N UseDualStack
+N UseDualStackEndpoint
+N UseFIPS
+N UseFIPSEndpoint
+N VPC
+N VPCId
+N VPCs
+N Value
+N Version
+N Weight
+T AcceleratedRecoveryStatus
+T AccountLimit
+T AccountLimitType
+T AlarmIdentifier
+T AliasTarget
+T Change
+T ChangeAction
+T ChangeBatch
+T ChangeInfo
+T ChangeStatus
+T CidrBlockInUseException
+T CidrBlockSummary
+T CidrCollection
+T CidrCollectionAlreadyExistsException
+T CidrCollectionChange
+T CidrCollectionChangeAction
+T CidrCollectionInUseException
+T CidrCollectionVersionMismatchException
+T CidrRoutingConfig
+T CloudWatchAlarmConfiguration
+T CloudWatchRegion
+T CollectionSummary
+T ComparisonOperator
+T ConcurrentModification
+T ConflictingDomainExists
+T ConflictingTypes
+T Coordinates
+T DNSSECNotFound
+T DNSSECStatus
+T DelegationSet
+T DelegationSetAlreadyCreated
+T DelegationSetAlreadyReusable
+T DelegationSetInUse
+T DelegationSetNotAvailable
+T DelegationSetNotReusable
+T Dimension
+T GeoLocation
+T GeoLocationDetails
+T GeoProximityLocation
+T HealthCheck
+T HealthCheckAlreadyExists
+T HealthCheckConfig
+T HealthCheckInUse
+T HealthCheckObservation
+T HealthCheckRegion
+T HealthCheckType
+T HealthCheckVersionMismatch
+T HostedZone
+T HostedZoneAlreadyExists
+T HostedZoneConfig
+T HostedZoneFailureReasons
+T HostedZoneFeatures
+T HostedZoneLimit
+T HostedZoneLimitType
+T HostedZoneNotEmpty
+T HostedZoneNotFound
+T HostedZoneNotPrivate
+T HostedZoneOwner
+T HostedZonePartiallyDelegated
+T HostedZoneSummary
+T HostedZoneType
+T IncompatibleVersion
+T InsufficientCloudWatchLogsResourcePolicy
+T InsufficientDataHealthStatus
+T InvalidArgument
+T InvalidChangeBatch
+T InvalidDomainName
+T InvalidInput
+T InvalidKMSArn
+T InvalidKeySigningKeyName
+T InvalidKeySigningKeyStatus
+T InvalidPaginationToken
+T InvalidSigningStatus
+T InvalidTrafficPolicyDocument
+T InvalidVPCId
+T KeySigningKey
+T KeySigningKeyAlreadyExists
+T KeySigningKeyInParentDSRecord
+T KeySigningKeyInUse
+T KeySigningKeyWithActiveStatusNotFound
+T LastVPCAssociation
+T LimitsExceeded
+T LinkedService
+T LocationSummary
+T NoSuchChange
+T NoSuchCidrCollectionException
+T NoSuchCidrLocationException
+T NoSuchCloudWatchLogsLogGroup
+T NoSuchDelegationSet
+T NoSuchGeoLocation
+T NoSuchHealthCheck
+T NoSuchHostedZone
+T NoSuchKeySigningKey
+T NoSuchQueryLoggingConfig
+T NoSuchTrafficPolicy
+T NoSuchTrafficPolicyInstance
+T NotAuthorizedException
+T PriorRequestNotComplete
+T PublicZoneVPCAssociation
+T QueryLoggingConfig
+T QueryLoggingConfigAlreadyExists
+T RRType
+T ResettableElementName
+T ResourceRecord
+T ResourceRecordSet
+T ResourceRecordSetFailover
+T ResourceRecordSetRegion
+T ResourceTagSet
+T ReusableDelegationSetLimit
+T ReusableDelegationSetLimitType
+T Statistic
+T StatusReport
+T Tag
+T TagResourceType
+T ThrottlingException
+T TooManyHealthChecks
+T TooManyHostedZones
+T TooManyKeySigningKeys
+T TooManyTrafficPolicies
+T TooManyTrafficPolicyInstances
+T TooManyTrafficPolicyVersionsForCurrentPolicy
+T TooManyVPCAssociationAuthorizations
+T TrafficPolicy
+T TrafficPolicyAlreadyExists
+T TrafficPolicyInUse
+T TrafficPolicyInstance
+T TrafficPolicyInstanceAlreadyExists
+T TrafficPolicySummary
+T VPC
+T VPCAssociationAuthorizationNotFound
+T VPCAssociationNotFound
+T VPCRegion
+E AcceleratedRecoveryStatusDisableFailed AcceleratedRecoveryStatus
+E AcceleratedRecoveryStatusDisabled AcceleratedRecoveryStatus
+E AcceleratedRecoveryStatusDisabling AcceleratedRecoveryStatus
+E AcceleratedRecoveryStatusDisablingHostedZoneLocked AcceleratedRecoveryStatus
+E AcceleratedRecoveryStatusEnableFailed AcceleratedRecoveryStatus
+E AcceleratedRecoveryStatusEnabled AcceleratedRecoveryStatus
+E AcceleratedRecoveryStatusEnabling AcceleratedRecoveryStatus
+E AcceleratedRecoveryStatusEnablingHostedZoneLocked AcceleratedRecoveryStatus
+E AccountLimitTypeMaxHealthChecksByOwner AccountLimitType
+E AccountLimitTypeMaxHostedZonesByOwner AccountLimitType
+E AccountLimitTypeMaxReusableDelegationSetsByOwner AccountLimitType
+E AccountLimitTypeMaxTrafficPoliciesByOwner AccountLimitType
+E AccountLimitTypeMaxTrafficPolicyInstancesByOwner AccountLimitType
+E ChangeActionCreate ChangeAction
+E ChangeActionDelete ChangeAction
+E ChangeActionUpsert ChangeAction
+E ChangeStatusInsync ChangeStatus
+E ChangeStatusPending ChangeStatus
+E CidrCollectionChangeActionDeleteIfExists CidrCollectionChangeAction
+E CidrCollectionChangeActionPut CidrCollectionChangeAction
+E CloudWatchRegionAfSouth1 CloudWatchRegion
+E CloudWatchRegionApEast1 CloudWatchRegion
+E CloudWatchRegionApEast2 CloudWatchRegion
+E CloudWatchRegionApNortheast1 CloudWatchRegion
+E CloudWatchRegionApNortheast2 CloudWatchRegion
+E CloudWatchRegionApNortheast3 CloudWatchRegion
+E CloudWatchRegionApSouth1 CloudWatchRegion
+E CloudWatchRegionApSouth2 CloudWatchRegion
+E CloudWatchRegionApSoutheast1 CloudWatchRegion
+E CloudWatchRegionApSoutheast2 CloudWatchRegion
+E CloudWatchRegionApSoutheast3 CloudWatchRegion
+E CloudWatchRegionApSoutheast4 CloudWatchRegion
+E CloudWatchRegionApSoutheast5 CloudWatchRegion
+E CloudWatchRegionApSoutheast6 CloudWatchRegion
+E CloudWatchRegionApSoutheast7 CloudWatchRegion
+E CloudWatchRegionCaCentral1 CloudWatchRegion
+E CloudWatchRegionCaWest1 CloudWatchRegion
+E CloudWatchRegionCnNorth1 CloudWatchRegion
+E CloudWatchRegionCnNorthwest1 CloudWatchRegion
+E CloudWatchRegionEuCentral1 CloudWatchRegion
+E CloudWatchRegionEuCentral2 CloudWatchRegion
+E CloudWatchRegionEuIsoeWest1 CloudWatchRegion
+E CloudWatchRegionEuNorth1 CloudWatchRegion
+E CloudWatchRegionEuSouth1 CloudWatchRegion
+E CloudWatchRegionEuSouth2 CloudWatchRegion
+E CloudWatchRegionEuWest1 CloudWatchRegion
+E CloudWatchRegionEuWest2 CloudWatchRegion
+E CloudWatchRegionEuWest3 CloudWatchRegion
+E CloudWatchRegionEuscDeEast1 CloudWatchRegion
+E CloudWatchRegionIlCentral1 CloudWatchRegion
+E CloudWatchRegionMeCentral1 CloudWatchRegion
+E CloudWatchRegionMeSouth1 CloudWatchRegion
+E CloudWatchRegionMxCentral1 CloudWatchRegion
+E CloudWatchRegionSaEast1 CloudWatchRegion
+E CloudWatchRegionUsEast1 CloudWatchRegion
+E CloudWatchRegionUsEast2 CloudWatchRegion
+E CloudWatchRegionUsGovEast1 CloudWatchRegion
+E CloudWatchRegionUsGovWest1 CloudWatchRegion
+E CloudWatchRegionUsIsoEast1 CloudWatchRegion
+E CloudWatchRegionUsIsoWest1 CloudWatchRegion
+E CloudWatchRegionUsIsobEast1 CloudWatchRegion
+E CloudWatchRegionUsIsobWest1 CloudWatchRegion
+E CloudWatchRegionUsIsofEast1 CloudWatchRegion
+E CloudWatchRegionUsIsofSouth1 CloudWatchRegion
+E CloudWatchRegionUsWest1 CloudWatchRegion
+E CloudWatchRegionUsWest2 CloudWatchRegion
+E ComparisonOperatorGreaterThanOrEqualToThreshold ComparisonOperator
+E ComparisonOperatorGreaterThanThreshold ComparisonOperator
+E ComparisonOperatorLessThanOrEqualToThreshold ComparisonOperator
+E ComparisonOperatorLessThanThreshold ComparisonOperator
+E HealthCheckRegionApNortheast1 HealthCheckRegion
+E HealthCheckRegionApSoutheast1 HealthCheckRegion
+E HealthCheckRegionApSoutheast2 HealthCheckRegion
+E HealthCheckRegionEuWest1 HealthCheckRegion
+E HealthCheckRegionSaEast1 HealthCheckRegion
+E HealthCheckRegionUsEast1 HealthCheckRegion
+E HealthCheckRegionUsWest1 HealthCheckRegion
+E HealthCheckRegionUsWest2 HealthCheckRegion
+E HealthCheckTypeCalculated HealthCheckType
+E HealthCheckTypeCloudwatchMetric HealthCheckType
+E HealthCheckTypeHttp HealthCheckType
+E HealthCheckTypeHttpStrMatch HealthCheckType
+E HealthCheckTypeHttps HealthCheckType
+E HealthCheckTypeHttpsStrMatch HealthCheckType
+E HealthCheckTypeRecoveryControl HealthCheckType
+E HealthCheckTypeTcp HealthCheckType
+E HostedZoneLimitTypeMaxRrsetsByZone HostedZoneLimitType
+E HostedZoneLimitTypeMaxVpcsAssociatedByZone HostedZoneLimitType
+E HostedZoneTypePrivateHostedZone HostedZoneType
+E InsufficientDataHealthStatusHealthy InsufficientDataHealthStatus
+E InsufficientDataHealthStatusLastKnownStatus InsufficientDataHealthStatus
+E InsufficientDataHealthStatusUnhealthy InsufficientDataHealthStatus
+E RRTypeA RRType
+E RRTypeAaaa RRType
+E RRTypeCaa RRType
+E RRTypeCname RRType
+E RRTypeDs RRType
+E RRTypeHttps RRType
+E RRTypeMx RRType
+E RRTypeNaptr RRType
+E RRTypeNs RRType
+E RRTypePtr RRType
+E RRTypeSoa RRType
+E RRTypeSpf RRType
+E RRTypeSrv RRType
+E RRTypeSshfp RRType
+E RRTypeSvcb RRType
+E RRTypeTlsa RRType
+E RRTypeTxt RRType
+E ResettableElementNameChildHealthChecks ResettableElementName
+E ResettableElementNameFullyQualifiedDomainName ResettableElementName
+E ResettableElementNameRegions ResettableElementName
+E ResettableElementNameResourcePath ResettableElementName
+E ResourceRecordSetFailoverPrimary ResourceRecordSetFailover
+E ResourceRecordSetFailoverSecondary ResourceRecordSetFailover
+E ResourceRecordSetRegionAfSouth1 ResourceRecordSetRegion
+E ResourceRecordSetRegionApEast1 ResourceRecordSetRegion
+E ResourceRecordSetRegionApEast2 ResourceRecordSetRegion
+E ResourceRecordSetRegionApNortheast1 ResourceRecordSetRegion
+E ResourceRecordSetRegionApNortheast2 ResourceRecordSetRegion
+E ResourceRecordSetRegionApNortheast3 ResourceRecordSetRegion
+E ResourceRecordSetRegionApSouth1 ResourceRecordSetRegion
+E ResourceRecordSetRegionApSouth2 ResourceRecordSetRegion
+E ResourceRecordSetRegionApSoutheast1 ResourceRecordSetRegion
+E ResourceRecordSetRegionApSoutheast2 ResourceRecordSetRegion
+E ResourceRecordSetRegionApSoutheast3 ResourceRecordSetRegion
+E ResourceRecordSetRegionApSoutheast4 ResourceRecordSetRegion
+E ResourceRecordSetRegionApSoutheast5 ResourceRecordSetRegion
+E ResourceRecordSetRegionApSoutheast6 ResourceRecordSetRegion
+E ResourceRecordSetRegionApSoutheast7 ResourceRecordSetRegion
+E ResourceRecordSetRegionCaCentral1 ResourceRecordSetRegion
+E ResourceRecordSetRegionCaWest1 ResourceRecordSetRegion
+E ResourceRecordSetRegionCnNorth1 ResourceRecordSetRegion
+E ResourceRecordSetRegionCnNorthwest1 ResourceRecordSetRegion
+E ResourceRecordSetRegionEuCentral1 ResourceRecordSetRegion
+E ResourceRecordSetRegionEuCentral2 ResourceRecordSetRegion
+E ResourceRecordSetRegionEuNorth1 ResourceRecordSetRegion
+E ResourceRecordSetRegionEuSouth1 ResourceRecordSetRegion
+E ResourceRecordSetRegionEuSouth2 ResourceRecordSetRegion
+E ResourceRecordSetRegionEuWest1 ResourceRecordSetRegion
+E ResourceRecordSetRegionEuWest2 ResourceRecordSetRegion
+E ResourceRecordSetRegionEuWest3 ResourceRecordSetRegion
+E ResourceRecordSetRegionEuscDeEast1 ResourceRecordSetRegion
+E ResourceRecordSetRegionIlCentral1 ResourceRecordSetRegion
+E ResourceRecordSetRegionMeCentral1 ResourceRecordSetRegion
+E ResourceRecordSetRegionMeSouth1 ResourceRecordSetRegion
+E ResourceRecordSetRegionMxCentral1 ResourceRecordSetRegion
+E ResourceRecordSetRegionSaEast1 ResourceRecordSetRegion
+E ResourceRecordSetRegionUsEast1 ResourceRecordSetRegion
+E ResourceRecordSetRegionUsEast2 ResourceRecordSetRegion
+E ResourceRecordSetRegionUsGovEast1 ResourceRecordSetRegion
+E ResourceRecordSetRegionUsGovWest1 ResourceRecordSetRegion
+E ResourceRecordSetRegionUsWest1 ResourceRecordSetRegion
+E ResourceRecordSetRegionUsWest2 ResourceRecordSetRegion
+E ReusableDelegationSetLimitTypeMaxZonesByReusableDelegationSet ReusableDelegationSetLimitType
+E StatisticAverage Statistic
+E StatisticMaximum Statistic
+E StatisticMinimum Statistic
+E StatisticSampleCount Statistic
+E StatisticSum Statistic
+E TagResourceTypeHealthcheck TagResourceType
+E TagResourceTypeHostedzone TagResourceType
+E VPCRegionAfSouth1 VPCRegion
+E VPCRegionApEast1 VPCRegion
+E VPCRegionApEast2 VPCRegion
+E VPCRegionApNortheast1 VPCRegion
+E VPCRegionApNortheast2 VPCRegion
+E VPCRegionApNortheast3 VPCRegion
+E VPCRegionApSouth1 VPCRegion
+E VPCRegionApSouth2 VPCRegion
+E VPCRegionApSoutheast1 VPCRegion
+E VPCRegionApSoutheast2 VPCRegion
+E VPCRegionApSoutheast3 VPCRegion
+E VPCRegionApSoutheast4 VPCRegion
+E VPCRegionApSoutheast5 VPCRegion
+E VPCRegionApSoutheast6 VPCRegion
+E VPCRegionApSoutheast7 VPCRegion
+E VPCRegionCaCentral1 VPCRegion
+E VPCRegionCaWest1 VPCRegion
+E VPCRegionCnNorth1 VPCRegion
+E VPCRegionCnNorthwest1 VPCRegion
+E VPCRegionEuCentral1 VPCRegion
+E VPCRegionEuCentral2 VPCRegion
+E VPCRegionEuIsoeWest1 VPCRegion
+E VPCRegionEuNorth1 VPCRegion
+E VPCRegionEuSouth1 VPCRegion
+E VPCRegionEuSouth2 VPCRegion
+E VPCRegionEuWest1 VPCRegion
+E VPCRegionEuWest2 VPCRegion
+E VPCRegionEuWest3 VPCRegion
+E VPCRegionEuscDeEast1 VPCRegion
+E VPCRegionIlCentral1 VPCRegion
+E VPCRegionMeCentral1 VPCRegion
+E VPCRegionMeSouth1 VPCRegion
+E VPCRegionMxCentral1 VPCRegion
+E VPCRegionSaEast1 VPCRegion
+E VPCRegionUsEast1 VPCRegion
+E VPCRegionUsEast2 VPCRegion
+E VPCRegionUsGovEast1 VPCRegion
+E VPCRegionUsGovWest1 VPCRegion
+E VPCRegionUsIsoEast1 VPCRegion
+E VPCRegionUsIsoWest1 VPCRegion
+E VPCRegionUsIsobEast1 VPCRegion
+E VPCRegionUsIsobWest1 VPCRegion
+E VPCRegionUsIsofEast1 VPCRegion
+E VPCRegionUsIsofSouth1 VPCRegion
+E VPCRegionUsWest1 VPCRegion
+E VPCRegionUsWest2 VPCRegion

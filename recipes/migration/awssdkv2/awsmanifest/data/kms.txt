@@ -1,0 +1,1174 @@
+C KMS
+S AuthResolverParameters
+S AuthSchemeResolver
+S CancelKeyDeletionInput
+S CancelKeyDeletionOutput
+S Client
+S ConnectCustomKeyStoreInput
+S ConnectCustomKeyStoreOutput
+S CreateAliasInput
+S CreateAliasOutput
+S CreateCustomKeyStoreInput
+S CreateCustomKeyStoreOutput
+S CreateGrantInput
+S CreateGrantOutput
+S CreateKeyInput
+S CreateKeyOutput
+S DecryptInput
+S DecryptOutput
+S DeleteAliasInput
+S DeleteAliasOutput
+S DeleteCustomKeyStoreInput
+S DeleteCustomKeyStoreOutput
+S DeleteImportedKeyMaterialInput
+S DeleteImportedKeyMaterialOutput
+S DeriveSharedSecretInput
+S DeriveSharedSecretOutput
+S DescribeCustomKeyStoresAPIClient
+S DescribeCustomKeyStoresInput
+S DescribeCustomKeyStoresOutput
+S DescribeCustomKeyStoresPaginator
+S DescribeCustomKeyStoresPaginatorOptions
+S DescribeKeyInput
+S DescribeKeyOutput
+S DisableKeyInput
+S DisableKeyOutput
+S DisableKeyRotationInput
+S DisableKeyRotationOutput
+S DisconnectCustomKeyStoreInput
+S DisconnectCustomKeyStoreOutput
+S EnableKeyInput
+S EnableKeyOutput
+S EnableKeyRotationInput
+S EnableKeyRotationOutput
+S EncryptInput
+S EncryptOutput
+S EndpointParameters
+S EndpointResolver
+S EndpointResolverFromURL
+S EndpointResolverFunc
+S EndpointResolverOptions
+S EndpointResolverV2
+S GenerateDataKeyInput
+S GenerateDataKeyOutput
+S GenerateDataKeyPairInput
+S GenerateDataKeyPairOutput
+S GenerateDataKeyPairWithoutPlaintextInput
+S GenerateDataKeyPairWithoutPlaintextOutput
+S GenerateDataKeyWithoutPlaintextInput
+S GenerateDataKeyWithoutPlaintextOutput
+S GenerateMacInput
+S GenerateMacOutput
+S GenerateRandomInput
+S GenerateRandomOutput
+S GetKeyLastUsageInput
+S GetKeyLastUsageOutput
+S GetKeyPolicyInput
+S GetKeyPolicyOutput
+S GetKeyRotationStatusInput
+S GetKeyRotationStatusOutput
+S GetParametersForImportInput
+S GetParametersForImportOutput
+S GetPublicKeyInput
+S GetPublicKeyOutput
+S HTTPClient
+S HTTPSignerV4
+S ImportKeyMaterialInput
+S ImportKeyMaterialOutput
+S ListAliasesAPIClient
+S ListAliasesInput
+S ListAliasesOutput
+S ListAliasesPaginator
+S ListAliasesPaginatorOptions
+S ListGrantsAPIClient
+S ListGrantsInput
+S ListGrantsOutput
+S ListGrantsPaginator
+S ListGrantsPaginatorOptions
+S ListKeyPoliciesAPIClient
+S ListKeyPoliciesInput
+S ListKeyPoliciesOutput
+S ListKeyPoliciesPaginator
+S ListKeyPoliciesPaginatorOptions
+S ListKeyRotationsAPIClient
+S ListKeyRotationsInput
+S ListKeyRotationsOutput
+S ListKeyRotationsPaginator
+S ListKeyRotationsPaginatorOptions
+S ListKeysAPIClient
+S ListKeysInput
+S ListKeysOutput
+S ListKeysPaginator
+S ListKeysPaginatorOptions
+S ListResourceTagsAPIClient
+S ListResourceTagsInput
+S ListResourceTagsOutput
+S ListResourceTagsPaginator
+S ListResourceTagsPaginatorOptions
+S ListRetirableGrantsAPIClient
+S ListRetirableGrantsInput
+S ListRetirableGrantsOutput
+S ListRetirableGrantsPaginator
+S ListRetirableGrantsPaginatorOptions
+S New
+S NewDefaultEndpointResolver
+S NewDefaultEndpointResolverV2
+S NewDescribeCustomKeyStoresPaginator
+S NewFromConfig
+S NewListAliasesPaginator
+S NewListGrantsPaginator
+S NewListKeyPoliciesPaginator
+S NewListKeyRotationsPaginator
+S NewListKeysPaginator
+S NewListResourceTagsPaginator
+S NewListRetirableGrantsPaginator
+S Options
+S PutKeyPolicyInput
+S PutKeyPolicyOutput
+S ReEncryptInput
+S ReEncryptOutput
+S ReplicateKeyInput
+S ReplicateKeyOutput
+S ResolveEndpoint
+S RetireGrantInput
+S RetireGrantOutput
+S RevokeGrantInput
+S RevokeGrantOutput
+S RotateKeyOnDemandInput
+S RotateKeyOnDemandOutput
+S ScheduleKeyDeletionInput
+S ScheduleKeyDeletionOutput
+S ServiceAPIVersion
+S ServiceID
+S SignInput
+S SignOutput
+S TagResourceInput
+S TagResourceOutput
+S TypeRegistry
+S UntagResourceInput
+S UntagResourceOutput
+S UpdateAliasInput
+S UpdateAliasOutput
+S UpdateCustomKeyStoreInput
+S UpdateCustomKeyStoreOutput
+S UpdateKeyDescriptionInput
+S UpdateKeyDescriptionOutput
+S UpdatePrimaryRegionInput
+S UpdatePrimaryRegionOutput
+S VerifyInput
+S VerifyMacInput
+S VerifyMacOutput
+S VerifyOutput
+S WithAPIOptions
+S WithEndpointResolver
+S WithEndpointResolverV2
+S WithSigV4SigningName
+S WithSigV4SigningRegion
+O CancelKeyDeletion
+O ConnectCustomKeyStore
+O CreateAlias
+O CreateCustomKeyStore
+O CreateGrant
+O CreateKey
+O Decrypt
+O DeleteAlias
+O DeleteCustomKeyStore
+O DeleteImportedKeyMaterial
+O DeriveSharedSecret
+O DescribeCustomKeyStores
+O DescribeKey
+O DisableKey
+O DisableKeyRotation
+O DisconnectCustomKeyStore
+O EnableKey
+O EnableKeyRotation
+O Encrypt
+O GenerateDataKey
+O GenerateDataKeyPair
+O GenerateDataKeyPairWithoutPlaintext
+O GenerateDataKeyWithoutPlaintext
+O GenerateMac
+O GenerateRandom
+O GetKeyLastUsage
+O GetKeyPolicy
+O GetKeyRotationStatus
+O GetParametersForImport
+O GetPublicKey
+O ImportKeyMaterial
+O ListAliases
+O ListGrants
+O ListKeyPolicies
+O ListKeyRotations
+O ListKeys
+O ListResourceTags
+O ListRetirableGrants
+O PutKeyPolicy
+O ReEncrypt
+O ReplicateKey
+O RetireGrant
+O RevokeGrant
+O RotateKeyOnDemand
+O ScheduleKeyDeletion
+O Sign
+O TagResource
+O UntagResource
+O UpdateAlias
+O UpdateCustomKeyStore
+O UpdateKeyDescription
+O UpdatePrimaryRegion
+O Verify
+O VerifyMac
+X ErrCodeAlreadyExistsException AlreadyExistsException
+X ErrCodeCloudHsmClusterInUseException CloudHsmClusterInUseException
+X ErrCodeCloudHsmClusterInvalidConfigurationException CloudHsmClusterInvalidConfigurationException
+X ErrCodeCloudHsmClusterNotActiveException CloudHsmClusterNotActiveException
+X ErrCodeCloudHsmClusterNotFoundException CloudHsmClusterNotFoundException
+X ErrCodeCloudHsmClusterNotRelatedException CloudHsmClusterNotRelatedException
+X ErrCodeConflictException ConflictException
+X ErrCodeCustomKeyStoreHasCMKsException CustomKeyStoreHasCMKsException
+X ErrCodeCustomKeyStoreInvalidStateException CustomKeyStoreInvalidStateException
+X ErrCodeCustomKeyStoreNameInUseException CustomKeyStoreNameInUseException
+X ErrCodeCustomKeyStoreNotFoundException CustomKeyStoreNotFoundException
+X ErrCodeDependencyTimeoutException DependencyTimeoutException
+X ErrCodeDisabledException DisabledException
+X ErrCodeDryRunOperationException DryRunOperationException
+X ErrCodeExpiredImportTokenException ExpiredImportTokenException
+X ErrCodeIncorrectKeyException IncorrectKeyException
+X ErrCodeIncorrectKeyMaterialException IncorrectKeyMaterialException
+X ErrCodeIncorrectTrustAnchorException IncorrectTrustAnchorException
+X ErrCodeInternalException KMSInternalException
+X ErrCodeInvalidAliasNameException InvalidAliasNameException
+X ErrCodeInvalidArnException InvalidArnException
+X ErrCodeInvalidCiphertextException InvalidCiphertextException
+X ErrCodeInvalidGrantIdException InvalidGrantIdException
+X ErrCodeInvalidGrantTokenException InvalidGrantTokenException
+X ErrCodeInvalidImportTokenException InvalidImportTokenException
+X ErrCodeInvalidKeyUsageException InvalidKeyUsageException
+X ErrCodeInvalidMarkerException InvalidMarkerException
+X ErrCodeInvalidStateException KMSInvalidStateException
+X ErrCodeKMSInvalidMacException KMSInvalidMacException
+X ErrCodeKMSInvalidSignatureException KMSInvalidSignatureException
+X ErrCodeKeyUnavailableException KeyUnavailableException
+X ErrCodeLimitExceededException LimitExceededException
+X ErrCodeMalformedPolicyDocumentException MalformedPolicyDocumentException
+X ErrCodeNotFoundException NotFoundException
+X ErrCodeTagException TagException
+X ErrCodeUnsupportedOperationException UnsupportedOperationException
+X ErrCodeXksKeyAlreadyInUseException XksKeyAlreadyInUseException
+X ErrCodeXksKeyInvalidConfigurationException XksKeyInvalidConfigurationException
+X ErrCodeXksKeyNotFoundException XksKeyNotFoundException
+X ErrCodeXksProxyIncorrectAuthenticationCredentialException XksProxyIncorrectAuthenticationCredentialException
+X ErrCodeXksProxyInvalidConfigurationException XksProxyInvalidConfigurationException
+X ErrCodeXksProxyInvalidResponseException XksProxyInvalidResponseException
+X ErrCodeXksProxyUriEndpointInUseException XksProxyUriEndpointInUseException
+X ErrCodeXksProxyUriInUseException XksProxyUriInUseException
+X ErrCodeXksProxyUriUnreachableException XksProxyUriUnreachableException
+X ErrCodeXksProxyVpcEndpointServiceInUseException XksProxyVpcEndpointServiceInUseException
+X ErrCodeXksProxyVpcEndpointServiceInvalidConfigurationException XksProxyVpcEndpointServiceInvalidConfigurationException
+X ErrCodeXksProxyVpcEndpointServiceNotFoundException XksProxyVpcEndpointServiceNotFoundException
+I DescribeCustomKeyStoresInput.Limit int64 int32
+I EnableKeyRotationInput.RotationPeriodInDays int64 int32
+I GenerateDataKeyInput.NumberOfBytes int64 int32
+I GenerateDataKeyWithoutPlaintextInput.NumberOfBytes int64 int32
+I GenerateRandomInput.NumberOfBytes int64 int32
+I GetKeyRotationStatusOutput.RotationPeriodInDays int64 int32
+I KeyMetadata.PendingDeletionWindowInDays int64 int32
+I ListAliasesInput.Limit int64 int32
+I ListGrantsInput.Limit int64 int32
+I ListKeyPoliciesInput.Limit int64 int32
+I ListKeyRotationsInput.Limit int64 int32
+I ListKeysInput.Limit int64 int32
+I ListResourceTagsInput.Limit int64 int32
+I ListRetirableGrantsInput.Limit int64 int32
+I ScheduleKeyDeletionInput.PendingWindowInDays int64 int32
+I ScheduleKeyDeletionOutput.PendingWindowInDays int64 int32
+R CreateCustomKeyStoreInput.XksProxyAuthenticationCredential XksProxyAuthenticationCredentialType
+R CreateGrantInput.Constraints GrantConstraints
+R CreateKeyOutput.KeyMetadata KeyMetadata
+R CustomKeyStoresListEntry.XksProxyConfiguration XksProxyConfigurationType
+R DecryptInput.Recipient RecipientInfo
+R DeriveSharedSecretInput.Recipient RecipientInfo
+R DescribeKeyOutput.KeyMetadata KeyMetadata
+R GenerateDataKeyInput.Recipient RecipientInfo
+R GenerateDataKeyPairInput.Recipient RecipientInfo
+R GenerateRandomInput.Recipient RecipientInfo
+R GetKeyLastUsageOutput.KeyLastUsage KeyLastUsageData
+R GrantListEntry.Constraints GrantConstraints
+R KeyMetadata.MultiRegionConfiguration MultiRegionConfiguration
+R KeyMetadata.XksKeyConfiguration XksKeyConfigurationType
+R MultiRegionConfiguration.PrimaryKey MultiRegionKey
+R ReplicateKeyOutput.ReplicaKeyMetadata KeyMetadata
+R UpdateCustomKeyStoreInput.XksProxyAuthenticationCredential XksProxyAuthenticationCredentialType
+V AliasListEntry.AliasArn string
+V AliasListEntry.AliasName string
+V AliasListEntry.TargetKeyId string
+V AlreadyExistsException.ErrorCodeOverride string
+V AlreadyExistsException.Message string
+V CancelKeyDeletionInput.KeyId string
+V CancelKeyDeletionOutput.KeyId string
+V CloudHsmClusterInUseException.ErrorCodeOverride string
+V CloudHsmClusterInUseException.Message string
+V CloudHsmClusterInvalidConfigurationException.ErrorCodeOverride string
+V CloudHsmClusterInvalidConfigurationException.Message string
+V CloudHsmClusterNotActiveException.ErrorCodeOverride string
+V CloudHsmClusterNotActiveException.Message string
+V CloudHsmClusterNotFoundException.ErrorCodeOverride string
+V CloudHsmClusterNotFoundException.Message string
+V CloudHsmClusterNotRelatedException.ErrorCodeOverride string
+V CloudHsmClusterNotRelatedException.Message string
+V ConflictException.ErrorCodeOverride string
+V ConflictException.Message string
+V ConnectCustomKeyStoreInput.CustomKeyStoreId string
+V CreateAliasInput.AliasName string
+V CreateAliasInput.TargetKeyId string
+V CreateCustomKeyStoreInput.CloudHsmClusterId string
+V CreateCustomKeyStoreInput.CustomKeyStoreName string
+V CreateCustomKeyStoreInput.KeyStorePassword string
+V CreateCustomKeyStoreInput.TrustAnchorCertificate string
+V CreateCustomKeyStoreInput.XksProxyUriEndpoint string
+V CreateCustomKeyStoreInput.XksProxyUriPath string
+V CreateCustomKeyStoreInput.XksProxyVpcEndpointServiceName string
+V CreateCustomKeyStoreInput.XksProxyVpcEndpointServiceOwner string
+V CreateCustomKeyStoreOutput.CustomKeyStoreId string
+V CreateGrantInput.DryRun bool
+V CreateGrantInput.GranteePrincipal string
+V CreateGrantInput.GranteeServicePrincipal string
+V CreateGrantInput.KeyId string
+V CreateGrantInput.Name string
+V CreateGrantInput.RetiringPrincipal string
+V CreateGrantInput.RetiringServicePrincipal string
+V CreateGrantOutput.GrantId string
+V CreateGrantOutput.GrantToken string
+V CreateKeyInput.CustomKeyStoreId string
+V CreateKeyInput.Description string
+V CreateKeyInput.MultiRegion bool
+V CreateKeyInput.Policy string
+V CreateKeyInput.XksKeyId string
+V CustomKeyStoreHasCMKsException.ErrorCodeOverride string
+V CustomKeyStoreHasCMKsException.Message string
+V CustomKeyStoreInvalidStateException.ErrorCodeOverride string
+V CustomKeyStoreInvalidStateException.Message string
+V CustomKeyStoreNameInUseException.ErrorCodeOverride string
+V CustomKeyStoreNameInUseException.Message string
+V CustomKeyStoreNotFoundException.ErrorCodeOverride string
+V CustomKeyStoreNotFoundException.Message string
+V CustomKeyStoresListEntry.CloudHsmClusterId string
+V CustomKeyStoresListEntry.CustomKeyStoreId string
+V CustomKeyStoresListEntry.CustomKeyStoreName string
+V CustomKeyStoresListEntry.TrustAnchorCertificate string
+V DecryptInput.DryRun bool
+V DecryptInput.KeyId string
+V DecryptOutput.KeyId string
+V DecryptOutput.KeyMaterialId string
+V DeleteAliasInput.AliasName string
+V DeleteCustomKeyStoreInput.CustomKeyStoreId string
+V DeleteImportedKeyMaterialInput.KeyId string
+V DeleteImportedKeyMaterialInput.KeyMaterialId string
+V DeleteImportedKeyMaterialOutput.KeyId string
+V DeleteImportedKeyMaterialOutput.KeyMaterialId string
+V DependencyTimeoutException.ErrorCodeOverride string
+V DependencyTimeoutException.Message string
+V DeriveSharedSecretInput.DryRun bool
+V DeriveSharedSecretInput.KeyId string
+V DeriveSharedSecretOutput.KeyId string
+V DescribeCustomKeyStoresInput.CustomKeyStoreId string
+V DescribeCustomKeyStoresInput.CustomKeyStoreName string
+V DescribeCustomKeyStoresInput.Limit int32
+V DescribeCustomKeyStoresInput.Marker string
+V DescribeCustomKeyStoresOutput.NextMarker string
+V DescribeKeyInput.KeyId string
+V DisableKeyInput.KeyId string
+V DisableKeyRotationInput.KeyId string
+V DisabledException.ErrorCodeOverride string
+V DisabledException.Message string
+V DisconnectCustomKeyStoreInput.CustomKeyStoreId string
+V DryRunOperationException.ErrorCodeOverride string
+V DryRunOperationException.Message string
+V EnableKeyInput.KeyId string
+V EnableKeyRotationInput.KeyId string
+V EnableKeyRotationInput.RotationPeriodInDays int32
+V EncryptInput.DryRun bool
+V EncryptInput.KeyId string
+V EncryptOutput.KeyId string
+V EndpointParameters.Endpoint string
+V EndpointParameters.Region string
+V EndpointParameters.UseDualStack bool
+V EndpointParameters.UseFIPS bool
+V ExpiredImportTokenException.ErrorCodeOverride string
+V ExpiredImportTokenException.Message string
+V GenerateDataKeyInput.DryRun bool
+V GenerateDataKeyInput.KeyId string
+V GenerateDataKeyInput.NumberOfBytes int32
+V GenerateDataKeyOutput.KeyId string
+V GenerateDataKeyOutput.KeyMaterialId string
+V GenerateDataKeyPairInput.DryRun bool
+V GenerateDataKeyPairInput.KeyId string
+V GenerateDataKeyPairOutput.KeyId string
+V GenerateDataKeyPairOutput.KeyMaterialId string
+V GenerateDataKeyPairWithoutPlaintextInput.DryRun bool
+V GenerateDataKeyPairWithoutPlaintextInput.KeyId string
+V GenerateDataKeyPairWithoutPlaintextOutput.KeyId string
+V GenerateDataKeyPairWithoutPlaintextOutput.KeyMaterialId string
+V GenerateDataKeyWithoutPlaintextInput.DryRun bool
+V GenerateDataKeyWithoutPlaintextInput.KeyId string
+V GenerateDataKeyWithoutPlaintextInput.NumberOfBytes int32
+V GenerateDataKeyWithoutPlaintextOutput.KeyId string
+V GenerateDataKeyWithoutPlaintextOutput.KeyMaterialId string
+V GenerateMacInput.DryRun bool
+V GenerateMacInput.KeyId string
+V GenerateMacOutput.KeyId string
+V GenerateRandomInput.CustomKeyStoreId string
+V GenerateRandomInput.NumberOfBytes int32
+V GetKeyLastUsageInput.KeyId string
+V GetKeyLastUsageOutput.KeyId string
+V GetKeyPolicyInput.KeyId string
+V GetKeyPolicyInput.PolicyName string
+V GetKeyPolicyOutput.Policy string
+V GetKeyPolicyOutput.PolicyName string
+V GetKeyRotationStatusInput.KeyId string
+V GetKeyRotationStatusOutput.KeyId string
+V GetKeyRotationStatusOutput.RotationPeriodInDays int32
+V GetParametersForImportInput.KeyId string
+V GetParametersForImportOutput.KeyId string
+V GetPublicKeyInput.KeyId string
+V GetPublicKeyOutput.KeyId string
+V GrantConstraints.SourceArn string
+V GrantListEntry.GrantId string
+V GrantListEntry.GranteePrincipal string
+V GrantListEntry.GranteeServicePrincipal string
+V GrantListEntry.IssuingAccount string
+V GrantListEntry.KeyId string
+V GrantListEntry.Name string
+V GrantListEntry.RetiringPrincipal string
+V GrantListEntry.RetiringServicePrincipal string
+V ImportKeyMaterialInput.KeyId string
+V ImportKeyMaterialInput.KeyMaterialDescription string
+V ImportKeyMaterialInput.KeyMaterialId string
+V ImportKeyMaterialOutput.KeyId string
+V ImportKeyMaterialOutput.KeyMaterialId string
+V IncorrectKeyException.ErrorCodeOverride string
+V IncorrectKeyException.Message string
+V IncorrectKeyMaterialException.ErrorCodeOverride string
+V IncorrectKeyMaterialException.Message string
+V IncorrectTrustAnchorException.ErrorCodeOverride string
+V IncorrectTrustAnchorException.Message string
+V InvalidAliasNameException.ErrorCodeOverride string
+V InvalidAliasNameException.Message string
+V InvalidArnException.ErrorCodeOverride string
+V InvalidArnException.Message string
+V InvalidCiphertextException.ErrorCodeOverride string
+V InvalidCiphertextException.Message string
+V InvalidGrantIdException.ErrorCodeOverride string
+V InvalidGrantIdException.Message string
+V InvalidGrantTokenException.ErrorCodeOverride string
+V InvalidGrantTokenException.Message string
+V InvalidImportTokenException.ErrorCodeOverride string
+V InvalidImportTokenException.Message string
+V InvalidKeyUsageException.ErrorCodeOverride string
+V InvalidKeyUsageException.Message string
+V InvalidMarkerException.ErrorCodeOverride string
+V InvalidMarkerException.Message string
+V KMSInternalException.ErrorCodeOverride string
+V KMSInternalException.Message string
+V KMSInvalidMacException.ErrorCodeOverride string
+V KMSInvalidMacException.Message string
+V KMSInvalidSignatureException.ErrorCodeOverride string
+V KMSInvalidSignatureException.Message string
+V KMSInvalidStateException.ErrorCodeOverride string
+V KMSInvalidStateException.Message string
+V KeyLastUsageData.CloudTrailEventId string
+V KeyLastUsageData.KmsRequestId string
+V KeyListEntry.KeyArn string
+V KeyListEntry.KeyId string
+V KeyMetadata.AWSAccountId string
+V KeyMetadata.Arn string
+V KeyMetadata.CloudHsmClusterId string
+V KeyMetadata.CurrentKeyMaterialId string
+V KeyMetadata.CustomKeyStoreId string
+V KeyMetadata.Description string
+V KeyMetadata.KeyId string
+V KeyMetadata.MultiRegion bool
+V KeyMetadata.PendingDeletionWindowInDays int32
+V KeyUnavailableException.ErrorCodeOverride string
+V KeyUnavailableException.Message string
+V LimitExceededException.ErrorCodeOverride string
+V LimitExceededException.Message string
+V ListAliasesInput.KeyId string
+V ListAliasesInput.Limit int32
+V ListAliasesInput.Marker string
+V ListAliasesOutput.NextMarker string
+V ListGrantsInput.GrantId string
+V ListGrantsInput.GranteePrincipal string
+V ListGrantsInput.GranteeServicePrincipal string
+V ListGrantsInput.KeyId string
+V ListGrantsInput.Limit int32
+V ListGrantsInput.Marker string
+V ListGrantsOutput.NextMarker string
+V ListKeyPoliciesInput.KeyId string
+V ListKeyPoliciesInput.Limit int32
+V ListKeyPoliciesInput.Marker string
+V ListKeyPoliciesOutput.NextMarker string
+V ListKeyRotationsInput.KeyId string
+V ListKeyRotationsInput.Limit int32
+V ListKeyRotationsInput.Marker string
+V ListKeyRotationsOutput.NextMarker string
+V ListKeysInput.Limit int32
+V ListKeysInput.Marker string
+V ListKeysOutput.NextMarker string
+V ListResourceTagsInput.KeyId string
+V ListResourceTagsInput.Limit int32
+V ListResourceTagsInput.Marker string
+V ListResourceTagsOutput.NextMarker string
+V ListRetirableGrantsInput.Limit int32
+V ListRetirableGrantsInput.Marker string
+V ListRetirableGrantsInput.RetiringPrincipal string
+V ListRetirableGrantsInput.RetiringServicePrincipal string
+V ListRetirableGrantsOutput.NextMarker string
+V MalformedPolicyDocumentException.ErrorCodeOverride string
+V MalformedPolicyDocumentException.Message string
+V MultiRegionKey.Arn string
+V MultiRegionKey.Region string
+V NotFoundException.ErrorCodeOverride string
+V NotFoundException.Message string
+V Options.BaseEndpoint string
+V PutKeyPolicyInput.KeyId string
+V PutKeyPolicyInput.Policy string
+V PutKeyPolicyInput.PolicyName string
+V ReEncryptInput.DestinationKeyId string
+V ReEncryptInput.DryRun bool
+V ReEncryptInput.SourceKeyId string
+V ReEncryptOutput.DestinationKeyMaterialId string
+V ReEncryptOutput.KeyId string
+V ReEncryptOutput.SourceKeyId string
+V ReEncryptOutput.SourceKeyMaterialId string
+V ReplicateKeyInput.Description string
+V ReplicateKeyInput.KeyId string
+V ReplicateKeyInput.Policy string
+V ReplicateKeyInput.ReplicaRegion string
+V ReplicateKeyOutput.ReplicaPolicy string
+V RetireGrantInput.DryRun bool
+V RetireGrantInput.GrantId string
+V RetireGrantInput.GrantToken string
+V RetireGrantInput.KeyId string
+V RevokeGrantInput.DryRun bool
+V RevokeGrantInput.GrantId string
+V RevokeGrantInput.KeyId string
+V RotateKeyOnDemandInput.KeyId string
+V RotateKeyOnDemandOutput.KeyId string
+V RotationsListEntry.KeyId string
+V RotationsListEntry.KeyMaterialDescription string
+V RotationsListEntry.KeyMaterialId string
+V ScheduleKeyDeletionInput.KeyId string
+V ScheduleKeyDeletionInput.PendingWindowInDays int32
+V ScheduleKeyDeletionOutput.KeyId string
+V ScheduleKeyDeletionOutput.PendingWindowInDays int32
+V SignInput.DryRun bool
+V SignInput.KeyId string
+V SignOutput.KeyId string
+V Tag.TagKey string
+V Tag.TagValue string
+V TagException.ErrorCodeOverride string
+V TagException.Message string
+V TagResourceInput.KeyId string
+V UnsupportedOperationException.ErrorCodeOverride string
+V UnsupportedOperationException.Message string
+V UntagResourceInput.KeyId string
+V UpdateAliasInput.AliasName string
+V UpdateAliasInput.TargetKeyId string
+V UpdateCustomKeyStoreInput.CloudHsmClusterId string
+V UpdateCustomKeyStoreInput.CustomKeyStoreId string
+V UpdateCustomKeyStoreInput.KeyStorePassword string
+V UpdateCustomKeyStoreInput.NewCustomKeyStoreName string
+V UpdateCustomKeyStoreInput.XksProxyUriEndpoint string
+V UpdateCustomKeyStoreInput.XksProxyUriPath string
+V UpdateCustomKeyStoreInput.XksProxyVpcEndpointServiceName string
+V UpdateCustomKeyStoreInput.XksProxyVpcEndpointServiceOwner string
+V UpdateKeyDescriptionInput.Description string
+V UpdateKeyDescriptionInput.KeyId string
+V UpdatePrimaryRegionInput.KeyId string
+V UpdatePrimaryRegionInput.PrimaryRegion string
+V VerifyInput.DryRun bool
+V VerifyInput.KeyId string
+V VerifyMacInput.DryRun bool
+V VerifyMacInput.KeyId string
+V VerifyMacOutput.KeyId string
+V VerifyOutput.KeyId string
+V XksKeyAlreadyInUseException.ErrorCodeOverride string
+V XksKeyAlreadyInUseException.Message string
+V XksKeyConfigurationType.Id string
+V XksKeyInvalidConfigurationException.ErrorCodeOverride string
+V XksKeyInvalidConfigurationException.Message string
+V XksKeyNotFoundException.ErrorCodeOverride string
+V XksKeyNotFoundException.Message string
+V XksProxyAuthenticationCredentialType.AccessKeyId string
+V XksProxyAuthenticationCredentialType.RawSecretAccessKey string
+V XksProxyConfigurationType.AccessKeyId string
+V XksProxyConfigurationType.UriEndpoint string
+V XksProxyConfigurationType.UriPath string
+V XksProxyConfigurationType.VpcEndpointServiceName string
+V XksProxyConfigurationType.VpcEndpointServiceOwner string
+V XksProxyIncorrectAuthenticationCredentialException.ErrorCodeOverride string
+V XksProxyIncorrectAuthenticationCredentialException.Message string
+V XksProxyInvalidConfigurationException.ErrorCodeOverride string
+V XksProxyInvalidConfigurationException.Message string
+V XksProxyInvalidResponseException.ErrorCodeOverride string
+V XksProxyInvalidResponseException.Message string
+V XksProxyUriEndpointInUseException.ErrorCodeOverride string
+V XksProxyUriEndpointInUseException.Message string
+V XksProxyUriInUseException.ErrorCodeOverride string
+V XksProxyUriInUseException.Message string
+V XksProxyUriUnreachableException.ErrorCodeOverride string
+V XksProxyUriUnreachableException.Message string
+V XksProxyVpcEndpointServiceInUseException.ErrorCodeOverride string
+V XksProxyVpcEndpointServiceInUseException.Message string
+V XksProxyVpcEndpointServiceInvalidConfigurationException.ErrorCodeOverride string
+V XksProxyVpcEndpointServiceInvalidConfigurationException.Message string
+V XksProxyVpcEndpointServiceNotFoundException.ErrorCodeOverride string
+V XksProxyVpcEndpointServiceNotFoundException.Message string
+Q DecryptInput.EncryptionContext
+Q EncryptInput.EncryptionContext
+Q GenerateDataKeyInput.EncryptionContext
+Q GenerateDataKeyPairInput.EncryptionContext
+Q GenerateDataKeyPairWithoutPlaintextInput.EncryptionContext
+Q GenerateDataKeyWithoutPlaintextInput.EncryptionContext
+Q GrantConstraints.EncryptionContextEquals
+Q GrantConstraints.EncryptionContextSubset
+Q ReEncryptInput.DestinationEncryptionContext
+Q ReEncryptInput.SourceEncryptionContext
+D CreateKeyInput.BypassPolicyLockoutSafetyCheck bool
+D DescribeCustomKeyStoresOutput.Truncated bool
+D GetKeyRotationStatusOutput.KeyRotationEnabled bool
+D KeyMetadata.Enabled bool
+D ListAliasesOutput.Truncated bool
+D ListKeyPoliciesOutput.Truncated bool
+D ListKeyRotationsOutput.Truncated bool
+D ListKeysOutput.Truncated bool
+D ListResourceTagsOutput.Truncated bool
+D PutKeyPolicyInput.BypassPolicyLockoutSafetyCheck bool
+D ReplicateKeyInput.BypassPolicyLockoutSafetyCheck bool
+D VerifyMacOutput.MacValid bool
+D VerifyOutput.SignatureValid bool
+L CreateGrantInput.GrantTokens -
+L CreateGrantInput.Operations GrantOperation
+L CreateKeyInput.Tags Tag
+L DecryptInput.GrantTokens -
+L DeriveSharedSecretInput.GrantTokens -
+L DescribeCustomKeyStoresOutput.CustomKeyStores CustomKeyStoresListEntry
+L DescribeKeyInput.GrantTokens -
+L EncryptInput.GrantTokens -
+L GenerateDataKeyInput.GrantTokens -
+L GenerateDataKeyPairInput.GrantTokens -
+L GenerateDataKeyPairWithoutPlaintextInput.GrantTokens -
+L GenerateDataKeyWithoutPlaintextInput.GrantTokens -
+L GenerateMacInput.GrantTokens -
+L GetPublicKeyInput.GrantTokens -
+L GetPublicKeyOutput.EncryptionAlgorithms EncryptionAlgorithmSpec
+L GetPublicKeyOutput.KeyAgreementAlgorithms KeyAgreementAlgorithmSpec
+L GetPublicKeyOutput.SigningAlgorithms SigningAlgorithmSpec
+L GrantListEntry.Operations GrantOperation
+L KeyMetadata.EncryptionAlgorithms EncryptionAlgorithmSpec
+L KeyMetadata.KeyAgreementAlgorithms KeyAgreementAlgorithmSpec
+L KeyMetadata.MacAlgorithms MacAlgorithmSpec
+L KeyMetadata.SigningAlgorithms SigningAlgorithmSpec
+L ListAliasesOutput.Aliases AliasListEntry
+L ListKeyPoliciesOutput.PolicyNames -
+L ListKeyRotationsOutput.Rotations RotationsListEntry
+L ListKeysOutput.Keys KeyListEntry
+L ListResourceTagsOutput.Tags Tag
+L MultiRegionConfiguration.ReplicaKeys MultiRegionKey
+L ReEncryptInput.GrantTokens -
+L ReplicateKeyInput.Tags Tag
+L ReplicateKeyOutput.ReplicaTags Tag
+L SignInput.GrantTokens -
+L TagResourceInput.Tags Tag
+L UntagResourceInput.TagKeys -
+L VerifyInput.GrantTokens -
+L VerifyMacInput.GrantTokens -
+F CreateCustomKeyStoreInput.CustomKeyStoreType CustomKeyStoreType
+F CreateCustomKeyStoreInput.XksProxyConnectivity XksProxyConnectivityType
+F CreateGrantInput.Operations GrantOperation
+F CreateKeyInput.CustomerMasterKeySpec CustomerMasterKeySpec
+F CreateKeyInput.KeySpec KeySpec
+F CreateKeyInput.KeyUsage KeyUsageType
+F CreateKeyInput.Origin OriginType
+F CustomKeyStoresListEntry.ConnectionErrorCode ConnectionErrorCodeType
+F CustomKeyStoresListEntry.ConnectionState ConnectionStateType
+F CustomKeyStoresListEntry.CustomKeyStoreType CustomKeyStoreType
+F DecryptInput.DryRunModifiers DryRunModifierType
+F DecryptInput.EncryptionAlgorithm EncryptionAlgorithmSpec
+F DecryptOutput.EncryptionAlgorithm EncryptionAlgorithmSpec
+F DeriveSharedSecretInput.KeyAgreementAlgorithm KeyAgreementAlgorithmSpec
+F DeriveSharedSecretOutput.KeyAgreementAlgorithm KeyAgreementAlgorithmSpec
+F DeriveSharedSecretOutput.KeyOrigin OriginType
+F EncryptInput.EncryptionAlgorithm EncryptionAlgorithmSpec
+F EncryptOutput.EncryptionAlgorithm EncryptionAlgorithmSpec
+F GenerateDataKeyInput.KeySpec DataKeySpec
+F GenerateDataKeyPairInput.KeyPairSpec DataKeyPairSpec
+F GenerateDataKeyPairOutput.KeyPairSpec DataKeyPairSpec
+F GenerateDataKeyPairWithoutPlaintextInput.KeyPairSpec DataKeyPairSpec
+F GenerateDataKeyPairWithoutPlaintextOutput.KeyPairSpec DataKeyPairSpec
+F GenerateDataKeyWithoutPlaintextInput.KeySpec DataKeySpec
+F GenerateMacInput.MacAlgorithm MacAlgorithmSpec
+F GenerateMacOutput.MacAlgorithm MacAlgorithmSpec
+F GetParametersForImportInput.WrappingAlgorithm AlgorithmSpec
+F GetParametersForImportInput.WrappingKeySpec WrappingKeySpec
+F GetPublicKeyOutput.CustomerMasterKeySpec CustomerMasterKeySpec
+F GetPublicKeyOutput.EncryptionAlgorithms EncryptionAlgorithmSpec
+F GetPublicKeyOutput.KeyAgreementAlgorithms KeyAgreementAlgorithmSpec
+F GetPublicKeyOutput.KeySpec KeySpec
+F GetPublicKeyOutput.KeyUsage KeyUsageType
+F GetPublicKeyOutput.SigningAlgorithms SigningAlgorithmSpec
+F GrantListEntry.Operations GrantOperation
+F ImportKeyMaterialInput.ExpirationModel ExpirationModelType
+F ImportKeyMaterialInput.ImportType ImportType
+F KeyLastUsageData.Operation KeyLastUsageTrackingOperation
+F KeyMetadata.CustomerMasterKeySpec CustomerMasterKeySpec
+F KeyMetadata.EncryptionAlgorithms EncryptionAlgorithmSpec
+F KeyMetadata.ExpirationModel ExpirationModelType
+F KeyMetadata.KeyAgreementAlgorithms KeyAgreementAlgorithmSpec
+F KeyMetadata.KeyManager KeyManagerType
+F KeyMetadata.KeySpec KeySpec
+F KeyMetadata.KeyState KeyState
+F KeyMetadata.KeyUsage KeyUsageType
+F KeyMetadata.MacAlgorithms MacAlgorithmSpec
+F KeyMetadata.Origin OriginType
+F KeyMetadata.SigningAlgorithms SigningAlgorithmSpec
+F ListKeyRotationsInput.IncludeKeyMaterial IncludeKeyMaterial
+F MultiRegionConfiguration.MultiRegionKeyType MultiRegionKeyType
+F ReEncryptInput.DestinationEncryptionAlgorithm EncryptionAlgorithmSpec
+F ReEncryptInput.DryRunModifiers DryRunModifierType
+F ReEncryptInput.SourceEncryptionAlgorithm EncryptionAlgorithmSpec
+F ReEncryptOutput.DestinationEncryptionAlgorithm EncryptionAlgorithmSpec
+F ReEncryptOutput.SourceEncryptionAlgorithm EncryptionAlgorithmSpec
+F RecipientInfo.KeyEncryptionAlgorithm KeyEncryptionMechanism
+F RotationsListEntry.ExpirationModel ExpirationModelType
+F RotationsListEntry.ImportState ImportState
+F RotationsListEntry.KeyMaterialState KeyMaterialState
+F RotationsListEntry.RotationType RotationType
+F ScheduleKeyDeletionOutput.KeyState KeyState
+F SignInput.MessageType MessageType
+F SignInput.SigningAlgorithm SigningAlgorithmSpec
+F SignOutput.SigningAlgorithm SigningAlgorithmSpec
+F UpdateCustomKeyStoreInput.XksProxyConnectivity XksProxyConnectivityType
+F VerifyInput.MessageType MessageType
+F VerifyInput.SigningAlgorithm SigningAlgorithmSpec
+F VerifyMacInput.MacAlgorithm MacAlgorithmSpec
+F VerifyMacOutput.MacAlgorithm MacAlgorithmSpec
+F VerifyOutput.SigningAlgorithm SigningAlgorithmSpec
+F XksProxyConfigurationType.Connectivity XksProxyConnectivityType
+N APIOptions
+N AWSAccountId
+N AccessKeyId
+N AliasArn
+N AliasName
+N Aliases
+N AppID
+N Arn
+N AttestationDocument
+N AuthSchemePreference
+N AuthSchemeResolver
+N AuthSchemes
+N BaseEndpoint
+N BypassPolicyLockoutSafetyCheck
+N CiphertextBlob
+N CiphertextForRecipient
+N ClientLogMode
+N CloudHsmClusterId
+N CloudTrailEventId
+N Constraints
+N CreationDate
+N Credentials
+N CurrentKeyMaterialId
+N CustomKeyStoreId
+N CustomKeyStoreName
+N CustomKeyStores
+N DefaultsMode
+N DeletionDate
+N Description
+N DestinationEncryptionContext
+N DestinationKeyId
+N DestinationKeyMaterialId
+N DisableClockSkewCorrection
+N DisableHTTPS
+N DryRun
+N Enabled
+N EncryptedKeyMaterial
+N EncryptionContext
+N EncryptionContextEquals
+N EncryptionContextSubset
+N Endpoint
+N EndpointOptions
+N EndpointResolver
+N EndpointResolverV2
+N ErrorCodeOverride
+N GrantId
+N GrantToken
+N GrantTokens
+N GranteePrincipal
+N GranteeServicePrincipal
+N Grants
+N HTTPClient
+N HTTPSignerV4
+N Id
+N ImportToken
+N Interceptors
+N IssuingAccount
+N KeyArn
+N KeyCreationDate
+N KeyId
+N KeyLastUsage
+N KeyMaterialDescription
+N KeyMaterialId
+N KeyMetadata
+N KeyRotationEnabled
+N KeyStorePassword
+N Keys
+N KmsRequestId
+N LastUpdatedDate
+N Limit
+N LogDeprecated
+N Logger
+N Mac
+N MacValid
+N Marker
+N Message
+N MeterProvider
+N MultiRegion
+N MultiRegionConfiguration
+N Name
+N NewCustomKeyStoreName
+N NextMarker
+N NextRotationDate
+N NumberOfBytes
+N OnDemandRotationStartDate
+N Operation
+N Options
+N ParametersValidTo
+N PendingDeletionWindowInDays
+N PendingWindowInDays
+N Plaintext
+N Policy
+N PolicyName
+N PolicyNames
+N PrimaryKey
+N PrimaryRegion
+N PrivateKeyCiphertextBlob
+N PrivateKeyPlaintext
+N Protocol
+N PublicKey
+N RawSecretAccessKey
+N Recipient
+N Region
+N ReplicaKeyMetadata
+N ReplicaKeys
+N ReplicaPolicy
+N ReplicaRegion
+N ReplicaTags
+N ResolvedRegion
+N Resolver
+N ResultMetadata
+N RetiringPrincipal
+N RetiringServicePrincipal
+N RetryMaxAttempts
+N RetryMode
+N Retryer
+N RotationDate
+N RotationPeriodInDays
+N Rotations
+N RuntimeEnvironment
+N SharedSecret
+N Signature
+N SignatureValid
+N SourceArn
+N SourceEncryptionContext
+N SourceKeyId
+N SourceKeyMaterialId
+N StopOnDuplicateToken
+N TagKey
+N TagKeys
+N TagValue
+N Tags
+N TargetKeyId
+N Timestamp
+N TracerProvider
+N TrackingStartDate
+N Truncated
+N TrustAnchorCertificate
+N UriEndpoint
+N UriPath
+N UseDualStack
+N UseDualStackEndpoint
+N UseFIPS
+N UseFIPSEndpoint
+N ValidTo
+N VpcEndpointServiceName
+N VpcEndpointServiceOwner
+N XksKeyConfiguration
+N XksKeyId
+N XksProxyAuthenticationCredential
+N XksProxyConfiguration
+N XksProxyUriEndpoint
+N XksProxyUriPath
+N XksProxyVpcEndpointServiceName
+N XksProxyVpcEndpointServiceOwner
+T AlgorithmSpec
+T AliasListEntry
+T AlreadyExistsException
+T CloudHsmClusterInUseException
+T CloudHsmClusterInvalidConfigurationException
+T CloudHsmClusterNotActiveException
+T CloudHsmClusterNotFoundException
+T CloudHsmClusterNotRelatedException
+T ConflictException
+T ConnectionErrorCodeType
+T ConnectionStateType
+T CustomKeyStoreHasCMKsException
+T CustomKeyStoreInvalidStateException
+T CustomKeyStoreNameInUseException
+T CustomKeyStoreNotFoundException
+T CustomKeyStoreType
+T CustomKeyStoresListEntry
+T CustomerMasterKeySpec
+T DataKeyPairSpec
+T DataKeySpec
+T DependencyTimeoutException
+T DisabledException
+T DryRunModifierType
+T DryRunOperationException
+T EncryptionAlgorithmSpec
+T ExpirationModelType
+T ExpiredImportTokenException
+T GrantConstraints
+T GrantListEntry
+T GrantOperation
+T ImportState
+T ImportType
+T IncludeKeyMaterial
+T IncorrectKeyException
+T IncorrectKeyMaterialException
+T IncorrectTrustAnchorException
+T InvalidAliasNameException
+T InvalidArnException
+T InvalidCiphertextException
+T InvalidGrantIdException
+T InvalidGrantTokenException
+T InvalidImportTokenException
+T InvalidKeyUsageException
+T InvalidMarkerException
+T KMSInternalException
+T KMSInvalidMacException
+T KMSInvalidSignatureException
+T KMSInvalidStateException
+T KeyAgreementAlgorithmSpec
+T KeyEncryptionMechanism
+T KeyLastUsageData
+T KeyLastUsageTrackingOperation
+T KeyListEntry
+T KeyManagerType
+T KeyMaterialState
+T KeyMetadata
+T KeySpec
+T KeyState
+T KeyUnavailableException
+T KeyUsageType
+T LimitExceededException
+T MacAlgorithmSpec
+T MalformedPolicyDocumentException
+T MessageType
+T MultiRegionConfiguration
+T MultiRegionKey
+T MultiRegionKeyType
+T NotFoundException
+T OriginType
+T RecipientInfo
+T RotationType
+T RotationsListEntry
+T SigningAlgorithmSpec
+T Tag
+T TagException
+T UnsupportedOperationException
+T WrappingKeySpec
+T XksKeyAlreadyInUseException
+T XksKeyConfigurationType
+T XksKeyInvalidConfigurationException
+T XksKeyNotFoundException
+T XksProxyAuthenticationCredentialType
+T XksProxyConfigurationType
+T XksProxyConnectivityType
+T XksProxyIncorrectAuthenticationCredentialException
+T XksProxyInvalidConfigurationException
+T XksProxyInvalidResponseException
+T XksProxyUriEndpointInUseException
+T XksProxyUriInUseException
+T XksProxyUriUnreachableException
+T XksProxyVpcEndpointServiceInUseException
+T XksProxyVpcEndpointServiceInvalidConfigurationException
+T XksProxyVpcEndpointServiceNotFoundException
+E AlgorithmSpecRsaAesKeyWrapSha1 AlgorithmSpec
+E AlgorithmSpecRsaAesKeyWrapSha256 AlgorithmSpec
+E AlgorithmSpecRsaesOaepSha1 AlgorithmSpec
+E AlgorithmSpecRsaesOaepSha256 AlgorithmSpec
+E AlgorithmSpecRsaesPkcs1V15 AlgorithmSpec
+E AlgorithmSpecSm2pke AlgorithmSpec
+E ConnectionErrorCodeTypeClusterNotFound ConnectionErrorCodeType
+E ConnectionErrorCodeTypeInsufficientCloudhsmHsms ConnectionErrorCodeType
+E ConnectionErrorCodeTypeInsufficientFreeAddressesInSubnet ConnectionErrorCodeType
+E ConnectionErrorCodeTypeInternalError ConnectionErrorCodeType
+E ConnectionErrorCodeTypeInvalidCredentials ConnectionErrorCodeType
+E ConnectionErrorCodeTypeNetworkErrors ConnectionErrorCodeType
+E ConnectionErrorCodeTypeSubnetNotFound ConnectionErrorCodeType
+E ConnectionErrorCodeTypeUserLockedOut ConnectionErrorCodeType
+E ConnectionErrorCodeTypeUserLoggedIn ConnectionErrorCodeType
+E ConnectionErrorCodeTypeUserNotFound ConnectionErrorCodeType
+E ConnectionErrorCodeTypeXksProxyAccessDenied ConnectionErrorCodeType
+E ConnectionErrorCodeTypeXksProxyInvalidConfiguration ConnectionErrorCodeType
+E ConnectionErrorCodeTypeXksProxyInvalidResponse ConnectionErrorCodeType
+E ConnectionErrorCodeTypeXksProxyInvalidTlsConfiguration ConnectionErrorCodeType
+E ConnectionErrorCodeTypeXksProxyNotReachable ConnectionErrorCodeType
+E ConnectionErrorCodeTypeXksProxyTimedOut ConnectionErrorCodeType
+E ConnectionErrorCodeTypeXksVpcEndpointServiceInvalidConfiguration ConnectionErrorCodeType
+E ConnectionErrorCodeTypeXksVpcEndpointServiceNotFound ConnectionErrorCodeType
+E ConnectionStateTypeConnected ConnectionStateType
+E ConnectionStateTypeConnecting ConnectionStateType
+E ConnectionStateTypeDisconnected ConnectionStateType
+E ConnectionStateTypeDisconnecting ConnectionStateType
+E ConnectionStateTypeFailed ConnectionStateType
+E CustomKeyStoreTypeAwsCloudhsm CustomKeyStoreType
+E CustomKeyStoreTypeExternalKeyStore CustomKeyStoreType
+E CustomerMasterKeySpecEccNistP256 CustomerMasterKeySpec
+E CustomerMasterKeySpecEccNistP384 CustomerMasterKeySpec
+E CustomerMasterKeySpecEccNistP521 CustomerMasterKeySpec
+E CustomerMasterKeySpecEccSecgP256k1 CustomerMasterKeySpec
+E CustomerMasterKeySpecHmac224 CustomerMasterKeySpec
+E CustomerMasterKeySpecHmac256 CustomerMasterKeySpec
+E CustomerMasterKeySpecHmac384 CustomerMasterKeySpec
+E CustomerMasterKeySpecHmac512 CustomerMasterKeySpec
+E CustomerMasterKeySpecRsa2048 CustomerMasterKeySpec
+E CustomerMasterKeySpecRsa3072 CustomerMasterKeySpec
+E CustomerMasterKeySpecRsa4096 CustomerMasterKeySpec
+E CustomerMasterKeySpecSm2 CustomerMasterKeySpec
+E CustomerMasterKeySpecSymmetricDefault CustomerMasterKeySpec
+E DataKeyPairSpecEccNistEdwards25519 DataKeyPairSpec
+E DataKeyPairSpecEccNistP256 DataKeyPairSpec
+E DataKeyPairSpecEccNistP384 DataKeyPairSpec
+E DataKeyPairSpecEccNistP521 DataKeyPairSpec
+E DataKeyPairSpecEccSecgP256k1 DataKeyPairSpec
+E DataKeyPairSpecRsa2048 DataKeyPairSpec
+E DataKeyPairSpecRsa3072 DataKeyPairSpec
+E DataKeyPairSpecRsa4096 DataKeyPairSpec
+E DataKeyPairSpecSm2 DataKeyPairSpec
+E DataKeySpecAes128 DataKeySpec
+E DataKeySpecAes256 DataKeySpec
+E DryRunModifierTypeIgnoreCiphertext DryRunModifierType
+E EncryptionAlgorithmSpecRsaesOaepSha1 EncryptionAlgorithmSpec
+E EncryptionAlgorithmSpecRsaesOaepSha256 EncryptionAlgorithmSpec
+E EncryptionAlgorithmSpecSm2pke EncryptionAlgorithmSpec
+E EncryptionAlgorithmSpecSymmetricDefault EncryptionAlgorithmSpec
+E ExpirationModelTypeKeyMaterialDoesNotExpire ExpirationModelType
+E ExpirationModelTypeKeyMaterialExpires ExpirationModelType
+E GrantOperationCreateGrant GrantOperation
+E GrantOperationDecrypt GrantOperation
+E GrantOperationDeriveSharedSecret GrantOperation
+E GrantOperationDescribeKey GrantOperation
+E GrantOperationEncrypt GrantOperation
+E GrantOperationGenerateDataKey GrantOperation
+E GrantOperationGenerateDataKeyPair GrantOperation
+E GrantOperationGenerateDataKeyPairWithoutPlaintext GrantOperation
+E GrantOperationGenerateDataKeyWithoutPlaintext GrantOperation
+E GrantOperationGenerateMac GrantOperation
+E GrantOperationGetPublicKey GrantOperation
+E GrantOperationReEncryptFrom GrantOperation
+E GrantOperationReEncryptTo GrantOperation
+E GrantOperationRetireGrant GrantOperation
+E GrantOperationSign GrantOperation
+E GrantOperationVerify GrantOperation
+E GrantOperationVerifyMac GrantOperation
+E ImportStateImported ImportState
+E ImportStatePendingImport ImportState
+E ImportTypeExistingKeyMaterial ImportType
+E ImportTypeNewKeyMaterial ImportType
+E IncludeKeyMaterialAllKeyMaterial IncludeKeyMaterial
+E IncludeKeyMaterialRotationsOnly IncludeKeyMaterial
+E KeyAgreementAlgorithmSpecEcdh KeyAgreementAlgorithmSpec
+E KeyEncryptionMechanismRsaesOaepSha256 KeyEncryptionMechanism
+E KeyLastUsageTrackingOperationDecrypt KeyLastUsageTrackingOperation
+E KeyLastUsageTrackingOperationDeriveSharedSecret KeyLastUsageTrackingOperation
+E KeyLastUsageTrackingOperationEncrypt KeyLastUsageTrackingOperation
+E KeyLastUsageTrackingOperationGenerateDataKey KeyLastUsageTrackingOperation
+E KeyLastUsageTrackingOperationGenerateDataKeyPair KeyLastUsageTrackingOperation
+E KeyLastUsageTrackingOperationGenerateDataKeyPairWithoutPlaintext KeyLastUsageTrackingOperation
+E KeyLastUsageTrackingOperationGenerateDataKeyWithoutPlaintext KeyLastUsageTrackingOperation
+E KeyLastUsageTrackingOperationGenerateMac KeyLastUsageTrackingOperation
+E KeyLastUsageTrackingOperationReEncrypt KeyLastUsageTrackingOperation
+E KeyLastUsageTrackingOperationSign KeyLastUsageTrackingOperation
+E KeyLastUsageTrackingOperationVerify KeyLastUsageTrackingOperation
+E KeyLastUsageTrackingOperationVerifyMac KeyLastUsageTrackingOperation
+E KeyManagerTypeAws KeyManagerType
+E KeyManagerTypeCustomer KeyManagerType
+E KeyMaterialStateCurrent KeyMaterialState
+E KeyMaterialStateNonCurrent KeyMaterialState
+E KeyMaterialStatePendingMultiRegionImportAndRotation KeyMaterialState
+E KeyMaterialStatePendingRotation KeyMaterialState
+E KeySpecEccNistEdwards25519 KeySpec
+E KeySpecEccNistP256 KeySpec
+E KeySpecEccNistP384 KeySpec
+E KeySpecEccNistP521 KeySpec
+E KeySpecEccSecgP256k1 KeySpec
+E KeySpecHmac224 KeySpec
+E KeySpecHmac256 KeySpec
+E KeySpecHmac384 KeySpec
+E KeySpecHmac512 KeySpec
+E KeySpecMlDsa44 KeySpec
+E KeySpecMlDsa65 KeySpec
+E KeySpecMlDsa87 KeySpec
+E KeySpecRsa2048 KeySpec
+E KeySpecRsa3072 KeySpec
+E KeySpecRsa4096 KeySpec
+E KeySpecSm2 KeySpec
+E KeySpecSymmetricDefault KeySpec
+E KeyStateCreating KeyState
+E KeyStateDisabled KeyState
+E KeyStateEnabled KeyState
+E KeyStatePendingDeletion KeyState
+E KeyStatePendingImport KeyState
+E KeyStatePendingReplicaDeletion KeyState
+E KeyStateUnavailable KeyState
+E KeyStateUpdating KeyState
+E KeyUsageTypeEncryptDecrypt KeyUsageType
+E KeyUsageTypeGenerateVerifyMac KeyUsageType
+E KeyUsageTypeKeyAgreement KeyUsageType
+E KeyUsageTypeSignVerify KeyUsageType
+E MacAlgorithmSpecHmacSha224 MacAlgorithmSpec
+E MacAlgorithmSpecHmacSha256 MacAlgorithmSpec
+E MacAlgorithmSpecHmacSha384 MacAlgorithmSpec
+E MacAlgorithmSpecHmacSha512 MacAlgorithmSpec
+E MessageTypeDigest MessageType
+E MessageTypeExternalMu MessageType
+E MessageTypeRaw MessageType
+E MultiRegionKeyTypePrimary MultiRegionKeyType
+E MultiRegionKeyTypeReplica MultiRegionKeyType
+E OriginTypeAwsCloudhsm OriginType
+E OriginTypeAwsKms OriginType
+E OriginTypeExternal OriginType
+E OriginTypeExternalKeyStore OriginType
+E RotationTypeAutomatic RotationType
+E RotationTypeOnDemand RotationType
+E SigningAlgorithmSpecEcdsaSha256 SigningAlgorithmSpec
+E SigningAlgorithmSpecEcdsaSha384 SigningAlgorithmSpec
+E SigningAlgorithmSpecEcdsaSha512 SigningAlgorithmSpec
+E SigningAlgorithmSpecEd25519PhSha512 SigningAlgorithmSpec
+E SigningAlgorithmSpecEd25519Sha512 SigningAlgorithmSpec
+E SigningAlgorithmSpecMlDsaShake256 SigningAlgorithmSpec
+E SigningAlgorithmSpecRsassaPkcs1V15Sha256 SigningAlgorithmSpec
+E SigningAlgorithmSpecRsassaPkcs1V15Sha384 SigningAlgorithmSpec
+E SigningAlgorithmSpecRsassaPkcs1V15Sha512 SigningAlgorithmSpec
+E SigningAlgorithmSpecRsassaPssSha256 SigningAlgorithmSpec
+E SigningAlgorithmSpecRsassaPssSha384 SigningAlgorithmSpec
+E SigningAlgorithmSpecRsassaPssSha512 SigningAlgorithmSpec
+E SigningAlgorithmSpecSm2dsa SigningAlgorithmSpec
+E WrappingKeySpecRsa2048 WrappingKeySpec
+E WrappingKeySpecRsa3072 WrappingKeySpec
+E WrappingKeySpecRsa4096 WrappingKeySpec
+E WrappingKeySpecSm2 WrappingKeySpec
+E XksProxyConnectivityTypePublicEndpoint XksProxyConnectivityType
+E XksProxyConnectivityTypeVpcEndpointService XksProxyConnectivityType

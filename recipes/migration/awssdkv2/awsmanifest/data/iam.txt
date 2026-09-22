@@ -1,0 +1,2378 @@
+C IAM
+S AcceptDelegationRequestInput
+S AcceptDelegationRequestOutput
+S AcquireRoleInput
+S AcquireRoleOutput
+S AddClientIDToOpenIDConnectProviderInput
+S AddClientIDToOpenIDConnectProviderOutput
+S AddRoleToInstanceProfileInput
+S AddRoleToInstanceProfileOutput
+S AddUserToGroupInput
+S AddUserToGroupOutput
+S AssociateDelegationRequestInput
+S AssociateDelegationRequestOutput
+S AttachGroupPolicyInput
+S AttachGroupPolicyOutput
+S AttachRolePolicyInput
+S AttachRolePolicyOutput
+S AttachUserPolicyInput
+S AttachUserPolicyOutput
+S AuthResolverParameters
+S AuthSchemeResolver
+S ChangePasswordInput
+S ChangePasswordOutput
+S Client
+S CreateAccessKeyInput
+S CreateAccessKeyOutput
+S CreateAccountAliasInput
+S CreateAccountAliasOutput
+S CreateDelegationRequestInput
+S CreateDelegationRequestOutput
+S CreateGroupInput
+S CreateGroupOutput
+S CreateInstanceProfileInput
+S CreateInstanceProfileOutput
+S CreateLoginProfileInput
+S CreateLoginProfileOutput
+S CreateOpenIDConnectProviderInput
+S CreateOpenIDConnectProviderOutput
+S CreatePolicyInput
+S CreatePolicyOutput
+S CreatePolicyVersionInput
+S CreatePolicyVersionOutput
+S CreateRoleInput
+S CreateRoleOutput
+S CreateSAMLProviderInput
+S CreateSAMLProviderOutput
+S CreateServiceLinkedRoleInput
+S CreateServiceLinkedRoleOutput
+S CreateServiceSpecificCredentialInput
+S CreateServiceSpecificCredentialOutput
+S CreateUserInput
+S CreateUserOutput
+S CreateVirtualMFADeviceInput
+S CreateVirtualMFADeviceOutput
+S DeactivateMFADeviceInput
+S DeactivateMFADeviceOutput
+S DeleteAccessKeyInput
+S DeleteAccessKeyOutput
+S DeleteAccountAliasInput
+S DeleteAccountAliasOutput
+S DeleteAccountPasswordPolicyInput
+S DeleteAccountPasswordPolicyOutput
+S DeleteGroupInput
+S DeleteGroupOutput
+S DeleteGroupPolicyInput
+S DeleteGroupPolicyOutput
+S DeleteInstanceProfileInput
+S DeleteInstanceProfileOutput
+S DeleteLoginProfileInput
+S DeleteLoginProfileOutput
+S DeleteOpenIDConnectProviderInput
+S DeleteOpenIDConnectProviderOutput
+S DeletePolicyInput
+S DeletePolicyOutput
+S DeletePolicyVersionInput
+S DeletePolicyVersionOutput
+S DeleteRoleInput
+S DeleteRoleOutput
+S DeleteRolePermissionsBoundaryInput
+S DeleteRolePermissionsBoundaryOutput
+S DeleteRolePolicyInput
+S DeleteRolePolicyOutput
+S DeleteSAMLProviderInput
+S DeleteSAMLProviderOutput
+S DeleteSSHPublicKeyInput
+S DeleteSSHPublicKeyOutput
+S DeleteServerCertificateInput
+S DeleteServerCertificateOutput
+S DeleteServiceLinkedRoleInput
+S DeleteServiceLinkedRoleOutput
+S DeleteServiceSpecificCredentialInput
+S DeleteServiceSpecificCredentialOutput
+S DeleteSigningCertificateInput
+S DeleteSigningCertificateOutput
+S DeleteUserInput
+S DeleteUserOutput
+S DeleteUserPermissionsBoundaryInput
+S DeleteUserPermissionsBoundaryOutput
+S DeleteUserPolicyInput
+S DeleteUserPolicyOutput
+S DeleteVirtualMFADeviceInput
+S DeleteVirtualMFADeviceOutput
+S DetachGroupPolicyInput
+S DetachGroupPolicyOutput
+S DetachRolePolicyInput
+S DetachRolePolicyOutput
+S DetachUserPolicyInput
+S DetachUserPolicyOutput
+S DisableOrganizationsRootCredentialsManagementInput
+S DisableOrganizationsRootCredentialsManagementOutput
+S DisableOrganizationsRootSessionsInput
+S DisableOrganizationsRootSessionsOutput
+S DisableOutboundWebIdentityFederationInput
+S DisableOutboundWebIdentityFederationOutput
+S EnableMFADeviceInput
+S EnableMFADeviceOutput
+S EnableOrganizationsRootCredentialsManagementInput
+S EnableOrganizationsRootCredentialsManagementOutput
+S EnableOrganizationsRootSessionsInput
+S EnableOrganizationsRootSessionsOutput
+S EnableOutboundWebIdentityFederationInput
+S EnableOutboundWebIdentityFederationOutput
+S EndpointParameters
+S EndpointResolver
+S EndpointResolverFromURL
+S EndpointResolverFunc
+S EndpointResolverOptions
+S EndpointResolverV2
+S GenerateCredentialReportInput
+S GenerateCredentialReportOutput
+S GenerateOrganizationsAccessReportInput
+S GenerateOrganizationsAccessReportOutput
+S GenerateServiceLastAccessedDetailsInput
+S GenerateServiceLastAccessedDetailsOutput
+S GetAccessKeyLastUsedInput
+S GetAccessKeyLastUsedOutput
+S GetAccountAuthorizationDetailsAPIClient
+S GetAccountAuthorizationDetailsInput
+S GetAccountAuthorizationDetailsOutput
+S GetAccountAuthorizationDetailsPaginator
+S GetAccountAuthorizationDetailsPaginatorOptions
+S GetAccountPasswordPolicyInput
+S GetAccountPasswordPolicyOutput
+S GetAccountPropertiesInput
+S GetAccountPropertiesOutput
+S GetAccountSummaryInput
+S GetAccountSummaryOutput
+S GetContextKeysForCustomPolicyInput
+S GetContextKeysForCustomPolicyOutput
+S GetContextKeysForPrincipalPolicyInput
+S GetContextKeysForPrincipalPolicyOutput
+S GetCredentialReportInput
+S GetCredentialReportOutput
+S GetDelegationRequestInput
+S GetDelegationRequestOutput
+S GetGroupAPIClient
+S GetGroupInput
+S GetGroupOutput
+S GetGroupPaginator
+S GetGroupPaginatorOptions
+S GetGroupPolicyInput
+S GetGroupPolicyOutput
+S GetHumanReadableSummaryInput
+S GetHumanReadableSummaryOutput
+S GetInstanceProfileAPIClient
+S GetInstanceProfileInput
+S GetInstanceProfileOutput
+S GetLoginProfileInput
+S GetLoginProfileOutput
+S GetMFADeviceInput
+S GetMFADeviceOutput
+S GetOpenIDConnectProviderInput
+S GetOpenIDConnectProviderOutput
+S GetOrganizationsAccessReportInput
+S GetOrganizationsAccessReportOutput
+S GetOutboundWebIdentityFederationInfoInput
+S GetOutboundWebIdentityFederationInfoOutput
+S GetPolicyAPIClient
+S GetPolicyInput
+S GetPolicyOutput
+S GetPolicyVersionInput
+S GetPolicyVersionOutput
+S GetRoleAPIClient
+S GetRoleInput
+S GetRoleOutput
+S GetRolePolicyInput
+S GetRolePolicyOutput
+S GetRoleTemplateVersionInput
+S GetRoleTemplateVersionOutput
+S GetSAMLProviderInput
+S GetSAMLProviderOutput
+S GetSSHPublicKeyInput
+S GetSSHPublicKeyOutput
+S GetServerCertificateInput
+S GetServerCertificateOutput
+S GetServiceLastAccessedDetailsInput
+S GetServiceLastAccessedDetailsOutput
+S GetServiceLastAccessedDetailsWithEntitiesInput
+S GetServiceLastAccessedDetailsWithEntitiesOutput
+S GetServiceLinkedRoleDeletionStatusInput
+S GetServiceLinkedRoleDeletionStatusOutput
+S GetUserAPIClient
+S GetUserInput
+S GetUserOutput
+S GetUserPolicyInput
+S GetUserPolicyOutput
+S HTTPClient
+S HTTPSignerV4
+S InstanceProfileExistsWaiter
+S InstanceProfileExistsWaiterOptions
+S ListAccessKeysAPIClient
+S ListAccessKeysInput
+S ListAccessKeysOutput
+S ListAccessKeysPaginator
+S ListAccessKeysPaginatorOptions
+S ListAccountAliasesAPIClient
+S ListAccountAliasesInput
+S ListAccountAliasesOutput
+S ListAccountAliasesPaginator
+S ListAccountAliasesPaginatorOptions
+S ListAttachedGroupPoliciesAPIClient
+S ListAttachedGroupPoliciesInput
+S ListAttachedGroupPoliciesOutput
+S ListAttachedGroupPoliciesPaginator
+S ListAttachedGroupPoliciesPaginatorOptions
+S ListAttachedRolePoliciesAPIClient
+S ListAttachedRolePoliciesInput
+S ListAttachedRolePoliciesOutput
+S ListAttachedRolePoliciesPaginator
+S ListAttachedRolePoliciesPaginatorOptions
+S ListAttachedUserPoliciesAPIClient
+S ListAttachedUserPoliciesInput
+S ListAttachedUserPoliciesOutput
+S ListAttachedUserPoliciesPaginator
+S ListAttachedUserPoliciesPaginatorOptions
+S ListDelegationRequestsInput
+S ListDelegationRequestsOutput
+S ListEntitiesForPolicyAPIClient
+S ListEntitiesForPolicyInput
+S ListEntitiesForPolicyOutput
+S ListEntitiesForPolicyPaginator
+S ListEntitiesForPolicyPaginatorOptions
+S ListGroupPoliciesAPIClient
+S ListGroupPoliciesInput
+S ListGroupPoliciesOutput
+S ListGroupPoliciesPaginator
+S ListGroupPoliciesPaginatorOptions
+S ListGroupsAPIClient
+S ListGroupsForUserAPIClient
+S ListGroupsForUserInput
+S ListGroupsForUserOutput
+S ListGroupsForUserPaginator
+S ListGroupsForUserPaginatorOptions
+S ListGroupsInput
+S ListGroupsOutput
+S ListGroupsPaginator
+S ListGroupsPaginatorOptions
+S ListInstanceProfileTagsAPIClient
+S ListInstanceProfileTagsInput
+S ListInstanceProfileTagsOutput
+S ListInstanceProfileTagsPaginator
+S ListInstanceProfileTagsPaginatorOptions
+S ListInstanceProfilesAPIClient
+S ListInstanceProfilesForRoleAPIClient
+S ListInstanceProfilesForRoleInput
+S ListInstanceProfilesForRoleOutput
+S ListInstanceProfilesForRolePaginator
+S ListInstanceProfilesForRolePaginatorOptions
+S ListInstanceProfilesInput
+S ListInstanceProfilesOutput
+S ListInstanceProfilesPaginator
+S ListInstanceProfilesPaginatorOptions
+S ListMFADeviceTagsAPIClient
+S ListMFADeviceTagsInput
+S ListMFADeviceTagsOutput
+S ListMFADeviceTagsPaginator
+S ListMFADeviceTagsPaginatorOptions
+S ListMFADevicesAPIClient
+S ListMFADevicesInput
+S ListMFADevicesOutput
+S ListMFADevicesPaginator
+S ListMFADevicesPaginatorOptions
+S ListOpenIDConnectProviderTagsAPIClient
+S ListOpenIDConnectProviderTagsInput
+S ListOpenIDConnectProviderTagsOutput
+S ListOpenIDConnectProviderTagsPaginator
+S ListOpenIDConnectProviderTagsPaginatorOptions
+S ListOpenIDConnectProvidersInput
+S ListOpenIDConnectProvidersOutput
+S ListOrganizationsFeaturesInput
+S ListOrganizationsFeaturesOutput
+S ListPoliciesAPIClient
+S ListPoliciesGrantingServiceAccessInput
+S ListPoliciesGrantingServiceAccessOutput
+S ListPoliciesInput
+S ListPoliciesOutput
+S ListPoliciesPaginator
+S ListPoliciesPaginatorOptions
+S ListPolicyTagsAPIClient
+S ListPolicyTagsInput
+S ListPolicyTagsOutput
+S ListPolicyTagsPaginator
+S ListPolicyTagsPaginatorOptions
+S ListPolicyVersionsAPIClient
+S ListPolicyVersionsInput
+S ListPolicyVersionsOutput
+S ListPolicyVersionsPaginator
+S ListPolicyVersionsPaginatorOptions
+S ListRolePoliciesAPIClient
+S ListRolePoliciesInput
+S ListRolePoliciesOutput
+S ListRolePoliciesPaginator
+S ListRolePoliciesPaginatorOptions
+S ListRoleTagsAPIClient
+S ListRoleTagsInput
+S ListRoleTagsOutput
+S ListRoleTagsPaginator
+S ListRoleTagsPaginatorOptions
+S ListRolesAPIClient
+S ListRolesInput
+S ListRolesOutput
+S ListRolesPaginator
+S ListRolesPaginatorOptions
+S ListSAMLProviderTagsAPIClient
+S ListSAMLProviderTagsInput
+S ListSAMLProviderTagsOutput
+S ListSAMLProviderTagsPaginator
+S ListSAMLProviderTagsPaginatorOptions
+S ListSAMLProvidersInput
+S ListSAMLProvidersOutput
+S ListSSHPublicKeysAPIClient
+S ListSSHPublicKeysInput
+S ListSSHPublicKeysOutput
+S ListSSHPublicKeysPaginator
+S ListSSHPublicKeysPaginatorOptions
+S ListServerCertificateTagsAPIClient
+S ListServerCertificateTagsInput
+S ListServerCertificateTagsOutput
+S ListServerCertificateTagsPaginator
+S ListServerCertificateTagsPaginatorOptions
+S ListServerCertificatesAPIClient
+S ListServerCertificatesInput
+S ListServerCertificatesOutput
+S ListServerCertificatesPaginator
+S ListServerCertificatesPaginatorOptions
+S ListServiceSpecificCredentialsInput
+S ListServiceSpecificCredentialsOutput
+S ListSigningCertificatesAPIClient
+S ListSigningCertificatesInput
+S ListSigningCertificatesOutput
+S ListSigningCertificatesPaginator
+S ListSigningCertificatesPaginatorOptions
+S ListUserPoliciesAPIClient
+S ListUserPoliciesInput
+S ListUserPoliciesOutput
+S ListUserPoliciesPaginator
+S ListUserPoliciesPaginatorOptions
+S ListUserTagsAPIClient
+S ListUserTagsInput
+S ListUserTagsOutput
+S ListUserTagsPaginator
+S ListUserTagsPaginatorOptions
+S ListUsersAPIClient
+S ListUsersInput
+S ListUsersOutput
+S ListUsersPaginator
+S ListUsersPaginatorOptions
+S ListVirtualMFADevicesAPIClient
+S ListVirtualMFADevicesInput
+S ListVirtualMFADevicesOutput
+S ListVirtualMFADevicesPaginator
+S ListVirtualMFADevicesPaginatorOptions
+S New
+S NewDefaultEndpointResolver
+S NewDefaultEndpointResolverV2
+S NewFromConfig
+S NewGetAccountAuthorizationDetailsPaginator
+S NewGetGroupPaginator
+S NewInstanceProfileExistsWaiter
+S NewListAccessKeysPaginator
+S NewListAccountAliasesPaginator
+S NewListAttachedGroupPoliciesPaginator
+S NewListAttachedRolePoliciesPaginator
+S NewListAttachedUserPoliciesPaginator
+S NewListEntitiesForPolicyPaginator
+S NewListGroupPoliciesPaginator
+S NewListGroupsForUserPaginator
+S NewListGroupsPaginator
+S NewListInstanceProfileTagsPaginator
+S NewListInstanceProfilesForRolePaginator
+S NewListInstanceProfilesPaginator
+S NewListMFADeviceTagsPaginator
+S NewListMFADevicesPaginator
+S NewListOpenIDConnectProviderTagsPaginator
+S NewListPoliciesPaginator
+S NewListPolicyTagsPaginator
+S NewListPolicyVersionsPaginator
+S NewListRolePoliciesPaginator
+S NewListRoleTagsPaginator
+S NewListRolesPaginator
+S NewListSAMLProviderTagsPaginator
+S NewListSSHPublicKeysPaginator
+S NewListServerCertificateTagsPaginator
+S NewListServerCertificatesPaginator
+S NewListSigningCertificatesPaginator
+S NewListUserPoliciesPaginator
+S NewListUserTagsPaginator
+S NewListUsersPaginator
+S NewListVirtualMFADevicesPaginator
+S NewPolicyExistsWaiter
+S NewRoleExistsWaiter
+S NewSimulateCustomPolicyPaginator
+S NewSimulatePrincipalPolicyPaginator
+S NewUserExistsWaiter
+S Options
+S PolicyExistsWaiter
+S PolicyExistsWaiterOptions
+S PutAccountPropertiesInput
+S PutAccountPropertiesOutput
+S PutGroupPolicyInput
+S PutGroupPolicyOutput
+S PutRolePermissionsBoundaryInput
+S PutRolePermissionsBoundaryOutput
+S PutRolePolicyInput
+S PutRolePolicyOutput
+S PutUserPermissionsBoundaryInput
+S PutUserPermissionsBoundaryOutput
+S PutUserPolicyInput
+S PutUserPolicyOutput
+S RejectDelegationRequestInput
+S RejectDelegationRequestOutput
+S RemoveClientIDFromOpenIDConnectProviderInput
+S RemoveClientIDFromOpenIDConnectProviderOutput
+S RemoveRoleFromInstanceProfileInput
+S RemoveRoleFromInstanceProfileOutput
+S RemoveUserFromGroupInput
+S RemoveUserFromGroupOutput
+S ResetServiceSpecificCredentialInput
+S ResetServiceSpecificCredentialOutput
+S ResolveEndpoint
+S ResyncMFADeviceInput
+S ResyncMFADeviceOutput
+S RoleExistsWaiter
+S RoleExistsWaiterOptions
+S SendDelegationTokenInput
+S SendDelegationTokenOutput
+S ServiceAPIVersion
+S ServiceID
+S SetDefaultPolicyVersionInput
+S SetDefaultPolicyVersionOutput
+S SetSecurityTokenServicePreferencesInput
+S SetSecurityTokenServicePreferencesOutput
+S SimulateCustomPolicyAPIClient
+S SimulateCustomPolicyInput
+S SimulateCustomPolicyOutput
+S SimulateCustomPolicyPaginator
+S SimulateCustomPolicyPaginatorOptions
+S SimulatePrincipalPolicyAPIClient
+S SimulatePrincipalPolicyInput
+S SimulatePrincipalPolicyOutput
+S SimulatePrincipalPolicyPaginator
+S SimulatePrincipalPolicyPaginatorOptions
+S TagInstanceProfileInput
+S TagInstanceProfileOutput
+S TagMFADeviceInput
+S TagMFADeviceOutput
+S TagOpenIDConnectProviderInput
+S TagOpenIDConnectProviderOutput
+S TagPolicyInput
+S TagPolicyOutput
+S TagRoleInput
+S TagRoleOutput
+S TagSAMLProviderInput
+S TagSAMLProviderOutput
+S TagServerCertificateInput
+S TagServerCertificateOutput
+S TagUserInput
+S TagUserOutput
+S UntagInstanceProfileInput
+S UntagInstanceProfileOutput
+S UntagMFADeviceInput
+S UntagMFADeviceOutput
+S UntagOpenIDConnectProviderInput
+S UntagOpenIDConnectProviderOutput
+S UntagPolicyInput
+S UntagPolicyOutput
+S UntagRoleInput
+S UntagRoleOutput
+S UntagSAMLProviderInput
+S UntagSAMLProviderOutput
+S UntagServerCertificateInput
+S UntagServerCertificateOutput
+S UntagUserInput
+S UntagUserOutput
+S UpdateAccessKeyInput
+S UpdateAccessKeyOutput
+S UpdateAccountPasswordPolicyInput
+S UpdateAccountPasswordPolicyOutput
+S UpdateAssumeRolePolicyInput
+S UpdateAssumeRolePolicyOutput
+S UpdateDelegationRequestInput
+S UpdateDelegationRequestOutput
+S UpdateGroupInput
+S UpdateGroupOutput
+S UpdateLoginProfileInput
+S UpdateLoginProfileOutput
+S UpdateOpenIDConnectProviderThumbprintInput
+S UpdateOpenIDConnectProviderThumbprintOutput
+S UpdateRoleDescriptionInput
+S UpdateRoleDescriptionOutput
+S UpdateRoleInput
+S UpdateRoleOutput
+S UpdateSAMLProviderInput
+S UpdateSAMLProviderOutput
+S UpdateSSHPublicKeyInput
+S UpdateSSHPublicKeyOutput
+S UpdateServerCertificateInput
+S UpdateServerCertificateOutput
+S UpdateServiceSpecificCredentialInput
+S UpdateServiceSpecificCredentialOutput
+S UpdateSigningCertificateInput
+S UpdateSigningCertificateOutput
+S UpdateUserInput
+S UpdateUserOutput
+S UploadSSHPublicKeyInput
+S UploadSSHPublicKeyOutput
+S UploadServerCertificateInput
+S UploadServerCertificateOutput
+S UploadSigningCertificateInput
+S UploadSigningCertificateOutput
+S UserExistsWaiter
+S UserExistsWaiterOptions
+S WithAPIOptions
+S WithEndpointResolver
+S WithEndpointResolverV2
+S WithSigV4SigningName
+S WithSigV4SigningRegion
+O AcceptDelegationRequest
+O AcquireRole
+O AddClientIDToOpenIDConnectProvider
+O AddRoleToInstanceProfile
+O AddUserToGroup
+O AssociateDelegationRequest
+O AttachGroupPolicy
+O AttachRolePolicy
+O AttachUserPolicy
+O ChangePassword
+O CreateAccessKey
+O CreateAccountAlias
+O CreateDelegationRequest
+O CreateGroup
+O CreateInstanceProfile
+O CreateLoginProfile
+O CreateOpenIDConnectProvider
+O CreatePolicy
+O CreatePolicyVersion
+O CreateRole
+O CreateSAMLProvider
+O CreateServiceLinkedRole
+O CreateServiceSpecificCredential
+O CreateUser
+O CreateVirtualMFADevice
+O DeactivateMFADevice
+O DeleteAccessKey
+O DeleteAccountAlias
+O DeleteAccountPasswordPolicy
+O DeleteGroup
+O DeleteGroupPolicy
+O DeleteInstanceProfile
+O DeleteLoginProfile
+O DeleteOpenIDConnectProvider
+O DeletePolicy
+O DeletePolicyVersion
+O DeleteRole
+O DeleteRolePermissionsBoundary
+O DeleteRolePolicy
+O DeleteSAMLProvider
+O DeleteSSHPublicKey
+O DeleteServerCertificate
+O DeleteServiceLinkedRole
+O DeleteServiceSpecificCredential
+O DeleteSigningCertificate
+O DeleteUser
+O DeleteUserPermissionsBoundary
+O DeleteUserPolicy
+O DeleteVirtualMFADevice
+O DetachGroupPolicy
+O DetachRolePolicy
+O DetachUserPolicy
+O DisableOrganizationsRootCredentialsManagement
+O DisableOrganizationsRootSessions
+O DisableOutboundWebIdentityFederation
+O EnableMFADevice
+O EnableOrganizationsRootCredentialsManagement
+O EnableOrganizationsRootSessions
+O EnableOutboundWebIdentityFederation
+O GenerateCredentialReport
+O GenerateOrganizationsAccessReport
+O GenerateServiceLastAccessedDetails
+O GetAccessKeyLastUsed
+O GetAccountAuthorizationDetails
+O GetAccountPasswordPolicy
+O GetAccountProperties
+O GetAccountSummary
+O GetContextKeysForCustomPolicy
+O GetContextKeysForPrincipalPolicy
+O GetCredentialReport
+O GetDelegationRequest
+O GetGroup
+O GetGroupPolicy
+O GetHumanReadableSummary
+O GetInstanceProfile
+O GetLoginProfile
+O GetMFADevice
+O GetOpenIDConnectProvider
+O GetOrganizationsAccessReport
+O GetOutboundWebIdentityFederationInfo
+O GetPolicy
+O GetPolicyVersion
+O GetRole
+O GetRolePolicy
+O GetRoleTemplateVersion
+O GetSAMLProvider
+O GetSSHPublicKey
+O GetServerCertificate
+O GetServiceLastAccessedDetails
+O GetServiceLastAccessedDetailsWithEntities
+O GetServiceLinkedRoleDeletionStatus
+O GetUser
+O GetUserPolicy
+O ListAccessKeys
+O ListAccountAliases
+O ListAttachedGroupPolicies
+O ListAttachedRolePolicies
+O ListAttachedUserPolicies
+O ListDelegationRequests
+O ListEntitiesForPolicy
+O ListGroupPolicies
+O ListGroups
+O ListGroupsForUser
+O ListInstanceProfileTags
+O ListInstanceProfiles
+O ListInstanceProfilesForRole
+O ListMFADeviceTags
+O ListMFADevices
+O ListOpenIDConnectProviderTags
+O ListOpenIDConnectProviders
+O ListOrganizationsFeatures
+O ListPolicies
+O ListPoliciesGrantingServiceAccess
+O ListPolicyTags
+O ListPolicyVersions
+O ListRolePolicies
+O ListRoleTags
+O ListRoles
+O ListSAMLProviderTags
+O ListSAMLProviders
+O ListSSHPublicKeys
+O ListServerCertificateTags
+O ListServerCertificates
+O ListServiceSpecificCredentials
+O ListSigningCertificates
+O ListUserPolicies
+O ListUserTags
+O ListUsers
+O ListVirtualMFADevices
+O PutAccountProperties
+O PutGroupPolicy
+O PutRolePermissionsBoundary
+O PutRolePolicy
+O PutUserPermissionsBoundary
+O PutUserPolicy
+O RejectDelegationRequest
+O RemoveClientIDFromOpenIDConnectProvider
+O RemoveRoleFromInstanceProfile
+O RemoveUserFromGroup
+O ResetServiceSpecificCredential
+O ResyncMFADevice
+O SendDelegationToken
+O SetDefaultPolicyVersion
+O SetSecurityTokenServicePreferences
+O SimulateCustomPolicy
+O SimulatePrincipalPolicy
+O TagInstanceProfile
+O TagMFADevice
+O TagOpenIDConnectProvider
+O TagPolicy
+O TagRole
+O TagSAMLProvider
+O TagServerCertificate
+O TagUser
+O UntagInstanceProfile
+O UntagMFADevice
+O UntagOpenIDConnectProvider
+O UntagPolicy
+O UntagRole
+O UntagSAMLProvider
+O UntagServerCertificate
+O UntagUser
+O UpdateAccessKey
+O UpdateAccountPasswordPolicy
+O UpdateAssumeRolePolicy
+O UpdateDelegationRequest
+O UpdateGroup
+O UpdateLoginProfile
+O UpdateOpenIDConnectProviderThumbprint
+O UpdateRole
+O UpdateRoleDescription
+O UpdateSAMLProvider
+O UpdateSSHPublicKey
+O UpdateServerCertificate
+O UpdateServiceSpecificCredential
+O UpdateSigningCertificate
+O UpdateUser
+O UploadSSHPublicKey
+O UploadServerCertificate
+O UploadSigningCertificate
+X ErrCodeConcurrentModificationException ConcurrentModification
+X ErrCodeCredentialReportExpiredException ReportExpired
+X ErrCodeCredentialReportNotPresentException ReportNotPresent
+X ErrCodeCredentialReportNotReadyException ReportInProgress
+X ErrCodeDeleteConflictException DeleteConflict
+X ErrCodeDuplicateCertificateException DuplicateCertificate
+X ErrCodeDuplicateSSHPublicKeyException DuplicateSSHPublicKey
+X ErrCodeEntityAlreadyExistsException EntityAlreadyExists
+X ErrCodeEntityTemporarilyUnmodifiableException EntityTemporarilyUnmodifiable
+X ErrCodeInvalidAuthenticationCodeException InvalidAuthenticationCode
+X ErrCodeInvalidCertificateException InvalidCertificate
+X ErrCodeInvalidInputException InvalidInput
+X ErrCodeInvalidPublicKeyException InvalidPublicKey
+X ErrCodeInvalidUserTypeException InvalidUserType
+X ErrCodeKeyPairMismatchException KeyPairMismatch
+X ErrCodeLimitExceededException LimitExceeded
+X ErrCodeMalformedCertificateException MalformedCertificate
+X ErrCodeMalformedPolicyDocumentException MalformedPolicyDocument
+X ErrCodeNoSuchEntityException NoSuchEntity
+X ErrCodeOpenIdIdpCommunicationErrorException OpenIdIdpCommunicationError
+X ErrCodePasswordPolicyViolationException PasswordPolicyViolation
+X ErrCodePolicyEvaluationException PolicyEvaluation
+X ErrCodePolicyNotAttachableException PolicyNotAttachable
+X ErrCodeReportGenerationLimitExceededException ReportGenerationLimitExceeded
+X ErrCodeServiceFailureException ServiceFailure
+X ErrCodeServiceNotSupportedException NotSupportedService
+X ErrCodeUnmodifiableEntityException UnmodifiableEntity
+X ErrCodeUnrecognizedPublicKeyEncodingException UnrecognizedPublicKeyEncoding
+I AccessDetail.TotalAuthenticatedEntities int64 int32
+I CreateRoleInput.MaxSessionDuration int64 int32
+I GetAccountAuthorizationDetailsInput.MaxItems int64 int32
+I GetGroupInput.MaxItems int64 int32
+I GetOrganizationsAccessReportInput.MaxItems int64 int32
+I GetOrganizationsAccessReportOutput.NumberOfServicesAccessible int64 int32
+I GetOrganizationsAccessReportOutput.NumberOfServicesNotAccessed int64 int32
+I GetServiceLastAccessedDetailsInput.MaxItems int64 int32
+I GetServiceLastAccessedDetailsWithEntitiesInput.MaxItems int64 int32
+I ListAccessKeysInput.MaxItems int64 int32
+I ListAccountAliasesInput.MaxItems int64 int32
+I ListAttachedGroupPoliciesInput.MaxItems int64 int32
+I ListAttachedRolePoliciesInput.MaxItems int64 int32
+I ListAttachedUserPoliciesInput.MaxItems int64 int32
+I ListEntitiesForPolicyInput.MaxItems int64 int32
+I ListGroupPoliciesInput.MaxItems int64 int32
+I ListGroupsForUserInput.MaxItems int64 int32
+I ListGroupsInput.MaxItems int64 int32
+I ListInstanceProfileTagsInput.MaxItems int64 int32
+I ListInstanceProfilesForRoleInput.MaxItems int64 int32
+I ListInstanceProfilesInput.MaxItems int64 int32
+I ListMFADeviceTagsInput.MaxItems int64 int32
+I ListMFADevicesInput.MaxItems int64 int32
+I ListOpenIDConnectProviderTagsInput.MaxItems int64 int32
+I ListPoliciesInput.MaxItems int64 int32
+I ListPolicyTagsInput.MaxItems int64 int32
+I ListPolicyVersionsInput.MaxItems int64 int32
+I ListRolePoliciesInput.MaxItems int64 int32
+I ListRoleTagsInput.MaxItems int64 int32
+I ListRolesInput.MaxItems int64 int32
+I ListSAMLProviderTagsInput.MaxItems int64 int32
+I ListSSHPublicKeysInput.MaxItems int64 int32
+I ListServerCertificateTagsInput.MaxItems int64 int32
+I ListServerCertificatesInput.MaxItems int64 int32
+I ListSigningCertificatesInput.MaxItems int64 int32
+I ListUserPoliciesInput.MaxItems int64 int32
+I ListUserTagsInput.MaxItems int64 int32
+I ListUsersInput.MaxItems int64 int32
+I ListVirtualMFADevicesInput.MaxItems int64 int32
+I ManagedPolicyDetail.AttachmentCount int64 int32
+I ManagedPolicyDetail.PermissionsBoundaryUsageCount int64 int32
+I PasswordPolicy.MaxPasswordAge int64 int32
+I PasswordPolicy.MinimumPasswordLength int64 int32
+I PasswordPolicy.PasswordReusePrevention int64 int32
+I Policy.AttachmentCount int64 int32
+I Policy.PermissionsBoundaryUsageCount int64 int32
+I Role.MaxSessionDuration int64 int32
+I ServiceLastAccessed.TotalAuthenticatedEntities int64 int32
+I SimulateCustomPolicyInput.MaxItems int64 int32
+I SimulatePrincipalPolicyInput.MaxItems int64 int32
+I UpdateAccountPasswordPolicyInput.MaxPasswordAge int64 int32
+I UpdateAccountPasswordPolicyInput.MinimumPasswordLength int64 int32
+I UpdateAccountPasswordPolicyInput.PasswordReusePrevention int64 int32
+I UpdateRoleInput.MaxSessionDuration int64 int32
+R AcquireRoleOutput.Role Role
+R CreateAccessKeyOutput.AccessKey AccessKey
+R CreateDelegationRequestInput.Permissions DelegationPermission
+R CreateGroupOutput.Group Group
+R CreateInstanceProfileOutput.InstanceProfile InstanceProfile
+R CreateLoginProfileOutput.LoginProfile LoginProfile
+R CreatePolicyOutput.Policy Policy
+R CreatePolicyVersionOutput.PolicyVersion PolicyVersion
+R CreateRoleOutput.Role Role
+R CreateServiceLinkedRoleOutput.Role Role
+R CreateServiceSpecificCredentialOutput.ServiceSpecificCredential ServiceSpecificCredential
+R CreateUserOutput.User User
+R CreateVirtualMFADeviceOutput.VirtualMFADevice VirtualMFADevice
+R DelegationRequest.Permissions DelegationPermission
+R EntityDetails.EntityInfo EntityInfo
+R EvaluationResult.OrganizationsDecisionDetail OrganizationsDecisionDetail
+R EvaluationResult.PermissionsBoundaryDecisionDetail PermissionsBoundaryDecisionDetail
+R GetAccessKeyLastUsedOutput.AccessKeyLastUsed AccessKeyLastUsed
+R GetAccountPasswordPolicyOutput.PasswordPolicy PasswordPolicy
+R GetDelegationRequestOutput.DelegationRequest DelegationRequest
+R GetGroupOutput.Group Group
+R GetInstanceProfileOutput.InstanceProfile InstanceProfile
+R GetLoginProfileOutput.LoginProfile LoginProfile
+R GetOrganizationsAccessReportOutput.ErrorDetails ErrorDetails
+R GetPolicyOutput.Policy Policy
+R GetPolicyVersionOutput.PolicyVersion PolicyVersion
+R GetRoleOutput.Role Role
+R GetRoleTemplateVersionOutput.RoleTemplateVersion RoleTemplateVersion
+R GetSSHPublicKeyOutput.SSHPublicKey SSHPublicKey
+R GetServerCertificateOutput.ServerCertificate ServerCertificate
+R GetServiceLastAccessedDetailsOutput.Error ErrorDetails
+R GetServiceLastAccessedDetailsWithEntitiesOutput.Error ErrorDetails
+R GetServiceLinkedRoleDeletionStatusOutput.Reason DeletionTaskFailureReasonType
+R GetUserOutput.User User
+R ResetServiceSpecificCredentialOutput.ServiceSpecificCredential ServiceSpecificCredential
+R ResourceSpecificResult.PermissionsBoundaryDecisionDetail PermissionsBoundaryDecisionDetail
+R Role.PermissionsBoundary AttachedPermissionsBoundary
+R Role.RoleLastUsed RoleLastUsed
+R Role.SourceRoleTemplate SourceRoleTemplate
+R RoleDetail.PermissionsBoundary AttachedPermissionsBoundary
+R RoleDetail.RoleLastUsed RoleLastUsed
+R ServerCertificate.ServerCertificateMetadata ServerCertificateMetadata
+R Statement.EndPosition Position
+R Statement.StartPosition Position
+R UpdateRoleDescriptionOutput.Role Role
+R UploadSSHPublicKeyOutput.SSHPublicKey SSHPublicKey
+R UploadServerCertificateOutput.ServerCertificateMetadata ServerCertificateMetadata
+R UploadSigningCertificateOutput.Certificate SigningCertificate
+R User.PermissionsBoundary AttachedPermissionsBoundary
+R UserDetail.PermissionsBoundary AttachedPermissionsBoundary
+R VirtualMFADevice.User User
+V AcceptDelegationRequestInput.DelegationRequestId string
+V AccessDetail.EntityPath string
+V AccessDetail.Region string
+V AccessDetail.ServiceName string
+V AccessDetail.ServiceNamespace string
+V AccessDetail.TotalAuthenticatedEntities int32
+V AccessKey.AccessKeyId string
+V AccessKey.SecretAccessKey string
+V AccessKey.UserName string
+V AccessKeyLastUsed.Region string
+V AccessKeyLastUsed.ServiceName string
+V AccessKeyMetadata.AccessKeyId string
+V AccessKeyMetadata.UserName string
+V AccountNotManagementOrDelegatedAdministratorException.ErrorCodeOverride string
+V AccountNotManagementOrDelegatedAdministratorException.Message string
+V AcquireRoleInput.TemplateArn string
+V AcquireRoleInput.TemplateMinorVersion int32
+V AddClientIDToOpenIDConnectProviderInput.ClientID string
+V AddClientIDToOpenIDConnectProviderInput.OpenIDConnectProviderArn string
+V AddRoleToInstanceProfileInput.InstanceProfileName string
+V AddRoleToInstanceProfileInput.RoleName string
+V AddUserToGroupInput.GroupName string
+V AddUserToGroupInput.UserName string
+V AssociateDelegationRequestInput.DelegationRequestId string
+V AttachGroupPolicyInput.GroupName string
+V AttachGroupPolicyInput.PolicyArn string
+V AttachRolePolicyInput.PolicyArn string
+V AttachRolePolicyInput.RoleName string
+V AttachUserPolicyInput.PolicyArn string
+V AttachUserPolicyInput.UserName string
+V AttachedPermissionsBoundary.PermissionsBoundaryArn string
+V AttachedPolicy.PolicyArn string
+V AttachedPolicy.PolicyName string
+V CallerIsNotManagementAccountException.ErrorCodeOverride string
+V CallerIsNotManagementAccountException.Message string
+V ChangePasswordInput.NewPassword string
+V ChangePasswordInput.OldPassword string
+V ConcurrentModificationException.ErrorCodeOverride string
+V ConcurrentModificationException.Message string
+V ContextEntry.ContextKeyName string
+V CreateAccessKeyInput.UserName string
+V CreateAccountAliasInput.AccountAlias string
+V CreateDelegationRequestInput.Description string
+V CreateDelegationRequestInput.NotificationChannel string
+V CreateDelegationRequestInput.OwnerAccountId string
+V CreateDelegationRequestInput.RedirectUrl string
+V CreateDelegationRequestInput.RequestMessage string
+V CreateDelegationRequestInput.RequestorWorkflowId string
+V CreateDelegationRequestInput.SessionDuration int32
+V CreateDelegationRequestOutput.ConsoleDeepLink string
+V CreateDelegationRequestOutput.DelegationRequestId string
+V CreateGroupInput.GroupName string
+V CreateGroupInput.Path string
+V CreateInstanceProfileInput.InstanceProfileName string
+V CreateInstanceProfileInput.Path string
+V CreateLoginProfileInput.Password string
+V CreateLoginProfileInput.UserName string
+V CreateOpenIDConnectProviderInput.Url string
+V CreateOpenIDConnectProviderOutput.OpenIDConnectProviderArn string
+V CreatePolicyInput.Description string
+V CreatePolicyInput.Path string
+V CreatePolicyInput.PolicyDocument string
+V CreatePolicyInput.PolicyName string
+V CreatePolicyVersionInput.PolicyArn string
+V CreatePolicyVersionInput.PolicyDocument string
+V CreateRoleInput.AssumeRolePolicyDocument string
+V CreateRoleInput.Description string
+V CreateRoleInput.MaxSessionDuration int32
+V CreateRoleInput.Path string
+V CreateRoleInput.PermissionsBoundary string
+V CreateRoleInput.RoleName string
+V CreateSAMLProviderInput.AddPrivateKey string
+V CreateSAMLProviderInput.Name string
+V CreateSAMLProviderInput.SAMLMetadataDocument string
+V CreateSAMLProviderOutput.SAMLProviderArn string
+V CreateServiceLinkedRoleInput.AWSServiceName string
+V CreateServiceLinkedRoleInput.CustomSuffix string
+V CreateServiceLinkedRoleInput.Description string
+V CreateServiceSpecificCredentialInput.CredentialAgeDays int32
+V CreateServiceSpecificCredentialInput.ServiceName string
+V CreateServiceSpecificCredentialInput.UserName string
+V CreateUserInput.Path string
+V CreateUserInput.PermissionsBoundary string
+V CreateUserInput.UserName string
+V CreateVirtualMFADeviceInput.Path string
+V CreateVirtualMFADeviceInput.VirtualMFADeviceName string
+V CredentialReportExpiredException.ErrorCodeOverride string
+V CredentialReportExpiredException.Message string
+V CredentialReportNotPresentException.ErrorCodeOverride string
+V CredentialReportNotPresentException.Message string
+V CredentialReportNotReadyException.ErrorCodeOverride string
+V CredentialReportNotReadyException.Message string
+V DeactivateMFADeviceInput.SerialNumber string
+V DeactivateMFADeviceInput.UserName string
+V DelegationPermission.PolicyTemplateArn string
+V DelegationRequest.ApproverId string
+V DelegationRequest.DelegationRequestId string
+V DelegationRequest.Description string
+V DelegationRequest.Notes string
+V DelegationRequest.OwnerAccountId string
+V DelegationRequest.OwnerId string
+V DelegationRequest.PermissionPolicy string
+V DelegationRequest.RedirectUrl string
+V DelegationRequest.RejectionReason string
+V DelegationRequest.RequestMessage string
+V DelegationRequest.RequestorId string
+V DelegationRequest.RequestorName string
+V DelegationRequest.SessionDuration int32
+V DeleteAccessKeyInput.AccessKeyId string
+V DeleteAccessKeyInput.UserName string
+V DeleteAccountAliasInput.AccountAlias string
+V DeleteConflictException.ErrorCodeOverride string
+V DeleteConflictException.Message string
+V DeleteGroupInput.GroupName string
+V DeleteGroupPolicyInput.GroupName string
+V DeleteGroupPolicyInput.PolicyName string
+V DeleteInstanceProfileInput.InstanceProfileName string
+V DeleteLoginProfileInput.UserName string
+V DeleteOpenIDConnectProviderInput.OpenIDConnectProviderArn string
+V DeletePolicyInput.PolicyArn string
+V DeletePolicyVersionInput.PolicyArn string
+V DeletePolicyVersionInput.VersionId string
+V DeleteRoleInput.RoleName string
+V DeleteRolePermissionsBoundaryInput.RoleName string
+V DeleteRolePolicyInput.PolicyName string
+V DeleteRolePolicyInput.RoleName string
+V DeleteSAMLProviderInput.SAMLProviderArn string
+V DeleteSSHPublicKeyInput.SSHPublicKeyId string
+V DeleteSSHPublicKeyInput.UserName string
+V DeleteServerCertificateInput.ServerCertificateName string
+V DeleteServiceLinkedRoleInput.RoleName string
+V DeleteServiceLinkedRoleOutput.DeletionTaskId string
+V DeleteServiceSpecificCredentialInput.ServiceSpecificCredentialId string
+V DeleteServiceSpecificCredentialInput.UserName string
+V DeleteSigningCertificateInput.CertificateId string
+V DeleteSigningCertificateInput.UserName string
+V DeleteUserInput.UserName string
+V DeleteUserPermissionsBoundaryInput.UserName string
+V DeleteUserPolicyInput.PolicyName string
+V DeleteUserPolicyInput.UserName string
+V DeleteVirtualMFADeviceInput.SerialNumber string
+V DeletionTaskFailureReasonType.Reason string
+V DetachGroupPolicyInput.GroupName string
+V DetachGroupPolicyInput.PolicyArn string
+V DetachRolePolicyInput.PolicyArn string
+V DetachRolePolicyInput.RoleName string
+V DetachUserPolicyInput.PolicyArn string
+V DetachUserPolicyInput.UserName string
+V DisableOrganizationsRootCredentialsManagementOutput.OrganizationId string
+V DisableOrganizationsRootSessionsOutput.OrganizationId string
+V DuplicateCertificateException.ErrorCodeOverride string
+V DuplicateCertificateException.Message string
+V DuplicateSSHPublicKeyException.ErrorCodeOverride string
+V DuplicateSSHPublicKeyException.Message string
+V EnableMFADeviceInput.AuthenticationCode1 string
+V EnableMFADeviceInput.AuthenticationCode2 string
+V EnableMFADeviceInput.SerialNumber string
+V EnableMFADeviceInput.UserName string
+V EnableOrganizationsRootCredentialsManagementOutput.OrganizationId string
+V EnableOrganizationsRootSessionsOutput.OrganizationId string
+V EnableOutboundWebIdentityFederationOutput.IssuerIdentifier string
+V EndpointParameters.Endpoint string
+V EndpointParameters.Region string
+V EndpointParameters.UseDualStack bool
+V EndpointParameters.UseFIPS bool
+V EntityAlreadyExistsException.ErrorCodeOverride string
+V EntityAlreadyExistsException.Message string
+V EntityInfo.Arn string
+V EntityInfo.Id string
+V EntityInfo.Name string
+V EntityInfo.Path string
+V EntityTemporarilyUnmodifiableException.ErrorCodeOverride string
+V EntityTemporarilyUnmodifiableException.Message string
+V ErrorDetails.Code string
+V ErrorDetails.Message string
+V EvaluationResult.EvalActionName string
+V EvaluationResult.EvalResourceName string
+V FeatureDisabledException.ErrorCodeOverride string
+V FeatureDisabledException.Message string
+V FeatureEnabledException.ErrorCodeOverride string
+V FeatureEnabledException.Message string
+V GenerateCredentialReportOutput.Description string
+V GenerateOrganizationsAccessReportInput.EntityPath string
+V GenerateOrganizationsAccessReportInput.OrganizationsPolicyId string
+V GenerateOrganizationsAccessReportOutput.JobId string
+V GenerateServiceLastAccessedDetailsInput.Arn string
+V GenerateServiceLastAccessedDetailsOutput.JobId string
+V GetAccessKeyLastUsedInput.AccessKeyId string
+V GetAccessKeyLastUsedOutput.UserName string
+V GetAccountAuthorizationDetailsInput.Marker string
+V GetAccountAuthorizationDetailsInput.MaxItems int32
+V GetAccountAuthorizationDetailsOutput.Marker string
+V GetContextKeysForPrincipalPolicyInput.PolicySourceArn string
+V GetDelegationRequestInput.DelegationRequestId string
+V GetGroupInput.GroupName string
+V GetGroupInput.Marker string
+V GetGroupInput.MaxItems int32
+V GetGroupOutput.Marker string
+V GetGroupPolicyInput.GroupName string
+V GetGroupPolicyInput.PolicyName string
+V GetGroupPolicyOutput.GroupName string
+V GetGroupPolicyOutput.PolicyDocument string
+V GetGroupPolicyOutput.PolicyName string
+V GetHumanReadableSummaryInput.EntityArn string
+V GetHumanReadableSummaryInput.Locale string
+V GetHumanReadableSummaryOutput.Locale string
+V GetHumanReadableSummaryOutput.SummaryContent string
+V GetInstanceProfileInput.InstanceProfileName string
+V GetLoginProfileInput.UserName string
+V GetMFADeviceInput.SerialNumber string
+V GetMFADeviceInput.UserName string
+V GetMFADeviceOutput.SerialNumber string
+V GetMFADeviceOutput.UserName string
+V GetOpenIDConnectProviderInput.OpenIDConnectProviderArn string
+V GetOpenIDConnectProviderOutput.Url string
+V GetOrganizationsAccessReportInput.JobId string
+V GetOrganizationsAccessReportInput.Marker string
+V GetOrganizationsAccessReportInput.MaxItems int32
+V GetOrganizationsAccessReportOutput.Marker string
+V GetOrganizationsAccessReportOutput.NumberOfServicesAccessible int32
+V GetOrganizationsAccessReportOutput.NumberOfServicesNotAccessed int32
+V GetOutboundWebIdentityFederationInfoOutput.IssuerIdentifier string
+V GetPolicyInput.PolicyArn string
+V GetPolicyVersionInput.PolicyArn string
+V GetPolicyVersionInput.VersionId string
+V GetRoleInput.RoleName string
+V GetRolePolicyInput.PolicyName string
+V GetRolePolicyInput.RoleName string
+V GetRolePolicyOutput.PolicyDocument string
+V GetRolePolicyOutput.PolicyName string
+V GetRolePolicyOutput.RoleName string
+V GetRoleTemplateVersionInput.MinorVersion int32
+V GetRoleTemplateVersionInput.TemplateArn string
+V GetSAMLProviderInput.SAMLProviderArn string
+V GetSAMLProviderOutput.SAMLMetadataDocument string
+V GetSAMLProviderOutput.SAMLProviderUUID string
+V GetSSHPublicKeyInput.SSHPublicKeyId string
+V GetSSHPublicKeyInput.UserName string
+V GetServerCertificateInput.ServerCertificateName string
+V GetServiceLastAccessedDetailsInput.JobId string
+V GetServiceLastAccessedDetailsInput.Marker string
+V GetServiceLastAccessedDetailsInput.MaxItems int32
+V GetServiceLastAccessedDetailsOutput.Marker string
+V GetServiceLastAccessedDetailsWithEntitiesInput.JobId string
+V GetServiceLastAccessedDetailsWithEntitiesInput.Marker string
+V GetServiceLastAccessedDetailsWithEntitiesInput.MaxItems int32
+V GetServiceLastAccessedDetailsWithEntitiesInput.ServiceNamespace string
+V GetServiceLastAccessedDetailsWithEntitiesOutput.Marker string
+V GetServiceLinkedRoleDeletionStatusInput.DeletionTaskId string
+V GetUserInput.UserName string
+V GetUserPolicyInput.PolicyName string
+V GetUserPolicyInput.UserName string
+V GetUserPolicyOutput.PolicyDocument string
+V GetUserPolicyOutput.PolicyName string
+V GetUserPolicyOutput.UserName string
+V Group.Arn string
+V Group.GroupId string
+V Group.GroupName string
+V Group.Path string
+V GroupDetail.Arn string
+V GroupDetail.GroupId string
+V GroupDetail.GroupName string
+V GroupDetail.Path string
+V InlinePolicy.PolicyDocument string
+V InlinePolicy.PolicyName string
+V InlinePolicyIdentifierType.AttachmentName string
+V InlinePolicyIdentifierType.PolicyName string
+V InstanceProfile.Arn string
+V InstanceProfile.InstanceProfileId string
+V InstanceProfile.InstanceProfileName string
+V InstanceProfile.Path string
+V InvalidAuthenticationCodeException.ErrorCodeOverride string
+V InvalidAuthenticationCodeException.Message string
+V InvalidCertificateException.ErrorCodeOverride string
+V InvalidCertificateException.Message string
+V InvalidInputException.ErrorCodeOverride string
+V InvalidInputException.Message string
+V InvalidPublicKeyException.ErrorCodeOverride string
+V InvalidPublicKeyException.Message string
+V InvalidUserTypeException.ErrorCodeOverride string
+V InvalidUserTypeException.Message string
+V KeyPairMismatchException.ErrorCodeOverride string
+V KeyPairMismatchException.Message string
+V LimitExceededException.ErrorCodeOverride string
+V LimitExceededException.Message string
+V ListAccessKeysInput.Marker string
+V ListAccessKeysInput.MaxItems int32
+V ListAccessKeysInput.UserName string
+V ListAccessKeysOutput.Marker string
+V ListAccountAliasesInput.Marker string
+V ListAccountAliasesInput.MaxItems int32
+V ListAccountAliasesOutput.Marker string
+V ListAttachedGroupPoliciesInput.GroupName string
+V ListAttachedGroupPoliciesInput.Marker string
+V ListAttachedGroupPoliciesInput.MaxItems int32
+V ListAttachedGroupPoliciesInput.PathPrefix string
+V ListAttachedGroupPoliciesOutput.Marker string
+V ListAttachedRolePoliciesInput.Marker string
+V ListAttachedRolePoliciesInput.MaxItems int32
+V ListAttachedRolePoliciesInput.PathPrefix string
+V ListAttachedRolePoliciesInput.RoleName string
+V ListAttachedRolePoliciesOutput.Marker string
+V ListAttachedUserPoliciesInput.Marker string
+V ListAttachedUserPoliciesInput.MaxItems int32
+V ListAttachedUserPoliciesInput.PathPrefix string
+V ListAttachedUserPoliciesInput.UserName string
+V ListAttachedUserPoliciesOutput.Marker string
+V ListDelegationRequestsInput.Marker string
+V ListDelegationRequestsInput.MaxItems int32
+V ListDelegationRequestsInput.OwnerId string
+V ListDelegationRequestsOutput.Marker string
+V ListEntitiesForPolicyInput.Marker string
+V ListEntitiesForPolicyInput.MaxItems int32
+V ListEntitiesForPolicyInput.PathPrefix string
+V ListEntitiesForPolicyInput.PolicyArn string
+V ListEntitiesForPolicyOutput.Marker string
+V ListGroupPoliciesInput.GroupName string
+V ListGroupPoliciesInput.Marker string
+V ListGroupPoliciesInput.MaxItems int32
+V ListGroupPoliciesOutput.Marker string
+V ListGroupsForUserInput.Marker string
+V ListGroupsForUserInput.MaxItems int32
+V ListGroupsForUserInput.UserName string
+V ListGroupsForUserOutput.Marker string
+V ListGroupsInput.Marker string
+V ListGroupsInput.MaxItems int32
+V ListGroupsInput.PathPrefix string
+V ListGroupsOutput.Marker string
+V ListInstanceProfileTagsInput.InstanceProfileName string
+V ListInstanceProfileTagsInput.Marker string
+V ListInstanceProfileTagsInput.MaxItems int32
+V ListInstanceProfileTagsOutput.Marker string
+V ListInstanceProfilesForRoleInput.Marker string
+V ListInstanceProfilesForRoleInput.MaxItems int32
+V ListInstanceProfilesForRoleInput.RoleName string
+V ListInstanceProfilesForRoleOutput.Marker string
+V ListInstanceProfilesInput.Marker string
+V ListInstanceProfilesInput.MaxItems int32
+V ListInstanceProfilesInput.PathPrefix string
+V ListInstanceProfilesOutput.Marker string
+V ListMFADeviceTagsInput.Marker string
+V ListMFADeviceTagsInput.MaxItems int32
+V ListMFADeviceTagsInput.SerialNumber string
+V ListMFADeviceTagsOutput.Marker string
+V ListMFADevicesInput.Marker string
+V ListMFADevicesInput.MaxItems int32
+V ListMFADevicesInput.UserName string
+V ListMFADevicesOutput.Marker string
+V ListOpenIDConnectProviderTagsInput.Marker string
+V ListOpenIDConnectProviderTagsInput.MaxItems int32
+V ListOpenIDConnectProviderTagsInput.OpenIDConnectProviderArn string
+V ListOpenIDConnectProviderTagsOutput.Marker string
+V ListOrganizationsFeaturesOutput.OrganizationId string
+V ListPoliciesGrantingServiceAccessEntry.ServiceNamespace string
+V ListPoliciesGrantingServiceAccessInput.Arn string
+V ListPoliciesGrantingServiceAccessInput.Marker string
+V ListPoliciesGrantingServiceAccessOutput.Marker string
+V ListPoliciesInput.Marker string
+V ListPoliciesInput.MaxItems int32
+V ListPoliciesInput.PathPrefix string
+V ListPoliciesOutput.Marker string
+V ListPolicyTagsInput.Marker string
+V ListPolicyTagsInput.MaxItems int32
+V ListPolicyTagsInput.PolicyArn string
+V ListPolicyTagsOutput.Marker string
+V ListPolicyVersionsInput.Marker string
+V ListPolicyVersionsInput.MaxItems int32
+V ListPolicyVersionsInput.PolicyArn string
+V ListPolicyVersionsOutput.Marker string
+V ListRolePoliciesInput.Marker string
+V ListRolePoliciesInput.MaxItems int32
+V ListRolePoliciesInput.RoleName string
+V ListRolePoliciesOutput.Marker string
+V ListRoleTagsInput.Marker string
+V ListRoleTagsInput.MaxItems int32
+V ListRoleTagsInput.RoleName string
+V ListRoleTagsOutput.Marker string
+V ListRolesInput.Marker string
+V ListRolesInput.MaxItems int32
+V ListRolesInput.PathPrefix string
+V ListRolesOutput.Marker string
+V ListSAMLProviderTagsInput.Marker string
+V ListSAMLProviderTagsInput.MaxItems int32
+V ListSAMLProviderTagsInput.SAMLProviderArn string
+V ListSAMLProviderTagsOutput.Marker string
+V ListSSHPublicKeysInput.Marker string
+V ListSSHPublicKeysInput.MaxItems int32
+V ListSSHPublicKeysInput.UserName string
+V ListSSHPublicKeysOutput.Marker string
+V ListServerCertificateTagsInput.Marker string
+V ListServerCertificateTagsInput.MaxItems int32
+V ListServerCertificateTagsInput.ServerCertificateName string
+V ListServerCertificateTagsOutput.Marker string
+V ListServerCertificatesInput.Marker string
+V ListServerCertificatesInput.MaxItems int32
+V ListServerCertificatesInput.PathPrefix string
+V ListServerCertificatesOutput.Marker string
+V ListServiceSpecificCredentialsInput.AllUsers bool
+V ListServiceSpecificCredentialsInput.Marker string
+V ListServiceSpecificCredentialsInput.MaxItems int32
+V ListServiceSpecificCredentialsInput.ServiceName string
+V ListServiceSpecificCredentialsInput.UserName string
+V ListServiceSpecificCredentialsOutput.Marker string
+V ListSigningCertificatesInput.Marker string
+V ListSigningCertificatesInput.MaxItems int32
+V ListSigningCertificatesInput.UserName string
+V ListSigningCertificatesOutput.Marker string
+V ListUserPoliciesInput.Marker string
+V ListUserPoliciesInput.MaxItems int32
+V ListUserPoliciesInput.UserName string
+V ListUserPoliciesOutput.Marker string
+V ListUserTagsInput.Marker string
+V ListUserTagsInput.MaxItems int32
+V ListUserTagsInput.UserName string
+V ListUserTagsOutput.Marker string
+V ListUsersInput.Marker string
+V ListUsersInput.MaxItems int32
+V ListUsersInput.PathPrefix string
+V ListUsersOutput.Marker string
+V ListVirtualMFADevicesInput.Marker string
+V ListVirtualMFADevicesInput.MaxItems int32
+V ListVirtualMFADevicesOutput.Marker string
+V LoginProfile.UserName string
+V MFADevice.SerialNumber string
+V MFADevice.UserName string
+V MalformedCertificateException.ErrorCodeOverride string
+V MalformedCertificateException.Message string
+V MalformedPolicyDocumentException.ErrorCodeOverride string
+V MalformedPolicyDocumentException.Message string
+V ManagedPolicyDetail.Arn string
+V ManagedPolicyDetail.AttachmentCount int32
+V ManagedPolicyDetail.DefaultVersionId string
+V ManagedPolicyDetail.Description string
+V ManagedPolicyDetail.Path string
+V ManagedPolicyDetail.PermissionsBoundaryUsageCount int32
+V ManagedPolicyDetail.PolicyId string
+V ManagedPolicyDetail.PolicyName string
+V NameConflictException.ErrorCodeOverride string
+V NameConflictException.Message string
+V NoSuchEntityException.ErrorCodeOverride string
+V NoSuchEntityException.Message string
+V OpenIDConnectProviderListEntry.Arn string
+V OpenIdIdpCommunicationErrorException.ErrorCodeOverride string
+V OpenIdIdpCommunicationErrorException.Message string
+V Options.BaseEndpoint string
+V OrganizationNotFoundException.ErrorCodeOverride string
+V OrganizationNotFoundException.Message string
+V OrganizationNotInAllFeaturesModeException.ErrorCodeOverride string
+V OrganizationNotInAllFeaturesModeException.Message string
+V ParameterDefinition.DefaultValue string
+V ParameterDefinition.Description string
+V ParameterDefinition.Name string
+V ParameterDefinition.SubType string
+V PasswordPolicy.HardExpiry bool
+V PasswordPolicy.MaxPasswordAge int32
+V PasswordPolicy.MinimumPasswordLength int32
+V PasswordPolicy.PasswordReusePrevention int32
+V PasswordPolicyViolationException.ErrorCodeOverride string
+V PasswordPolicyViolationException.Message string
+V Policy.Arn string
+V Policy.AttachmentCount int32
+V Policy.DefaultVersionId string
+V Policy.Description string
+V Policy.Path string
+V Policy.PermissionsBoundaryUsageCount int32
+V Policy.PolicyId string
+V Policy.PolicyName string
+V PolicyDetail.PolicyDocument string
+V PolicyDetail.PolicyName string
+V PolicyEvaluationException.ErrorCodeOverride string
+V PolicyEvaluationException.Message string
+V PolicyGrantingServiceAccess.EntityName string
+V PolicyGrantingServiceAccess.PolicyArn string
+V PolicyGrantingServiceAccess.PolicyName string
+V PolicyGroup.GroupId string
+V PolicyGroup.GroupName string
+V PolicyNotAttachableException.ErrorCodeOverride string
+V PolicyNotAttachableException.Message string
+V PolicyParameter.Name string
+V PolicyRole.RoleId string
+V PolicyRole.RoleName string
+V PolicyUser.UserId string
+V PolicyUser.UserName string
+V PolicyVersion.Document string
+V PolicyVersion.VersionId string
+V PutGroupPolicyInput.GroupName string
+V PutGroupPolicyInput.PolicyDocument string
+V PutGroupPolicyInput.PolicyName string
+V PutRolePermissionsBoundaryInput.PermissionsBoundary string
+V PutRolePermissionsBoundaryInput.RoleName string
+V PutRolePolicyInput.PolicyDocument string
+V PutRolePolicyInput.PolicyName string
+V PutRolePolicyInput.RoleName string
+V PutUserPermissionsBoundaryInput.PermissionsBoundary string
+V PutUserPermissionsBoundaryInput.UserName string
+V PutUserPolicyInput.PolicyDocument string
+V PutUserPolicyInput.PolicyName string
+V PutUserPolicyInput.UserName string
+V RejectDelegationRequestInput.DelegationRequestId string
+V RejectDelegationRequestInput.Notes string
+V RemoveClientIDFromOpenIDConnectProviderInput.ClientID string
+V RemoveClientIDFromOpenIDConnectProviderInput.OpenIDConnectProviderArn string
+V RemoveRoleFromInstanceProfileInput.InstanceProfileName string
+V RemoveRoleFromInstanceProfileInput.RoleName string
+V RemoveUserFromGroupInput.GroupName string
+V RemoveUserFromGroupInput.UserName string
+V ReportGenerationLimitExceededException.ErrorCodeOverride string
+V ReportGenerationLimitExceededException.Message string
+V ResetServiceSpecificCredentialInput.ServiceSpecificCredentialId string
+V ResetServiceSpecificCredentialInput.UserName string
+V ResourceSpecificResult.EvalResourceName string
+V ResyncMFADeviceInput.AuthenticationCode1 string
+V ResyncMFADeviceInput.AuthenticationCode2 string
+V ResyncMFADeviceInput.SerialNumber string
+V ResyncMFADeviceInput.UserName string
+V Role.Arn string
+V Role.AssumeRolePolicyDocument string
+V Role.Description string
+V Role.MaxSessionDuration int32
+V Role.Path string
+V Role.RoleId string
+V Role.RoleName string
+V RoleDetail.Arn string
+V RoleDetail.AssumeRolePolicyDocument string
+V RoleDetail.Path string
+V RoleDetail.RoleId string
+V RoleDetail.RoleName string
+V RoleLastUsed.Region string
+V RoleModifiedException.ErrorCodeOverride string
+V RoleModifiedException.Message string
+V RoleTemplateDisabledException.ErrorCodeOverride string
+V RoleTemplateDisabledException.Message string
+V RoleTemplateVersion.AssumeRolePolicyDocumentTemplate string
+V RoleTemplateVersion.DefaultMinorVersion int32
+V RoleTemplateVersion.Description string
+V RoleTemplateVersion.MajorVersion int32
+V RoleTemplateVersion.ManagedByValue string
+V RoleTemplateVersion.MaxSessionDuration int32
+V RoleTemplateVersion.MinorVersion int32
+V RoleTemplateVersion.PermissionBoundaryArn string
+V RoleTemplateVersion.RoleDescriptionPattern string
+V RoleTemplateVersion.RoleNamePattern string
+V RoleTemplateVersion.RolePathPattern string
+V RoleTemplateVersion.TemplateArn string
+V RoleTemplateVersion.TemplateName string
+V RoleTemplateVersion.TemplateVersionId string
+V RoleUsageType.Region string
+V SAMLPrivateKey.KeyId string
+V SAMLProviderListEntry.Arn string
+V SSHPublicKey.Fingerprint string
+V SSHPublicKey.SSHPublicKeyBody string
+V SSHPublicKey.SSHPublicKeyId string
+V SSHPublicKey.UserName string
+V SSHPublicKeyMetadata.SSHPublicKeyId string
+V SSHPublicKeyMetadata.UserName string
+V SendDelegationTokenInput.DelegationRequestId string
+V ServerCertificate.CertificateBody string
+V ServerCertificate.CertificateChain string
+V ServerCertificateMetadata.Arn string
+V ServerCertificateMetadata.Path string
+V ServerCertificateMetadata.ServerCertificateId string
+V ServerCertificateMetadata.ServerCertificateName string
+V ServiceAccessNotEnabledException.ErrorCodeOverride string
+V ServiceAccessNotEnabledException.Message string
+V ServiceFailureException.ErrorCodeOverride string
+V ServiceFailureException.Message string
+V ServiceLastAccessed.LastAuthenticatedEntity string
+V ServiceLastAccessed.LastAuthenticatedRegion string
+V ServiceLastAccessed.ServiceName string
+V ServiceLastAccessed.ServiceNamespace string
+V ServiceLastAccessed.TotalAuthenticatedEntities int32
+V ServiceNotSupportedException.ErrorCodeOverride string
+V ServiceNotSupportedException.Message string
+V ServiceSpecificCredential.ServiceCredentialAlias string
+V ServiceSpecificCredential.ServiceCredentialSecret string
+V ServiceSpecificCredential.ServiceName string
+V ServiceSpecificCredential.ServicePassword string
+V ServiceSpecificCredential.ServiceSpecificCredentialId string
+V ServiceSpecificCredential.ServiceUserName string
+V ServiceSpecificCredential.UserName string
+V ServiceSpecificCredentialMetadata.ServiceCredentialAlias string
+V ServiceSpecificCredentialMetadata.ServiceName string
+V ServiceSpecificCredentialMetadata.ServiceSpecificCredentialId string
+V ServiceSpecificCredentialMetadata.ServiceUserName string
+V ServiceSpecificCredentialMetadata.UserName string
+V SetDefaultPolicyVersionInput.PolicyArn string
+V SetDefaultPolicyVersionInput.VersionId string
+V SigningCertificate.CertificateBody string
+V SigningCertificate.CertificateId string
+V SigningCertificate.UserName string
+V SimulateCustomPolicyInput.CallerArn string
+V SimulateCustomPolicyInput.Marker string
+V SimulateCustomPolicyInput.MaxItems int32
+V SimulateCustomPolicyInput.ResourceHandlingOption string
+V SimulateCustomPolicyInput.ResourceOwner string
+V SimulateCustomPolicyInput.ResourcePolicy string
+V SimulateCustomPolicyOutput.Marker string
+V SimulatePrincipalPolicyInput.CallerArn string
+V SimulatePrincipalPolicyInput.Marker string
+V SimulatePrincipalPolicyInput.MaxItems int32
+V SimulatePrincipalPolicyInput.PolicySourceArn string
+V SimulatePrincipalPolicyInput.ResourceHandlingOption string
+V SimulatePrincipalPolicyInput.ResourceOwner string
+V SimulatePrincipalPolicyInput.ResourcePolicy string
+V SimulatePrincipalPolicyOutput.Marker string
+V SourceRoleTemplate.TemplateArn string
+V SourceRoleTemplate.TemplateMinorVersion int32
+V Statement.SourcePolicyId string
+V Tag.Key string
+V Tag.Value string
+V TagInstanceProfileInput.InstanceProfileName string
+V TagMFADeviceInput.SerialNumber string
+V TagOpenIDConnectProviderInput.OpenIDConnectProviderArn string
+V TagPolicyInput.PolicyArn string
+V TagRoleInput.RoleName string
+V TagSAMLProviderInput.SAMLProviderArn string
+V TagServerCertificateInput.ServerCertificateName string
+V TagTemplate.Key string
+V TagTemplate.Value string
+V TagUserInput.UserName string
+V TrackedActionLastAccessed.ActionName string
+V TrackedActionLastAccessed.LastAccessedEntity string
+V TrackedActionLastAccessed.LastAccessedRegion string
+V UnmodifiableEntityException.ErrorCodeOverride string
+V UnmodifiableEntityException.Message string
+V UnrecognizedPublicKeyEncodingException.ErrorCodeOverride string
+V UnrecognizedPublicKeyEncodingException.Message string
+V UntagInstanceProfileInput.InstanceProfileName string
+V UntagMFADeviceInput.SerialNumber string
+V UntagOpenIDConnectProviderInput.OpenIDConnectProviderArn string
+V UntagPolicyInput.PolicyArn string
+V UntagRoleInput.RoleName string
+V UntagSAMLProviderInput.SAMLProviderArn string
+V UntagServerCertificateInput.ServerCertificateName string
+V UntagUserInput.UserName string
+V UpdateAccessKeyInput.AccessKeyId string
+V UpdateAccessKeyInput.UserName string
+V UpdateAccountPasswordPolicyInput.HardExpiry bool
+V UpdateAccountPasswordPolicyInput.MaxPasswordAge int32
+V UpdateAccountPasswordPolicyInput.MinimumPasswordLength int32
+V UpdateAccountPasswordPolicyInput.PasswordReusePrevention int32
+V UpdateAssumeRolePolicyInput.PolicyDocument string
+V UpdateAssumeRolePolicyInput.RoleName string
+V UpdateDelegationRequestInput.DelegationRequestId string
+V UpdateDelegationRequestInput.Notes string
+V UpdateGroupInput.GroupName string
+V UpdateGroupInput.NewGroupName string
+V UpdateGroupInput.NewPath string
+V UpdateLoginProfileInput.Password string
+V UpdateLoginProfileInput.PasswordResetRequired bool
+V UpdateLoginProfileInput.UserName string
+V UpdateOpenIDConnectProviderThumbprintInput.OpenIDConnectProviderArn string
+V UpdateRoleDescriptionInput.Description string
+V UpdateRoleDescriptionInput.RoleName string
+V UpdateRoleInput.Description string
+V UpdateRoleInput.MaxSessionDuration int32
+V UpdateRoleInput.RoleName string
+V UpdateSAMLProviderInput.AddPrivateKey string
+V UpdateSAMLProviderInput.RemovePrivateKey string
+V UpdateSAMLProviderInput.SAMLMetadataDocument string
+V UpdateSAMLProviderInput.SAMLProviderArn string
+V UpdateSAMLProviderOutput.SAMLProviderArn string
+V UpdateSSHPublicKeyInput.SSHPublicKeyId string
+V UpdateSSHPublicKeyInput.UserName string
+V UpdateServerCertificateInput.NewPath string
+V UpdateServerCertificateInput.NewServerCertificateName string
+V UpdateServerCertificateInput.ServerCertificateName string
+V UpdateServiceSpecificCredentialInput.ServiceSpecificCredentialId string
+V UpdateServiceSpecificCredentialInput.UserName string
+V UpdateSigningCertificateInput.CertificateId string
+V UpdateSigningCertificateInput.UserName string
+V UpdateUserInput.NewPath string
+V UpdateUserInput.NewUserName string
+V UpdateUserInput.UserName string
+V UploadSSHPublicKeyInput.SSHPublicKeyBody string
+V UploadSSHPublicKeyInput.UserName string
+V UploadServerCertificateInput.CertificateBody string
+V UploadServerCertificateInput.CertificateChain string
+V UploadServerCertificateInput.Path string
+V UploadServerCertificateInput.PrivateKey string
+V UploadServerCertificateInput.ServerCertificateName string
+V UploadSigningCertificateInput.CertificateBody string
+V UploadSigningCertificateInput.UserName string
+V User.Arn string
+V User.Path string
+V User.UserId string
+V User.UserName string
+V UserDetail.Arn string
+V UserDetail.Path string
+V UserDetail.UserId string
+V UserDetail.UserName string
+V VirtualMFADevice.SerialNumber string
+Q GetAccountSummaryOutput.SummaryMap
+Q GetMFADeviceOutput.Certifications
+D CreateLoginProfileInput.PasswordResetRequired bool
+D CreatePolicyVersionInput.SetAsDefault bool
+D GetAccountAuthorizationDetailsOutput.IsTruncated bool
+D GetGroupOutput.IsTruncated bool
+D GetOrganizationsAccessReportOutput.IsTruncated bool
+D GetServiceLastAccessedDetailsOutput.IsTruncated bool
+D GetServiceLastAccessedDetailsWithEntitiesOutput.IsTruncated bool
+D ListAccessKeysOutput.IsTruncated bool
+D ListAccountAliasesOutput.IsTruncated bool
+D ListAttachedGroupPoliciesOutput.IsTruncated bool
+D ListAttachedRolePoliciesOutput.IsTruncated bool
+D ListAttachedUserPoliciesOutput.IsTruncated bool
+D ListEntitiesForPolicyOutput.IsTruncated bool
+D ListGroupPoliciesOutput.IsTruncated bool
+D ListGroupsForUserOutput.IsTruncated bool
+D ListGroupsOutput.IsTruncated bool
+D ListInstanceProfileTagsOutput.IsTruncated bool
+D ListInstanceProfilesForRoleOutput.IsTruncated bool
+D ListInstanceProfilesOutput.IsTruncated bool
+D ListMFADeviceTagsOutput.IsTruncated bool
+D ListMFADevicesOutput.IsTruncated bool
+D ListOpenIDConnectProviderTagsOutput.IsTruncated bool
+D ListPoliciesGrantingServiceAccessOutput.IsTruncated bool
+D ListPoliciesInput.OnlyAttached bool
+D ListPoliciesOutput.IsTruncated bool
+D ListPolicyTagsOutput.IsTruncated bool
+D ListPolicyVersionsOutput.IsTruncated bool
+D ListRolePoliciesOutput.IsTruncated bool
+D ListRoleTagsOutput.IsTruncated bool
+D ListRolesOutput.IsTruncated bool
+D ListSAMLProviderTagsOutput.IsTruncated bool
+D ListSSHPublicKeysOutput.IsTruncated bool
+D ListServerCertificateTagsOutput.IsTruncated bool
+D ListServerCertificatesOutput.IsTruncated bool
+D ListSigningCertificatesOutput.IsTruncated bool
+D ListUserPoliciesOutput.IsTruncated bool
+D ListUserTagsOutput.IsTruncated bool
+D ListUsersOutput.IsTruncated bool
+D ListVirtualMFADevicesOutput.IsTruncated bool
+D LoginProfile.PasswordResetRequired bool
+D ManagedPolicyDetail.IsAttachable bool
+D OrganizationsDecisionDetail.AllowedByOrganizations bool
+D PasswordPolicy.AllowUsersToChangePassword bool
+D PasswordPolicy.ExpirePasswords bool
+D PasswordPolicy.RequireLowercaseCharacters bool
+D PasswordPolicy.RequireNumbers bool
+D PasswordPolicy.RequireSymbols bool
+D PasswordPolicy.RequireUppercaseCharacters bool
+D PermissionsBoundaryDecisionDetail.AllowedByPermissionsBoundary bool
+D Policy.IsAttachable bool
+D PolicyVersion.IsDefaultVersion bool
+D UpdateAccountPasswordPolicyInput.AllowUsersToChangePassword bool
+D UpdateAccountPasswordPolicyInput.RequireLowercaseCharacters bool
+D UpdateAccountPasswordPolicyInput.RequireNumbers bool
+D UpdateAccountPasswordPolicyInput.RequireSymbols bool
+D UpdateAccountPasswordPolicyInput.RequireUppercaseCharacters bool
+L ContextEntry.ContextKeyValues -
+L CreateInstanceProfileInput.Tags Tag
+L CreateOpenIDConnectProviderInput.ClientIDList -
+L CreateOpenIDConnectProviderInput.Tags Tag
+L CreateOpenIDConnectProviderInput.ThumbprintList -
+L CreateOpenIDConnectProviderOutput.Tags Tag
+L CreatePolicyInput.Tags Tag
+L CreateRoleInput.Tags Tag
+L CreateSAMLProviderInput.Tags Tag
+L CreateSAMLProviderOutput.Tags Tag
+L CreateUserInput.Tags Tag
+L CreateVirtualMFADeviceInput.Tags Tag
+L DeletionTaskFailureReasonType.RoleUsageList RoleUsageType
+L EvaluationResult.MatchedStatements Statement
+L EvaluationResult.MissingContextValues -
+L EvaluationResult.ResourceSpecificResults ResourceSpecificResult
+L GetAccountAuthorizationDetailsInput.Filter EntityType
+L GetAccountAuthorizationDetailsOutput.GroupDetailList GroupDetail
+L GetAccountAuthorizationDetailsOutput.Policies ManagedPolicyDetail
+L GetAccountAuthorizationDetailsOutput.RoleDetailList RoleDetail
+L GetAccountAuthorizationDetailsOutput.UserDetailList UserDetail
+L GetContextKeysForCustomPolicyInput.PolicyInputList -
+L GetContextKeysForPrincipalPolicyInput.PolicyInputList -
+L GetGroupOutput.Users User
+L GetOpenIDConnectProviderOutput.ClientIDList -
+L GetOpenIDConnectProviderOutput.Tags Tag
+L GetOpenIDConnectProviderOutput.ThumbprintList -
+L GetOrganizationsAccessReportOutput.AccessDetails AccessDetail
+L GetSAMLProviderOutput.Tags Tag
+L GetServiceLastAccessedDetailsOutput.ServicesLastAccessed ServiceLastAccessed
+L GetServiceLastAccessedDetailsWithEntitiesOutput.EntityDetailsList EntityDetails
+L GroupDetail.AttachedManagedPolicies AttachedPolicy
+L GroupDetail.GroupPolicyList PolicyDetail
+L InstanceProfile.Roles Role
+L InstanceProfile.Tags Tag
+L ListAccessKeysOutput.AccessKeyMetadata AccessKeyMetadata
+L ListAccountAliasesOutput.AccountAliases -
+L ListAttachedGroupPoliciesOutput.AttachedPolicies AttachedPolicy
+L ListAttachedRolePoliciesOutput.AttachedPolicies AttachedPolicy
+L ListAttachedUserPoliciesOutput.AttachedPolicies AttachedPolicy
+L ListEntitiesForPolicyOutput.PolicyGroups PolicyGroup
+L ListEntitiesForPolicyOutput.PolicyRoles PolicyRole
+L ListEntitiesForPolicyOutput.PolicyUsers PolicyUser
+L ListGroupPoliciesOutput.PolicyNames -
+L ListGroupsForUserOutput.Groups Group
+L ListGroupsOutput.Groups Group
+L ListInstanceProfileTagsOutput.Tags Tag
+L ListInstanceProfilesForRoleOutput.InstanceProfiles InstanceProfile
+L ListInstanceProfilesOutput.InstanceProfiles InstanceProfile
+L ListMFADeviceTagsOutput.Tags Tag
+L ListMFADevicesOutput.MFADevices MFADevice
+L ListOpenIDConnectProviderTagsOutput.Tags Tag
+L ListOpenIDConnectProvidersOutput.OpenIDConnectProviderList OpenIDConnectProviderListEntry
+L ListPoliciesGrantingServiceAccessEntry.Policies PolicyGrantingServiceAccess
+L ListPoliciesGrantingServiceAccessInput.ServiceNamespaces -
+L ListPoliciesGrantingServiceAccessOutput.PoliciesGrantingServiceAccess ListPoliciesGrantingServiceAccessEntry
+L ListPoliciesOutput.Policies Policy
+L ListPolicyTagsOutput.Tags Tag
+L ListPolicyVersionsOutput.Versions PolicyVersion
+L ListRolePoliciesOutput.PolicyNames -
+L ListRoleTagsOutput.Tags Tag
+L ListRolesOutput.Roles Role
+L ListSAMLProviderTagsOutput.Tags Tag
+L ListSAMLProvidersOutput.SAMLProviderList SAMLProviderListEntry
+L ListSSHPublicKeysOutput.SSHPublicKeys SSHPublicKeyMetadata
+L ListServerCertificateTagsOutput.Tags Tag
+L ListServerCertificatesOutput.ServerCertificateMetadataList ServerCertificateMetadata
+L ListServiceSpecificCredentialsOutput.ServiceSpecificCredentials ServiceSpecificCredentialMetadata
+L ListSigningCertificatesOutput.Certificates SigningCertificate
+L ListUserPoliciesOutput.PolicyNames -
+L ListUserTagsOutput.Tags Tag
+L ListUsersOutput.Users User
+L ListVirtualMFADevicesOutput.VirtualMFADevices VirtualMFADevice
+L ManagedPolicyDetail.PolicyVersionList PolicyVersion
+L Policy.Tags Tag
+L ResourceSpecificResult.MatchedStatements Statement
+L ResourceSpecificResult.MissingContextValues -
+L Role.Tags Tag
+L RoleDetail.AttachedManagedPolicies AttachedPolicy
+L RoleDetail.InstanceProfileList InstanceProfile
+L RoleDetail.RolePolicyList PolicyDetail
+L RoleDetail.Tags Tag
+L RoleUsageType.Resources -
+L ServerCertificate.Tags Tag
+L ServiceLastAccessed.TrackedActionsLastAccessed TrackedActionLastAccessed
+L SimulateCustomPolicyInput.ActionNames -
+L SimulateCustomPolicyInput.ContextEntries ContextEntry
+L SimulateCustomPolicyInput.PermissionsBoundaryPolicyInputList -
+L SimulateCustomPolicyInput.PolicyInputList -
+L SimulateCustomPolicyInput.ResourceArns -
+L SimulatePrincipalPolicyInput.ActionNames -
+L SimulatePrincipalPolicyInput.ContextEntries ContextEntry
+L SimulatePrincipalPolicyInput.PermissionsBoundaryPolicyInputList -
+L SimulatePrincipalPolicyInput.PolicyInputList -
+L SimulatePrincipalPolicyInput.ResourceArns -
+L TagInstanceProfileInput.Tags Tag
+L TagMFADeviceInput.Tags Tag
+L TagOpenIDConnectProviderInput.Tags Tag
+L TagPolicyInput.Tags Tag
+L TagRoleInput.Tags Tag
+L TagSAMLProviderInput.Tags Tag
+L TagServerCertificateInput.Tags Tag
+L TagUserInput.Tags Tag
+L UntagInstanceProfileInput.TagKeys -
+L UntagMFADeviceInput.TagKeys -
+L UntagOpenIDConnectProviderInput.TagKeys -
+L UntagPolicyInput.TagKeys -
+L UntagRoleInput.TagKeys -
+L UntagSAMLProviderInput.TagKeys -
+L UntagServerCertificateInput.TagKeys -
+L UntagUserInput.TagKeys -
+L UpdateOpenIDConnectProviderThumbprintInput.ThumbprintList -
+L UploadServerCertificateInput.Tags Tag
+L UploadServerCertificateOutput.Tags Tag
+L User.Tags Tag
+L UserDetail.AttachedManagedPolicies AttachedPolicy
+L UserDetail.GroupList -
+L UserDetail.Tags Tag
+L UserDetail.UserPolicyList PolicyDetail
+L VirtualMFADevice.Tags Tag
+F AccessKey.Status StatusType
+F AccessKeyMetadata.Status StatusType
+F AttachedPermissionsBoundary.PermissionsBoundaryType PermissionsBoundaryAttachmentType
+F ContextEntry.ContextKeyType ContextKeyTypeEnum
+F CreateSAMLProviderInput.AssertionEncryptionMode AssertionEncryptionModeType
+F DelegationRequest.State StateType
+F DisableOrganizationsRootCredentialsManagementOutput.EnabledFeatures FeatureType
+F DisableOrganizationsRootSessionsOutput.EnabledFeatures FeatureType
+F EnableOrganizationsRootCredentialsManagementOutput.EnabledFeatures FeatureType
+F EnableOrganizationsRootSessionsOutput.EnabledFeatures FeatureType
+F EntityInfo.Type PolicyOwnerEntityType
+F EvaluationResult.EvalDecision PolicyEvaluationDecisionType
+F GenerateCredentialReportOutput.State ReportStateType
+F GenerateServiceLastAccessedDetailsInput.Granularity AccessAdvisorUsageGranularityType
+F GetAccountAuthorizationDetailsInput.Filter EntityType
+F GetCredentialReportOutput.ReportFormat ReportFormatType
+F GetDelegationRequestOutput.PermissionCheckResult PermissionCheckResultType
+F GetDelegationRequestOutput.PermissionCheckStatus PermissionCheckStatusType
+F GetHumanReadableSummaryOutput.SummaryState SummaryStateType
+F GetOrganizationsAccessReportInput.SortKey SortKeyType
+F GetOrganizationsAccessReportOutput.JobStatus JobStatusType
+F GetSAMLProviderOutput.AssertionEncryptionMode AssertionEncryptionModeType
+F GetSSHPublicKeyInput.Encoding EncodingType
+F GetServiceLastAccessedDetailsOutput.JobStatus JobStatusType
+F GetServiceLastAccessedDetailsOutput.JobType AccessAdvisorUsageGranularityType
+F GetServiceLastAccessedDetailsWithEntitiesOutput.JobStatus JobStatusType
+F GetServiceLinkedRoleDeletionStatusOutput.Status DeletionTaskStatusType
+F InlinePolicyIdentifierType.AttachmentType AttachmentType
+F ListEntitiesForPolicyInput.EntityFilter EntityType
+F ListEntitiesForPolicyInput.PolicyUsageFilter PolicyUsageType
+F ListOrganizationsFeaturesOutput.EnabledFeatures FeatureType
+F ListPoliciesInput.PolicyUsageFilter PolicyUsageType
+F ListPoliciesInput.Scope PolicyScopeType
+F ListVirtualMFADevicesInput.AssignmentStatus AssignmentStatusType
+F ParameterDefinition.Type ParameterTypeType
+F PolicyGrantingServiceAccess.EntityType PolicyOwnerEntityType
+F PolicyGrantingServiceAccess.PolicyType PolicyType
+F PolicyIdentifierMemberPolicyType.Value PolicyIdentifierPolicyType
+F PolicyParameter.Type PolicyParameterTypeEnum
+F ResourceSpecificResult.EvalResourceDecision PolicyEvaluationDecisionType
+F RoleTemplateVersion.ManagedByType ManagedByTypeType
+F SSHPublicKey.Status StatusType
+F SSHPublicKeyMetadata.Status StatusType
+F ServiceSpecificCredential.Status StatusType
+F ServiceSpecificCredentialMetadata.Status StatusType
+F SetSecurityTokenServicePreferencesInput.GlobalEndpointTokenVersion GlobalEndpointTokenVersion
+F SigningCertificate.Status StatusType
+F Statement.SourcePolicyType PolicySourceType
+F UpdateAccessKeyInput.Status StatusType
+F UpdateSAMLProviderInput.AssertionEncryptionMode AssertionEncryptionModeType
+F UpdateSSHPublicKeyInput.Status StatusType
+F UpdateServiceSpecificCredentialInput.Status StatusType
+F UpdateSigningCertificateInput.Status StatusType
+N APIOptions
+N AWSServiceName
+N AccessDetails
+N AccessKey
+N AccessKeyId
+N AccessKeyLastUsed
+N AccessKeyMetadata
+N AccountAlias
+N AccountAliases
+N ActionName
+N ActionNames
+N AddPrivateKey
+N AllUsers
+N AllowUsersToChangePassword
+N AllowedByOrganizations
+N AllowedByPermissionsBoundary
+N AppID
+N ApproverId
+N Arn
+N AssumeRolePolicyDocument
+N AssumeRolePolicyDocumentTemplate
+N AttachedManagedPolicies
+N AttachedPolicies
+N AttachmentCount
+N AttachmentName
+N AuthSchemePreference
+N AuthSchemeResolver
+N AuthSchemes
+N AuthenticationCode1
+N AuthenticationCode2
+N Base32StringSeed
+N BaseEndpoint
+N CallerArn
+N Certificate
+N CertificateBody
+N CertificateChain
+N CertificateId
+N Certificates
+N Certifications
+N ClientID
+N ClientIDList
+N ClientLogMode
+N ClientOptions
+N Code
+N Column
+N ConsoleDeepLink
+N Content
+N ContextEntries
+N ContextKeyName
+N ContextKeyNames
+N ContextKeyValues
+N CreateDate
+N CreateTimestamp
+N CredentialAgeDays
+N Credentials
+N CustomSuffix
+N DefaultMinorVersion
+N DefaultValue
+N DefaultVersionId
+N DefaultsMode
+N DelegationPermissionCheck
+N DelegationRequest
+N DelegationRequestId
+N DelegationRequests
+N DeletionTaskId
+N Description
+N DisableClockSkewCorrection
+N DisableHTTPS
+N Document
+N EnableDate
+N Enabled
+N EndPosition
+N Endpoint
+N EndpointOptions
+N EndpointResolver
+N EndpointResolverV2
+N EntityArn
+N EntityDetailsList
+N EntityInfo
+N EntityName
+N EntityPath
+N Error
+N ErrorCodeOverride
+N ErrorDetails
+N EvalActionName
+N EvalDecisionDetails
+N EvalResourceName
+N EvaluationResults
+N Expiration
+N ExpirationDate
+N ExpirationTime
+N ExpirePasswords
+N Fingerprint
+N GeneratedTime
+N Group
+N GroupDetailList
+N GroupId
+N GroupList
+N GroupName
+N GroupPolicyList
+N Groups
+N HTTPClient
+N HTTPSignerV4
+N HardExpiry
+N Id
+N Immutable
+N InlinePolicyTemplates
+N InstanceProfile
+N InstanceProfileId
+N InstanceProfileList
+N InstanceProfileName
+N InstanceProfiles
+N Interceptors
+N IsAttachable
+N IsDefaultVersion
+N IsRequired
+N IsTruncated
+N IssuerIdentifier
+N JobCompletionDate
+N JobCreationDate
+N JobId
+N JwtVendingEnabled
+N Key
+N KeyId
+N LastAccessedEntity
+N LastAccessedRegion
+N LastAccessedTime
+N LastAuthenticated
+N LastAuthenticatedEntity
+N LastAuthenticatedRegion
+N LastAuthenticatedTime
+N LastUsedDate
+N Limit
+N Line
+N Locale
+N LogDeprecated
+N LogWaitAttempts
+N Logger
+N LoginProfile
+N MFADevices
+N MajorVersion
+N ManagedByValue
+N ManagedPolicyArns
+N Marker
+N MatchedStatements
+N MaxDelay
+N MaxItems
+N MaxPasswordAge
+N MaxSessionDuration
+N Message
+N MeterProvider
+N MinDelay
+N MinimumPasswordLength
+N MinorVersion
+N MissingContextValues
+N Name
+N NewGroupName
+N NewPassword
+N NewPath
+N NewServerCertificateName
+N NewUserName
+N Notes
+N NotificationChannel
+N NumberOfServicesAccessible
+N NumberOfServicesNotAccessed
+N OldPassword
+N OnlyAttached
+N OnlySendByOwner
+N OpenIDConnectProviderArn
+N OpenIDConnectProviderList
+N Operation
+N Options
+N OrderedOrganizationPolicyInputList
+N OrganizationId
+N OrganizationsDecisionDetail
+N OrganizationsPolicyId
+N OwnerAccountId
+N OwnerId
+N Parameters
+N ParametersDefinition
+N Password
+N PasswordLastUsed
+N PasswordPolicy
+N PasswordResetRequired
+N PasswordReusePrevention
+N Path
+N PathPrefix
+N PermissionBoundaryArn
+N PermissionPolicy
+N Permissions
+N PermissionsBoundary
+N PermissionsBoundaryArn
+N PermissionsBoundaryDecisionDetail
+N PermissionsBoundaryPolicyInputList
+N PermissionsBoundaryUsageCount
+N Policies
+N PoliciesGrantingServiceAccess
+N Policy
+N PolicyArn
+N PolicyDocument
+N PolicyExclusionList
+N PolicyGroups
+N PolicyId
+N PolicyInputList
+N PolicyName
+N PolicyNames
+N PolicyRoles
+N PolicySourceArn
+N PolicyTemplateArn
+N PolicyUsers
+N PolicyVersion
+N PolicyVersionList
+N PrivateKey
+N PrivateKeyList
+N Properties
+N QRCodePNG
+N Reason
+N RedirectUrl
+N Region
+N RejectionReason
+N RemovePrivateKey
+N ReplacementValues
+N RequestMessage
+N RequestorId
+N RequestorName
+N RequestorWorkflowId
+N RequireLowercaseCharacters
+N RequireNumbers
+N RequireSymbols
+N RequireUppercaseCharacters
+N ResolvedRegion
+N Resolver
+N ResourceArns
+N ResourceHandlingOption
+N ResourceOwner
+N ResourcePolicy
+N ResourceSpecificResults
+N Resources
+N ResultMetadata
+N RetryMaxAttempts
+N RetryMode
+N Retryable
+N Retryer
+N Role
+N RoleDescriptionPattern
+N RoleDetailList
+N RoleId
+N RoleLastUsed
+N RoleName
+N RoleNamePattern
+N RolePathPattern
+N RolePermissionRestrictionArns
+N RolePolicyList
+N RoleTagsTemplate
+N RoleTemplateVersion
+N RoleUsageList
+N Roles
+N RuntimeEnvironment
+N SAMLMetadataDocument
+N SAMLProviderArn
+N SAMLProviderList
+N SAMLProviderUUID
+N SSHPublicKey
+N SSHPublicKeyBody
+N SSHPublicKeyId
+N SSHPublicKeys
+N SecretAccessKey
+N SerialNumber
+N ServerCertificate
+N ServerCertificateId
+N ServerCertificateMetadata
+N ServerCertificateMetadataList
+N ServerCertificateName
+N ServiceControlPolicyInputList
+N ServiceCredentialAlias
+N ServiceCredentialSecret
+N ServiceName
+N ServiceNamespace
+N ServiceNamespaces
+N ServicePassword
+N ServiceSpecificCredential
+N ServiceSpecificCredentialId
+N ServiceSpecificCredentials
+N ServiceUserName
+N ServicesLastAccessed
+N SessionDuration
+N SetAsDefault
+N SourcePolicyId
+N SourceRoleTemplate
+N StartPosition
+N StopOnDuplicateToken
+N SubType
+N SummaryContent
+N SummaryMap
+N Tag
+N TagKeys
+N Tags
+N TemplateArn
+N TemplateMinorVersion
+N TemplateName
+N TemplateVersionId
+N ThumbprintList
+N Timestamp
+N TotalAuthenticatedEntities
+N TracerProvider
+N TrackedActionsLastAccessed
+N UpdateDate
+N UpdateTimestamp
+N UpdatedTime
+N UploadDate
+N Url
+N UseDualStack
+N UseDualStackEndpoint
+N UseFIPS
+N UseFIPSEndpoint
+N User
+N UserDetailList
+N UserId
+N UserName
+N UserPolicyList
+N Users
+N ValidUntil
+N Value
+N Values
+N VersionEnabled
+N VersionId
+N Versions
+N VirtualMFADevice
+N VirtualMFADeviceName
+N VirtualMFADevices
+T AccessAdvisorUsageGranularityType
+T AccessDetail
+T AccessKey
+T AccessKeyLastUsed
+T AccessKeyMetadata
+T AccountNotManagementOrDelegatedAdministratorException
+T AssertionEncryptionModeType
+T AssignmentStatusType
+T AttachedPermissionsBoundary
+T AttachedPolicy
+T AttachmentType
+T CallerIsNotManagementAccountException
+T ConcurrentModificationException
+T ContextEntry
+T ContextKeyTypeEnum
+T CredentialReportExpiredException
+T CredentialReportNotPresentException
+T CredentialReportNotReadyException
+T DelegationPermission
+T DelegationRequest
+T DeleteConflictException
+T DeletionTaskFailureReasonType
+T DeletionTaskStatusType
+T DuplicateCertificateException
+T DuplicateSSHPublicKeyException
+T EncodingType
+T EntityAlreadyExistsException
+T EntityDetails
+T EntityInfo
+T EntityTemporarilyUnmodifiableException
+T EntityType
+T ErrorDetails
+T EvaluationResult
+T FeatureDisabledException
+T FeatureEnabledException
+T FeatureType
+T GlobalEndpointTokenVersion
+T Group
+T GroupDetail
+T InlinePolicy
+T InlinePolicyIdentifierType
+T InstanceProfile
+T InvalidAuthenticationCodeException
+T InvalidCertificateException
+T InvalidInputException
+T InvalidPublicKeyException
+T InvalidUserTypeException
+T JobStatusType
+T KeyPairMismatchException
+T LimitExceededException
+T ListPoliciesGrantingServiceAccessEntry
+T LoginProfile
+T MFADevice
+T MalformedCertificateException
+T MalformedPolicyDocumentException
+T ManagedByTypeType
+T ManagedPolicyDetail
+T NameConflictException
+T NoSuchEntityException
+T OpenIDConnectProviderListEntry
+T OpenIdIdpCommunicationErrorException
+T OrderedOrganizationPolicyType
+T OrganizationNotFoundException
+T OrganizationNotInAllFeaturesModeException
+T OrganizationsDecisionDetail
+T ParameterDefinition
+T ParameterTypeType
+T PasswordPolicy
+T PasswordPolicyViolationException
+T PermissionCheckResultType
+T PermissionCheckStatusType
+T PermissionsBoundaryAttachmentType
+T PermissionsBoundaryDecisionDetail
+T Policy
+T PolicyDetail
+T PolicyEvaluationDecisionType
+T PolicyEvaluationException
+T PolicyGrantingServiceAccess
+T PolicyGroup
+T PolicyIdentifier
+T PolicyIdentifierMemberInlinePolicyIdentifier
+T PolicyIdentifierMemberPolicyArn
+T PolicyIdentifierMemberPolicyType
+T PolicyIdentifierPolicyType
+T PolicyNotAttachableException
+T PolicyOwnerEntityType
+T PolicyParameter
+T PolicyParameterTypeEnum
+T PolicyRole
+T PolicyScopeType
+T PolicySourceType
+T PolicyType
+T PolicyUsageType
+T PolicyUser
+T PolicyVersion
+T Position
+T ReplacementValueEntry
+T ReportFormatType
+T ReportGenerationLimitExceededException
+T ReportStateType
+T ResourceSpecificResult
+T Role
+T RoleDetail
+T RoleLastUsed
+T RoleModifiedException
+T RoleTemplateDisabledException
+T RoleTemplateVersion
+T RoleUsageType
+T SAMLPrivateKey
+T SAMLProviderListEntry
+T SSHPublicKey
+T SSHPublicKeyMetadata
+T ServerCertificate
+T ServerCertificateMetadata
+T ServiceAccessNotEnabledException
+T ServiceFailureException
+T ServiceLastAccessed
+T ServiceNotSupportedException
+T ServiceSpecificCredential
+T ServiceSpecificCredentialMetadata
+T SigningCertificate
+T SortKeyType
+T SourceRoleTemplate
+T StateType
+T Statement
+T StatusType
+T SummaryKeyType
+T SummaryStateType
+T Tag
+T TagTemplate
+T TrackedActionLastAccessed
+T UnknownUnionMember
+T UnmodifiableEntityException
+T UnrecognizedPublicKeyEncodingException
+T User
+T UserDetail
+T VirtualMFADevice
+E AccessAdvisorUsageGranularityTypeActionLevel AccessAdvisorUsageGranularityType
+E AccessAdvisorUsageGranularityTypeServiceLevel AccessAdvisorUsageGranularityType
+E AssertionEncryptionModeTypeAllowed AssertionEncryptionModeType
+E AssertionEncryptionModeTypeRequired AssertionEncryptionModeType
+E AssignmentStatusTypeAny AssignmentStatusType
+E AssignmentStatusTypeAssigned AssignmentStatusType
+E AssignmentStatusTypeUnassigned AssignmentStatusType
+E AttachmentTypeGroup AttachmentType
+E AttachmentTypeRole AttachmentType
+E AttachmentTypeUser AttachmentType
+E ContextKeyTypeEnumBinary ContextKeyTypeEnum
+E ContextKeyTypeEnumBinaryList ContextKeyTypeEnum
+E ContextKeyTypeEnumBoolean ContextKeyTypeEnum
+E ContextKeyTypeEnumBooleanList ContextKeyTypeEnum
+E ContextKeyTypeEnumDate ContextKeyTypeEnum
+E ContextKeyTypeEnumDateList ContextKeyTypeEnum
+E ContextKeyTypeEnumIp ContextKeyTypeEnum
+E ContextKeyTypeEnumIpList ContextKeyTypeEnum
+E ContextKeyTypeEnumNumeric ContextKeyTypeEnum
+E ContextKeyTypeEnumNumericList ContextKeyTypeEnum
+E ContextKeyTypeEnumString ContextKeyTypeEnum
+E ContextKeyTypeEnumStringList ContextKeyTypeEnum
+E DeletionTaskStatusTypeFailed DeletionTaskStatusType
+E DeletionTaskStatusTypeInProgress DeletionTaskStatusType
+E DeletionTaskStatusTypeNotStarted DeletionTaskStatusType
+E DeletionTaskStatusTypeSucceeded DeletionTaskStatusType
+E EncodingTypePem EncodingType
+E EncodingTypeSsh EncodingType
+E EntityTypeAWSManagedPolicy EntityType
+E EntityTypeGroup EntityType
+E EntityTypeLocalManagedPolicy EntityType
+E EntityTypeRole EntityType
+E EntityTypeUser EntityType
+E FeatureTypeRootCredentialsManagement FeatureType
+E FeatureTypeRootSessions FeatureType
+E GlobalEndpointTokenVersionV1Token GlobalEndpointTokenVersion
+E GlobalEndpointTokenVersionV2Token GlobalEndpointTokenVersion
+E JobStatusTypeCompleted JobStatusType
+E JobStatusTypeFailed JobStatusType
+E JobStatusTypeInProgress JobStatusType
+E ManagedByTypeTypeService ManagedByTypeType
+E ParameterTypeTypeArn ParameterTypeType
+E ParameterTypeTypeArnList ParameterTypeType
+E ParameterTypeTypeNumber ParameterTypeType
+E ParameterTypeTypeNumberList ParameterTypeType
+E ParameterTypeTypeString ParameterTypeType
+E ParameterTypeTypeStringList ParameterTypeType
+E PermissionCheckResultTypeAllowed PermissionCheckResultType
+E PermissionCheckResultTypeDenied PermissionCheckResultType
+E PermissionCheckResultTypeUnsure PermissionCheckResultType
+E PermissionCheckStatusTypeComplete PermissionCheckStatusType
+E PermissionCheckStatusTypeFailed PermissionCheckStatusType
+E PermissionCheckStatusTypeInProgress PermissionCheckStatusType
+E PermissionsBoundaryAttachmentTypePolicy PermissionsBoundaryAttachmentType
+E PolicyEvaluationDecisionTypeAllowed PolicyEvaluationDecisionType
+E PolicyEvaluationDecisionTypeExplicitDeny PolicyEvaluationDecisionType
+E PolicyEvaluationDecisionTypeImplicitDeny PolicyEvaluationDecisionType
+E PolicyIdentifierPolicyTypeAwsManaged PolicyIdentifierPolicyType
+E PolicyIdentifierPolicyTypeInline PolicyIdentifierPolicyType
+E PolicyIdentifierPolicyTypePermissionBoundary PolicyIdentifierPolicyType
+E PolicyIdentifierPolicyTypeRcp PolicyIdentifierPolicyType
+E PolicyIdentifierPolicyTypeScp PolicyIdentifierPolicyType
+E PolicyIdentifierPolicyTypeUserManaged PolicyIdentifierPolicyType
+E PolicyOwnerEntityTypeGroup PolicyOwnerEntityType
+E PolicyOwnerEntityTypeRole PolicyOwnerEntityType
+E PolicyOwnerEntityTypeUser PolicyOwnerEntityType
+E PolicyParameterTypeEnumString PolicyParameterTypeEnum
+E PolicyParameterTypeEnumStringList PolicyParameterTypeEnum
+E PolicyScopeTypeAll PolicyScopeType
+E PolicyScopeTypeAws PolicyScopeType
+E PolicyScopeTypeLocal PolicyScopeType
+E PolicySourceTypeAwsManaged PolicySourceType
+E PolicySourceTypeGroup PolicySourceType
+E PolicySourceTypeNone PolicySourceType
+E PolicySourceTypeResource PolicySourceType
+E PolicySourceTypeRole PolicySourceType
+E PolicySourceTypeUser PolicySourceType
+E PolicySourceTypeUserManaged PolicySourceType
+E PolicyTypeInline PolicyType
+E PolicyTypeManaged PolicyType
+E PolicyUsageTypePermissionsBoundary PolicyUsageType
+E PolicyUsageTypePermissionsPolicy PolicyUsageType
+E ReportFormatTypeTextCsv ReportFormatType
+E ReportStateTypeComplete ReportStateType
+E ReportStateTypeInprogress ReportStateType
+E ReportStateTypeStarted ReportStateType
+E SortKeyTypeLastAuthenticatedTimeAscending SortKeyType
+E SortKeyTypeLastAuthenticatedTimeDescending SortKeyType
+E SortKeyTypeServiceNamespaceAscending SortKeyType
+E SortKeyTypeServiceNamespaceDescending SortKeyType
+E StateTypeAccepted StateType
+E StateTypeAssigned StateType
+E StateTypeExpired StateType
+E StateTypeFinalized StateType
+E StateTypePendingApproval StateType
+E StateTypeRejected StateType
+E StateTypeUnassigned StateType
+E StatusTypeActive StatusType
+E StatusTypeExpired StatusType
+E StatusTypeInactive StatusType
+E SummaryKeyTypeAccessKeysPerUserQuota SummaryKeyType
+E SummaryKeyTypeAccountAccessKeysPresent SummaryKeyType
+E SummaryKeyTypeAccountMFAEnabled SummaryKeyType
+E SummaryKeyTypeAccountPasswordPresent SummaryKeyType
+E SummaryKeyTypeAccountSigningCertificatesPresent SummaryKeyType
+E SummaryKeyTypeAssumeRolePolicySizeQuota SummaryKeyType
+E SummaryKeyTypeAttachedPoliciesPerGroupQuota SummaryKeyType
+E SummaryKeyTypeAttachedPoliciesPerRoleQuota SummaryKeyType
+E SummaryKeyTypeAttachedPoliciesPerUserQuota SummaryKeyType
+E SummaryKeyTypeGlobalEndpointTokenVersion SummaryKeyType
+E SummaryKeyTypeGroupPolicySizeQuota SummaryKeyType
+E SummaryKeyTypeGroups SummaryKeyType
+E SummaryKeyTypeGroupsPerUserQuota SummaryKeyType
+E SummaryKeyTypeGroupsQuota SummaryKeyType
+E SummaryKeyTypeInstanceProfiles SummaryKeyType
+E SummaryKeyTypeInstanceProfilesQuota SummaryKeyType
+E SummaryKeyTypeMFADevices SummaryKeyType
+E SummaryKeyTypeMFADevicesInUse SummaryKeyType
+E SummaryKeyTypePolicies SummaryKeyType
+E SummaryKeyTypePoliciesQuota SummaryKeyType
+E SummaryKeyTypePolicySizeQuota SummaryKeyType
+E SummaryKeyTypePolicyVersionsInUse SummaryKeyType
+E SummaryKeyTypePolicyVersionsInUseQuota SummaryKeyType
+E SummaryKeyTypeProviders SummaryKeyType
+E SummaryKeyTypeRolePolicySizeQuota SummaryKeyType
+E SummaryKeyTypeRoles SummaryKeyType
+E SummaryKeyTypeRolesQuota SummaryKeyType
+E SummaryKeyTypeServerCertificates SummaryKeyType
+E SummaryKeyTypeServerCertificatesQuota SummaryKeyType
+E SummaryKeyTypeSigningCertificatesPerUserQuota SummaryKeyType
+E SummaryKeyTypeUserPolicySizeQuota SummaryKeyType
+E SummaryKeyTypeUsers SummaryKeyType
+E SummaryKeyTypeUsersQuota SummaryKeyType
+E SummaryKeyTypeVersionsPerPolicyQuota SummaryKeyType
+E SummaryStateTypeAvailable SummaryStateType
+E SummaryStateTypeFailed SummaryStateType
+E SummaryStateTypeNotAvailable SummaryStateType
+E SummaryStateTypeNotSupported SummaryStateType

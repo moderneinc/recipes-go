@@ -37,7 +37,8 @@ func (r *AddV1FormatTags) Editor() recipe.TreeVisitor {
 
 type addV1FormatTagsVisitor struct {
 	visitor.GoVisitor
-	insideStruct int
+	insideStruct   int
+	insideFuncType int
 }
 
 func (v *addV1FormatTagsVisitor) VisitStructType(st *golang.StructType, p any) java.J {
@@ -47,9 +48,18 @@ func (v *addV1FormatTagsVisitor) VisitStructType(st *golang.StructType, p any) j
 	return st
 }
 
+// A func-typed field's parameters and named results are VariableDeclarations
+// inside the struct too, and a tag written onto one of those does not parse.
+func (v *addV1FormatTagsVisitor) VisitFuncType(ft *golang.FuncType, p any) java.J {
+	v.insideFuncType++
+	ft = v.GoVisitor.VisitFuncType(ft, p).(*golang.FuncType)
+	v.insideFuncType--
+	return ft
+}
+
 func (v *addV1FormatTagsVisitor) VisitVariableDeclarations(vd *java.VariableDeclarations, p any) java.J {
 	vd = v.GoVisitor.VisitVariableDeclarations(vd, p).(*java.VariableDeclarations)
-	if v.insideStruct == 0 {
+	if v.insideStruct == 0 || v.insideFuncType > 0 {
 		return vd
 	}
 	format := v1FormatFor(vd)
