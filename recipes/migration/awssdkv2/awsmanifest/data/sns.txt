@@ -1,0 +1,609 @@
+C SNS
+S AddPermissionInput
+S AddPermissionOutput
+S AuthResolverParameters
+S AuthSchemeResolver
+S CheckIfPhoneNumberIsOptedOutInput
+S CheckIfPhoneNumberIsOptedOutOutput
+S Client
+S ConfirmSubscriptionInput
+S ConfirmSubscriptionOutput
+S CreatePlatformApplicationInput
+S CreatePlatformApplicationOutput
+S CreatePlatformEndpointInput
+S CreatePlatformEndpointOutput
+S CreateSMSSandboxPhoneNumberInput
+S CreateSMSSandboxPhoneNumberOutput
+S CreateTopicInput
+S CreateTopicOutput
+S DeleteEndpointInput
+S DeleteEndpointOutput
+S DeletePlatformApplicationInput
+S DeletePlatformApplicationOutput
+S DeleteSMSSandboxPhoneNumberInput
+S DeleteSMSSandboxPhoneNumberOutput
+S DeleteTopicInput
+S DeleteTopicOutput
+S EndpointParameters
+S EndpointResolver
+S EndpointResolverFromURL
+S EndpointResolverFunc
+S EndpointResolverOptions
+S EndpointResolverV2
+S GetDataProtectionPolicyInput
+S GetDataProtectionPolicyOutput
+S GetEndpointAttributesInput
+S GetEndpointAttributesOutput
+S GetPlatformApplicationAttributesInput
+S GetPlatformApplicationAttributesOutput
+S GetSMSAttributesInput
+S GetSMSAttributesOutput
+S GetSMSSandboxAccountStatusInput
+S GetSMSSandboxAccountStatusOutput
+S GetSubscriptionAttributesInput
+S GetSubscriptionAttributesOutput
+S GetTopicAttributesInput
+S GetTopicAttributesOutput
+S HTTPClient
+S HTTPSignerV4
+S ListEndpointsByPlatformApplicationAPIClient
+S ListEndpointsByPlatformApplicationInput
+S ListEndpointsByPlatformApplicationOutput
+S ListEndpointsByPlatformApplicationPaginator
+S ListEndpointsByPlatformApplicationPaginatorOptions
+S ListOriginationNumbersAPIClient
+S ListOriginationNumbersInput
+S ListOriginationNumbersOutput
+S ListOriginationNumbersPaginator
+S ListOriginationNumbersPaginatorOptions
+S ListPhoneNumbersOptedOutAPIClient
+S ListPhoneNumbersOptedOutInput
+S ListPhoneNumbersOptedOutOutput
+S ListPhoneNumbersOptedOutPaginator
+S ListPhoneNumbersOptedOutPaginatorOptions
+S ListPlatformApplicationsAPIClient
+S ListPlatformApplicationsInput
+S ListPlatformApplicationsOutput
+S ListPlatformApplicationsPaginator
+S ListPlatformApplicationsPaginatorOptions
+S ListSMSSandboxPhoneNumbersAPIClient
+S ListSMSSandboxPhoneNumbersInput
+S ListSMSSandboxPhoneNumbersOutput
+S ListSMSSandboxPhoneNumbersPaginator
+S ListSMSSandboxPhoneNumbersPaginatorOptions
+S ListSubscriptionsAPIClient
+S ListSubscriptionsByTopicAPIClient
+S ListSubscriptionsByTopicInput
+S ListSubscriptionsByTopicOutput
+S ListSubscriptionsByTopicPaginator
+S ListSubscriptionsByTopicPaginatorOptions
+S ListSubscriptionsInput
+S ListSubscriptionsOutput
+S ListSubscriptionsPaginator
+S ListSubscriptionsPaginatorOptions
+S ListTagsForResourceInput
+S ListTagsForResourceOutput
+S ListTopicsAPIClient
+S ListTopicsInput
+S ListTopicsOutput
+S ListTopicsPaginator
+S ListTopicsPaginatorOptions
+S New
+S NewDefaultEndpointResolver
+S NewDefaultEndpointResolverV2
+S NewFromConfig
+S NewListEndpointsByPlatformApplicationPaginator
+S NewListOriginationNumbersPaginator
+S NewListPhoneNumbersOptedOutPaginator
+S NewListPlatformApplicationsPaginator
+S NewListSMSSandboxPhoneNumbersPaginator
+S NewListSubscriptionsByTopicPaginator
+S NewListSubscriptionsPaginator
+S NewListTopicsPaginator
+S OptInPhoneNumberInput
+S OptInPhoneNumberOutput
+S Options
+S PublishBatchInput
+S PublishBatchOutput
+S PublishInput
+S PublishOutput
+S PutDataProtectionPolicyInput
+S PutDataProtectionPolicyOutput
+S RemovePermissionInput
+S RemovePermissionOutput
+S ResolveEndpoint
+S ServiceAPIVersion
+S ServiceID
+S SetEndpointAttributesInput
+S SetEndpointAttributesOutput
+S SetPlatformApplicationAttributesInput
+S SetPlatformApplicationAttributesOutput
+S SetSMSAttributesInput
+S SetSMSAttributesOutput
+S SetSubscriptionAttributesInput
+S SetSubscriptionAttributesOutput
+S SetTopicAttributesInput
+S SetTopicAttributesOutput
+S SubscribeInput
+S SubscribeOutput
+S TagResourceInput
+S TagResourceOutput
+S UnsubscribeInput
+S UnsubscribeOutput
+S UntagResourceInput
+S UntagResourceOutput
+S VerifySMSSandboxPhoneNumberInput
+S VerifySMSSandboxPhoneNumberOutput
+S WithAPIOptions
+S WithEndpointResolver
+S WithEndpointResolverV2
+S WithSigV4SigningName
+S WithSigV4SigningRegion
+O AddPermission
+O CheckIfPhoneNumberIsOptedOut
+O ConfirmSubscription
+O CreatePlatformApplication
+O CreatePlatformEndpoint
+O CreateSMSSandboxPhoneNumber
+O CreateTopic
+O DeleteEndpoint
+O DeletePlatformApplication
+O DeleteSMSSandboxPhoneNumber
+O DeleteTopic
+O GetDataProtectionPolicy
+O GetEndpointAttributes
+O GetPlatformApplicationAttributes
+O GetSMSAttributes
+O GetSMSSandboxAccountStatus
+O GetSubscriptionAttributes
+O GetTopicAttributes
+O ListEndpointsByPlatformApplication
+O ListOriginationNumbers
+O ListPhoneNumbersOptedOut
+O ListPlatformApplications
+O ListSMSSandboxPhoneNumbers
+O ListSubscriptions
+O ListSubscriptionsByTopic
+O ListTagsForResource
+O ListTopics
+O OptInPhoneNumber
+O Publish
+O PublishBatch
+O PutDataProtectionPolicy
+O RemovePermission
+O SetEndpointAttributes
+O SetPlatformApplicationAttributes
+O SetSMSAttributes
+O SetSubscriptionAttributes
+O SetTopicAttributes
+O Subscribe
+O TagResource
+O Unsubscribe
+O UntagResource
+O VerifySMSSandboxPhoneNumber
+X ErrCodeAuthorizationErrorException AuthorizationError
+X ErrCodeBatchEntryIdsNotDistinctException BatchEntryIdsNotDistinct
+X ErrCodeBatchRequestTooLongException BatchRequestTooLong
+X ErrCodeConcurrentAccessException ConcurrentAccess
+X ErrCodeEmptyBatchRequestException EmptyBatchRequest
+X ErrCodeEndpointDisabledException EndpointDisabled
+X ErrCodeFilterPolicyLimitExceededException FilterPolicyLimitExceeded
+X ErrCodeInternalErrorException InternalError
+X ErrCodeInvalidBatchEntryIdException InvalidBatchEntryId
+X ErrCodeInvalidParameterException InvalidParameter
+X ErrCodeInvalidParameterValueException ParameterValueInvalid
+X ErrCodeInvalidSecurityException InvalidSecurity
+X ErrCodeInvalidStateException InvalidState
+X ErrCodeKMSAccessDeniedException KMSAccessDenied
+X ErrCodeKMSDisabledException KMSDisabled
+X ErrCodeKMSInvalidStateException KMSInvalidState
+X ErrCodeKMSNotFoundException KMSNotFound
+X ErrCodeKMSOptInRequired KMSOptInRequired
+X ErrCodeKMSThrottlingException KMSThrottling
+X ErrCodeNotFoundException NotFound
+X ErrCodeOptedOutException OptedOut
+X ErrCodePlatformApplicationDisabledException PlatformApplicationDisabled
+X ErrCodeReplayLimitExceededException ReplayLimitExceeded
+X ErrCodeResourceNotFoundException ResourceNotFound
+X ErrCodeStaleTagException StaleTag
+X ErrCodeSubscriptionLimitExceededException SubscriptionLimitExceeded
+X ErrCodeTagLimitExceededException TagLimitExceeded
+X ErrCodeTagPolicyException TagPolicy
+X ErrCodeThrottledException Throttled
+X ErrCodeTooManyEntriesInBatchRequestException TooManyEntriesInBatchRequest
+X ErrCodeTopicLimitExceededException TopicLimitExceeded
+X ErrCodeUserErrorException UserError
+X ErrCodeValidationException ValidationException
+X ErrCodeVerificationException VerificationException
+I ListOriginationNumbersInput.MaxResults int64 int32
+I ListSMSSandboxPhoneNumbersInput.MaxResults int64 int32
+V AddPermissionInput.Label string
+V AddPermissionInput.TopicArn string
+V AuthorizationErrorException.ErrorCodeOverride string
+V AuthorizationErrorException.Message string
+V BatchEntryIdsNotDistinctException.ErrorCodeOverride string
+V BatchEntryIdsNotDistinctException.Message string
+V BatchRequestTooLongException.ErrorCodeOverride string
+V BatchRequestTooLongException.Message string
+V BatchResultErrorEntry.Code string
+V BatchResultErrorEntry.Id string
+V BatchResultErrorEntry.Message string
+V CheckIfPhoneNumberIsOptedOutInput.PhoneNumber string
+V ConcurrentAccessException.ErrorCodeOverride string
+V ConcurrentAccessException.Message string
+V ConfirmSubscriptionInput.AuthenticateOnUnsubscribe string
+V ConfirmSubscriptionInput.Token string
+V ConfirmSubscriptionInput.TopicArn string
+V ConfirmSubscriptionOutput.SubscriptionArn string
+V CreatePlatformApplicationInput.Name string
+V CreatePlatformApplicationInput.Platform string
+V CreatePlatformApplicationOutput.PlatformApplicationArn string
+V CreatePlatformEndpointInput.CustomUserData string
+V CreatePlatformEndpointInput.PlatformApplicationArn string
+V CreatePlatformEndpointInput.Token string
+V CreatePlatformEndpointOutput.EndpointArn string
+V CreateSMSSandboxPhoneNumberInput.PhoneNumber string
+V CreateTopicInput.DataProtectionPolicy string
+V CreateTopicInput.Name string
+V CreateTopicOutput.TopicArn string
+V DeleteEndpointInput.EndpointArn string
+V DeletePlatformApplicationInput.PlatformApplicationArn string
+V DeleteSMSSandboxPhoneNumberInput.PhoneNumber string
+V DeleteTopicInput.TopicArn string
+V EmptyBatchRequestException.ErrorCodeOverride string
+V EmptyBatchRequestException.Message string
+V Endpoint.EndpointArn string
+V EndpointDisabledException.ErrorCodeOverride string
+V EndpointDisabledException.Message string
+V EndpointParameters.Endpoint string
+V EndpointParameters.Region string
+V EndpointParameters.UseDualStack bool
+V EndpointParameters.UseFIPS bool
+V FilterPolicyLimitExceededException.ErrorCodeOverride string
+V FilterPolicyLimitExceededException.Message string
+V GetDataProtectionPolicyInput.ResourceArn string
+V GetDataProtectionPolicyOutput.DataProtectionPolicy string
+V GetEndpointAttributesInput.EndpointArn string
+V GetPlatformApplicationAttributesInput.PlatformApplicationArn string
+V GetSubscriptionAttributesInput.SubscriptionArn string
+V GetTopicAttributesInput.TopicArn string
+V InternalErrorException.ErrorCodeOverride string
+V InternalErrorException.Message string
+V InvalidBatchEntryIdException.ErrorCodeOverride string
+V InvalidBatchEntryIdException.Message string
+V InvalidParameterException.ErrorCodeOverride string
+V InvalidParameterException.Message string
+V InvalidParameterValueException.ErrorCodeOverride string
+V InvalidParameterValueException.Message string
+V InvalidSecurityException.ErrorCodeOverride string
+V InvalidSecurityException.Message string
+V InvalidStateException.ErrorCodeOverride string
+V InvalidStateException.Message string
+V KMSAccessDeniedException.ErrorCodeOverride string
+V KMSAccessDeniedException.Message string
+V KMSDisabledException.ErrorCodeOverride string
+V KMSDisabledException.Message string
+V KMSInvalidStateException.ErrorCodeOverride string
+V KMSInvalidStateException.Message string
+V KMSNotFoundException.ErrorCodeOverride string
+V KMSNotFoundException.Message string
+V KMSOptInRequired.ErrorCodeOverride string
+V KMSOptInRequired.Message string
+V KMSThrottlingException.ErrorCodeOverride string
+V KMSThrottlingException.Message string
+V ListEndpointsByPlatformApplicationInput.NextToken string
+V ListEndpointsByPlatformApplicationInput.PlatformApplicationArn string
+V ListEndpointsByPlatformApplicationOutput.NextToken string
+V ListOriginationNumbersInput.MaxResults int32
+V ListOriginationNumbersInput.NextToken string
+V ListOriginationNumbersOutput.NextToken string
+V ListPhoneNumbersOptedOutInput.NextToken string
+V ListPhoneNumbersOptedOutOutput.NextToken string
+V ListPlatformApplicationsInput.NextToken string
+V ListPlatformApplicationsOutput.NextToken string
+V ListSMSSandboxPhoneNumbersInput.MaxResults int32
+V ListSMSSandboxPhoneNumbersInput.NextToken string
+V ListSMSSandboxPhoneNumbersOutput.NextToken string
+V ListSubscriptionsByTopicInput.NextToken string
+V ListSubscriptionsByTopicInput.TopicArn string
+V ListSubscriptionsByTopicOutput.NextToken string
+V ListSubscriptionsInput.NextToken string
+V ListSubscriptionsOutput.NextToken string
+V ListTagsForResourceInput.ResourceArn string
+V ListTopicsInput.NextToken string
+V ListTopicsOutput.NextToken string
+V MessageAttributeValue.DataType string
+V MessageAttributeValue.StringValue string
+V NotFoundException.ErrorCodeOverride string
+V NotFoundException.Message string
+V OptInPhoneNumberInput.PhoneNumber string
+V OptedOutException.ErrorCodeOverride string
+V OptedOutException.Message string
+V Options.BaseEndpoint string
+V PhoneNumberInformation.Iso2CountryCode string
+V PhoneNumberInformation.PhoneNumber string
+V PhoneNumberInformation.Status string
+V PlatformApplication.PlatformApplicationArn string
+V PlatformApplicationDisabledException.ErrorCodeOverride string
+V PlatformApplicationDisabledException.Message string
+V PublishBatchInput.TopicArn string
+V PublishBatchRequestEntry.Id string
+V PublishBatchRequestEntry.Message string
+V PublishBatchRequestEntry.MessageDeduplicationId string
+V PublishBatchRequestEntry.MessageGroupId string
+V PublishBatchRequestEntry.MessageStructure string
+V PublishBatchRequestEntry.Subject string
+V PublishBatchResultEntry.Id string
+V PublishBatchResultEntry.MessageId string
+V PublishBatchResultEntry.SequenceNumber string
+V PublishInput.Message string
+V PublishInput.MessageDeduplicationId string
+V PublishInput.MessageGroupId string
+V PublishInput.MessageStructure string
+V PublishInput.PhoneNumber string
+V PublishInput.Subject string
+V PublishInput.TargetArn string
+V PublishInput.TopicArn string
+V PublishOutput.MessageId string
+V PublishOutput.SequenceNumber string
+V PutDataProtectionPolicyInput.DataProtectionPolicy string
+V PutDataProtectionPolicyInput.ResourceArn string
+V RemovePermissionInput.Label string
+V RemovePermissionInput.TopicArn string
+V ReplayLimitExceededException.ErrorCodeOverride string
+V ReplayLimitExceededException.Message string
+V ResourceNotFoundException.ErrorCodeOverride string
+V ResourceNotFoundException.Message string
+V SMSSandboxPhoneNumber.PhoneNumber string
+V SetEndpointAttributesInput.EndpointArn string
+V SetPlatformApplicationAttributesInput.PlatformApplicationArn string
+V SetSubscriptionAttributesInput.AttributeName string
+V SetSubscriptionAttributesInput.AttributeValue string
+V SetSubscriptionAttributesInput.SubscriptionArn string
+V SetTopicAttributesInput.AttributeName string
+V SetTopicAttributesInput.AttributeValue string
+V SetTopicAttributesInput.TopicArn string
+V StaleTagException.ErrorCodeOverride string
+V StaleTagException.Message string
+V SubscribeInput.Endpoint string
+V SubscribeInput.Protocol string
+V SubscribeInput.TopicArn string
+V SubscribeOutput.SubscriptionArn string
+V Subscription.Endpoint string
+V Subscription.Owner string
+V Subscription.Protocol string
+V Subscription.SubscriptionArn string
+V Subscription.TopicArn string
+V SubscriptionLimitExceededException.ErrorCodeOverride string
+V SubscriptionLimitExceededException.Message string
+V Tag.Key string
+V Tag.Value string
+V TagLimitExceededException.ErrorCodeOverride string
+V TagLimitExceededException.Message string
+V TagPolicyException.ErrorCodeOverride string
+V TagPolicyException.Message string
+V TagResourceInput.ResourceArn string
+V ThrottledException.ErrorCodeOverride string
+V ThrottledException.Message string
+V TooManyEntriesInBatchRequestException.ErrorCodeOverride string
+V TooManyEntriesInBatchRequestException.Message string
+V Topic.TopicArn string
+V TopicLimitExceededException.ErrorCodeOverride string
+V TopicLimitExceededException.Message string
+V UnsubscribeInput.SubscriptionArn string
+V UntagResourceInput.ResourceArn string
+V UserErrorException.ErrorCodeOverride string
+V UserErrorException.Message string
+V ValidationException.ErrorCodeOverride string
+V ValidationException.Message string
+V VerificationException.ErrorCodeOverride string
+V VerificationException.Message string
+V VerificationException.Status string
+V VerifySMSSandboxPhoneNumberInput.OneTimePassword string
+V VerifySMSSandboxPhoneNumberInput.PhoneNumber string
+Q CreatePlatformApplicationInput.Attributes
+Q CreatePlatformEndpointInput.Attributes
+Q CreateTopicInput.Attributes
+Q Endpoint.Attributes
+Q GetEndpointAttributesOutput.Attributes
+Q GetPlatformApplicationAttributesOutput.Attributes
+Q GetSMSAttributesOutput.Attributes
+Q GetSubscriptionAttributesOutput.Attributes
+Q GetTopicAttributesOutput.Attributes
+Q PlatformApplication.Attributes
+Q SetEndpointAttributesInput.Attributes
+Q SetPlatformApplicationAttributesInput.Attributes
+Q SetSMSAttributesInput.Attributes
+Q SubscribeInput.Attributes
+D BatchResultErrorEntry.SenderFault bool
+D CheckIfPhoneNumberIsOptedOutOutput.IsOptedOut bool
+D GetSMSSandboxAccountStatusOutput.IsInSandbox bool
+D SubscribeInput.ReturnSubscriptionArn bool
+L AddPermissionInput.AWSAccountId -
+L AddPermissionInput.ActionName -
+L CreateTopicInput.Tags Tag
+L GetSMSAttributesInput.Attributes -
+L ListEndpointsByPlatformApplicationOutput.Endpoints Endpoint
+L ListOriginationNumbersOutput.PhoneNumbers PhoneNumberInformation
+L ListPhoneNumbersOptedOutOutput.PhoneNumbers -
+L ListPlatformApplicationsOutput.PlatformApplications PlatformApplication
+L ListSMSSandboxPhoneNumbersOutput.PhoneNumbers SMSSandboxPhoneNumber
+L ListSubscriptionsByTopicOutput.Subscriptions Subscription
+L ListSubscriptionsOutput.Subscriptions Subscription
+L ListTagsForResourceOutput.Tags Tag
+L ListTopicsOutput.Topics Topic
+L PhoneNumberInformation.NumberCapabilities NumberCapability
+L PublishBatchInput.PublishBatchRequestEntries PublishBatchRequestEntry
+L PublishBatchOutput.Failed BatchResultErrorEntry
+L PublishBatchOutput.Successful PublishBatchResultEntry
+L TagResourceInput.Tags Tag
+L UntagResourceInput.TagKeys -
+F CreateSMSSandboxPhoneNumberInput.LanguageCode LanguageCodeString
+F PhoneNumberInformation.NumberCapabilities NumberCapability
+F PhoneNumberInformation.RouteType RouteType
+F SMSSandboxPhoneNumber.Status SMSSandboxPhoneNumberVerificationStatus
+N APIOptions
+N AWSAccountId
+N ActionName
+N AppID
+N AttributeName
+N AttributeValue
+N Attributes
+N AuthSchemePreference
+N AuthSchemeResolver
+N AuthSchemes
+N AuthenticateOnUnsubscribe
+N BaseEndpoint
+N BinaryValue
+N ClientLogMode
+N Code
+N CreatedAt
+N Credentials
+N CustomUserData
+N DataProtectionPolicy
+N DataType
+N DefaultsMode
+N DisableClockSkewCorrection
+N DisableHTTPS
+N Endpoint
+N EndpointArn
+N EndpointOptions
+N EndpointResolver
+N EndpointResolverV2
+N Endpoints
+N ErrorCodeOverride
+N Failed
+N HTTPClient
+N HTTPSignerV4
+N Id
+N Interceptors
+N IsInSandbox
+N IsOptedOut
+N Iso2CountryCode
+N Key
+N Label
+N Limit
+N LogDeprecated
+N Logger
+N MaxResults
+N Message
+N MessageAttributes
+N MessageDeduplicationId
+N MessageGroupId
+N MessageId
+N MessageStructure
+N MeterProvider
+N Name
+N NextToken
+N OneTimePassword
+N Operation
+N Options
+N Owner
+N PhoneNumber
+N PhoneNumbers
+N Platform
+N PlatformApplicationArn
+N PlatformApplications
+N Protocol
+N PublishBatchRequestEntries
+N Region
+N ResolvedRegion
+N Resolver
+N ResourceArn
+N ResultMetadata
+N RetryMaxAttempts
+N RetryMode
+N Retryer
+N ReturnSubscriptionArn
+N RuntimeEnvironment
+N SenderFault
+N SequenceNumber
+N Status
+N StopOnDuplicateToken
+N StringValue
+N Subject
+N SubscriptionArn
+N Subscriptions
+N Successful
+N TagKeys
+N Tags
+N TargetArn
+N Token
+N TopicArn
+N Topics
+N TracerProvider
+N UseDualStack
+N UseDualStackEndpoint
+N UseFIPS
+N UseFIPSEndpoint
+N Value
+T AuthorizationErrorException
+T BatchEntryIdsNotDistinctException
+T BatchRequestTooLongException
+T BatchResultErrorEntry
+T ConcurrentAccessException
+T EmptyBatchRequestException
+T Endpoint
+T EndpointDisabledException
+T FilterPolicyLimitExceededException
+T InternalErrorException
+T InvalidBatchEntryIdException
+T InvalidParameterException
+T InvalidParameterValueException
+T InvalidSecurityException
+T InvalidStateException
+T KMSAccessDeniedException
+T KMSDisabledException
+T KMSInvalidStateException
+T KMSNotFoundException
+T KMSOptInRequired
+T KMSThrottlingException
+T LanguageCodeString
+T MessageAttributeValue
+T NotFoundException
+T NumberCapability
+T OptedOutException
+T PhoneNumberInformation
+T PlatformApplication
+T PlatformApplicationDisabledException
+T PublishBatchRequestEntry
+T PublishBatchResultEntry
+T ReplayLimitExceededException
+T ResourceNotFoundException
+T RouteType
+T SMSSandboxPhoneNumber
+T SMSSandboxPhoneNumberVerificationStatus
+T StaleTagException
+T Subscription
+T SubscriptionLimitExceededException
+T Tag
+T TagLimitExceededException
+T TagPolicyException
+T ThrottledException
+T TooManyEntriesInBatchRequestException
+T Topic
+T TopicLimitExceededException
+T UserErrorException
+T ValidationException
+T VerificationException
+E LanguageCodeStringDeDe LanguageCodeString
+E LanguageCodeStringEnGb LanguageCodeString
+E LanguageCodeStringEnUs LanguageCodeString
+E LanguageCodeStringEs419 LanguageCodeString
+E LanguageCodeStringEsEs LanguageCodeString
+E LanguageCodeStringFrCa LanguageCodeString
+E LanguageCodeStringFrFr LanguageCodeString
+E LanguageCodeStringItIt LanguageCodeString
+E LanguageCodeStringJpJp LanguageCodeString
+E LanguageCodeStringKrKr LanguageCodeString
+E LanguageCodeStringPtBr LanguageCodeString
+E LanguageCodeStringZhCn LanguageCodeString
+E LanguageCodeStringZhTw LanguageCodeString
+E NumberCapabilityMms NumberCapability
+E NumberCapabilitySms NumberCapability
+E NumberCapabilityVoice NumberCapability
+E RouteTypePremium RouteType
+E RouteTypePromotional RouteType
+E RouteTypeTransactional RouteType
+E SMSSandboxPhoneNumberVerificationStatusPending SMSSandboxPhoneNumberVerificationStatus
+E SMSSandboxPhoneNumberVerificationStatusVerified SMSSandboxPhoneNumberVerificationStatus

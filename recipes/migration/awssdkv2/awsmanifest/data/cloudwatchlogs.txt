@@ -1,0 +1,2275 @@
+C CloudWatchLogs
+S AssociateKmsKeyInput
+S AssociateKmsKeyOutput
+S AssociateSourceToS3TableIntegrationInput
+S AssociateSourceToS3TableIntegrationOutput
+S AuthResolverParameters
+S AuthSchemeResolver
+S CancelExportTaskInput
+S CancelExportTaskOutput
+S CancelImportTaskInput
+S CancelImportTaskOutput
+S Client
+S CreateDeliveryInput
+S CreateDeliveryOutput
+S CreateExportTaskInput
+S CreateExportTaskOutput
+S CreateImportTaskInput
+S CreateImportTaskOutput
+S CreateLogAnomalyDetectorInput
+S CreateLogAnomalyDetectorOutput
+S CreateLogGroupInput
+S CreateLogGroupOutput
+S CreateLogStreamInput
+S CreateLogStreamOutput
+S CreateLookupTableInput
+S CreateLookupTableOutput
+S CreateScheduledQueryInput
+S CreateScheduledQueryOutput
+S DeleteAccountPolicyInput
+S DeleteAccountPolicyOutput
+S DeleteDataProtectionPolicyInput
+S DeleteDataProtectionPolicyOutput
+S DeleteDeliveryDestinationInput
+S DeleteDeliveryDestinationOutput
+S DeleteDeliveryDestinationPolicyInput
+S DeleteDeliveryDestinationPolicyOutput
+S DeleteDeliveryInput
+S DeleteDeliveryOutput
+S DeleteDeliverySourceInput
+S DeleteDeliverySourceOutput
+S DeleteDestinationInput
+S DeleteDestinationOutput
+S DeleteIndexPolicyInput
+S DeleteIndexPolicyOutput
+S DeleteIntegrationInput
+S DeleteIntegrationOutput
+S DeleteLogAnomalyDetectorInput
+S DeleteLogAnomalyDetectorOutput
+S DeleteLogGroupInput
+S DeleteLogGroupOutput
+S DeleteLogStreamInput
+S DeleteLogStreamOutput
+S DeleteLookupTableInput
+S DeleteLookupTableOutput
+S DeleteMetricFilterInput
+S DeleteMetricFilterOutput
+S DeleteQueryDefinitionInput
+S DeleteQueryDefinitionOutput
+S DeleteResourcePolicyInput
+S DeleteResourcePolicyOutput
+S DeleteRetentionPolicyInput
+S DeleteRetentionPolicyOutput
+S DeleteScheduledQueryInput
+S DeleteScheduledQueryOutput
+S DeleteSubscriptionFilterInput
+S DeleteSubscriptionFilterOutput
+S DeleteSyslogConfigurationInput
+S DeleteSyslogConfigurationOutput
+S DeleteTransformerInput
+S DeleteTransformerOutput
+S DescribeAccountPoliciesInput
+S DescribeAccountPoliciesOutput
+S DescribeConfigurationTemplatesAPIClient
+S DescribeConfigurationTemplatesInput
+S DescribeConfigurationTemplatesOutput
+S DescribeConfigurationTemplatesPaginator
+S DescribeConfigurationTemplatesPaginatorOptions
+S DescribeDeliveriesAPIClient
+S DescribeDeliveriesInput
+S DescribeDeliveriesOutput
+S DescribeDeliveriesPaginator
+S DescribeDeliveriesPaginatorOptions
+S DescribeDeliveryDestinationsAPIClient
+S DescribeDeliveryDestinationsInput
+S DescribeDeliveryDestinationsOutput
+S DescribeDeliveryDestinationsPaginator
+S DescribeDeliveryDestinationsPaginatorOptions
+S DescribeDeliverySourcesAPIClient
+S DescribeDeliverySourcesInput
+S DescribeDeliverySourcesOutput
+S DescribeDeliverySourcesPaginator
+S DescribeDeliverySourcesPaginatorOptions
+S DescribeDestinationsAPIClient
+S DescribeDestinationsInput
+S DescribeDestinationsOutput
+S DescribeDestinationsPaginator
+S DescribeDestinationsPaginatorOptions
+S DescribeExportTasksInput
+S DescribeExportTasksOutput
+S DescribeFieldIndexesInput
+S DescribeFieldIndexesOutput
+S DescribeImportTaskBatchesInput
+S DescribeImportTaskBatchesOutput
+S DescribeImportTasksInput
+S DescribeImportTasksOutput
+S DescribeIndexPoliciesInput
+S DescribeIndexPoliciesOutput
+S DescribeLogGroupsAPIClient
+S DescribeLogGroupsInput
+S DescribeLogGroupsOutput
+S DescribeLogGroupsPaginator
+S DescribeLogGroupsPaginatorOptions
+S DescribeLogStreamsAPIClient
+S DescribeLogStreamsInput
+S DescribeLogStreamsOutput
+S DescribeLogStreamsPaginator
+S DescribeLogStreamsPaginatorOptions
+S DescribeLookupTablesInput
+S DescribeLookupTablesOutput
+S DescribeMetricFiltersAPIClient
+S DescribeMetricFiltersInput
+S DescribeMetricFiltersOutput
+S DescribeMetricFiltersPaginator
+S DescribeMetricFiltersPaginatorOptions
+S DescribeQueriesInput
+S DescribeQueriesOutput
+S DescribeQueryDefinitionsInput
+S DescribeQueryDefinitionsOutput
+S DescribeResourcePoliciesInput
+S DescribeResourcePoliciesOutput
+S DescribeSubscriptionFiltersAPIClient
+S DescribeSubscriptionFiltersInput
+S DescribeSubscriptionFiltersOutput
+S DescribeSubscriptionFiltersPaginator
+S DescribeSubscriptionFiltersPaginatorOptions
+S DisassociateKmsKeyInput
+S DisassociateKmsKeyOutput
+S DisassociateSourceFromS3TableIntegrationInput
+S DisassociateSourceFromS3TableIntegrationOutput
+S EndpointParameters
+S EndpointResolver
+S EndpointResolverFromURL
+S EndpointResolverFunc
+S EndpointResolverOptions
+S EndpointResolverV2
+S FilterLogEventsAPIClient
+S FilterLogEventsInput
+S FilterLogEventsOutput
+S FilterLogEventsPaginator
+S FilterLogEventsPaginatorOptions
+S GetDataProtectionPolicyInput
+S GetDataProtectionPolicyOutput
+S GetDeliveryDestinationInput
+S GetDeliveryDestinationOutput
+S GetDeliveryDestinationPolicyInput
+S GetDeliveryDestinationPolicyOutput
+S GetDeliveryInput
+S GetDeliveryOutput
+S GetDeliverySourceInput
+S GetDeliverySourceOutput
+S GetIntegrationInput
+S GetIntegrationOutput
+S GetLogAnomalyDetectorInput
+S GetLogAnomalyDetectorOutput
+S GetLogEventsAPIClient
+S GetLogEventsInput
+S GetLogEventsOutput
+S GetLogEventsPaginator
+S GetLogEventsPaginatorOptions
+S GetLogFieldsInput
+S GetLogFieldsOutput
+S GetLogGroupFieldsInput
+S GetLogGroupFieldsOutput
+S GetLogObjectEventStream
+S GetLogObjectInput
+S GetLogObjectOutput
+S GetLogObjectResponseStreamReader
+S GetLogRecordInput
+S GetLogRecordOutput
+S GetLookupTableInput
+S GetLookupTableOutput
+S GetQueryResultsInput
+S GetQueryResultsOutput
+S GetScheduledQueryHistoryAPIClient
+S GetScheduledQueryHistoryInput
+S GetScheduledQueryHistoryOutput
+S GetScheduledQueryHistoryPaginator
+S GetScheduledQueryHistoryPaginatorOptions
+S GetScheduledQueryInput
+S GetScheduledQueryOutput
+S GetStorageTierPolicyInput
+S GetStorageTierPolicyOutput
+S GetTransformerInput
+S GetTransformerOutput
+S HTTPClient
+S HTTPSignerV4
+S IdempotencyTokenProvider
+S ListAggregateLogGroupSummariesAPIClient
+S ListAggregateLogGroupSummariesInput
+S ListAggregateLogGroupSummariesOutput
+S ListAggregateLogGroupSummariesPaginator
+S ListAggregateLogGroupSummariesPaginatorOptions
+S ListAnomaliesAPIClient
+S ListAnomaliesInput
+S ListAnomaliesOutput
+S ListAnomaliesPaginator
+S ListAnomaliesPaginatorOptions
+S ListIntegrationsInput
+S ListIntegrationsOutput
+S ListLogAnomalyDetectorsAPIClient
+S ListLogAnomalyDetectorsInput
+S ListLogAnomalyDetectorsOutput
+S ListLogAnomalyDetectorsPaginator
+S ListLogAnomalyDetectorsPaginatorOptions
+S ListLogGroupsForQueryAPIClient
+S ListLogGroupsForQueryInput
+S ListLogGroupsForQueryOutput
+S ListLogGroupsForQueryPaginator
+S ListLogGroupsForQueryPaginatorOptions
+S ListLogGroupsInput
+S ListLogGroupsOutput
+S ListScheduledQueriesAPIClient
+S ListScheduledQueriesInput
+S ListScheduledQueriesOutput
+S ListScheduledQueriesPaginator
+S ListScheduledQueriesPaginatorOptions
+S ListSourcesForS3TableIntegrationAPIClient
+S ListSourcesForS3TableIntegrationInput
+S ListSourcesForS3TableIntegrationOutput
+S ListSourcesForS3TableIntegrationPaginator
+S ListSourcesForS3TableIntegrationPaginatorOptions
+S ListSyslogConfigurationsInput
+S ListSyslogConfigurationsOutput
+S ListTagsForResourceInput
+S ListTagsForResourceOutput
+S ListTagsLogGroupInput
+S ListTagsLogGroupOutput
+S New
+S NewDefaultEndpointResolver
+S NewDefaultEndpointResolverV2
+S NewDescribeConfigurationTemplatesPaginator
+S NewDescribeDeliveriesPaginator
+S NewDescribeDeliveryDestinationsPaginator
+S NewDescribeDeliverySourcesPaginator
+S NewDescribeDestinationsPaginator
+S NewDescribeLogGroupsPaginator
+S NewDescribeLogStreamsPaginator
+S NewDescribeMetricFiltersPaginator
+S NewDescribeSubscriptionFiltersPaginator
+S NewFilterLogEventsPaginator
+S NewFromConfig
+S NewGetLogEventsPaginator
+S NewGetLogObjectEventStream
+S NewGetScheduledQueryHistoryPaginator
+S NewListAggregateLogGroupSummariesPaginator
+S NewListAnomaliesPaginator
+S NewListLogAnomalyDetectorsPaginator
+S NewListLogGroupsForQueryPaginator
+S NewListScheduledQueriesPaginator
+S NewListSourcesForS3TableIntegrationPaginator
+S NewStartLiveTailEventStream
+S Options
+S PutAccountPolicyInput
+S PutAccountPolicyOutput
+S PutBearerTokenAuthenticationInput
+S PutBearerTokenAuthenticationOutput
+S PutDataProtectionPolicyInput
+S PutDataProtectionPolicyOutput
+S PutDeliveryDestinationInput
+S PutDeliveryDestinationOutput
+S PutDeliveryDestinationPolicyInput
+S PutDeliveryDestinationPolicyOutput
+S PutDeliverySourceInput
+S PutDeliverySourceOutput
+S PutDestinationInput
+S PutDestinationOutput
+S PutDestinationPolicyInput
+S PutDestinationPolicyOutput
+S PutIndexPolicyInput
+S PutIndexPolicyOutput
+S PutIntegrationInput
+S PutIntegrationOutput
+S PutLogEventsInput
+S PutLogEventsOutput
+S PutLogGroupDeletionProtectionInput
+S PutLogGroupDeletionProtectionOutput
+S PutMetricFilterInput
+S PutMetricFilterOutput
+S PutQueryDefinitionInput
+S PutQueryDefinitionOutput
+S PutResourcePolicyInput
+S PutResourcePolicyOutput
+S PutRetentionPolicyInput
+S PutRetentionPolicyOutput
+S PutStorageTierPolicyInput
+S PutStorageTierPolicyOutput
+S PutSubscriptionFilterInput
+S PutSubscriptionFilterOutput
+S PutSyslogConfigurationInput
+S PutSyslogConfigurationOutput
+S PutTransformerInput
+S PutTransformerOutput
+S ResolveEndpoint
+S ServiceAPIVersion
+S ServiceID
+S StartLiveTailEventStream
+S StartLiveTailInput
+S StartLiveTailOutput
+S StartLiveTailResponseStreamReader
+S StartQueryInput
+S StartQueryOutput
+S StopQueryInput
+S StopQueryOutput
+S TagLogGroupInput
+S TagLogGroupOutput
+S TagResourceInput
+S TagResourceOutput
+S TestMetricFilterInput
+S TestMetricFilterOutput
+S TestTransformerInput
+S TestTransformerOutput
+S TypeRegistry
+S UnknownEventMessageError
+S UntagLogGroupInput
+S UntagLogGroupOutput
+S UntagResourceInput
+S UntagResourceOutput
+S UpdateAnomalyInput
+S UpdateAnomalyOutput
+S UpdateDeliveryConfigurationInput
+S UpdateDeliveryConfigurationOutput
+S UpdateLogAnomalyDetectorInput
+S UpdateLogAnomalyDetectorOutput
+S UpdateLookupTableInput
+S UpdateLookupTableOutput
+S UpdateScheduledQueryInput
+S UpdateScheduledQueryOutput
+S WithAPIOptions
+S WithEndpointResolver
+S WithEndpointResolverV2
+S WithSigV4SigningName
+S WithSigV4SigningRegion
+O AssociateKmsKey
+O AssociateSourceToS3TableIntegration
+O CancelExportTask
+O CancelImportTask
+O CreateDelivery
+O CreateExportTask
+O CreateImportTask
+O CreateLogAnomalyDetector
+O CreateLogGroup
+O CreateLogStream
+O CreateLookupTable
+O CreateScheduledQuery
+O DeleteAccountPolicy
+O DeleteDataProtectionPolicy
+O DeleteDelivery
+O DeleteDeliveryDestination
+O DeleteDeliveryDestinationPolicy
+O DeleteDeliverySource
+O DeleteDestination
+O DeleteIndexPolicy
+O DeleteIntegration
+O DeleteLogAnomalyDetector
+O DeleteLogGroup
+O DeleteLogStream
+O DeleteLookupTable
+O DeleteMetricFilter
+O DeleteQueryDefinition
+O DeleteResourcePolicy
+O DeleteRetentionPolicy
+O DeleteScheduledQuery
+O DeleteSubscriptionFilter
+O DeleteSyslogConfiguration
+O DeleteTransformer
+O DescribeAccountPolicies
+O DescribeConfigurationTemplates
+O DescribeDeliveries
+O DescribeDeliveryDestinations
+O DescribeDeliverySources
+O DescribeDestinations
+O DescribeExportTasks
+O DescribeFieldIndexes
+O DescribeImportTaskBatches
+O DescribeImportTasks
+O DescribeIndexPolicies
+O DescribeLogGroups
+O DescribeLogStreams
+O DescribeLookupTables
+O DescribeMetricFilters
+O DescribeQueries
+O DescribeQueryDefinitions
+O DescribeResourcePolicies
+O DescribeSubscriptionFilters
+O DisassociateKmsKey
+O DisassociateSourceFromS3TableIntegration
+O FilterLogEvents
+O GetDataProtectionPolicy
+O GetDelivery
+O GetDeliveryDestination
+O GetDeliveryDestinationPolicy
+O GetDeliverySource
+O GetIntegration
+O GetLogAnomalyDetector
+O GetLogEvents
+O GetLogFields
+O GetLogGroupFields
+O GetLogObject
+O GetLogRecord
+O GetLookupTable
+O GetQueryResults
+O GetScheduledQuery
+O GetScheduledQueryHistory
+O GetStorageTierPolicy
+O GetTransformer
+O ListAggregateLogGroupSummaries
+O ListAnomalies
+O ListIntegrations
+O ListLogAnomalyDetectors
+O ListLogGroups
+O ListLogGroupsForQuery
+O ListScheduledQueries
+O ListSourcesForS3TableIntegration
+O ListSyslogConfigurations
+O ListTagsForResource
+O ListTagsLogGroup
+O PutAccountPolicy
+O PutBearerTokenAuthentication
+O PutDataProtectionPolicy
+O PutDeliveryDestination
+O PutDeliveryDestinationPolicy
+O PutDeliverySource
+O PutDestination
+O PutDestinationPolicy
+O PutIndexPolicy
+O PutIntegration
+O PutLogEvents
+O PutLogGroupDeletionProtection
+O PutMetricFilter
+O PutQueryDefinition
+O PutResourcePolicy
+O PutRetentionPolicy
+O PutStorageTierPolicy
+O PutSubscriptionFilter
+O PutSyslogConfiguration
+O PutTransformer
+O StartLiveTail
+O StartQuery
+O StopQuery
+O TagLogGroup
+O TagResource
+O TestMetricFilter
+O TestTransformer
+O UntagLogGroup
+O UntagResource
+O UpdateAnomaly
+O UpdateDeliveryConfiguration
+O UpdateLogAnomalyDetector
+O UpdateLookupTable
+O UpdateScheduledQuery
+X ErrCodeAccessDeniedException AccessDeniedException
+X ErrCodeConflictException ConflictException
+X ErrCodeDataAlreadyAcceptedException DataAlreadyAcceptedException
+X ErrCodeInvalidOperationException InvalidOperationException
+X ErrCodeInvalidParameterException InvalidParameterException
+X ErrCodeInvalidSequenceTokenException InvalidSequenceTokenException
+X ErrCodeLimitExceededException LimitExceededException
+X ErrCodeMalformedQueryException MalformedQueryException
+X ErrCodeOperationAbortedException OperationAbortedException
+X ErrCodeResourceAlreadyExistsException ResourceAlreadyExistsException
+X ErrCodeResourceNotFoundException ResourceNotFoundException
+X ErrCodeServiceQuotaExceededException ServiceQuotaExceededException
+X ErrCodeServiceUnavailableException ServiceUnavailableException
+X ErrCodeSessionStreamingException SessionStreamingException
+X ErrCodeSessionTimeoutException SessionTimeoutException
+X ErrCodeThrottlingException ThrottlingException
+X ErrCodeTooManyTagsException TooManyTagsException
+X ErrCodeUnrecognizedClientException UnrecognizedClientException
+X ErrCodeValidationException ValidationException
+I DescribeDeliveriesInput.Limit int64 int32
+I DescribeDeliveryDestinationsInput.Limit int64 int32
+I DescribeDeliverySourcesInput.Limit int64 int32
+I DescribeDestinationsInput.Limit int64 int32
+I DescribeExportTasksInput.Limit int64 int32
+I DescribeLogGroupsInput.Limit int64 int32
+I DescribeLogStreamsInput.Limit int64 int32
+I DescribeMetricFiltersInput.Limit int64 int32
+I DescribeQueriesInput.MaxResults int64 int32
+I DescribeQueryDefinitionsInput.MaxResults int64 int32
+I DescribeResourcePoliciesInput.Limit int64 int32
+I DescribeSubscriptionFiltersInput.Limit int64 int32
+I FilterLogEventsInput.Limit int64 int32
+I GetLogEventsInput.Limit int64 int32
+I ListAnomaliesInput.Limit int64 int32
+I ListLogAnomalyDetectorsInput.Limit int64 int32
+I LogGroup.MetricFilterCount int64 int32
+I LogGroup.RetentionInDays int64 int32
+I PutRetentionPolicyInput.RetentionInDays int64 int32
+I QueryCompileErrorLocation.EndCharOffset int64 int32
+I QueryCompileErrorLocation.StartCharOffset int64 int32
+I RejectedLogEventsInfo.ExpiredLogEventEndIndex int64 int32
+I RejectedLogEventsInfo.TooNewLogEventStartIndex int64 int32
+I RejectedLogEventsInfo.TooOldLogEventEndIndex int64 int32
+I StartQueryInput.Limit int64 int32
+R AssociateSourceToS3TableIntegrationInput.DataSource DataSource
+R CancelImportTaskOutput.ImportStatistics ImportStatistics
+R ConfigurationTemplate.DefaultDeliveryConfigValues ConfigurationTemplateDeliveryConfigValues
+R ConfigurationTemplate.S3TablesIntegration S3TablesIntegration
+R ConfigurationTemplateDeliveryConfigValues.S3DeliveryConfiguration S3DeliveryConfiguration
+R CreateDeliveryInput.S3DeliveryConfiguration S3DeliveryConfiguration
+R CreateDeliveryOutput.Delivery Delivery
+R CreateImportTaskInput.ImportFilter ImportFilter
+R CreateScheduledQueryInput.DestinationConfiguration DestinationConfiguration
+R Delivery.S3DeliveryConfiguration S3DeliveryConfiguration
+R DeliveryDestination.DeliveryDestinationConfiguration DeliveryDestinationConfiguration
+R DestinationConfiguration.LookupTableConfiguration LookupTableConfiguration
+R DestinationConfiguration.S3Configuration S3Configuration
+R ExportTask.ExecutionInfo ExportTaskExecutionInfo
+R ExportTask.Status ExportTaskStatus
+R GetDeliveryDestinationOutput.DeliveryDestination DeliveryDestination
+R GetDeliveryDestinationPolicyOutput.Policy Policy
+R GetDeliveryOutput.Delivery Delivery
+R GetDeliverySourceOutput.DeliverySource DeliverySource
+R GetQueryResultsOutput.Statistics QueryStatistics
+R GetScheduledQueryOutput.DestinationConfiguration DestinationConfiguration
+R Import.ImportFilter ImportFilter
+R Import.ImportStatistics ImportStatistics
+R LiveTailSessionUpdate.SessionMetadata LiveTailSessionMetadata
+R LogFieldType.Element LogFieldType
+R LogFieldsListItem.LogFieldType LogFieldType
+R MalformedQueryException.QueryCompileError QueryCompileError
+R OpenSearchApplication.Status OpenSearchResourceStatus
+R OpenSearchCollection.Status OpenSearchResourceStatus
+R OpenSearchDataAccessPolicy.Status OpenSearchResourceStatus
+R OpenSearchDataSource.Status OpenSearchResourceStatus
+R OpenSearchEncryptionPolicy.Status OpenSearchResourceStatus
+R OpenSearchIntegrationDetails.AccessPolicy OpenSearchDataAccessPolicy
+R OpenSearchIntegrationDetails.Application OpenSearchApplication
+R OpenSearchIntegrationDetails.Collection OpenSearchCollection
+R OpenSearchIntegrationDetails.DataSource OpenSearchDataSource
+R OpenSearchIntegrationDetails.EncryptionPolicy OpenSearchEncryptionPolicy
+R OpenSearchIntegrationDetails.LifecyclePolicy OpenSearchLifecyclePolicy
+R OpenSearchIntegrationDetails.NetworkPolicy OpenSearchNetworkPolicy
+R OpenSearchIntegrationDetails.Workspace OpenSearchWorkspace
+R OpenSearchLifecyclePolicy.Status OpenSearchResourceStatus
+R OpenSearchNetworkPolicy.Status OpenSearchResourceStatus
+R OpenSearchWorkspace.Status OpenSearchResourceStatus
+R Processor.AddKeys AddKeys
+R Processor.CopyValue CopyValue
+R Processor.Csv CSV
+R Processor.DateTimeConverter DateTimeConverter
+R Processor.DeleteKeys DeleteKeys
+R Processor.Grok Grok
+R Processor.ListToMap ListToMap
+R Processor.LowerCaseString LowerCaseString
+R Processor.MoveKeys MoveKeys
+R Processor.ParseCloudfront ParseCloudfront
+R Processor.ParseJSON ParseJSON
+R Processor.ParseKeyValue ParseKeyValue
+R Processor.ParsePostgres ParsePostgres
+R Processor.ParseRoute53 ParseRoute53
+R Processor.ParseToOCSF ParseToOCSF
+R Processor.ParseVPC ParseVPC
+R Processor.ParseWAF ParseWAF
+R Processor.RenameKeys RenameKeys
+R Processor.SplitString SplitString
+R Processor.SubstituteString SubstituteString
+R Processor.TrimString TrimString
+R Processor.TypeConverter TypeConverter
+R Processor.UpperCaseString UpperCaseString
+R PutAccountPolicyOutput.AccountPolicy AccountPolicy
+R PutDeliveryDestinationInput.DeliveryDestinationConfiguration DeliveryDestinationConfiguration
+R PutDeliveryDestinationOutput.DeliveryDestination DeliveryDestination
+R PutDeliveryDestinationPolicyOutput.Policy Policy
+R PutDeliverySourceOutput.DeliverySource DeliverySource
+R PutDestinationOutput.Destination Destination
+R PutIndexPolicyOutput.IndexPolicy IndexPolicy
+R PutLogEventsInput.Entity Entity
+R PutLogEventsOutput.RejectedEntityInfo RejectedEntityInfo
+R PutLogEventsOutput.RejectedLogEventsInfo RejectedLogEventsInfo
+R PutResourcePolicyOutput.ResourcePolicy ResourcePolicy
+R QueryCompileError.Location QueryCompileErrorLocation
+R S3TableIntegrationSource.DataSource DataSource
+R ScheduledQuerySummary.DestinationConfiguration DestinationConfiguration
+R UpdateAnomalyInput.SuppressionPeriod SuppressionPeriod
+R UpdateDeliveryConfigurationInput.S3DeliveryConfiguration S3DeliveryConfiguration
+R UpdateScheduledQueryInput.DestinationConfiguration DestinationConfiguration
+R UpdateScheduledQueryOutput.DestinationConfiguration DestinationConfiguration
+V AccessDeniedException.ErrorCodeOverride string
+V AccessDeniedException.Message string
+V AccountPolicy.AccountId string
+V AccountPolicy.LastUpdatedTime int64
+V AccountPolicy.PolicyDocument string
+V AccountPolicy.PolicyName string
+V AccountPolicy.SelectionCriteria string
+V AddKeyEntry.Key string
+V AddKeyEntry.Value string
+V AggregateLogGroupSummary.LogGroupCount int32
+V Anomaly.Active bool
+V Anomaly.AnomalyDetectorArn string
+V Anomaly.AnomalyId string
+V Anomaly.Description string
+V Anomaly.IsPatternLevelSuppression bool
+V Anomaly.PatternId string
+V Anomaly.PatternRegex string
+V Anomaly.PatternString string
+V Anomaly.Priority string
+V Anomaly.Suppressed bool
+V AnomalyDetector.AnomalyDetectorArn string
+V AnomalyDetector.AnomalyVisibilityTime int64
+V AnomalyDetector.DetectorName string
+V AnomalyDetector.FilterPattern string
+V AnomalyDetector.KmsKeyId string
+V AssociateKmsKeyInput.KmsKeyId string
+V AssociateKmsKeyInput.LogGroupName string
+V AssociateKmsKeyInput.ResourceIdentifier string
+V AssociateSourceToS3TableIntegrationInput.IntegrationArn string
+V AssociateSourceToS3TableIntegrationOutput.Identifier string
+V CSV.Delimiter string
+V CSV.Destination string
+V CSV.QuoteCharacter string
+V CSV.Source string
+V CancelExportTaskInput.TaskId string
+V CancelImportTaskInput.ImportId string
+V CancelImportTaskOutput.CreationTime int64
+V CancelImportTaskOutput.ImportId string
+V CancelImportTaskOutput.LastUpdatedTime int64
+V ConfigurationTemplate.AllowedActionForAllowVendedLogsDeliveryForResource string
+V ConfigurationTemplate.LogType string
+V ConfigurationTemplate.ResourceType string
+V ConfigurationTemplate.Service string
+V ConfigurationTemplateDeliveryConfigValues.FieldDelimiter string
+V ConflictException.ErrorCodeOverride string
+V ConflictException.Message string
+V CopyValueEntry.Source string
+V CopyValueEntry.Target string
+V CreateDeliveryInput.DeliveryDestinationArn string
+V CreateDeliveryInput.DeliverySourceName string
+V CreateDeliveryInput.FieldDelimiter string
+V CreateExportTaskInput.Destination string
+V CreateExportTaskInput.DestinationPrefix string
+V CreateExportTaskInput.From int64
+V CreateExportTaskInput.LogGroupName string
+V CreateExportTaskInput.LogStreamNamePrefix string
+V CreateExportTaskInput.TaskName string
+V CreateExportTaskInput.To int64
+V CreateExportTaskOutput.TaskId string
+V CreateImportTaskInput.ImportRoleArn string
+V CreateImportTaskInput.ImportSourceArn string
+V CreateImportTaskOutput.CreationTime int64
+V CreateImportTaskOutput.ImportDestinationArn string
+V CreateImportTaskOutput.ImportId string
+V CreateLogAnomalyDetectorInput.AnomalyVisibilityTime int64
+V CreateLogAnomalyDetectorInput.DetectorName string
+V CreateLogAnomalyDetectorInput.FilterPattern string
+V CreateLogAnomalyDetectorInput.KmsKeyId string
+V CreateLogAnomalyDetectorOutput.AnomalyDetectorArn string
+V CreateLogGroupInput.DeletionProtectionEnabled bool
+V CreateLogGroupInput.KmsKeyId string
+V CreateLogGroupInput.LogGroupName string
+V CreateLogStreamInput.LogGroupName string
+V CreateLogStreamInput.LogStreamName string
+V CreateLookupTableInput.Description string
+V CreateLookupTableInput.KmsKeyId string
+V CreateLookupTableInput.LookupTableName string
+V CreateLookupTableInput.QueryId string
+V CreateLookupTableInput.TableBody string
+V CreateLookupTableOutput.CreatedAt int64
+V CreateLookupTableOutput.LookupTableArn string
+V CreateScheduledQueryInput.Description string
+V CreateScheduledQueryInput.EndTimeOffset int64
+V CreateScheduledQueryInput.ExecutionRoleArn string
+V CreateScheduledQueryInput.Name string
+V CreateScheduledQueryInput.QueryString string
+V CreateScheduledQueryInput.ScheduleEndTime int64
+V CreateScheduledQueryInput.ScheduleExpression string
+V CreateScheduledQueryInput.ScheduleStartTime int64
+V CreateScheduledQueryInput.StartTimeOffset int64
+V CreateScheduledQueryInput.Timezone string
+V CreateScheduledQueryOutput.ScheduledQueryArn string
+V DataAlreadyAcceptedException.ErrorCodeOverride string
+V DataAlreadyAcceptedException.ExpectedSequenceToken string
+V DataAlreadyAcceptedException.Message string
+V DataSource.Name string
+V DataSource.Type string
+V DataSourceFilter.Name string
+V DataSourceFilter.Type string
+V DateTimeConverter.Locale string
+V DateTimeConverter.Source string
+V DateTimeConverter.SourceTimezone string
+V DateTimeConverter.Target string
+V DateTimeConverter.TargetFormat string
+V DateTimeConverter.TargetTimezone string
+V DeleteAccountPolicyInput.PolicyName string
+V DeleteDataProtectionPolicyInput.LogGroupIdentifier string
+V DeleteDeliveryDestinationInput.Name string
+V DeleteDeliveryDestinationPolicyInput.DeliveryDestinationName string
+V DeleteDeliveryInput.Id string
+V DeleteDeliverySourceInput.Name string
+V DeleteDestinationInput.DestinationName string
+V DeleteIndexPolicyInput.LogGroupIdentifier string
+V DeleteIntegrationInput.IntegrationName string
+V DeleteLogAnomalyDetectorInput.AnomalyDetectorArn string
+V DeleteLogGroupInput.LogGroupName string
+V DeleteLogStreamInput.LogGroupName string
+V DeleteLogStreamInput.LogStreamName string
+V DeleteLookupTableInput.LookupTableArn string
+V DeleteMetricFilterInput.FilterName string
+V DeleteMetricFilterInput.LogGroupName string
+V DeleteQueryDefinitionInput.QueryDefinitionId string
+V DeleteResourcePolicyInput.ExpectedRevisionId string
+V DeleteResourcePolicyInput.PolicyName string
+V DeleteResourcePolicyInput.ResourceArn string
+V DeleteRetentionPolicyInput.LogGroupName string
+V DeleteScheduledQueryInput.Identifier string
+V DeleteSubscriptionFilterInput.FilterName string
+V DeleteSubscriptionFilterInput.LogGroupName string
+V DeleteSyslogConfigurationInput.LogGroupIdentifier string
+V DeleteSyslogConfigurationInput.VpcEndpointId string
+V DeleteTransformerInput.LogGroupIdentifier string
+V Delivery.Arn string
+V Delivery.DeliveryDestinationArn string
+V Delivery.DeliverySourceName string
+V Delivery.FieldDelimiter string
+V Delivery.Id string
+V DeliveryDestination.Arn string
+V DeliveryDestination.Name string
+V DeliveryDestinationConfiguration.DestinationResourceArn string
+V DeliverySource.Arn string
+V DeliverySource.LogType string
+V DeliverySource.Name string
+V DeliverySource.Service string
+V DeliverySourceConfigurationSchema.DefaultValue string
+V DeliverySourceConfigurationSchema.KeyName string
+V DeliverySourceConfigurationSchema.MaxValue float64
+V DeliverySourceConfigurationSchema.MinValue float64
+V DescribeAccountPoliciesInput.NextToken string
+V DescribeAccountPoliciesInput.PolicyName string
+V DescribeAccountPoliciesOutput.NextToken string
+V DescribeConfigurationTemplatesInput.Limit int32
+V DescribeConfigurationTemplatesInput.NextToken string
+V DescribeConfigurationTemplatesInput.Service string
+V DescribeConfigurationTemplatesOutput.NextToken string
+V DescribeDeliveriesInput.Limit int32
+V DescribeDeliveriesInput.NextToken string
+V DescribeDeliveriesOutput.NextToken string
+V DescribeDeliveryDestinationsInput.Limit int32
+V DescribeDeliveryDestinationsInput.NextToken string
+V DescribeDeliveryDestinationsOutput.NextToken string
+V DescribeDeliverySourcesInput.Limit int32
+V DescribeDeliverySourcesInput.NextToken string
+V DescribeDeliverySourcesOutput.NextToken string
+V DescribeDestinationsInput.DestinationNamePrefix string
+V DescribeDestinationsInput.Limit int32
+V DescribeDestinationsInput.NextToken string
+V DescribeDestinationsOutput.NextToken string
+V DescribeExportTasksInput.Limit int32
+V DescribeExportTasksInput.NextToken string
+V DescribeExportTasksInput.TaskId string
+V DescribeExportTasksOutput.NextToken string
+V DescribeFieldIndexesInput.NextToken string
+V DescribeFieldIndexesOutput.NextToken string
+V DescribeImportTaskBatchesInput.ImportId string
+V DescribeImportTaskBatchesInput.Limit int32
+V DescribeImportTaskBatchesInput.NextToken string
+V DescribeImportTaskBatchesOutput.ImportId string
+V DescribeImportTaskBatchesOutput.ImportSourceArn string
+V DescribeImportTaskBatchesOutput.NextToken string
+V DescribeImportTasksInput.ImportId string
+V DescribeImportTasksInput.ImportSourceArn string
+V DescribeImportTasksInput.Limit int32
+V DescribeImportTasksInput.NextToken string
+V DescribeImportTasksOutput.NextToken string
+V DescribeIndexPoliciesInput.NextToken string
+V DescribeIndexPoliciesOutput.NextToken string
+V DescribeLogGroupsInput.IncludeLinkedAccounts bool
+V DescribeLogGroupsInput.Limit int32
+V DescribeLogGroupsInput.LogGroupNamePattern string
+V DescribeLogGroupsInput.LogGroupNamePrefix string
+V DescribeLogGroupsInput.NextToken string
+V DescribeLogGroupsOutput.NextToken string
+V DescribeLogStreamsInput.Descending bool
+V DescribeLogStreamsInput.Limit int32
+V DescribeLogStreamsInput.LogGroupIdentifier string
+V DescribeLogStreamsInput.LogGroupName string
+V DescribeLogStreamsInput.LogStreamNamePrefix string
+V DescribeLogStreamsInput.NextToken string
+V DescribeLogStreamsOutput.NextToken string
+V DescribeLookupTablesInput.LookupTableNamePrefix string
+V DescribeLookupTablesInput.NextToken string
+V DescribeLookupTablesOutput.NextToken string
+V DescribeMetricFiltersInput.FilterNamePrefix string
+V DescribeMetricFiltersInput.Limit int32
+V DescribeMetricFiltersInput.LogGroupName string
+V DescribeMetricFiltersInput.MetricName string
+V DescribeMetricFiltersInput.MetricNamespace string
+V DescribeMetricFiltersInput.NextToken string
+V DescribeMetricFiltersOutput.NextToken string
+V DescribeQueriesInput.LogGroupName string
+V DescribeQueriesInput.MaxResults int32
+V DescribeQueriesInput.NextToken string
+V DescribeQueriesOutput.NextToken string
+V DescribeQueryDefinitionsInput.MaxResults int32
+V DescribeQueryDefinitionsInput.NextToken string
+V DescribeQueryDefinitionsInput.QueryDefinitionNamePrefix string
+V DescribeQueryDefinitionsOutput.NextToken string
+V DescribeResourcePoliciesInput.Limit int32
+V DescribeResourcePoliciesInput.NextToken string
+V DescribeResourcePoliciesInput.ResourceArn string
+V DescribeResourcePoliciesOutput.NextToken string
+V DescribeSubscriptionFiltersInput.FilterNamePrefix string
+V DescribeSubscriptionFiltersInput.Limit int32
+V DescribeSubscriptionFiltersInput.LogGroupName string
+V DescribeSubscriptionFiltersInput.NextToken string
+V DescribeSubscriptionFiltersOutput.NextToken string
+V Destination.AccessPolicy string
+V Destination.Arn string
+V Destination.CreationTime int64
+V Destination.DestinationName string
+V Destination.RoleArn string
+V Destination.TargetArn string
+V DisassociateKmsKeyInput.LogGroupName string
+V DisassociateKmsKeyInput.ResourceIdentifier string
+V DisassociateSourceFromS3TableIntegrationInput.Identifier string
+V DisassociateSourceFromS3TableIntegrationOutput.Identifier string
+V EndpointParameters.Endpoint string
+V EndpointParameters.Region string
+V EndpointParameters.UseDualStack bool
+V EndpointParameters.UseFIPS bool
+V ExportTask.Destination string
+V ExportTask.DestinationPrefix string
+V ExportTask.From int64
+V ExportTask.LogGroupName string
+V ExportTask.TaskId string
+V ExportTask.TaskName string
+V ExportTask.To int64
+V ExportTaskExecutionInfo.CompletionTime int64
+V ExportTaskExecutionInfo.CreationTime int64
+V ExportTaskStatus.Message string
+V FieldIndex.FieldIndexName string
+V FieldIndex.FirstEventTime int64
+V FieldIndex.LastEventTime int64
+V FieldIndex.LastScanTime int64
+V FieldIndex.LogGroupIdentifier string
+V FilterLogEventsInput.EndTime int64
+V FilterLogEventsInput.FilterPattern string
+V FilterLogEventsInput.Interleaved bool
+V FilterLogEventsInput.Limit int32
+V FilterLogEventsInput.LogGroupIdentifier string
+V FilterLogEventsInput.LogGroupName string
+V FilterLogEventsInput.LogStreamNamePrefix string
+V FilterLogEventsInput.NextToken string
+V FilterLogEventsInput.StartFromHead bool
+V FilterLogEventsInput.StartTime int64
+V FilterLogEventsOutput.NextToken string
+V FilteredLogEvent.EventId string
+V FilteredLogEvent.IngestionTime int64
+V FilteredLogEvent.LogStreamName string
+V FilteredLogEvent.Message string
+V FilteredLogEvent.Timestamp int64
+V GetDataProtectionPolicyInput.LogGroupIdentifier string
+V GetDataProtectionPolicyOutput.LastUpdatedTime int64
+V GetDataProtectionPolicyOutput.LogGroupIdentifier string
+V GetDataProtectionPolicyOutput.PolicyDocument string
+V GetDeliveryDestinationInput.Name string
+V GetDeliveryDestinationPolicyInput.DeliveryDestinationName string
+V GetDeliveryInput.Id string
+V GetDeliverySourceInput.Name string
+V GetIntegrationInput.IntegrationName string
+V GetIntegrationOutput.IntegrationName string
+V GetLogAnomalyDetectorInput.AnomalyDetectorArn string
+V GetLogAnomalyDetectorOutput.AnomalyVisibilityTime int64
+V GetLogAnomalyDetectorOutput.DetectorName string
+V GetLogAnomalyDetectorOutput.FilterPattern string
+V GetLogAnomalyDetectorOutput.KmsKeyId string
+V GetLogEventsInput.EndTime int64
+V GetLogEventsInput.Limit int32
+V GetLogEventsInput.LogGroupIdentifier string
+V GetLogEventsInput.LogGroupName string
+V GetLogEventsInput.LogStreamName string
+V GetLogEventsInput.NextToken string
+V GetLogEventsInput.StartFromHead bool
+V GetLogEventsInput.StartTime int64
+V GetLogEventsOutput.NextBackwardToken string
+V GetLogEventsOutput.NextForwardToken string
+V GetLogFieldsInput.DataSourceName string
+V GetLogFieldsInput.DataSourceType string
+V GetLogGroupFieldsInput.LogGroupIdentifier string
+V GetLogGroupFieldsInput.LogGroupName string
+V GetLogGroupFieldsInput.Time int64
+V GetLogObjectInput.LogObjectPointer string
+V GetLogRecordInput.LogRecordPointer string
+V GetLookupTableInput.LookupTableArn string
+V GetLookupTableOutput.Description string
+V GetLookupTableOutput.KmsKeyId string
+V GetLookupTableOutput.LastUpdatedTime int64
+V GetLookupTableOutput.LookupTableArn string
+V GetLookupTableOutput.LookupTableName string
+V GetLookupTableOutput.SizeBytes int64
+V GetLookupTableOutput.TableBody string
+V GetQueryResultsInput.MaxItems int32
+V GetQueryResultsInput.NextToken string
+V GetQueryResultsInput.QueryId string
+V GetQueryResultsOutput.EncryptionKey string
+V GetQueryResultsOutput.NextToken string
+V GetScheduledQueryHistoryInput.EndTime int64
+V GetScheduledQueryHistoryInput.Identifier string
+V GetScheduledQueryHistoryInput.MaxResults int32
+V GetScheduledQueryHistoryInput.NextToken string
+V GetScheduledQueryHistoryInput.StartTime int64
+V GetScheduledQueryHistoryOutput.Name string
+V GetScheduledQueryHistoryOutput.NextToken string
+V GetScheduledQueryHistoryOutput.ScheduledQueryArn string
+V GetScheduledQueryInput.Identifier string
+V GetScheduledQueryOutput.CreationTime int64
+V GetScheduledQueryOutput.Description string
+V GetScheduledQueryOutput.EndTimeOffset int64
+V GetScheduledQueryOutput.ExecutionRoleArn string
+V GetScheduledQueryOutput.LastTriggeredTime int64
+V GetScheduledQueryOutput.LastUpdatedTime int64
+V GetScheduledQueryOutput.Name string
+V GetScheduledQueryOutput.QueryString string
+V GetScheduledQueryOutput.ScheduleEndTime int64
+V GetScheduledQueryOutput.ScheduleExpression string
+V GetScheduledQueryOutput.ScheduleStartTime int64
+V GetScheduledQueryOutput.ScheduledQueryArn string
+V GetScheduledQueryOutput.StartTimeOffset int64
+V GetScheduledQueryOutput.Timezone string
+V GetStorageTierPolicyOutput.LastUpdatedTime int64
+V GetTransformerInput.LogGroupIdentifier string
+V GetTransformerOutput.CreationTime int64
+V GetTransformerOutput.LastModifiedTime int64
+V GetTransformerOutput.LogGroupIdentifier string
+V Grok.Match string
+V Grok.Source string
+V GroupingIdentifier.Key string
+V GroupingIdentifier.Value string
+V Import.CreationTime int64
+V Import.ErrorMessage string
+V Import.ImportDestinationArn string
+V Import.ImportId string
+V Import.ImportSourceArn string
+V Import.LastUpdatedTime int64
+V ImportBatch.BatchId string
+V ImportBatch.ErrorMessage string
+V ImportFilter.EndEventTime int64
+V ImportFilter.StartEventTime int64
+V ImportStatistics.BytesImported int64
+V IndexPolicy.LastUpdateTime int64
+V IndexPolicy.LogGroupIdentifier string
+V IndexPolicy.PolicyDocument string
+V IndexPolicy.PolicyName string
+V InputLogEvent.Message string
+V InputLogEvent.Timestamp int64
+V IntegrationSummary.IntegrationName string
+V InternalServerException.ErrorCodeOverride string
+V InternalServerException.Message string
+V InternalStreamingException.ErrorCodeOverride string
+V InternalStreamingException.Message string
+V InvalidOperationException.ErrorCodeOverride string
+V InvalidOperationException.Message string
+V InvalidParameterException.ErrorCodeOverride string
+V InvalidParameterException.Message string
+V InvalidSequenceTokenException.ErrorCodeOverride string
+V InvalidSequenceTokenException.ExpectedSequenceToken string
+V InvalidSequenceTokenException.Message string
+V LimitExceededException.ErrorCodeOverride string
+V LimitExceededException.Message string
+V ListAggregateLogGroupSummariesInput.IncludeLinkedAccounts bool
+V ListAggregateLogGroupSummariesInput.Limit int32
+V ListAggregateLogGroupSummariesInput.LogGroupNamePattern string
+V ListAggregateLogGroupSummariesInput.NextToken string
+V ListAggregateLogGroupSummariesOutput.NextToken string
+V ListAnomaliesInput.AnomalyDetectorArn string
+V ListAnomaliesInput.Limit int32
+V ListAnomaliesInput.NextToken string
+V ListAnomaliesOutput.NextToken string
+V ListIntegrationsInput.IntegrationNamePrefix string
+V ListLogAnomalyDetectorsInput.FilterLogGroupArn string
+V ListLogAnomalyDetectorsInput.Limit int32
+V ListLogAnomalyDetectorsInput.NextToken string
+V ListLogAnomalyDetectorsOutput.NextToken string
+V ListLogGroupsForQueryInput.MaxResults int32
+V ListLogGroupsForQueryInput.NextToken string
+V ListLogGroupsForQueryInput.QueryId string
+V ListLogGroupsForQueryOutput.NextToken string
+V ListLogGroupsInput.IncludeLinkedAccounts bool
+V ListLogGroupsInput.Limit int32
+V ListLogGroupsInput.LogGroupNamePattern string
+V ListLogGroupsInput.NextToken string
+V ListLogGroupsOutput.NextToken string
+V ListScheduledQueriesInput.MaxResults int32
+V ListScheduledQueriesInput.NextToken string
+V ListScheduledQueriesOutput.NextToken string
+V ListSourcesForS3TableIntegrationInput.IntegrationArn string
+V ListSourcesForS3TableIntegrationInput.MaxResults int32
+V ListSourcesForS3TableIntegrationInput.NextToken string
+V ListSourcesForS3TableIntegrationOutput.NextToken string
+V ListSyslogConfigurationsInput.LogGroupIdentifier string
+V ListSyslogConfigurationsInput.NextToken string
+V ListSyslogConfigurationsInput.VpcEndpointId string
+V ListSyslogConfigurationsOutput.NextToken string
+V ListTagsForResourceInput.ResourceArn string
+V ListTagsLogGroupInput.LogGroupName string
+V ListToMap.Key string
+V ListToMap.Source string
+V ListToMap.Target string
+V ListToMap.ValueKey string
+V LiveTailSessionLogEvent.IngestionTime int64
+V LiveTailSessionLogEvent.LogGroupIdentifier string
+V LiveTailSessionLogEvent.LogStreamName string
+V LiveTailSessionLogEvent.Message string
+V LiveTailSessionLogEvent.Timestamp int64
+V LiveTailSessionStart.LogEventFilterPattern string
+V LiveTailSessionStart.RequestId string
+V LiveTailSessionStart.SessionId string
+V LogEvent.Message string
+V LogEvent.Timestamp int64
+V LogFieldType.Type string
+V LogFieldsListItem.LogFieldName string
+V LogGroup.Arn string
+V LogGroup.BearerTokenAuthenticationEnabled bool
+V LogGroup.CreationTime int64
+V LogGroup.DeletionProtectionEnabled bool
+V LogGroup.KmsKeyId string
+V LogGroup.LogGroupArn string
+V LogGroup.LogGroupName string
+V LogGroup.MetricFilterCount int32
+V LogGroup.RetentionInDays int32
+V LogGroup.StoredBytes int64
+V LogGroupField.Name string
+V LogGroupSummary.LogGroupArn string
+V LogGroupSummary.LogGroupName string
+V LogStream.Arn string
+V LogStream.CreationTime int64
+V LogStream.FirstEventTimestamp int64
+V LogStream.LastEventTimestamp int64
+V LogStream.LastIngestionTime int64
+V LogStream.LogStreamName string
+V LogStream.StoredBytes int64
+V LogStream.UploadSequenceToken string
+V LookupTable.Description string
+V LookupTable.KmsKeyId string
+V LookupTable.LastUpdatedTime int64
+V LookupTable.LookupTableArn string
+V LookupTable.LookupTableName string
+V LookupTable.RecordsCount int64
+V LookupTable.SizeBytes int64
+V LookupTableConfiguration.Description string
+V LookupTableConfiguration.KmsKeyId string
+V LookupTableConfiguration.RoleArn string
+V LookupTableConfiguration.TableName string
+V MalformedQueryException.ErrorCodeOverride string
+V MalformedQueryException.Message string
+V MetricFilter.CreationTime int64
+V MetricFilter.FieldSelectionCriteria string
+V MetricFilter.FilterName string
+V MetricFilter.FilterPattern string
+V MetricFilter.LogGroupName string
+V MetricFilterMatchRecord.EventMessage string
+V MetricTransformation.DefaultValue float64
+V MetricTransformation.MetricName string
+V MetricTransformation.MetricNamespace string
+V MetricTransformation.MetricValue string
+V MoveKeyEntry.Source string
+V MoveKeyEntry.Target string
+V OpenSearchApplication.ApplicationArn string
+V OpenSearchApplication.ApplicationEndpoint string
+V OpenSearchApplication.ApplicationId string
+V OpenSearchCollection.CollectionArn string
+V OpenSearchCollection.CollectionEndpoint string
+V OpenSearchDataAccessPolicy.PolicyName string
+V OpenSearchDataSource.DataSourceName string
+V OpenSearchEncryptionPolicy.PolicyName string
+V OpenSearchLifecyclePolicy.PolicyName string
+V OpenSearchNetworkPolicy.PolicyName string
+V OpenSearchResourceConfig.ApplicationArn string
+V OpenSearchResourceConfig.DataSourceRoleArn string
+V OpenSearchResourceConfig.KmsKeyArn string
+V OpenSearchResourceConfig.RetentionDays int32
+V OpenSearchResourceStatus.StatusMessage string
+V OpenSearchWorkspace.WorkspaceId string
+V OperationAbortedException.ErrorCodeOverride string
+V OperationAbortedException.Message string
+V Options.BaseEndpoint string
+V OutputLogEvent.IngestionTime int64
+V OutputLogEvent.Message string
+V OutputLogEvent.Timestamp int64
+V ParseCloudfront.Source string
+V ParseJSON.Destination string
+V ParseJSON.Source string
+V ParseKeyValue.Destination string
+V ParseKeyValue.FieldDelimiter string
+V ParseKeyValue.KeyPrefix string
+V ParseKeyValue.KeyValueDelimiter string
+V ParseKeyValue.NonMatchValue string
+V ParseKeyValue.Source string
+V ParsePostgres.Source string
+V ParseRoute53.Source string
+V ParseToOCSF.MappingVersion string
+V ParseToOCSF.Source string
+V ParseVPC.Source string
+V ParseWAF.Source string
+V PatternToken.InferredTokenName string
+V PatternToken.IsDynamic bool
+V PatternToken.TokenString string
+V Policy.DeliveryDestinationPolicy string
+V PutAccountPolicyInput.PolicyDocument string
+V PutAccountPolicyInput.PolicyName string
+V PutAccountPolicyInput.SelectionCriteria string
+V PutBearerTokenAuthenticationInput.BearerTokenAuthenticationEnabled bool
+V PutBearerTokenAuthenticationInput.LogGroupIdentifier string
+V PutDataProtectionPolicyInput.LogGroupIdentifier string
+V PutDataProtectionPolicyInput.PolicyDocument string
+V PutDataProtectionPolicyOutput.LastUpdatedTime int64
+V PutDataProtectionPolicyOutput.LogGroupIdentifier string
+V PutDataProtectionPolicyOutput.PolicyDocument string
+V PutDeliveryDestinationInput.Name string
+V PutDeliveryDestinationPolicyInput.DeliveryDestinationName string
+V PutDeliveryDestinationPolicyInput.DeliveryDestinationPolicy string
+V PutDeliverySourceInput.LogType string
+V PutDeliverySourceInput.Name string
+V PutDeliverySourceInput.ResourceArn string
+V PutDestinationInput.DestinationName string
+V PutDestinationInput.RoleArn string
+V PutDestinationInput.TargetArn string
+V PutDestinationPolicyInput.AccessPolicy string
+V PutDestinationPolicyInput.DestinationName string
+V PutDestinationPolicyInput.ForceUpdate bool
+V PutIndexPolicyInput.LogGroupIdentifier string
+V PutIndexPolicyInput.PolicyDocument string
+V PutIntegrationInput.IntegrationName string
+V PutIntegrationOutput.IntegrationName string
+V PutLogEventsInput.LogGroupName string
+V PutLogEventsInput.LogStreamName string
+V PutLogEventsInput.SequenceToken string
+V PutLogEventsOutput.NextSequenceToken string
+V PutLogGroupDeletionProtectionInput.DeletionProtectionEnabled bool
+V PutLogGroupDeletionProtectionInput.LogGroupIdentifier string
+V PutMetricFilterInput.FieldSelectionCriteria string
+V PutMetricFilterInput.FilterName string
+V PutMetricFilterInput.FilterPattern string
+V PutMetricFilterInput.LogGroupName string
+V PutQueryDefinitionInput.ClientToken string
+V PutQueryDefinitionInput.Name string
+V PutQueryDefinitionInput.QueryDefinitionId string
+V PutQueryDefinitionInput.QueryString string
+V PutQueryDefinitionOutput.QueryDefinitionId string
+V PutResourcePolicyInput.ExpectedRevisionId string
+V PutResourcePolicyInput.PolicyDocument string
+V PutResourcePolicyInput.PolicyName string
+V PutResourcePolicyInput.ResourceArn string
+V PutResourcePolicyOutput.RevisionId string
+V PutRetentionPolicyInput.LogGroupName string
+V PutRetentionPolicyInput.RetentionInDays int32
+V PutStorageTierPolicyOutput.LastUpdatedTime int64
+V PutSubscriptionFilterInput.DestinationArn string
+V PutSubscriptionFilterInput.FieldSelectionCriteria string
+V PutSubscriptionFilterInput.FilterName string
+V PutSubscriptionFilterInput.FilterPattern string
+V PutSubscriptionFilterInput.LogGroupName string
+V PutSubscriptionFilterInput.RoleArn string
+V PutSyslogConfigurationInput.LogGroupIdentifier string
+V PutSyslogConfigurationInput.VpcEndpointId string
+V PutTransformerInput.LogGroupIdentifier string
+V QueryCompileError.Message string
+V QueryCompileErrorLocation.EndCharOffset int32
+V QueryCompileErrorLocation.StartCharOffset int32
+V QueryDefinition.LastModified int64
+V QueryDefinition.Name string
+V QueryDefinition.QueryDefinitionId string
+V QueryDefinition.QueryString string
+V QueryInfo.BytesScanned float64
+V QueryInfo.CreateTime int64
+V QueryInfo.LogGroupName string
+V QueryInfo.QueryDuration int64
+V QueryInfo.QueryId string
+V QueryInfo.QueryString string
+V QueryInfo.UserIdentity string
+V QueryParameter.DefaultValue string
+V QueryParameter.Description string
+V QueryParameter.Name string
+V RecordField.Mandatory bool
+V RecordField.Name string
+V RejectedLogEventsInfo.ExpiredLogEventEndIndex int32
+V RejectedLogEventsInfo.TooNewLogEventStartIndex int32
+V RejectedLogEventsInfo.TooOldLogEventEndIndex int32
+V RenameKeyEntry.Key string
+V RenameKeyEntry.RenameTo string
+V ResourceAlreadyExistsException.ErrorCodeOverride string
+V ResourceAlreadyExistsException.Message string
+V ResourceNotFoundException.ErrorCodeOverride string
+V ResourceNotFoundException.Message string
+V ResourcePolicy.LastUpdatedTime int64
+V ResourcePolicy.PolicyDocument string
+V ResourcePolicy.PolicyName string
+V ResourcePolicy.ResourceArn string
+V ResourcePolicy.RevisionId string
+V ResultField.Field string
+V ResultField.Value string
+V S3Configuration.DestinationIdentifier string
+V S3Configuration.KmsKeyId string
+V S3Configuration.OwnerAccountId string
+V S3Configuration.RoleArn string
+V S3DeliveryConfiguration.EnableHiveCompatiblePath bool
+V S3DeliveryConfiguration.SuffixPath string
+V S3TableIntegrationSource.CreatedTimeStamp int64
+V S3TableIntegrationSource.Identifier string
+V S3TableIntegrationSource.ParentSourceIdentifier string
+V S3TableIntegrationSource.StatusReason string
+V S3TablesIntegration.DatasourceName string
+V S3TablesIntegration.DatasourceType string
+V ScheduledQueryDestination.DestinationIdentifier string
+V ScheduledQueryDestination.ErrorMessage string
+V ScheduledQueryDestination.ProcessedIdentifier string
+V ScheduledQuerySummary.CreationTime int64
+V ScheduledQuerySummary.LastTriggeredTime int64
+V ScheduledQuerySummary.LastUpdatedTime int64
+V ScheduledQuerySummary.Name string
+V ScheduledQuerySummary.ScheduleExpression string
+V ScheduledQuerySummary.ScheduledQueryArn string
+V ScheduledQuerySummary.Timezone string
+V SearchedLogStream.LogStreamName string
+V SearchedLogStream.SearchedCompletely bool
+V ServiceQuotaExceededException.ErrorCodeOverride string
+V ServiceQuotaExceededException.Message string
+V ServiceUnavailableException.ErrorCodeOverride string
+V ServiceUnavailableException.Message string
+V SessionStreamingException.ErrorCodeOverride string
+V SessionStreamingException.Message string
+V SessionTimeoutException.ErrorCodeOverride string
+V SessionTimeoutException.Message string
+V SplitStringEntry.Delimiter string
+V SplitStringEntry.Source string
+V StartLiveTailInput.LogEventFilterPattern string
+V StartQueryInput.EndTime int64
+V StartQueryInput.Limit int32
+V StartQueryInput.LogGroupName string
+V StartQueryInput.QueryString string
+V StartQueryInput.StartTime int64
+V StartQueryOutput.QueryId string
+V StopQueryInput.QueryId string
+V SubscriptionFilter.CreationTime int64
+V SubscriptionFilter.DestinationArn string
+V SubscriptionFilter.FieldSelectionCriteria string
+V SubscriptionFilter.FilterName string
+V SubscriptionFilter.FilterPattern string
+V SubscriptionFilter.LogGroupName string
+V SubscriptionFilter.RoleArn string
+V SubstituteStringEntry.From string
+V SubstituteStringEntry.Source string
+V SubstituteStringEntry.To string
+V SyslogConfiguration.CreatedAt int64
+V SyslogConfiguration.LogGroupArn string
+V SyslogConfiguration.VpcEndpointId string
+V TagFilter.Key string
+V TagLogGroupInput.LogGroupName string
+V TagResourceInput.ResourceArn string
+V TestMetricFilterInput.FilterPattern string
+V ThrottlingException.ErrorCodeOverride string
+V ThrottlingException.Message string
+V TooManyTagsException.ErrorCodeOverride string
+V TooManyTagsException.Message string
+V TooManyTagsException.ResourceName string
+V TransformedLogRecord.EventMessage string
+V TransformedLogRecord.TransformedEventMessage string
+V TriggerHistoryRecord.ErrorMessage string
+V TriggerHistoryRecord.QueryId string
+V TriggerHistoryRecord.TriggeredTimestamp int64
+V TypeConverterEntry.Key string
+V UnrecognizedClientException.ErrorCodeOverride string
+V UnrecognizedClientException.Message string
+V UntagLogGroupInput.LogGroupName string
+V UntagResourceInput.ResourceArn string
+V UpdateAnomalyInput.AnomalyDetectorArn string
+V UpdateAnomalyInput.AnomalyId string
+V UpdateAnomalyInput.Baseline bool
+V UpdateAnomalyInput.PatternId string
+V UpdateDeliveryConfigurationInput.FieldDelimiter string
+V UpdateDeliveryConfigurationInput.Id string
+V UpdateLogAnomalyDetectorInput.AnomalyDetectorArn string
+V UpdateLogAnomalyDetectorInput.AnomalyVisibilityTime int64
+V UpdateLogAnomalyDetectorInput.Enabled bool
+V UpdateLogAnomalyDetectorInput.FilterPattern string
+V UpdateLookupTableInput.Description string
+V UpdateLookupTableInput.KmsKeyId string
+V UpdateLookupTableInput.LookupTableArn string
+V UpdateLookupTableInput.QueryId string
+V UpdateLookupTableInput.TableBody string
+V UpdateLookupTableOutput.LastUpdatedTime int64
+V UpdateLookupTableOutput.LookupTableArn string
+V UpdateScheduledQueryInput.Description string
+V UpdateScheduledQueryInput.EndTimeOffset int64
+V UpdateScheduledQueryInput.ExecutionRoleArn string
+V UpdateScheduledQueryInput.Identifier string
+V UpdateScheduledQueryInput.QueryString string
+V UpdateScheduledQueryInput.ScheduleEndTime int64
+V UpdateScheduledQueryInput.ScheduleExpression string
+V UpdateScheduledQueryInput.ScheduleStartTime int64
+V UpdateScheduledQueryInput.StartTimeOffset int64
+V UpdateScheduledQueryInput.Timezone string
+V UpdateScheduledQueryOutput.CreationTime int64
+V UpdateScheduledQueryOutput.Description string
+V UpdateScheduledQueryOutput.EndTimeOffset int64
+V UpdateScheduledQueryOutput.ExecutionRoleArn string
+V UpdateScheduledQueryOutput.LastTriggeredTime int64
+V UpdateScheduledQueryOutput.LastUpdatedTime int64
+V UpdateScheduledQueryOutput.Name string
+V UpdateScheduledQueryOutput.QueryString string
+V UpdateScheduledQueryOutput.ScheduleEndTime int64
+V UpdateScheduledQueryOutput.ScheduleExpression string
+V UpdateScheduledQueryOutput.ScheduleStartTime int64
+V UpdateScheduledQueryOutput.ScheduledQueryArn string
+V UpdateScheduledQueryOutput.StartTimeOffset int64
+V UpdateScheduledQueryOutput.Timezone string
+V ValidationException.ErrorCodeOverride string
+V ValidationException.Message string
+Q Anomaly.Histogram
+Q CreateDeliveryInput.Tags
+Q CreateLogAnomalyDetectorInput.Tags
+Q CreateLogGroupInput.Tags
+Q Delivery.Tags
+Q DeliveryDestination.Tags
+Q DeliverySource.Tags
+Q GetLogRecordOutput.LogRecord
+Q ListTagsForResourceOutput.Tags
+Q ListTagsLogGroupOutput.Tags
+Q MetricFilterMatchRecord.ExtractedValues
+Q MetricTransformation.Dimensions
+Q PatternToken.Enumerations
+Q PutDeliveryDestinationInput.Tags
+Q PutDeliverySourceInput.Tags
+Q PutDestinationInput.Tags
+Q TagLogGroupInput.Tags
+Q TagResourceInput.Tags
+D Anomaly.FirstSeen int64
+D Anomaly.LastSeen int64
+D Anomaly.SuppressedDate int64
+D Anomaly.SuppressedUntil int64
+D AnomalyDetector.CreationTimeStamp int64
+D AnomalyDetector.LastModifiedTimeStamp int64
+D DeleteQueryDefinitionOutput.Success bool
+D FilterLogEventsInput.Unmask bool
+D GetLogAnomalyDetectorOutput.CreationTimeStamp int64
+D GetLogAnomalyDetectorOutput.LastModifiedTimeStamp int64
+D GetLogEventsInput.Unmask bool
+D GetLogRecordInput.Unmask bool
+D LiveTailSessionMetadata.Sampled bool
+D MetricFilterMatchRecord.EventNumber int64
+D QueryStatistics.BytesScanned float64
+D QueryStatistics.RecordsMatched float64
+D QueryStatistics.RecordsScanned float64
+D StopQueryOutput.Success bool
+L Anomaly.LogGroupArnList -
+L Anomaly.LogSamples LogEvent
+L Anomaly.PatternTokens PatternToken
+L AnomalyDetector.LogGroupArnList -
+L CreateLogAnomalyDetectorInput.LogGroupArnList -
+L DeliverySource.ResourceArns -
+L DescribeAccountPoliciesInput.AccountIdentifiers -
+L DescribeAccountPoliciesOutput.AccountPolicies AccountPolicy
+L DescribeDeliveriesOutput.Deliveries Delivery
+L DescribeDeliveryDestinationsOutput.DeliveryDestinations DeliveryDestination
+L DescribeDeliverySourcesOutput.DeliverySources DeliverySource
+L DescribeDestinationsOutput.Destinations Destination
+L DescribeExportTasksOutput.ExportTasks ExportTask
+L DescribeLogGroupsInput.AccountIdentifiers -
+L DescribeLogGroupsOutput.LogGroups LogGroup
+L DescribeLogStreamsOutput.LogStreams LogStream
+L DescribeMetricFiltersOutput.MetricFilters MetricFilter
+L DescribeQueriesOutput.Queries QueryInfo
+L DescribeQueryDefinitionsOutput.QueryDefinitions QueryDefinition
+L DescribeResourcePoliciesOutput.ResourcePolicies ResourcePolicy
+L DescribeSubscriptionFiltersOutput.SubscriptionFilters SubscriptionFilter
+L FilterLogEventsInput.LogStreamNames -
+L FilterLogEventsOutput.Events FilteredLogEvent
+L FilterLogEventsOutput.SearchedLogStreams SearchedLogStream
+L GetLogAnomalyDetectorOutput.LogGroupArnList -
+L GetLogEventsOutput.Events OutputLogEvent
+L GetLogGroupFieldsOutput.LogGroupFields LogGroupField
+L ListAnomaliesOutput.Anomalies Anomaly
+L ListLogAnomalyDetectorsOutput.AnomalyDetectors AnomalyDetector
+L LiveTailSessionStart.LogGroupIdentifiers -
+L LiveTailSessionStart.LogStreamNamePrefixes -
+L LiveTailSessionStart.LogStreamNames -
+L LiveTailSessionUpdate.SessionResults LiveTailSessionLogEvent
+L LogGroup.InheritedProperties InheritedProperty
+L MetricFilter.MetricTransformations MetricTransformation
+L PutLogEventsInput.LogEvents InputLogEvent
+L PutMetricFilterInput.MetricTransformations MetricTransformation
+L PutQueryDefinitionInput.LogGroupNames -
+L QueryDefinition.LogGroupNames -
+L StartLiveTailInput.LogGroupIdentifiers -
+L StartLiveTailInput.LogStreamNamePrefixes -
+L StartLiveTailInput.LogStreamNames -
+L StartQueryInput.LogGroupIdentifiers -
+L StartQueryInput.LogGroupNames -
+L TestMetricFilterInput.LogEventMessages -
+L TestMetricFilterOutput.Matches MetricFilterMatchRecord
+L UntagLogGroupInput.Tags -
+L UntagResourceInput.TagKeys -
+F AccountPolicy.PolicyType PolicyType
+F AccountPolicy.Scope Scope
+F Anomaly.State State
+F AnomalyDetector.AnomalyDetectorStatus AnomalyDetectorStatus
+F AnomalyDetector.EvaluationFrequency EvaluationFrequency
+F CancelImportTaskOutput.ImportStatus ImportStatus
+F ConfigurationTemplate.AllowedOutputFormats OutputFormat
+F ConfigurationTemplate.DeliveryDestinationType DeliveryDestinationType
+F CreateLogAnomalyDetectorInput.EvaluationFrequency EvaluationFrequency
+F CreateLogGroupInput.LogGroupClass LogGroupClass
+F CreateScheduledQueryInput.QueryLanguage QueryLanguage
+F CreateScheduledQueryInput.State ScheduledQueryState
+F CreateScheduledQueryOutput.State ScheduledQueryState
+F DeleteAccountPolicyInput.PolicyType PolicyType
+F Delivery.DeliveryDestinationType DeliveryDestinationType
+F DeliveryDestination.DeliveryDestinationType DeliveryDestinationType
+F DeliveryDestination.OutputFormat OutputFormat
+F DeliverySource.Status DeliverySourceStatus
+F DeliverySource.StatusReason DeliverySourceStatusReason
+F DeliverySourceConfigurationSchema.ValueType DeliverySourceConfigurationSchemaValueType
+F DescribeAccountPoliciesInput.PolicyType PolicyType
+F DescribeConfigurationTemplatesInput.DeliveryDestinationTypes DeliveryDestinationType
+F DescribeExportTasksInput.StatusCode ExportTaskStatusCode
+F DescribeFieldIndexesInput.IndexCategories IndexCategory
+F DescribeImportTaskBatchesInput.BatchImportStatus ImportStatus
+F DescribeImportTasksInput.ImportStatus ImportStatus
+F DescribeLogGroupsInput.LogGroupClass LogGroupClass
+F DescribeLogStreamsInput.OrderBy OrderBy
+F DescribeQueriesInput.QueryLanguage QueryLanguage
+F DescribeQueriesInput.Status QueryStatus
+F DescribeQueryDefinitionsInput.QueryLanguage QueryLanguage
+F DescribeResourcePoliciesInput.PolicyScope PolicyScope
+F ExportTaskStatus.Code ExportTaskStatusCode
+F FieldIndex.IndexCategory IndexCategory
+F FieldIndex.Type IndexType
+F GetIntegrationOutput.IntegrationStatus IntegrationStatus
+F GetIntegrationOutput.IntegrationType IntegrationType
+F GetLogAnomalyDetectorOutput.AnomalyDetectorStatus AnomalyDetectorStatus
+F GetLogAnomalyDetectorOutput.EvaluationFrequency EvaluationFrequency
+F GetQueryResultsOutput.QueryLanguage QueryLanguage
+F GetQueryResultsOutput.Status QueryStatus
+F GetScheduledQueryHistoryInput.ExecutionStatuses ExecutionStatus
+F GetScheduledQueryOutput.LastExecutionStatus ExecutionStatus
+F GetScheduledQueryOutput.QueryLanguage QueryLanguage
+F GetScheduledQueryOutput.ScheduleType ScheduleType
+F GetScheduledQueryOutput.State ScheduledQueryState
+F GetStorageTierPolicyOutput.StorageTier StorageTier
+F Import.ImportStatus ImportStatus
+F ImportBatch.Status ImportStatus
+F IndexPolicy.Source IndexSource
+F IntegrationSummary.IntegrationStatus IntegrationStatus
+F IntegrationSummary.IntegrationType IntegrationType
+F ListAggregateLogGroupSummariesInput.GroupBy ListAggregateLogGroupSummariesGroupBy
+F ListAggregateLogGroupSummariesInput.LogGroupClass LogGroupClass
+F ListAnomaliesInput.SuppressionState SuppressionState
+F ListIntegrationsInput.IntegrationStatus IntegrationStatus
+F ListIntegrationsInput.IntegrationType IntegrationType
+F ListLogGroupsInput.LogGroupClass LogGroupClass
+F ListScheduledQueriesInput.ScheduleType ScheduleType
+F ListScheduledQueriesInput.State ScheduledQueryState
+F ListToMap.FlattenedElement FlattenedElement
+F LogGroup.DataProtectionStatus DataProtectionStatus
+F LogGroup.InheritedProperties InheritedProperty
+F LogGroup.LogGroupClass LogGroupClass
+F LogGroupSummary.LogGroupClass LogGroupClass
+F MetricTransformation.Unit StandardUnit
+F OpenSearchResourceStatus.Status OpenSearchResourceStatusType
+F ParseToOCSF.EventSource EventSource
+F ParseToOCSF.OcsfVersion OCSFVersion
+F PutAccountPolicyInput.PolicyType PolicyType
+F PutAccountPolicyInput.Scope Scope
+F PutDeliveryDestinationInput.DeliveryDestinationType DeliveryDestinationType
+F PutDeliveryDestinationInput.OutputFormat OutputFormat
+F PutIntegrationInput.IntegrationType IntegrationType
+F PutIntegrationOutput.IntegrationStatus IntegrationStatus
+F PutQueryDefinitionInput.QueryLanguage QueryLanguage
+F PutStorageTierPolicyInput.StorageTier StorageTier
+F PutStorageTierPolicyOutput.StorageTier StorageTier
+F PutSubscriptionFilterInput.Distribution Distribution
+F QueryDefinition.QueryLanguage QueryLanguage
+F QueryInfo.QueryLanguage QueryLanguage
+F QueryInfo.Status QueryStatus
+F RejectedEntityInfo.ErrorType EntityRejectionErrorType
+F ResourcePolicy.PolicyScope PolicyScope
+F S3TableIntegrationSource.Status S3TableIntegrationSourceStatus
+F ScheduledQueryDestination.DestinationType ScheduledQueryDestinationType
+F ScheduledQueryDestination.Status ActionStatus
+F ScheduledQuerySummary.LastExecutionStatus ExecutionStatus
+F ScheduledQuerySummary.ScheduleType ScheduleType
+F ScheduledQuerySummary.State ScheduledQueryState
+F StartQueryInput.QueryLanguage QueryLanguage
+F SubscriptionFilter.Distribution Distribution
+F SuppressionPeriod.SuppressionUnit SuppressionUnit
+F SyslogConfiguration.SourceType SyslogSourceType
+F TriggerHistoryRecord.ExecutionStatus ExecutionStatus
+F TypeConverterEntry.Type Type
+F UpdateAnomalyInput.SuppressionType SuppressionType
+F UpdateLogAnomalyDetectorInput.EvaluationFrequency EvaluationFrequency
+F UpdateScheduledQueryInput.QueryLanguage QueryLanguage
+F UpdateScheduledQueryInput.State ScheduledQueryState
+F UpdateScheduledQueryOutput.LastExecutionStatus ExecutionStatus
+F UpdateScheduledQueryOutput.QueryLanguage QueryLanguage
+F UpdateScheduledQueryOutput.ScheduleType ScheduleType
+F UpdateScheduledQueryOutput.State ScheduledQueryState
+N APIOptions
+N AccessPolicy
+N AccountId
+N AccountIdentifiers
+N AccountPolicies
+N AccountPolicy
+N Active
+N AddKeys
+N AggregateLogGroupSummaries
+N AllowedActionForAllowVendedLogsDeliveryForResource
+N AllowedFieldDelimiters
+N AllowedFields
+N AllowedSuffixPathFields
+N Anomalies
+N AnomalyDetectorArn
+N AnomalyDetectors
+N AnomalyId
+N AnomalyVisibilityTime
+N AppID
+N Application
+N ApplicationArn
+N ApplicationEndpoint
+N ApplicationId
+N ApplyOnTransformedLogs
+N Arn
+N Attributes
+N AuthSchemePreference
+N AuthSchemeResolver
+N AuthSchemes
+N BaseEndpoint
+N Baseline
+N BatchId
+N BearerTokenAuthenticationEnabled
+N BytesImported
+N BytesScanned
+N ClientLogMode
+N ClientToken
+N Collection
+N CollectionArn
+N CollectionEndpoint
+N Columns
+N CompletionTime
+N ConfigurationTemplates
+N CopyValue
+N CreateTime
+N CreatedAt
+N CreatedTimeStamp
+N CreationTime
+N CreationTimeStamp
+N Credentials
+N Csv
+N DashboardViewerPrincipals
+N Data
+N DataSource
+N DataSourceName
+N DataSourceRoleArn
+N DataSourceType
+N DataSources
+N DatasourceName
+N DatasourceType
+N DateTimeConverter
+N DefaultDeliveryConfigValues
+N DefaultValue
+N DefaultsMode
+N DeleteKeys
+N DeletionProtectionEnabled
+N Delimiter
+N Deliveries
+N Delivery
+N DeliveryDestination
+N DeliveryDestinationArn
+N DeliveryDestinationConfiguration
+N DeliveryDestinationName
+N DeliveryDestinationPolicy
+N DeliveryDestinations
+N DeliverySource
+N DeliverySourceConfiguration
+N DeliverySourceName
+N DeliverySources
+N Descending
+N Description
+N Destination
+N DestinationArn
+N DestinationConfiguration
+N DestinationIdentifier
+N DestinationName
+N DestinationNamePrefix
+N DestinationPrefix
+N DestinationResourceArn
+N Destinations
+N DetectorName
+N Dimensions
+N DisableClockSkewCorrection
+N DisableHTTPS
+N DynamicTokenPosition
+N Element
+N EmitSystemFieldDimensions
+N EmitSystemFields
+N EnableHiveCompatiblePath
+N Enabled
+N EncryptionKey
+N EncryptionPolicy
+N EndCharOffset
+N EndEventTime
+N EndTime
+N EndTimeOffset
+N Endpoint
+N EndpointOptions
+N EndpointResolver
+N EndpointResolverV2
+N Entity
+N Entries
+N Enumerations
+N ErrorCodeOverride
+N ErrorMessage
+N EstimatedBytesSkipped
+N EstimatedRecordsSkipped
+N EventId
+N EventMessage
+N EventNumber
+N Events
+N ExecutionInfo
+N ExecutionRoleArn
+N ExpectedRevisionId
+N ExpectedSequenceToken
+N ExpiredLogEventEndIndex
+N ExportTasks
+N ExtractedValues
+N Field
+N FieldDelimiter
+N FieldIndexName
+N FieldIndexNames
+N FieldIndexes
+N FieldSelectionCriteria
+N Fields
+N FilterLogGroupArn
+N FilterName
+N FilterNamePrefix
+N FilterPattern
+N FirstEventTime
+N FirstEventTimestamp
+N FirstSeen
+N Flatten
+N Force
+N ForceUpdate
+N From
+N Grok
+N GroupingIdentifiers
+N HTTPClient
+N HTTPSignerV4
+N Histogram
+N Id
+N IdempotencyTokenProvider
+N Identifier
+N ImportBatches
+N ImportDestinationArn
+N ImportFilter
+N ImportId
+N ImportRoleArn
+N ImportSourceArn
+N ImportStatistics
+N Imports
+N IncludeLinkedAccounts
+N IndexPolicies
+N IndexPolicy
+N InferredTokenName
+N IngestionTime
+N IntegrationArn
+N IntegrationDetails
+N IntegrationName
+N IntegrationNamePrefix
+N IntegrationSummaries
+N Interceptors
+N Interleaved
+N IsDynamic
+N IsPatternLevelSuppression
+N Key
+N KeyAttributes
+N KeyName
+N KeyPrefix
+N KeyValueDelimiter
+N KmsKeyArn
+N KmsKeyId
+N LastEventTime
+N LastEventTimestamp
+N LastIngestionTime
+N LastModified
+N LastModifiedTime
+N LastModifiedTimeStamp
+N LastScanTime
+N LastSeen
+N LastTriggeredTime
+N LastUpdateTime
+N LastUpdatedTime
+N LifecyclePolicy
+N Limit
+N ListToMap
+N Locale
+N Location
+N LogDeprecated
+N LogEventFilterPattern
+N LogEventMessages
+N LogEvents
+N LogFieldName
+N LogFieldType
+N LogFields
+N LogGroupArn
+N LogGroupArnList
+N LogGroupCount
+N LogGroupFields
+N LogGroupIdentifier
+N LogGroupIdentifiers
+N LogGroupName
+N LogGroupNamePattern
+N LogGroupNamePrefix
+N LogGroupNames
+N LogGroupTags
+N LogGroups
+N LogGroupsScanned
+N LogObjectPointer
+N LogRecord
+N LogRecordPointer
+N LogSamples
+N LogStreamName
+N LogStreamNamePrefix
+N LogStreamNamePrefixes
+N LogStreamNames
+N LogStreams
+N LogType
+N LogTypes
+N Logger
+N LookupTableArn
+N LookupTableConfiguration
+N LookupTableName
+N LookupTableNamePrefix
+N LookupTables
+N LowerCaseString
+N Mandatory
+N MappingVersion
+N Match
+N MatchPatterns
+N Matches
+N MaxItems
+N MaxResults
+N MaxValue
+N Message
+N MeterProvider
+N MetricFilterCount
+N MetricFilters
+N MetricName
+N MetricNamespace
+N MetricTransformations
+N MetricValue
+N MinValue
+N MoveKeys
+N Name
+N NetworkPolicy
+N NextBackwardToken
+N NextForwardToken
+N NextSequenceToken
+N NextToken
+N NonMatchValue
+N Operation
+N Options
+N OverwriteIfExists
+N OwnerAccountId
+N Parameters
+N ParentSourceIdentifier
+N ParseCloudfront
+N ParseJSON
+N ParseKeyValue
+N ParsePostgres
+N ParseRoute53
+N ParseToOCSF
+N ParseVPC
+N ParseWAF
+N PatternId
+N PatternRegex
+N PatternString
+N PatternTokens
+N Percent
+N Policy
+N PolicyDocument
+N PolicyName
+N Priority
+N ProcessedIdentifier
+N Protocol
+N Queries
+N QueryCompileError
+N QueryDefinitionId
+N QueryDefinitionNamePrefix
+N QueryDefinitions
+N QueryDuration
+N QueryId
+N QueryString
+N QuoteCharacter
+N Reader
+N RecordFields
+N RecordsCount
+N RecordsMatched
+N RecordsScanned
+N Region
+N RejectedEntityInfo
+N RejectedLogEventsInfo
+N RenameKeys
+N RenameTo
+N RequestId
+N ResolvedRegion
+N Resolver
+N ResourceArn
+N ResourceArns
+N ResourceConfig
+N ResourceIdentifier
+N ResourceName
+N ResourcePolicies
+N ResourcePolicy
+N ResourceType
+N ResourceTypes
+N ResultCount
+N ResultMetadata
+N Results
+N RetentionDays
+N RetentionInDays
+N RetryMaxAttempts
+N RetryMode
+N Retryer
+N RevisionId
+N RoleArn
+N RuntimeEnvironment
+N S3Configuration
+N S3DeliveryConfiguration
+N S3TablesIntegration
+N Sampled
+N ScheduleEndTime
+N ScheduleExpression
+N ScheduleStartTime
+N ScheduledQueries
+N ScheduledQueryArn
+N SearchedCompletely
+N SearchedLogStreams
+N SelectionCriteria
+N SequenceToken
+N Service
+N SessionId
+N SessionMetadata
+N SessionResults
+N SizeBytes
+N Source
+N SourceTimezone
+N Sources
+N SplitString
+N StartCharOffset
+N StartEventTime
+N StartFromHead
+N StartTime
+N StartTimeOffset
+N Statistics
+N Status
+N StatusMessage
+N StatusReason
+N StopOnDuplicateToken
+N StoredBytes
+N SubscriptionFilters
+N SubstituteString
+N Success
+N SuffixPath
+N SupportedValues
+N Suppressed
+N SuppressedDate
+N SuppressedUntil
+N SuppressionPeriod
+N SyslogConfigurations
+N TableBody
+N TableFields
+N TableName
+N Tag
+N TagKeys
+N Tags
+N Target
+N TargetArn
+N TargetFormat
+N TargetTimezone
+N TaskId
+N TaskName
+N Time
+N Timestamp
+N Timezone
+N To
+N TokenString
+N TooNewLogEventStartIndex
+N TooOldLogEventEndIndex
+N TracerProvider
+N TransformedEventMessage
+N TransformedLogs
+N TransformerConfig
+N TriggerHistory
+N TriggeredTimestamp
+N TrimString
+N Type
+N TypeConverter
+N Unmask
+N UploadSequenceToken
+N UpperCaseString
+N UseDualStack
+N UseDualStackEndpoint
+N UseFIPS
+N UseFIPSEndpoint
+N UserIdentity
+N Value
+N ValueKey
+N Values
+N VpcEndpointId
+N WithKeys
+N Workspace
+N WorkspaceId
+T AccessDeniedException
+T AccountPolicy
+T ActionStatus
+T AddKeyEntry
+T AddKeys
+T AggregateLogGroupSummary
+T Anomaly
+T AnomalyDetector
+T AnomalyDetectorStatus
+T CSV
+T ConfigurationTemplate
+T ConfigurationTemplateDeliveryConfigValues
+T ConflictException
+T CopyValue
+T CopyValueEntry
+T DataAlreadyAcceptedException
+T DataProtectionStatus
+T DataSource
+T DataSourceFilter
+T DateTimeConverter
+T DeleteKeys
+T Delivery
+T DeliveryDestination
+T DeliveryDestinationConfiguration
+T DeliveryDestinationType
+T DeliverySource
+T DeliverySourceConfigurationSchema
+T DeliverySourceConfigurationSchemaValueType
+T DeliverySourceStatus
+T DeliverySourceStatusReason
+T Destination
+T DestinationConfiguration
+T Distribution
+T Entity
+T EntityRejectionErrorType
+T EvaluationFrequency
+T EventSource
+T ExecutionStatus
+T ExportTask
+T ExportTaskExecutionInfo
+T ExportTaskStatus
+T ExportTaskStatusCode
+T FieldIndex
+T FieldsData
+T FilteredLogEvent
+T FlattenedElement
+T GetLogObjectResponseStream
+T GetLogObjectResponseStreamMemberFields
+T Grok
+T GroupingIdentifier
+T Import
+T ImportBatch
+T ImportFilter
+T ImportStatistics
+T ImportStatus
+T IndexCategory
+T IndexPolicy
+T IndexSource
+T IndexType
+T InheritedProperty
+T InputLogEvent
+T IntegrationDetails
+T IntegrationDetailsMemberOpenSearchIntegrationDetails
+T IntegrationStatus
+T IntegrationSummary
+T IntegrationType
+T InternalServerException
+T InternalStreamingException
+T InvalidOperationException
+T InvalidParameterException
+T InvalidSequenceTokenException
+T LimitExceededException
+T ListAggregateLogGroupSummariesGroupBy
+T ListToMap
+T LiveTailSessionLogEvent
+T LiveTailSessionMetadata
+T LiveTailSessionStart
+T LiveTailSessionUpdate
+T LogEvent
+T LogFieldType
+T LogFieldsListItem
+T LogGroup
+T LogGroupClass
+T LogGroupField
+T LogGroupSummary
+T LogStream
+T LookupTable
+T LookupTableConfiguration
+T LowerCaseString
+T MalformedQueryException
+T MetricFilter
+T MetricFilterMatchRecord
+T MetricTransformation
+T MoveKeyEntry
+T MoveKeys
+T OCSFVersion
+T OpenSearchApplication
+T OpenSearchCollection
+T OpenSearchDataAccessPolicy
+T OpenSearchDataSource
+T OpenSearchEncryptionPolicy
+T OpenSearchIntegrationDetails
+T OpenSearchLifecyclePolicy
+T OpenSearchNetworkPolicy
+T OpenSearchResourceConfig
+T OpenSearchResourceStatus
+T OpenSearchResourceStatusType
+T OpenSearchWorkspace
+T OperationAbortedException
+T OrderBy
+T OutputFormat
+T OutputLogEvent
+T ParseCloudfront
+T ParseJSON
+T ParseKeyValue
+T ParsePostgres
+T ParseRoute53
+T ParseToOCSF
+T ParseVPC
+T ParseWAF
+T PatternToken
+T Policy
+T PolicyScope
+T PolicyType
+T Processor
+T QueryCompileError
+T QueryCompileErrorLocation
+T QueryDefinition
+T QueryInfo
+T QueryLanguage
+T QueryParameter
+T QueryStatistics
+T QueryStatus
+T RecordField
+T RejectedEntityInfo
+T RejectedLogEventsInfo
+T RenameKeyEntry
+T RenameKeys
+T ResourceAlreadyExistsException
+T ResourceConfig
+T ResourceConfigMemberOpenSearchResourceConfig
+T ResourceNotFoundException
+T ResourcePolicy
+T ResultField
+T S3Configuration
+T S3DeliveryConfiguration
+T S3TableIntegrationSource
+T S3TableIntegrationSourceStatus
+T S3TablesIntegration
+T ScheduleType
+T ScheduledQueryDestination
+T ScheduledQueryDestinationType
+T ScheduledQueryState
+T ScheduledQuerySummary
+T Scope
+T SearchedLogStream
+T ServiceQuotaExceededException
+T ServiceUnavailableException
+T SessionStreamingException
+T SessionTimeoutException
+T SplitString
+T SplitStringEntry
+T StandardUnit
+T StartLiveTailResponseStream
+T StartLiveTailResponseStreamMemberSessionStart
+T StartLiveTailResponseStreamMemberSessionUpdate
+T State
+T StorageTier
+T SubscriptionFilter
+T SubstituteString
+T SubstituteStringEntry
+T SuppressionPeriod
+T SuppressionState
+T SuppressionType
+T SuppressionUnit
+T SyslogConfiguration
+T SyslogSourceType
+T TagFilter
+T ThrottlingException
+T TooManyTagsException
+T TransformedLogRecord
+T TriggerHistoryRecord
+T TrimString
+T Type
+T TypeConverter
+T TypeConverterEntry
+T UnknownUnionMember
+T UnrecognizedClientException
+T UpperCaseString
+T ValidationException
+E ActionStatusClientError ActionStatus
+E ActionStatusComplete ActionStatus
+E ActionStatusFailed ActionStatus
+E ActionStatusInProgress ActionStatus
+E AnomalyDetectorStatusAnalyzing AnomalyDetectorStatus
+E AnomalyDetectorStatusDeleted AnomalyDetectorStatus
+E AnomalyDetectorStatusFailed AnomalyDetectorStatus
+E AnomalyDetectorStatusInitializing AnomalyDetectorStatus
+E AnomalyDetectorStatusPaused AnomalyDetectorStatus
+E AnomalyDetectorStatusTraining AnomalyDetectorStatus
+E DataProtectionStatusActivated DataProtectionStatus
+E DataProtectionStatusArchived DataProtectionStatus
+E DataProtectionStatusDeleted DataProtectionStatus
+E DataProtectionStatusDisabled DataProtectionStatus
+E DeliveryDestinationTypeCwl DeliveryDestinationType
+E DeliveryDestinationTypeFh DeliveryDestinationType
+E DeliveryDestinationTypeS3 DeliveryDestinationType
+E DeliveryDestinationTypeXray DeliveryDestinationType
+E DeliverySourceConfigurationSchemaValueTypeBoolean DeliverySourceConfigurationSchemaValueType
+E DeliverySourceConfigurationSchemaValueTypeDouble DeliverySourceConfigurationSchemaValueType
+E DeliverySourceConfigurationSchemaValueTypeInt DeliverySourceConfigurationSchemaValueType
+E DeliverySourceConfigurationSchemaValueTypeLong DeliverySourceConfigurationSchemaValueType
+E DeliverySourceConfigurationSchemaValueTypeString DeliverySourceConfigurationSchemaValueType
+E DeliverySourceStatusActive DeliverySourceStatus
+E DeliverySourceStatusInactive DeliverySourceStatus
+E DeliverySourceStatusReasonResourceDeleted DeliverySourceStatusReason
+E DistributionByLogStream Distribution
+E DistributionRandom Distribution
+E EntityRejectionErrorTypeEntitySizeTooLarge EntityRejectionErrorType
+E EntityRejectionErrorTypeInvalidAttributes EntityRejectionErrorType
+E EntityRejectionErrorTypeInvalidEntity EntityRejectionErrorType
+E EntityRejectionErrorTypeInvalidKeyAttribute EntityRejectionErrorType
+E EntityRejectionErrorTypeInvalidTypeValue EntityRejectionErrorType
+E EntityRejectionErrorTypeMissingRequiredFields EntityRejectionErrorType
+E EntityRejectionErrorTypeUnsupportedLogGroupType EntityRejectionErrorType
+E EvaluationFrequencyFifteenMin EvaluationFrequency
+E EvaluationFrequencyFiveMin EvaluationFrequency
+E EvaluationFrequencyOneHour EvaluationFrequency
+E EvaluationFrequencyOneMin EvaluationFrequency
+E EvaluationFrequencyTenMin EvaluationFrequency
+E EvaluationFrequencyThirtyMin EvaluationFrequency
+E EventSourceAwswaf EventSource
+E EventSourceCloudTrail EventSource
+E EventSourceEksAudit EventSource
+E EventSourceRoute53Resolver EventSource
+E EventSourceVpcFlow EventSource
+E ExecutionStatusComplete ExecutionStatus
+E ExecutionStatusFailed ExecutionStatus
+E ExecutionStatusInvalidQuery ExecutionStatus
+E ExecutionStatusRunning ExecutionStatus
+E ExecutionStatusTimeout ExecutionStatus
+E ExportTaskStatusCodeCancelled ExportTaskStatusCode
+E ExportTaskStatusCodeCompleted ExportTaskStatusCode
+E ExportTaskStatusCodeFailed ExportTaskStatusCode
+E ExportTaskStatusCodePending ExportTaskStatusCode
+E ExportTaskStatusCodePendingCancel ExportTaskStatusCode
+E ExportTaskStatusCodeRunning ExportTaskStatusCode
+E FlattenedElementFirst FlattenedElement
+E FlattenedElementLast FlattenedElement
+E ImportStatusCancelled ImportStatus
+E ImportStatusCompleted ImportStatus
+E ImportStatusFailed ImportStatus
+E ImportStatusInProgress ImportStatus
+E IndexCategoryAuto IndexCategory
+E IndexCategoryCustom IndexCategory
+E IndexCategoryDefault IndexCategory
+E IndexCategoryInactive IndexCategory
+E IndexSourceAccount IndexSource
+E IndexSourceLogGroup IndexSource
+E IndexTypeFacet IndexType
+E IndexTypeFieldIndex IndexType
+E InheritedPropertyAccountDataProtection InheritedProperty
+E IntegrationStatusActive IntegrationStatus
+E IntegrationStatusFailed IntegrationStatus
+E IntegrationStatusProvisioning IntegrationStatus
+E IntegrationTypeOpensearch IntegrationType
+E ListAggregateLogGroupSummariesGroupByDataSourceNameAndType ListAggregateLogGroupSummariesGroupBy
+E ListAggregateLogGroupSummariesGroupByDataSourceNameTypeAndFormat ListAggregateLogGroupSummariesGroupBy
+E LogGroupClassDelivery LogGroupClass
+E LogGroupClassInfrequentAccess LogGroupClass
+E LogGroupClassStandard LogGroupClass
+E OCSFVersionV11 OCSFVersion
+E OCSFVersionV15 OCSFVersion
+E OpenSearchResourceStatusTypeActive OpenSearchResourceStatusType
+E OpenSearchResourceStatusTypeError OpenSearchResourceStatusType
+E OpenSearchResourceStatusTypeNotFound OpenSearchResourceStatusType
+E OrderByLastEventTime OrderBy
+E OrderByLogStreamName OrderBy
+E OutputFormatJson OutputFormat
+E OutputFormatParquet OutputFormat
+E OutputFormatPlain OutputFormat
+E OutputFormatRaw OutputFormat
+E OutputFormatW3c OutputFormat
+E PolicyScopeAccount PolicyScope
+E PolicyScopeResource PolicyScope
+E PolicyTypeDataProtectionPolicy PolicyType
+E PolicyTypeFieldIndexPolicy PolicyType
+E PolicyTypeMetricExtractionPolicy PolicyType
+E PolicyTypeSubscriptionFilterPolicy PolicyType
+E PolicyTypeTransformerPolicy PolicyType
+E QueryLanguageCwli QueryLanguage
+E QueryLanguagePpl QueryLanguage
+E QueryLanguageSql QueryLanguage
+E QueryStatusCancelled QueryStatus
+E QueryStatusComplete QueryStatus
+E QueryStatusFailed QueryStatus
+E QueryStatusRunning QueryStatus
+E QueryStatusScheduled QueryStatus
+E QueryStatusTimeout QueryStatus
+E QueryStatusUnknown QueryStatus
+E S3TableIntegrationSourceStatusActive S3TableIntegrationSourceStatus
+E S3TableIntegrationSourceStatusDataSourceDeleteInProgress S3TableIntegrationSourceStatus
+E S3TableIntegrationSourceStatusFailed S3TableIntegrationSourceStatus
+E S3TableIntegrationSourceStatusUnhealthy S3TableIntegrationSourceStatus
+E ScheduleTypeAwsManaged ScheduleType
+E ScheduleTypeCustomerManaged ScheduleType
+E ScheduledQueryDestinationTypeLookupTable ScheduledQueryDestinationType
+E ScheduledQueryDestinationTypeS3 ScheduledQueryDestinationType
+E ScheduledQueryStateDisabled ScheduledQueryState
+E ScheduledQueryStateEnabled ScheduledQueryState
+E ScopeAll Scope
+E StandardUnitBits StandardUnit
+E StandardUnitBitsSecond StandardUnit
+E StandardUnitBytes StandardUnit
+E StandardUnitBytesSecond StandardUnit
+E StandardUnitCount StandardUnit
+E StandardUnitCountSecond StandardUnit
+E StandardUnitGigabits StandardUnit
+E StandardUnitGigabitsSecond StandardUnit
+E StandardUnitGigabytes StandardUnit
+E StandardUnitGigabytesSecond StandardUnit
+E StandardUnitKilobits StandardUnit
+E StandardUnitKilobitsSecond StandardUnit
+E StandardUnitKilobytes StandardUnit
+E StandardUnitKilobytesSecond StandardUnit
+E StandardUnitMegabits StandardUnit
+E StandardUnitMegabitsSecond StandardUnit
+E StandardUnitMegabytes StandardUnit
+E StandardUnitMegabytesSecond StandardUnit
+E StandardUnitMicroseconds StandardUnit
+E StandardUnitMilliseconds StandardUnit
+E StandardUnitNone StandardUnit
+E StandardUnitPercent StandardUnit
+E StandardUnitSeconds StandardUnit
+E StandardUnitTerabits StandardUnit
+E StandardUnitTerabitsSecond StandardUnit
+E StandardUnitTerabytes StandardUnit
+E StandardUnitTerabytesSecond StandardUnit
+E StateActive State
+E StateBaseline State
+E StateSuppressed State
+E StorageTierIntelligentTiering StorageTier
+E StorageTierStandard StorageTier
+E SuppressionStateSuppressed SuppressionState
+E SuppressionStateUnsuppressed SuppressionState
+E SuppressionTypeInfinite SuppressionType
+E SuppressionTypeLimited SuppressionType
+E SuppressionUnitHours SuppressionUnit
+E SuppressionUnitMinutes SuppressionUnit
+E SuppressionUnitSeconds SuppressionUnit
+E SyslogSourceTypeVpce SyslogSourceType
+E TypeBoolean Type
+E TypeDouble Type
+E TypeInteger Type
+E TypeString Type

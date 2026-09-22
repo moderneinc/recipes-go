@@ -1,0 +1,488 @@
+C SQS
+S AddPermissionInput
+S AddPermissionOutput
+S AuthResolverParameters
+S AuthSchemeResolver
+S CancelMessageMoveTaskInput
+S CancelMessageMoveTaskOutput
+S ChangeMessageVisibilityBatchInput
+S ChangeMessageVisibilityBatchOutput
+S ChangeMessageVisibilityInput
+S ChangeMessageVisibilityOutput
+S Client
+S CreateQueueInput
+S CreateQueueOutput
+S DeleteMessageBatchInput
+S DeleteMessageBatchOutput
+S DeleteMessageInput
+S DeleteMessageOutput
+S DeleteQueueInput
+S DeleteQueueOutput
+S EndpointParameters
+S EndpointResolver
+S EndpointResolverFromURL
+S EndpointResolverFunc
+S EndpointResolverOptions
+S EndpointResolverV2
+S GetQueueAttributesInput
+S GetQueueAttributesOutput
+S GetQueueUrlInput
+S GetQueueUrlOutput
+S HTTPClient
+S HTTPSignerV4
+S ListDeadLetterSourceQueuesAPIClient
+S ListDeadLetterSourceQueuesInput
+S ListDeadLetterSourceQueuesOutput
+S ListDeadLetterSourceQueuesPaginator
+S ListDeadLetterSourceQueuesPaginatorOptions
+S ListMessageMoveTasksInput
+S ListMessageMoveTasksOutput
+S ListQueueTagsInput
+S ListQueueTagsOutput
+S ListQueuesAPIClient
+S ListQueuesInput
+S ListQueuesOutput
+S ListQueuesPaginator
+S ListQueuesPaginatorOptions
+S New
+S NewDefaultEndpointResolver
+S NewDefaultEndpointResolverV2
+S NewFromConfig
+S NewListDeadLetterSourceQueuesPaginator
+S NewListQueuesPaginator
+S Options
+S PurgeQueueInput
+S PurgeQueueOutput
+S ReceiveMessageInput
+S ReceiveMessageOutput
+S RemovePermissionInput
+S RemovePermissionOutput
+S ResolveEndpoint
+S SendMessageBatchInput
+S SendMessageBatchOutput
+S SendMessageInput
+S SendMessageOutput
+S ServiceAPIVersion
+S ServiceID
+S SetQueueAttributesInput
+S SetQueueAttributesOutput
+S StartMessageMoveTaskInput
+S StartMessageMoveTaskOutput
+S TagQueueInput
+S TagQueueOutput
+S TypeRegistry
+S UntagQueueInput
+S UntagQueueOutput
+S WithAPIOptions
+S WithEndpointResolver
+S WithEndpointResolverV2
+S WithSigV4SigningName
+S WithSigV4SigningRegion
+O AddPermission
+O CancelMessageMoveTask
+O ChangeMessageVisibility
+O ChangeMessageVisibilityBatch
+O CreateQueue
+O DeleteMessage
+O DeleteMessageBatch
+O DeleteQueue
+O GetQueueAttributes
+O GetQueueUrl
+O ListDeadLetterSourceQueues
+O ListMessageMoveTasks
+O ListQueueTags
+O ListQueues
+O PurgeQueue
+O ReceiveMessage
+O RemovePermission
+O SendMessage
+O SendMessageBatch
+O SetQueueAttributes
+O StartMessageMoveTask
+O TagQueue
+O UntagQueue
+X ErrCodeBatchEntryIdsNotDistinct AWS.SimpleQueueService.BatchEntryIdsNotDistinct
+X ErrCodeBatchRequestTooLong AWS.SimpleQueueService.BatchRequestTooLong
+X ErrCodeEmptyBatchRequest AWS.SimpleQueueService.EmptyBatchRequest
+X ErrCodeInvalidAddress InvalidAddress
+X ErrCodeInvalidAttributeName InvalidAttributeName
+X ErrCodeInvalidAttributeValue InvalidAttributeValue
+X ErrCodeInvalidBatchEntryId AWS.SimpleQueueService.InvalidBatchEntryId
+X ErrCodeInvalidIdFormat InvalidIdFormat
+X ErrCodeInvalidMessageContents InvalidMessageContents
+X ErrCodeInvalidSecurity InvalidSecurity
+X ErrCodeKmsAccessDenied KmsAccessDenied
+X ErrCodeKmsDisabled KmsDisabled
+X ErrCodeKmsInvalidKeyUsage KmsInvalidKeyUsage
+X ErrCodeKmsInvalidState KmsInvalidState
+X ErrCodeKmsNotFound KmsNotFound
+X ErrCodeKmsOptInRequired KmsOptInRequired
+X ErrCodeKmsThrottled KmsThrottled
+X ErrCodeMessageNotInflight AWS.SimpleQueueService.MessageNotInflight
+X ErrCodeOverLimit OverLimit
+X ErrCodePurgeQueueInProgress AWS.SimpleQueueService.PurgeQueueInProgress
+X ErrCodeQueueDeletedRecently AWS.SimpleQueueService.QueueDeletedRecently
+X ErrCodeQueueDoesNotExist AWS.SimpleQueueService.NonExistentQueue
+X ErrCodeQueueNameExists QueueAlreadyExists
+X ErrCodeReceiptHandleIsInvalid ReceiptHandleIsInvalid
+X ErrCodeRequestThrottled RequestThrottled
+X ErrCodeResourceNotFoundException ResourceNotFoundException
+X ErrCodeTooManyEntriesInBatchRequest AWS.SimpleQueueService.TooManyEntriesInBatchRequest
+X ErrCodeUnsupportedOperation AWS.SimpleQueueService.UnsupportedOperation
+I ListDeadLetterSourceQueuesInput.MaxResults int64 int32
+I ListMessageMoveTasksInput.MaxResults int64 int32
+I ListMessageMoveTasksResultEntry.MaxNumberOfMessagesPerSecond int64 int32
+I ListQueuesInput.MaxResults int64 int32
+I StartMessageMoveTaskInput.MaxNumberOfMessagesPerSecond int64 int32
+V AddPermissionInput.Label string
+V AddPermissionInput.QueueUrl string
+V BatchEntryIdsNotDistinct.ErrorCodeOverride string
+V BatchEntryIdsNotDistinct.Message string
+V BatchRequestTooLong.ErrorCodeOverride string
+V BatchRequestTooLong.Message string
+V BatchResultErrorEntry.Code string
+V BatchResultErrorEntry.Id string
+V BatchResultErrorEntry.Message string
+V CancelMessageMoveTaskInput.TaskHandle string
+V ChangeMessageVisibilityBatchInput.QueueUrl string
+V ChangeMessageVisibilityBatchRequestEntry.Id string
+V ChangeMessageVisibilityBatchRequestEntry.ReceiptHandle string
+V ChangeMessageVisibilityBatchResultEntry.Id string
+V ChangeMessageVisibilityInput.QueueUrl string
+V ChangeMessageVisibilityInput.ReceiptHandle string
+V CreateQueueInput.QueueName string
+V CreateQueueOutput.QueueUrl string
+V DeleteMessageBatchInput.QueueUrl string
+V DeleteMessageBatchRequestEntry.Id string
+V DeleteMessageBatchRequestEntry.ReceiptHandle string
+V DeleteMessageBatchResultEntry.Id string
+V DeleteMessageInput.QueueUrl string
+V DeleteMessageInput.ReceiptHandle string
+V DeleteQueueInput.QueueUrl string
+V EmptyBatchRequest.ErrorCodeOverride string
+V EmptyBatchRequest.Message string
+V EndpointParameters.Endpoint string
+V EndpointParameters.Region string
+V EndpointParameters.UseDualStack bool
+V EndpointParameters.UseFIPS bool
+V GetQueueAttributesInput.QueueUrl string
+V GetQueueUrlInput.QueueName string
+V GetQueueUrlInput.QueueOwnerAWSAccountId string
+V GetQueueUrlOutput.QueueUrl string
+V InvalidAddress.ErrorCodeOverride string
+V InvalidAddress.Message string
+V InvalidAttributeName.ErrorCodeOverride string
+V InvalidAttributeName.Message string
+V InvalidAttributeValue.ErrorCodeOverride string
+V InvalidAttributeValue.Message string
+V InvalidBatchEntryId.ErrorCodeOverride string
+V InvalidBatchEntryId.Message string
+V InvalidIdFormat.ErrorCodeOverride string
+V InvalidIdFormat.Message string
+V InvalidMessageContents.ErrorCodeOverride string
+V InvalidMessageContents.Message string
+V InvalidSecurity.ErrorCodeOverride string
+V InvalidSecurity.Message string
+V KmsAccessDenied.ErrorCodeOverride string
+V KmsAccessDenied.Message string
+V KmsDisabled.ErrorCodeOverride string
+V KmsDisabled.Message string
+V KmsInvalidKeyUsage.ErrorCodeOverride string
+V KmsInvalidKeyUsage.Message string
+V KmsInvalidState.ErrorCodeOverride string
+V KmsInvalidState.Message string
+V KmsNotFound.ErrorCodeOverride string
+V KmsNotFound.Message string
+V KmsOptInRequired.ErrorCodeOverride string
+V KmsOptInRequired.Message string
+V KmsThrottled.ErrorCodeOverride string
+V KmsThrottled.Message string
+V ListDeadLetterSourceQueuesInput.MaxResults int32
+V ListDeadLetterSourceQueuesInput.NextToken string
+V ListDeadLetterSourceQueuesInput.QueueUrl string
+V ListDeadLetterSourceQueuesOutput.NextToken string
+V ListMessageMoveTasksInput.MaxResults int32
+V ListMessageMoveTasksInput.SourceArn string
+V ListMessageMoveTasksResultEntry.ApproximateNumberOfMessagesToMove int64
+V ListMessageMoveTasksResultEntry.DestinationArn string
+V ListMessageMoveTasksResultEntry.FailureReason string
+V ListMessageMoveTasksResultEntry.MaxNumberOfMessagesPerSecond int32
+V ListMessageMoveTasksResultEntry.SourceArn string
+V ListMessageMoveTasksResultEntry.Status string
+V ListMessageMoveTasksResultEntry.TaskHandle string
+V ListQueueTagsInput.QueueUrl string
+V ListQueuesInput.MaxResults int32
+V ListQueuesInput.NextToken string
+V ListQueuesInput.QueueNamePrefix string
+V ListQueuesOutput.NextToken string
+V Message.Body string
+V Message.MD5OfBody string
+V Message.MD5OfMessageAttributes string
+V Message.MessageId string
+V Message.ReceiptHandle string
+V MessageAttributeValue.DataType string
+V MessageAttributeValue.StringValue string
+V MessageNotInflight.ErrorCodeOverride string
+V MessageNotInflight.Message string
+V MessageSystemAttributeValue.DataType string
+V MessageSystemAttributeValue.StringValue string
+V Options.BaseEndpoint string
+V OverLimit.ErrorCodeOverride string
+V OverLimit.Message string
+V PurgeQueueInProgress.ErrorCodeOverride string
+V PurgeQueueInProgress.Message string
+V PurgeQueueInput.QueueUrl string
+V QueueDeletedRecently.ErrorCodeOverride string
+V QueueDeletedRecently.Message string
+V QueueDoesNotExist.ErrorCodeOverride string
+V QueueDoesNotExist.Message string
+V QueueNameExists.ErrorCodeOverride string
+V QueueNameExists.Message string
+V ReceiptHandleIsInvalid.ErrorCodeOverride string
+V ReceiptHandleIsInvalid.Message string
+V ReceiveMessageInput.QueueUrl string
+V ReceiveMessageInput.ReceiveRequestAttemptId string
+V RemovePermissionInput.Label string
+V RemovePermissionInput.QueueUrl string
+V RequestThrottled.ErrorCodeOverride string
+V RequestThrottled.Message string
+V ResourceNotFoundException.ErrorCodeOverride string
+V ResourceNotFoundException.Message string
+V SendMessageBatchInput.QueueUrl string
+V SendMessageBatchRequestEntry.Id string
+V SendMessageBatchRequestEntry.MessageBody string
+V SendMessageBatchRequestEntry.MessageDeduplicationId string
+V SendMessageBatchRequestEntry.MessageGroupId string
+V SendMessageBatchResultEntry.Id string
+V SendMessageBatchResultEntry.MD5OfMessageAttributes string
+V SendMessageBatchResultEntry.MD5OfMessageBody string
+V SendMessageBatchResultEntry.MD5OfMessageSystemAttributes string
+V SendMessageBatchResultEntry.MessageId string
+V SendMessageBatchResultEntry.SequenceNumber string
+V SendMessageInput.MessageBody string
+V SendMessageInput.MessageDeduplicationId string
+V SendMessageInput.MessageGroupId string
+V SendMessageInput.QueueUrl string
+V SendMessageOutput.MD5OfMessageAttributes string
+V SendMessageOutput.MD5OfMessageBody string
+V SendMessageOutput.MD5OfMessageSystemAttributes string
+V SendMessageOutput.MessageId string
+V SendMessageOutput.SequenceNumber string
+V SetQueueAttributesInput.QueueUrl string
+V StartMessageMoveTaskInput.DestinationArn string
+V StartMessageMoveTaskInput.MaxNumberOfMessagesPerSecond int32
+V StartMessageMoveTaskInput.SourceArn string
+V StartMessageMoveTaskOutput.TaskHandle string
+V TagQueueInput.QueueUrl string
+V TooManyEntriesInBatchRequest.ErrorCodeOverride string
+V TooManyEntriesInBatchRequest.Message string
+V UnsupportedOperation.ErrorCodeOverride string
+V UnsupportedOperation.Message string
+V UntagQueueInput.QueueUrl string
+Q CreateQueueInput.Attributes
+Q CreateQueueInput.Tags
+Q GetQueueAttributesOutput.Attributes
+Q ListQueueTagsOutput.Tags
+Q Message.Attributes
+Q SetQueueAttributesInput.Attributes
+Q TagQueueInput.Tags
+D BatchResultErrorEntry.SenderFault bool
+D CancelMessageMoveTaskOutput.ApproximateNumberOfMessagesMoved int64
+D ListMessageMoveTasksResultEntry.ApproximateNumberOfMessagesMoved int64
+D ListMessageMoveTasksResultEntry.StartedTimestamp int64
+L AddPermissionInput.AWSAccountIds -
+L AddPermissionInput.Actions -
+L ChangeMessageVisibilityBatchInput.Entries ChangeMessageVisibilityBatchRequestEntry
+L ChangeMessageVisibilityBatchOutput.Failed BatchResultErrorEntry
+L ChangeMessageVisibilityBatchOutput.Successful ChangeMessageVisibilityBatchResultEntry
+L DeleteMessageBatchInput.Entries DeleteMessageBatchRequestEntry
+L DeleteMessageBatchOutput.Failed BatchResultErrorEntry
+L DeleteMessageBatchOutput.Successful DeleteMessageBatchResultEntry
+L GetQueueAttributesInput.AttributeNames QueueAttributeName
+L ListDeadLetterSourceQueuesOutput.QueueUrls -
+L ListMessageMoveTasksOutput.Results ListMessageMoveTasksResultEntry
+L ListQueuesOutput.QueueUrls -
+L MessageAttributeValue.StringListValues -
+L MessageSystemAttributeValue.StringListValues -
+L ReceiveMessageInput.AttributeNames QueueAttributeName
+L ReceiveMessageInput.MessageAttributeNames -
+L ReceiveMessageInput.MessageSystemAttributeNames MessageSystemAttributeName
+L ReceiveMessageOutput.Messages Message
+L SendMessageBatchInput.Entries SendMessageBatchRequestEntry
+L SendMessageBatchOutput.Failed BatchResultErrorEntry
+L SendMessageBatchOutput.Successful SendMessageBatchResultEntry
+L UntagQueueInput.TagKeys -
+F GetQueueAttributesInput.AttributeNames QueueAttributeName
+F ReceiveMessageInput.AttributeNames QueueAttributeName
+F ReceiveMessageInput.MessageSystemAttributeNames MessageSystemAttributeName
+N APIOptions
+N AWSAccountIds
+N Actions
+N AppID
+N ApproximateNumberOfMessagesMoved
+N ApproximateNumberOfMessagesToMove
+N Attributes
+N AuthSchemePreference
+N AuthSchemeResolver
+N AuthSchemes
+N BaseEndpoint
+N BinaryListValues
+N BinaryValue
+N Body
+N ClientLogMode
+N Code
+N Credentials
+N DataType
+N DefaultsMode
+N DelaySeconds
+N DestinationArn
+N DisableClockSkewCorrection
+N DisableHTTPS
+N DisableMessageChecksumValidation
+N Endpoint
+N EndpointOptions
+N EndpointResolver
+N EndpointResolverV2
+N Entries
+N ErrorCodeOverride
+N Failed
+N FailureReason
+N HTTPClient
+N HTTPSignerV4
+N Id
+N Interceptors
+N Label
+N Limit
+N LogDeprecated
+N Logger
+N MD5OfBody
+N MD5OfMessageAttributes
+N MD5OfMessageBody
+N MD5OfMessageSystemAttributes
+N MaxNumberOfMessages
+N MaxNumberOfMessagesPerSecond
+N MaxResults
+N Message
+N MessageAttributeNames
+N MessageAttributes
+N MessageBody
+N MessageDeduplicationId
+N MessageGroupId
+N MessageId
+N MessageSystemAttributes
+N Messages
+N MeterProvider
+N NextToken
+N Operation
+N Options
+N Protocol
+N QueueName
+N QueueNamePrefix
+N QueueOwnerAWSAccountId
+N QueueUrl
+N QueueUrls
+N ReceiptHandle
+N ReceiveRequestAttemptId
+N Region
+N ResolvedRegion
+N Resolver
+N ResultMetadata
+N Results
+N RetryMaxAttempts
+N RetryMode
+N Retryer
+N RuntimeEnvironment
+N SenderFault
+N SequenceNumber
+N SourceArn
+N StartedTimestamp
+N Status
+N StopOnDuplicateToken
+N StringListValues
+N StringValue
+N Successful
+N TagKeys
+N Tags
+N TaskHandle
+N TracerProvider
+N UseDualStack
+N UseDualStackEndpoint
+N UseFIPS
+N UseFIPSEndpoint
+N VisibilityTimeout
+N WaitTimeSeconds
+T BatchEntryIdsNotDistinct
+T BatchRequestTooLong
+T BatchResultErrorEntry
+T ChangeMessageVisibilityBatchRequestEntry
+T ChangeMessageVisibilityBatchResultEntry
+T DeleteMessageBatchRequestEntry
+T DeleteMessageBatchResultEntry
+T EmptyBatchRequest
+T InvalidAddress
+T InvalidAttributeName
+T InvalidAttributeValue
+T InvalidBatchEntryId
+T InvalidIdFormat
+T InvalidMessageContents
+T InvalidSecurity
+T KmsAccessDenied
+T KmsDisabled
+T KmsInvalidKeyUsage
+T KmsInvalidState
+T KmsNotFound
+T KmsOptInRequired
+T KmsThrottled
+T ListMessageMoveTasksResultEntry
+T Message
+T MessageAttributeValue
+T MessageNotInflight
+T MessageSystemAttributeName
+T MessageSystemAttributeNameForSends
+T MessageSystemAttributeValue
+T OverLimit
+T PurgeQueueInProgress
+T QueueAttributeName
+T QueueDeletedRecently
+T QueueDoesNotExist
+T QueueNameExists
+T ReceiptHandleIsInvalid
+T RequestThrottled
+T ResourceNotFoundException
+T SendMessageBatchRequestEntry
+T SendMessageBatchResultEntry
+T TooManyEntriesInBatchRequest
+T UnsupportedOperation
+E MessageSystemAttributeNameAWSTraceHeader MessageSystemAttributeName
+E MessageSystemAttributeNameAll MessageSystemAttributeName
+E MessageSystemAttributeNameApproximateFirstReceiveTimestamp MessageSystemAttributeName
+E MessageSystemAttributeNameApproximateReceiveCount MessageSystemAttributeName
+E MessageSystemAttributeNameDeadLetterQueueSourceArn MessageSystemAttributeName
+E MessageSystemAttributeNameForSendsAWSTraceHeader MessageSystemAttributeNameForSends
+E MessageSystemAttributeNameMessageDeduplicationId MessageSystemAttributeName
+E MessageSystemAttributeNameMessageGroupId MessageSystemAttributeName
+E MessageSystemAttributeNameSenderId MessageSystemAttributeName
+E MessageSystemAttributeNameSentTimestamp MessageSystemAttributeName
+E MessageSystemAttributeNameSequenceNumber MessageSystemAttributeName
+E QueueAttributeNameAll QueueAttributeName
+E QueueAttributeNameApproximateNumberOfMessages QueueAttributeName
+E QueueAttributeNameApproximateNumberOfMessagesDelayed QueueAttributeName
+E QueueAttributeNameApproximateNumberOfMessagesNotVisible QueueAttributeName
+E QueueAttributeNameContentBasedDeduplication QueueAttributeName
+E QueueAttributeNameCreatedTimestamp QueueAttributeName
+E QueueAttributeNameDeduplicationScope QueueAttributeName
+E QueueAttributeNameDelaySeconds QueueAttributeName
+E QueueAttributeNameFifoQueue QueueAttributeName
+E QueueAttributeNameFifoThroughputLimit QueueAttributeName
+E QueueAttributeNameKmsDataKeyReusePeriodSeconds QueueAttributeName
+E QueueAttributeNameKmsMasterKeyId QueueAttributeName
+E QueueAttributeNameLastModifiedTimestamp QueueAttributeName
+E QueueAttributeNameMaximumMessageSize QueueAttributeName
+E QueueAttributeNameMessageRetentionPeriod QueueAttributeName
+E QueueAttributeNamePolicy QueueAttributeName
+E QueueAttributeNameQueueArn QueueAttributeName
+E QueueAttributeNameReceiveMessageWaitTimeSeconds QueueAttributeName
+E QueueAttributeNameRedriveAllowPolicy QueueAttributeName
+E QueueAttributeNameRedrivePolicy QueueAttributeName
+E QueueAttributeNameSqsManagedSseEnabled QueueAttributeName
+E QueueAttributeNameVisibilityTimeout QueueAttributeName

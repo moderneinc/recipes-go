@@ -1,0 +1,653 @@
+C ServiceDiscovery
+S AuthResolverParameters
+S AuthSchemeResolver
+S Client
+S CreateHttpNamespaceInput
+S CreateHttpNamespaceOutput
+S CreatePrivateDnsNamespaceInput
+S CreatePrivateDnsNamespaceOutput
+S CreatePublicDnsNamespaceInput
+S CreatePublicDnsNamespaceOutput
+S CreateServiceInput
+S CreateServiceOutput
+S DeleteNamespaceInput
+S DeleteNamespaceOutput
+S DeleteServiceAttributesInput
+S DeleteServiceAttributesOutput
+S DeleteServiceInput
+S DeleteServiceOutput
+S DeregisterInstanceInput
+S DeregisterInstanceOutput
+S DiscoverInstancesInput
+S DiscoverInstancesOutput
+S DiscoverInstancesRevisionInput
+S DiscoverInstancesRevisionOutput
+S EndpointParameters
+S EndpointResolver
+S EndpointResolverFromURL
+S EndpointResolverFunc
+S EndpointResolverOptions
+S EndpointResolverV2
+S GetInstanceInput
+S GetInstanceOutput
+S GetInstancesHealthStatusAPIClient
+S GetInstancesHealthStatusInput
+S GetInstancesHealthStatusOutput
+S GetInstancesHealthStatusPaginator
+S GetInstancesHealthStatusPaginatorOptions
+S GetNamespaceInput
+S GetNamespaceOutput
+S GetOperationInput
+S GetOperationOutput
+S GetServiceAttributesInput
+S GetServiceAttributesOutput
+S GetServiceInput
+S GetServiceOutput
+S HTTPClient
+S HTTPSignerV4
+S IdempotencyTokenProvider
+S ListInstancesAPIClient
+S ListInstancesInput
+S ListInstancesOutput
+S ListInstancesPaginator
+S ListInstancesPaginatorOptions
+S ListNamespacesAPIClient
+S ListNamespacesInput
+S ListNamespacesOutput
+S ListNamespacesPaginator
+S ListNamespacesPaginatorOptions
+S ListOperationsAPIClient
+S ListOperationsInput
+S ListOperationsOutput
+S ListOperationsPaginator
+S ListOperationsPaginatorOptions
+S ListServicesAPIClient
+S ListServicesInput
+S ListServicesOutput
+S ListServicesPaginator
+S ListServicesPaginatorOptions
+S ListTagsForResourceInput
+S ListTagsForResourceOutput
+S New
+S NewDefaultEndpointResolver
+S NewDefaultEndpointResolverV2
+S NewFromConfig
+S NewGetInstancesHealthStatusPaginator
+S NewListInstancesPaginator
+S NewListNamespacesPaginator
+S NewListOperationsPaginator
+S NewListServicesPaginator
+S Options
+S RegisterInstanceInput
+S RegisterInstanceOutput
+S ResolveEndpoint
+S ServiceAPIVersion
+S ServiceID
+S TagResourceInput
+S TagResourceOutput
+S TypeRegistry
+S UntagResourceInput
+S UntagResourceOutput
+S UpdateHttpNamespaceInput
+S UpdateHttpNamespaceOutput
+S UpdateInstanceCustomHealthStatusInput
+S UpdateInstanceCustomHealthStatusOutput
+S UpdatePrivateDnsNamespaceInput
+S UpdatePrivateDnsNamespaceOutput
+S UpdatePublicDnsNamespaceInput
+S UpdatePublicDnsNamespaceOutput
+S UpdateServiceAttributesInput
+S UpdateServiceAttributesOutput
+S UpdateServiceInput
+S UpdateServiceOutput
+S WithAPIOptions
+S WithEndpointResolver
+S WithEndpointResolverV2
+S WithSigV4SigningName
+S WithSigV4SigningRegion
+O CreateHttpNamespace
+O CreatePrivateDnsNamespace
+O CreatePublicDnsNamespace
+O CreateService
+O DeleteNamespace
+O DeleteService
+O DeleteServiceAttributes
+O DeregisterInstance
+O DiscoverInstances
+O DiscoverInstancesRevision
+O GetInstance
+O GetInstancesHealthStatus
+O GetNamespace
+O GetOperation
+O GetService
+O GetServiceAttributes
+O ListInstances
+O ListNamespaces
+O ListOperations
+O ListServices
+O ListTagsForResource
+O RegisterInstance
+O TagResource
+O UntagResource
+O UpdateHttpNamespace
+O UpdateInstanceCustomHealthStatus
+O UpdatePrivateDnsNamespace
+O UpdatePublicDnsNamespace
+O UpdateService
+O UpdateServiceAttributes
+X ErrCodeCustomHealthNotFound CustomHealthNotFound
+X ErrCodeDuplicateRequest DuplicateRequest
+X ErrCodeInstanceNotFound InstanceNotFound
+X ErrCodeInvalidInput InvalidInput
+X ErrCodeNamespaceAlreadyExists NamespaceAlreadyExists
+X ErrCodeNamespaceNotFound NamespaceNotFound
+X ErrCodeOperationNotFound OperationNotFound
+X ErrCodeRequestLimitExceeded RequestLimitExceeded
+X ErrCodeResourceInUse ResourceInUse
+X ErrCodeResourceLimitExceeded ResourceLimitExceeded
+X ErrCodeResourceNotFoundException ResourceNotFoundException
+X ErrCodeServiceAlreadyExists ServiceAlreadyExists
+X ErrCodeServiceNotFound ServiceNotFound
+X ErrCodeTooManyTagsException TooManyTagsException
+I DiscoverInstancesInput.MaxResults int64 int32
+I GetInstancesHealthStatusInput.MaxResults int64 int32
+I HealthCheckConfig.FailureThreshold int64 int32
+I HealthCheckCustomConfig.FailureThreshold int64 int32
+I ListInstancesInput.MaxResults int64 int32
+I ListNamespacesInput.MaxResults int64 int32
+I ListOperationsInput.MaxResults int64 int32
+I ListServicesInput.MaxResults int64 int32
+I Namespace.ServiceCount int64 int32
+I NamespaceSummary.ServiceCount int64 int32
+I Service.InstanceCount int64 int32
+I ServiceSummary.InstanceCount int64 int32
+R CreatePrivateDnsNamespaceInput.Properties PrivateDnsNamespaceProperties
+R CreatePublicDnsNamespaceInput.Properties PublicDnsNamespaceProperties
+R CreateServiceInput.DnsConfig DnsConfig
+R CreateServiceInput.HealthCheckConfig HealthCheckConfig
+R CreateServiceInput.HealthCheckCustomConfig HealthCheckCustomConfig
+R CreateServiceOutput.Service Service
+R DnsProperties.SOA SOA
+R GetInstanceOutput.Instance Instance
+R GetNamespaceOutput.Namespace Namespace
+R GetOperationOutput.Operation Operation
+R GetServiceAttributesOutput.ServiceAttributes ServiceAttributes
+R GetServiceOutput.Service Service
+R Namespace.Properties NamespaceProperties
+R NamespaceProperties.DnsProperties DnsProperties
+R NamespaceProperties.HttpProperties HttpProperties
+R NamespaceSummary.Properties NamespaceProperties
+R PrivateDnsNamespaceChange.Properties PrivateDnsNamespacePropertiesChange
+R PrivateDnsNamespaceProperties.DnsProperties PrivateDnsPropertiesMutable
+R PrivateDnsNamespacePropertiesChange.DnsProperties PrivateDnsPropertiesMutableChange
+R PrivateDnsPropertiesMutable.SOA SOA
+R PrivateDnsPropertiesMutableChange.SOA SOAChange
+R PublicDnsNamespaceChange.Properties PublicDnsNamespacePropertiesChange
+R PublicDnsNamespaceProperties.DnsProperties PublicDnsPropertiesMutable
+R PublicDnsNamespacePropertiesChange.DnsProperties PublicDnsPropertiesMutableChange
+R PublicDnsPropertiesMutable.SOA SOA
+R PublicDnsPropertiesMutableChange.SOA SOAChange
+R Service.DnsConfig DnsConfig
+R Service.HealthCheckConfig HealthCheckConfig
+R Service.HealthCheckCustomConfig HealthCheckCustomConfig
+R ServiceChange.DnsConfig DnsConfigChange
+R ServiceChange.HealthCheckConfig HealthCheckConfig
+R ServiceSummary.DnsConfig DnsConfig
+R ServiceSummary.HealthCheckConfig HealthCheckConfig
+R ServiceSummary.HealthCheckCustomConfig HealthCheckCustomConfig
+R UpdateHttpNamespaceInput.Namespace HttpNamespaceChange
+R UpdatePrivateDnsNamespaceInput.Namespace PrivateDnsNamespaceChange
+R UpdatePublicDnsNamespaceInput.Namespace PublicDnsNamespaceChange
+R UpdateServiceInput.Service ServiceChange
+V CreateHttpNamespaceInput.CreatorRequestId string
+V CreateHttpNamespaceInput.Description string
+V CreateHttpNamespaceInput.Name string
+V CreateHttpNamespaceOutput.OperationId string
+V CreatePrivateDnsNamespaceInput.CreatorRequestId string
+V CreatePrivateDnsNamespaceInput.Description string
+V CreatePrivateDnsNamespaceInput.Name string
+V CreatePrivateDnsNamespaceInput.Vpc string
+V CreatePrivateDnsNamespaceOutput.OperationId string
+V CreatePublicDnsNamespaceInput.CreatorRequestId string
+V CreatePublicDnsNamespaceInput.Description string
+V CreatePublicDnsNamespaceInput.Name string
+V CreatePublicDnsNamespaceOutput.OperationId string
+V CreateServiceInput.CreatorRequestId string
+V CreateServiceInput.Description string
+V CreateServiceInput.Name string
+V CreateServiceInput.NamespaceId string
+V CustomHealthNotFound.ErrorCodeOverride string
+V CustomHealthNotFound.Message string
+V DeleteNamespaceInput.Id string
+V DeleteNamespaceOutput.OperationId string
+V DeleteServiceAttributesInput.ServiceId string
+V DeleteServiceInput.Id string
+V DeregisterInstanceInput.InstanceId string
+V DeregisterInstanceInput.ServiceId string
+V DeregisterInstanceOutput.OperationId string
+V DiscoverInstancesInput.MaxResults int32
+V DiscoverInstancesInput.NamespaceName string
+V DiscoverInstancesInput.OwnerAccount string
+V DiscoverInstancesInput.ServiceName string
+V DiscoverInstancesOutput.InstancesRevision int64
+V DiscoverInstancesRevisionInput.NamespaceName string
+V DiscoverInstancesRevisionInput.OwnerAccount string
+V DiscoverInstancesRevisionInput.ServiceName string
+V DiscoverInstancesRevisionOutput.InstancesRevision int64
+V DnsConfig.NamespaceId string
+V DnsProperties.HostedZoneId string
+V DnsRecord.TTL int64
+V DuplicateRequest.DuplicateOperationId string
+V DuplicateRequest.ErrorCodeOverride string
+V DuplicateRequest.Message string
+V EndpointParameters.Endpoint string
+V EndpointParameters.Region string
+V EndpointParameters.UseDualStack bool
+V EndpointParameters.UseFIPS bool
+V GetInstanceInput.InstanceId string
+V GetInstanceInput.ServiceId string
+V GetInstanceOutput.ResourceOwner string
+V GetInstancesHealthStatusInput.MaxResults int32
+V GetInstancesHealthStatusInput.NextToken string
+V GetInstancesHealthStatusInput.ServiceId string
+V GetInstancesHealthStatusOutput.NextToken string
+V GetNamespaceInput.Id string
+V GetOperationInput.OperationId string
+V GetOperationInput.OwnerAccount string
+V GetServiceAttributesInput.ServiceId string
+V GetServiceInput.Id string
+V HealthCheckConfig.FailureThreshold int32
+V HealthCheckConfig.ResourcePath string
+V HealthCheckCustomConfig.FailureThreshold int32
+V HttpInstanceSummary.InstanceId string
+V HttpInstanceSummary.NamespaceName string
+V HttpInstanceSummary.ServiceName string
+V HttpNamespaceChange.Description string
+V HttpProperties.HttpName string
+V Instance.CreatedByAccount string
+V Instance.CreatorRequestId string
+V Instance.Id string
+V InstanceNotFound.ErrorCodeOverride string
+V InstanceNotFound.Message string
+V InstanceSummary.CreatedByAccount string
+V InstanceSummary.Id string
+V InvalidInput.ErrorCodeOverride string
+V InvalidInput.Message string
+V ListInstancesInput.MaxResults int32
+V ListInstancesInput.NextToken string
+V ListInstancesInput.ServiceId string
+V ListInstancesOutput.NextToken string
+V ListInstancesOutput.ResourceOwner string
+V ListNamespacesInput.MaxResults int32
+V ListNamespacesInput.NextToken string
+V ListNamespacesOutput.NextToken string
+V ListOperationsInput.MaxResults int32
+V ListOperationsInput.NextToken string
+V ListOperationsOutput.NextToken string
+V ListServicesInput.MaxResults int32
+V ListServicesInput.NextToken string
+V ListServicesOutput.NextToken string
+V ListTagsForResourceInput.ResourceARN string
+V Namespace.Arn string
+V Namespace.CreatorRequestId string
+V Namespace.Description string
+V Namespace.Id string
+V Namespace.Name string
+V Namespace.ResourceOwner string
+V Namespace.ServiceCount int32
+V NamespaceAlreadyExists.CreatorRequestId string
+V NamespaceAlreadyExists.ErrorCodeOverride string
+V NamespaceAlreadyExists.Message string
+V NamespaceAlreadyExists.NamespaceId string
+V NamespaceNotFound.ErrorCodeOverride string
+V NamespaceNotFound.Message string
+V NamespaceSummary.Arn string
+V NamespaceSummary.Description string
+V NamespaceSummary.Id string
+V NamespaceSummary.Name string
+V NamespaceSummary.ResourceOwner string
+V NamespaceSummary.ServiceCount int32
+V Operation.ErrorCode string
+V Operation.ErrorMessage string
+V Operation.Id string
+V Operation.OwnerAccount string
+V OperationNotFound.ErrorCodeOverride string
+V OperationNotFound.Message string
+V OperationSummary.Id string
+V Options.BaseEndpoint string
+V PrivateDnsNamespaceChange.Description string
+V PublicDnsNamespaceChange.Description string
+V RegisterInstanceInput.CreatorRequestId string
+V RegisterInstanceInput.InstanceId string
+V RegisterInstanceInput.ServiceId string
+V RegisterInstanceOutput.OperationId string
+V RequestLimitExceeded.ErrorCodeOverride string
+V RequestLimitExceeded.Message string
+V ResourceInUse.ErrorCodeOverride string
+V ResourceInUse.Message string
+V ResourceLimitExceeded.ErrorCodeOverride string
+V ResourceLimitExceeded.Message string
+V ResourceNotFoundException.ErrorCodeOverride string
+V ResourceNotFoundException.Message string
+V SOA.TTL int64
+V SOAChange.TTL int64
+V Service.Arn string
+V Service.CreatedByAccount string
+V Service.CreatorRequestId string
+V Service.Description string
+V Service.Id string
+V Service.InstanceCount int32
+V Service.Name string
+V Service.NamespaceId string
+V Service.ResourceOwner string
+V ServiceAlreadyExists.CreatorRequestId string
+V ServiceAlreadyExists.ErrorCodeOverride string
+V ServiceAlreadyExists.Message string
+V ServiceAlreadyExists.ServiceArn string
+V ServiceAlreadyExists.ServiceId string
+V ServiceAttributes.ResourceOwner string
+V ServiceAttributes.ServiceArn string
+V ServiceAttributesLimitExceededException.ErrorCodeOverride string
+V ServiceAttributesLimitExceededException.Message string
+V ServiceChange.Description string
+V ServiceNotFound.ErrorCodeOverride string
+V ServiceNotFound.Message string
+V ServiceSummary.Arn string
+V ServiceSummary.CreatedByAccount string
+V ServiceSummary.Description string
+V ServiceSummary.Id string
+V ServiceSummary.InstanceCount int32
+V ServiceSummary.Name string
+V ServiceSummary.ResourceOwner string
+V Tag.Key string
+V Tag.Value string
+V TagResourceInput.ResourceARN string
+V TooManyTagsException.ErrorCodeOverride string
+V TooManyTagsException.Message string
+V TooManyTagsException.ResourceName string
+V UntagResourceInput.ResourceARN string
+V UpdateHttpNamespaceInput.Id string
+V UpdateHttpNamespaceInput.UpdaterRequestId string
+V UpdateHttpNamespaceOutput.OperationId string
+V UpdateInstanceCustomHealthStatusInput.InstanceId string
+V UpdateInstanceCustomHealthStatusInput.ServiceId string
+V UpdatePrivateDnsNamespaceInput.Id string
+V UpdatePrivateDnsNamespaceInput.UpdaterRequestId string
+V UpdatePrivateDnsNamespaceOutput.OperationId string
+V UpdatePublicDnsNamespaceInput.Id string
+V UpdatePublicDnsNamespaceInput.UpdaterRequestId string
+V UpdatePublicDnsNamespaceOutput.OperationId string
+V UpdateServiceAttributesInput.ServiceId string
+V UpdateServiceInput.Id string
+V UpdateServiceOutput.OperationId string
+Q DiscoverInstancesInput.OptionalParameters
+Q DiscoverInstancesInput.QueryParameters
+Q HttpInstanceSummary.Attributes
+Q Instance.Attributes
+Q InstanceSummary.Attributes
+Q Operation.Targets
+Q RegisterInstanceInput.Attributes
+L CreateHttpNamespaceInput.Tags Tag
+L CreatePrivateDnsNamespaceInput.Tags Tag
+L CreatePublicDnsNamespaceInput.Tags Tag
+L CreateServiceInput.Tags Tag
+L DiscoverInstancesOutput.Instances HttpInstanceSummary
+L DnsConfig.DnsRecords DnsRecord
+L DnsConfigChange.DnsRecords DnsRecord
+L GetInstancesHealthStatusInput.Instances -
+L ListInstancesOutput.Instances InstanceSummary
+L ListNamespacesInput.Filters NamespaceFilter
+L ListNamespacesOutput.Namespaces NamespaceSummary
+L ListOperationsInput.Filters OperationFilter
+L ListOperationsOutput.Operations OperationSummary
+L ListServicesInput.Filters ServiceFilter
+L ListServicesOutput.Services ServiceSummary
+L ListTagsForResourceOutput.Tags Tag
+L NamespaceFilter.Values -
+L OperationFilter.Values -
+L ServiceFilter.Values -
+L TagResourceInput.Tags Tag
+L UntagResourceInput.TagKeys -
+F CreateServiceInput.Type ServiceTypeOption
+F DiscoverInstancesInput.HealthStatus HealthStatusFilter
+F DnsConfig.RoutingPolicy RoutingPolicy
+F DnsRecord.Type RecordType
+F HealthCheckConfig.Type HealthCheckType
+F HttpInstanceSummary.HealthStatus HealthStatus
+F Namespace.Type NamespaceType
+F NamespaceFilter.Condition FilterCondition
+F NamespaceFilter.Name NamespaceFilterName
+F NamespaceSummary.Type NamespaceType
+F Operation.Status OperationStatus
+F Operation.Type OperationType
+F OperationFilter.Condition FilterCondition
+F OperationFilter.Name OperationFilterName
+F OperationSummary.Status OperationStatus
+F Service.Type ServiceType
+F ServiceFilter.Condition FilterCondition
+F ServiceFilter.Name ServiceFilterName
+F ServiceSummary.Type ServiceType
+F UpdateInstanceCustomHealthStatusInput.Status CustomHealthStatus
+N APIOptions
+N AppID
+N Arn
+N Attributes
+N AuthSchemePreference
+N AuthSchemeResolver
+N AuthSchemes
+N BaseEndpoint
+N ClientLogMode
+N CreateDate
+N CreatedByAccount
+N CreatorRequestId
+N Credentials
+N DefaultsMode
+N Description
+N DisableClockSkewCorrection
+N DisableHTTPS
+N DnsConfig
+N DnsProperties
+N DnsRecords
+N DuplicateOperationId
+N Endpoint
+N EndpointOptions
+N EndpointResolver
+N EndpointResolverV2
+N ErrorCode
+N ErrorCodeOverride
+N ErrorMessage
+N FailureThreshold
+N Filters
+N HTTPClient
+N HTTPSignerV4
+N HealthCheckConfig
+N HealthCheckCustomConfig
+N HostedZoneId
+N HttpName
+N HttpProperties
+N Id
+N IdempotencyTokenProvider
+N Instance
+N InstanceCount
+N InstanceId
+N Instances
+N InstancesRevision
+N Interceptors
+N Key
+N Limit
+N LogDeprecated
+N Logger
+N MaxResults
+N Message
+N MeterProvider
+N Name
+N Namespace
+N NamespaceId
+N NamespaceName
+N Namespaces
+N NextToken
+N Operation
+N OperationId
+N Operations
+N OptionalParameters
+N Options
+N OwnerAccount
+N Properties
+N Protocol
+N QueryParameters
+N Region
+N ResolvedRegion
+N Resolver
+N ResourceARN
+N ResourceName
+N ResourceOwner
+N ResourcePath
+N ResultMetadata
+N RetryMaxAttempts
+N RetryMode
+N Retryer
+N RuntimeEnvironment
+N SOA
+N Service
+N ServiceArn
+N ServiceAttributes
+N ServiceCount
+N ServiceId
+N ServiceName
+N Services
+N Status
+N StopOnDuplicateToken
+N TTL
+N TagKeys
+N Tags
+N Targets
+N TracerProvider
+N UpdateDate
+N UpdaterRequestId
+N UseDualStack
+N UseDualStackEndpoint
+N UseFIPS
+N UseFIPSEndpoint
+N Value
+N Values
+N Vpc
+T CustomHealthNotFound
+T CustomHealthStatus
+T DnsConfig
+T DnsConfigChange
+T DnsProperties
+T DnsRecord
+T DuplicateRequest
+T FilterCondition
+T HealthCheckConfig
+T HealthCheckCustomConfig
+T HealthCheckType
+T HealthStatus
+T HealthStatusFilter
+T HttpInstanceSummary
+T HttpNamespaceChange
+T HttpProperties
+T Instance
+T InstanceNotFound
+T InstanceSummary
+T InvalidInput
+T Namespace
+T NamespaceAlreadyExists
+T NamespaceFilter
+T NamespaceFilterName
+T NamespaceNotFound
+T NamespaceProperties
+T NamespaceSummary
+T NamespaceType
+T Operation
+T OperationFilter
+T OperationFilterName
+T OperationNotFound
+T OperationStatus
+T OperationSummary
+T OperationTargetType
+T OperationType
+T PrivateDnsNamespaceChange
+T PrivateDnsNamespaceProperties
+T PrivateDnsNamespacePropertiesChange
+T PrivateDnsPropertiesMutable
+T PrivateDnsPropertiesMutableChange
+T PublicDnsNamespaceChange
+T PublicDnsNamespaceProperties
+T PublicDnsNamespacePropertiesChange
+T PublicDnsPropertiesMutable
+T PublicDnsPropertiesMutableChange
+T RecordType
+T RequestLimitExceeded
+T ResourceInUse
+T ResourceLimitExceeded
+T ResourceNotFoundException
+T RoutingPolicy
+T SOA
+T SOAChange
+T Service
+T ServiceAlreadyExists
+T ServiceAttributes
+T ServiceAttributesLimitExceededException
+T ServiceChange
+T ServiceFilter
+T ServiceFilterName
+T ServiceNotFound
+T ServiceSummary
+T ServiceType
+T ServiceTypeOption
+T Tag
+T TooManyTagsException
+E CustomHealthStatusHealthy CustomHealthStatus
+E CustomHealthStatusUnhealthy CustomHealthStatus
+E FilterConditionBeginsWith FilterCondition
+E FilterConditionBetween FilterCondition
+E FilterConditionEq FilterCondition
+E FilterConditionIn FilterCondition
+E HealthCheckTypeHttp HealthCheckType
+E HealthCheckTypeHttps HealthCheckType
+E HealthCheckTypeTcp HealthCheckType
+E HealthStatusFilterAll HealthStatusFilter
+E HealthStatusFilterHealthy HealthStatusFilter
+E HealthStatusFilterHealthyOrElseAll HealthStatusFilter
+E HealthStatusFilterUnhealthy HealthStatusFilter
+E HealthStatusHealthy HealthStatus
+E HealthStatusUnhealthy HealthStatus
+E HealthStatusUnknown HealthStatus
+E NamespaceFilterNameHttpName NamespaceFilterName
+E NamespaceFilterNameName NamespaceFilterName
+E NamespaceFilterNameResourceOwner NamespaceFilterName
+E NamespaceFilterNameType NamespaceFilterName
+E NamespaceTypeDnsPrivate NamespaceType
+E NamespaceTypeDnsPublic NamespaceType
+E NamespaceTypeHttp NamespaceType
+E OperationFilterNameNamespaceId OperationFilterName
+E OperationFilterNameServiceId OperationFilterName
+E OperationFilterNameStatus OperationFilterName
+E OperationFilterNameType OperationFilterName
+E OperationFilterNameUpdateDate OperationFilterName
+E OperationStatusFail OperationStatus
+E OperationStatusPending OperationStatus
+E OperationStatusSubmitted OperationStatus
+E OperationStatusSuccess OperationStatus
+E OperationTargetTypeInstance OperationTargetType
+E OperationTargetTypeNamespace OperationTargetType
+E OperationTargetTypeService OperationTargetType
+E OperationTypeCreateNamespace OperationType
+E OperationTypeDeleteNamespace OperationType
+E OperationTypeDeregisterInstance OperationType
+E OperationTypeRegisterInstance OperationType
+E OperationTypeUpdateNamespace OperationType
+E OperationTypeUpdateService OperationType
+E RecordTypeA RecordType
+E RecordTypeAaaa RecordType
+E RecordTypeCname RecordType
+E RecordTypeSrv RecordType
+E RoutingPolicyMultivalue RoutingPolicy
+E RoutingPolicyWeighted RoutingPolicy
+E ServiceFilterNameNamespaceId ServiceFilterName
+E ServiceFilterNameResourceOwner ServiceFilterName
+E ServiceTypeDns ServiceType
+E ServiceTypeDnsHttp ServiceType
+E ServiceTypeHttp ServiceType
+E ServiceTypeOptionHttp ServiceTypeOption

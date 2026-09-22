@@ -30,6 +30,21 @@ REALWORLD_REPOS=1 go test ./tests/ -run TestParseRealRepos -count=1 -v
 
 The repositories and their pinned revisions are `realWorldRepos` in `tests/validation_test.go`. Each is fetched shallow into `build/realworld/<owner>/<repo>@<sha>/` and reused across runs; bumping a pin fetches afresh. Findings are informational — only panics and unusable output fail the test.
 
+### Tests that type a fixture against a module
+
+Most tests type their fixture from the sources in it. A few need a real type from
+a dependency — `TestMigrateAdjunctFileFollowsShapes` covers a file that holds SDK
+values without importing the SDK, so only the parse-time type identifies them.
+The parser reads such a module out of `$GOMODCACHE`, which a clean CI checkout has
+nothing in, so those tests are gated and skip by default:
+
+```bash
+MODULE_CACHE_TESTS=1 go test ./tests/migration/awssdkv2/ -count=1
+```
+
+Prime the cache first if it is cold: `go mod download github.com/aws/aws-sdk-go@v1.55.8`
+from a scratch module.
+
 ## Releasing
 
 Tag-triggered. Push a `vX.Y.Z` (or `vX.Y.Z-rc.N`) tag from `main` and `.github/workflows/publish.yml` runs the shared `openrewrite/gh-automation` `publish-gradle.yml` workflow, which publishes the recipe-library Maven artifact (catalog metadata) to Maven Central via OSSRH. The Go module itself is served from `proxy.golang.org` as soon as the tag exists — no active push needed.

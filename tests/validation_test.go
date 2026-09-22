@@ -47,6 +47,31 @@ var realWorldRepos = []realWorldRepo{
 	{"sirupsen/logrus", "457e372460c7a80ca7c800b51ebeee5362aaa180"},
 	{"go-chi/chi", "8b258c7bb28f97a5f2a856ff7ef962578fec9215"},
 	{"labstack/echo", "05489dc1730161df26b72d1ae2a3ba6fb8178fc7"},
+	// Repositories that exercise the library migrations: x/exp slices and maps,
+	// the archived golang/mock, mitchellh/mapstructure and the New Relic
+	// telemetry SDK respectively.
+	{"livekit/psrpc", "14e18a85df778d53e826e92f2f4da833e6b549bc"},
+	{"multiformats/go-multiaddr", "7fae00adf671d9d4b931e591f2357a261567fee5"},
+	{"err0r500/go-realworld-clean", "137f16f344f03dc4e3c8b5096b7b5593b234f508"},
+	{"PaddleHQ/go-aws-ssm", "f8a8e7a4249d7875582b5bfc5f20249f09fa6f87"},
+	{"bcneng/candebot", "a374654919cdab3a6e762d17c25eefc5e2387404"},
+	// Edge cases the first five do not reach: x/exp maps keys sorted through
+	// x/exp's own slices, a gomock controller built from a testify suite's T(),
+	// the numeric constraints the standard library never took, and the
+	// mapstructure.Error the go-viper fork dropped.
+	{"coroot/coroot", "ce49b11fa079683eddfba318c71089c3449bc93b"},
+	{"equinor/radix-log-api", "6ed4ca4f9220081edd6d001cfe19d1a4677442fb"},
+	{"Code-Hex/go-generics-cache", "f567a8625646b7c3e8828091d4cfa604056fad71"},
+	{"AlexSSD7/linsk", "4c98a8500c4e73ecadeb0c354f07a6375eceb4d9"},
+	{"France-ioi/AlgoreaBackend", "f0dcd36fe3a2c8ac67df572c6709ece825a557f5"},
+	// aws-sdk-go v1, across the shapes the v2 migration has to tell apart: a
+	// session built from a region, paginators, and awserr matching. Each has a
+	// go.mod — a pre-modules repository cloned here would be absorbed into this
+	// module by `go build ./...`.
+	{"dmfutcher/git-s3-push", "f6ef37f8f30216f50e4904e54114a1ce341558f6"},
+	{"ZipRecruiter/cloudwatching", "3f3fa9a5755905746837dff8facd86b6d51f58d9"},
+	{"99designs/iamy", "f1c19eb5e6497d66ffb7f1771016ba2eee83cb8e"},
+	{"awslabs/aws-cloudmap-prometheus-sd", "8aedc304a7ceb7eeb4e706d905732d2e6d48264b"},
 }
 
 // registeredRecipes instantiates every recipe in the catalog. The registry is

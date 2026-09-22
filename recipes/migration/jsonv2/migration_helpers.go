@@ -117,8 +117,9 @@ func fileNeedsV1Compat(cu *golang.CompilationUnit) bool {
 
 type v1CompatFieldScan struct {
 	visitor.GoVisitor
-	insideStruct int
-	found        bool
+	insideStruct   int
+	insideFuncType int
+	found          bool
 }
 
 func (s *v1CompatFieldScan) VisitStructType(st *golang.StructType, p any) java.J {
@@ -128,8 +129,18 @@ func (s *v1CompatFieldScan) VisitStructType(st *golang.StructType, p any) java.J
 	return st
 }
 
+// A func-typed field's parameters and named results are VariableDeclarations
+// inside the struct too, and a time.Duration among them is not a field whose
+// encoding changes.
+func (s *v1CompatFieldScan) VisitFuncType(ft *golang.FuncType, p any) java.J {
+	s.insideFuncType++
+	ft = s.GoVisitor.VisitFuncType(ft, p).(*golang.FuncType)
+	s.insideFuncType--
+	return ft
+}
+
 func (s *v1CompatFieldScan) VisitVariableDeclarations(vd *java.VariableDeclarations, p any) java.J {
-	if s.insideStruct > 0 && (isDurationField(vd) || isFixedByteArrayField(vd)) && !hasJsonFormatOption(vd) {
+	if s.insideStruct > 0 && s.insideFuncType == 0 && (isDurationField(vd) || isFixedByteArrayField(vd)) && !hasJsonFormatOption(vd) {
 		s.found = true
 	}
 	return s.GoVisitor.VisitVariableDeclarations(vd, p)

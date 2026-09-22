@@ -7,8 +7,13 @@ package recipes
 import (
 	"github.com/moderneinc/recipes-go/recipes/errorhandling"
 	"github.com/moderneinc/recipes-go/recipes/migration"
+	"github.com/moderneinc/recipes-go/recipes/migration/awssdkv2"
+	"github.com/moderneinc/recipes-go/recipes/migration/expstd"
 	"github.com/moderneinc/recipes-go/recipes/migration/jsonv2"
+	"github.com/moderneinc/recipes-go/recipes/migration/mapstructurev2"
+	"github.com/moderneinc/recipes-go/recipes/migration/newrelicotel"
 	"github.com/moderneinc/recipes-go/recipes/migration/testify"
+	"github.com/moderneinc/recipes-go/recipes/migration/ubermock"
 	"github.com/moderneinc/recipes-go/recipes/naming"
 	"github.com/moderneinc/recipes-go/recipes/performance"
 	"github.com/moderneinc/recipes-go/recipes/redundancy"
@@ -304,4 +309,44 @@ func Activate(r *recipe.Registry) {
 	r.Register(&jsonv2.MigrateToJSONV2PreservingV1{}, golang, codeQuality, migrationCategory, jsonV2Category)
 	r.Register(&jsonv2.PreserveV1Semantics{}, golang, codeQuality, migrationCategory, jsonV2Category)
 	r.Register(&jsonv2.AddV1FormatTags{}, golang, codeQuality, migrationCategory, jsonV2Category)
+
+	// Migration — github.com/golang/mock to go.uber.org/mock
+	uberMockCategory := recipe.CategoryDescriptor{DisplayName: "Uber mock", Description: "Migrate from the archived github.com/golang/mock to go.uber.org/mock"}
+	r.Register(&ubermock.MigrateToUberMock{}, golang, codeQuality, migrationCategory, uberMockCategory)
+	r.Register(&ubermock.SwapGolangMockImports{}, golang, codeQuality, migrationCategory, uberMockCategory)
+	r.Register(&ubermock.UpdateMockgenGoGenerateDirectives{}, golang, codeQuality, migrationCategory, uberMockCategory)
+	r.Register(&ubermock.UpdateGolangMockDependency{}, golang, codeQuality, migrationCategory, uberMockCategory)
+	r.Register(&ubermock.RemoveRedundantGomockFinish{}, golang, codeQuality, migrationCategory, uberMockCategory)
+	r.Register(&ubermock.FindGolangMockUsage{}, golang, codeQuality, migrationCategory, uberMockCategory)
+
+	// Migration — github.com/mitchellh/mapstructure to github.com/go-viper/mapstructure/v2
+	mapstructureCategory := recipe.CategoryDescriptor{DisplayName: "mapstructure v2", Description: "Migrate from the unmaintained github.com/mitchellh/mapstructure to github.com/go-viper/mapstructure/v2"}
+	r.Register(&mapstructurev2.MigrateToGoViperMapstructure{}, golang, codeQuality, migrationCategory, mapstructureCategory)
+	r.Register(&mapstructurev2.SwapMapstructureImports{}, golang, codeQuality, migrationCategory, mapstructureCategory)
+	r.Register(&mapstructurev2.UpdateMapstructureDependency{}, golang, codeQuality, migrationCategory, mapstructureCategory)
+	r.Register(&mapstructurev2.FindMapstructureErrorUsage{}, golang, codeQuality, migrationCategory, mapstructureCategory)
+
+	// Migration — golang.org/x/exp to the standard library
+	expStdCategory := recipe.CategoryDescriptor{DisplayName: "x/exp to stdlib", Description: "Migrate golang.org/x/exp packages to the standard library that absorbed them"}
+	r.Register(&expstd.MigrateXExpToStdlib{}, golang, codeQuality, migrationCategory, expStdCategory)
+	r.Register(&expstd.MigrateXExpSlicesToStdlib{}, golang, codeQuality, migrationCategory, expStdCategory)
+	r.Register(&expstd.MigrateXExpMapsToStdlib{}, golang, codeQuality, migrationCategory, expStdCategory)
+	r.Register(&expstd.MigrateXExpConstraintsToStdlib{}, golang, codeQuality, migrationCategory, expStdCategory)
+	r.Register(&expstd.MigrateXExpSlogToStdlib{}, golang, codeQuality, migrationCategory, expStdCategory)
+	r.Register(&expstd.RemoveXExpDependency{}, golang, codeQuality, migrationCategory, expStdCategory)
+	r.Register(&expstd.FindXExpUsage{}, golang, codeQuality, migrationCategory, expStdCategory)
+
+	// Migration — newrelic-telemetry-sdk-go to the OpenTelemetry Go SDK
+	otelCategory := recipe.CategoryDescriptor{DisplayName: "OpenTelemetry", Description: "Migrate from the superseded newrelic-telemetry-sdk-go to the OpenTelemetry Go SDK"}
+	r.Register(&newrelicotel.MigrateNewRelicTelemetryToOpenTelemetry{}, golang, codeQuality, migrationCategory, otelCategory)
+	r.Register(&newrelicotel.MigrateNewRelicMetricRecording{}, golang, codeQuality, migrationCategory, otelCategory)
+	r.Register(&newrelicotel.UpdateNewRelicTelemetryDependency{}, golang, codeQuality, migrationCategory, otelCategory)
+	r.Register(&newrelicotel.FindNewRelicTelemetrySdkUsage{}, golang, codeQuality, migrationCategory, otelCategory)
+
+	// Migration — aws-sdk-go to aws-sdk-go-v2
+	awsCategory := recipe.CategoryDescriptor{DisplayName: "AWS SDK v2", Description: "Migrate from the end-of-life github.com/aws/aws-sdk-go to github.com/aws/aws-sdk-go-v2"}
+	r.Register(&awssdkv2.MigrateAwsSdkGoModuleToV2{}, golang, codeQuality, migrationCategory, awsCategory)
+	r.Register(&awssdkv2.MigrateAwsSdkGoToV2{}, golang, codeQuality, migrationCategory, awsCategory)
+	r.Register(&awssdkv2.UpdateAwsSdkDependency{}, golang, codeQuality, migrationCategory, awsCategory)
+	r.Register(&awssdkv2.FindAwsSdkGoV1Usage{}, golang, codeQuality, migrationCategory, awsCategory)
 }

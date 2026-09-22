@@ -127,3 +127,21 @@ func TestAddV1FormatTagsNoChange(t *testing.T) {
 		})
 	}
 }
+
+// livekit/psrpc declares a func-typed field whose named results include a
+// time.Duration. Those results are VariableDeclarations inside the struct too,
+// and a tag written onto one does not parse.
+func TestAddV1FormatTagsSkipsFuncTypedFieldResults(t *testing.T) {
+	test.NewRecipeSpec().WithRecipe(&jsonv2.AddV1FormatTags{}).RewriteRun(t,
+		test.Golang(`
+			package middleware
+
+			import "time"
+
+			type RetryOptions struct {
+				MaxAttempts        int
+				GetRetryParameters func(err error, attempt int) (retry bool, timeout time.Duration, waitTime time.Duration)
+			}
+		`),
+	)
+}
