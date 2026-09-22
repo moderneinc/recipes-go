@@ -24,7 +24,7 @@ func TestAddMissingGoModRequiresAppendsToBlock(t *testing.T) {
 
 	// when / then the missing modules are appended, indirect flag preserved
 	spec.RewriteRun(t,
-		test.GoModGraph(
+		resolvedGraph(
 			test.GoMod(`
 				module example.com/app
 
@@ -60,7 +60,7 @@ func TestAddMissingGoModRequiresCreatesBlockWhenNone(t *testing.T) {
 
 	// when / then a new require block is created for the missing module
 	spec.RewriteRun(t,
-		test.GoModGraph(
+		resolvedGraph(
 			test.GoMod(`
 				module example.com/app
 
@@ -93,7 +93,7 @@ func TestAddMissingGoModRequiresNoChangeWhenAllDeclared(t *testing.T) {
 
 	// when / then no change
 	spec.RewriteRun(t,
-		test.GoModGraph(
+		resolvedGraph(
 			test.GoMod(`
 				module example.com/app
 

@@ -20,8 +20,9 @@ import (
 // the `// indirect` marker the toolchain assigned it.
 //
 // It reads the resolved build list from the go.mod's GoResolutionResult marker,
-// which is populated at parse time by the rewrite-go toolchain resolver. When
-// resolution did not run (marker has no resolved dependencies) it is a no-op.
+// which is populated at parse time by the rewrite-go toolchain resolver. It acts
+// only when the marker's ResolutionStatus is RESOLVED; any other status means the
+// build list is untrustworthy, so it is a no-op.
 type AddMissingGoModRequires struct {
 	recipe.Base
 }
@@ -59,7 +60,7 @@ type missingRequire struct {
 
 func (v *addMissingRequiresVisitor) VisitGoMod(gm *golang.GoMod, p any) java.Tree {
 	mrr := java.FindMarker[golang.GoResolutionResult](gm.Markers)
-	if mrr == nil {
+	if mrr == nil || mrr.ResolutionStatus != golang.GoResolutionResolved {
 		return gm
 	}
 

@@ -21,9 +21,10 @@ import (
 // It uses the package→module map and module graph resolved at parse time
 // (GoResolutionResult.PackageModules and ResolvedDependencies[].Deps). To stay
 // build-safe it removes only modules unreachable from the import closure, so
-// modules that merely pin a transitive version are kept. When parse-time
-// resolution did not run (no PackageModules) it is a no-op: without the import
-// closure it cannot tell used from unused.
+// modules that merely pin a transitive version are kept. It acts only when the
+// marker's ResolutionStatus is RESOLVED and a package→module map is present; any
+// other status or a missing map means it cannot tell used from unused, so it is
+// a no-op.
 type RemoveUnusedGoModRequires struct {
 	recipe.Base
 }
@@ -55,7 +56,7 @@ type removeUnusedRequiresVisitor struct {
 
 func (v *removeUnusedRequiresVisitor) VisitGoMod(gm *golang.GoMod, p any) java.Tree {
 	mrr := java.FindMarker[golang.GoResolutionResult](gm.Markers)
-	if mrr == nil || len(mrr.PackageModules) == 0 {
+	if mrr == nil || mrr.ResolutionStatus != golang.GoResolutionResolved || len(mrr.PackageModules) == 0 {
 		return gm
 	}
 	needed := neededModules(mrr)

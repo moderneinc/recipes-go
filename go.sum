@@ -10,6 +10,8 @@ github.com/openrewrite/rewrite/rewrite-go v0.0.35 h1:u/pXQXNpQj0lCRKrlmISXe/uRk5
 github.com/openrewrite/rewrite/rewrite-go v0.0.35/go.mod h1:6fC3xnUD4/MGZsuWVcEwWlaBsxZTP1ueCWf69rKLeQQ=
 github.com/openrewrite/rewrite/rewrite-go v0.0.36 h1:XZJDzNkS5a29Dv8E6bI/z0UTewmtUHvRbMb2kJl7ZdA=
 github.com/openrewrite/rewrite/rewrite-go v0.0.36/go.mod h1:6fC3xnUD4/MGZsuWVcEwWlaBsxZTP1ueCWf69rKLeQQ=
+github.com/openrewrite/rewrite/rewrite-go v0.0.37 h1:mNGqB99o5E9JFZ/nl+2vCqQcEtzcMQVRYlu+sK46Fdw=
+github.com/openrewrite/rewrite/rewrite-go v0.0.37/go.mod h1:6fC3xnUD4/MGZsuWVcEwWlaBsxZTP1ueCWf69rKLeQQ=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=

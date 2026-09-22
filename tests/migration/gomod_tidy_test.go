@@ -33,7 +33,7 @@ func TestGoModTidyComposite(t *testing.T) {
 	// when / then: baz/qux added (// indirect), dead/mod removed, block sorted.
 	spec.RewriteRun(t,
 		test.GoProject("app",
-			test.GoModGraph(
+			resolvedGraph(
 				test.GoMod(`
 					module example.com/app
 
@@ -81,7 +81,7 @@ func TestGoModTidyNoEditWhenResolutionIncomplete(t *testing.T) {
 	// when / then no edits at all: with no trustworthy map, nothing is removed, added, or re-marked.
 	spec.RewriteRun(t,
 		test.GoProject("app",
-			test.GoModGraph(
+			graphWithStatus(
 				test.GoMod(`
 					module example.com/app
 
@@ -92,7 +92,7 @@ func TestGoModTidyNoEditWhenResolutionIncomplete(t *testing.T) {
 						github.com/unused/mod v1.0.0 // indirect
 					)
 				`),
-				resolved, nil,
+				resolved, nil, golang.GoResolutionIncomplete,
 			),
 			test.Golang(`
 				package main
@@ -100,6 +100,45 @@ func TestGoModTidyNoEditWhenResolutionIncomplete(t *testing.T) {
 				import "github.com/cof-primary/go-shared-libraries/gotel"
 
 				func main() { _ = gotel.Name }
+			`),
+		),
+	)
+}
+
+func TestGoModTidyNoEditWhenGoSumOnly(t *testing.T) {
+	// given a complete-looking build list and package->module map, but resolution
+	// fell back to go.sum (status GO_SUM_ONLY) so the graph must not be trusted:
+	// baz/qux would be added under a trustworthy resolution.
+	spec := test.NewRecipeSpec().WithRecipe(&migration.GoModTidy{})
+	resolved := []golang.GoResolvedDependency{
+		{ModulePath: "example.com/app", Main: true},
+		{ModulePath: "github.com/foo/bar", Version: "v1.0.0"},
+		{ModulePath: "github.com/baz/qux", Version: "v1.0.0", Indirect: true},
+	}
+	pkgs := []golang.GoPackageModule{
+		{ImportPath: "github.com/foo/bar", ModulePath: "github.com/foo/bar", Version: "v1.0.0"},
+		{ImportPath: "github.com/baz/qux", ModulePath: "github.com/baz/qux", Version: "v1.0.0"},
+	}
+
+	// when / then no edits: the graph-dependent steps are gated off GO_SUM_ONLY.
+	spec.RewriteRun(t,
+		test.GoProject("app",
+			graphWithStatus(
+				test.GoMod(`
+					module example.com/app
+
+					go 1.22
+
+					require github.com/foo/bar v1.0.0
+				`),
+				resolved, pkgs, golang.GoResolutionGoSumOnly,
+			),
+			test.Golang(`
+				package main
+
+				import "github.com/foo/bar"
+
+				func main() { _ = bar.A }
 			`),
 		),
 	)
