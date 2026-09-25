@@ -17,14 +17,13 @@ import (
 // is missing a build-list module, carries an unused one, and is unsorted, run
 // through the composite with the module graph injected and one .go source.
 func TestGoModTidyComposite(t *testing.T) {
-	// given foo/bar is imported; foo/bar -> baz/qux (transitive); dead/mod is unreachable;
-	// baz/qux is in the build list but absent from go.mod.
+	// given foo/bar is imported; foo/bar -> baz/qux (transitive); dead/mod is absent
+	// from the build list; baz/qux is in the build list but absent from go.mod.
 	spec := test.NewRecipeSpec().WithRecipe(&migration.GoModTidy{})
 	resolved := []golang.GoResolvedDependency{
 		{ModulePath: "example.com/app", Main: true},
 		{ModulePath: "github.com/foo/bar", Version: "v1.0.0", Deps: []golang.GoModuleRef{{ModulePath: "github.com/baz/qux", Version: "v1.0.0"}}},
 		{ModulePath: "github.com/baz/qux", Version: "v1.0.0", Indirect: true},
-		{ModulePath: "github.com/dead/mod", Version: "v1.0.0", Indirect: true},
 	}
 	pkgs := []golang.GoPackageModule{
 		{ImportPath: "github.com/foo/bar", ModulePath: "github.com/foo/bar", Version: "v1.0.0"},

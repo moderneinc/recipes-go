@@ -14,8 +14,8 @@ import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
-// RemoveUnusedGoModRequires removes `// indirect` requires unreachable from the imported-package
-// modules and retained direct requires (kept as possible gated imports), plus stray self-references.
+// RemoveUnusedGoModRequires removes `require` directives that are provably unused from the
+// offline resolution: modules absent from the resolved build list and stray self-references.
 type RemoveUnusedGoModRequires struct {
 	recipe.Base
 }
@@ -29,7 +29,7 @@ func (r *RemoveUnusedGoModRequires) DisplayName() string {
 }
 
 func (r *RemoveUnusedGoModRequires) Description() string {
-	return "Remove `require` directives that `go mod tidy` would drop, restricted to what can be proven unused offline: unreachable `// indirect` requires and stray self-references. Direct requires are kept even when unimported in the scanned build configuration, since their import may be gated behind an inactive build constraint. Uses the package→module map and module graph resolved at parse time; a no-op when that resolution did not run."
+	return "Remove `require` directives that `go mod tidy` would drop, restricted to what can be proven unused from the offline resolution: modules absent from the resolved build list and stray self-references. A require present in the build list is kept even when it is neither imported nor reachable through the recorded module-graph edges, since that graph is pruned and a still-needed test-closure or build-tag-gated dependency can be unreachable in it. Uses the resolved build list attached at parse time; a no-op when that resolution did not run."
 }
 
 func (r *RemoveUnusedGoModRequires) Tags() []string { return []string{"gomod", "tidy"} }
@@ -47,24 +47,24 @@ type removeUnusedRequiresVisitor struct {
 
 func (v *removeUnusedRequiresVisitor) VisitGoMod(gm *golang.GoMod, p any) java.Tree {
 	mrr := java.FindMarker[golang.GoResolutionResult](gm.Markers)
-	if mrr == nil || mrr.ResolutionStatus != golang.GoResolutionResolved || len(mrr.PackageModules) == 0 {
+	if mrr == nil || mrr.ResolutionStatus != golang.GoResolutionResolved || len(mrr.ResolvedDependencies) == 0 {
 		return gm
 	}
 	main := mrr.ModulePath
-	needed := neededModules(mrr, main, retainedDirectRequires(gm, main))
+	buildList := buildListModules(mrr, main)
 
 	var out []java.RightPadded[golang.GoModStatement]
 	changed := false
 	for _, rp := range gm.Statements {
 		switch el := rp.Element.(type) {
 		case *golang.GoModDirective:
-			if el.Keyword == "require" && removableModule(firstValueText(el), needed, main) {
+			if el.Keyword == "require" && removableModule(firstValueText(el), buildList, main) {
 				changed = true
 				continue
 			}
 		case *golang.GoModBlock:
 			if el.Keyword == "require" {
-				kept, dropped := filterRequireBlock(el, needed, main)
+				kept, dropped := filterRequireBlock(el, buildList, main)
 				if dropped {
 					changed = true
 					if len(kept.Entries) == 0 {
@@ -82,42 +82,22 @@ func (v *removeUnusedRequiresVisitor) VisitGoMod(gm *golang.GoMod, p any) java.T
 	return gm.WithStatements(out)
 }
 
-func removableModule(modulePath string, needed map[string]bool, main string) bool {
-	return modulePath != "" && modulePath != main && !needed[modulePath]
+// removableModule keeps anything in the resolved build list (the pruned graph can hide a still-needed indirect), removing only self-references and modules absent from that list.
+func removableModule(modulePath string, buildList map[string]bool, main string) bool {
+	if modulePath == "" || modulePath == main {
+		return false
+	}
+	return isSelfReference(modulePath, main) || !buildList[modulePath]
 }
 
-// retainedDirectRequires returns the module paths of the direct requires that
-// are always kept: every `require` not marked `// indirect`, except a stray
-// self-reference to another major version of the main module. These seed the
-// needed set so a build-constraint-gated direct import — invisible to the
-// primary-configuration scan — is not deleted, and so its indirect closure
-// stays reachable.
-func retainedDirectRequires(gm *golang.GoMod, main string) map[string]bool {
-	direct := map[string]bool{}
-	add := func(d *golang.GoModDirective, after java.Space) {
-		modulePath := firstValueText(d)
-		if modulePath == "" || hasIndirectComment(after) || isSelfReference(modulePath, main) {
-			return
-		}
-		direct[modulePath] = true
-	}
-	for _, rp := range gm.Statements {
-		switch el := rp.Element.(type) {
-		case *golang.GoModDirective:
-			if el.Keyword == "require" {
-				add(el, rp.After)
-			}
-		case *golang.GoModBlock:
-			if el.Keyword == "require" {
-				for _, e := range el.Entries {
-					if d, ok := e.Element.(*golang.GoModDirective); ok {
-						add(d, e.After)
-					}
-				}
-			}
+func buildListModules(mrr *golang.GoResolutionResult, main string) map[string]bool {
+	set := make(map[string]bool, len(mrr.ResolvedDependencies))
+	for _, rd := range mrr.ResolvedDependencies {
+		if rd.ModulePath != "" && rd.ModulePath != main {
+			set[rd.ModulePath] = true
 		}
 	}
-	return direct
+	return set
 }
 
 // isSelfReference reports whether modulePath names a different major version of
@@ -151,53 +131,14 @@ func moduleBase(modulePath string) string {
 	return modulePath[:i]
 }
 
-func neededModules(mrr *golang.GoResolutionResult, main string, directSeeds map[string]bool) map[string]bool {
-	adj := make(map[string][]string, len(mrr.ResolvedDependencies))
-	for _, rd := range mrr.ResolvedDependencies {
-		for _, d := range rd.Deps {
-			adj[rd.ModulePath] = append(adj[rd.ModulePath], d.ModulePath)
-		}
-	}
-
-	needed := map[string]bool{}
-	var queue []string
-	seed := func(modulePath string) {
-		if modulePath == "" || modulePath == main || needed[modulePath] {
-			return
-		}
-		needed[modulePath] = true
-		queue = append(queue, modulePath)
-	}
-	for _, pm := range mrr.PackageModules {
-		if pm.Standard {
-			continue
-		}
-		seed(pm.ModulePath)
-	}
-	for m := range directSeeds {
-		seed(m)
-	}
-	for len(queue) > 0 {
-		m := queue[0]
-		queue = queue[1:]
-		for _, n := range adj[m] {
-			if n != main && !needed[n] {
-				needed[n] = true
-				queue = append(queue, n)
-			}
-		}
-	}
-	return needed
-}
-
 // filterRequireBlock drops removable entries from a require block. When the
 // original first entry is dropped, the new first entry's leading newline is
 // restored so the block still opens on its own line.
-func filterRequireBlock(b *golang.GoModBlock, needed map[string]bool, main string) (*golang.GoModBlock, bool) {
+func filterRequireBlock(b *golang.GoModBlock, buildList map[string]bool, main string) (*golang.GoModBlock, bool) {
 	var kept []java.RightPadded[golang.GoModStatement]
 	dropped, firstDropped := false, false
 	for i, e := range b.Entries {
-		if d, ok := e.Element.(*golang.GoModDirective); ok && removableModule(firstValueText(d), needed, main) {
+		if d, ok := e.Element.(*golang.GoModDirective); ok && removableModule(firstValueText(d), buildList, main) {
 			dropped = true
 			if i == 0 {
 				firstDropped = true
