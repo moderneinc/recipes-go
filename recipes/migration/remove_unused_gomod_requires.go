@@ -59,8 +59,8 @@ func (v *removeUnusedRequiresVisitor) VisitGoMod(gm *golang.GoMod, p any) java.T
 	if mrr == nil || mrr.ResolutionStatus != golang.GoResolutionResolved || len(mrr.PackageModules) == 0 {
 		return gm
 	}
-	needed := neededModules(mrr)
 	main := mrr.ModulePath
+	needed := neededModules(mrr, main)
 
 	var out []java.RightPadded[golang.GoModStatement]
 	changed := false
@@ -98,7 +98,7 @@ func removableModule(modulePath string, needed map[string]bool, main string) boo
 // neededModules returns the set of module paths that provide an imported package
 // (the non-stdlib entries of PackageModules) plus everything reachable from them
 // through the `go mod graph` edges recorded on ResolvedDependencies.
-func neededModules(mrr *golang.GoResolutionResult) map[string]bool {
+func neededModules(mrr *golang.GoResolutionResult, main string) map[string]bool {
 	adj := make(map[string][]string, len(mrr.ResolvedDependencies))
 	for _, rd := range mrr.ResolvedDependencies {
 		for _, d := range rd.Deps {
@@ -109,7 +109,7 @@ func neededModules(mrr *golang.GoResolutionResult) map[string]bool {
 	needed := map[string]bool{}
 	var queue []string
 	for _, pm := range mrr.PackageModules {
-		if pm.Standard || pm.ModulePath == "" || needed[pm.ModulePath] {
+		if pm.Standard || pm.ModulePath == "" || pm.ModulePath == main || needed[pm.ModulePath] {
 			continue
 		}
 		needed[pm.ModulePath] = true
@@ -119,7 +119,7 @@ func neededModules(mrr *golang.GoResolutionResult) map[string]bool {
 		m := queue[0]
 		queue = queue[1:]
 		for _, n := range adj[m] {
-			if !needed[n] {
+			if n != main && !needed[n] {
 				needed[n] = true
 				queue = append(queue, n)
 			}

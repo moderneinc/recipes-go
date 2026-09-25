@@ -198,6 +198,50 @@ func TestRemoveUnusedGoModRequiresKeepsTestOnlyDependency(t *testing.T) {
 	)
 }
 
+func TestRemoveUnusedGoModRequiresDropsSelfReference(t *testing.T) {
+	// given a /v2 module carrying a stray require on its own v1 major version.
+	//       The v1 module provides no imported package; it is "reachable" only
+	//       through the main module's own require list, which go mod tidy drops.
+	spec := test.NewRecipeSpec().WithRecipe(&migration.RemoveUnusedGoModRequires{})
+	resolved := []golang.GoResolvedDependency{
+		{ModulePath: "github.com/gocolly/colly/v2", Main: true, Deps: []golang.GoModuleRef{
+			{ModulePath: "github.com/gocolly/colly", Version: "v1.2.0"},
+			{ModulePath: "github.com/PuerkitoBio/goquery", Version: "v1.11.0"},
+		}},
+		{ModulePath: "github.com/gocolly/colly", Version: "v1.2.0"},
+		{ModulePath: "github.com/PuerkitoBio/goquery", Version: "v1.11.0"},
+	}
+	pkgs := []golang.GoPackageModule{
+		{ImportPath: "github.com/gocolly/colly/v2", ModulePath: "github.com/gocolly/colly/v2"},
+		{ImportPath: "github.com/PuerkitoBio/goquery", ModulePath: "github.com/PuerkitoBio/goquery", Version: "v1.11.0"},
+	}
+
+	// when / then the v1 self-reference is removed; the imported goquery is kept
+	spec.RewriteRun(t,
+		resolvedGraph(
+			test.GoMod(`
+				module github.com/gocolly/colly/v2
+
+				go 1.24
+
+				require (
+					github.com/PuerkitoBio/goquery v1.11.0
+					github.com/gocolly/colly v1.2.0
+				)
+			`, `
+				module github.com/gocolly/colly/v2
+
+				go 1.24
+
+				require (
+					github.com/PuerkitoBio/goquery v1.11.0
+				)
+			`),
+			resolved, pkgs,
+		),
+	)
+}
+
 func TestRemoveUnusedGoModRequiresNoChangeWithoutResolution(t *testing.T) {
 	// given no resolved package→module map (resolution did not run)
 	spec := test.NewRecipeSpec().WithRecipe(&migration.RemoveUnusedGoModRequires{})
