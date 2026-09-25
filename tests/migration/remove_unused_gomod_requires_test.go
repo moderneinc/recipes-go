@@ -124,18 +124,21 @@ func TestRemoveUnusedGoModRequiresDropsWholeBlock(t *testing.T) {
 }
 
 func TestRemoveUnusedGoModRequiresSingleLine(t *testing.T) {
-	// given an unused single-line require
+	// given an unreachable single-line indirect require. A direct require is
+	// kept even when unimported in the scanned configuration (it may be a
+	// build-constraint-gated import), so the removable single-line case is an
+	// orphaned indirect one.
 	spec := test.NewRecipeSpec().WithRecipe(&migration.RemoveUnusedGoModRequires{})
 	resolved := []golang.GoResolvedDependency{
 		{ModulePath: "example.com/app", Main: true},
 		{ModulePath: "github.com/a/a", Version: "v1.0.0"},
-		{ModulePath: "github.com/c/c", Version: "v1.0.0"},
+		{ModulePath: "github.com/c/c", Version: "v1.0.0", Indirect: true},
 	}
 	pkgs := []golang.GoPackageModule{
 		{ImportPath: "github.com/a/a", ModulePath: "github.com/a/a", Version: "v1.0.0"},
 	}
 
-	// when / then only the unused single-line require is dropped
+	// when / then only the unreachable indirect single-line require is dropped
 	spec.RewriteRun(t,
 		resolvedGraph(
 			test.GoMod(`
@@ -145,7 +148,7 @@ func TestRemoveUnusedGoModRequiresSingleLine(t *testing.T) {
 
 				require github.com/a/a v1.0.0
 
-				require github.com/c/c v1.0.0
+				require github.com/c/c v1.0.0 // indirect
 			`, `
 				module example.com/app
 
@@ -235,6 +238,46 @@ func TestRemoveUnusedGoModRequiresDropsSelfReference(t *testing.T) {
 
 				require (
 					github.com/PuerkitoBio/goquery v1.11.0
+				)
+			`),
+			resolved, pkgs,
+		),
+	)
+}
+
+func TestRemoveUnusedGoModRequiresKeepsBuildConstraintDirect(t *testing.T) {
+	// given M is a direct require whose only import lives behind a build
+	//       constraint not active when the LST was built, so M is absent from
+	//       PackageModules; M pulls in the indirect deps i1/i2. `go mod tidy`
+	//       keeps all three, so the recipe must not delete a direct require it
+	//       merely failed to observe imported, nor cascade to its closure.
+	spec := test.NewRecipeSpec().WithRecipe(&migration.RemoveUnusedGoModRequires{})
+	resolved := []golang.GoResolvedDependency{
+		{ModulePath: "example.com/app", Main: true, Deps: []golang.GoModuleRef{
+			{ModulePath: "github.com/gated/m", Version: "v1.9.0"},
+		}},
+		{ModulePath: "github.com/gated/m", Version: "v1.9.0", Deps: []golang.GoModuleRef{
+			{ModulePath: "github.com/i/one", Version: "v1.0.0"},
+			{ModulePath: "github.com/i/two", Version: "v1.0.0"},
+		}},
+		{ModulePath: "github.com/i/one", Version: "v1.0.0", Indirect: true},
+		{ModulePath: "github.com/i/two", Version: "v1.0.0", Indirect: true},
+	}
+	pkgs := []golang.GoPackageModule{{ImportPath: "fmt", Standard: true}}
+
+	// when / then M and its indirect closure are retained
+	spec.RewriteRun(t,
+		resolvedGraph(
+			test.GoMod(`
+				module example.com/app
+
+				go 1.22
+
+				require github.com/gated/m v1.9.0
+
+				require (
+					github.com/i/one v1.0.0 // indirect
+					github.com/i/two v1.0.0 // indirect
 				)
 			`),
 			resolved, pkgs,

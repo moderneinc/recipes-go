@@ -14,17 +14,8 @@ import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
-// RemoveUnusedGoModRequires removes `require` directives whose module provides
-// no imported package and is not reachable, through the module graph, from any
-// module that does — the requirements `go mod tidy` would drop.
-//
-// It uses the package→module map and module graph resolved at parse time
-// (GoResolutionResult.PackageModules and ResolvedDependencies[].Deps). To stay
-// build-safe it removes only modules unreachable from the import closure, so
-// modules that merely pin a transitive version are kept. It acts only when the
-// marker's ResolutionStatus is RESOLVED and a package→module map is present; any
-// other status or a missing map means it cannot tell used from unused, so it is
-// a no-op.
+// RemoveUnusedGoModRequires removes `// indirect` requires unreachable from the imported-package
+// modules and retained direct requires (kept as possible gated imports), plus stray self-references.
 type RemoveUnusedGoModRequires struct {
 	recipe.Base
 }
@@ -38,7 +29,7 @@ func (r *RemoveUnusedGoModRequires) DisplayName() string {
 }
 
 func (r *RemoveUnusedGoModRequires) Description() string {
-	return "Remove `require` directives whose module provides no imported package and is unreachable through the module graph from any module that does. Uses the package→module map and module graph resolved at parse time; a no-op when that resolution did not run. Modules that pin a transitive version are kept, so the removal is build-safe."
+	return "Remove `require` directives that `go mod tidy` would drop, restricted to what can be proven unused offline: unreachable `// indirect` requires and stray self-references. Direct requires are kept even when unimported in the scanned build configuration, since their import may be gated behind an inactive build constraint. Uses the package→module map and module graph resolved at parse time; a no-op when that resolution did not run."
 }
 
 func (r *RemoveUnusedGoModRequires) Tags() []string { return []string{"gomod", "tidy"} }
@@ -60,7 +51,7 @@ func (v *removeUnusedRequiresVisitor) VisitGoMod(gm *golang.GoMod, p any) java.T
 		return gm
 	}
 	main := mrr.ModulePath
-	needed := neededModules(mrr, main)
+	needed := neededModules(mrr, main, retainedDirectRequires(gm, main))
 
 	var out []java.RightPadded[golang.GoModStatement]
 	changed := false
@@ -95,10 +86,72 @@ func removableModule(modulePath string, needed map[string]bool, main string) boo
 	return modulePath != "" && modulePath != main && !needed[modulePath]
 }
 
-// neededModules returns the set of module paths that provide an imported package
-// (the non-stdlib entries of PackageModules) plus everything reachable from them
-// through the `go mod graph` edges recorded on ResolvedDependencies.
-func neededModules(mrr *golang.GoResolutionResult, main string) map[string]bool {
+// retainedDirectRequires returns the module paths of the direct requires that
+// are always kept: every `require` not marked `// indirect`, except a stray
+// self-reference to another major version of the main module. These seed the
+// needed set so a build-constraint-gated direct import — invisible to the
+// primary-configuration scan — is not deleted, and so its indirect closure
+// stays reachable.
+func retainedDirectRequires(gm *golang.GoMod, main string) map[string]bool {
+	direct := map[string]bool{}
+	add := func(d *golang.GoModDirective, after java.Space) {
+		modulePath := firstValueText(d)
+		if modulePath == "" || hasIndirectComment(after) || isSelfReference(modulePath, main) {
+			return
+		}
+		direct[modulePath] = true
+	}
+	for _, rp := range gm.Statements {
+		switch el := rp.Element.(type) {
+		case *golang.GoModDirective:
+			if el.Keyword == "require" {
+				add(el, rp.After)
+			}
+		case *golang.GoModBlock:
+			if el.Keyword == "require" {
+				for _, e := range el.Entries {
+					if d, ok := e.Element.(*golang.GoModDirective); ok {
+						add(d, e.After)
+					}
+				}
+			}
+		}
+	}
+	return direct
+}
+
+// isSelfReference reports whether modulePath names a different major version of
+// the main module (e.g. `.../foo` under main `.../foo/v2`). `go mod tidy` always
+// drops such a stray require, and a module importing an earlier major of itself
+// under a build constraint is not a case that occurs in practice, so removing it
+// stays build-safe.
+func isSelfReference(modulePath, main string) bool {
+	return modulePath != main && moduleBase(modulePath) == moduleBase(main)
+}
+
+// moduleBase strips a trailing `/vN` (N >= 2) major-version element from a module
+// path, so two major versions of the same module share a base.
+func moduleBase(modulePath string) string {
+	i := strings.LastIndexByte(modulePath, '/')
+	if i < 0 {
+		return modulePath
+	}
+	last := modulePath[i+1:]
+	if len(last) < 2 || last[0] != 'v' {
+		return modulePath
+	}
+	for _, c := range last[1:] {
+		if c < '0' || c > '9' {
+			return modulePath
+		}
+	}
+	if last == "v0" || last == "v1" {
+		return modulePath
+	}
+	return modulePath[:i]
+}
+
+func neededModules(mrr *golang.GoResolutionResult, main string, directSeeds map[string]bool) map[string]bool {
 	adj := make(map[string][]string, len(mrr.ResolvedDependencies))
 	for _, rd := range mrr.ResolvedDependencies {
 		for _, d := range rd.Deps {
@@ -108,12 +161,21 @@ func neededModules(mrr *golang.GoResolutionResult, main string) map[string]bool 
 
 	needed := map[string]bool{}
 	var queue []string
+	seed := func(modulePath string) {
+		if modulePath == "" || modulePath == main || needed[modulePath] {
+			return
+		}
+		needed[modulePath] = true
+		queue = append(queue, modulePath)
+	}
 	for _, pm := range mrr.PackageModules {
-		if pm.Standard || pm.ModulePath == "" || pm.ModulePath == main || needed[pm.ModulePath] {
+		if pm.Standard {
 			continue
 		}
-		needed[pm.ModulePath] = true
-		queue = append(queue, pm.ModulePath)
+		seed(pm.ModulePath)
+	}
+	for m := range directSeeds {
+		seed(m)
 	}
 	for len(queue) > 0 {
 		m := queue[0]
