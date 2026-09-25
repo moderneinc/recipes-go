@@ -112,10 +112,11 @@ func importedModules(mrr *golang.GoResolutionResult) map[string]bool {
 
 // AddRequire returns gm with a `require modulePath version` directive added when
 // no `require` for modulePath is already present; otherwise gm is returned
-// unchanged. The entry is appended to the first `require` block (or a new block
-// when none exists) and marked `// indirect` when indirect is true. It does not
-// touch go.sum, so callers introducing a brand-new module still need a
-// `go mod tidy` / `go mod download` to complete resolution.
+// unchanged. A direct entry is routed to the direct `require` block and an
+// indirect one to the `// indirect` block, mirroring how `go mod tidy` keeps
+// direct and indirect requirements separated; a suitable block is created when
+// none exists. It does not touch go.sum, so callers introducing a brand-new
+// module still need a `go mod tidy` / `go mod download` to complete resolution.
 func AddRequire(gm *golang.GoMod, modulePath, version string, indirect bool) *golang.GoMod {
 	if requiredModuleSet(gm)[modulePath] {
 		return gm
@@ -123,21 +124,70 @@ func AddRequire(gm *golang.GoMod, modulePath, version string, indirect bool) *go
 	return insertRequires(gm, []missingRequire{{modulePath: modulePath, version: version, indirect: indirect}})
 }
 
-// insertRequires appends the missing requirements to the first `require` block,
-// or creates a new block when none exists.
+// insertRequires adds the missing requirements, routing direct entries to the
+// direct `require` block and indirect entries to the `// indirect` block so the
+// two stay separated the way `go mod tidy` keeps them. A block is created when no
+// suitable one exists. Existing entries are never reordered or re-split.
 func insertRequires(gm *golang.GoMod, missing []missingRequire) *golang.GoMod {
-	for i, rp := range gm.Statements {
-		if b, ok := rp.Element.(*golang.GoModBlock); ok && b.Keyword == "require" {
-			rp.Element = appendToRequireBlock(b, missing)
-			statements := append([]java.RightPadded[golang.GoModStatement]{}, gm.Statements...)
-			statements[i] = rp
-			return gm.WithStatements(statements)
+	var direct, indirect []missingRequire
+	for _, m := range missing {
+		if m.indirect {
+			indirect = append(indirect, m)
+		} else {
+			direct = append(direct, m)
 		}
 	}
 
-	block := newRequireBlock(missing)
+	statements := append([]java.RightPadded[golang.GoModStatement]{}, gm.Statements...)
+	statements = routeToRequireBlock(statements, direct, false)
+	statements = routeToRequireBlock(statements, indirect, true)
+	return gm.WithStatements(statements)
+}
+
+// routeToRequireBlock appends entries to the require block matching their
+// directness — an all-`// indirect` block for indirect entries, a direct or
+// mixed block for direct ones — creating a new block when none matches.
+func routeToRequireBlock(statements []java.RightPadded[golang.GoModStatement], entries []missingRequire, indirect bool) []java.RightPadded[golang.GoModStatement] {
+	if len(entries) == 0 {
+		return statements
+	}
+	if i := findRequireBlock(statements, indirect); i >= 0 {
+		rp := statements[i]
+		rp.Element = appendToRequireBlock(rp.Element.(*golang.GoModBlock), entries)
+		statements[i] = rp
+		return statements
+	}
+	block := newRequireBlock(entries)
 	entry := java.RightPadded[golang.GoModStatement]{Element: block, After: java.Space{Whitespace: "\n"}, Markers: freshMarkers()}
-	return gm.WithStatements(append(append([]java.RightPadded[golang.GoModStatement]{}, gm.Statements...), entry))
+	return append(statements, entry)
+}
+
+// findRequireBlock returns the index of the require block that should receive an
+// entry of the given directness: the first all-`// indirect` block for indirect
+// entries, or the first block that is not all-indirect for direct entries.
+// Returns -1 when no such block exists.
+func findRequireBlock(statements []java.RightPadded[golang.GoModStatement], indirect bool) int {
+	for i, rp := range statements {
+		if b, ok := rp.Element.(*golang.GoModBlock); ok && b.Keyword == "require" && isAllIndirectBlock(b) == indirect {
+			return i
+		}
+	}
+	return -1
+}
+
+// isAllIndirectBlock reports whether every entry in a non-empty require block
+// carries the `// indirect` marker, marking it as the block go.mod dedicates to
+// indirect requirements.
+func isAllIndirectBlock(b *golang.GoModBlock) bool {
+	if len(b.Entries) == 0 {
+		return false
+	}
+	for _, e := range b.Entries {
+		if _, ok := e.Element.(*golang.GoModDirective); !ok || !hasIndirectComment(e.After) {
+			return false
+		}
+	}
+	return true
 }
 
 func appendToRequireBlock(b *golang.GoModBlock, missing []missingRequire) *golang.GoModBlock {

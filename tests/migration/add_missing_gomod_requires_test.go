@@ -27,7 +27,8 @@ func TestAddMissingGoModRequiresAppendsToBlock(t *testing.T) {
 		{ImportPath: "golang.org/x/text/language", ModulePath: "golang.org/x/text", Version: "v0.3.0"},
 	}
 
-	// when / then the missing modules are appended, indirect flag preserved
+	// when / then the direct module joins the direct block and the indirect one
+	//           lands in its own indirect block
 	spec.RewriteRun(t,
 		resolvedGraph(
 			test.GoMod(`
@@ -46,6 +47,9 @@ func TestAddMissingGoModRequiresAppendsToBlock(t *testing.T) {
 				require (
 					github.com/foo/bar v1.2.3
 					github.com/baz/qux v1.0.0
+				)
+
+				require (
 					golang.org/x/text v0.3.0 // indirect
 				)
 			`),
@@ -85,6 +89,56 @@ func TestAddMissingGoModRequiresCreatesBlockWhenNone(t *testing.T) {
 
 				require (
 					github.com/baz/qux v1.0.0
+				)
+			`),
+			resolved, pkgs,
+		),
+	)
+}
+
+func TestAddMissingGoModRequiresAddsIndirectToIndirectBlock(t *testing.T) {
+	// given a go.mod with a direct block then an indirect block, and a resolved
+	//       graph needing one new indirect module
+	spec := test.NewRecipeSpec().WithRecipe(&migration.AddMissingGoModRequires{})
+	resolved := []golang.GoResolvedDependency{
+		{ModulePath: "example.com/app", Main: true},
+		{ModulePath: "github.com/foo/bar", Version: "v1.2.3"},
+		{ModulePath: "golang.org/x/sys", Version: "v0.1.0", Indirect: true},
+		{ModulePath: "golang.org/x/text", Version: "v0.3.0", Indirect: true},
+	}
+	pkgs := []golang.GoPackageModule{
+		{ImportPath: "github.com/foo/bar", ModulePath: "github.com/foo/bar", Version: "v1.2.3"},
+		{ImportPath: "golang.org/x/sys/unix", ModulePath: "golang.org/x/sys", Version: "v0.1.0"},
+		{ImportPath: "golang.org/x/text/language", ModulePath: "golang.org/x/text", Version: "v0.3.0"},
+	}
+
+	// when / then the new module is added to the indirect block, not the direct block
+	spec.RewriteRun(t,
+		resolvedGraph(
+			test.GoMod(`
+				module example.com/app
+
+				go 1.22
+
+				require (
+					github.com/foo/bar v1.2.3
+				)
+
+				require (
+					golang.org/x/sys v0.1.0 // indirect
+				)
+			`, `
+				module example.com/app
+
+				go 1.22
+
+				require (
+					github.com/foo/bar v1.2.3
+				)
+
+				require (
+					golang.org/x/sys v0.1.0 // indirect
+					golang.org/x/text v0.3.0 // indirect
 				)
 			`),
 			resolved, pkgs,
