@@ -12,13 +12,12 @@ import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 )
 
-// graph: a is imported; a -> b (so b is reachable); c is dead.
+// build list: a and b are selected; c/c is absent (not in `go list -m all`).
 func usageGraph() ([]golang.GoResolvedDependency, []golang.GoPackageModule) {
 	resolved := []golang.GoResolvedDependency{
 		{ModulePath: "example.com/app", Main: true},
-		{ModulePath: "github.com/a/a", Version: "v1.0.0", Deps: []golang.GoModuleRef{{ModulePath: "github.com/b/b", Version: "v1.0.0"}}},
+		{ModulePath: "github.com/a/a", Version: "v1.0.0"},
 		{ModulePath: "github.com/b/b", Version: "v1.0.0"},
-		{ModulePath: "github.com/c/c", Version: "v1.0.0"},
 	}
 	pkgs := []golang.GoPackageModule{
 		{ImportPath: "fmt", Standard: true},
@@ -27,12 +26,13 @@ func usageGraph() ([]golang.GoResolvedDependency, []golang.GoPackageModule) {
 	return resolved, pkgs
 }
 
-func TestRemoveUnusedGoModRequiresDropsUnreachable(t *testing.T) {
-	// given c/c is neither imported nor reachable from an imported module
+func TestRemoveUnusedGoModRequiresDropsAbsentFromBuildList(t *testing.T) {
+	// given c/c is absent from the resolved build list, while b/b is an // indirect
+	//       require that is present in it (kept even though unreachable)
 	spec := test.NewRecipeSpec().WithRecipe(&migration.RemoveUnusedGoModRequires{})
 	resolved, pkgs := usageGraph()
 
-	// when / then c/c is removed; b/b is kept because a/a (imported) requires it
+	// when / then c/c is removed; b/b is kept because it is in the build list
 	spec.RewriteRun(t,
 		resolvedGraph(
 			test.GoMod(`
@@ -61,7 +61,7 @@ func TestRemoveUnusedGoModRequiresDropsUnreachable(t *testing.T) {
 }
 
 func TestRemoveUnusedGoModRequiresFixesFirstEntryDrop(t *testing.T) {
-	// given the unreachable module is the first block entry
+	// given the module absent from the build list is the first block entry
 	spec := test.NewRecipeSpec().WithRecipe(&migration.RemoveUnusedGoModRequires{})
 	resolved, pkgs := usageGraph()
 
@@ -94,11 +94,10 @@ func TestRemoveUnusedGoModRequiresFixesFirstEntryDrop(t *testing.T) {
 }
 
 func TestRemoveUnusedGoModRequiresDropsWholeBlock(t *testing.T) {
-	// given every entry in the block is unused
+	// given every entry in the block is absent from the build list
 	spec := test.NewRecipeSpec().WithRecipe(&migration.RemoveUnusedGoModRequires{})
 	resolved := []golang.GoResolvedDependency{
 		{ModulePath: "example.com/app", Main: true},
-		{ModulePath: "github.com/c/c", Version: "v1.0.0"},
 	}
 	pkgs := []golang.GoPackageModule{{ImportPath: "fmt", Standard: true}}
 
@@ -124,21 +123,18 @@ func TestRemoveUnusedGoModRequiresDropsWholeBlock(t *testing.T) {
 }
 
 func TestRemoveUnusedGoModRequiresSingleLine(t *testing.T) {
-	// given an unreachable single-line indirect require. A direct require is
-	// kept even when unimported in the scanned configuration (it may be a
-	// build-constraint-gated import), so the removable single-line case is an
-	// orphaned indirect one.
+	// given a single-line indirect require absent from the build list, alongside a
+	// single-line direct require present in it.
 	spec := test.NewRecipeSpec().WithRecipe(&migration.RemoveUnusedGoModRequires{})
 	resolved := []golang.GoResolvedDependency{
 		{ModulePath: "example.com/app", Main: true},
 		{ModulePath: "github.com/a/a", Version: "v1.0.0"},
-		{ModulePath: "github.com/c/c", Version: "v1.0.0", Indirect: true},
 	}
 	pkgs := []golang.GoPackageModule{
 		{ImportPath: "github.com/a/a", ModulePath: "github.com/a/a", Version: "v1.0.0"},
 	}
 
-	// when / then only the unreachable indirect single-line require is dropped
+	// when / then only the single-line require absent from the build list is dropped
 	spec.RewriteRun(t,
 		resolvedGraph(
 			test.GoMod(`
@@ -155,46 +151,6 @@ func TestRemoveUnusedGoModRequiresSingleLine(t *testing.T) {
 				go 1.22
 
 				require github.com/a/a v1.0.0
-			`),
-			resolved, pkgs,
-		),
-	)
-}
-
-func TestRemoveUnusedGoModRequiresKeepsTestOnlyDependency(t *testing.T) {
-	// given a module imported only by a test file. Since the resolver runs
-	// `go list -deps -test`, that module appears in PackageModules, so it is
-	// part of the needed set and must not be removed.
-	spec := test.NewRecipeSpec().WithRecipe(&migration.RemoveUnusedGoModRequires{})
-	resolved := []golang.GoResolvedDependency{
-		{ModulePath: "example.com/app", Main: true},
-		{ModulePath: "github.com/testonly/dep", Version: "v1.0.0", Indirect: true},
-		{ModulePath: "github.com/dead/mod", Version: "v1.0.0", Indirect: true},
-	}
-	pkgs := []golang.GoPackageModule{
-		{ImportPath: "github.com/testonly/dep", ModulePath: "github.com/testonly/dep", Version: "v1.0.0"},
-	}
-
-	// when / then the test-only dependency is kept; only the dead module is dropped
-	spec.RewriteRun(t,
-		resolvedGraph(
-			test.GoMod(`
-				module example.com/app
-
-				go 1.22
-
-				require (
-					github.com/testonly/dep v1.0.0 // indirect
-					github.com/dead/mod v1.0.0 // indirect
-				)
-			`, `
-				module example.com/app
-
-				go 1.22
-
-				require (
-					github.com/testonly/dep v1.0.0 // indirect
-				)
 			`),
 			resolved, pkgs,
 		),
@@ -279,6 +235,42 @@ func TestRemoveUnusedGoModRequiresKeepsBuildConstraintDirect(t *testing.T) {
 					github.com/i/one v1.0.0 // indirect
 					github.com/i/two v1.0.0 // indirect
 				)
+			`),
+			resolved, pkgs,
+		),
+	)
+}
+
+func TestRemoveUnusedGoModRequiresKeepsUnreachableBuildListIndirect(t *testing.T) {
+	// given an // indirect require whose module is in the resolved build list
+	//       (go list -m all) but is neither imported nor reachable through the
+	//       recorded `go mod graph` edges — the shape of a test-closure or
+	//       build-tag-gated transitive dep whose justifying edge is pruned out of
+	//       the offline graph (e.g. gotest.tools/v3, onsi/ginkgo, otel/sdk in the
+	//       real sweep). `go mod tidy` keeps it, so the recipe must not remove it.
+	spec := test.NewRecipeSpec().WithRecipe(&migration.RemoveUnusedGoModRequires{})
+	resolved := []golang.GoResolvedDependency{
+		{ModulePath: "example.com/app", Main: true, Deps: []golang.GoModuleRef{
+			{ModulePath: "github.com/a/a", Version: "v1.0.0"},
+		}},
+		{ModulePath: "github.com/a/a", Version: "v1.0.0"},
+		{ModulePath: "gotest.tools/v3", Version: "v3.5.0", Indirect: true},
+	}
+	pkgs := []golang.GoPackageModule{
+		{ImportPath: "github.com/a/a", ModulePath: "github.com/a/a", Version: "v1.0.0"},
+	}
+
+	// when / then the unreachable build-list indirect is retained (no change)
+	spec.RewriteRun(t,
+		resolvedGraph(
+			test.GoMod(`
+				module example.com/app
+
+				go 1.22
+
+				require github.com/a/a v1.0.0
+
+				require gotest.tools/v3 v3.5.0 // indirect
 			`),
 			resolved, pkgs,
 		),
