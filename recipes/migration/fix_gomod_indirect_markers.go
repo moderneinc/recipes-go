@@ -5,6 +5,8 @@
 package migration
 
 import (
+	"path"
+
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -59,7 +61,7 @@ type fixIndirectEditor struct {
 }
 
 func (v *fixIndirectEditor) VisitGoMod(gm *golang.GoMod, p any) java.Tree {
-	directImported := directlyImportedModules(gm, v.acc.imports)
+	directImported := directlyImportedModules(gm, v.acc.importsForModule(path.Dir(gm.SourcePath)))
 
 	changed := false
 	statements := make([]java.RightPadded[golang.GoModStatement], len(gm.Statements))

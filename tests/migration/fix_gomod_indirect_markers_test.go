@@ -153,6 +153,47 @@ func TestFixGoModIndirectNestedModulesBindToLongestPath(t *testing.T) {
 	)
 }
 
+func TestFixGoModIndirectScopesImportsPerModule(t *testing.T) {
+	// given a parent module that imports example.com/dep and a nested module sub/
+	//       that does not, with sub/go.mod requiring example.com/dep // indirect
+	spec := test.NewRecipeSpec().WithRecipe(&migration.FixGoModIndirectMarkers{})
+
+	// when the recipe runs over both modules
+	// then sub/go.mod keeps example.com/dep // indirect; only the parent marks it direct
+	spec.RewriteRun(t,
+		test.GoProject("app",
+			test.GoMod(`
+				module example.com/app
+
+				go 1.22
+
+				require example.com/dep v1.0.0
+			`),
+			test.Golang(`
+				package main
+
+				import "example.com/dep"
+
+				func main() { _ = dep.A }
+			`),
+		),
+		test.GoProject("sub",
+			test.GoMod(`
+				module example.com/app/sub
+
+				go 1.22
+
+				require example.com/dep v1.0.0 // indirect
+			`).WithPath("sub/go.mod"),
+			test.Golang(`
+				package sub
+
+				func B() {}
+			`).WithPath("sub/sub.go"),
+		),
+	)
+}
+
 func TestFixGoModIndirectNoChangeWhenAlreadyCorrect(t *testing.T) {
 	// given a go.mod whose markers already match usage
 	spec := test.NewRecipeSpec().WithRecipe(&migration.FixGoModIndirectMarkers{})

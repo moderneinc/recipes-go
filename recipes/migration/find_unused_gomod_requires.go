@@ -5,6 +5,8 @@
 package migration
 
 import (
+	"path"
+
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -57,7 +59,7 @@ type findUnusedRequiresEditor struct {
 }
 
 func (v *findUnusedRequiresEditor) VisitGoMod(gm *golang.GoMod, p any) java.Tree {
-	imported := directlyImportedModules(gm, v.acc.imports)
+	imported := directlyImportedModules(gm, v.acc.importsForModule(path.Dir(gm.SourcePath)))
 
 	changed := false
 	statements := make([]java.RightPadded[golang.GoModStatement], len(gm.Statements))

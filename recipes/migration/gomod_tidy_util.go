@@ -5,6 +5,7 @@
 package migration
 
 import (
+	"path"
 	"strings"
 
 	"github.com/google/uuid"
@@ -13,18 +14,76 @@ import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
-// importedModulesAcc accumulates the third-party import paths seen across all
-// .go files in a module during a scanning recipe's scan phase.
+// importedModulesAcc accumulates, during a scanning recipe's scan phase, the
+// non-stdlib import paths seen in each .go file keyed by the file's directory,
+// together with the directory of every go.mod in the run. In a multi-module
+// repo those two let importsForModule scope a go.mod's imports to the files its
+// own module owns, so a submodule does not count a sibling's imports as direct.
 type importedModulesAcc struct {
-	imports map[string]struct{}
+	importsByDir map[string]map[string]struct{}
+	moduleDirs   map[string]struct{}
 }
 
 func newImportedModulesAcc() *importedModulesAcc {
-	return &importedModulesAcc{imports: map[string]struct{}{}}
+	return &importedModulesAcc{
+		importsByDir: map[string]map[string]struct{}{},
+		moduleDirs:   map[string]struct{}{},
+	}
+}
+
+// importsForModule returns the union of imports from the .go files owned by the
+// module rooted at moduleDir: files whose nearest enclosing go.mod directory is
+// moduleDir. Files under a deeper nested module are excluded, mirroring how Go
+// binds a package to its most specific module.
+func (a *importedModulesAcc) importsForModule(moduleDir string) map[string]struct{} {
+	imports := map[string]struct{}{}
+	for fileDir, ips := range a.importsByDir {
+		if a.nearestModuleDir(fileDir) != moduleDir {
+			continue
+		}
+		for ip := range ips {
+			imports[ip] = struct{}{}
+		}
+	}
+	return imports
+}
+
+// nearestModuleDir returns the directory of the go.mod that owns files in
+// fileDir: the longest module directory that contains fileDir, or "" when no
+// collected module directory does.
+func (a *importedModulesAcc) nearestModuleDir(fileDir string) string {
+	best := ""
+	bestRank := -1
+	for md := range a.moduleDirs {
+		if dirContains(md, fileDir) && dirRank(md) > bestRank {
+			best, bestRank = md, dirRank(md)
+		}
+	}
+	return best
+}
+
+// dirContains reports whether the directory dir contains descendant (a file in
+// dir itself or in a subdirectory). Paths are slash-separated and cleaned; the
+// module root "." contains everything.
+func dirContains(dir, descendant string) bool {
+	if dir == "." {
+		return true
+	}
+	return descendant == dir || strings.HasPrefix(descendant, dir+"/")
+}
+
+// dirRank orders directories by depth so the nearest (deepest) module wins. The
+// module root "." is the shallowest.
+func dirRank(dir string) int {
+	if dir == "." {
+		return 0
+	}
+	return strings.Count(dir, "/") + 1
 }
 
 // importCollector is the scan-phase visitor shared by the go.mod tidy recipes:
-// it records every non-stdlib import path across the module's .go files.
+// it records every non-stdlib import path per .go file directory and the
+// directory of every go.mod, so imports can later be scoped per module.
 type importCollector struct {
 	visitor.GoVisitor
 	acc *importedModulesAcc
@@ -35,13 +94,24 @@ func (v *importCollector) VisitCompilationUnit(cu *golang.CompilationUnit, p any
 	if cu.Imports == nil {
 		return cu
 	}
+	dir := path.Dir(cu.SourcePath)
 	for _, rp := range cu.Imports.Elements {
 		ip := importPathOf(rp.Element)
 		if ip != "" && !isStdlibImport(ip) {
-			v.acc.imports[ip] = struct{}{}
+			imports := v.acc.importsByDir[dir]
+			if imports == nil {
+				imports = map[string]struct{}{}
+				v.acc.importsByDir[dir] = imports
+			}
+			imports[ip] = struct{}{}
 		}
 	}
 	return cu
+}
+
+func (v *importCollector) VisitGoMod(gm *golang.GoMod, p any) java.Tree {
+	v.acc.moduleDirs[path.Dir(gm.SourcePath)] = struct{}{}
+	return v.GoVisitor.VisitGoMod(gm, p)
 }
 
 // importPathOf returns the unquoted import path of an import spec, or "" when
