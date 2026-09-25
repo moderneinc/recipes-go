@@ -31,7 +31,7 @@ func TestGoModTidyComposite(t *testing.T) {
 		{ImportPath: "github.com/baz/qux", ModulePath: "github.com/baz/qux", Version: "v1.0.0"},
 	}
 
-	// when / then: baz/qux added (// indirect), dead/mod removed, block sorted.
+	// when / then: dead/mod removed, baz/qux added to its own indirect block, blocks sorted.
 	spec.RewriteRun(t,
 		test.GoProject("app",
 			resolvedGraph(
@@ -50,8 +50,11 @@ func TestGoModTidyComposite(t *testing.T) {
 					go 1.22
 
 					require (
-						github.com/baz/qux v1.0.0 // indirect
 						github.com/foo/bar v1.0.0
+					)
+
+					require (
+						github.com/baz/qux v1.0.0 // indirect
 					)
 				`),
 				resolved, pkgs,
