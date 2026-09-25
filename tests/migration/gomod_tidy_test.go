@@ -5,6 +5,7 @@
 package migration_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/moderneinc/recipes-go/recipes/migration"
@@ -61,6 +62,79 @@ func TestGoModTidyComposite(t *testing.T) {
 				import "github.com/foo/bar"
 
 				func main() { _ = bar.A }
+			`),
+		),
+	)
+}
+
+func TestGoModTidyAddsMissingGoDirective(t *testing.T) {
+	// given a resolved graph where foo/bar is imported and already required, but
+	// the go.mod carries no `go` directive.
+	spec := test.NewRecipeSpec().WithRecipe(&migration.GoModTidy{})
+	resolved := []golang.GoResolvedDependency{
+		{ModulePath: "example.com/app", Main: true},
+		{ModulePath: "github.com/foo/bar", Version: "v1.0.0"},
+	}
+	pkgs := []golang.GoPackageModule{
+		{ImportPath: "github.com/foo/bar", ModulePath: "github.com/foo/bar", Version: "v1.0.0"},
+	}
+
+	// when / then a `go` directive should be added, as `go mod tidy` does.
+	spec.RewriteRun(t,
+		test.GoProject("app",
+			resolvedGraph(
+				test.GoMod(
+					`
+					module example.com/app
+
+					require github.com/foo/bar v1.0.0
+				`,
+					fmt.Sprintf(`
+					module example.com/app
+
+					go %s
+
+					require github.com/foo/bar v1.0.0
+				`, migration.DefaultGoDirectiveVersion())),
+				resolved, pkgs,
+			),
+			test.Golang(`
+				package main
+
+				import "github.com/foo/bar"
+
+				func main() { _ = bar.A }
+			`),
+		),
+	)
+}
+
+func TestGoModTidyAddsGoDirectiveToMinimalModule(t *testing.T) {
+	// given a bare go.mod with only a module directive.
+	spec := test.NewRecipeSpec().WithRecipe(&migration.GoModTidy{})
+	resolved := []golang.GoResolvedDependency{
+		{ModulePath: "example.com/app", Main: true},
+	}
+
+	// when / then a `go` directive should be added, as `go mod tidy` does.
+	spec.RewriteRun(t,
+		test.GoProject("app",
+			resolvedGraph(
+				test.GoMod(
+					`
+					module example.com/app
+				`,
+					fmt.Sprintf(`
+					module example.com/app
+
+					go %s
+				`, migration.DefaultGoDirectiveVersion())),
+				resolved, nil,
+			),
+			test.Golang(`
+				package main
+
+				func main() {}
 			`),
 		),
 	)
