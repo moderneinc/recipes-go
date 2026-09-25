@@ -21,6 +21,11 @@ func TestAddMissingGoModRequiresAppendsToBlock(t *testing.T) {
 		{ModulePath: "github.com/baz/qux", Version: "v1.0.0"},
 		{ModulePath: "golang.org/x/text", Version: "v0.3.0", Indirect: true},
 	}
+	pkgs := []golang.GoPackageModule{
+		{ImportPath: "github.com/foo/bar", ModulePath: "github.com/foo/bar", Version: "v1.2.3"},
+		{ImportPath: "github.com/baz/qux", ModulePath: "github.com/baz/qux", Version: "v1.0.0"},
+		{ImportPath: "golang.org/x/text/language", ModulePath: "golang.org/x/text", Version: "v0.3.0"},
+	}
 
 	// when / then the missing modules are appended, indirect flag preserved
 	spec.RewriteRun(t,
@@ -44,7 +49,7 @@ func TestAddMissingGoModRequiresAppendsToBlock(t *testing.T) {
 					golang.org/x/text v0.3.0 // indirect
 				)
 			`),
-			resolved, nil,
+			resolved, pkgs,
 		),
 	)
 }
@@ -56,6 +61,10 @@ func TestAddMissingGoModRequiresCreatesBlockWhenNone(t *testing.T) {
 		{ModulePath: "example.com/app", Main: true},
 		{ModulePath: "github.com/foo/bar", Version: "v1.2.3"},
 		{ModulePath: "github.com/baz/qux", Version: "v1.0.0"},
+	}
+	pkgs := []golang.GoPackageModule{
+		{ImportPath: "github.com/foo/bar", ModulePath: "github.com/foo/bar", Version: "v1.2.3"},
+		{ImportPath: "github.com/baz/qux", ModulePath: "github.com/baz/qux", Version: "v1.0.0"},
 	}
 
 	// when / then a new require block is created for the missing module
@@ -78,7 +87,36 @@ func TestAddMissingGoModRequiresCreatesBlockWhenNone(t *testing.T) {
 					github.com/baz/qux v1.0.0
 				)
 			`),
-			resolved, nil,
+			resolved, pkgs,
+		),
+	)
+}
+
+func TestAddMissingGoModRequiresSkipsUnimportedPrunedModules(t *testing.T) {
+	// given testify is imported but its (unimported) objx dep is in the build list
+	spec := test.NewRecipeSpec().WithRecipe(&migration.AddMissingGoModRequires{})
+	resolved := []golang.GoResolvedDependency{
+		{ModulePath: "example.com/app", Main: true},
+		{ModulePath: "github.com/stretchr/testify", Version: "v1.11.1", Deps: []golang.GoModuleRef{
+			{ModulePath: "github.com/stretchr/objx", Version: "v0.5.2"},
+		}},
+		{ModulePath: "github.com/stretchr/objx", Version: "v0.5.2", Indirect: true},
+	}
+	pkgs := []golang.GoPackageModule{
+		{ImportPath: "github.com/stretchr/testify/require", ModulePath: "github.com/stretchr/testify", Version: "v1.11.1"},
+	}
+
+	// when / then no require is added: objx is reachable but not imported
+	spec.RewriteRun(t,
+		resolvedGraph(
+			test.GoMod(`
+				module example.com/app
+
+				go 1.25
+
+				require github.com/stretchr/testify v1.11.1
+			`),
+			resolved, pkgs,
 		),
 	)
 }
@@ -89,6 +127,9 @@ func TestAddMissingGoModRequiresNoChangeWhenAllDeclared(t *testing.T) {
 	resolved := []golang.GoResolvedDependency{
 		{ModulePath: "example.com/app", Main: true},
 		{ModulePath: "github.com/foo/bar", Version: "v1.2.3"},
+	}
+	pkgs := []golang.GoPackageModule{
+		{ImportPath: "github.com/foo/bar", ModulePath: "github.com/foo/bar", Version: "v1.2.3"},
 	}
 
 	// when / then no change
@@ -101,7 +142,7 @@ func TestAddMissingGoModRequiresNoChangeWhenAllDeclared(t *testing.T) {
 
 				require github.com/foo/bar v1.2.3
 			`),
-			resolved, nil,
+			resolved, pkgs,
 		),
 	)
 }

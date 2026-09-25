@@ -14,15 +14,20 @@ import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
-// AddMissingGoModRequires adds `require` directives for modules that the
-// resolved build list needs but go.mod does not yet declare — the requirements
-// `go mod tidy` would add. Each module is added at its resolved version with
-// the `// indirect` marker the toolchain assigned it.
+// AddMissingGoModRequires adds `require` directives for modules that provide an
+// imported package but go.mod does not yet declare — the requirements `go mod
+// tidy` would add. Each module is added at its resolved version with the
+// `// indirect` marker the toolchain assigned it.
 //
-// It reads the resolved build list from the go.mod's GoResolutionResult marker,
-// which is populated at parse time by the rewrite-go toolchain resolver. It acts
-// only when the marker's ResolutionStatus is RESOLVED; any other status means the
-// build list is untrustworthy, so it is a no-op.
+// It reads the resolved build list and package→module map from the go.mod's
+// GoResolutionResult marker, populated at parse time by the rewrite-go toolchain
+// resolver. Only modules named in the package→module map are added: under module
+// graph pruning (go >=1.17) the full build list carries transitively-reachable
+// modules whose packages are never imported (e.g. a dep of an unimported package
+// of a dependency), and `go mod tidy` does not record those. It acts only when
+// the marker's ResolutionStatus is RESOLVED and a package→module map is present;
+// any other status or a missing map means it cannot tell imported from merely
+// reachable, so it is a no-op.
 type AddMissingGoModRequires struct {
 	recipe.Base
 }
@@ -60,7 +65,7 @@ type missingRequire struct {
 
 func (v *addMissingRequiresVisitor) VisitGoMod(gm *golang.GoMod, p any) java.Tree {
 	mrr := java.FindMarker[golang.GoResolutionResult](gm.Markers)
-	if mrr == nil || mrr.ResolutionStatus != golang.GoResolutionResolved {
+	if mrr == nil || mrr.ResolutionStatus != golang.GoResolutionResolved || len(mrr.PackageModules) == 0 {
 		return gm
 	}
 
@@ -72,16 +77,17 @@ func (v *addMissingRequiresVisitor) VisitGoMod(gm *golang.GoMod, p any) java.Tre
 }
 
 // missingRequires returns, sorted by module path, the build-list modules that
-// no `require` directive covers.
+// provide an imported package but no `require` directive covers.
 func missingRequires(gm *golang.GoMod, mrr *golang.GoResolutionResult) []missingRequire {
 	required := requiredModuleSet(gm)
+	imported := importedModules(mrr)
 	seen := map[string]bool{}
 	var missing []missingRequire
 	for _, rd := range mrr.ResolvedDependencies {
 		if rd.Main || rd.ModulePath == "" || rd.ModulePath == mrr.ModulePath {
 			continue
 		}
-		if required[rd.ModulePath] || seen[rd.ModulePath] {
+		if required[rd.ModulePath] || seen[rd.ModulePath] || !imported[rd.ModulePath] {
 			continue
 		}
 		seen[rd.ModulePath] = true
@@ -89,6 +95,19 @@ func missingRequires(gm *golang.GoMod, mrr *golang.GoResolutionResult) []missing
 	}
 	sort.Slice(missing, func(i, j int) bool { return missing[i].modulePath < missing[j].modulePath })
 	return missing
+}
+
+// importedModules returns the set of non-stdlib module paths that provide an
+// imported package, from the parse-time package→module map.
+func importedModules(mrr *golang.GoResolutionResult) map[string]bool {
+	imported := map[string]bool{}
+	for _, pm := range mrr.PackageModules {
+		if pm.Standard || pm.ModulePath == "" {
+			continue
+		}
+		imported[pm.ModulePath] = true
+	}
+	return imported
 }
 
 // AddRequire returns gm with a `require modulePath version` directive added when
