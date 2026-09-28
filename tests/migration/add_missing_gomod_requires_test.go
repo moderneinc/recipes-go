@@ -175,6 +175,122 @@ func TestAddMissingGoModRequiresSkipsUnimportedPrunedModules(t *testing.T) {
 	)
 }
 
+func TestAddMissingGoModRequiresSkipsImpliedIndirectBelowGo117(t *testing.T) {
+	// given a go 1.15 main module that directly requires go-md2man, whose go.mod
+	//       already requires blackfriday at the selected version, and blackfriday
+	//       is a transitively imported indirect in the build list
+	spec := test.NewRecipeSpec().WithRecipe(&migration.AddMissingGoModRequires{})
+	resolved := []golang.GoResolvedDependency{
+		{ModulePath: "example.com/app", Main: true},
+		{ModulePath: "github.com/cpuguy83/go-md2man/v2", Version: "v2.0.6", Deps: []golang.GoModuleRef{
+			{ModulePath: "github.com/russross/blackfriday/v2", Version: "v2.1.0"},
+		}},
+		{ModulePath: "github.com/russross/blackfriday/v2", Version: "v2.1.0", Indirect: true},
+	}
+	pkgs := []golang.GoPackageModule{
+		{ImportPath: "github.com/cpuguy83/go-md2man/v2/md2man", ModulePath: "github.com/cpuguy83/go-md2man/v2", Version: "v2.0.6"},
+		{ImportPath: "github.com/russross/blackfriday/v2", ModulePath: "github.com/russross/blackfriday/v2", Version: "v2.1.0"},
+	}
+
+	// when / then blackfriday is not added: go mod tidy below 1.17 omits an
+	//           indirect already implied by a dependency's go.mod
+	spec.RewriteRun(t,
+		resolvedGraph(
+			test.GoMod(`
+				module example.com/app
+
+				go 1.15
+
+				require github.com/cpuguy83/go-md2man/v2 v2.0.6
+			`),
+			resolved, pkgs,
+		),
+	)
+}
+
+func TestAddMissingGoModRequiresAddsImpliedIndirectFromGo117(t *testing.T) {
+	// given the same graph but a go 1.17 main module
+	spec := test.NewRecipeSpec().WithRecipe(&migration.AddMissingGoModRequires{})
+	resolved := []golang.GoResolvedDependency{
+		{ModulePath: "example.com/app", Main: true},
+		{ModulePath: "github.com/cpuguy83/go-md2man/v2", Version: "v2.0.6", Deps: []golang.GoModuleRef{
+			{ModulePath: "github.com/russross/blackfriday/v2", Version: "v2.1.0"},
+		}},
+		{ModulePath: "github.com/russross/blackfriday/v2", Version: "v2.1.0", Indirect: true},
+	}
+	pkgs := []golang.GoPackageModule{
+		{ImportPath: "github.com/cpuguy83/go-md2man/v2/md2man", ModulePath: "github.com/cpuguy83/go-md2man/v2", Version: "v2.0.6"},
+		{ImportPath: "github.com/russross/blackfriday/v2", ModulePath: "github.com/russross/blackfriday/v2", Version: "v2.1.0"},
+	}
+
+	// when / then blackfriday is recorded: from go 1.17 tidy lists every
+	//           transitively imported module explicitly
+	spec.RewriteRun(t,
+		resolvedGraph(
+			test.GoMod(`
+				module example.com/app
+
+				go 1.17
+
+				require github.com/cpuguy83/go-md2man/v2 v2.0.6
+			`, `
+				module example.com/app
+
+				go 1.17
+
+				require github.com/cpuguy83/go-md2man/v2 v2.0.6
+
+				require (
+					github.com/russross/blackfriday/v2 v2.1.0 // indirect
+				)
+			`),
+			resolved, pkgs,
+		),
+	)
+}
+
+func TestAddMissingGoModRequiresAddsIndirectMainPinsBelowGo117(t *testing.T) {
+	// given a go 1.15 main module where the imported indirect's selected version
+	//       is higher than the version its requiring dependency declares, so the
+	//       main module is what pins it
+	spec := test.NewRecipeSpec().WithRecipe(&migration.AddMissingGoModRequires{})
+	resolved := []golang.GoResolvedDependency{
+		{ModulePath: "example.com/app", Main: true},
+		{ModulePath: "github.com/foo/dep", Version: "v1.0.0", Deps: []golang.GoModuleRef{
+			{ModulePath: "github.com/lone/x", Version: "v0.9.0"},
+		}},
+		{ModulePath: "github.com/lone/x", Version: "v1.0.0", Indirect: true},
+	}
+	pkgs := []golang.GoPackageModule{
+		{ImportPath: "github.com/foo/dep", ModulePath: "github.com/foo/dep", Version: "v1.0.0"},
+		{ImportPath: "github.com/lone/x", ModulePath: "github.com/lone/x", Version: "v1.0.0"},
+	}
+
+	// when / then lone/x is added: no dependency's go.mod implies v1.0.0
+	spec.RewriteRun(t,
+		resolvedGraph(
+			test.GoMod(`
+				module example.com/app
+
+				go 1.15
+
+				require github.com/foo/dep v1.0.0
+			`, `
+				module example.com/app
+
+				go 1.15
+
+				require github.com/foo/dep v1.0.0
+
+				require (
+					github.com/lone/x v1.0.0 // indirect
+				)
+			`),
+			resolved, pkgs,
+		),
+	)
+}
+
 func TestAddMissingGoModRequiresNoChangeWhenAllDeclared(t *testing.T) {
 	// given a build list fully covered by go.mod
 	spec := test.NewRecipeSpec().WithRecipe(&migration.AddMissingGoModRequires{})

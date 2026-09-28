@@ -198,6 +198,47 @@ func requireModulePaths(gm *golang.GoMod) (requires []string, mainModule string)
 	return requires, mainModule
 }
 
+// mainGoVersion returns the version named by the go.mod's `go` directive, or
+// "" when there is none.
+func mainGoVersion(gm *golang.GoMod) string {
+	for _, rp := range gm.Statements {
+		if d, ok := rp.Element.(*golang.GoModDirective); ok && d.Keyword == "go" {
+			return firstValueText(d)
+		}
+	}
+	return ""
+}
+
+// goVersionBelow117 reports whether a `go` directive version predates 1.17,
+// the release that switched `go mod tidy` to record an explicit require for
+// every transitively-imported module. An absent directive ("") counts as
+// below, matching the toolchain's treatment of a directive-less module.
+func goVersionBelow117(version string) bool {
+	major, minor := parseMajorMinor(version)
+	return major < 1 || (major == 1 && minor < 17)
+}
+
+// parseMajorMinor extracts the leading major and minor integers of a go
+// version string ("1.15", "1.21.4", "1.24rc1"); missing components are 0.
+func parseMajorMinor(version string) (major, minor int) {
+	parts := strings.SplitN(version, ".", 3)
+	major = leadingInt(parts[0])
+	if len(parts) > 1 {
+		minor = leadingInt(parts[1])
+	}
+	return major, minor
+}
+
+// leadingInt returns the value of the leading run of digits in s, or 0 when s
+// does not start with a digit.
+func leadingInt(s string) int {
+	n := 0
+	for i := 0; i < len(s) && s[i] >= '0' && s[i] <= '9'; i++ {
+		n = n*10 + int(s[i]-'0')
+	}
+	return n
+}
+
 // requiredModuleSet returns the set of module paths already declared by a
 // `require` directive (single-line or block entry) in the go.mod.
 func requiredModuleSet(gm *golang.GoMod) map[string]bool {
