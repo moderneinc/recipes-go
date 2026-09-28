@@ -166,7 +166,7 @@ func buildReturn(ifStmt *java.If, thenIsTrue bool) *java.Return {
 		cond = &java.Unary{
 			Prefix:   exprPrefix(cond),
 			Operator: java.LeftPadded[java.UnaryOperator]{Element: java.Not},
-			Operand:  setExprPrefix(cond, java.Space{}),
+			Operand:  setExprPrefix(cond, java.EmptySpace),
 		}
 	}
 	return &java.Return{

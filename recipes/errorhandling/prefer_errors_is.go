@@ -114,5 +114,5 @@ func getLeadingPrefixExpr(bin *java.Binary) java.Space {
 }
 
 func stripExprPrefix(expr java.Expression) java.Expression {
-	return lstutil.SetExprPrefix(expr, java.Space{})
+	return lstutil.SetExprPrefix(expr, java.EmptySpace)
 }

@@ -63,7 +63,7 @@ func (v *handleSwallowedErrorVisitor) VisitIf(ifStmt *java.If, p any) java.J {
 	}
 
 	// Replace bare return with return err
-	errIdent := &java.Identifier{Prefix: java.Space{Whitespace: " "}, Name: "err"}
+	errIdent := &java.Identifier{Prefix: java.MakeSpace(nil, " "), Name: "err"}
 	newRet := &java.Return{
 		ID: ret.ID, Prefix: ret.Prefix, Markers: ret.Markers,
 		Expression: errIdent,

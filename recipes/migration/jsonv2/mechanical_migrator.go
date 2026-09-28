@@ -290,10 +290,10 @@ func (s *mechanicalBlockerScan) VisitFieldAccess(fa *java.FieldAccess, p any) ja
 // or trailing space, which the reordering rewrite cannot preserve.
 func marshalIndentHasArgComments(mi *java.MethodInvocation) bool {
 	for _, e := range mi.Arguments.Elements {
-		if len(e.After.Comments) > 0 {
+		if len(e.After.Comments()) > 0 {
 			return true
 		}
-		if e.Element != nil && len(e.Element.GetPrefix().Comments) > 0 {
+		if e.Element != nil && len(e.Element.GetPrefix().Comments()) > 0 {
 			return true
 		}
 	}

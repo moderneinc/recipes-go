@@ -179,7 +179,7 @@ func allBranchBodiesIdentical(ifStmt *java.If) bool {
 }
 
 func printBlockNormalized(block *java.Block) string {
-	return printer.Print(block.WithPrefix(java.Space{}))
+	return printer.Print(block.WithPrefix(java.EmptySpace))
 }
 
 // conditionMayHaveSideEffects reports whether evaluating a condition might

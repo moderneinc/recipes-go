@@ -86,12 +86,12 @@ func (v *addMissingGoDirectiveVisitor) VisitGoMod(gm *golang.GoMod, p any) java.
 
 	directive := &golang.GoModDirective{
 		Ident:   newIdent(),
-		Prefix:  java.Space{Whitespace: "\n"},
+		Prefix:  java.MakeSpace(nil, "\n"),
 		Markers: freshMarkers(),
 		Keyword: "go",
 		Values:  []*golang.GoModValue{newGoModValue(java.SingleSpace, v.version)},
 	}
-	entry := java.RightPadded[golang.GoModStatement]{Element: directive, After: java.Space{Whitespace: "\n"}, Markers: freshMarkers()}
+	entry := java.RightPadded[golang.GoModStatement]{Element: directive, After: java.MakeSpace(nil, "\n"), Markers: freshMarkers()}
 
 	insertAt := moduleIdx + 1
 	statements := make([]java.RightPadded[golang.GoModStatement], 0, len(gm.Statements)+1)

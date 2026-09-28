@@ -243,7 +243,7 @@ func withLeadingSpace(expr java.Expression) java.Expression {
 // comments, using the node's WithPrefix method reflectively so every expression
 // type is handled.
 func withExprWhitespace(expr java.Expression, ws string) java.Expression {
-	prefix := java.Space{Comments: expr.GetPrefix().Comments, Whitespace: ws}
+	prefix := java.MakeSpace(expr.GetPrefix().Comments(), ws)
 	m := reflect.ValueOf(expr).MethodByName("WithPrefix")
 	if !m.IsValid() {
 		return expr

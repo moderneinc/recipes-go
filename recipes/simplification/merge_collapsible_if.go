@@ -113,8 +113,8 @@ type dedentCollapsedVisitor struct {
 }
 
 func (v *dedentCollapsedVisitor) VisitSpace(space java.Space, p any) java.Space {
-	if strings.Contains(space.Whitespace, "\t") {
-		space.Whitespace = strings.Replace(space.Whitespace, "\t", "", 1)
+	if strings.Contains(space.Whitespace(), "\t") {
+		return java.MakeSpace(space.Comments(), strings.Replace(space.Whitespace(), "\t", "", 1))
 	}
 	return space
 }
@@ -129,7 +129,7 @@ func maybeWrapOr(expr java.Expression) java.Expression {
 	return &java.Parentheses{
 		Prefix: exprPrefix(expr),
 		Tree: java.RightPadded[java.Expression]{
-			Element: setExprPrefix(expr, java.Space{}),
+			Element: setExprPrefix(expr, java.EmptySpace),
 		},
 	}
 }

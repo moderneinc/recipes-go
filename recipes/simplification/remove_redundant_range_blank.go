@@ -69,7 +69,7 @@ func (v *simplifyRedundantRangeBlankVisitor) VisitForEachLoop(forEach *java.ForE
 	// printed once the key is the only (last) target.
 	newMa := *ma
 	key := ma.Variables[0]
-	key.After = java.Space{}
+	key.After = java.EmptySpace
 	newMa.Variables = []java.RightPadded[java.Expression]{key}
 
 	newCtrl := ctrl

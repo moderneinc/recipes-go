@@ -58,7 +58,7 @@ func (v *migrateVisitor) expandMustSession(cursor *visitor.Cursor, stmt java.Sta
 	load := &golang.MultiAssignment{
 		ID:      uuid.New(),
 		Prefix:  stmt.GetPrefix(),
-		Markers: java.Markers{ID: uuid.New(), Entries: []java.Marker{golang.ShortVarDecl{Ident: uuid.New()}}},
+		Markers: java.MakeMarkers(uuid.New(), []java.Marker{golang.ShortVarDecl{Ident: uuid.New()}}),
 		Variables: []java.RightPadded[java.Expression]{
 			{Element: &java.Identifier{Name: name.Name, Type: name.Type}},
 			{Element: errName},
@@ -82,7 +82,7 @@ func (v *migrateVisitor) expandMustSession(cursor *visitor.Cursor, stmt java.Sta
 	}
 	// A comment above the statement belongs to the load that replaces it, not to
 	// the guard that follows; the template picked up the whole prefix.
-	guardStmt = lstutil.SetStmtPrefix(guardStmt, java.Space{Whitespace: guardStmt.GetPrefix().Whitespace})
+	guardStmt = lstutil.SetStmtPrefix(guardStmt, java.MakeSpace(nil, guardStmt.GetPrefix().Whitespace()))
 	return []java.Statement{load, guardStmt}, true
 }
 

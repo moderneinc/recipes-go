@@ -205,7 +205,7 @@ func buildVarDecl(name string, call *java.MethodInvocation, prefix java.Space) *
 	// Clone the call expression. The leading whitespace lives on the call's own
 	// (outermost) prefix — a single space after "=".
 	cleanCall := *call
-	cleanCall.Prefix = java.Space{Whitespace: " "}
+	cleanCall.Prefix = java.MakeSpace(nil, " ")
 	if call.Select != nil {
 		sel := *call.Select
 		sel.Element = lstutil.SetExprPrefix(sel.Element, java.EmptySpace)
@@ -223,22 +223,19 @@ func buildVarDecl(name string, call *java.MethodInvocation, prefix java.Space) *
 		Name: name,
 	}
 	init := &java.LeftPadded[java.Expression]{
-		Before:  java.Space{Whitespace: " "},
+		Before:  java.MakeSpace(nil, " "),
 		Element: &cleanCall,
 	}
 	vd := &java.VariableDeclarator{
 		ID:          uuid.New(),
-		Prefix:      java.Space{Whitespace: " "},
+		Prefix:      java.MakeSpace(nil, " "),
 		Name:        nameIdent,
 		Initializer: init,
 	}
 	return &java.VariableDeclarations{
-		ID:     uuid.New(),
-		Prefix: prefix,
-		Markers: java.Markers{
-			ID:      uuid.New(),
-			Entries: []java.Marker{golang.VarKeyword{Ident: uuid.New()}},
-		},
+		ID:      uuid.New(),
+		Prefix:  prefix,
+		Markers: java.MakeMarkers(uuid.New(), []java.Marker{golang.VarKeyword{Ident: uuid.New()}}),
 		Variables: []java.RightPadded[*java.VariableDeclarator]{
 			{Element: vd},
 		},
@@ -267,7 +264,7 @@ func replaceInBody(body *java.Block, rc regexCallInfo, varName string) *java.Blo
 	rp := newStmts[rc.stmtIdx]
 	varRef := &java.Identifier{
 		ID:     uuid.New(),
-		Prefix: java.Space{Whitespace: " "},
+		Prefix: java.MakeSpace(nil, " "),
 		Name:   varName,
 	}
 
@@ -330,6 +327,6 @@ func stmtPrefix(stmt java.Statement) java.Space {
 	case *java.ForEachLoop:
 		return lstutil.IndentPrefix(s.Prefix)
 	default:
-		return java.Space{}
+		return java.EmptySpace
 	}
 }

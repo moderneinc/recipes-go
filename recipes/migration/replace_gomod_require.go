@@ -90,10 +90,10 @@ func restoreBlockOpeningNewline(entries []java.RightPadded[golang.GoModStatement
 		return entries
 	}
 	d, ok := entries[0].Element.(*golang.GoModDirective)
-	if !ok || strings.HasPrefix(d.Prefix.Whitespace, "\n") {
+	if !ok || strings.HasPrefix(d.Prefix.Whitespace(), "\n") {
 		return entries
 	}
-	sp := java.Space{Whitespace: "\n" + d.Prefix.Whitespace, Comments: d.Prefix.Comments}
+	sp := java.MakeSpace(d.Prefix.Comments(), "\n"+d.Prefix.Whitespace())
 	entries[0].Element = d.WithPrefix(sp)
 	return entries
 }
@@ -185,7 +185,7 @@ func dropRequireEntry(b *golang.GoModBlock, modulePath string) (*golang.GoModBlo
 // isIndirect reports whether a require line carries the `// indirect` marker,
 // which the parser attaches as a comment on the whitespace following the entry.
 func isIndirect(rp java.RightPadded[golang.GoModStatement]) bool {
-	for _, c := range rp.After.Comments {
+	for _, c := range rp.After.Comments() {
 		if strings.Contains(c.Text, "indirect") {
 			return true
 		}

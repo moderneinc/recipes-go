@@ -74,5 +74,5 @@ func isLogicalOrBitwiseOp(op java.BinaryOperator) bool {
 // equality comparison. Leading whitespace is trimmed so that formatting
 // differences between the left and right operands do not cause false negatives.
 func printExpr(expr java.Expression) string {
-	return printer.Print(setExprPrefix(expr, java.Space{}))
+	return printer.Print(setExprPrefix(expr, java.EmptySpace))
 }

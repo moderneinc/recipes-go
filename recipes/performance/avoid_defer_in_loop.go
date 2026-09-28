@@ -114,20 +114,20 @@ func buildIIFEBlock(originalBody *java.Block) *java.Block {
 	innerStmts := make([]java.RightPadded[java.Statement], len(originalBody.Statements))
 	for i, rp := range originalBody.Statements {
 		innerStmts[i] = java.RightPadded[java.Statement]{
-			Element: lstutil.SetStmtPrefix(rp.Element, java.Space{Whitespace: deeperIndent}),
+			Element: lstutil.SetStmtPrefix(rp.Element, java.MakeSpace(nil, deeperIndent)),
 			After:   rp.After,
 		}
 	}
 
 	// Inner body End = same indent as the IIFE call.
-	innerEnd := java.Space{Whitespace: stmtIndent}
+	innerEnd := java.MakeSpace(nil, stmtIndent)
 
 	// Build: func() { ...indented body... }
 	// The leading whitespace goes on the MethodDeclaration prefix since
 	// the printer emits md.Prefix then "func".
 	funcLit := &java.MethodDeclaration{
 		ID:     uuid.New(),
-		Prefix: java.Space{Whitespace: stmtIndent},
+		Prefix: java.MakeSpace(nil, stmtIndent),
 		Name: &java.Identifier{
 			ID: uuid.New(),
 		},
@@ -186,5 +186,5 @@ func extractStmtIndent(body *java.Block) string {
 // prefix. The parser attaches leading whitespace to the outermost element, so
 // it lives directly on the statement.
 func getStmtWhitespace(stmt java.Statement) string {
-	return stmt.GetPrefix().Whitespace
+	return stmt.GetPrefix().Whitespace()
 }

@@ -392,8 +392,8 @@ func (v *migrateVisitor) restructuredConfigDecl(stmt java.Statement, name string
 		return out, true
 	}
 	out = append(out, &java.Assignment{
-		Prefix:   java.Space{Whitespace: stmt.GetPrefix().Whitespace},
-		Markers:  java.Markers{ID: uuid.New(), Entries: []java.Marker{golang.ShortVarDecl{Ident: uuid.New()}}},
+		Prefix:   java.MakeSpace(nil, stmt.GetPrefix().Whitespace()),
+		Markers:  java.MakeMarkers(uuid.New(), []java.Marker{golang.ShortVarDecl{Ident: uuid.New()}}),
 		Variable: &java.Identifier{Name: pathStyleVar, Type: lstutil.NamedType("bool")},
 		Value: java.LeftPadded[java.Expression]{
 			Before:  java.SingleSpace,

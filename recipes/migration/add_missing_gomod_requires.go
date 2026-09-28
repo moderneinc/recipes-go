@@ -158,7 +158,7 @@ func routeToRequireBlock(statements []java.RightPadded[golang.GoModStatement], e
 		return statements
 	}
 	block := newRequireBlock(entries)
-	entry := java.RightPadded[golang.GoModStatement]{Element: block, After: java.Space{Whitespace: "\n"}, Markers: freshMarkers()}
+	entry := java.RightPadded[golang.GoModStatement]{Element: block, After: java.MakeSpace(nil, "\n"), Markers: freshMarkers()}
 	return append(statements, entry)
 }
 
@@ -215,7 +215,7 @@ func newRequireBlock(missing []missingRequire) *golang.GoModBlock {
 	}
 	return &golang.GoModBlock{
 		Ident:        newIdent(),
-		Prefix:       java.Space{Whitespace: "\n"},
+		Prefix:       java.MakeSpace(nil, "\n"),
 		Markers:      freshMarkers(),
 		Keyword:      "require",
 		BeforeLParen: java.SingleSpace,

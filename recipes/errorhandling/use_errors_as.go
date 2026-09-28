@@ -189,12 +189,9 @@ func looksLikeError(expr java.Expression) bool {
 // buildVarDecl constructs: var varName typeExpr
 func buildVarDecl(varName string, typeExpr java.Expression, prefix java.Space) *java.VariableDeclarations {
 	return &java.VariableDeclarations{
-		ID:     uuid.New(),
-		Prefix: prefix,
-		Markers: java.Markers{
-			ID:      uuid.New(),
-			Entries: []java.Marker{golang.VarKeyword{Ident: uuid.New()}},
-		},
+		ID:       uuid.New(),
+		Prefix:   prefix,
+		Markers:  java.MakeMarkers(uuid.New(), []java.Marker{golang.VarKeyword{Ident: uuid.New()}}),
 		TypeExpr: lstutil.SetExprPrefix(typeExpr, java.SingleSpace),
 		Variables: []java.RightPadded[*java.VariableDeclarator]{
 			{

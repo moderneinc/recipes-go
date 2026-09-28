@@ -161,22 +161,19 @@ func buildMapVarDecl(name string, call *java.MethodInvocation, prefix java.Space
 		Name: name,
 	}
 	init := &java.LeftPadded[java.Expression]{
-		Before:  java.Space{Whitespace: " "},
+		Before:  java.MakeSpace(nil, " "),
 		Element: &cleanCall,
 	}
 	vd := &java.VariableDeclarator{
 		ID:          uuid.New(),
-		Prefix:      java.Space{Whitespace: " "},
+		Prefix:      java.MakeSpace(nil, " "),
 		Name:        nameIdent,
 		Initializer: init,
 	}
 	return &java.VariableDeclarations{
-		ID:     uuid.New(),
-		Prefix: prefix,
-		Markers: java.Markers{
-			ID:      uuid.New(),
-			Entries: []java.Marker{golang.VarKeyword{Ident: uuid.New()}},
-		},
+		ID:      uuid.New(),
+		Prefix:  prefix,
+		Markers: java.MakeMarkers(uuid.New(), []java.Marker{golang.VarKeyword{Ident: uuid.New()}}),
 		Variables: []java.RightPadded[*java.VariableDeclarator]{
 			{Element: vd},
 		},

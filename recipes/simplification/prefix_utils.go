@@ -46,7 +46,7 @@ func setExprPrefix(expr java.Expression, prefix java.Space) java.Expression {
 		// whitespace isn't doubled.
 		return &java.Binary{
 			ID: n.ID, Prefix: prefix, Markers: n.Markers,
-			Left: setExprPrefix(n.Left, java.Space{}), Operator: n.Operator, Right: n.Right, Type: n.Type,
+			Left: setExprPrefix(n.Left, java.EmptySpace), Operator: n.Operator, Right: n.Right, Type: n.Type,
 		}
 	case *java.FieldAccess:
 		return n.WithPrefix(prefix)

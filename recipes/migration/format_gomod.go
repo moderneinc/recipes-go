@@ -68,12 +68,12 @@ func sortRequireBlock(b *golang.GoModBlock) *golang.GoModBlock {
 	directives := make([]*golang.GoModDirective, len(b.Entries))
 	for i, e := range b.Entries {
 		d, ok := e.Element.(*golang.GoModDirective)
-		if !ok || len(d.Prefix.Comments) > 0 {
+		if !ok || len(d.Prefix.Comments()) > 0 {
 			return b
 		}
 		directives[i] = d
 	}
-	if !strings.Contains(directives[0].Prefix.Whitespace, "\n") {
+	if !strings.Contains(directives[0].Prefix.Whitespace(), "\n") {
 		return b
 	}
 

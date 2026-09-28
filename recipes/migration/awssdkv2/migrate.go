@@ -493,7 +493,7 @@ func groupSeparator(prefix java.Space, carried *java.Space) *java.Space {
 	if carried != nil {
 		return carried
 	}
-	if strings.Contains(prefix.Whitespace, "\n\n") {
+	if strings.Contains(prefix.Whitespace(), "\n\n") {
 		return &prefix
 	}
 	return nil
