@@ -21,13 +21,15 @@ import (
 //
 // It reads the resolved build list and package→module map from the go.mod's
 // GoResolutionResult marker, populated at parse time by the rewrite-go toolchain
-// resolver. Only modules named in the package→module map are added: under module
-// graph pruning (go >=1.17) the full build list carries transitively-reachable
-// modules whose packages are never imported (e.g. a dep of an unimported package
-// of a dependency), and `go mod tidy` does not record those. It acts only when
-// the marker's ResolutionStatus is RESOLVED and a package→module map is present;
-// any other status or a missing map means it cannot tell imported from merely
-// reachable, so it is a no-op.
+// resolver. Only modules named in the package→module map are added: the full
+// build list carries transitively-reachable modules whose packages are never
+// imported (e.g. a dep of an unimported package of a dependency), and `go mod
+// tidy` does not record those. Below go 1.17 it additionally leaves out an
+// indirect module whose selected version is already implied by another module's
+// go.mod, matching how a pre-1.17 `go mod tidy` records only the indirects the
+// main module itself pins. It acts only when the marker's ResolutionStatus is
+// RESOLVED and a package→module map is present; any other status or a missing
+// map means it cannot tell imported from merely reachable, so it is a no-op.
 type AddMissingGoModRequires struct {
 	recipe.Base
 }
@@ -78,9 +80,16 @@ func (v *addMissingRequiresVisitor) VisitGoMod(gm *golang.GoMod, p any) java.Tre
 
 // missingRequires returns, sorted by module path, the build-list modules that
 // provide an imported package but no `require` directive covers.
+//
+// Below go 1.17 `go mod tidy` records an indirect requirement only when the
+// main module is what pins its version; a module whose selected version is
+// already implied by another module's go.mod is left out. Such an implied
+// indirect is skipped here so the recipe matches tidy. From go 1.17 on tidy
+// records every transitively-imported module explicitly, so nothing is skipped.
 func missingRequires(gm *golang.GoMod, mrr *golang.GoResolutionResult) []missingRequire {
 	required := requiredModuleSet(gm)
 	imported := importedModules(mrr)
+	prune := goVersionBelow117(mainGoVersion(gm))
 	seen := map[string]bool{}
 	var missing []missingRequire
 	for _, rd := range mrr.ResolvedDependencies {
@@ -90,11 +99,32 @@ func missingRequires(gm *golang.GoMod, mrr *golang.GoResolutionResult) []missing
 		if required[rd.ModulePath] || seen[rd.ModulePath] || !imported[rd.ModulePath] {
 			continue
 		}
+		if prune && rd.Indirect && impliedByGraph(mrr, rd.ModulePath, rd.Version) {
+			continue
+		}
 		seen[rd.ModulePath] = true
 		missing = append(missing, missingRequire{rd.ModulePath, rd.Version, rd.Indirect})
 	}
 	sort.Slice(missing, func(i, j int) bool { return missing[i].modulePath < missing[j].modulePath })
 	return missing
+}
+
+// impliedByGraph reports whether a non-main build-list module requires
+// modulePath at version. When one does, minimal version selection already
+// picks that version without a require in the main go.mod, so a pre-1.17
+// `go mod tidy` does not record the requirement.
+func impliedByGraph(mrr *golang.GoResolutionResult, modulePath, version string) bool {
+	for _, rd := range mrr.ResolvedDependencies {
+		if rd.Main {
+			continue
+		}
+		for _, dep := range rd.Deps {
+			if dep.ModulePath == modulePath && dep.Version == version {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 // importedModules returns the set of non-stdlib module paths that provide an
