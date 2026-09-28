@@ -162,8 +162,8 @@ type dedentVisitor struct {
 }
 
 func (v *dedentVisitor) VisitSpace(space java.Space, p any) java.Space {
-	if strings.Contains(space.Whitespace, "\t") {
-		space.Whitespace = strings.Replace(space.Whitespace, "\t", "", 1)
+	if strings.Contains(space.Whitespace(), "\t") {
+		return java.MakeSpace(space.Comments(), strings.Replace(space.Whitespace(), "\t", "", 1))
 	}
 	return space
 }

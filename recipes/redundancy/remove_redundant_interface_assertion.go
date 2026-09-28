@@ -87,11 +87,11 @@ func prependExprPrefix(expr java.Expression, extra java.Space) java.J {
 	}
 	switch n := expr.(type) {
 	case *java.Identifier:
-		return n.WithPrefix(java.Space{Whitespace: extra.Whitespace + n.Prefix.Whitespace})
+		return n.WithPrefix(java.MakeSpace(nil, extra.Whitespace()+n.Prefix.Whitespace()))
 	case *java.MethodInvocation:
-		return n.WithPrefix(java.Space{Whitespace: extra.Whitespace + n.Prefix.Whitespace})
+		return n.WithPrefix(java.MakeSpace(nil, extra.Whitespace()+n.Prefix.Whitespace()))
 	case *java.FieldAccess:
-		return n.WithPrefix(java.Space{Whitespace: extra.Whitespace + n.Prefix.Whitespace})
+		return n.WithPrefix(java.MakeSpace(nil, extra.Whitespace()+n.Prefix.Whitespace()))
 	default:
 		return expr
 	}

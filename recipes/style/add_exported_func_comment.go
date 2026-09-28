@@ -96,7 +96,7 @@ func addDocComment(name string, prefix java.Space) (java.Space, bool) {
 		return prefix, false
 	}
 
-	if doc, ok := docBlock(prefix.Comments); ok && strings.HasPrefix(doc.Text, " "+name) {
+	if doc, ok := docBlock(prefix.Comments()); ok && strings.HasPrefix(doc.Text, " "+name) {
 		return prefix, false
 	}
 
@@ -108,10 +108,7 @@ func addDocComment(name string, prefix java.Space) (java.Space, bool) {
 	commentText := " " + name + " ..."
 	indent := prefix.Indent()
 	comment := java.Comment{Text: commentText, Suffix: "\n" + indent}
-	return java.Space{
-		Whitespace: prefix.Whitespace,
-		Comments:   append(prefix.Comments, comment),
-	}, true
+	return java.MakeSpace(append(prefix.Comments(), comment), prefix.Whitespace()), true
 }
 
 // docBlock returns the first comment of the run directly above the declaration

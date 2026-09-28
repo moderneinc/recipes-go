@@ -89,7 +89,7 @@ type markerCounter struct {
 
 func (v *markerCounter) Visit(t java.Tree, p any) java.Tree {
 	if j, ok := t.(java.J); ok && j != nil {
-		v.n += len(j.GetMarkers().Entries)
+		v.n += len(j.GetMarkers().Entries())
 	}
 	return v.GoVisitor.Visit(t, p)
 }

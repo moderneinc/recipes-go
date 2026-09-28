@@ -76,7 +76,7 @@ func expandAwserrAssertion(cursor *visitor.Cursor, swi *golang.StatementWithInit
 	declaration := &java.VariableDeclarations{
 		ID:       uuid.New(),
 		Prefix:   swi.Prefix,
-		Markers:  java.Markers{ID: uuid.New()},
+		Markers:  java.MakeMarkers(uuid.New(), nil),
 		TypeExpr: smithyAPIErrorType(),
 		Variables: []java.RightPadded[*java.VariableDeclarator]{
 			{Element: &java.VariableDeclarator{
@@ -85,7 +85,7 @@ func expandAwserrAssertion(cursor *visitor.Cursor, swi *golang.StatementWithInit
 			}},
 		},
 	}
-	declaration.Markers = java.Markers{ID: uuid.New(), Entries: []java.Marker{golang.VarKeyword{Ident: uuid.New()}}}
+	declaration.Markers = java.MakeMarkers(uuid.New(), []java.Marker{golang.VarKeyword{Ident: uuid.New()}})
 
 	// The `ok` the assertion produced becomes the errors.As call itself.
 	matched := errorsAsCall(errExpr, bound, errorsLocal)
@@ -167,7 +167,7 @@ func errCodeLiteral(service, name string, prefix java.Space) (java.Expression, b
 		Value:   value,
 		Source:  `"` + value + `"`,
 		Type:    &java.JavaTypePrimitive{Keyword: "String"},
-		Markers: java.Markers{ID: uuid.New()},
+		Markers: java.MakeMarkers(uuid.New(), nil),
 	}, true
 }
 

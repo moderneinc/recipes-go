@@ -372,7 +372,7 @@ func sentinelDecl(varName string, message *java.Literal) java.Statement {
 	if !ok {
 		return nil
 	}
-	return decl.WithPrefix(java.Space{Whitespace: "\n\n"})
+	return decl.WithPrefix(java.MakeSpace(nil, "\n\n"))
 }
 
 // errorsNewLiteral returns the message literal of an `errors.New("...")` call.
@@ -439,7 +439,7 @@ var goosOrGoarch = map[string]bool{
 // ordinary build leaves out. Files sharing a summary are in the same builds.
 func buildTag(cu *golang.CompilationUnit) string {
 	var parts []string
-	for _, c := range cu.Prefix.Comments {
+	for _, c := range cu.Prefix.Comments() {
 		text := strings.TrimSpace(strings.TrimLeft(c.Text, "/"))
 		if strings.HasPrefix(text, "go:build ") || strings.HasPrefix(text, "+build ") {
 			parts = append(parts, text)

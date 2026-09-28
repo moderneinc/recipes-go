@@ -118,5 +118,5 @@ func bodiesEqual(a, b *java.Block) bool {
 }
 
 func printBlock(block *java.Block) string {
-	return printer.Print(block.WithPrefix(java.Space{}))
+	return printer.Print(block.WithPrefix(java.EmptySpace))
 }

@@ -211,7 +211,7 @@ func requiredModuleSet(gm *golang.GoMod) map[string]bool {
 
 func newIdent() uuid.UUID { return uuid.New() }
 
-func freshMarkers() java.Markers { return java.Markers{ID: uuid.New()} }
+func freshMarkers() java.Markers { return java.MakeMarkers(uuid.New(), nil) }
 
 func newGoModValue(prefix java.Space, text string) *golang.GoModValue {
 	return &golang.GoModValue{Ident: uuid.New(), Prefix: prefix, Markers: freshMarkers(), Text: text}
@@ -223,14 +223,14 @@ func newGoModValue(prefix java.Space, text string) *golang.GoModValue {
 func newRequireEntry(prefixWS, modulePath, version string, indirect bool) java.RightPadded[golang.GoModStatement] {
 	d := &golang.GoModDirective{
 		Ident:   uuid.New(),
-		Prefix:  java.Space{Whitespace: prefixWS},
+		Prefix:  java.MakeSpace(nil, prefixWS),
 		Markers: freshMarkers(),
 		Values: []*golang.GoModValue{
 			newGoModValue(java.EmptySpace, modulePath),
 			newGoModValue(java.SingleSpace, version),
 		},
 	}
-	after := java.Space{Whitespace: "\n"}
+	after := java.MakeSpace(nil, "\n")
 	if indirect {
 		after = withIndirectComment(after)
 	}
@@ -258,7 +258,7 @@ const indirectComment = "indirect"
 // hasIndirectComment reports whether after carries a trailing `// indirect`
 // comment.
 func hasIndirectComment(after java.Space) bool {
-	for _, c := range after.Comments {
+	for _, c := range after.Comments() {
 		if strings.TrimSpace(c.Text) == indirectComment {
 			return true
 		}
@@ -270,9 +270,9 @@ func hasIndirectComment(after java.Space) bool {
 // preserving the trailing newline that followed it and dropping the whitespace
 // that preceded it on the line.
 func withoutIndirectComment(after java.Space) java.Space {
-	kept := make([]java.Comment, 0, len(after.Comments))
-	whitespace := after.Whitespace
-	for _, c := range after.Comments {
+	kept := make([]java.Comment, 0, len(after.Comments()))
+	whitespace := after.Whitespace()
+	for _, c := range after.Comments() {
 		if strings.TrimSpace(c.Text) == indirectComment {
 			whitespace = strings.TrimRight(whitespace, " \t") + c.Suffix
 			continue
@@ -282,7 +282,7 @@ func withoutIndirectComment(after java.Space) java.Space {
 	if len(kept) == 0 {
 		kept = nil
 	}
-	return java.Space{Whitespace: whitespace, Comments: kept}
+	return java.MakeSpace(kept, whitespace)
 }
 
 // withIndirectComment returns after with a trailing `// indirect` comment,
@@ -292,7 +292,7 @@ func withIndirectComment(after java.Space) java.Space {
 	if hasIndirectComment(after) {
 		return after
 	}
-	ws := after.Whitespace
+	ws := after.Whitespace()
 	suffix := ""
 	if i := strings.LastIndexByte(ws, '\n'); i >= 0 {
 		suffix = ws[i:]
@@ -300,5 +300,5 @@ func withIndirectComment(after java.Space) java.Space {
 	}
 	ws += " "
 	comment := java.Comment{Text: " " + indirectComment, Suffix: suffix}
-	return java.Space{Whitespace: ws, Comments: append(append([]java.Comment{}, after.Comments...), comment)}
+	return java.MakeSpace(append(append([]java.Comment{}, after.Comments()...), comment), ws)
 }

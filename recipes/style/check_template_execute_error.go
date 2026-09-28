@@ -138,10 +138,7 @@ func buildIfInitErrCheck(mi *java.MethodInvocation) *golang.StatementWithInit {
 			Prefix: java.SingleSpace,
 			Name:   "err",
 		},
-		Markers: java.Markers{
-			ID:      uuid.New(),
-			Entries: []java.Marker{golang.ShortVarDecl{Ident: uuid.New()}},
-		},
+		Markers: java.MakeMarkers(uuid.New(), []java.Marker{golang.ShortVarDecl{Ident: uuid.New()}}),
 		Value: java.LeftPadded[java.Expression]{
 			Before:  java.SingleSpace,
 			Element: callStripped,
@@ -170,7 +167,7 @@ func buildIfInitErrCheck(mi *java.MethodInvocation) *golang.StatementWithInit {
 	// return err
 	returnStmt := &java.Return{
 		ID:     uuid.New(),
-		Prefix: java.Space{Whitespace: "\n" + indent + "\t"},
+		Prefix: java.MakeSpace(nil, "\n"+indent+"\t"),
 		Expression: &java.Identifier{
 			ID:     uuid.New(),
 			Prefix: java.SingleSpace,
@@ -184,7 +181,7 @@ func buildIfInitErrCheck(mi *java.MethodInvocation) *golang.StatementWithInit {
 		Statements: []java.RightPadded[java.Statement]{
 			{Element: returnStmt},
 		},
-		End: java.Space{Whitespace: "\n" + indent},
+		End: java.MakeSpace(nil, "\n"+indent),
 	}
 
 	// An `if init; cond` is modeled as a golang.StatementWithInit wrapping a plain
@@ -205,7 +202,7 @@ func buildIfInitErrCheck(mi *java.MethodInvocation) *golang.StatementWithInit {
 		Init: java.RightPadded[java.Statement]{
 			Element: initAssign,
 			// The printer emits the `;` between init and condition from this marker.
-			Markers: java.Markers{ID: uuid.New(), Entries: []java.Marker{golang.NewSemicolon()}},
+			Markers: java.MakeMarkers(uuid.New(), []java.Marker{golang.NewSemicolon()}),
 		},
 		Statement: innerIf,
 	}
@@ -216,7 +213,7 @@ func buildIfInitErrCheck(mi *java.MethodInvocation) *golang.StatementWithInit {
 // identifier), not on the MethodInvocation node.
 func extractMIPrefix(mi *java.MethodInvocation) java.Space {
 	if mi.Select != nil {
-		if ident, ok := mi.Select.Element.(*java.Identifier); ok && ident.Prefix.Whitespace != "" {
+		if ident, ok := mi.Select.Element.(*java.Identifier); ok && ident.Prefix.Whitespace() != "" {
 			return ident.Prefix
 		}
 	}

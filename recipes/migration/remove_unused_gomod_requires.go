@@ -210,8 +210,8 @@ func filterRequireBlock(b *golang.GoModBlock, needed map[string]bool, main strin
 		return b, false
 	}
 	if firstDropped && len(kept) > 0 {
-		if d, ok := kept[0].Element.(*golang.GoModDirective); ok && !strings.HasPrefix(d.Prefix.Whitespace, "\n") {
-			sp := java.Space{Whitespace: "\n" + d.Prefix.Whitespace, Comments: d.Prefix.Comments}
+		if d, ok := kept[0].Element.(*golang.GoModDirective); ok && !strings.HasPrefix(d.Prefix.Whitespace(), "\n") {
+			sp := java.MakeSpace(d.Prefix.Comments(), "\n"+d.Prefix.Whitespace())
 			kept[0].Element = d.WithPrefix(sp)
 		}
 	}

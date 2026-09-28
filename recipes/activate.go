@@ -285,6 +285,7 @@ func Activate(r *recipe.Registry) {
 	r.Register(&migration.FormatGoMod{}, golang, codeQuality, migrationCategory)
 	r.Register(&migration.FindMissingGoModRequires{}, golang, codeQuality, migrationCategory)
 	r.Register(&migration.FindUnusedGoModRequires{}, golang, codeQuality, migrationCategory)
+	r.Register(&migration.FindPartiallyResolvedGoMod{}, golang, codeQuality, migrationCategory)
 
 	// Migration — adopt stretchr/testify
 	testifyCategory := recipe.CategoryDescriptor{DisplayName: "Testify", Description: "Adopt the stretchr/testify assertion library"}

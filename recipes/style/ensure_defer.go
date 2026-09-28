@@ -282,13 +282,13 @@ func buildDeferMethodCall(a acquisition, methodName string, originalStmt java.St
 func stmtPrefix(stmt java.Statement) java.Space {
 	switch s := stmt.(type) {
 	case *java.Assignment:
-		if id, ok := s.Variable.(*java.Identifier); ok && id.Prefix.Whitespace != "" {
+		if id, ok := s.Variable.(*java.Identifier); ok && id.Prefix.Whitespace() != "" {
 			return lstutil.IndentPrefix(id.Prefix)
 		}
 		return lstutil.IndentPrefix(s.Prefix)
 	case *golang.MultiAssignment:
 		if len(s.Variables) > 0 {
-			if id, ok := s.Variables[0].Element.(*java.Identifier); ok && id.Prefix.Whitespace != "" {
+			if id, ok := s.Variables[0].Element.(*java.Identifier); ok && id.Prefix.Whitespace() != "" {
 				return lstutil.IndentPrefix(id.Prefix)
 			}
 		}
@@ -298,6 +298,6 @@ func stmtPrefix(stmt java.Statement) java.Space {
 	case *java.MethodInvocation:
 		return lstutil.IndentPrefix(s.Prefix)
 	default:
-		return java.Space{Whitespace: "\n\t"}
+		return java.MakeSpace(nil, "\n\t")
 	}
 }

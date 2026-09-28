@@ -198,7 +198,7 @@ func buildErrGuard(ifStmt *java.If, returnExpr java.Expression) *java.If {
 	newCond.Tree.Element = invertedCond
 
 	ret := &java.Return{
-		Prefix:     java.Space{Whitespace: "\n" + guardIndent(ifStmt.Prefix)},
+		Prefix:     java.MakeSpace(nil, "\n"+guardIndent(ifStmt.Prefix)),
 		Expression: returnExpr,
 	}
 
@@ -207,7 +207,7 @@ func buildErrGuard(ifStmt *java.If, returnExpr java.Expression) *java.If {
 		Statements: []java.RightPadded[java.Statement]{
 			{Element: ret},
 		},
-		End: java.Space{Whitespace: "\n" + lstutil.BaseIndent(ifStmt.Prefix)},
+		End: java.MakeSpace(nil, "\n"+lstutil.BaseIndent(ifStmt.Prefix)),
 	}
 
 	return &java.If{
@@ -229,8 +229,8 @@ type nestingDedentVisitor struct {
 }
 
 func (v *nestingDedentVisitor) VisitSpace(space java.Space, p any) java.Space {
-	if strings.Contains(space.Whitespace, "\t") {
-		space.Whitespace = strings.Replace(space.Whitespace, "\t", "", 1)
+	if strings.Contains(space.Whitespace(), "\t") {
+		return java.MakeSpace(space.Comments(), strings.Replace(space.Whitespace(), "\t", "", 1))
 	}
 	return space
 }

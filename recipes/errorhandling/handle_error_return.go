@@ -153,7 +153,7 @@ func buildReturnErrGuard(base string) *java.If {
 
 	ret := &java.Return{
 		ID:         uuid.New(),
-		Prefix:     java.Space{Whitespace: "\n" + base + "\t"},
+		Prefix:     java.MakeSpace(nil, "\n"+base+"\t"),
 		Expression: &java.Identifier{ID: uuid.New(), Prefix: java.SingleSpace, Name: "err"},
 	}
 
@@ -161,12 +161,12 @@ func buildReturnErrGuard(base string) *java.If {
 		ID:         uuid.New(),
 		Prefix:     java.SingleSpace,
 		Statements: []java.RightPadded[java.Statement]{{Element: ret}},
-		End:        java.Space{Whitespace: "\n" + base},
+		End:        java.MakeSpace(nil, "\n"+base),
 	}
 
 	return &java.If{
 		ID:        uuid.New(),
-		Prefix:    java.Space{Whitespace: "\n" + base},
+		Prefix:    java.MakeSpace(nil, "\n"+base),
 		Condition: cond,
 		ThenPart:  java.RightPadded[java.Statement]{Element: guardBody},
 	}

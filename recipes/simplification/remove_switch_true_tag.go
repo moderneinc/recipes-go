@@ -55,8 +55,8 @@ func (v *simplifySwitchTrueVisitor) VisitSwitch(sw *java.Switch, p any) java.J {
 	c := *sw
 	c.Selector = &java.ControlParentheses{
 		ID:      uuid.New(),
-		Markers: java.Markers{ID: uuid.New()},
-		Tree:    java.RightPadded[java.Expression]{Element: &java.Empty{ID: uuid.New(), Markers: java.Markers{ID: uuid.New()}}},
+		Markers: java.MakeMarkers(uuid.New(), nil),
+		Tree:    java.RightPadded[java.Expression]{Element: &java.Empty{ID: uuid.New(), Markers: java.MakeMarkers(uuid.New(), nil)}},
 	}
 	return &c
 }

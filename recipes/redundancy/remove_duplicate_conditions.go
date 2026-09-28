@@ -101,7 +101,7 @@ func removeDuplicateBranches(ifStmt *java.If) *java.If {
 }
 
 func printCondition(expr java.Expression) string {
-	return printer.Print(lstutil.SetExprPrefix(expr, java.Space{}))
+	return printer.Print(lstutil.SetExprPrefix(expr, java.EmptySpace))
 }
 
 func containsStr(slice []string, s string) bool {

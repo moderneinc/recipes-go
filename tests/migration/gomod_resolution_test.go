@@ -24,3 +24,17 @@ func graphWithStatus(mod test.SourceSpec, resolved []golang.GoResolvedDependency
 func resolvedGraph(mod test.SourceSpec, resolved []golang.GoResolvedDependency, pkgs []golang.GoPackageModule) test.SourceSpec {
 	return graphWithStatus(mod, resolved, pkgs, golang.GoResolutionResolved)
 }
+
+func graphWithUnresolved(mod test.SourceSpec, resolved []golang.GoResolvedDependency, pkgs []golang.GoPackageModule, status golang.GoResolutionStatus, unresolvedImports []string, resolutionError string) test.SourceSpec {
+	mod = test.GoModGraph(mod, resolved, pkgs)
+	for i, m := range mod.Markers {
+		if mrr, ok := m.(golang.GoResolutionResult); ok {
+			mrr.ResolutionStatus = status
+			mrr.UnresolvedImports = unresolvedImports
+			mrr.ResolutionError = resolutionError
+			mod.Markers[i] = mrr
+			break
+		}
+	}
+	return mod
+}

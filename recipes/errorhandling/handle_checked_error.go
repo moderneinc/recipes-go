@@ -70,13 +70,13 @@ func (v *handleCheckedErrorVisitor) VisitIf(ifStmt *java.If, p any) java.J {
 		return ifStmt
 	}
 
-	// Derive indentation from the block's End space. End.Whitespace is
+	// Derive indentation from the block's End space. End.Whitespace() is
 	// the whitespace before `}`, e.g. "\n\t". The return statement sits
 	// one indent level deeper.
-	endWS := thenBlock.End.Whitespace
-	returnPrefix := java.Space{Whitespace: endWS + "\t"}
+	endWS := thenBlock.End.Whitespace()
+	returnPrefix := java.MakeSpace(nil, endWS+"\t")
 
-	errIdent := &java.Identifier{Prefix: java.Space{Whitespace: " "}, Name: "err"}
+	errIdent := &java.Identifier{Prefix: java.MakeSpace(nil, " "), Name: "err"}
 	returnStmt := &java.Return{
 		Prefix:     returnPrefix,
 		Expression: errIdent,
