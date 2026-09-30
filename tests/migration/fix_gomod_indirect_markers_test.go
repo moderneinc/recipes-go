@@ -194,6 +194,62 @@ func TestFixGoModIndirectScopesImportsPerModule(t *testing.T) {
 	)
 }
 
+func TestFixGoModIndirectLeavesMalformedMarkerNeighbourIntact(t *testing.T) {
+	// given a require whose // indirect marker carries trailing garbage,
+	//       immediately followed by a normally-marked indirect require (I11)
+	spec := test.NewRecipeSpec().WithRecipe(&migration.FixGoModIndirectMarkers{})
+
+	// when / then the malformed require is left verbatim and the following
+	//            require is not commented out
+	spec.RewriteRun(t,
+		test.GoProject("app",
+			test.GoMod(`
+				module example.com/app
+
+				go 1.22
+
+				require (
+					github.com/foo/mangled v1.0.0 // indirect; junk
+					github.com/foo/bar v1.2.3 // indirect
+				)
+			`),
+			test.Golang(`
+				package main
+
+				func main() {}
+			`),
+		),
+	)
+}
+
+func TestFixGoModIndirectLeavesRequireWithNonIndirectComment(t *testing.T) {
+	// given an unimported require carrying a non-indirect trailing comment,
+	//       immediately followed by another require
+	spec := test.NewRecipeSpec().WithRecipe(&migration.FixGoModIndirectMarkers{})
+
+	// when / then no marker is appended after the existing comment (which would
+	//            comment out the next require), and the neighbour stays intact
+	spec.RewriteRun(t,
+		test.GoProject("app",
+			test.GoMod(`
+				module example.com/app
+
+				go 1.22
+
+				require (
+					github.com/foo/pinned v1.0.0 // keep this pin
+					github.com/foo/bar v1.2.3 // indirect
+				)
+			`),
+			test.Golang(`
+				package main
+
+				func main() {}
+			`),
+		),
+	)
+}
+
 func TestFixGoModIndirectNoChangeWhenAlreadyCorrect(t *testing.T) {
 	// given a go.mod whose markers already match usage
 	spec := test.NewRecipeSpec().WithRecipe(&migration.FixGoModIndirectMarkers{})
