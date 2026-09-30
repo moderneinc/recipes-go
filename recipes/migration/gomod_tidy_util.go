@@ -330,7 +330,7 @@ func withoutIndirectComment(after java.Space) java.Space {
 // re-homing the line's terminating newline onto the comment's suffix so the
 // entry prints as `<tokens> // indirect\n`.
 func withIndirectComment(after java.Space) java.Space {
-	if hasIndirectComment(after) {
+	if len(after.Comments()) > 0 {
 		return after
 	}
 	ws := after.Whitespace()
@@ -341,5 +341,5 @@ func withIndirectComment(after java.Space) java.Space {
 	}
 	ws += " "
 	comment := java.Comment{Text: " " + indirectComment, Suffix: suffix}
-	return java.MakeSpace(append(append([]java.Comment{}, after.Comments()...), comment), ws)
+	return java.MakeSpace([]java.Comment{comment}, ws)
 }
