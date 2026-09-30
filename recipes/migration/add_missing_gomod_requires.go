@@ -99,10 +99,10 @@ func missingRequires(gm *golang.GoMod, mrr *golang.GoResolutionResult) []missing
 		if required[rd.ModulePath] || seen[rd.ModulePath] || !imported[rd.ModulePath] {
 			continue
 		}
+		seen[rd.ModulePath] = true
 		if prune && rd.Indirect && impliedByGraph(mrr, rd.ModulePath, rd.Version) {
 			continue
 		}
-		seen[rd.ModulePath] = true
 		missing = append(missing, missingRequire{rd.ModulePath, rd.Version, rd.Indirect})
 	}
 	sort.Slice(missing, func(i, j int) bool { return missing[i].modulePath < missing[j].modulePath })
