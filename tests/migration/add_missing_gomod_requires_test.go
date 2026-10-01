@@ -208,6 +208,39 @@ func TestAddMissingGoModRequiresSkipsImpliedIndirectBelowGo117(t *testing.T) {
 	)
 }
 
+func TestAddMissingGoModRequiresSkipsImpliedIndirectWithStaleGoSumVersionBelowGo117(t *testing.T) {
+	// given a go 1.15 main module whose imported indirect x/sys is implied at its
+	//       selected version by x/tools' go.mod, while go.sum still lists an older,
+	//       unselected x/sys version merged in after the build list
+	spec := test.NewRecipeSpec().WithRecipe(&migration.AddMissingGoModRequires{})
+	resolved := []golang.GoResolvedDependency{
+		{ModulePath: "example.com/app", Main: true},
+		{ModulePath: "golang.org/x/tools", Version: "v0.1.8", Deps: []golang.GoModuleRef{
+			{ModulePath: "golang.org/x/sys", Version: "v0.0.0-20211019181941-9d821ace8654"},
+		}},
+		{ModulePath: "golang.org/x/sys", Version: "v0.0.0-20211019181941-9d821ace8654", Indirect: true},
+		{ModulePath: "golang.org/x/sys", Version: "v0.0.0-20190215142949-d0b11bdaac8a"},
+	}
+	pkgs := []golang.GoPackageModule{
+		{ImportPath: "golang.org/x/tools/go/loader", ModulePath: "golang.org/x/tools", Version: "v0.1.8"},
+		{ImportPath: "golang.org/x/sys/execabs", ModulePath: "golang.org/x/sys", Version: "v0.0.0-20211019181941-9d821ace8654"},
+	}
+
+	// when / then x/sys is not added, neither at the selected nor the stale version
+	spec.RewriteRun(t,
+		resolvedGraph(
+			test.GoMod(`
+				module example.com/app
+
+				go 1.15
+
+				require golang.org/x/tools v0.1.8
+			`),
+			resolved, pkgs,
+		),
+	)
+}
+
 func TestAddMissingGoModRequiresAddsImpliedIndirectFromGo117(t *testing.T) {
 	// given the same graph but a go 1.17 main module
 	spec := test.NewRecipeSpec().WithRecipe(&migration.AddMissingGoModRequires{})
