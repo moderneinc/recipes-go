@@ -8,6 +8,7 @@ import (
 	"reflect"
 	"strings"
 
+	"github.com/moderneinc/recipes-go/recipes/migration/internal/pathswap"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
@@ -37,19 +38,10 @@ type importSwapToV2Visitor struct {
 
 func (v *importSwapToV2Visitor) VisitImport(imp *java.Import, p any) java.J {
 	imp = v.GoVisitor.VisitImport(imp, p).(*java.Import)
-	lit, ok := imp.Qualid.(*java.Literal)
-	if !ok {
+	if imp.Path() != "encoding/json" {
 		return imp
 	}
-	if path, ok := importPath(imp); !ok || path != "encoding/json" {
-		return imp
-	}
-	newLit := *lit
-	newLit.Value = "encoding/json/v2"
-	newLit.Source = strings.Replace(lit.Source, "encoding/json", "encoding/json/v2", 1)
-	c := *imp
-	c.Qualid = &newLit
-	return &c
+	return pathswap.WithPath(imp, "encoding/json/v2")
 }
 
 // Reports whether cu already imports encoding/json/v2, so the swap would produce
@@ -59,7 +51,7 @@ func importsEncodingJsonV2(cu *golang.CompilationUnit) bool {
 		return false
 	}
 	for _, imp := range cu.Imports.Elements {
-		if path, ok := importPath(imp.Element); ok && path == "encoding/json/v2" {
+		if imp.Element.Path() == "encoding/json/v2" {
 			return true
 		}
 	}

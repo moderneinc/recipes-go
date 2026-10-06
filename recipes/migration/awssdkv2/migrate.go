@@ -425,7 +425,7 @@ func (v *migrateVisitor) dropEmptiedServiceImports(cu *golang.CompilationUnit) *
 			rp.Element = rp.Element.WithPrefix(*carried)
 			carried = nil
 		}
-		path := pathswap.Path(rp.Element)
+		path := rp.Element.Path()
 		service, isService := strings.CutPrefix(path, v2ServicePkg)
 		if isService && !strings.Contains(service, "/") && v.scan.usesService(service) && !v.serviceUsed[service] {
 			dropped = true
@@ -476,7 +476,7 @@ func (v *migrateVisitor) dropEmptiedServiceImports(cu *golang.CompilationUnit) *
 	// so dropping that entry would put the paren on the same line as its
 	// neighbour.
 	if last := cu.Imports.Elements[len(cu.Imports.Elements)-1]; len(kept) > 0 {
-		if pathswap.Path(kept[len(kept)-1].Element) != pathswap.Path(last.Element) {
+		if kept[len(kept)-1].Element.Path() != last.Element.Path() {
 			kept[len(kept)-1].After = last.After
 		}
 	}
@@ -516,7 +516,7 @@ func (v *migrateVisitor) swapImports(cu *golang.CompilationUnit, p any) *golang.
 		rules = append(rules, pathswap.Rule{Old: v1Awserr, New: v1Awserr})
 	}
 	for _, rp := range cu.Imports.Elements {
-		path := pathswap.Path(rp.Element)
+		path := rp.Element.Path()
 		if service, _, isIface := ifacePackageName(path); isIface {
 			rules = append(rules, pathswap.Rule{Old: path, New: ifaceImportPath(v.acc.modulePath, service)})
 			continue

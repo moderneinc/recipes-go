@@ -8,7 +8,6 @@ import (
 	"go/version"
 
 	"github.com/moderneinc/recipes-go/recipes/migration"
-	"github.com/moderneinc/recipes-go/recipes/migration/internal/pathswap"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -85,7 +84,7 @@ func recordAwsUsage(acc *awsUsageAcc, cu *golang.CompilationUnit) {
 		return
 	}
 	for _, rp := range cu.Imports.Elements {
-		if module, ok := pinnedModuleFor(pathswap.Path(rp.Element)); ok {
+		if module, ok := pinnedModuleFor(rp.Element.Path()); ok {
 			acc.needed[module] = true
 		}
 	}
@@ -98,7 +97,7 @@ func recordAwsUsage(acc *awsUsageAcc, cu *golang.CompilationUnit) {
 	}
 	acc.migrated = true
 	for _, rp := range cu.Imports.Elements {
-		newPath, ok := MapPath(pathswap.Path(rp.Element))
+		newPath, ok := MapPath(rp.Element.Path())
 		if !ok {
 			continue
 		}

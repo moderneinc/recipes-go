@@ -95,9 +95,13 @@ func wrapLoopBodyInFunc(loopStmt java.Statement, body *java.Block) java.Statemen
 	wrapped := buildIIFEBlock(body)
 	switch loop := loopStmt.(type) {
 	case *java.ForLoop:
-		return loop.WithBody(wrapped)
+		body := loop.Body
+		body.Element = wrapped
+		return loop.WithBody(body)
 	case *java.ForEachLoop:
-		return loop.WithBody(wrapped)
+		body := loop.Body
+		body.Element = wrapped
+		return loop.WithBody(body)
 	}
 	return loopStmt
 }

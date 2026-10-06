@@ -247,11 +247,13 @@ func buildVarDecl(name string, call *java.MethodInvocation, prefix java.Space) *
 func replaceCallInLoop(loopStmt java.Statement, rc regexCallInfo, varName string) java.Statement {
 	switch loop := loopStmt.(type) {
 	case *java.ForLoop:
-		newBody := replaceInBody(loop.Body, rc, varName)
-		return loop.WithBody(newBody)
+		body := loop.Body
+		body.Element = replaceInBody(loop.Body.Element.(*java.Block), rc, varName)
+		return loop.WithBody(body)
 	case *java.ForEachLoop:
-		newBody := replaceInBody(loop.Body, rc, varName)
-		return loop.WithBody(newBody)
+		body := loop.Body
+		body.Element = replaceInBody(loop.Body.Element.(*java.Block), rc, varName)
+		return loop.WithBody(body)
 	}
 	return loopStmt
 }
@@ -311,9 +313,11 @@ func replaceInBody(body *java.Block, rc regexCallInfo, varName string) *java.Blo
 func getLoopBody(stmt java.Statement) *java.Block {
 	switch s := stmt.(type) {
 	case *java.ForLoop:
-		return s.Body
+		b, _ := s.Body.Element.(*java.Block)
+		return b
 	case *java.ForEachLoop:
-		return s.Body
+		b, _ := s.Body.Element.(*java.Block)
+		return b
 	}
 	return nil
 }

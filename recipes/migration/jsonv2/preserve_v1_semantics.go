@@ -125,7 +125,7 @@ func localJsonV2Package(cu *golang.CompilationUnit) string {
 		return ""
 	}
 	for _, imp := range cu.Imports.Elements {
-		if path, ok := importPath(imp.Element); ok && path == "encoding/json/v2" {
+		if imp.Element.Path() == "encoding/json/v2" {
 			if alias := importAlias(imp.Element); alias != "" {
 				return alias
 			}
@@ -142,7 +142,7 @@ func localJsontextPackage(cu *golang.CompilationUnit) string {
 		return ""
 	}
 	for _, imp := range cu.Imports.Elements {
-		if path, ok := importPath(imp.Element); ok && path == "encoding/json/jsontext" {
+		if imp.Element.Path() == "encoding/json/jsontext" {
 			if alias := importAlias(imp.Element); alias != "" {
 				return alias
 			}

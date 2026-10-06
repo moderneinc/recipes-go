@@ -67,7 +67,7 @@ func (v *avoidDotImportVisitor) VisitCompilationUnit(cu *golang.CompilationUnit,
 		normal := map[string]bool{}
 		for _, rp := range cu.Imports.Elements {
 			if imp := rp.Element; !isDotImport(imp) {
-				if path := importPath(imp); path != "" {
+				if path := imp.Path(); path != "" {
 					normal[path] = true
 				}
 			}
@@ -101,18 +101,6 @@ func isDotImport(imp *java.Import) bool {
 	return imp.Alias != nil && imp.Alias.Element != nil && imp.Alias.Element.Name == "."
 }
 
-// importPath returns the package path of a non-dot import, unquoted.
-func importPath(imp *java.Import) string {
-	lit, ok := imp.Qualid.(*java.Literal)
-	if !ok {
-		return ""
-	}
-	if s, ok := lit.Value.(string); ok && s != "" {
-		return strings.Trim(s, "\"`")
-	}
-	return strings.Trim(lit.Source, "\"`")
-}
-
 func (v *avoidDotImportVisitor) VisitImport(imp *java.Import, p any) java.J {
 	imp = v.GoVisitor.VisitImport(imp, p).(*java.Import)
 
@@ -139,10 +127,8 @@ func (v *avoidDotImportVisitor) VisitImport(imp *java.Import, p any) java.J {
 	// by the import prefix.
 	c := *imp
 	c.Alias = nil
-	if lit, ok := c.Qualid.(*java.Literal); ok {
-		c.Qualid = lit.WithPrefix(java.EmptySpace)
-	} else if ident, ok := c.Qualid.(*java.Identifier); ok {
-		c.Qualid = ident.WithPrefix(java.EmptySpace)
+	if c.Qualid != nil {
+		c.Qualid = c.Qualid.WithPrefix(java.EmptySpace)
 	}
 	return &c
 }

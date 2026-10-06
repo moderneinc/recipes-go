@@ -70,7 +70,7 @@ func (v *testifyImportScanner) VisitCompilationUnit(cu *golang.CompilationUnit, 
 		return cu
 	}
 	for _, rp := range cu.Imports.Elements {
-		if importsTestify(importPathOf(rp.Element)) {
+		if importsTestify(rp.Element.Path()) {
 			v.acc.imported = true
 			break
 		}
@@ -92,21 +92,4 @@ func (v *addTestifyRequireEditor) VisitGoMod(gm *golang.GoMod, p any) java.Tree 
 
 func importsTestify(importPath string) bool {
 	return importPath == testifyModulePath || strings.HasPrefix(importPath, testifyModulePath+"/")
-}
-
-// importPathOf returns the unquoted import path of an import spec, or "" when the
-// spec is not a plain string literal.
-func importPathOf(imp *java.Import) string {
-	if imp == nil {
-		return ""
-	}
-	lit, ok := imp.Qualid.(*java.Literal)
-	if !ok || lit == nil {
-		return ""
-	}
-	raw := lit.Source
-	if s, ok := lit.Value.(string); ok {
-		raw = s
-	}
-	return strings.Trim(raw, "\"`")
 }

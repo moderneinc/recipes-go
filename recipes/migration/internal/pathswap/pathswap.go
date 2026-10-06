@@ -79,22 +79,6 @@ func mapFQN(fqn string, rules []Rule) (string, bool) {
 	return "", false
 }
 
-// Path returns the unquoted import path of imp, or "" when the spec is not a
-// plain string literal.
-func Path(imp *java.Import) string {
-	if imp == nil {
-		return ""
-	}
-	lit, ok := imp.Qualid.(*java.Literal)
-	if !ok || lit == nil {
-		return ""
-	}
-	if s, ok := lit.Value.(string); ok {
-		return s
-	}
-	return strings.Trim(lit.Source, "`\"")
-}
-
 // Alias returns the explicit local name an import spec binds, or "" when the
 // import has none and takes the package's own name.
 func Alias(imp *java.Import) string {
@@ -113,7 +97,7 @@ func LocalName(imp *java.Import) string {
 	if alias := Alias(imp); alias != "" {
 		return alias
 	}
-	return packageNameOf(Path(imp))
+	return packageNameOf(imp.Path())
 }
 
 // packageNameOf returns the name an import path binds by default.
@@ -152,7 +136,7 @@ func Find(cu *golang.CompilationUnit, path string) *java.Import {
 		return nil
 	}
 	for _, rp := range cu.Imports.Elements {
-		if Path(rp.Element) == path {
+		if rp.Element.Path() == path {
 			return rp.Element
 		}
 	}
@@ -181,36 +165,36 @@ func Imports(cu *golang.CompilationUnit, path string) bool {
 	return Find(cu, path) != nil
 }
 
-// WithPath returns imp with its path literal replaced, keeping the original
-// quoting style and the surrounding whitespace.
+// WithPath returns imp with its path replaced, keeping the original quoting
+// style and the surrounding whitespace.
 func WithPath(imp *java.Import, newPath string) *java.Import {
-	lit, ok := imp.Qualid.(*java.Literal)
-	if !ok || lit == nil {
+	if imp.Qualid == nil || imp.Qualid.Name.Element == nil {
 		return imp
 	}
-	quote := `"`
-	if strings.HasPrefix(strings.TrimSpace(lit.Source), "`") {
-		quote = "`"
+	name := *imp.Qualid.Name.Element
+	name.Name = newPath
+	if strings.HasPrefix(imp.Qualid.Name.Element.Name, "`") {
+		name.Name = "`" + newPath + "`"
 	}
-	newLit := *lit
-	newLit.Value = newPath
-	newLit.Source = quote + newPath + quote
+	qualid := *imp.Qualid
+	if qualid.Type != nil {
+		pkg := &java.JavaTypeClass{Kind: "Class", FullyQualifiedName: newPath}
+		name.Type, qualid.Type = pkg, pkg
+	}
+	qualid.Name.Element = &name
 	c := *imp
-	c.Qualid = &newLit
+	c.Qualid = &qualid
 	return &c
 }
 
 // WithAlias returns imp bound to an explicit local name. The space separating
-// the two is the path literal's prefix, which an unaliased import has none of.
+// the two is the path's prefix, which an unaliased import has none of.
 func WithAlias(imp *java.Import, name string) *java.Import {
-	lit, ok := imp.Qualid.(*java.Literal)
-	if !ok || lit == nil {
+	if imp.Qualid == nil {
 		return imp
 	}
-	spaced := *lit
-	spaced.Prefix = java.SingleSpace
 	c := *imp
-	c.Qualid = &spaced
+	c.Qualid = imp.Qualid.WithPrefix(java.SingleSpace)
 	c.Alias = &java.LeftPadded[*java.Identifier]{
 		Element: &java.Identifier{Prefix: java.EmptySpace, Name: name},
 	}
@@ -227,7 +211,7 @@ func RewriteImports(cu *golang.CompilationUnit, rules []Rule) *golang.Compilatio
 	copy(elements, cu.Imports.Elements)
 	changed := false
 	for i, rp := range elements {
-		path := Path(rp.Element)
+		path := rp.Element.Path()
 		if path == "" {
 			continue
 		}

@@ -67,7 +67,7 @@ func (v *preallocateSliceVisitor) VisitBlock(block *java.Block, p any) java.J {
 		if !ok {
 			continue
 		}
-		if !appendsTo(forEach.Body, name, p) {
+		if !appendsTo(forEach.Body.Element, name, p) {
 			continue
 		}
 		newStmts[i] = java.RightPadded[java.Statement]{
@@ -141,7 +141,7 @@ func withCapacity(stmt java.Statement, mk *java.MethodInvocation, iterable strin
 }
 
 // appendsTo reports whether body appends to a slice named target, at any depth.
-func appendsTo(body *java.Block, target string, p any) bool {
+func appendsTo(body java.Statement, target string, p any) bool {
 	finder := &appendFinder{target: target}
 	visitor.Init(finder).Visit(body, p)
 	return finder.found

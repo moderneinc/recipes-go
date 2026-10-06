@@ -39,7 +39,7 @@ type findUsageVisitor struct {
 
 func (v *findUsageVisitor) VisitImport(imp *java.Import, p any) java.J {
 	imp = v.GoVisitor.VisitImport(imp, p).(*java.Import)
-	newPath, ok := pathswap.MapPath(pathswap.Path(imp), swapRules)
+	newPath, ok := pathswap.MapPath(imp.Path(), swapRules)
 	if !ok {
 		return imp
 	}

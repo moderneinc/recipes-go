@@ -151,7 +151,7 @@ func importsV1(cu *golang.CompilationUnit) bool {
 		return false
 	}
 	for _, rp := range cu.Imports.Elements {
-		if underV1(pathswap.Path(rp.Element)) {
+		if underV1(rp.Element.Path()) {
 			return true
 		}
 	}
@@ -170,7 +170,7 @@ func serviceImports(cu *golang.CompilationUnit) map[string]string {
 		return out
 	}
 	for _, rp := range cu.Imports.Elements {
-		path := pathswap.Path(rp.Element)
+		path := rp.Element.Path()
 		if !strings.HasPrefix(path, v1ServicePkg) {
 			continue
 		}

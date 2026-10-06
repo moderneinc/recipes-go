@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/moderneinc/recipes-go/recipes/migration"
-	"github.com/moderneinc/recipes-go/recipes/migration/internal/pathswap"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -121,7 +120,7 @@ func importsXExp(cu *golang.CompilationUnit) bool {
 		return false
 	}
 	for _, rp := range cu.Imports.Elements {
-		if path := pathswap.Path(rp.Element); path == expModule || strings.HasPrefix(path, expModule+"/") {
+		if path := rp.Element.Path(); path == expModule || strings.HasPrefix(path, expModule+"/") {
 			return true
 		}
 	}
