@@ -4180,6 +4180,7 @@ V XMLClassifier.Classification string
 V XMLClassifier.Name string
 V XMLClassifier.RowTag string
 Q Action.Arguments
+Q BatchDeleteConnectionOutput.Errors
 Q CatalogDeltaSource.AdditionalDeltaOptions
 Q CatalogHudiSource.AdditionalHudiOptions
 Q Column.Parameters
@@ -4196,6 +4197,7 @@ Q CreateDatabaseInput.Tags
 Q CreateDevEndpointInput.Arguments
 Q CreateDevEndpointInput.Tags
 Q CreateDevEndpointOutput.Arguments
+Q CreateJobInput.CodeGenConfigurationNodes
 Q CreateJobInput.DefaultArguments
 Q CreateJobInput.NonOverridableArguments
 Q CreateJobInput.Tags
@@ -4217,13 +4219,16 @@ Q DatabaseInput.Parameters
 Q DevEndpoint.Arguments
 Q EvaluateDataQualityMultiFrame.AdditionalDataSources
 Q EvaluateDataQualityMultiFrame.AdditionalOptions
+Q GetDataQualityRulesetEvaluationRunOutput.AdditionalDataSources
 Q GetPlanInput.AdditionalPlanOptionsMap
 Q GetTagsOutput.Tags
 Q GetWorkflowRunPropertiesOutput.RunProperties
 Q JDBCConnectorTarget.AdditionalOptions
+Q Job.CodeGenConfigurationNodes
 Q Job.DefaultArguments
 Q Job.NonOverridableArguments
 Q JobRun.Arguments
+Q JobUpdate.CodeGenConfigurationNodes
 Q JobUpdate.DefaultArguments
 Q JobUpdate.NonOverridableArguments
 Q ListBlueprintsInput.Tags
@@ -4238,7 +4243,10 @@ Q ListTriggersInput.Tags
 Q OAuth2Properties.TokenUrlParametersMap
 Q Partition.Parameters
 Q PartitionInput.Parameters
+Q ProfileConfiguration.JobConfiguration
+Q ProfileConfiguration.SessionConfiguration
 Q PutWorkflowRunPropertiesInput.RunProperties
+Q QuerySchemaVersionMetadataOutput.MetadataInfoMap
 Q QuerySessionContext.AdditionalContext
 Q RecipeAction.Parameters
 Q S3CatalogDeltaSource.AdditionalDeltaOptions
@@ -4255,6 +4263,7 @@ Q SkewedInfo.SkewedColumnValueLocationMaps
 Q SnowflakeNodeData.AdditionalOptions
 Q SparkConnectorSource.AdditionalOptions
 Q SparkConnectorTarget.AdditionalOptions
+Q StartDataQualityRulesetEvaluationRunInput.AdditionalDataSources
 Q StartJobRunInput.Arguments
 Q StartWorkflowRunInput.RunProperties
 Q StorageDescriptor.Parameters
@@ -4331,6 +4340,55 @@ D UnfilteredPartition.IsRegisteredWithLakeFormation bool
 D UpdateDevEndpointInput.UpdateEtlLibraries bool
 D UpdateTableInput.Force bool
 D XMLClassifier.Version int64
+W CancelStatementInput.Id int64 int32
+W CodeGenNode.LineNumber int64 int32
+W ColumnStatisticsTaskRun.NumberOfWorkers int64 int32
+W CrawlerMetrics.TablesCreated int64 int32
+W CrawlerMetrics.TablesDeleted int64 int32
+W CrawlerMetrics.TablesUpdated int64 int32
+W CreateDevEndpointInput.NumberOfNodes int64 int32
+W CreateDevEndpointOutput.NumberOfNodes int64 int32
+W CreateDevEndpointOutput.ZeppelinRemoteSparkInterpreterPort int64 int32
+W CreateJobInput.AllocatedCapacity int64 int32
+W CreateJobInput.MaxRetries int64 int32
+W DecimalNumber.Scale int64 int32
+W DevEndpoint.NumberOfNodes int64 int32
+W DevEndpoint.ZeppelinRemoteSparkInterpreterPort int64 int32
+W ExecutionProperty.MaxConcurrentRuns int64 int32
+W GetDataQualityRuleRecommendationRunOutput.ExecutionTime int64 int32
+W GetDataQualityRulesetEvaluationRunOutput.ExecutionTime int64 int32
+W GetMLTaskRunOutput.ExecutionTime int64 int32
+W GetMLTransformOutput.LabelCount int64 int32
+W GetStatementInput.Id int64 int32
+W Job.AllocatedCapacity int64 int32
+W Job.MaxRetries int64 int32
+W JobBookmarkEntry.Attempt int64 int32
+W JobBookmarkEntry.Run int64 int32
+W JobBookmarkEntry.Version int64 int32
+W JobRun.AllocatedCapacity int64 int32
+W JobRun.Attempt int64 int32
+W JobRun.ExecutionTime int64 int32
+W JobUpdate.AllocatedCapacity int64 int32
+W JobUpdate.MaxRetries int64 int32
+W ListTableOptimizerRunsInput.MaxResults int64 int32
+W MLTransform.LabelCount int64 int32
+W Order.SortOrder int64 int32
+W RunStatementOutput.Id int64 int32
+W Segment.SegmentNumber int64 int32
+W SelectFromCollection.Index int64 int32
+W StartJobRunInput.AllocatedCapacity int64 int32
+W Statement.Id int64 int32
+W StorageDescriptor.NumberOfBuckets int64 int32
+W TableInput.Retention int64 int32
+W TaskRun.ExecutionTime int64 int32
+W WorkflowRunStatistics.ErroredActions int64 int32
+W WorkflowRunStatistics.FailedActions int64 int32
+W WorkflowRunStatistics.RunningActions int64 int32
+W WorkflowRunStatistics.StoppedActions int64 int32
+W WorkflowRunStatistics.SucceededActions int64 int32
+W WorkflowRunStatistics.TimeoutActions int64 int32
+W WorkflowRunStatistics.TotalActions int64 int32
+W WorkflowRunStatistics.WaitingActions int64 int32
 L Aggregate.Aggs AggregateOperation
 L Aggregate.Inputs -
 L AggregateOperation.Column -

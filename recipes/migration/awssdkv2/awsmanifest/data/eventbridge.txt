@@ -711,6 +711,14 @@ D RedshiftDataParameters.WithEvent bool
 D RemovePermissionInput.RemoveAllPermissions bool
 D RemoveTargetsInput.Force bool
 D TestEventPatternOutput.Result bool
+W BatchArrayProperties.Size int64 int32
+W BatchRetryStrategy.Attempts int64 int32
+W CapacityProviderStrategyItem.Base int64 int32
+W CapacityProviderStrategyItem.Weight int64 int32
+W PutEventsOutput.FailedEntryCount int64 int32
+W PutPartnerEventsOutput.FailedEntryCount int64 int32
+W PutTargetsOutput.FailedEntryCount int64 int32
+W RemoveTargetsOutput.FailedEntryCount int64 int32
 L AwsVpcConfiguration.SecurityGroups -
 L AwsVpcConfiguration.Subnets -
 L ConnectionHttpParameters.BodyParameters ConnectionBodyParameter

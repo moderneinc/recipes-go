@@ -665,6 +665,18 @@ D MapRunItemCounts.Total int64
 D TestStateInput.RevealSecrets bool
 D TracingConfiguration.Enabled bool
 D UpdateStateMachineInput.Publish bool
+W DescribeMapRunOutput.MaxConcurrency int64 int32
+W DescribeMapRunOutput.ToleratedFailurePercentage float64 float32
+W GetExecutionHistoryInput.MaxResults int64 int32
+W ListActivitiesInput.MaxResults int64 int32
+W ListExecutionsInput.MaxResults int64 int32
+W ListMapRunsInput.MaxResults int64 int32
+W ListStateMachineAliasesInput.MaxResults int64 int32
+W ListStateMachineVersionsInput.MaxResults int64 int32
+W ListStateMachinesInput.MaxResults int64 int32
+W MapIterationEventDetails.Index int64 int32
+W MapStateStartedEventDetails.Length int64 int32
+W RoutingConfigurationListItem.Weight int64 int32
 L CreateActivityInput.Tags Tag
 L CreateStateMachineAliasInput.RoutingConfiguration RoutingConfigurationListItem
 L CreateStateMachineInput.Tags Tag

@@ -940,6 +940,10 @@ D ListTrafficPolicyInstancesByHostedZoneOutput.IsTruncated bool
 D ListTrafficPolicyInstancesByPolicyOutput.IsTruncated bool
 D ListTrafficPolicyInstancesOutput.IsTruncated bool
 D ListTrafficPolicyVersionsOutput.IsTruncated bool
+W KeySigningKey.DigestAlgorithmType int64 int32
+W KeySigningKey.Flag int64 int32
+W KeySigningKey.KeyTag int64 int32
+W KeySigningKey.SigningAlgorithmType int64 int32
 L ChangeBatch.Changes Change
 L ChangeCidrCollectionInput.Changes CidrCollectionChange
 L ChangeTagsForResourceInput.AddTags Tag

@@ -72,6 +72,10 @@ type fileScan struct {
 	// sessionOptionsBlocked is set by a session.Options literal carrying
 	// something a v2 config load has no option for.
 	sessionOptionsBlocked bool
+	// consumedOptionRefs are the session references inside an Options literal
+	// handed straight to NewSessionWithOptions, which the rewrite folds into
+	// loader options. Any other reference outlives the session import.
+	consumedOptionRefs map[*java.FieldAccess]bool
 	// configLocal is the name the v2 config import binds, which is the package's
 	// own unless the file already uses it for something else.
 	configLocal string
@@ -477,6 +481,16 @@ func (v *blockerScan) VisitMethodInvocation(mi *java.MethodInvocation, p any) ja
 	}
 	name := mi.Name.Name
 
+	// v2's config is a plain struct with no fluent setters. Only a chain off
+	// aws.NewConfig() handed to a constructor has a rewrite; one on a config
+	// held in a variable or a field does not.
+	if strings.HasPrefix(name, "With") && mi.Select != nil && matcher.DeclaringTypeFQN(mi) == v1Aws+".Config" {
+		if _, chained := mi.Select.Element.(*java.MethodInvocation); !chained {
+			v.block("aws.Config." + name + " on a config held in a variable, which v2 has no setter for")
+			return mi
+		}
+	}
+
 	if call, ok := qualifiedCall(mi, v.scan.sessionPkg); ok {
 		// NewSession has a faithful config form, and Must expands into the load
 		// plus the panic it stood for.
@@ -677,7 +691,15 @@ func (s *fileScan) compositeShapeAt(comp *golang.Composite, cursor *visitor.Curs
 // returning the service that input belongs to. Every v1 operation has this
 // shape, whatever it is called on.
 func (s *fileScan) operationInputService(mi *java.MethodInvocation) (string, bool) {
+	if mi.Name == nil {
+		return "", false
+	}
 	args := realArgs(mi)
+	operation := mi.Name.Name
+	// The WithContext form takes the context first and the input after it.
+	if trimmed := strings.TrimSuffix(operation, "WithContext"); trimmed != operation && trimmed != "" && len(args) == 2 {
+		operation, args = trimmed, args[1:]
+	}
 	if len(args) != 1 {
 		return "", false
 	}
@@ -686,10 +708,10 @@ func (s *fileScan) operationInputService(mi *java.MethodInvocation) (string, boo
 	// input belongs to: a call taking a shape is not an operation on it, as
 	// `json.Marshal(input)` is not.
 	service, shape, isShape := s.inputShape(args[0])
-	if !isShape || mi.Name == nil {
+	if !isShape {
 		return "", false
 	}
-	input, _, isOperation := awsmanifest.OperationShapes(service, mi.Name.Name)
+	input, _, isOperation := awsmanifest.OperationShapes(service, operation)
 	if !isOperation || input != shape {
 		return "", false
 	}
@@ -844,7 +866,7 @@ func (v *blockerScan) VisitFieldAccess(fa *java.FieldAccess, p any) java.J {
 	if name, ok := qualifiedRef(fa, v.scan.sessionPkg); ok {
 		// A session passed between functions becomes the config that replaced
 		// it; anything else the package exported has no counterpart.
-		if name != "Session" && !(sessionOptionNames[name] && !v.scan.sessionOptionsBlocked) {
+		if name != "Session" && !(sessionOptionNames[name] && !v.scan.sessionOptionsBlocked && v.scan.consumedOptionRefs[fa]) {
 			v.block("session." + name + " as a type")
 		}
 		return fa
@@ -1129,6 +1151,19 @@ func (s *fileScan) depointeredFieldOf(fa *java.FieldAccess) (string, bool) {
 	}
 	basic := awsmanifest.Depointered(owner.service, owner.shape, fa.Name.Element.Name)
 	return basic, basic != ""
+}
+
+// narrowedFieldOf names the v1 pointee type of a depointered field v2 also
+// narrowed, or "".
+func (s *fileScan) narrowedFieldOf(fa *java.FieldAccess) string {
+	if fa.Name.Element == nil {
+		return ""
+	}
+	owner, known := s.receiverShape(fa.Target)
+	if !known {
+		return ""
+	}
+	return awsmanifest.NarrowedFrom(owner.service, owner.shape, fa.Name.Element.Name)
 }
 
 // unresolvedEnumField reports whether fa reads a field the imported services

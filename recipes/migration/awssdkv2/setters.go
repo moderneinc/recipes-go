@@ -76,6 +76,9 @@ func (v *migrateVisitor) setterAssignment(mi *java.MethodInvocation) (java.State
 	case awsmanifest.Depointered(owner.service, owner.shape, field) != "":
 		// v2 holds the field as the value the setter already took.
 		assigned = value
+		if from := awsmanifest.NarrowedFrom(owner.service, owner.shape, field); from != "" {
+			assigned = narrowedValue(value, from, awsmanifest.Depointered(owner.service, owner.shape, field))
+		}
 	case awsmanifest.FieldEnum(owner.service, owner.shape, field) != "":
 		assigned = v.enumConversion(value, owner.service, awsmanifest.FieldEnum(owner.service, owner.shape, field))
 	default:

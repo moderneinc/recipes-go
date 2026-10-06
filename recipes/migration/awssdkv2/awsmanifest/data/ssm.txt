@@ -2563,10 +2563,24 @@ V ValidationFindingScope.Id string
 Q AssociationOverview.AssociationStatusAggregatedCount
 Q ComplianceItem.Details
 Q ComplianceItemEntry.Details
+Q CreateOpsItemInput.OperationalData
+Q CreateOpsMetadataInput.Metadata
+Q GetMaintenanceWindowTaskOutput.TaskParameters
+Q GetOpsMetadataOutput.Metadata
 Q InstanceAggregatedAssociationOverview.InstanceAssociationStatusAggregatedCount
 Q InventoryItem.Context
+Q InventoryResultEntity.Data
+Q MaintenanceWindowTask.TaskParameters
 Q OpsAggregator.Values
+Q OpsEntity.Data
+Q OpsItem.OperationalData
+Q OpsItemSummary.OperationalData
+Q RegisterTaskWithMaintenanceWindowInput.TaskParameters
 Q StepExecution.Inputs
+Q UpdateMaintenanceWindowTaskInput.TaskParameters
+Q UpdateMaintenanceWindowTaskOutput.TaskParameters
+Q UpdateOpsItemInput.OperationalData
+Q UpdateOpsMetadataInput.MetadataToUpdate
 P AssociationDescription.Parameters
 P AssociationVersionInfo.Parameters
 P AutomationExecution.Outputs
@@ -2622,6 +2636,51 @@ D StartChangeRequestExecutionInput.AutoApprove bool
 D UpdateAssociationInput.ApplyOnlyAtCronInterval bool
 D UpdateMaintenanceWindowOutput.AllowUnassociatedTargets bool
 D UpdateMaintenanceWindowOutput.Enabled bool
+W Command.CompletedCount int64 int32
+W Command.DeliveryTimedOutCount int64 int32
+W Command.ErrorCount int64 int32
+W Command.TargetCount int64 int32
+W CommandPlugin.ResponseCode int64 int32
+W CompliantSummary.CompliantCount int64 int32
+W CreateMaintenanceWindowInput.Cutoff int64 int32
+W DescribePatchGroupStateOutput.Instances int64 int32
+W DescribePatchGroupStateOutput.InstancesWithFailedPatches int64 int32
+W DescribePatchGroupStateOutput.InstancesWithInstalledOtherPatches int64 int32
+W DescribePatchGroupStateOutput.InstancesWithInstalledPatches int64 int32
+W DescribePatchGroupStateOutput.InstancesWithMissingPatches int64 int32
+W DescribePatchGroupStateOutput.InstancesWithNotApplicablePatches int64 int32
+W GetCommandInvocationOutput.ResponseCode int64 int32
+W GetMaintenanceWindowExecutionTaskOutput.Priority int64 int32
+W GetMaintenanceWindowOutput.Cutoff int64 int32
+W GetMaintenanceWindowTaskOutput.Priority int64 int32
+W InstancePatchState.FailedCount int64 int32
+W InstancePatchState.InstalledCount int64 int32
+W InstancePatchState.InstalledOtherCount int64 int32
+W InstancePatchState.MissingCount int64 int32
+W InstancePatchState.NotApplicableCount int64 int32
+W InventoryDeletionSummary.RemainingCount int64 int32
+W InventoryDeletionSummary.TotalCount int64 int32
+W InventoryDeletionSummaryItem.Count int64 int32
+W InventoryDeletionSummaryItem.RemainingCount int64 int32
+W MaintenanceWindowIdentity.Cutoff int64 int32
+W MaintenanceWindowTask.Priority int64 int32
+W NonCompliantSummary.NonCompliantCount int64 int32
+W OpsItemLimitExceededException.Limit int64 int32
+W Patch.Epoch int64 int32
+W ProgressCounters.CancelledSteps int64 int32
+W ProgressCounters.FailedSteps int64 int32
+W ProgressCounters.SuccessSteps int64 int32
+W ProgressCounters.TimedOutSteps int64 int32
+W ProgressCounters.TotalSteps int64 int32
+W ResourcePolicyLimitExceededException.Limit int64 int32
+W SeveritySummary.CriticalCount int64 int32
+W SeveritySummary.HighCount int64 int32
+W SeveritySummary.InformationalCount int64 int32
+W SeveritySummary.LowCount int64 int32
+W SeveritySummary.MediumCount int64 int32
+W SeveritySummary.UnspecifiedCount int64 int32
+W UpdateMaintenanceWindowOutput.Cutoff int64 int32
+W UpdateMaintenanceWindowTaskOutput.Priority int64 int32
 L Activation.Tags Tag
 L AddTagsToResourceInput.Tags Tag
 L AlarmConfiguration.Alarms Alarm

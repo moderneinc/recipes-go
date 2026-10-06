@@ -1598,6 +1598,8 @@ D UpdateAccountPasswordPolicyInput.RequireLowercaseCharacters bool
 D UpdateAccountPasswordPolicyInput.RequireNumbers bool
 D UpdateAccountPasswordPolicyInput.RequireSymbols bool
 D UpdateAccountPasswordPolicyInput.RequireUppercaseCharacters bool
+W Position.Column int64 int32
+W Position.Line int64 int32
 L ContextEntry.ContextKeyValues -
 L CreateInstanceProfileInput.Tags Tag
 L CreateOpenIDConnectProviderInput.ClientIDList -

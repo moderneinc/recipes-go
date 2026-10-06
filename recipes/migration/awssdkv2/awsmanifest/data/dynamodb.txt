@@ -905,17 +905,28 @@ V VectorIndexInfo.Dimensions int64
 V VectorIndexInfo.IndexName string
 V WarmThroughput.ReadUnitsPerSecond int64
 V WarmThroughput.WriteUnitsPerSecond int64
+Q BatchGetItemInput.RequestItems
+Q BatchGetItemOutput.UnprocessedKeys
 Q ConditionCheck.ExpressionAttributeNames
+Q ConsumedCapacity.GlobalSecondaryIndexes
+Q ConsumedCapacity.LocalSecondaryIndexes
 Q Delete.ExpressionAttributeNames
+Q DeleteItemInput.Expected
 Q DeleteItemInput.ExpressionAttributeNames
 Q Get.ExpressionAttributeNames
 Q GetItemInput.ExpressionAttributeNames
 Q KeysAndAttributes.ExpressionAttributeNames
 Q Put.ExpressionAttributeNames
+Q PutItemInput.Expected
 Q PutItemInput.ExpressionAttributeNames
 Q QueryInput.ExpressionAttributeNames
+Q QueryInput.KeyConditions
+Q QueryInput.QueryFilter
 Q ScanInput.ExpressionAttributeNames
+Q ScanInput.ScanFilter
 Q Update.ExpressionAttributeNames
+Q UpdateItemInput.AttributeUpdates
+Q UpdateItemInput.Expected
 Q UpdateItemInput.ExpressionAttributeNames
 P BatchWriteItemInput.RequestItems
 P BatchWriteItemOutput.ItemCollectionMetrics
@@ -926,6 +937,11 @@ D ImportTableDescription.ErrorCount int64
 D ImportTableDescription.ImportedItemCount int64
 D ImportTableDescription.ProcessedItemCount int64
 D PutResourcePolicyInput.ConfirmRemoveSelfResourceAccess bool
+W ListContributorInsightsInput.MaxResults int64 int32
+W QueryOutput.Count int64 int32
+W QueryOutput.ScannedCount int64 int32
+W ScanOutput.Count int64 int32
+W ScanOutput.ScannedCount int64 int32
 L AutoScalingSettingsDescription.ScalingPolicies AutoScalingPolicyDescription
 L BatchExecuteStatementInput.Statements BatchStatementRequest
 L BatchExecuteStatementOutput.ConsumedCapacity ConsumedCapacity
