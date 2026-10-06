@@ -185,11 +185,13 @@ func buildMapVarDecl(name string, call *java.MethodInvocation, prefix java.Space
 func replaceMapMakeInLoop(loopStmt java.Statement, mi mapMakeInfo) java.Statement {
 	switch loop := loopStmt.(type) {
 	case *java.ForLoop:
-		newBody := replaceMapMakeInBody(loop.Body, mi)
-		return loop.WithBody(newBody)
+		body := loop.Body
+		body.Element = replaceMapMakeInBody(loop.Body.Element.(*java.Block), mi)
+		return loop.WithBody(body)
 	case *java.ForEachLoop:
-		newBody := replaceMapMakeInBody(loop.Body, mi)
-		return loop.WithBody(newBody)
+		body := loop.Body
+		body.Element = replaceMapMakeInBody(loop.Body.Element.(*java.Block), mi)
+		return loop.WithBody(body)
 	}
 	return loopStmt
 }

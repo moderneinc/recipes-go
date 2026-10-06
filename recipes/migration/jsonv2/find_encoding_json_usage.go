@@ -167,7 +167,7 @@ func receiverBaseTypeName(md *golang.MethodDeclaration) string {
 
 func (v *findEncodingJsonUsageVisitor) VisitImport(imp *java.Import, p any) java.J {
 	imp = v.GoVisitor.VisitImport(imp, p).(*java.Import)
-	if path, ok := importPath(imp); ok && path == "encoding/json" {
+	if imp.Path() == "encoding/json" {
 		v.insertRow(p, "import", "encoding/json", importAlias(imp), "rewrite the import to encoding/json/v2")
 	}
 	return imp
@@ -523,7 +523,7 @@ func localJsonPackage(cu *golang.CompilationUnit) string {
 		return ""
 	}
 	for _, imp := range cu.Imports.Elements {
-		if path, ok := importPath(imp.Element); ok && path == "encoding/json" {
+		if imp.Element.Path() == "encoding/json" {
 			if alias := importAlias(imp.Element); alias != "" {
 				return alias
 			}
@@ -531,18 +531,6 @@ func localJsonPackage(cu *golang.CompilationUnit) string {
 		}
 	}
 	return ""
-}
-
-// importPath returns the unquoted path of an import, e.g. "encoding/json".
-func importPath(imp *java.Import) (string, bool) {
-	lit, ok := imp.Qualid.(*java.Literal)
-	if !ok {
-		return "", false
-	}
-	if s, ok := lit.Value.(string); ok {
-		return s, true
-	}
-	return strings.Trim(lit.Source, "`\""), true
 }
 
 // importAlias returns the import alias, or an empty string when unaliased.

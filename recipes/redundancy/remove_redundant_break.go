@@ -44,18 +44,20 @@ type removeRedundantBreakVisitor struct {
 func (v *removeRedundantBreakVisitor) VisitCase(c *java.Case, p any) java.J {
 	c = v.GoVisitor.VisitCase(c, p).(*java.Case)
 
-	if len(c.Body) == 0 {
+	stmts := c.Body.Elements
+	if len(stmts) == 0 {
 		return c
 	}
 
 	// Check if the last statement is a break with no label.
-	last := c.Body[len(c.Body)-1]
+	last := stmts[len(stmts)-1]
 	brk, ok := last.Element.(*java.Break)
 	if !ok || brk.Label != nil {
 		return c
 	}
 
 	// Remove the trailing break.
-	c.Body = c.Body[:len(c.Body)-1]
-	return c
+	copied := *c
+	copied.Body.Elements = stmts[:len(stmts)-1]
+	return &copied
 }

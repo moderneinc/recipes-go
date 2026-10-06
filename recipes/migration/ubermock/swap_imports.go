@@ -68,7 +68,7 @@ func importsOldModule(cu *golang.CompilationUnit) bool {
 		return false
 	}
 	for _, rp := range cu.Imports.Elements {
-		if _, ok := pathswap.MapPath(pathswap.Path(rp.Element), swapRules); ok {
+		if _, ok := pathswap.MapPath(rp.Element.Path(), swapRules); ok {
 			return true
 		}
 	}
@@ -84,10 +84,10 @@ func importsBothForks(cu *golang.CompilationUnit) bool {
 	}
 	existing := map[string]bool{}
 	for _, rp := range cu.Imports.Elements {
-		existing[pathswap.Path(rp.Element)] = true
+		existing[rp.Element.Path()] = true
 	}
 	for _, rp := range cu.Imports.Elements {
-		if newPath, ok := pathswap.MapPath(pathswap.Path(rp.Element), swapRules); ok && existing[newPath] {
+		if newPath, ok := pathswap.MapPath(rp.Element.Path(), swapRules); ok && existing[newPath] {
 			return true
 		}
 	}

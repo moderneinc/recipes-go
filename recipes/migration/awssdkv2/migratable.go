@@ -148,7 +148,7 @@ func scanFile(cu *golang.CompilationUnit) *fileScan {
 	// rewrites call into, and a file already on another errors package binds the
 	// name to that one.
 	for _, rp := range cu.Imports.Elements {
-		if pathswap.LocalName(rp.Element) == errorsPkg && pathswap.Path(rp.Element) != errorsPkg {
+		if pathswap.LocalName(rp.Element) == errorsPkg && rp.Element.Path() != errorsPkg {
 			s.errorsLocal = "std" + errorsPkg
 		}
 	}
@@ -163,7 +163,7 @@ func scanFile(cu *golang.CompilationUnit) *fileScan {
 		s.configLocal = configPkgName + "aws"
 	}
 	for _, rp := range cu.Imports.Elements {
-		path := pathswap.Path(rp.Element)
+		path := rp.Element.Path()
 		if _, blocked := v1OnlyPackages[path]; blocked {
 			s.reason = "v1-only package " + path
 			return s
@@ -182,7 +182,7 @@ func scanFile(cu *golang.CompilationUnit) *fileScan {
 	}
 
 	for _, rp := range cu.Imports.Elements {
-		path := pathswap.Path(rp.Element)
+		path := rp.Element.Path()
 		service, _, isIface := ifacePackageName(path)
 		if !isIface {
 			continue

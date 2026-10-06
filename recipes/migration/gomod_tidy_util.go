@@ -96,7 +96,7 @@ func (v *importCollector) VisitCompilationUnit(cu *golang.CompilationUnit, p any
 	}
 	dir := path.Dir(cu.SourcePath)
 	for _, rp := range cu.Imports.Elements {
-		ip := importPathOf(rp.Element)
+		ip := rp.Element.Path()
 		if ip != "" && !isStdlibImport(ip) {
 			imports := v.acc.importsByDir[dir]
 			if imports == nil {
@@ -112,23 +112,6 @@ func (v *importCollector) VisitCompilationUnit(cu *golang.CompilationUnit, p any
 func (v *importCollector) VisitGoMod(gm *golang.GoMod, p any) java.Tree {
 	v.acc.moduleDirs[path.Dir(gm.SourcePath)] = struct{}{}
 	return v.GoVisitor.VisitGoMod(gm, p)
-}
-
-// importPathOf returns the unquoted import path of an import spec, or "" when
-// the spec is not a plain string literal.
-func importPathOf(imp *java.Import) string {
-	if imp == nil {
-		return ""
-	}
-	lit, ok := imp.Qualid.(*java.Literal)
-	if !ok || lit == nil {
-		return ""
-	}
-	raw := lit.Source
-	if s, ok := lit.Value.(string); ok {
-		raw = s
-	}
-	return strings.Trim(raw, "\"`")
 }
 
 // isStdlibImport reports whether importPath refers to a standard-library

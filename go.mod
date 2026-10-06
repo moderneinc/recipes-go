@@ -2,7 +2,7 @@ module github.com/moderneinc/recipes-go
 
 go 1.25.0
 
-require github.com/openrewrite/rewrite/rewrite-go v0.0.38
+require github.com/openrewrite/rewrite/rewrite-go v0.0.39
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect

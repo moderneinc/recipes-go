@@ -84,7 +84,7 @@ func (v *findMissingGoModRequiresVisitor) VisitCompilationUnit(cu *golang.Compil
 	newElements := make([]java.RightPadded[*java.Import], len(elements))
 	changed := false
 	for i, rp := range elements {
-		if isMissingRequire(importPathOf(rp.Element), &mrr) {
+		if isMissingRequire(rp.Element.Path(), &mrr) {
 			rp.Element = rp.Element.WithMarkers(
 				java.FoundSearchResult(rp.Element.Markers, "missing go.mod requirement"),
 			)

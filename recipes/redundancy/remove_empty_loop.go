@@ -43,7 +43,7 @@ type removeEmptyLoopVisitor struct {
 func (v *removeEmptyLoopVisitor) VisitForLoop(forLoop *java.ForLoop, p any) java.J {
 	forLoop = v.GoVisitor.VisitForLoop(forLoop, p).(*java.ForLoop)
 
-	if !isEmptyBlock(forLoop.Body) {
+	if !isEmptyBlock(forLoop.Body.Element) {
 		return forLoop
 	}
 
@@ -54,7 +54,7 @@ func (v *removeEmptyLoopVisitor) VisitForLoop(forLoop *java.ForLoop, p any) java
 func (v *removeEmptyLoopVisitor) VisitForEachLoop(forEach *java.ForEachLoop, p any) java.J {
 	forEach = v.GoVisitor.VisitForEachLoop(forEach, p).(*java.ForEachLoop)
 
-	if !isEmptyBlock(forEach.Body) {
+	if !isEmptyBlock(forEach.Body.Element) {
 		return forEach
 	}
 
@@ -62,11 +62,12 @@ func (v *removeEmptyLoopVisitor) VisitForEachLoop(forEach *java.ForEachLoop, p a
 	return &java.Empty{}
 }
 
-// isEmptyBlock returns true if the block is nil or contains no real statements
-// (only Empty sentinels).
-func isEmptyBlock(block *java.Block) bool {
-	if block == nil {
-		return true
+// isEmptyBlock reports whether body is a block with no real statements (only
+// Empty sentinels).
+func isEmptyBlock(body java.Statement) bool {
+	block, ok := body.(*java.Block)
+	if !ok {
+		return false
 	}
 	for _, stmt := range block.Statements {
 		if _, isEmpty := stmt.Element.(*java.Empty); !isEmpty {

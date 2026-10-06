@@ -42,7 +42,7 @@ func (v *removeEmptyDefaultVisitor) VisitCase(c *java.Case, p any) java.J {
 	}
 
 	// Body must have no real statements (only Empty sentinels count as empty).
-	for _, stmt := range c.Body {
+	for _, stmt := range c.Body.Elements {
 		if _, ok := stmt.Element.(*java.Empty); !ok {
 			return c
 		}

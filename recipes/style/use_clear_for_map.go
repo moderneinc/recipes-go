@@ -37,14 +37,15 @@ type findMapRangeClearVisitor struct {
 func (v *findMapRangeClearVisitor) VisitForEachLoop(forEach *java.ForEachLoop, p any) java.J {
 	forEach = v.GoVisitor.VisitForEachLoop(forEach, p).(*java.ForEachLoop)
 
-	if forEach.Body == nil {
+	body, ok := forEach.Body.Element.(*java.Block)
+	if !ok {
 		return forEach
 	}
 
 	// The body must have exactly one real statement
 	var onlyStmt java.Statement
 	count := 0
-	for _, stmt := range forEach.Body.Statements {
+	for _, stmt := range body.Statements {
 		if _, isEmpty := stmt.Element.(*java.Empty); !isEmpty {
 			count++
 			onlyStmt = stmt.Element

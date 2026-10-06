@@ -23,7 +23,6 @@ import (
 	"strings"
 
 	"github.com/moderneinc/recipes-go/recipes/migration"
-	"github.com/moderneinc/recipes-go/recipes/migration/internal/pathswap"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -75,7 +74,7 @@ func (s *scanner) VisitCompilationUnit(cu *golang.CompilationUnit, p any) java.J
 	}
 	onOld, onNew := false, false
 	for _, rp := range cu.Imports.Elements {
-		path := pathswap.Path(rp.Element)
+		path := rp.Element.Path()
 		if underModule(path, s.mods.Old) {
 			onOld = true
 		}

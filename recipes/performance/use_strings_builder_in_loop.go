@@ -179,11 +179,13 @@ func buildBuilderStringAssign(variable java.Expression, prefix java.Space) *java
 func replaceAddAssignInLoop(loopStmt java.Statement, sc stringConcatInfo) java.Statement {
 	switch loop := loopStmt.(type) {
 	case *java.ForLoop:
-		newBody := replaceAddAssignInBody(loop.Body, sc)
-		return loop.WithBody(newBody)
+		body := loop.Body
+		body.Element = replaceAddAssignInBody(loop.Body.Element.(*java.Block), sc)
+		return loop.WithBody(body)
 	case *java.ForEachLoop:
-		newBody := replaceAddAssignInBody(loop.Body, sc)
-		return loop.WithBody(newBody)
+		body := loop.Body
+		body.Element = replaceAddAssignInBody(loop.Body.Element.(*java.Block), sc)
+		return loop.WithBody(body)
 	}
 	return loopStmt
 }

@@ -57,7 +57,7 @@ func (v *findUsageVisitor) VisitCompilationUnit(cu *golang.CompilationUnit, p an
 
 func (v *findUsageVisitor) VisitImport(imp *java.Import, p any) java.J {
 	imp = v.GoVisitor.VisitImport(imp, p).(*java.Import)
-	path := pathswap.Path(imp)
+	path := imp.Path()
 	if reason, blocked := v1OnlyPackages[path]; blocked {
 		return imp.WithMarkers(java.MarkupWarn(imp.Markers, reason))
 	}
