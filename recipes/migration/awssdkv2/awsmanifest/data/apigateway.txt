@@ -1339,6 +1339,7 @@ V VpcLink.Id string
 V VpcLink.Name string
 V VpcLink.StatusMessage string
 Q ApiKey.Tags
+Q ApiStage.Throttle
 Q CanarySettings.StageVariableOverrides
 Q ClientCertificate.Tags
 Q CreateApiKeyInput.Tags
@@ -1356,10 +1357,12 @@ Q GetExportInput.Parameters
 Q GetSdkInput.Parameters
 Q GetTagsOutput.Tags
 Q ImportRestApiInput.Parameters
+Q Integration.IntegrationResponses
 Q Integration.RequestParameters
 Q Integration.RequestTemplates
 Q IntegrationResponse.ResponseParameters
 Q IntegrationResponse.ResponseTemplates
+Q Method.MethodResponses
 Q Method.RequestModels
 Q Method.RequestParameters
 Q MethodResponse.ResponseModels
@@ -1375,7 +1378,9 @@ Q PutMethodInput.RequestParameters
 Q PutMethodResponseInput.ResponseModels
 Q PutMethodResponseInput.ResponseParameters
 Q PutRestApiInput.Parameters
+Q Resource.ResourceMethods
 Q RestApi.Tags
+Q Stage.MethodSettings
 Q Stage.Tags
 Q Stage.Variables
 Q TagResourceInput.Tags
@@ -1430,6 +1435,14 @@ D TlsConfig.InsecureSkipVerification bool
 D UpdateGatewayResponseOutput.DefaultResponse bool
 D UpdateRequestValidatorOutput.ValidateRequestBody bool
 D UpdateRequestValidatorOutput.ValidateRequestParameters bool
+W Integration.TimeoutInMillis int64 int32
+W MethodSetting.CacheTtlInSeconds int64 int32
+W MethodSetting.ThrottlingBurstLimit int64 int32
+W QuotaSettings.Limit int64 int32
+W QuotaSettings.Offset int64 int32
+W TestInvokeAuthorizerOutput.ClientStatus int64 int32
+W TestInvokeMethodOutput.Status int64 int32
+W ThrottleSettings.BurstLimit int64 int32
 L ApiKey.StageKeys -
 L Authorizer.ProviderARNs -
 L CreateApiKeyInput.StageKeys StageKey

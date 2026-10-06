@@ -5,6 +5,8 @@
 package awssdkv2
 
 import (
+	"fmt"
+
 	"github.com/google/uuid"
 	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/template"
@@ -15,9 +17,34 @@ import (
 
 // session.Must panics on a failure the v2 loader returns instead, so one
 // statement becomes two: the load, and the panic that Must stood for.
-var mustPanicTemplate = template.StatementTemplate(`if err != nil {
-	panic(err)
-}`).Build()
+var (
+	mustErr           = template.Ident("mustErr")
+	mustPanicTemplate = template.StatementTemplate(fmt.Sprintf(`if %s != nil {
+	panic(%s)
+}`, mustErr, mustErr)).Captures(mustErr).Build()
+)
+
+// mustErrName is the error the load binds: err, unless a later statement in the
+// block declares err by itself, which the load's := would leave with no new
+// variable on its left.
+func mustErrName(later []java.RightPadded[java.Statement]) string {
+	for _, rp := range later {
+		switch stmt := rp.Element.(type) {
+		case *java.Assignment:
+			if id, isIdent := stmt.Variable.(*java.Identifier); isIdent && id.Name == "err" &&
+				java.HasMarker[golang.ShortVarDecl](stmt.Markers) {
+				return "cfgErr"
+			}
+		case *java.VariableDeclarations:
+			for _, v := range stmt.Variables {
+				if v.Element != nil && v.Element.Name != nil && v.Element.Name.Name == "err" {
+					return "cfgErr"
+				}
+			}
+		}
+	}
+	return "err"
+}
 
 // mustSession reports whether a statement is `x := session.Must(…)`, returning
 // the name bound and the call inside.
@@ -53,8 +80,8 @@ func (v *migrateVisitor) mustSession(stmt java.Statement) (name *java.Identifier
 
 // expandMustSession builds the two statements that replace the one: the config
 // load, bound to the same name, and the panic Must performed.
-func (v *migrateVisitor) expandMustSession(cursor *visitor.Cursor, stmt java.Statement, name *java.Identifier, loaded *java.MethodInvocation) ([]java.Statement, bool) {
-	errName := &java.Identifier{Prefix: java.SingleSpace, Name: "err", Type: lstutil.NamedType("error")}
+func (v *migrateVisitor) expandMustSession(cursor *visitor.Cursor, stmt java.Statement, name *java.Identifier, loaded *java.MethodInvocation, errVar string) ([]java.Statement, bool) {
+	errName := &java.Identifier{Prefix: java.SingleSpace, Name: errVar, Type: lstutil.NamedType("error")}
 	load := &golang.MultiAssignment{
 		ID:      uuid.New(),
 		Prefix:  stmt.GetPrefix(),
@@ -72,7 +99,8 @@ func (v *migrateVisitor) expandMustSession(cursor *visitor.Cursor, stmt java.Sta
 	// Applied at the statement being replaced so the template's body picks up
 	// that statement's indentation; instantiating it detached would leave the
 	// panic at column zero.
-	guard := mustPanicTemplate.Apply(visitor.NewCursor(cursor, stmt), template.NewMatchResult())
+	values := template.NewMatchResult().Bind(mustErr, &java.Identifier{Name: errVar, Type: lstutil.NamedType("error")})
+	guard := mustPanicTemplate.Apply(visitor.NewCursor(cursor, stmt), values)
 	if guard == nil {
 		return nil, false
 	}

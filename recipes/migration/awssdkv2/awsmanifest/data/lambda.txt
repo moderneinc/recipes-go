@@ -1687,6 +1687,10 @@ D LayerVersionsListItem.Version int64
 D PublishLayerVersionOutput.Version int64
 D UpdateFunctionCodeInput.DryRun bool
 D UpdateFunctionCodeInput.Publish bool
+W AccountLimit.ConcurrentExecutions int64 int32
+W InvokeAsyncOutput.Status int64 int32
+W InvokeOutput.StatusCode int64 int32
+W InvokeWithResponseStreamOutput.StatusCode int64 int32
 L AllowedPublishers.SigningProfileVersionArns -
 L Cors.AllowHeaders -
 L Cors.AllowMethods -

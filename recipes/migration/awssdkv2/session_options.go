@@ -148,6 +148,35 @@ func (v *sessionOptionsScan) VisitComposite(comp *golang.Composite, p any) java.
 	return v.GoVisitor.VisitComposite(comp, p)
 }
 
+func (v *sessionOptionsScan) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	if call, ok := qualifiedCall(mi, v.scan.sessionPkg); ok && call == "NewSessionWithOptions" {
+		if args := realArgs(mi); len(args) == 1 {
+			if comp, isOptions := v.scan.sessionOptionsLiteral(args[0]); isOptions {
+				refs := visitor.Init(&sessionRefScan{scan: v.scan})
+				refs.Visit(comp, nil)
+			}
+		}
+	}
+	return v.GoVisitor.VisitMethodInvocation(mi, p)
+}
+
+// sessionRefScan records the session references within a literal the rewrite
+// consumes.
+type sessionRefScan struct {
+	visitor.GoVisitor
+	scan *fileScan
+}
+
+func (v *sessionRefScan) VisitFieldAccess(fa *java.FieldAccess, p any) java.J {
+	if _, ok := qualifiedRef(fa, v.scan.sessionPkg); ok {
+		if v.scan.consumedOptionRefs == nil {
+			v.scan.consumedOptionRefs = map[*java.FieldAccess]bool{}
+		}
+		v.scan.consumedOptionRefs[fa] = true
+	}
+	return v.GoVisitor.VisitFieldAccess(fa, p)
+}
+
 // loadConfigFromOptions rewrites session.NewSessionWithOptions as the v2 config
 // load the options it was given amount to.
 func (v *migrateVisitor) loadConfigFromOptions(mi *java.MethodInvocation) java.J {

@@ -284,12 +284,24 @@ Q CreateQueueInput.Tags
 Q GetQueueAttributesOutput.Attributes
 Q ListQueueTagsOutput.Tags
 Q Message.Attributes
+Q Message.MessageAttributes
+Q SendMessageBatchRequestEntry.MessageAttributes
+Q SendMessageBatchRequestEntry.MessageSystemAttributes
+Q SendMessageInput.MessageAttributes
+Q SendMessageInput.MessageSystemAttributes
 Q SetQueueAttributesInput.Attributes
 Q TagQueueInput.Tags
 D BatchResultErrorEntry.SenderFault bool
 D CancelMessageMoveTaskOutput.ApproximateNumberOfMessagesMoved int64
 D ListMessageMoveTasksResultEntry.ApproximateNumberOfMessagesMoved int64
 D ListMessageMoveTasksResultEntry.StartedTimestamp int64
+W ChangeMessageVisibilityBatchRequestEntry.VisibilityTimeout int64 int32
+W ChangeMessageVisibilityInput.VisibilityTimeout int64 int32
+W ReceiveMessageInput.MaxNumberOfMessages int64 int32
+W ReceiveMessageInput.VisibilityTimeout int64 int32
+W ReceiveMessageInput.WaitTimeSeconds int64 int32
+W SendMessageBatchRequestEntry.DelaySeconds int64 int32
+W SendMessageInput.DelaySeconds int64 int32
 L AddPermissionInput.AWSAccountIds -
 L AddPermissionInput.Actions -
 L ChangeMessageVisibilityBatchInput.Entries ChangeMessageVisibilityBatchRequestEntry

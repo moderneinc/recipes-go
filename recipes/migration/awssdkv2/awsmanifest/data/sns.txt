@@ -411,6 +411,8 @@ Q GetSMSAttributesOutput.Attributes
 Q GetSubscriptionAttributesOutput.Attributes
 Q GetTopicAttributesOutput.Attributes
 Q PlatformApplication.Attributes
+Q PublishBatchRequestEntry.MessageAttributes
+Q PublishInput.MessageAttributes
 Q SetEndpointAttributesInput.Attributes
 Q SetPlatformApplicationAttributesInput.Attributes
 Q SetSMSAttributesInput.Attributes

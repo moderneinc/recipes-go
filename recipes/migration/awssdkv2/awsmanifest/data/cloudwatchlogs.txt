@@ -1351,6 +1351,9 @@ D QueryStatistics.BytesScanned float64
 D QueryStatistics.RecordsMatched float64
 D QueryStatistics.RecordsScanned float64
 D StopQueryOutput.Success bool
+W LogGroupField.Percent int64 int32
+W PatternToken.DynamicTokenPosition int64 int32
+W SuppressionPeriod.Value int64 int32
 L Anomaly.LogGroupArnList -
 L Anomaly.LogSamples LogEvent
 L Anomaly.PatternTokens PatternToken

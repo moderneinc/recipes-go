@@ -1402,6 +1402,33 @@ D Task.EnableExecuteCommand bool
 D Task.Version int64
 D UpdateServiceInput.ForceNewDeployment bool
 D UpdateTaskProtectionInput.ProtectionEnabled bool
+W CapacityProviderStrategyItem.Base int64 int32
+W CapacityProviderStrategyItem.Weight int64 int32
+W Cluster.ActiveServicesCount int64 int32
+W Cluster.PendingTasksCount int64 int32
+W Cluster.RegisteredContainerInstancesCount int64 int32
+W Cluster.RunningTasksCount int64 int32
+W ContainerDefinition.Cpu int64 int32
+W ContainerInstance.PendingTasksCount int64 int32
+W ContainerInstance.RunningTasksCount int64 int32
+W Deployment.DesiredCount int64 int32
+W Deployment.FailedTasks int64 int32
+W Deployment.PendingCount int64 int32
+W Deployment.RunningCount int64 int32
+W EphemeralStorage.SizeInGiB int64 int32
+W ListAccountSettingsInput.MaxResults int64 int32
+W Resource.IntegerValue int64 int32
+W Service.DesiredCount int64 int32
+W Service.PendingCount int64 int32
+W Service.RunningCount int64 int32
+W TaskDefinition.Revision int64 int32
+W TaskEphemeralStorage.SizeInGiB int64 int32
+W TaskSet.ComputedDesiredCount int64 int32
+W TaskSet.PendingCount int64 int32
+W TaskSet.RunningCount int64 int32
+W Tmpfs.Size int64 int32
+W Ulimit.HardLimit int64 int32
+W Ulimit.SoftLimit int64 int32
 L Attachment.Details KeyValuePair
 L AwsVpcConfiguration.SecurityGroups -
 L AwsVpcConfiguration.Subnets -

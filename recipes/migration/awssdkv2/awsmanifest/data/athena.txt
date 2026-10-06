@@ -805,6 +805,8 @@ D AthenaError.Retryable bool
 D ColumnInfo.CaseSensitive bool
 D ResultReuseByAgeConfiguration.Enabled bool
 D ResultReuseInformation.ReusedPreviousResult bool
+W ColumnInfo.Precision int64 int32
+W ColumnInfo.Scale int64 int32
 L ApplicationDPUSizes.SupportedDPUSizes -
 L BatchGetNamedQueryInput.NamedQueryIds -
 L BatchGetNamedQueryOutput.NamedQueries NamedQuery

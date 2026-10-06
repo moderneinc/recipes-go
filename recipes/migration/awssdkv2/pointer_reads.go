@@ -28,6 +28,10 @@ func (s *fileScan) pointerRead(fa *java.FieldAccess) (helper, conversion string,
 		return "String", "string", true
 	}
 	if basic, isValue := s.depointeredFieldOf(fa); isValue {
+		// A narrowed field is widened back to the pointer v1 handed out.
+		if from := s.narrowedFieldOf(fa); from != "" {
+			return awsHelperFor(from), from, awsHelperFor(from) != ""
+		}
 		if helper := awsHelperFor(basic); helper != "" {
 			return helper, "", true
 		}

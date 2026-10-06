@@ -80,6 +80,9 @@ type manifest struct {
 	// depointeredFields maps `Shape.Field` to the basic type v2 holds by value
 	// where v1 held a pointer to it.
 	depointeredFields map[string]string
+	// narrowedFields maps a depointered `Shape.Field` to the v1 pointee type,
+	// where v2 also narrowed it: v1's *int64 became an int32.
+	narrowedFields map[string]string
 	// nonEnumFieldNames is the set of field names that are something other than
 	// an enum somewhere in the service, which makes the name alone no evidence
 	// of an enum.
@@ -119,6 +122,7 @@ func load(service string) *manifest {
 		mapValueFields:      map[string]bool{},
 		mapSliceFields:      map[string]bool{},
 		depointeredFields:   map[string]string{},
+		narrowedFields:      map[string]string{},
 		nonEnumFieldNames:   map[string]bool{},
 	}
 	for _, line := range strings.Split(string(raw), "\n") {
@@ -168,6 +172,12 @@ func load(service string) *manifest {
 		case 'D':
 			field, basic, _ := strings.Cut(name, " ")
 			m.depointeredFields[field] = basic
+		case 'W':
+			parts := strings.Fields(name)
+			if len(parts) == 3 {
+				m.depointeredFields[parts[0]] = parts[2]
+				m.narrowedFields[parts[0]] = parts[1]
+			}
 		case 'N':
 			m.nonEnumFieldNames[name] = true
 		}
@@ -295,6 +305,16 @@ func Depointered(service, shape, field string) string {
 		return ""
 	}
 	return m.depointeredFields[shape+"."+field]
+}
+
+// NarrowedFrom names the v1 pointee type of a depointered field v2 also
+// narrowed, or "" where the two hold the same basic type.
+func NarrowedFrom(service, shape, field string) string {
+	m := load(service)
+	if m == nil {
+		return ""
+	}
+	return m.narrowedFields[shape+"."+field]
 }
 
 // IsValueSlice reports whether v2 holds the named field of the named shape by
