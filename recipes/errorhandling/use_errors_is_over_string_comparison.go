@@ -71,10 +71,9 @@ func (v *useErrorsIsOverStringComparisonVisitor) VisitBinary(bin *java.Binary, p
 		return bin
 	}
 
-	bin = bin.WithMarkers(
+	return bin.WithMarkers(
 		java.MarkupWarn(bin.Markers, "comparing error string is fragile; use errors.Is or errors.As"),
 	)
-	return bin
 }
 
 // isErrorMethodCall checks if an expression is a method call of the form x.Error().

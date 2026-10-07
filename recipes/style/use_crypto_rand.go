@@ -72,6 +72,5 @@ func (v *useCryptoRandVisitor) VisitMethodInvocation(mi *java.MethodInvocation, 
 		return mi
 	}
 
-	mi = mi.WithMarkers(java.MarkupInfo(mi.Markers, "consider using crypto/rand for security-sensitive randomness"))
-	return mi
+	return mi.WithMarkers(java.MarkupInfo(mi.Markers, "consider using crypto/rand for security-sensitive randomness"))
 }

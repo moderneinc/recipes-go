@@ -69,8 +69,7 @@ func (v *reuseJsonCodecInLoopVisitor) VisitMethodInvocation(mi *java.MethodInvoc
 		return mi
 	}
 
-	mi = mi.WithMarkers(
+	return mi.WithMarkers(
 		java.MarkupInfo(mi.Markers, "json marshal/unmarshal in loop; consider using a pre-allocated encoder/decoder"),
 	)
-	return mi
 }

@@ -49,6 +49,5 @@ func (v *auditYamlUnmarshalVisitor) VisitMethodInvocation(mi *java.MethodInvocat
 		return mi
 	}
 
-	mi = mi.WithMarkers(java.MarkupInfo(mi.Markers, "yaml.Unmarshal() call; validate input carefully"))
-	return mi
+	return mi.WithMarkers(java.MarkupInfo(mi.Markers, "yaml.Unmarshal() call; validate input carefully"))
 }

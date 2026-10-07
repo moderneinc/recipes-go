@@ -61,6 +61,5 @@ func (v *useDescriptivePackageNameVisitor) VisitCompilationUnit(cu *golang.Compi
 	pkg.Element = pkg.Element.WithMarkers(
 		java.MarkupWarn(pkg.Element.Markers, "package name is too generic; consider a more descriptive name"),
 	)
-	cu = cu.WithPackageDecl(&pkg)
-	return cu
+	return cu.WithPackageDecl(&pkg)
 }

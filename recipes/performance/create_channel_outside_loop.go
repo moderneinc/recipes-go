@@ -78,8 +78,7 @@ func (v *createChannelOutsideLoopVisitor) VisitMethodInvocation(mi *java.MethodI
 		return mi
 	}
 
-	mi = mi.WithMarkers(
+	return mi.WithMarkers(
 		java.MarkupInfo(mi.Markers, "channel creation in loop; consider creating the channel once before the loop"),
 	)
-	return mi
 }

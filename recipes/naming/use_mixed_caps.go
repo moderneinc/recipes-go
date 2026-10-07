@@ -69,8 +69,7 @@ func (v *useMixedCapsVisitor) VisitMethodDeclaration(md *java.MethodDeclaration,
 
 	// Convert underscored name to MixedCaps.
 	newName := toMixedCaps(funcName)
-	md = md.WithName(md.Name.WithName(newName))
-	return md
+	return md.WithName(md.Name.WithName(newName))
 }
 
 // toMixedCaps converts an underscored name to MixedCaps by splitting on "_",

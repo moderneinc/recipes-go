@@ -71,8 +71,7 @@ func (v *avoidOsExitVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p 
 	}
 
 	// Non-zero exit codes: keep but warn.
-	mi = mi.WithMarkers(
+	return mi.WithMarkers(
 		java.MarkupWarn(mi.Markers, "os.Exit bypasses deferred functions and cleanup"),
 	)
-	return mi
 }

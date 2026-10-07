@@ -60,8 +60,7 @@ func (v *useDescriptiveVarNamesVisitor) VisitVariableDeclarator(vd *java.Variabl
 		return vd
 	}
 
-	vd = vd.WithName(vd.Name.WithMarkers(
+	return vd.WithName(vd.Name.WithMarkers(
 		java.MarkupInfo(vd.Name.Markers, "single-letter variable name is not a conventional short name"),
 	))
-	return vd
 }

@@ -46,6 +46,5 @@ func (v *auditJsonNumberVisitor) VisitFieldAccess(fa *java.FieldAccess, p any) j
 		return fa
 	}
 
-	fa = fa.WithMarkers(java.MarkupInfo(fa.Markers, "json.Number should be used carefully"))
-	return fa
+	return fa.WithMarkers(java.MarkupInfo(fa.Markers, "json.Number should be used carefully"))
 }

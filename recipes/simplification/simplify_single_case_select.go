@@ -117,8 +117,7 @@ func (v *findSingleCaseSelectVisitor) VisitBlock(block *java.Block, p any) java.
 		return block
 	}
 
-	block = block.WithStatements(newStmts)
-	return block
+	return block.WithStatements(newStmts)
 }
 
 // replaceLeadingPrefix replaces all leading whitespace of a statement with

@@ -67,8 +67,7 @@ func (v *avoidInitFunctionVisitor) VisitMethodDeclaration(md *java.MethodDeclara
 		return md
 	}
 
-	md = md.WithName(md.Name.WithMarkers(
+	return md.WithName(md.Name.WithMarkers(
 		java.MarkupInfo(md.Name.Markers, "consider removing init function"),
 	))
-	return md
 }

@@ -50,6 +50,5 @@ func (v *auditHttpRedirectVisitor) VisitMethodInvocation(mi *java.MethodInvocati
 		return mi
 	}
 
-	mi = mi.WithMarkers(java.MarkupInfo(mi.Markers, "review redirect target and status code"))
-	return mi
+	return mi.WithMarkers(java.MarkupInfo(mi.Markers, "review redirect target and status code"))
 }

@@ -97,8 +97,7 @@ func (v *findMissingGoModRequiresVisitor) VisitCompilationUnit(cu *golang.Compil
 	}
 	imports := *cu.Imports
 	imports.Elements = newElements
-	cu = cu.WithImports(&imports)
-	return cu
+	return cu.WithImports(&imports)
 }
 
 func isMissingRequire(importPath string, mrr *golang.GoResolutionResult) bool {

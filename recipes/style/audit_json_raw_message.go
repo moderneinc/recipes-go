@@ -46,6 +46,5 @@ func (v *auditJsonRawMessageVisitor) VisitFieldAccess(fa *java.FieldAccess, p an
 		return fa
 	}
 
-	fa = fa.WithMarkers(java.MarkupInfo(fa.Markers, "json.RawMessage defers parsing; review for correctness"))
-	return fa
+	return fa.WithMarkers(java.MarkupInfo(fa.Markers, "json.RawMessage defers parsing; review for correctness"))
 }

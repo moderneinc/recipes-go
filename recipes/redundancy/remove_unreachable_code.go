@@ -59,8 +59,7 @@ func (v *removeUnreachableCodeVisitor) VisitBlock(block *java.Block, p any) java
 		}
 
 		// Found a return that is not the last statement -- remove everything after it.
-		block = block.WithStatements(stmts[:i+1])
-		return block
+		return block.WithStatements(stmts[:i+1])
 	}
 
 	return block

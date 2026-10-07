@@ -46,6 +46,5 @@ func (v *auditContextBackgroundVisitor) VisitMethodInvocation(mi *java.MethodInv
 		return mi
 	}
 
-	mi = mi.WithMarkers(java.MarkupInfo(mi.Markers, "context.Background() call; consider using a passed context instead"))
-	return mi
+	return mi.WithMarkers(java.MarkupInfo(mi.Markers, "context.Background() call; consider using a passed context instead"))
 }

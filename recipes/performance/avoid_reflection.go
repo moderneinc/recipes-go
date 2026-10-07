@@ -49,8 +49,7 @@ func (v *avoidReflectionVisitor) VisitMethodInvocation(mi *java.MethodInvocation
 		return mi
 	}
 
-	mi = mi.WithMarkers(
+	return mi.WithMarkers(
 		java.MarkupInfo(mi.Markers, "reflection is slow; avoid in performance-sensitive code"),
 	)
-	return mi
 }

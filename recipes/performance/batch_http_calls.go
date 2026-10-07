@@ -69,8 +69,7 @@ func (v *batchHttpCallsVisitor) VisitMethodInvocation(mi *java.MethodInvocation,
 		return mi
 	}
 
-	mi = mi.WithMarkers(
+	return mi.WithMarkers(
 		java.MarkupWarn(mi.Markers, "HTTP call in loop; making HTTP requests in tight loops can be slow"),
 	)
-	return mi
 }

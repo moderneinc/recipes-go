@@ -55,8 +55,7 @@ func (v *removePackagePrefixFromNameVisitor) VisitCompilationUnit(cu *golang.Com
 	if cu.PackageDecl != nil {
 		v.pkgName = cu.PackageDecl.Element.Name
 	}
-	cu = v.GoVisitor.VisitCompilationUnit(cu, p).(*golang.CompilationUnit)
-	return cu
+	return v.GoVisitor.VisitCompilationUnit(cu, p).(*golang.CompilationUnit)
 }
 
 func (v *removePackagePrefixFromNameVisitor) VisitMethodDeclaration(md *java.MethodDeclaration, p any) java.J {
@@ -84,6 +83,5 @@ func (v *removePackagePrefixFromNameVisitor) VisitMethodDeclaration(md *java.Met
 
 	// Strip the package prefix from the function name.
 	newName := funcName[len(v.pkgName):]
-	md = md.WithName(md.Name.WithName(newName))
-	return md
+	return md.WithName(md.Name.WithName(newName))
 }

@@ -73,6 +73,5 @@ func (v *useParameterizedSqlQueryVisitor) VisitMethodInvocation(mi *java.MethodI
 		return mi
 	}
 
-	mi = mi.WithMarkers(java.MarkupWarn(mi.Markers, "possible SQL injection via string concatenation"))
-	return mi
+	return mi.WithMarkers(java.MarkupWarn(mi.Markers, "possible SQL injection via string concatenation"))
 }

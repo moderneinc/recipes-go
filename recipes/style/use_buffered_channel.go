@@ -61,6 +61,5 @@ func (v *useBufferedChannelVisitor) VisitMethodInvocation(mi *java.MethodInvocat
 		return mi
 	}
 
-	mi = mi.WithMarkers(java.MarkupInfo(mi.Markers, "unbuffered channel"))
-	return mi
+	return mi.WithMarkers(java.MarkupInfo(mi.Markers, "unbuffered channel"))
 }

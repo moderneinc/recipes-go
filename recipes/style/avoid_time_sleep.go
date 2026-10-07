@@ -50,6 +50,5 @@ func (v *avoidTimeSleepVisitor) VisitMethodInvocation(mi *java.MethodInvocation,
 		return mi
 	}
 
-	mi = mi.WithMarkers(java.MarkupInfo(mi.Markers, "consider using tickers, timers, or context-based synchronization"))
-	return mi
+	return mi.WithMarkers(java.MarkupInfo(mi.Markers, "consider using tickers, timers, or context-based synchronization"))
 }
