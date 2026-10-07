@@ -49,8 +49,7 @@ func (v *checkContextErrorVisitor) VisitMethodInvocation(mi *java.MethodInvocati
 		return mi
 	}
 
-	mi = mi.WithMarkers(
+	return mi.WithMarkers(
 		java.MarkupInfo(mi.Markers, "ctx.Err() found; inspect the context error"),
 	)
-	return mi
 }

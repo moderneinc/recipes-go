@@ -71,6 +71,5 @@ func (v *avoidFormatStringVariableVisitor) VisitMethodInvocation(mi *java.Method
 		return mi
 	}
 
-	mi = mi.WithMarkers(java.MarkupWarn(mi.Markers, "format string is a variable, not a literal; potential format string vulnerability"))
-	return mi
+	return mi.WithMarkers(java.MarkupWarn(mi.Markers, "format string is a variable, not a literal; potential format string vulnerability"))
 }

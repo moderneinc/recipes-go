@@ -51,6 +51,5 @@ func (v *simplifyComplexSwitchVisitor) VisitSwitch(sw *java.Switch, p any) java.
 		return sw
 	}
 
-	sw = sw.WithMarkers(java.MarkupInfo(sw.Markers, "switch has too many cases; consider using a map or strategy pattern"))
-	return sw
+	return sw.WithMarkers(java.MarkupInfo(sw.Markers, "switch has too many cases; consider using a map or strategy pattern"))
 }

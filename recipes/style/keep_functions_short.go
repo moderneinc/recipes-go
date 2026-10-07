@@ -55,10 +55,9 @@ func (v *keepFunctionsShortVisitor) VisitMethodDeclaration(md *java.MethodDeclar
 		return md
 	}
 
-	md = md.WithName(md.Name.WithMarkers(
+	return md.WithName(md.Name.WithMarkers(
 		java.MarkupInfo(md.Name.Markers, "function has too many statements"),
 	))
-	return md
 }
 
 // countStatements counts real statements, excluding Empty sentinels.

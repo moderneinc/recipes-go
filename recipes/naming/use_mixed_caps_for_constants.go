@@ -65,8 +65,7 @@ func (v *useMixedCapsForConstantsVisitor) VisitVariableDeclarator(vd *java.Varia
 
 	// Convert ALL_CAPS to MixedCaps.
 	newName := allCapsToMixedCaps(name)
-	vd = vd.WithName(vd.Name.WithName(newName))
-	return vd
+	return vd.WithName(vd.Name.WithName(newName))
 }
 
 // allCapsToMixedCaps converts an ALL_CAPS_NAME to MixedCaps by splitting on "_",

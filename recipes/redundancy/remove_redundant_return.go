@@ -65,6 +65,5 @@ func (v *removeRedundantReturnVisitor) VisitMethodDeclaration(md *java.MethodDec
 	}
 
 	// Remove the trailing bare return.
-	md = md.WithBody(md.Body.WithStatements(stmts[:len(stmts)-1]))
-	return md
+	return md.WithBody(md.Body.WithStatements(stmts[:len(stmts)-1]))
 }

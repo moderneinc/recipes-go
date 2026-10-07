@@ -53,8 +53,7 @@ func (v *auditTestFatalVisitor) VisitMethodInvocation(mi *java.MethodInvocation,
 		return mi
 	}
 
-	mi = mi.WithMarkers(
+	return mi.WithMarkers(
 		java.MarkupInfo(mi.Markers, "t.Fatal call found; consider t.Error in goroutines"),
 	)
-	return mi
 }

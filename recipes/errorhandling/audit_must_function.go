@@ -43,8 +43,7 @@ func (v *auditMustFunctionVisitor) VisitMethodInvocation(mi *java.MethodInvocati
 		return mi
 	}
 
-	mi = mi.WithMarkers(
+	return mi.WithMarkers(
 		java.MarkupInfo(mi.Markers, "Must* function panics on error; use with care"),
 	)
-	return mi
 }

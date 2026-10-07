@@ -65,8 +65,7 @@ func (v *avoidLockInLoopVisitor) VisitMethodInvocation(mi *java.MethodInvocation
 		return mi
 	}
 
-	mi = mi.WithMarkers(
+	return mi.WithMarkers(
 		java.MarkupWarn(mi.Markers, "lock acquisition in loop; consider locking once outside the loop"),
 	)
-	return mi
 }

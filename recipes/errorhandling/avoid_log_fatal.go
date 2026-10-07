@@ -59,6 +59,5 @@ func (v *avoidLogFatalVisitor) VisitMethodInvocation(mi *java.MethodInvocation, 
 	}
 
 	// Replace the method name: Fatal→Println, Fatalf→Printf, Fatalln→Println
-	mi = mi.WithName(mi.Name.WithName(replacement))
-	return mi
+	return mi.WithName(mi.Name.WithName(replacement))
 }

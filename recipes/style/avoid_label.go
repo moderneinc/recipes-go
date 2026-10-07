@@ -35,6 +35,5 @@ type avoidLabelVisitor struct {
 
 func (v *avoidLabelVisitor) VisitLabel(l *java.Label, p any) java.J {
 	l = v.GoVisitor.VisitLabel(l, p).(*java.Label)
-	l = l.WithMarkers(java.MarkupInfo(l.Markers, "labeled statement indicates complex control flow"))
-	return l
+	return l.WithMarkers(java.MarkupInfo(l.Markers, "labeled statement indicates complex control flow"))
 }

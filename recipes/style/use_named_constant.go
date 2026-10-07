@@ -71,8 +71,7 @@ func (v *useNamedConstantVisitor) VisitLiteral(lit *java.Literal, p any) java.J 
 		return lit
 	}
 
-	lit = lit.WithMarkers(
+	return lit.WithMarkers(
 		java.MarkupInfo(lit.Markers, "magic number; consider using a named constant"),
 	)
-	return lit
 }

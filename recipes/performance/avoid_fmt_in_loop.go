@@ -70,8 +70,7 @@ func (v *avoidFmtInLoopVisitor) VisitMethodInvocation(mi *java.MethodInvocation,
 		return mi
 	}
 
-	mi = mi.WithMarkers(
+	return mi.WithMarkers(
 		java.MarkupInfo(mi.Markers, "fmt formatting in loop; allocates on every call, prefer strconv or direct string operations"),
 	)
-	return mi
 }

@@ -53,8 +53,7 @@ func (v *useDocumentedBlankImportVisitor) VisitImport(imp *java.Import, p any) j
 		return imp
 	}
 
-	imp = imp.WithMarkers(
+	return imp.WithMarkers(
 		java.MarkupInfo(imp.Markers, "blank import used for side effects"),
 	)
-	return imp
 }

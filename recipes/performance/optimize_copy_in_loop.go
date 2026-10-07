@@ -60,8 +60,7 @@ func (v *optimizeCopyInLoopVisitor) VisitMethodInvocation(mi *java.MethodInvocat
 		return mi
 	}
 
-	mi = mi.WithMarkers(
+	return mi.WithMarkers(
 		java.MarkupInfo(mi.Markers, "copy in loop; consider reusing buffer outside loop"),
 	)
-	return mi
 }

@@ -53,8 +53,7 @@ func (v *useMeaningfulReturnValuesVisitor) VisitGoReturn(ret *golang.Return, p a
 		}
 	}
 
-	ret = ret.WithMarkers(
+	return ret.WithMarkers(
 		java.MarkupInfo(ret.Markers, "all return values are nil; possible missing error or result"),
 	)
-	return ret
 }

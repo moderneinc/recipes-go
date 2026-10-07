@@ -66,8 +66,7 @@ func (v *limitReturnValuesVisitor) VisitMethodDeclaration(md *java.MethodDeclara
 		return md
 	}
 
-	md = md.WithName(md.Name.WithMarkers(
+	return md.WithName(md.Name.WithMarkers(
 		java.MarkupInfo(md.Name.Markers, "function has too many return values"),
 	))
-	return md
 }

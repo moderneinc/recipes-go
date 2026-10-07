@@ -60,8 +60,7 @@ func (v *limitFunctionParametersVisitor) VisitMethodDeclaration(md *java.MethodD
 		return md
 	}
 
-	md = md.WithName(md.Name.WithMarkers(
+	return md.WithName(md.Name.WithMarkers(
 		java.MarkupInfo(md.Name.Markers, "function has too many parameters"),
 	))
-	return md
 }

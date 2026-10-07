@@ -72,8 +72,7 @@ func (v *avoidReadAllInLoopVisitor) VisitMethodInvocation(mi *java.MethodInvocat
 		return mi
 	}
 
-	mi = mi.WithMarkers(
+	return mi.WithMarkers(
 		java.MarkupWarn(mi.Markers, "ReadAll in loop; reads entire content into memory each iteration"),
 	)
-	return mi
 }

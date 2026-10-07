@@ -60,6 +60,5 @@ func (v *auditGoroutineClosureVisitor) VisitGoStmt(g *golang.GoStmt, p any) java
 		return g
 	}
 
-	g = g.WithMarkers(java.MarkupInfo(g.Markers, "goroutine with closure"))
-	return g
+	return g.WithMarkers(java.MarkupInfo(g.Markers, "goroutine with closure"))
 }

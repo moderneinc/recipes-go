@@ -50,8 +50,7 @@ func (v *avoidUnsafePackageVisitor) VisitFieldAccess(fa *java.FieldAccess, p any
 		return fa
 	}
 
-	fa = fa.WithMarkers(java.MarkupWarn(fa.Markers, "unsafe package usage"))
-	return fa
+	return fa.WithMarkers(java.MarkupWarn(fa.Markers, "unsafe package usage"))
 }
 
 func (v *avoidUnsafePackageVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
@@ -66,6 +65,5 @@ func (v *avoidUnsafePackageVisitor) VisitMethodInvocation(mi *java.MethodInvocat
 		return mi
 	}
 
-	mi = mi.WithMarkers(java.MarkupWarn(mi.Markers, "unsafe package usage"))
-	return mi
+	return mi.WithMarkers(java.MarkupWarn(mi.Markers, "unsafe package usage"))
 }

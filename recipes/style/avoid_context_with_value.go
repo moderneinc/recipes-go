@@ -50,6 +50,5 @@ func (v *avoidContextWithValueVisitor) VisitMethodInvocation(mi *java.MethodInvo
 		return mi
 	}
 
-	mi = mi.WithMarkers(java.MarkupInfo(mi.Markers, "context.WithValue() call; consider passing dependencies explicitly"))
-	return mi
+	return mi.WithMarkers(java.MarkupInfo(mi.Markers, "context.WithValue() call; consider passing dependencies explicitly"))
 }

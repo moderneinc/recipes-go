@@ -36,6 +36,5 @@ type avoidGotoVisitor struct {
 
 func (v *avoidGotoVisitor) VisitGoto(g *golang.Goto, p any) java.J {
 	g = v.GoVisitor.VisitGoto(g, p).(*golang.Goto)
-	g = g.WithMarkers(java.MarkupWarn(g.Markers, "consider restructuring to avoid goto"))
-	return g
+	return g.WithMarkers(java.MarkupWarn(g.Markers, "consider restructuring to avoid goto"))
 }

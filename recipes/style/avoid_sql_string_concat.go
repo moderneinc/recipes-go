@@ -64,8 +64,7 @@ func (v *avoidSqlStringConcatVisitor) VisitBinary(bin *java.Binary, p any) java.
 	upper := strings.ToUpper(lit.Source)
 	for _, kw := range sqlKeywords {
 		if strings.Contains(upper, kw) {
-			bin = bin.WithMarkers(java.MarkupWarn(bin.Markers, "possible SQL injection via string concatenation"))
-			return bin
+			return bin.WithMarkers(java.MarkupWarn(bin.Markers, "possible SQL injection via string concatenation"))
 		}
 	}
 

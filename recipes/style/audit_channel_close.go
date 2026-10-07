@@ -42,6 +42,5 @@ func (v *auditChannelCloseVisitor) VisitMethodInvocation(mi *java.MethodInvocati
 		return mi
 	}
 
-	mi = mi.WithMarkers(java.MarkupInfo(mi.Markers, "ensure channel is only closed by the sender"))
-	return mi
+	return mi.WithMarkers(java.MarkupInfo(mi.Markers, "ensure channel is only closed by the sender"))
 }

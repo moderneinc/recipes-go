@@ -57,8 +57,7 @@ func (v *limitGoroutinesInLoopVisitor) VisitGoStmt(g *golang.GoStmt, p any) java
 		return g
 	}
 
-	g = g.WithMarkers(
+	return g.WithMarkers(
 		java.MarkupWarn(g.Markers, "goroutine launched in loop; unbounded goroutine creation can cause resource exhaustion"),
 	)
-	return g
 }

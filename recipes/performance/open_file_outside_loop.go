@@ -70,8 +70,7 @@ func (v *openFileOutsideLoopVisitor) VisitMethodInvocation(mi *java.MethodInvoca
 		return mi
 	}
 
-	mi = mi.WithMarkers(
+	return mi.WithMarkers(
 		java.MarkupInfo(mi.Markers, "file open in loop; consider opening file once outside loop"),
 	)
-	return mi
 }

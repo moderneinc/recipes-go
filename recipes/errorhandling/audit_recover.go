@@ -57,8 +57,7 @@ func (v *auditRecoverVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p
 		return mi
 	}
 
-	mi = mi.WithMarkers(
+	return mi.WithMarkers(
 		java.MarkupInfo(mi.Markers, "recover() catches panics; ensure it is in a deferred function"),
 	)
-	return mi
 }

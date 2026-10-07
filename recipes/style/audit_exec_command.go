@@ -57,6 +57,5 @@ func (v *auditExecCommandVisitor) VisitMethodInvocation(mi *java.MethodInvocatio
 		return mi
 	}
 
-	mi = mi.WithMarkers(java.MarkupWarn(mi.Markers, "exec.Command call; ensure arguments are not from untrusted input"))
-	return mi
+	return mi.WithMarkers(java.MarkupWarn(mi.Markers, "exec.Command call; ensure arguments are not from untrusted input"))
 }

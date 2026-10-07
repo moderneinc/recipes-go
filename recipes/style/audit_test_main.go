@@ -48,8 +48,7 @@ func (v *auditTestMainVisitor) VisitMethodDeclaration(md *java.MethodDeclaration
 		return md
 	}
 
-	md = md.WithName(md.Name.WithMarkers(
+	return md.WithName(md.Name.WithMarkers(
 		java.MarkupInfo(md.Name.Markers, "TestMain overrides default test execution"),
 	))
-	return md
 }

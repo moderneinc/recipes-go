@@ -61,8 +61,7 @@ func (v *allocateOutsideLoopVisitor) VisitMethodInvocation(mi *java.MethodInvoca
 		return mi
 	}
 
-	mi = mi.WithMarkers(
+	return mi.WithMarkers(
 		java.MarkupInfo(mi.Markers, "new() in loop; consider allocating once outside the loop"),
 	)
-	return mi
 }

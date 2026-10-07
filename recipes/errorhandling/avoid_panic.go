@@ -41,8 +41,7 @@ func (v *avoidPanicVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p a
 		return mi
 	}
 
-	mi = mi.WithMarkers(
+	return mi.WithMarkers(
 		java.MarkupWarn(mi.Markers, "panic call found; consider returning an error instead"),
 	)
-	return mi
 }

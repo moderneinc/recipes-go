@@ -60,6 +60,5 @@ func (v *keepInterfacesSmallVisitor) VisitInterfaceType(it *golang.InterfaceType
 		return it
 	}
 
-	it = it.WithMarkers(java.MarkupInfo(it.Markers, "interface has too many methods"))
-	return it
+	return it.WithMarkers(java.MarkupInfo(it.Markers, "interface has too many methods"))
 }
