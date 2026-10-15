@@ -38,9 +38,9 @@ dependencies {
 
 val goLicenseSources = fileTree(projectDir) {
     include("**/*.go")
-    // goexportdata writes exportdata.go with a `DO NOT EDIT` banner, so a header
-    // added here would last until the next regeneration.
-    exclude("**/build/**", "**/vendor/**", "**/*exportdata/exportdata.go")
+    // goexportdata and genmodules write their output with a `DO NOT EDIT` banner,
+    // so a header added here would last until the next regeneration.
+    exclude("**/build/**", "**/vendor/**", "**/*exportdata/exportdata.go", "**/awssdkv2/zz_*_gen.go")
 }
 
 val licenseGo by tasks.registering(LicenseCheck::class) {

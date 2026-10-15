@@ -89,11 +89,78 @@ func loadConfigTemplateFor(withs []string) (*template.GoTemplate, bool) {
 	return t, true
 }
 
-// configLiteralOptions reads an aws.Config literal, returning the loader options
-// it amounts to. The literal may be written with or without its address taken.
+// endpointCall wraps an endpoint in the generated helper giving it v1's scheme.
+func endpointCall(endpoint java.Expression) java.Expression {
+	return &java.MethodInvocation{
+		Prefix:     endpoint.GetPrefix(),
+		Name:       &java.Identifier{Name: endpointHelper},
+		Arguments:  java.Container[java.Expression]{Elements: []java.RightPadded[java.Expression]{{Element: lstutil.SetExprPrefix(endpoint, java.EmptySpace)}}},
+		MethodType: lstutil.FuncType("", endpointHelper, nil),
+	}
+}
+
+// configChainOptions reads `aws.NewConfig().WithX(…)…`, returning the loader
+// options it amounts to. Its setters take the value itself where the literal's
+// fields took a pointer, and asking for STS's regional endpoints needs nothing:
+// v2's are always regional.
+func (s *fileScan) configChainOptions(expr java.Expression) ([]configOption, bool) {
+	var options []configOption
+	for {
+		mi, isCall := expr.(*java.MethodInvocation)
+		if !isCall || mi.Name == nil {
+			return nil, false
+		}
+		if helper, isAws := qualifiedCall(mi, s.awsPkg); isAws {
+			if helper != "NewConfig" || len(realArgs(mi)) != 0 {
+				return nil, false
+			}
+			// The chain was read from its last setter back to its head.
+			for i, j := 0, len(options)-1; i < j; i, j = i+1, j-1 {
+				options[i], options[j] = options[j], options[i]
+			}
+			return options, true
+		}
+		args := realArgs(mi)
+		if mi.Select == nil || len(args) != 1 {
+			return nil, false
+		}
+		switch mi.Name.Name {
+		case "WithRegion":
+			options = append(options, configOption{with: "WithRegion", value: args[0]})
+		case "WithEndpoint":
+			options = append(options, configOption{with: "WithBaseEndpoint", value: endpointCall(args[0])})
+		case "WithMaxRetries":
+			options = append(options, configOption{with: "WithRetryMaxAttempts", value: shifted(args[0], configTargets["MaxRetries"].offset)})
+		case "WithSTSRegionalEndpoint":
+			if !s.regionalSTSEndpoint(args[0]) {
+				return nil, false
+			}
+		default:
+			return nil, false
+		}
+		expr = mi.Select.Element
+	}
+}
+
+// regionalSTSEndpoint reports whether expr is endpoints.RegionalSTSEndpoint.
+func (s *fileScan) regionalSTSEndpoint(expr java.Expression) bool {
+	fa, isField := expr.(*java.FieldAccess)
+	if !isField {
+		return false
+	}
+	name, isEndpoints := qualifiedRef(fa, s.endpointsPkg)
+	return isEndpoints && name == "RegionalSTSEndpoint"
+}
+
+// configLiteralOptions reads an aws.Config literal, or a NewConfig chain,
+// returning the loader options it amounts to. Either may be written with or
+// without its address taken or dereferenced.
 func (s *fileScan) configLiteralOptions(expr java.Expression) ([]configOption, bool) {
 	if unary, isUnary := expr.(*golang.Unary); isUnary {
 		expr = unary.Expression
+	}
+	if options, ok := s.configChainOptions(expr); ok {
+		return options, true
 	}
 	comp, isComposite := expr.(*golang.Composite)
 	if !isComposite {
@@ -148,7 +215,10 @@ func (s *fileScan) configFieldOption(field string, value java.Expression) ([]con
 	if !unwrapped {
 		return nil, false
 	}
-	return []configOption{{with: with, value: inner}}, true
+	if field == "Endpoint" {
+		inner = endpointCall(inner)
+	}
+	return []configOption{{with: with, value: shifted(inner, configTargets[field].offset)}}, true
 }
 
 // credentialsOptions maps v1's credential constructors to the loader options
@@ -207,12 +277,14 @@ func (v *migrateVisitor) loadConfigCall(ctx java.Expression, options []configOpt
 	values := template.NewMatchResult().Bind(awsCtx, lstutil.SetExprPrefix(ctx, java.EmptySpace))
 	for i, o := range options {
 		values = values.Bind(awsOpts[i], lstutil.SetExprPrefix(o.value, java.EmptySpace))
+		if o.with == "WithBaseEndpoint" {
+			v.needsConfigHelper = true
+		}
 	}
 	applied := t.Apply(v.Cursor(), values)
 	if applied == nil {
 		return nil, false
 	}
-	v.configUsed = true
 	return v.renamedConfigQualifier(applied), true
 }
 

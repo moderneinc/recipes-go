@@ -25,11 +25,28 @@ var (
 )
 
 // mustErrName is the error the load binds: err, unless a later statement in the
-// block declares err by itself, which the load's := would leave with no new
-// variable on its left.
+// block declares err by itself — beside nothing but blanks, as `_, err :=` does
+// — which the load's := would leave with no new variable on its left.
 func mustErrName(later []java.RightPadded[java.Statement]) string {
 	for _, rp := range later {
 		switch stmt := rp.Element.(type) {
+		case *golang.MultiAssignment:
+			if !java.HasMarker[golang.ShortVarDecl](stmt.Markers) {
+				continue
+			}
+			declaresErr, onlyBlanks := false, true
+			for _, v := range stmt.Variables {
+				id, isIdent := v.Element.(*java.Identifier)
+				switch {
+				case isIdent && id.Name == "err":
+					declaresErr = true
+				case !isIdent || id.Name != "_":
+					onlyBlanks = false
+				}
+			}
+			if declaresErr && onlyBlanks {
+				return "cfgErr"
+			}
 		case *java.Assignment:
 			if id, isIdent := stmt.Variable.(*java.Identifier); isIdent && id.Name == "err" &&
 				java.HasMarker[golang.ShortVarDecl](stmt.Markers) {
@@ -114,12 +131,66 @@ func (v *migrateVisitor) expandMustSession(cursor *visitor.Cursor, stmt java.Sta
 	return []java.Statement{load, guardStmt}, true
 }
 
+// mustExpression rewrites a session.Must the block cannot expand into
+// statements — one returned, passed on, or assigned other than by := — as the
+// generated loader, which panics on a load failure as Must did. A config the
+// caller already held cannot fail to load, so Must around it is just that
+// config.
+func (v *migrateVisitor) mustExpression(mi *java.MethodInvocation, inner java.Expression) (java.Expression, bool) {
+	if v.expandableMust() {
+		return nil, false
+	}
+	loaded, isCall := inner.(*java.MethodInvocation)
+	if !isCall || loaded.Name == nil {
+		return nil, false
+	}
+	switch {
+	case loaded.Name.Name == sessionConfigHelper && loaded.Select == nil:
+		if args := realArgs(loaded); len(args) == 1 {
+			v.carriedConfigs--
+			return lstutil.SetExprPrefix(args[0], mi.Prefix), true
+		}
+	case loaded.Name.Name == "LoadDefaultConfig" && loaded.Select != nil:
+		v.needsConfigHelper = true
+		return lstutil.SetExprPrefix(asCompatConfig(loaded), mi.Prefix), true
+	}
+	return nil, false
+}
+
+// expandableMust reports whether the call being visited is the value of an `x := session.Must(…)`
+// statement, which VisitBlock expands into the load and the panic.
+func (v *migrateVisitor) expandableMust() bool {
+	cursor := v.Cursor()
+	for cursor != nil && cursor.Value() == nil {
+		cursor = cursor.Parent()
+	}
+	if cursor == nil {
+		return false
+	}
+	assignment, isAssignment := parentTree(cursor).(*java.Assignment)
+	if !isAssignment {
+		return false
+	}
+	_, isIdent := assignment.Variable.(*java.Identifier)
+	if !isIdent || !java.HasMarker[golang.ShortVarDecl](assignment.Markers) {
+		return false
+	}
+	for c := cursor.Parent(); c != nil; c = c.Parent() {
+		if c.Value() == java.Tree(assignment) {
+			_, isBlock := parentTree(c).(*java.Block)
+			return isBlock
+		}
+	}
+	return false
+}
+
 // v1's session.New built a session in an expression, deferring any load failure
 // to the first call. v2's loader returns that failure, and an expression has
 // nowhere to return it from, so the load moves into a generated helper that
 // panics as session.Must did.
 const (
 	configHelper            = "awsCompatConfig"
+	endpointHelper          = "awsCompatEndpoint"
 	sharedCredentialsHelper = "awsCompatSharedCredentials"
 	sessionConfigHelper     = "awsCompatSessionConfig"
 	configFileName          = "zz_awssdkv2_config.go"
@@ -131,6 +202,7 @@ package %s
 
 import (
 	"context"
+	"regexp"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -169,6 +241,18 @@ func awsCompatSharedCredentials(ctx context.Context, file, profile string) aws.C
 func awsCompatSessionConfig(cfg aws.Config) (aws.Config, error) {
 	return cfg, nil
 }
+
+// awsCompatEndpoint gives an endpoint written without a scheme the https one
+// aws-sdk-go v1 added; v2 takes the URL as it is given. Empty stays empty,
+// which both read as no endpoint at all.
+func awsCompatEndpoint(endpoint string) string {
+	if endpoint == "" || awsCompatSchemeRE.MatchString(endpoint) {
+		return endpoint
+	}
+	return "https://" + endpoint
+}
+
+var awsCompatSchemeRE = regexp.MustCompile("^([^:]+)://")
 `
 
 // sessionNewConfig rewrites session.New as the generated loader, which takes
@@ -178,9 +262,6 @@ func (v *migrateVisitor) sessionNewConfig(mi *java.MethodInvocation) java.J {
 	if !isCall || applied == mi || applied.Select == nil {
 		return mi
 	}
-	// Without a region the call names nothing from the config package; the
-	// helper file imports it on its own behalf.
-	v.configUsed = len(realArgs(mi)) > 0
 	v.needsConfigHelper = true
 	return lstutil.SetExprPrefix(asCompatConfig(applied), mi.Prefix)
 }
@@ -195,7 +276,6 @@ func (v *migrateVisitor) compatConfigCall(ctx java.Expression, options []configO
 	if !isCall || call.Select == nil {
 		return nil, false
 	}
-	v.configUsed = len(options) > 0
 	v.needsConfigHelper = true
 	return asCompatConfig(call), true
 }

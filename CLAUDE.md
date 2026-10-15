@@ -45,6 +45,27 @@ MODULE_CACHE_TESTS=1 go test ./tests/migration/awssdkv2/ -count=1
 Prime the cache first if it is cold: `go mod download github.com/aws/aws-sdk-go@v1.55.8`
 from a scratch module.
 
+### Building migrated modules
+
+`RewriteRun` compares printed text, so it cannot tell whether migrated output
+compiles or whether go.mod and go.sum suffice. `tests/migration/awssdkv2/compile_test.go`
+migrates small modules on disk and runs `go build` on the result: as migrated,
+after `go mod download all`, and after `go mod tidy`. They fetch modules, so they are gated:
+
+```bash
+COMPILE_TESTS=1 go test ./tests/migration/awssdkv2/ -run TestMigrated -count=1 -v
+```
+
+`TestMigrateRealWorldAwsRepos` does the same for the corpus repositories on
+aws-sdk-go v1, reporting what migrated, what was held back and whether it
+builds. It reads the checkouts `TestParseRealRepos` fetches, so run that first.
+
+The v2 module versions, indirect requirements and go.sum hashes the migration
+writes come from `zz_modules_gen.go`, and the v1 service names a migrated request
+handler still reports from `zz_service_names_gen.go`. Regenerate both with
+`go generate ./recipes/migration/awssdkv2/` after adding a service to the
+manifest, then rerun the gated tests.
+
 ## Releasing
 
 Tag-triggered. Push a `vX.Y.Z` (or `vX.Y.Z-rc.N`) tag from `main` and `.github/workflows/publish.yml` runs the shared `openrewrite/gh-automation` `publish-gradle.yml` workflow, which publishes the recipe-library Maven artifact (catalog metadata) to Maven Central via OSSRH. The Go module itself is served from `proxy.golang.org` as soon as the tag exists — no active push needed.

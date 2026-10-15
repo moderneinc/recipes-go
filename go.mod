@@ -9,6 +9,6 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/stretchr/testify v1.11.1
-	golang.org/x/mod v0.35.0 // indirect
+	golang.org/x/mod v0.35.0
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
