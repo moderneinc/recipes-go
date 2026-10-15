@@ -165,13 +165,13 @@ git push origin v0.1.0
 
 The `publish` workflow (`.github/workflows/publish.yml`) reacts to tags matching
 `vX.Y.Z` or `vX.Y.Z-rc.N` and delegates to the shared
-`openrewrite/gh-automation` `publish-gradle.yml` workflow, which publishes the
-recipe-library Maven artifact (catalog metadata) to Maven Central via OSSRH.
+`openrewrite/gh-automation` `publish-gradle.yml` workflow, which builds and tests
+the tagged commit. No Maven artifact is published, as it would hold no recipes.
 
 The Go module itself is consumed by the Moderne CLI directly from the Go module
 proxy (`proxy.golang.org`). The module lives at the repository root, so a single
-plain `vX.Y.Z` tag serves both the Maven publish and the Go module — no
-subdirectory-prefixed tag is needed. No active push is needed for the Go side —
+plain `vX.Y.Z` tag serves the Go module — no subdirectory-prefixed tag is
+needed. No active push is needed for the Go side —
 once the tag exists on GitHub, `mod config recipes go install
 github.com/moderneinc/recipes-go@vX.Y.Z` resolves it.
 
