@@ -4,7 +4,7 @@ OpenRewrite recipes for Go codebases — code quality, migration, and remediatio
 
 ## Project Structure
 
-The Go module lives at the repository root (module path `github.com/moderneinc/recipes-go`) so that a single plain `vX.Y.Z` tag serves both the Maven publish and the Go module proxy — no subdirectory-prefixed tag is needed.
+The Go module lives at the repository root (module path `github.com/moderneinc/recipes-go`) so that a single plain `vX.Y.Z` tag serves the Go module proxy — no subdirectory-prefixed tag is needed.
 
 - `activate.go` — Registers every recipe with the catalog; `recipes/activate.go` holds the per-category registrations
 - `recipes/` — Recipe implementations by category (simplification, redundancy, style, performance, error handling, naming, migration)
@@ -47,7 +47,7 @@ from a scratch module.
 
 ## Releasing
 
-Tag-triggered. Push a `vX.Y.Z` (or `vX.Y.Z-rc.N`) tag from `main` and `.github/workflows/publish.yml` runs the shared `openrewrite/gh-automation` `publish-gradle.yml` workflow, which publishes the recipe-library Maven artifact (catalog metadata) to Maven Central via OSSRH. The Go module itself is served from `proxy.golang.org` as soon as the tag exists — no active push needed.
+Tag-triggered. Push a `vX.Y.Z` (or `vX.Y.Z-rc.N`) tag from `main` and `.github/workflows/publish.yml` runs the shared `openrewrite/gh-automation` `publish-gradle.yml` workflow, which builds and tests the tagged commit. Nothing is published from there: the Go module is served from `proxy.golang.org` as soon as the tag exists. No Maven artifact is published either, as it would hold no recipes; the workflows don't forward the Code Genome Project AWS keys that the Maven publish needs.
 
 The Go-side dependency on `github.com/openrewrite/rewrite/rewrite-go` requires upstream to have a matching `rewrite-go/vX.Y.Z` tag pushed on `openrewrite/rewrite`. Go's semantic-import-versioning rule means upstream tags must stay at `v0.x.y` or `v1.x.y` unless the module path is bumped to `/v2`+.
 
