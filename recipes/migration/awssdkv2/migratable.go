@@ -36,6 +36,25 @@ type fileScan struct {
 	imdsVars map[string]bool
 	// stscredsPkg is the local name of the assume-role credentials package.
 	stscredsPkg string
+	// expressionPkg is the local name of the DynamoDB expression builder.
+	expressionPkg string
+	// rdsutilsPkg is the local name of the RDS IAM token signer.
+	rdsutilsPkg string
+	// ioPkg, ioutilPkg, bytesPkg and stringsPkg are the names those standard
+	// library packages are imported under.
+	ioPkg, ioutilPkg, bytesPkg, stringsPkg string
+	// managerNameTaken records that the file binds the name an added transfer
+	// manager import would take.
+	managerNameTaken bool
+	// endpointsPkg is the local name of v1's endpoints package.
+	endpointsPkg string
+	// requestPkg is the local name of v1's request package, and handlerReason
+	// what held back a handler added through it. The consumed refs are the
+	// `sess.Handlers` reaches and request references the handler rewrite takes.
+	requestPkg          string
+	handlerReason       string
+	consumedHandlerRefs map[*java.FieldAccess]bool
+	consumedRequestRefs map[*java.FieldAccess]bool
 	// managerVars maps a name holding a transfer manager to which one it holds.
 	managerVars map[string]string
 	services    map[string]string
@@ -72,6 +91,8 @@ type fileScan struct {
 	// sessionOptionsBlocked is set by a session.Options literal carrying
 	// something a v2 config load has no option for.
 	sessionOptionsBlocked bool
+	// consumedAwserrRefs are the awserr.Error references the rewrite replaces.
+	consumedAwserrRefs map[*java.FieldAccess]bool
 	// consumedOptionRefs are the session references inside an Options literal
 	// handed straight to NewSessionWithOptions, which the rewrite folds into
 	// loader options. Any other reference outlives the session import.
@@ -94,6 +115,9 @@ type fileScan struct {
 	// sliceShapes names the shape a variable holds a slice of, so a range over
 	// it binds its elements.
 	sliceShapes map[string]shapeRef
+	// regionConfigs are the locals a client takes as an optional region-only
+	// config.
+	regionConfigs map[string]bool
 	// clients maps a variable holding a service client to that client's service,
 	// so its operation calls can gain a context and name the v2 type they land
 	// on.
@@ -113,6 +137,13 @@ func scanFile(cu *golang.CompilationUnit) *fileScan {
 		imdsVars:            map[string]bool{},
 		managerVars:         map[string]string{},
 		stscredsPkg:         pathswap.Qualifier(cu, v1Stscreds),
+		expressionPkg:       pathswap.Qualifier(cu, v1DynamoExpression),
+		rdsutilsPkg:         pathswap.Qualifier(cu, v1Rdsutils),
+		requestPkg:          pathswap.Qualifier(cu, v1Request),
+		endpointsPkg:        pathswap.Qualifier(cu, v1Endpoints),
+		consumedHandlerRefs: map[*java.FieldAccess]bool{},
+		consumedRequestRefs: map[*java.FieldAccess]bool{},
+		consumedAwserrRefs:  map[*java.FieldAccess]bool{},
 		services:            serviceImports(cu),
 		clients:             map[string]string{},
 		configVars:          map[string][]configOption{},
@@ -138,15 +169,13 @@ func scanFile(cu *golang.CompilationUnit) *fileScan {
 		visitor.Init(&shapeScan{scan: s}).Visit(cu, nil)
 		return s
 	}
-	// A v2 path already in the file would collide with the one the swap
-	// introduces, and the config import replaces the session's own name.
-	for _, name := range []string{v2Aws, v2Config, v2Credentials} {
-		if pathswap.Imports(cu, name) {
+	// A v2 path already in the file would collide with the one the swap moves a
+	// v1 import onto. A file part-way through by hand is otherwise fine.
+	for _, rp := range cu.Imports.Elements {
+		if moved, ok := MapPath(rp.Element.Path()); ok && pathswap.Imports(cu, moved) {
+			s.reason = "imports both " + rp.Element.Path() + " and the v2 path it moves to"
 			return s
 		}
-	}
-	if s.sessionPkg != "" && bindsName(cu, configPkgName) {
-		return s
 	}
 	// The standard library's errors package is what the smithy and missing-region
 	// rewrites call into, and a file already on another errors package binds the
@@ -163,8 +192,13 @@ func scanFile(cu *golang.CompilationUnit) *fileScan {
 	// v2's loader lives in a package called config, a name Go code often gives
 	// a local of its own. Where the file does, the import is aliased rather than
 	// left to be shadowed.
-	if s.sessionPkg != "" && bindsLocalName(cu, configPkgName) {
+	// An import of another package called config is aliased around the same way.
+	if s.sessionPkg != "" && (bindsLocalName(cu, configPkgName) || bindsName(cu, configPkgName)) {
 		s.configLocal = configPkgName + "aws"
+		if bindsLocalName(cu, s.configLocal) || bindsName(cu, s.configLocal) {
+			s.reason = "both config and " + s.configLocal + " already bound, leaving v2's config package no name"
+			return s
+		}
 	}
 	for _, rp := range cu.Imports.Elements {
 		path := rp.Element.Path()
@@ -175,9 +209,9 @@ func scanFile(cu *golang.CompilationUnit) *fileScan {
 		if _, _, isIface := ifacePackageName(path); isIface {
 			continue
 		}
-		if underV1(path) && path != v1Awserr {
-			// awserr has no v2 path at all; its uses become smithy and the
-			// import is dropped rather than repointed.
+		if underV1(path) && path != v1Awserr && path != v1Request && path != v1Endpoints {
+			// awserr and request have no v2 path at all; their uses are
+			// rewritten and the import is dropped rather than repointed.
 			if _, ok := MapPath(path); !ok {
 				s.reason = "no v2 path for " + path
 				return s
@@ -208,11 +242,23 @@ func scanFile(cu *golang.CompilationUnit) *fileScan {
 		}
 	}
 
+	s.ioQualifiers(cu)
+	s.managerNameTaken = s.managerPkg == "" && (bindsName(cu, "manager") || bindsLocalName(cu, "manager"))
+
 	options := visitor.Init(&sessionOptionsScan{scan: s})
 	options.Visit(cu, nil)
 
 	sessions := visitor.Init(&sessionVarScan{scan: s})
 	sessions.Visit(cu, nil)
+
+	visitor.Init(&awserrRefScan{scan: s}).Visit(cu, nil)
+
+	handlers := visitor.Init(&handlerScan{scan: s})
+	handlers.Visit(cu, nil)
+	if s.handlerReason != "" {
+		s.reason = s.handlerReason
+		return s
+	}
 
 	creds := visitor.Init(&credentialsScan{scan: s, consumed: s.credentialsConsumed})
 	creds.Visit(cu, nil)
@@ -238,6 +284,7 @@ func scanFile(cu *golang.CompilationUnit) *fileScan {
 
 	collect := visitor.Init(&clientVarScan{scan: s})
 	collect.Visit(cu, nil)
+	s.regionConfigs = s.regionConfigLocals(cu)
 
 	// After the clients, since a reach through a Config field is only
 	// recognisable once its receiver is known to be one.
@@ -481,6 +528,42 @@ func (v *blockerScan) VisitMethodInvocation(mi *java.MethodInvocation, p any) ja
 	}
 	name := mi.Name.Name
 
+	if reason := v.scan.expressionBlockReason(mi, v.Cursor()); reason != "" {
+		v.block(reason)
+		return mi
+	}
+	if call, ok := qualifiedCall(mi, v.scan.endpointsPkg); ok {
+		v.block("endpoints." + call + ": " + endpointsReason)
+		return mi
+	}
+	if call, ok := qualifiedCall(mi, v.scan.awserrPkg); ok {
+		if _, _, isLiteral := v.scan.awserrNewLiteral(mi); !isLiteral {
+			v.block("awserr." + call + " other than New with no wrapped error, which v2 has no counterpart for")
+		}
+		return mi
+	}
+	if reason := v.scan.rdsutilsBlockReason(mi); reason != "" {
+		v.block(reason)
+		return mi
+	}
+
+	// The aws package's helpers survive only where v2 kept or renamed them.
+	// NewConfig survives as the head of the WithRegion chain a client
+	// constructor's guard has already checked.
+	if helper, ok := qualifiedCall(mi, v.scan.awsPkg); ok {
+		outer, isCall := parentTree(v.Cursor()).(*java.MethodInvocation)
+		inChain := isCall && outer.Select != nil && outer.Select.Element == java.Expression(mi)
+		if _, unwraps := v.scan.readSeekCloserOperand(mi); unwraps {
+			return mi
+		}
+		if managerRelocations[helper] && v.scan.managerNameTaken {
+			v.block("aws." + helper + ", whose v2 package's name the file already binds")
+		} else if !awsPackageSurvivors[helper] && valueHelperRenames[helper] == "" && !managerRelocations[helper] && !(helper == "NewConfig" && inChain) {
+			v.block("aws." + helper + ", which v2 has no counterpart for")
+		}
+		return mi
+	}
+
 	// v2's config is a plain struct with no fluent setters. Only a chain off
 	// aws.NewConfig() handed to a constructor has a rewrite; one on a config
 	// held in a variable or a field does not.
@@ -676,11 +759,17 @@ func (s *fileScan) compositeShapeAt(comp *golang.Composite, cursor *visitor.Curs
 	if !isComposite {
 		return "", "", false
 	}
-	arr, isArray := enclosing.TypeExpr.(*java.ArrayType)
-	if !isArray || arr.ElementType == nil {
+	var elem java.Expression
+	switch t := enclosing.TypeExpr.(type) {
+	case *java.ArrayType:
+		elem = t.ElementType
+	case *golang.MapType:
+		elem = t.Value
+	}
+	if elem == nil {
 		return "", "", false
 	}
-	ref, isShape := s.declaredShape(arr.ElementType)
+	ref, isShape := s.declaredShape(elem)
 	if !isShape {
 		return "", "", false
 	}
@@ -725,6 +814,18 @@ func (v *blockerScan) VisitComposite(comp *golang.Composite, p any) java.J {
 		return comp
 	}
 	cursor := v.Cursor()
+	if v.scan.attributeComposite(comp, cursor) {
+		member, value, ok := attributeMember(comp)
+		if !ok {
+			v.block("an AttributeValue setting other than one of the S, N, B, BOOL and NULL members")
+			return comp
+		}
+		if _, ok := v.scan.memberValue(member, value, cursor); !ok {
+			v.block("an AttributeValue whose " + member + " may be nil, which v1 sent as an empty value the service rejected")
+			return comp
+		}
+		return v.GoVisitor.VisitComposite(comp, p)
+	}
 	// An aws.Config the session does not consume keeps its settings, so each one
 	// has to be a setting v2 still holds on the config.
 	if v.scan.awsConfigLiteral(comp) && !consumedAsSessionConfig(v.scan, cursor) {
@@ -887,7 +988,42 @@ func (v *blockerScan) VisitFieldAccess(fa *java.FieldAccess, p any) java.J {
 		// the constructors and batched shapes have none.
 		if !awserrSupported[name] {
 			v.block("awserr." + name)
+		} else if !v.scan.consumedAwserrRefs[fa] {
+			v.block("awserr." + name + " other than asserted to or declared, which v2 has no counterpart for")
 		}
+		return fa
+	}
+
+	if fa.Name.Element != nil && v.scan.managerPkg != "" && v.scan.managerValue(fa.Target) && !managerFields[fa.Name.Element.Name] {
+		v.block("s3manager field " + fa.Name.Element.Name + ", which v2 holds as a different type")
+		return fa
+	}
+
+	// Only the regional STS setting a NewConfig chain asks for carries over, by
+	// going away; the resolvers and the partition data have no v2 counterpart.
+	if name, ok := qualifiedRef(fa, v.scan.endpointsPkg); ok {
+		outer, isCall := parentTree(v.Cursor()).(*java.MethodInvocation)
+		if name != "RegionalSTSEndpoint" || !isCall || outer.Name == nil || outer.Name.Name != "WithSTSRegionalEndpoint" {
+			v.block("endpoints." + name + ": " + endpointsReason)
+		}
+		return fa
+	}
+	if name, ok := qualifiedRef(fa, v.scan.requestPkg); ok {
+		if !v.scan.consumedRequestRefs[fa] {
+			v.block("request." + name + ": " + requestReason)
+		}
+		return fa
+	}
+	// The handlers a session carried are rewritten where they are added; any
+	// other reach for them, or for a client's, has nothing to land on.
+	if holder, isIdent := fa.Target.(*java.Identifier); isIdent && fa.Name.Element != nil && fa.Name.Element.Name == handlersField &&
+		(v.scan.sessionVars[holder.Name] || v.scan.clients[holder.Name] != "") && !v.scan.consumedHandlerRefs[fa] {
+		v.block("request handlers reached other than by adding one to a session: " + requestReason)
+		return fa
+	}
+
+	if name, ok := qualifiedRef(fa, v.scan.rdsutilsPkg); ok {
+		v.block("rdsutils." + name + " " + rdsConnectionBuilderReason)
 		return fa
 	}
 
@@ -902,7 +1038,9 @@ func (v *blockerScan) VisitFieldAccess(fa *java.FieldAccess, p any) java.J {
 			}
 			return fa
 		}
-		if !awsPackageSurvivors[name] && valueHelperRenames[name] == "" && name != "Config" {
+		if managerRelocations[name] && v.scan.managerNameTaken {
+			v.block("aws." + name + ", whose v2 package's name the file already binds")
+		} else if !awsPackageSurvivors[name] && valueHelperRenames[name] == "" && !managerRelocations[name] && name != "Config" {
 			v.block("aws." + name)
 		}
 		return fa
@@ -932,7 +1070,30 @@ func (v *blockerScan) VisitFieldAccess(fa *java.FieldAccess, p any) java.J {
 				v.block("unknown name " + service + "." + name)
 			}
 		}
+		if service == dynamodbService && name == attributeValue {
+			if reason := v.scan.attributeValueBlockReason(fa, v.Cursor()); reason != "" {
+				v.block(reason)
+			}
+		} else if awsmanifest.IsUnion(service, name) {
+			v.block("union shape " + service + "." + name)
+		}
 		return fa
+	}
+	// A union's value reaches a file through an output without its type ever
+	// being named, so a read of one of its fields holds the file back too.
+	if fa.Name.Element != nil {
+		if v.scan.attributeRead(fa) {
+			if assignedTo(v.Cursor()) || addressTaken(v.Cursor()) {
+				v.block("AttributeValue member ." + fa.Name.Element.Name + " written in place, which v2's member types do not allow")
+			}
+			return fa
+		}
+		for _, service := range v.scan.services {
+			if awsmanifest.IsUnionVariant(service, fa.Name.Element.Name) {
+				v.block("union member read ." + fa.Name.Element.Name + " on a " + service + " value")
+				break
+			}
+		}
 	}
 	return fa
 }
@@ -965,6 +1126,13 @@ func selectIdentifier(mi *java.MethodInvocation) (*java.Identifier, bool) {
 func (s *fileScan) depointeredFieldOf2(fa *java.FieldAccess) bool {
 	_, ok := s.depointeredFieldOf(fa)
 	return ok
+}
+
+// addressTaken reports whether the node the cursor points at is the operand of
+// an `&`.
+func addressTaken(cursor *visitor.Cursor) bool {
+	unary, isUnary := parentTree(cursor).(*golang.Unary)
+	return isUnary && unary.Operator.Element == golang.AddressOf
 }
 
 // dereferenced reports whether the node the cursor points at is the operand of
@@ -1069,6 +1237,33 @@ func (s *fileScan) receiverShape(expr java.Expression) (shapeRef, bool) {
 			return shapeRef{}, false
 		}
 		return shapeRef{service: outer.service, shape: elem}, true
+	case *java.ArrayAccess:
+		// An element of a list of shapes, which the editor may already have
+		// wrapped to hand back v1's pointers.
+		indexed := target.Indexed
+		if mi, wrapped := indexed.(*java.MethodInvocation); wrapped && mi.Name != nil && mi.Name.Name == compatPtrs {
+			if args := realArgs(mi); len(args) == 1 {
+				indexed = args[0]
+			}
+		}
+		switch list := indexed.(type) {
+		case *java.Identifier:
+			elem, held := s.sliceShapes[list.Name]
+			return elem, held
+		case *java.FieldAccess:
+			owner, known := s.receiverShape(list.Target)
+			if !known || list.Name.Element == nil {
+				return shapeRef{}, false
+			}
+			field := list.Name.Element.Name
+			elem := awsmanifest.ValueSliceElement(owner.service, owner.shape, field)
+			if elem == "" || elem == "-" {
+				elem = awsmanifest.FieldShape(owner.service, owner.shape, field)
+			}
+			if elem != "" && elem != "-" {
+				return shapeRef{service: owner.service, shape: elem}, true
+			}
+		}
 	}
 	return shapeRef{}, false
 }

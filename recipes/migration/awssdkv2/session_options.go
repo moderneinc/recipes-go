@@ -196,7 +196,7 @@ func (v *migrateVisitor) loadConfigFromOptions(mi *java.MethodInvocation) java.J
 	// session call becomes the pass-through that keeps the error the v1 one
 	// answered with.
 	if carried != nil {
-		v.needsConfigHelper = true
+		v.carriedConfigs++
 		c := *mi
 		c.Select = nil
 		c.Name = &java.Identifier{Name: sessionConfigHelper}
@@ -234,6 +234,39 @@ func (v *sessionVarScan) VisitVariableDeclarations(vd *java.VariableDeclarations
 		}
 	}
 	return v.GoVisitor.VisitVariableDeclarations(vd, p)
+}
+
+// A session is as often assigned straight from its constructor, whose result
+// the migration turns into the config the variable then holds.
+func (v *sessionVarScan) VisitAssignment(a *java.Assignment, p any) java.J {
+	a = v.GoVisitor.VisitAssignment(a, p).(*java.Assignment)
+	if name, isIdent := a.Variable.(*java.Identifier); isIdent && v.scan.constructsSession(a.Value.Element) {
+		v.scan.sessionVars[name.Name] = true
+	}
+	return a
+}
+
+func (v *sessionVarScan) VisitMultiAssignment(ma *golang.MultiAssignment, p any) java.J {
+	ma = v.GoVisitor.VisitMultiAssignment(ma, p).(*golang.MultiAssignment)
+	if len(ma.Variables) == 2 && len(ma.Values) == 1 && v.scan.constructsSession(ma.Values[0].Element) {
+		if name, isIdent := ma.Variables[0].Element.(*java.Identifier); isIdent {
+			v.scan.sessionVars[name.Name] = true
+		}
+	}
+	return ma
+}
+
+// sessionConstructors are the session package's functions returning one.
+var sessionConstructors = map[string]bool{"Must": true, "New": true, "NewSession": true, "NewSessionWithOptions": true}
+
+// constructsSession reports whether expr is a call building a session.
+func (s *fileScan) constructsSession(expr java.Expression) bool {
+	mi, isCall := expr.(*java.MethodInvocation)
+	if !isCall {
+		return false
+	}
+	call, ok := qualifiedCall(mi, s.sessionPkg)
+	return ok && sessionConstructors[call]
 }
 
 func (v *sessionVarScan) VisitBinary(bin *java.Binary, p any) java.J {

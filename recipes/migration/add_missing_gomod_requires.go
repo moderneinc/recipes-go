@@ -154,6 +154,28 @@ func AddRequire(gm *golang.GoMod, modulePath, version string, indirect bool) *go
 	return insertRequires(gm, []missingRequire{{modulePath: modulePath, version: version, indirect: indirect}})
 }
 
+// AddMissingRequires returns gm requiring every build-list module that provides
+// an imported package and has no `require`, from the module graph resolved at
+// parse time, skipping any module skip names. A caller raising the `go`
+// directive past 1.17 needs this: from there go.mod must list every module the
+// build reads, where before it left the indirect ones to the graph. It is a
+// no-op without a resolved graph, and does not touch go.sum.
+func AddMissingRequires(gm *golang.GoMod, mrr *golang.GoResolutionResult, skip func(modulePath string) bool) *golang.GoMod {
+	if mrr == nil || mrr.ResolutionStatus != golang.GoResolutionResolved || len(mrr.PackageModules) == 0 {
+		return gm
+	}
+	var missing []missingRequire
+	for _, m := range missingRequires(gm, mrr) {
+		if !skip(m.modulePath) {
+			missing = append(missing, m)
+		}
+	}
+	if len(missing) == 0 {
+		return gm
+	}
+	return insertRequires(gm, missing)
+}
+
 // insertRequires adds the missing requirements, routing direct entries to the
 // direct `require` block and indirect entries to the `// indirect` block so the
 // two stay separated the way `go mod tidy` keeps them. A block is created when no

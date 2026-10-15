@@ -82,3 +82,59 @@ func TestFindQuietOnUnrelatedFile(t *testing.T) {
 		`),
 	)
 }
+
+// A sub-package v2 moved or dropped is reported with where it went, not as a
+// service the manifest does not know.
+func TestFindReportsRelocatedSubpackages(t *testing.T) {
+	findSpec().RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				_ "github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+				_ "github.com/aws/aws-sdk-go/service/dynamodb/expression"
+				_ "github.com/aws/aws-sdk-go/service/rds/rdsutils"
+				_ "github.com/aws/aws-sdk-go/service/s3/s3crypto"
+			)
+		`, `
+			package main
+
+			import (
+				/*~~(dynamodbattribute moved to github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue, which writes differently: it ignores json struct tags (add dynamodbav tags, or set TagKey to "json" where the two agree), stores an empty string, byte slice or collection as itself where v1 stored NULL (tag such a field `+"`"+`,nullempty`+"`"+` to keep NULL), and its Marshaler and Unmarshaler take types.AttributeValue)~~>*/_ "github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+				/*~~(migrates to github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression)~~>*/_ "github.com/aws/aws-sdk-go/service/dynamodb/expression"
+				/*~~(migrates to github.com/aws/aws-sdk-go-v2/feature/rds/auth)~~>*/_ "github.com/aws/aws-sdk-go/service/rds/rdsutils"
+				/*~~(s3crypto has no v2 package: move to github.com/aws/amazon-s3-encryption-client-go/v3, whose default policy reads and writes the format v1's V2 client did, and set EnableLegacyUnauthenticatedModes to read objects v1's original client wrote; move on to v4's key-committing format only once every reader of the bucket is on v3)~~>*/_ "github.com/aws/aws-sdk-go/service/s3/s3crypto"
+			)
+		`),
+	)
+}
+
+// The connection-string builder is the part of rdsutils v2 dropped, so it is
+// called out where it is used, with what to write instead.
+func TestFindReportsRdsConnectionStringBuilder(t *testing.T) {
+	findSpec().RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"github.com/aws/aws-sdk-go/aws/credentials"
+				"github.com/aws/aws-sdk-go/service/rds/rdsutils"
+			)
+
+			func dsn(creds *credentials.Credentials) (string, error) {
+				return rdsutils.NewConnectionStringBuilder("db:3306", "us-east-1", "app", "orders", creds).Build()
+			}
+		`, `
+			package main
+
+			import (
+				/*~~(migrates to github.com/aws/aws-sdk-go-v2/credentials)~~>*/"github.com/aws/aws-sdk-go/aws/credentials"
+				/*~~(migrates to github.com/aws/aws-sdk-go-v2/feature/rds/auth)~~>*/"github.com/aws/aws-sdk-go/service/rds/rdsutils"
+			)
+
+			func dsn(creds *credentials.Credentials) (string, error) {
+				return /*~~(rdsutils.NewConnectionStringBuilder has no v2 counterpart: build the DSN by hand, with the token from github.com/aws/aws-sdk-go-v2/feature/rds/auth.BuildAuthToken as the password and the tls and allowCleartextPasswords parameters v1's builder set)~~>*/rdsutils.NewConnectionStringBuilder("db:3306", "us-east-1", "app", "orders", creds).Build()
+			}
+		`),
+	)
+}

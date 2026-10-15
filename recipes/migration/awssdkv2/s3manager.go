@@ -217,6 +217,12 @@ func (s *fileScan) managerMethod(mi *java.MethodInvocation) (string, bool) {
 			return "", false
 		}
 		recv = target.Name.Element.Name
+	case *java.MethodInvocation:
+		// Called on the manager straight off its constructor.
+		if s.constructedManager(target) == "" {
+			return "", false
+		}
+		return mi.Name.Name, true
 	default:
 		return "", false
 	}
@@ -224,6 +230,16 @@ func (s *fileScan) managerMethod(mi *java.MethodInvocation) (string, bool) {
 		return "", false
 	}
 	return mi.Name.Name, true
+}
+
+// constructedManager names the manager a constructor call builds, or "" when
+// the call is not one.
+func (s *fileScan) constructedManager(mi *java.MethodInvocation) string {
+	call, ok := qualifiedCall(mi, s.managerPkg)
+	if !ok {
+		return ""
+	}
+	return strings.TrimPrefix(managerConstructors[call], "New")
 }
 
 // managerInputCall recognises a transfer-manager call by the shape it takes,
@@ -307,6 +323,9 @@ func (v *migrateVisitor) managerCall(mi *java.MethodInvocation) (java.J, bool) {
 	c.Arguments = mi.Arguments
 	c.Arguments.Elements = elements
 	kind := v.scan.managerVars[receiverName(mi)]
+	if ctor, isCall := mi.Select.Element.(*java.MethodInvocation); isCall {
+		kind = v.scan.constructedManager(ctor)
+	}
 	if kind == "" {
 		kind = "Uploader"
 	}
@@ -325,4 +344,48 @@ func receiverName(mi *java.MethodInvocation) string {
 		}
 	}
 	return ""
+}
+
+// v1 kept the in-memory download target in the aws package; v2 moved it into
+// the transfer manager's own, unchanged.
+var managerRelocations = map[string]bool{"NewWriteAtBuffer": true, "WriteAtBuffer": true}
+
+// managerLocal is the name the v2 transfer manager is reached through: the
+// file's own s3manager import, which keeps its name across the swap, or the
+// package's own name in an import the rewrite adds.
+func (s *fileScan) managerLocal() string {
+	if s.managerPkg != "" {
+		return s.managerPkg
+	}
+	return "manager"
+}
+
+// relocatedToManager rewrites a reference to aws.WriteAtBuffer or its
+// constructor onto the transfer manager.
+func (v *migrateVisitor) relocatedToManager(target *java.Identifier) *java.Identifier {
+	if v.scan.managerPkg == "" {
+		v.needsManager = true
+	}
+	return &java.Identifier{Prefix: target.Prefix, Name: v.scan.managerLocal(), Type: lstutil.NamedType(v2S3Manager)}
+}
+
+// managerFields are the transfer-manager fields v2 kept with the same meaning
+// and type. Its S3 is a client interface narrowed to the calls the manager
+// makes, MaxUploadParts became an int32, and RequestOptions is gone.
+var managerFields = map[string]bool{"PartSize": true, "Concurrency": true, "LeavePartsOnError": true}
+
+// managerValue reports whether expr holds a transfer manager: a name the scan
+// bound to one, a field declared as one, or a value attribution types as one.
+func (s *fileScan) managerValue(expr java.Expression) bool {
+	switch e := expr.(type) {
+	case *java.Identifier:
+		if s.managerVars[e.Name] != "" {
+			return true
+		}
+	case *java.FieldAccess:
+		if e.Name.Element != nil && s.managerVars[e.Name.Element.Name] != "" {
+			return true
+		}
+	}
+	return s.attributedManager(expr)
 }

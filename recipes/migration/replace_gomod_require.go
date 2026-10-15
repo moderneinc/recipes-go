@@ -9,6 +9,7 @@ import (
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
+	"golang.org/x/mod/semver"
 )
 
 // ReplaceRequire returns gm with the `require oldPath` directive repointed at
@@ -191,4 +192,56 @@ func isIndirect(rp java.RightPadded[golang.GoModStatement]) bool {
 		}
 	}
 	return false
+}
+
+// RequireAtLeast returns gm requiring modulePath at version or higher: a missing
+// require is added, and one at a lower version is raised in place, keeping its
+// comments and `// indirect` marker. It does not touch go.sum.
+func RequireAtLeast(gm *golang.GoMod, modulePath, version string, indirect bool) *golang.GoMod {
+	if !requiredModuleSet(gm)[modulePath] {
+		return AddRequire(gm, modulePath, version, indirect)
+	}
+	raise := func(d *golang.GoModDirective) (*golang.GoModDirective, bool) {
+		if directiveModulePath(d) != modulePath || len(d.Values) < 2 || semver.Compare(d.Values[1].Text, version) >= 0 {
+			return d, false
+		}
+		return repointDirective(d, modulePath, version), true
+	}
+	statements := make([]java.RightPadded[golang.GoModStatement], len(gm.Statements))
+	copy(statements, gm.Statements)
+	changed := false
+	for i, rp := range statements {
+		switch el := rp.Element.(type) {
+		case *golang.GoModDirective:
+			if el.Keyword == "require" {
+				if d, ok := raise(el); ok {
+					statements[i].Element = d
+					changed = true
+				}
+			}
+		case *golang.GoModBlock:
+			if el.Keyword != "require" {
+				continue
+			}
+			entries := make([]java.RightPadded[golang.GoModStatement], len(el.Entries))
+			copy(entries, el.Entries)
+			blockChanged := false
+			for j, e := range entries {
+				if d, ok := e.Element.(*golang.GoModDirective); ok {
+					if d, ok := raise(d); ok {
+						entries[j].Element = d
+						blockChanged = true
+					}
+				}
+			}
+			if blockChanged {
+				statements[i].Element = el.WithEntries(entries)
+				changed = true
+			}
+		}
+	}
+	if !changed {
+		return gm
+	}
+	return gm.WithStatements(statements)
 }

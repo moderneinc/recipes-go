@@ -17,6 +17,7 @@ import (
 	"embed"
 	"strings"
 	"sync"
+	"unicode"
 )
 
 //go:embed all:data
@@ -77,6 +78,10 @@ type manifest struct {
 	// mapSliceFields is the set of `Shape.Field` holding a map whose slice values
 	// v2 holds by value where v1 held pointers.
 	mapSliceFields map[string]bool
+	// unions are the shapes v2 made union interfaces, and unionVariants the v1
+	// field names their members stand for.
+	unions        map[string]bool
+	unionVariants map[string]bool
 	// depointeredFields maps `Shape.Field` to the basic type v2 holds by value
 	// where v1 held a pointer to it.
 	depointeredFields map[string]string
@@ -182,12 +187,90 @@ func load(service string) *manifest {
 			m.nonEnumFieldNames[name] = true
 		}
 	}
+	m.unions, m.unionVariants = unionsOf(m.types)
+	// A variant spelled like another shape's field cannot tell a union read
+	// from an ordinary one: S3's MetricsFilter has a Prefix member, and half of
+	// S3's shapes a Prefix field.
+	for _, fields := range []map[string]bool{keysOf(m.enumFields), keysOf(m.scalarFields), keysOf(m.listFields),
+		keysOf(m.shapeFields), keysOf(m.pointerScalarFields), m.mapValueFields, m.mapSliceFields, keysOf(m.depointeredFields)} {
+		for key := range fields {
+			if shape, field, ok := strings.Cut(key, "."); ok && !m.unions[shape] {
+				delete(m.unionVariants, field)
+			}
+		}
+	}
 	loaded[service] = m
 	return m
 }
 
+func keysOf[V any](m map[string]V) map[string]bool {
+	keys := make(map[string]bool, len(m))
+	for k := range m {
+		keys[k] = true
+	}
+	return keys
+}
+
+// unionsOf finds the shapes v2 turned into union interfaces, which it spells as
+// the union plus one `<Union>Member<Variant>` type per v1 field.
+func unionsOf(types map[string]bool) (unions, variants map[string]bool) {
+	members := map[string][]string{}
+	for name := range types {
+		base, variant, found := strings.Cut(name, "Member")
+		if found && types[base] && variant != "" && unicode.IsUpper(rune(variant[0])) {
+			members[base] = append(members[base], variant)
+		}
+	}
+	unions, variants = map[string]bool{}, map[string]bool{}
+	for base, vs := range members {
+		if len(vs) < 2 {
+			continue
+		}
+		unions[base] = true
+		// v1 read an event stream through an event channel rather than off the
+		// shape's fields, so its variant names say nothing about a field read.
+		if strings.Contains(base, "Stream") || strings.HasSuffix(base, "Event") {
+			continue
+		}
+		for _, v := range vs {
+			variants[v] = true
+		}
+	}
+	return unions, variants
+}
+
 // Known reports whether a manifest covers the service at all.
 func Known(service string) bool { return load(service) != nil }
+
+// IsUnion reports whether v2 turned the v1 shape into a union interface, whose
+// value is one member type per field v1 could set. Nothing about building or
+// reading one carries over by renaming.
+func IsUnion(service, shape string) bool {
+	m := load(service)
+	return m != nil && m.unions[shape]
+}
+
+// IsUnionVariant reports whether field is one a union shape of the service
+// held in v1, and so a read of it may be a read of a union member.
+func IsUnionVariant(service, field string) bool {
+	m := load(service)
+	return m != nil && m.unionVariants[field]
+}
+
+// Services lists every service a manifest covers, in name order.
+func Services() []string {
+	entries, err := data.ReadDir("data")
+	if err != nil {
+		return nil
+	}
+	var services []string
+	for _, e := range entries {
+		if name, ok := strings.CutSuffix(e.Name(), ".txt"); ok {
+			services = append(services, name)
+		}
+	}
+	return services
+}
 
 // Place answers where the v1 name `<service>.<name>` lands in v2.
 func Place(service, name string) Placement {

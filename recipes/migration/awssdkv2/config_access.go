@@ -5,6 +5,8 @@
 package awssdkv2
 
 import (
+	"strconv"
+
 	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -24,6 +26,10 @@ type configTarget struct {
 	// depointered records that v2 holds it by value where v1 held a pointer, so
 	// a read of it loses its dereference and a write its aws helper.
 	depointered bool
+	// offset is what v2's value adds to v1's. v1 counted retries and v2 counts
+	// attempts, so v1's n is v2's n+1 — which also carries v1's -1, the
+	// service default, to v2's 0, which means the same.
+	offset int64
 }
 
 // configTargets are the settings with a v2 counterpart under the same reach.
@@ -33,7 +39,7 @@ var configTargets = map[string]configTarget{
 	// v2 calls it a CredentialsProvider, and the constructors that fill it are
 	// renamed or stood in for where they are.
 	"Credentials": {name: "Credentials"},
-	"MaxRetries":  {name: "RetryMaxAttempts", depointered: true},
+	"MaxRetries":  {name: "RetryMaxAttempts", depointered: true, offset: 1},
 	"Endpoint":    {name: "BaseEndpoint"},
 	"HTTPClient":  {name: "HTTPClient"},
 }
@@ -142,8 +148,74 @@ func (v *configAccessScan) VisitFieldAccess(fa *java.FieldAccess, p any) java.J 
 		v.scan.configAccessBlocked = "Config." + name + ", which v2 configures elsewhere"
 	} else if target.depointered && !dereferenced(v.Cursor().Parent()) && !assignedTo(v.Cursor().Parent()) {
 		v.scan.configAccessBlocked = "Config." + target.name + " read as the pointer v1 held it in"
+	} else if target.offset != 0 && dereferenced(v.Cursor().Parent()) && writtenThrough(v.Cursor().Parent().Parent()) {
+		// The read becomes v2's value less the offset, which cannot be written to.
+		v.scan.configAccessBlocked = "Config." + target.name + " written through the pointer v1 held it in"
 	}
 	return fa
+}
+
+// writtenThrough reports whether the dereference the cursor points at is
+// written to: assigned, compound-assigned, incremented or decremented.
+func writtenThrough(cursor *visitor.Cursor) bool {
+	switch parent := parentTree(cursor).(type) {
+	case *java.Assignment:
+		return parent.Variable == cursor.Value()
+	case *java.AssignmentOperation, *golang.AssignmentOperation:
+		return true
+	case *java.Unary:
+		switch parent.Operator.Element {
+		case java.PostIncrement, java.PostDecrement:
+			return true
+		}
+	}
+	return false
+}
+
+// shifted adds offset to a setting's value, folding it into an integer literal.
+func shifted(expr java.Expression, offset int64) java.Expression {
+	if offset == 0 {
+		return expr
+	}
+	value, isConstant := intConstant(expr)
+	if isConstant {
+		v := value + offset
+		return &java.Literal{Prefix: expr.GetPrefix(), Value: v, Source: strconv.FormatInt(v, 10), Type: lstutil.NamedType("int")}
+	}
+	op, amount := java.Add, offset
+	if offset < 0 {
+		op, amount = java.Subtract, -offset
+	}
+	// Every Go integer operator binds at least as tightly as + and -, so the
+	// operand needs no parentheses.
+	return &java.Binary{
+		Prefix:   expr.GetPrefix(),
+		Left:     lstutil.SetExprPrefix(expr, java.EmptySpace),
+		Operator: java.LeftPadded[java.BinaryOperator]{Before: java.SingleSpace, Element: op},
+		Right:    &java.Literal{Prefix: java.SingleSpace, Value: amount, Source: strconv.FormatInt(amount, 10), Type: lstutil.NamedType("int")},
+		Type:     lstutil.NamedType("int"),
+	}
+}
+
+// intConstant reads an integer literal, negated or not.
+func intConstant(expr java.Expression) (int64, bool) {
+	sign := int64(1)
+	if unary, isUnary := expr.(*java.Unary); isUnary && unary.Operator.Element == java.Negate {
+		sign, expr = -1, unary.Operand
+	}
+	lit, isLiteral := expr.(*java.Literal)
+	if !isLiteral {
+		return 0, false
+	}
+	value, isInt := lit.Value.(int64)
+	return sign * value, isInt
+}
+
+func parenthesized(expr java.Expression) java.Expression {
+	return &java.Parentheses{
+		Prefix: expr.GetPrefix(),
+		Tree:   java.RightPadded[java.Expression]{Element: lstutil.SetExprPrefix(expr, java.EmptySpace)},
+	}
 }
 
 // assignedTo reports whether the node the cursor points at is the target of an
@@ -201,8 +273,9 @@ func consumedAsSessionConfig(scan *fileScan, cursor *visitor.Cursor) bool {
 		if !isIdent {
 			return false
 		}
+		// A local only a client takes keeps its literals, retyped where they stand.
 		_, isConfigLocal := scan.configLocals[target.Name]
-		return isConfigLocal
+		return isConfigLocal && !scan.regionConfigs[target.Name]
 	}
 	return false
 }
@@ -227,12 +300,24 @@ func (v *migrateVisitor) retypedConfigLiteral(comp *golang.Composite) (java.J, b
 			continue
 		}
 		value := kv.Value.Element
+		// The endpoint takes the scheme v1 would have added, inside the pointer
+		// v2 still holds it by.
+		if key.Name == "Endpoint" {
+			if call, isCall := value.(*java.MethodInvocation); isCall {
+				if helper, isAws := qualifiedCall(call, v.scan.awsPkg); isAws && helper == "String" && len(realArgs(call)) == 1 {
+					c := *call
+					c.Arguments.Elements = []java.RightPadded[java.Expression]{{Element: endpointCall(realArgs(call)[0])}}
+					value = &c
+					v.needsConfigHelper = true
+				}
+			}
+		}
 		if target.depointered {
 			inner, unwrapped := v.scan.pointerValueSource(value)
 			if !unwrapped {
 				continue
 			}
-			value = lstutil.SetExprPrefix(inner, value.GetPrefix())
+			value = lstutil.SetExprPrefix(shifted(inner, target.offset), value.GetPrefix())
 		}
 		replaced := *kv
 		replaced.Key = &java.Identifier{Prefix: key.Prefix, Name: target.name, Type: key.Type}

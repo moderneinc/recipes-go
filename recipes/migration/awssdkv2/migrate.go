@@ -7,6 +7,7 @@ package awssdkv2
 import (
 	"fmt"
 	"path"
+	"slices"
 	"sort"
 	"strings"
 
@@ -14,6 +15,7 @@ import (
 	"github.com/moderneinc/recipes-go/recipes/migration/awssdkv2/awsexportdata"
 	"github.com/moderneinc/recipes-go/recipes/migration/awssdkv2/awsmanifest"
 	"github.com/moderneinc/recipes-go/recipes/migration/internal/pathswap"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/format"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/parser"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	recipegolang "github.com/openrewrite/rewrite/rewrite-go/pkg/recipe/golang"
@@ -69,6 +71,12 @@ type migrateAcc struct {
 	moduleAcc
 	// compatPackages maps a directory to the package declared in it.
 	compatPackages map[string]string
+	// errorPackages does the same for the awserr.New stand-in.
+	errorPackages map[string]string
+	// attributePackages does the same for the AttributeValue getters.
+	attributePackages map[string]string
+	// handlerPackages does the same for the request-handler adapter.
+	handlerPackages map[string]string
 	// configPackages does the same for the session.New replacement, which is a
 	// separate file because it carries imports the slice helpers do not.
 	configPackages map[string]string
@@ -80,7 +88,7 @@ type migrateAcc struct {
 	helperPackages map[string]string
 	// ifaceServices are the services whose v1 iface package the module imports
 	// and the migration regenerates.
-	ifaceServices map[string]bool
+	ifaceServices map[string][]string
 	// modulePath is the go.mod `module` path, which the regenerated iface
 	// packages are imported through.
 	modulePath string
@@ -110,6 +118,7 @@ type migrateAcc struct {
 // holdBack records that file stays on v1, and with it the package it is in.
 func (a *migrateAcc) holdBack(file, reason string) {
 	a.blockerReason(file, reason)
+	a.usage.held[path.Dir(file)] = true
 	if _, held := a.heldBack[path.Dir(file)]; !held {
 		a.heldBack[path.Dir(file)] = file
 	}
@@ -142,15 +151,18 @@ func (a *migrateAcc) ifaceUnreachable() bool {
 
 func (r *MigrateAwsSdkGoToV2) InitialValue(*recipe.ExecutionContext) any {
 	return &migrateAcc{
-		blockers:       map[string]string{},
-		heldBack:       map[string]string{},
-		compatPackages: map[string]string{},
-		configPackages: map[string]string{},
-		waitPackages:   map[string]string{},
-		imdsPackages:   map[string]string{},
-		helperPackages: map[string]string{},
-		ifaceServices:  map[string]bool{},
-		usage:          awsUsageAcc{needed: map[string]bool{}},
+		blockers:          map[string]string{},
+		heldBack:          map[string]string{},
+		compatPackages:    map[string]string{},
+		configPackages:    map[string]string{},
+		waitPackages:      map[string]string{},
+		imdsPackages:      map[string]string{},
+		helperPackages:    map[string]string{},
+		handlerPackages:   map[string]string{},
+		attributePackages: map[string]string{},
+		errorPackages:     map[string]string{},
+		ifaceServices:     map[string][]string{},
+		usage:             newAwsUsageAcc(),
 	}
 }
 
@@ -175,7 +187,7 @@ func (r *MigrateAwsSdkGoToV2) Generate(acc any, ctx *recipe.ExecutionContext) []
 		}
 	}
 	// A package held back on v1 calls none of the helpers.
-	for _, packages := range []map[string]string{a.helperPackages, a.imdsPackages, a.waitPackages, a.configPackages, a.compatPackages} {
+	for _, packages := range []map[string]string{a.errorPackages, a.attributePackages, a.handlerPackages, a.helperPackages, a.imdsPackages, a.waitPackages, a.configPackages, a.compatPackages} {
 		for dir := range packages {
 			if _, held := a.heldBack[dir]; held {
 				delete(packages, dir)
@@ -189,15 +201,41 @@ func (r *MigrateAwsSdkGoToV2) Generate(acc any, ctx *recipe.ExecutionContext) []
 	// v2 deleted the iface packages outright, so a replacement is written under
 	// the v2 path its importers now name. Their importers stay on v1 when there
 	// is no module path, but the files around them still need their helpers.
-	for service := range a.ifaceServices {
+	for service, importers := range a.ifaceServices {
 		if a.ifaceUnreachable() {
 			break
+		}
+		// Only a migrating importer names the regenerated package; one held
+		// back keeps importing v1's, and nothing would require v2's service.
+		if !slices.ContainsFunc(importers, func(dir string) bool { _, held := a.heldBack[dir]; return !held }) {
+			continue
 		}
 		source, ok := ifaceSource(service)
 		if !ok {
 			continue
 		}
 		cu, err := parser.NewGoParser().Parse(path.Join(ifaceDir(service), ifaceFileName), source)
+		if err != nil {
+			continue
+		}
+		out = append(out, cu)
+	}
+	for dir, pkg := range a.errorPackages {
+		cu, err := parser.NewGoParser().Parse(path.Join(dir, errorHelperFile), fmt.Sprintf(errorHelperSource, pkg))
+		if err != nil {
+			continue
+		}
+		out = append(out, cu)
+	}
+	for dir, pkg := range a.attributePackages {
+		cu, err := parser.NewGoParser().Parse(path.Join(dir, attributeValueFile), fmt.Sprintf(attributeValueSource, pkg))
+		if err != nil {
+			continue
+		}
+		out = append(out, cu)
+	}
+	for dir, pkg := range a.handlerPackages {
+		cu, err := parser.NewGoParser().Parse(path.Join(dir, handlerFile), handlerFileSource(pkg))
 		if err != nil {
 			continue
 		}
@@ -249,6 +287,11 @@ type compatScanner struct {
 	acc *migrateAcc
 }
 
+func (v *compatScanner) VisitGoMod(gm *golang.GoMod, p any) java.Tree {
+	recordBuildList(&v.acc.usage, gm)
+	return v.GoVisitor.VisitGoMod(gm, p)
+}
+
 func (v *compatScanner) VisitGoModDirective(d *golang.GoModDirective, p any) java.Tree {
 	if len(d.Values) == 1 {
 		switch d.Keyword {
@@ -276,9 +319,9 @@ func (v *compatScanner) VisitCompilationUnit(cu *golang.CompilationUnit, p any) 
 	if len(scan.ifacePaths) > 0 {
 		v.acc.ifaceFiles = append(v.acc.ifaceFiles, cu.SourcePath)
 	}
-	for _, path := range scan.ifacePaths {
-		if service, _, ok := ifacePackageName(path); ok {
-			v.acc.ifaceServices[service] = true
+	for _, ifacePath := range scan.ifacePaths {
+		if service, _, ok := ifacePackageName(ifacePath); ok {
+			v.acc.ifaceServices[service] = append(v.acc.ifaceServices[service], path.Dir(cu.SourcePath))
 		}
 	}
 	if cu.PackageDecl == nil || cu.PackageDecl.Element == nil {
@@ -312,11 +355,25 @@ func (a *migrateAcc) probe(cu *golang.CompilationUnit) {
 		a.configPackages[dir] = pkg
 		// The generated loader names both packages whether or not the source it
 		// stands in for did.
-		a.usage.needed[v2Module] = true
-		a.usage.needed[v2Config] = true
+		a.usage.imported[v2Module] = true
+		a.usage.imported[v2Config] = true
 	}
 	if probe.needsCompat {
 		a.compatPackages[dir] = pkg
+	}
+	if probe.needsErrorHelper {
+		a.errorPackages[dir] = pkg
+	}
+	if probe.needsAttributeHelpers {
+		a.attributePackages[dir] = pkg
+	}
+	if probe.needsManager {
+		a.usage.imported[v2S3Manager] = true
+	}
+	if probe.needsHandlers {
+		a.handlerPackages[dir] = pkg
+		a.usage.imported[v2Module] = true
+		a.usage.imported[smithyGo] = true
 	}
 }
 
@@ -357,7 +414,7 @@ func (r *MigrateAwsSdkGoToV2) DisplayName() string {
 	return "Migrate `aws-sdk-go` to `aws-sdk-go-v2`"
 }
 func (r *MigrateAwsSdkGoToV2) Description() string {
-	return "Migrate `github.com/aws/aws-sdk-go`, whose support AWS ended in July 2025, to `github.com/aws/aws-sdk-go-v2`. The go directive rises to the Go 1.24 the v2 modules require; the session becomes a config loaded through a context, with each `aws.Config` field it carried — the region, the endpoint, the retry count, a static or shared credentials provider — becoming the loader option that replaces it; each client is built with `NewFromConfig`, a per-client region override becoming a functional option; and every operation takes a context. A config built field by field instead of in one literal keeps its shape: the load moves to the local's declaration and the writes that follow retarget onto v2's own config, with the S3 addressing style — which v2 holds on the client's options rather than the config — hoisted into a local the constructor reads. Shapes and enums follow the manifest to the `types` sub-package, an enum field losing the `aws.String` its `*string` needed and an enum list changing element type with it; v1's fluent setters become assignments; and a field v2 holds by value loses the dereference that read it, or regains the pointer where it was passed on — v1 could report such a field as nil and v2 cannot, so review a nil test downstream of one. The packages v2 relocated follow too: `s3manager` becomes `feature/s3/manager`, `ec2metadata` becomes `feature/ec2/imds` and `stscreds` moves up beside `credentials`, each bound back to the name the file already spells, and the per-service `iface` packages v2 deleted are regenerated into the module under `internal/awsiface`, so the interfaces mocks embed still exist. Where v2 restructured rather than renamed, a wrapper keeps the v1 call site's shape: a page iterator's callback is driven by the v2 paginator in a function literal called on the spot, a waiter becomes v2's waiter type bounded by a generated constant, an inline `session.New` becomes a generated loader that panics as `session.Must` did, `EC2Metadata.Region` goes through a generated helper, and a list or map v2 holds by value is converted at the API boundary by generated helpers so the code around it keeps its v1 shape. v1 took no context anywhere v2 takes one, so a function with none in scope gets `context.TODO()` — review those and plumb a real context through. A package migrates whole or not at all, since a half-migrated one does not compile, but the module does not: a file holding a construct with no faithful v2 form — the v1 request handler stack, a session compared to nil, a shared-credentials provider assigned to a config field, a v1-only helper the manifest cannot account for — is left as it is along with the rest of its package, each listed in the blockers data table, and the rest of the module moves around it. Both requires then sit in the go.mod side by side. A client and a shape cross package boundaries, so callers of what stayed behind will not compile until it is migrated by hand; that table is the list to work through, and `FindAwsSdkGoV1Usage` marks the constructs within each file. Run `go mod tidy` afterwards to resolve the per-service modules."
+	return "Migrate `github.com/aws/aws-sdk-go`, whose support AWS ended in July 2025, to `github.com/aws/aws-sdk-go-v2`. The go directive rises to the Go 1.24 the v2 modules require; the session becomes a config loaded through a context, with each `aws.Config` field it carried — the region, the endpoint, the retry count, a static or shared credentials provider — becoming the loader option that replaces it; each client is built with `NewFromConfig`, a per-client region override — or a config local that is nil or sets only the region — becoming a functional option; and every operation takes a context. A config built field by field instead of in one literal keeps its shape: the load moves to the local's declaration and the writes that follow retarget onto v2's own config, with the S3 addressing style — which v2 holds on the client's options rather than the config — hoisted into a local the constructor reads. Shapes and enums follow the manifest to the `types` sub-package, an enum field losing the `aws.String` its `*string` needed and an enum list changing element type with it; v1's fluent setters become assignments; and a field v2 holds by value loses the dereference that read it, or regains the pointer where it was passed on — v1 could report such a field as nil and v2 cannot, so review a nil test downstream of one. The packages v2 relocated follow too: `s3manager` becomes `feature/s3/manager`, `ec2metadata` becomes `feature/ec2/imds`, the DynamoDB `expression` builder becomes `feature/dynamodb/expression` — short of an operand v2's encoder would store differently — `rdsutils.BuildAuthToken` becomes `feature/rds/auth`'s, taking a context and the config's credentials provider, and `stscreds` moves up beside `credentials`, each bound back to the name the file already spells, and the per-service `iface` packages v2 deleted are regenerated into the module under `internal/awsiface`, so the interfaces mocks embed still exist. Where v2 restructured rather than renamed, a wrapper keeps the v1 call site's shape: a page iterator's callback is driven by the v2 paginator in a function literal called on the spot, a waiter becomes v2's waiter type bounded by a generated constant, an inline `session.New` becomes a generated loader that panics as `session.Must` did, as does a `session.Must` anywhere but an `x :=` statement, which expands into the load and its panic, a handler a function adds to its session's `Send` or `UnmarshalError` list becomes a generated stand-in for that list on the config's `APIOptions`, run per attempt around the round trip in v1's order and handed the service and operation names, the attempt's start and the input — so metrics and logs it feeds keep their meaning, though the operation and input print differently — `EC2Metadata.Region` and `Available` go through generated helpers, a DynamoDB `AttributeValue` setting one scalar member becomes that member's v2 type and a read of one goes through a generated getter answering nil where v1's field was unset, `awserr.New` with nothing wrapped becomes a generated error reading as v1's did, `aws.WriteAtBuffer` moves to the transfer manager, an endpoint gains the https scheme v1 added to one written without, and a list or map v2 holds by value is converted at the API boundary by generated helpers so the code around it keeps its v1 shape. v1 took no context anywhere v2 takes one, so a function with none in scope gets `context.TODO()` — review those and plumb a real context through. A package migrates whole or not at all, since a half-migrated one does not compile, but the module does not: a file holding a construct with no faithful v2 form — the rest of the v1 request plumbing, such as a handler reading the request's error or response, a session compared to nil, a shared-credentials provider assigned to a config field, a v1-only helper the manifest cannot account for, a shape v2 turned into a union interface such as DynamoDB's `AttributeValue`, a sub-package v2 moved or dropped such as `dynamodbattribute`, whose v2 encoder stores empty values and reads struct tags differently — is left as it is along with the rest of its package, each listed in the blockers data table, and the rest of the module moves around it. Both requires then sit in the go.mod side by side. A client and a shape cross package boundaries, so callers of what stayed behind will not compile until it is migrated by hand; that table is the list to work through, and `FindAwsSdkGoV1Usage` marks the constructs within each file. go.mod requires each v2 module the migrated source imports, along with the indirect requirements they bring, at versions the regenerated iface packages compile against — a module the build already selects higher keeps its version — and go.sum gains their hashes, so the result builds under `-mod=readonly` as it stands. Then run `go mod tidy`: the build does not need it, but it drops what the migration leaves behind — the requirements only v1 needed, the go.sum lines nothing reads any more, and an `// indirect` marker on a module the source now imports directly."
 }
 func (r *MigrateAwsSdkGoToV2) DataTables() []recipe.DataTableDescriptor {
 	return []recipe.DataTableDescriptor{awsBlockersTable.Descriptor()}
@@ -383,14 +440,15 @@ type migrateVisitor struct {
 	// awserrVars are the names bound by an awserr.Error assertion, whose
 	// accessors smithy spells differently.
 	awserrVars map[string]bool
-	// configUsed records that a config load was emitted, which is the only thing
-	// the session import becomes.
-	configUsed bool
 	// needsAws records that an aws package reference was emitted where the file
 	// may not have imported it.
 	needsAws bool
-	// needsSmithy records that the smithy error interface was emitted.
-	needsSmithy bool
+	// needsSmithy records that the smithy error interface was emitted, along
+	// with the errors.As matching it, and needsSmithyType a smithy type alone.
+	needsSmithy     bool
+	needsSmithyType bool
+	// needsErrorHelper records that awserr.New became the generated error.
+	needsErrorHelper bool
 	// awsUsed records that an aws package reference survived the rewrite.
 	awsUsed bool
 	// pathStyleHoisted records that this function carries the S3 addressing
@@ -399,6 +457,9 @@ type migrateVisitor struct {
 	// needsConfigHelper records that session.New was rewritten as the generated
 	// loader, which the package then needs a definition of.
 	needsConfigHelper bool
+	// carriedConfigs counts the pass-throughs a carried config became, less the
+	// ones a Must unwrapped again, which need no helper.
+	carriedConfigs int
 	// receiver is the enclosing method's receiver name, when it binds something
 	// other than a client.
 	receiver string
@@ -416,12 +477,21 @@ type migrateVisitor struct {
 	// needsS3 records that the s3 package was named by a rewrite of the
 	// transfer manager, whose input moved there.
 	needsS3 bool
+	// needsManager records that the transfer manager was named by a relocated
+	// aws reference in a file that did not import it.
+	needsManager bool
 	// serviceUsed records the services still referenced through their own
 	// package after the relocation, so the ones emptied out lose their import.
 	serviceUsed map[string]bool
 	// needsCompat records that a slice conversion was emitted, so the package
 	// gains the helper file that defines it.
 	needsCompat bool
+	// needsHandlers records that a request handler was rewritten onto the
+	// generated adapter.
+	needsHandlers bool
+	// needsAttributeHelpers records that an AttributeValue member read became
+	// the generated getter.
+	needsAttributeHelpers bool
 }
 
 func (v *migrateVisitor) VisitCompilationUnit(cu *golang.CompilationUnit, p any) java.J {
@@ -434,9 +504,13 @@ func (v *migrateVisitor) VisitCompilationUnit(cu *golang.CompilationUnit, p any)
 	if vendored(cu) {
 		return cu
 	}
-	if v.acc != nil && importsV1(cu) {
+	if v.acc != nil {
 		if by, held := v.acc.heldBackBy(cu); held {
-			v.acc.blockerReason(cu.SourcePath, "in the same package as "+by+", which stays on v1")
+			// A file that never names the SDK still reads its values, typed as the
+			// v1 shapes the rest of the package keeps.
+			if importsV1(cu) {
+				v.acc.blockerReason(cu.SourcePath, "in the same package as "+by+", which stays on v1")
+			}
 			return cu
 		}
 	}
@@ -455,16 +529,24 @@ func (v *migrateVisitor) VisitCompilationUnit(cu *golang.CompilationUnit, p any)
 	// afterwards, so the names it binds are collected first.
 	v.awserrVars = awserrBoundNames(cu, v.scan)
 	v.needsSmithy = false
+	v.needsSmithyType = false
+	v.needsErrorHelper = false
 	v.needsAws = false
-	v.configUsed = false
 	v.needsCompat = false
 	v.needsS3 = false
+	v.needsManager = false
 	v.needsConfigHelper = false
+	v.carriedConfigs = 0
 	v.needsWaitDuration = false
 	v.needsImdsHelper = false
 	v.needsServiceHelpers = false
 	v.needsErrors = false
+	v.needsHandlers = false
+	v.needsAttributeHelpers = false
 	cu = v.GoVisitor.VisitCompilationUnit(cu, p).(*golang.CompilationUnit)
+	if v.carriedConfigs > 0 {
+		v.needsConfigHelper = true
+	}
 	if v.needsContext {
 		recipegolang.MaybeAddImport(v, contextPkg, nil, false)
 	}
@@ -474,8 +556,11 @@ func (v *migrateVisitor) VisitCompilationUnit(cu *golang.CompilationUnit, p any)
 	if v.needsSmithy || v.needsErrors {
 		recipegolang.MaybeAddImport(v, errorsPkg, v.errorsAlias(), false)
 	}
-	if v.needsSmithy {
+	if v.needsSmithy || v.needsSmithyType {
 		recipegolang.MaybeAddImport(v, smithyGo, nil, false)
+	}
+	if v.needsManager {
+		recipegolang.MaybeAddImport(v, v2S3Manager, nil, false)
 	}
 	if v.needsS3 && !pathswap.Imports(cu, v1ServicePkg+s3Service) {
 		recipegolang.MaybeAddImport(v, v2ServicePkg+s3Service, nil, false)
@@ -528,13 +613,15 @@ func (v *migrateVisitor) dropEmptiedServiceImports(cu *golang.CompilationUnit) *
 		// nothing behind.
 		// The session import became the config package, which is dead when the
 		// file only ever named the session as a type.
-		if path == v2Config && v.scan.sessionPkg != "" && !v.configUsed {
+		if path == v2Config && v.scan.sessionPkg != "" && !referencesQualifier(cu, v.scan.configLocal) {
 			dropped = true
 			carried = groupSeparator(rp.Element.Prefix, carried)
 			continue
 		}
 		// awserr has no v2 package; its every use became smithy or a literal.
-		if path == v1Awserr {
+		// The request package goes once its handlers were rewritten.
+		if path == v1Awserr || path == v1Request && !referencesQualifier(cu, v.scan.requestPkg) ||
+			path == v1Endpoints && !referencesQualifier(cu, v.scan.endpointsPkg) {
 			dropped = true
 			carried = groupSeparator(rp.Element.Prefix, carried)
 			continue
@@ -562,6 +649,13 @@ func (v *migrateVisitor) dropEmptiedServiceImports(cu *golang.CompilationUnit) *
 	}
 	if !dropped {
 		return cu
+	}
+	// An import added afterwards starts a declaration of its own rather than
+	// inheriting an empty one's missing spacing.
+	if len(kept) == 0 {
+		c := *cu
+		c.Imports = nil
+		return &c
 	}
 	// The whitespace before the block's closing paren belongs to the last entry,
 	// so dropping that entry would put the paren on the same line as its
@@ -595,6 +689,10 @@ func (v *migrateVisitor) VisitGoMod(gm *golang.GoMod, p any) java.Tree {
 	return applyAwsRequires(gm, &v.acc.usage)
 }
 
+func (v *migrateVisitor) VisitGoSum(gs *golang.GoSum, p any) java.Tree {
+	return applyAwsSums(gs, &v.acc.usage)
+}
+
 // swapImports repoints every v1 import at its v2 path and re-attributes the
 // references, so RemoveUnusedImports does not read the new imports as unused.
 func (v *migrateVisitor) swapImports(cu *golang.CompilationUnit, p any) *golang.CompilationUnit {
@@ -606,6 +704,11 @@ func (v *migrateVisitor) swapImports(cu *golang.CompilationUnit, p any) *golang.
 	if pathswap.Imports(cu, v1Awserr) {
 		rules = append(rules, pathswap.Rule{Old: v1Awserr, New: v1Awserr})
 	}
+	for _, kept := range []string{v1Request, v1Endpoints} {
+		if pathswap.Imports(cu, kept) {
+			rules = append(rules, pathswap.Rule{Old: kept, New: kept})
+		}
+	}
 	for _, rp := range cu.Imports.Elements {
 		path := rp.Element.Path()
 		if service, _, isIface := ifacePackageName(path); isIface {
@@ -615,7 +718,7 @@ func (v *migrateVisitor) swapImports(cu *golang.CompilationUnit, p any) *golang.
 		if newPath, ok := MapPath(path); ok {
 			// The transfer manager's package was renamed along with its move, so
 			// it is bound back to the name the file already spells.
-			rule := pathswap.Rule{Old: path, New: newPath, KeepName: path == v1S3Manager || path == v1Ec2Metadata}
+			rule := pathswap.Rule{Old: path, New: newPath, KeepName: path == v1S3Manager || path == v1Ec2Metadata || path == v1Rdsutils}
 			if newPath == v2Config && v.scan.configLocal != configPkgName {
 				rule.Alias = v.scan.configLocal
 			}
@@ -716,7 +819,7 @@ func (v *migrateVisitor) VisitAssignment(a *java.Assignment, p any) java.J {
 			c.Variable = rewritten
 			c.Value = java.LeftPadded[java.Expression]{
 				Before:  a.Value.Before,
-				Element: lstutil.SetExprPrefix(value, java.SingleSpace),
+				Element: lstutil.SetExprPrefix(shifted(value, target.offset), java.SingleSpace),
 				Markers: a.Value.Markers,
 			}
 			return &c
@@ -809,6 +912,13 @@ func (s *fileScan) shapeOfExpression(expr java.Expression) (shapeRef, bool) {
 
 // A parameter or local declared as a shape is known just as directly.
 func (v *migrateVisitor) VisitVariableDeclarations(vd *java.VariableDeclarations, p any) java.J {
+	// The target an errors.As call fills is smithy's interface in v2.
+	if ref, ok := v.scan.awserrDeclared(vd); ok {
+		c := *vd
+		c.TypeExpr = lstutil.SetExprPrefix(smithyAPIErrorType(), ref.Prefix)
+		v.needsSmithyType = true
+		return &c
+	}
 	vd = v.GoVisitor.VisitVariableDeclarations(vd, p).(*java.VariableDeclarations)
 	if elem, ok := v.scan.declaredSliceShape(vd.TypeExpr); ok {
 		for _, decl := range vd.Variables {
@@ -902,12 +1012,26 @@ func (v *migrateVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any)
 		return mi
 	}
 
+	if inner, ok := v.scan.readSeekCloserOperand(mi); ok {
+		return lstutil.SetExprPrefix(inner, mi.Prefix)
+	}
 	if helper, ok := qualifiedCall(mi, v.scan.awsPkg); ok {
+		if managerRelocations[helper] {
+			c := renameCall(mi, helper, v2S3Manager).(*java.MethodInvocation)
+			sel := *c.Select
+			sel.Element = v.relocatedToManager(mi.Select.Element.(*java.Identifier))
+			c.Select = &sel
+			return c
+		}
 		v.awsUsed = true
 		if renamed, isHelper := valueHelperRenames[helper]; isHelper {
 			return renameCall(mi, renamed, v2Aws)
 		}
 		return mi
+	}
+	if code, message, ok := v.scan.awserrNewLiteral(mi); ok {
+		v.needsErrorHelper = true
+		return newErrorCall(mi.Prefix, code, message)
 	}
 	if call, ok := qualifiedCall(mi, v.scan.credentialsPkg); ok && call == "NewStaticCredentials" {
 		return renameCall(mi, "NewStaticCredentialsProvider", v2Credentials)
@@ -926,6 +1050,9 @@ func (v *migrateVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any)
 			if args := realArgs(mi); len(args) == 1 {
 				if id, isIdent := args[0].(*java.Identifier); isIdent {
 					return lstutil.SetExprPrefix(id, mi.Prefix)
+				}
+				if rewritten, ok := v.mustExpression(mi, args[0]); ok {
+					return rewritten
 				}
 			}
 		}
@@ -959,12 +1086,15 @@ func (v *migrateVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p any)
 	if rewritten, ok := v.managerCall(mi); ok {
 		return rewritten
 	}
+	if rewritten, ok := v.rdsAuthToken(mi); ok {
+		return rewritten
+	}
 	if rewritten, ok := v.managerConstructor(mi); ok {
 		return rewritten
 	}
 	if service, ok := v.scan.clientConstructorService(mi); ok {
 		v.serviceUsed[service] = true
-		return v.clientConstructor(mi, service)
+		return v.clientConstructor(mi, service, p)
 	}
 	if renamed, ok := v.awserrAccessor(mi); ok {
 		return renamed
@@ -1022,7 +1152,7 @@ func (v *migrateVisitor) loadConfig(mi *java.MethodInvocation) java.J {
 
 // clientConstructor renames the v1 constructor and turns a trailing config into
 // the functional option v2 takes in its place.
-func (v *migrateVisitor) clientConstructor(mi *java.MethodInvocation, service string) java.J {
+func (v *migrateVisitor) clientConstructor(mi *java.MethodInvocation, service string, p any) java.J {
 	renamed := renameCall(mi, "NewFromConfig", v2ServicePkg+service).(*java.MethodInvocation)
 	args := realArgs(renamed)
 	if v.pathStyleHoisted && service == s3Service && len(args) == 1 {
@@ -1038,6 +1168,24 @@ func (v *migrateVisitor) clientConstructor(mi *java.MethodInvocation, service st
 	}
 	if len(args) != 2 {
 		return renamed
+	}
+	if id, isIdent := args[1].(*java.Identifier); isIdent && v.scan.regionConfigs[id.Name] {
+		option, ok := optionalRegionOption(v.scan.qualifierFor(service), id.Name)
+		if !ok {
+			return renamed
+		}
+		c := *renamed
+		c.Arguments = renamed.Arguments
+		c.Arguments.Elements = []java.RightPadded[java.Expression]{
+			{Element: args[0]},
+			{Element: lstutil.SetExprPrefix(option, java.SingleSpace)},
+		}
+		// The literal was parsed at the top level, so its body takes the
+		// indentation of the call it now sits in.
+		if formatted, isCall := format.AutoFormat(&c, p, nil, v.Cursor().Parent()).(*java.MethodInvocation); isCall {
+			return formatted
+		}
+		return &c
 	}
 	region, ok := v.scan.clientConfigRegion(args[1])
 	if !ok {
@@ -1088,6 +1236,10 @@ func (v *migrateVisitor) operationWithContext(mi *java.MethodInvocation, declari
 // replaced it — a value, not a pointer, so the indirection goes with the type.
 func (v *migrateVisitor) VisitPointerType(ptr *golang.PointerType, p any) java.J {
 	ptr = v.GoVisitor.VisitPointerType(ptr, p).(*golang.PointerType)
+	// v2's AttributeValue is the interface a pointer to a member satisfies.
+	if elem, isField := ptr.Elem.(*java.FieldAccess); isField && v.scan.attributeValueRef(elem) {
+		return lstutil.SetExprPrefix(elem, ptr.Prefix)
+	}
 	fa, isField := ptr.Elem.(*java.FieldAccess)
 	if !isField || fa.Name.Element == nil || fa.Name.Element.Name != "Session" {
 		return ptr
@@ -1113,7 +1265,16 @@ func (v *migrateVisitor) VisitGoUnary(unary *golang.Unary, p any) java.J {
 	// reach becomes no longer looks like the one this recognises.
 	if unary.Operator.Element == golang.Indirection {
 		if rewritten, target, ok := v.rewriteConfigAccess(unary.Expression); ok && target.depointered {
-			return lstutil.SetExprPrefix(rewritten, unary.Prefix)
+			read := shifted(rewritten, -target.offset)
+			// The read is a subtraction now, which an operator around it binds
+			// tighter than.
+			if target.offset != 0 {
+				switch parentTree(v.Cursor()).(type) {
+				case *java.Binary, *java.Unary, *golang.Unary:
+					read = parenthesized(read)
+				}
+			}
+			return lstutil.SetExprPrefix(read, unary.Prefix)
 		}
 	}
 	unary = v.GoVisitor.VisitGoUnary(unary, p).(*golang.Unary)
@@ -1157,6 +1318,9 @@ func (v *migrateVisitor) VisitFieldAccess(fa *java.FieldAccess, p any) java.J {
 		return rewritten
 	}
 	fa = v.GoVisitor.VisitFieldAccess(fa, p).(*java.FieldAccess)
+	if v.scan.attributeRead(fa) && !assignedTo(v.Cursor()) {
+		return v.attributeGetterCall(fa)
+	}
 	target, ok := fa.Target.(*java.Identifier)
 	if !ok || fa.Name.Element == nil {
 		return fa
@@ -1189,6 +1353,13 @@ func (v *migrateVisitor) VisitFieldAccess(fa *java.FieldAccess, p any) java.J {
 	if helper, conversion, isPointerRead := v.scan.pointerRead(fa); isPointerRead &&
 		!dereferenced(v.Cursor()) && !assignedTo(v.Cursor()) && !v.feedsMatchingKeyValue(fa) {
 		return v.restorePointer(fa, helper, conversion)
+	}
+
+	if name, isAws := qualifiedRef(fa, v.scan.awsPkg); isAws && managerRelocations[name] {
+		c := *fa
+		c.Target = v.relocatedToManager(target)
+		c.Type = lstutil.NamedType(v2S3Manager + "." + name)
+		return &c
 	}
 
 	service, isService := v.scan.services[target.Name]
@@ -1226,6 +1397,9 @@ func (v *migrateVisitor) VisitFieldAccess(fa *java.FieldAccess, p any) java.J {
 			Type:   lstutil.NamedType(v2ServicePkg + service + "/types"),
 		}
 		c.Type = lstutil.NamedType(v2ServicePkg + service + "/types." + name)
+		if awsmanifest.Place(service, name) == awsmanifest.InTypesConst && !v.enumSlot(v.Cursor()) {
+			return lstutil.SetExprPrefix(basicConversion(&c, "string"), fa.Prefix)
+		}
 		return &c
 	}
 	return fa
@@ -1233,6 +1407,14 @@ func (v *migrateVisitor) VisitFieldAccess(fa *java.FieldAccess, p any) java.J {
 
 // expandAwserr turns an awserr.Error assertion into smithy's errors.As form.
 func (v *migrateVisitor) expandAwserr(stmt java.Statement) ([]java.Statement, bool) {
+	if ma, isMulti := stmt.(*golang.MultiAssignment); isMulti && java.HasMarker[golang.ShortVarDecl](ma.Markers) {
+		bound, okName, errExpr, _, ok := v.scan.awserrAssertionOf(ma)
+		if !ok {
+			return nil, false
+		}
+		v.needsSmithy = true
+		return expandAwserrStatement(ma, bound, okName, errExpr, v.scan.errorsLocal), true
+	}
 	swi, isInit := stmt.(*golang.StatementWithInit)
 	if !isInit {
 		return nil, false
@@ -1298,6 +1480,11 @@ func (v *migrateVisitor) VisitBlock(block *java.Block, p any) java.J {
 		// A fluent setter is a call in v1 and an assignment in v2, so it is
 		// swapped where it stands rather than inside the expression visit.
 		if call, isCall := rp.Element.(*java.MethodInvocation); isCall {
+			if appended, swapped := v.handlerStatement(call, p); swapped {
+				out = append(out, java.RightPadded[java.Statement]{Element: appended, After: rp.After})
+				changed = true
+				continue
+			}
 			if assignment, swapped := v.setterAssignment(call); swapped {
 				out = append(out, java.RightPadded[java.Statement]{Element: assignment, After: rp.After})
 				changed = true
@@ -1356,7 +1543,15 @@ func (v *migrateVisitor) VisitComposite(comp *golang.Composite, p any) java.J {
 	// An aws.Config the session does not consume is a value the file keeps, so
 	// its settings are brought to the v2 shape where they are written.
 	isConfig := v.scan.awsConfigLiteral(comp) && !consumedAsSessionConfig(v.scan, cursor)
+	isAttribute := v.scan.attributeComposite(comp, cursor)
 	comp = v.GoVisitor.VisitComposite(comp, p).(*golang.Composite)
+	if isAttribute {
+		_, addressed := parentTree(cursor).(*golang.Unary)
+		if literal, ok := v.attributeLiteral(comp, addressed); ok {
+			return literal
+		}
+		return comp
+	}
 	if isConfig {
 		if retyped, rewrote := v.retypedConfigLiteral(comp); rewrote {
 			return retyped
@@ -1416,6 +1611,9 @@ func (v *migrateVisitor) depointeredValue(expr java.Expression) (java.Expression
 // answer is the same whether the field is filled in a composite literal or
 // assigned to afterwards.
 func (v *migrateVisitor) convertedFieldValue(service, shape, field string, value java.Expression) (java.Expression, bool) {
+	if v.scan.expressionMap(value) {
+		return nil, false
+	}
 	switch {
 	case awsmanifest.Depointered(service, shape, field) != "":
 		inner, ok := v.depointeredValue(value)
