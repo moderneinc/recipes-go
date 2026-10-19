@@ -14,7 +14,7 @@ import (
 // v2 moved the instance metadata client into its own feature module and renamed
 // both the package and the client type. Its methods changed shape too: each one
 // takes a context and answers with an output struct, where v1 returned the value
-// itself. Region and Available are the ones this recipe carries over, through
+// itself. Region, Available and IAMInfo are the ones this recipe carries over, through
 // helpers that keep the v1 call site's shape.
 const (
 	v1Ec2Metadata     = v1Aws + "/ec2metadata"
@@ -23,6 +23,7 @@ const (
 
 	imdsRegionHelper    = "awsCompatIMDSRegion"
 	imdsAvailableHelper = "awsCompatIMDSAvailable"
+	imdsIAMInfoHelper   = "awsCompatIMDSIAMInfo"
 	imdsFileName        = "zz_awssdkv2_imds.go"
 )
 
@@ -32,6 +33,7 @@ package %s
 
 import (
 	"context"
+	"fmt"
 	"io"
 
 	"github.com/aws/aws-sdk-go-v2/feature/ec2/imds"
@@ -59,14 +61,30 @@ func awsCompatIMDSAvailable(ctx context.Context, c *imds.Client) bool {
 	_, err = io.ReadAll(out.Content)
 	return err == nil
 }
+
+// awsCompatIMDSIAMInfo stands in for aws-sdk-go v1's EC2Metadata.IAMInfo, which
+// also failed where the metadata reported a code other than Success.
+func awsCompatIMDSIAMInfo(ctx context.Context, c *imds.Client) (imds.IAMInfo, error) {
+	out, err := c.GetIAMInfo(ctx, &imds.GetIAMInfoInput{})
+	if err != nil {
+		return imds.IAMInfo{}, err
+	}
+	if out.IAMInfo.Code != "Success" {
+		return imds.IAMInfo{}, fmt.Errorf("EC2MetadataError: failed to get EC2 IAM Info (%%s)", out.IAMInfo.Code)
+	}
+	return out.IAMInfo, nil
+}
 `
 
 // imdsNames are the ec2metadata references the migration carries over.
-var imdsNames = map[string]bool{"New": true, ec2MetadataClient: true}
+var imdsNames = map[string]bool{"New": true, ec2MetadataClient: true, "EC2IAMInfo": true}
+
+// imdsTypeRenames are the ec2metadata types v2's imds names differently.
+var imdsTypeRenames = map[string]string{ec2MetadataClient: "Client", "EC2IAMInfo": "IAMInfo"}
 
 // imdsMethods are the metadata client's methods with a v2 form this recipe
 // writes.
-var imdsMethods = map[string]bool{"Region": true, "Available": true, "AvailableWithContext": true}
+var imdsMethods = map[string]bool{"Region": true, "Available": true, "AvailableWithContext": true, "IAMInfo": true, "IAMInfoWithContext": true}
 
 // imdsVarScan records the names holding a metadata client, so its method calls
 // are told apart from any other call in the file.
@@ -154,6 +172,10 @@ func (v *migrateVisitor) imdsCall(mi *java.MethodInvocation) (java.J, bool) {
 		helper, ctx = imdsAvailableHelper, v.contextExpr()
 	case method == "AvailableWithContext" && len(realArgs(mi)) == 1:
 		helper, ctx = imdsAvailableHelper, realArgs(mi)[0]
+	case method == "IAMInfo" && len(realArgs(mi)) == 0:
+		helper, ctx = imdsIAMInfoHelper, v.contextExpr()
+	case method == "IAMInfoWithContext" && len(realArgs(mi)) == 1:
+		helper, ctx = imdsIAMInfoHelper, realArgs(mi)[0]
 	}
 	if ctx == nil {
 		return nil, false

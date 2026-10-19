@@ -840,6 +840,7 @@ V CapacityProviderScalingConfig.MaxVCpuCount int32
 V ChainedInvokeDetails.Result string
 V ChainedInvokeOptions.FunctionName string
 V ChainedInvokeOptions.TenantId string
+V ChainedInvokeOptions.XAmznTraceId string
 V ChainedInvokeStartedDetails.DurableExecutionArn string
 V ChainedInvokeStartedDetails.ExecutedVersion string
 V ChainedInvokeStartedDetails.FunctionName string
@@ -2551,6 +2552,7 @@ E InvokeModeBuffered InvokeMode
 E InvokeModeResponseStream InvokeMode
 E KafkaSchemaRegistryAuthTypeBasicAuth KafkaSchemaRegistryAuthType
 E KafkaSchemaRegistryAuthTypeClientCertificateTlsAuth KafkaSchemaRegistryAuthType
+E KafkaSchemaRegistryAuthTypeOauthbearerAuth KafkaSchemaRegistryAuthType
 E KafkaSchemaRegistryAuthTypeServerRootCaCertificate KafkaSchemaRegistryAuthType
 E KafkaSchemaValidationAttributeKey KafkaSchemaValidationAttribute
 E KafkaSchemaValidationAttributeValue KafkaSchemaValidationAttribute
@@ -2688,6 +2690,13 @@ E SnapStartOptimizationStatusOff SnapStartOptimizationStatus
 E SnapStartOptimizationStatusOn SnapStartOptimizationStatus
 E SourceAccessTypeBasicAuth SourceAccessType
 E SourceAccessTypeClientCertificateTlsAuth SourceAccessType
+E SourceAccessTypeIamAuth SourceAccessType
+E SourceAccessTypeIamOauthbearerAuth SourceAccessType
+E SourceAccessTypeOauthbearerAudience SourceAccessType
+E SourceAccessTypeOauthbearerAuth SourceAccessType
+E SourceAccessTypeOauthbearerIdentityPool SourceAccessType
+E SourceAccessTypeOauthbearerLogicalCluster SourceAccessType
+E SourceAccessTypeOauthbearerScope SourceAccessType
 E SourceAccessTypeSaslScram256Auth SourceAccessType
 E SourceAccessTypeSaslScram512Auth SourceAccessType
 E SourceAccessTypeServerRootCaCertificate SourceAccessType
@@ -2757,3 +2766,297 @@ E TracingModePassThrough TracingMode
 E UpdateRuntimeOnAuto UpdateRuntimeOn
 E UpdateRuntimeOnFunctionUpdate UpdateRuntimeOn
 E UpdateRuntimeOnManual UpdateRuntimeOn
+H Environment.Variables
+H EnvironmentError.Message
+H EnvironmentResponse.Variables
+H FunctionCode.ZipFile
+H ImageConfigError.Message
+H InvokeInput.Payload
+H InvokeOutput.Payload
+H InvokeResponseStreamUpdate.Payload
+H InvokeWithResponseStreamInput.Payload
+H LayerVersionContentInput.ZipFile
+H RuntimeVersionError.Message
+H UpdateFunctionCodeInput.ZipFile
+Y FunctionActive 5 60
+Y FunctionActiveV2 1 300
+Y FunctionExists 1 20
+Y FunctionUpdated 5 60
+Y FunctionUpdatedV2 1 300
+Y PublishedVersionActive 5 312
+U InvokeWithResponseStreamResponseEvent
+K AddLayerVersionPermissionInput 001 Action req nil
+K AddLayerVersionPermissionInput 002 LayerName req nil
+K AddLayerVersionPermissionInput 003 LayerName len 1 ptr
+K AddLayerVersionPermissionInput 004 Principal req nil
+K AddLayerVersionPermissionInput 005 StatementId req nil
+K AddLayerVersionPermissionInput 006 StatementId len 1 ptr
+K AddLayerVersionPermissionInput 007 VersionNumber req nil
+K AddPermissionInput 001 Action req nil
+K AddPermissionInput 002 FunctionName req nil
+K AddPermissionInput 003 FunctionName len 1 ptr
+K AddPermissionInput 004 Principal req nil
+K AddPermissionInput 005 PrincipalOrgID len 12 ptr
+K AddPermissionInput 006 Qualifier len 1 ptr
+K AddPermissionInput 007 StatementId req nil
+K AddPermissionInput 008 StatementId len 1 ptr
+K AllowedPublishers 001 SigningProfileVersionArns req nil
+K AllowedPublishers 002 SigningProfileVersionArns len 1 container
+K AmazonManagedKafkaEventSourceConfig 001 ConsumerGroupId len 1 ptr
+K CreateAliasInput 001 FunctionName req nil
+K CreateAliasInput 002 FunctionName len 1 ptr
+K CreateAliasInput 003 FunctionVersion req nil
+K CreateAliasInput 004 FunctionVersion len 1 ptr
+K CreateAliasInput 005 Name req nil
+K CreateAliasInput 006 Name len 1 ptr
+K CreateCodeSigningConfigInput 001 AllowedPublishers req nil
+K CreateCodeSigningConfigInput 002 AllowedPublishers nest AllowedPublishers
+K CreateEventSourceMappingInput 001 BatchSize min 1 ptr
+K CreateEventSourceMappingInput 002 FunctionName req nil
+K CreateEventSourceMappingInput 003 FunctionName len 1 ptr
+K CreateEventSourceMappingInput 004 MaximumRecordAgeInSeconds min -1 ptr
+K CreateEventSourceMappingInput 005 MaximumRetryAttempts min -1 ptr
+K CreateEventSourceMappingInput 006 ParallelizationFactor min 1 ptr
+K CreateEventSourceMappingInput 007 Queues len 1 container
+K CreateEventSourceMappingInput 008 Topics len 1 container
+K CreateEventSourceMappingInput 009 AmazonManagedKafkaEventSourceConfig nest AmazonManagedKafkaEventSourceConfig
+K CreateEventSourceMappingInput 010 DocumentDBEventSourceConfig nest DocumentDBEventSourceConfig
+K CreateEventSourceMappingInput 011 ScalingConfig nest ScalingConfig
+K CreateEventSourceMappingInput 012 SelfManagedEventSource nest SelfManagedEventSource
+K CreateEventSourceMappingInput 013 SelfManagedKafkaEventSourceConfig nest SelfManagedKafkaEventSourceConfig
+K CreateEventSourceMappingInput 014 SourceAccessConfigurations each SourceAccessConfiguration slice
+K CreateFunctionInput 001 Architectures len 1 container
+K CreateFunctionInput 002 Code req nil
+K CreateFunctionInput 003 FunctionName req nil
+K CreateFunctionInput 004 FunctionName len 1 ptr
+K CreateFunctionInput 005 MemorySize min 128 ptr
+K CreateFunctionInput 006 Role req nil
+K CreateFunctionInput 007 Timeout min 1 ptr
+K CreateFunctionInput 008 Code nest FunctionCode
+K CreateFunctionInput 009 EphemeralStorage nest EphemeralStorage
+K CreateFunctionInput 010 FileSystemConfigs each FileSystemConfig slice
+K CreateFunctionInput 011 LoggingConfig nest LoggingConfig
+K CreateFunctionUrlConfigInput 001 AuthType req empty
+K CreateFunctionUrlConfigInput 002 FunctionName req nil
+K CreateFunctionUrlConfigInput 003 FunctionName len 1 ptr
+K CreateFunctionUrlConfigInput 004 Qualifier len 1 ptr
+K DeleteAliasInput 001 FunctionName req nil
+K DeleteAliasInput 002 FunctionName len 1 ptr
+K DeleteAliasInput 003 Name req nil
+K DeleteAliasInput 004 Name len 1 ptr
+K DeleteCodeSigningConfigInput 001 CodeSigningConfigArn req nil
+K DeleteCodeSigningConfigInput 002 CodeSigningConfigArn len 1 ptr
+K DeleteEventSourceMappingInput 001 UUID req nil
+K DeleteEventSourceMappingInput 002 UUID len 1 ptr
+K DeleteFunctionCodeSigningConfigInput 001 FunctionName req nil
+K DeleteFunctionCodeSigningConfigInput 002 FunctionName len 1 ptr
+K DeleteFunctionConcurrencyInput 001 FunctionName req nil
+K DeleteFunctionConcurrencyInput 002 FunctionName len 1 ptr
+K DeleteFunctionEventInvokeConfigInput 001 FunctionName req nil
+K DeleteFunctionEventInvokeConfigInput 002 FunctionName len 1 ptr
+K DeleteFunctionEventInvokeConfigInput 003 Qualifier len 1 ptr
+K DeleteFunctionInput 001 FunctionName req nil
+K DeleteFunctionInput 002 FunctionName len 1 ptr
+K DeleteFunctionInput 003 Qualifier len 1 ptr
+K DeleteFunctionUrlConfigInput 001 FunctionName req nil
+K DeleteFunctionUrlConfigInput 002 FunctionName len 1 ptr
+K DeleteFunctionUrlConfigInput 003 Qualifier len 1 ptr
+K DeleteLayerVersionInput 001 LayerName req nil
+K DeleteLayerVersionInput 002 LayerName len 1 ptr
+K DeleteLayerVersionInput 003 VersionNumber req nil
+K DeleteProvisionedConcurrencyConfigInput 001 FunctionName req nil
+K DeleteProvisionedConcurrencyConfigInput 002 FunctionName len 1 ptr
+K DeleteProvisionedConcurrencyConfigInput 003 Qualifier req nil
+K DeleteProvisionedConcurrencyConfigInput 004 Qualifier len 1 ptr
+K DocumentDBEventSourceConfig 001 CollectionName len 1 ptr
+K DocumentDBEventSourceConfig 002 DatabaseName len 1 ptr
+K EphemeralStorage 001 Size req nil
+K EphemeralStorage 002 Size min 512 ptr
+K FileSystemConfig 001 Arn req nil
+K FileSystemConfig 002 LocalMountPath req nil
+K FunctionCode 001 S3Bucket len 3 ptr
+K FunctionCode 002 S3Key len 1 ptr
+K FunctionCode 003 S3ObjectVersion len 1 ptr
+K GetAliasInput 001 FunctionName req nil
+K GetAliasInput 002 FunctionName len 1 ptr
+K GetAliasInput 003 Name req nil
+K GetAliasInput 004 Name len 1 ptr
+K GetCodeSigningConfigInput 001 CodeSigningConfigArn req nil
+K GetCodeSigningConfigInput 002 CodeSigningConfigArn len 1 ptr
+K GetEventSourceMappingInput 001 UUID req nil
+K GetEventSourceMappingInput 002 UUID len 1 ptr
+K GetFunctionCodeSigningConfigInput 001 FunctionName req nil
+K GetFunctionCodeSigningConfigInput 002 FunctionName len 1 ptr
+K GetFunctionConcurrencyInput 001 FunctionName req nil
+K GetFunctionConcurrencyInput 002 FunctionName len 1 ptr
+K GetFunctionConfigurationInput 001 FunctionName req nil
+K GetFunctionConfigurationInput 002 FunctionName len 1 ptr
+K GetFunctionConfigurationInput 003 Qualifier len 1 ptr
+K GetFunctionEventInvokeConfigInput 001 FunctionName req nil
+K GetFunctionEventInvokeConfigInput 002 FunctionName len 1 ptr
+K GetFunctionEventInvokeConfigInput 003 Qualifier len 1 ptr
+K GetFunctionInput 001 FunctionName req nil
+K GetFunctionInput 002 FunctionName len 1 ptr
+K GetFunctionInput 003 Qualifier len 1 ptr
+K GetFunctionUrlConfigInput 001 FunctionName req nil
+K GetFunctionUrlConfigInput 002 FunctionName len 1 ptr
+K GetFunctionUrlConfigInput 003 Qualifier len 1 ptr
+K GetLayerVersionByArnInput 001 Arn req nil
+K GetLayerVersionByArnInput 002 Arn len 1 ptr
+K GetLayerVersionInput 001 LayerName req nil
+K GetLayerVersionInput 002 LayerName len 1 ptr
+K GetLayerVersionInput 003 VersionNumber req nil
+K GetLayerVersionPolicyInput 001 LayerName req nil
+K GetLayerVersionPolicyInput 002 LayerName len 1 ptr
+K GetLayerVersionPolicyInput 003 VersionNumber req nil
+K GetPolicyInput 001 FunctionName req nil
+K GetPolicyInput 002 FunctionName len 1 ptr
+K GetPolicyInput 003 Qualifier len 1 ptr
+K GetProvisionedConcurrencyConfigInput 001 FunctionName req nil
+K GetProvisionedConcurrencyConfigInput 002 FunctionName len 1 ptr
+K GetProvisionedConcurrencyConfigInput 003 Qualifier req nil
+K GetProvisionedConcurrencyConfigInput 004 Qualifier len 1 ptr
+K GetRuntimeManagementConfigInput 001 FunctionName req nil
+K GetRuntimeManagementConfigInput 002 FunctionName len 1 ptr
+K GetRuntimeManagementConfigInput 003 Qualifier len 1 ptr
+K InvokeAsyncInput 000 - unsupported
+K InvokeInput 001 FunctionName req nil
+K InvokeInput 002 FunctionName len 1 ptr
+K InvokeInput 003 Qualifier len 1 ptr
+K InvokeWithResponseStreamInput 001 FunctionName req nil
+K InvokeWithResponseStreamInput 002 FunctionName len 1 ptr
+K InvokeWithResponseStreamInput 003 Qualifier len 1 ptr
+K LayerVersionContentInput 001 S3Bucket len 3 ptr
+K LayerVersionContentInput 002 S3Key len 1 ptr
+K LayerVersionContentInput 003 S3ObjectVersion len 1 ptr
+K ListAliasesInput 001 FunctionName req nil
+K ListAliasesInput 002 FunctionName len 1 ptr
+K ListAliasesInput 003 FunctionVersion len 1 ptr
+K ListAliasesInput 004 MaxItems min 1 ptr
+K ListCodeSigningConfigsInput 001 MaxItems min 1 ptr
+K ListEventSourceMappingsInput 001 FunctionName len 1 ptr
+K ListEventSourceMappingsInput 002 MaxItems min 1 ptr
+K ListFunctionEventInvokeConfigsInput 001 FunctionName req nil
+K ListFunctionEventInvokeConfigsInput 002 FunctionName len 1 ptr
+K ListFunctionEventInvokeConfigsInput 003 MaxItems min 1 ptr
+K ListFunctionUrlConfigsInput 001 FunctionName req nil
+K ListFunctionUrlConfigsInput 002 FunctionName len 1 ptr
+K ListFunctionUrlConfigsInput 003 MaxItems min 1 ptr
+K ListFunctionsByCodeSigningConfigInput 001 CodeSigningConfigArn req nil
+K ListFunctionsByCodeSigningConfigInput 002 CodeSigningConfigArn len 1 ptr
+K ListFunctionsByCodeSigningConfigInput 003 MaxItems min 1 ptr
+K ListFunctionsInput 001 MaxItems min 1 ptr
+K ListLayerVersionsInput 001 LayerName req nil
+K ListLayerVersionsInput 002 LayerName len 1 ptr
+K ListLayerVersionsInput 003 MaxItems min 1 ptr
+K ListLayersInput 001 MaxItems min 1 ptr
+K ListProvisionedConcurrencyConfigsInput 001 FunctionName req nil
+K ListProvisionedConcurrencyConfigsInput 002 FunctionName len 1 ptr
+K ListProvisionedConcurrencyConfigsInput 003 MaxItems min 1 ptr
+K ListTagsInput 001 Resource req nil
+K ListTagsInput 002 Resource len 1 ptr
+K ListVersionsByFunctionInput 001 FunctionName req nil
+K ListVersionsByFunctionInput 002 FunctionName len 1 ptr
+K ListVersionsByFunctionInput 003 MaxItems min 1 ptr
+K LoggingConfig 001 LogGroup len 1 ptr
+K PublishLayerVersionInput 001 Content req nil
+K PublishLayerVersionInput 002 LayerName req nil
+K PublishLayerVersionInput 003 LayerName len 1 ptr
+K PublishLayerVersionInput 004 Content nest LayerVersionContentInput
+K PublishVersionInput 001 FunctionName req nil
+K PublishVersionInput 002 FunctionName len 1 ptr
+K PutFunctionCodeSigningConfigInput 001 CodeSigningConfigArn req nil
+K PutFunctionCodeSigningConfigInput 002 FunctionName req nil
+K PutFunctionCodeSigningConfigInput 003 FunctionName len 1 ptr
+K PutFunctionConcurrencyInput 001 FunctionName req nil
+K PutFunctionConcurrencyInput 002 FunctionName len 1 ptr
+K PutFunctionConcurrencyInput 003 ReservedConcurrentExecutions req nil
+K PutFunctionEventInvokeConfigInput 001 FunctionName req nil
+K PutFunctionEventInvokeConfigInput 002 FunctionName len 1 ptr
+K PutFunctionEventInvokeConfigInput 003 MaximumEventAgeInSeconds min 60 ptr
+K PutFunctionEventInvokeConfigInput 004 Qualifier len 1 ptr
+K PutProvisionedConcurrencyConfigInput 001 FunctionName req nil
+K PutProvisionedConcurrencyConfigInput 002 FunctionName len 1 ptr
+K PutProvisionedConcurrencyConfigInput 003 ProvisionedConcurrentExecutions req nil
+K PutProvisionedConcurrencyConfigInput 004 ProvisionedConcurrentExecutions min 1 ptr
+K PutProvisionedConcurrencyConfigInput 005 Qualifier req nil
+K PutProvisionedConcurrencyConfigInput 006 Qualifier len 1 ptr
+K PutRuntimeManagementConfigInput 001 FunctionName req nil
+K PutRuntimeManagementConfigInput 002 FunctionName len 1 ptr
+K PutRuntimeManagementConfigInput 003 Qualifier len 1 ptr
+K PutRuntimeManagementConfigInput 004 RuntimeVersionArn len 26 ptr
+K PutRuntimeManagementConfigInput 005 UpdateRuntimeOn req empty
+K RemoveLayerVersionPermissionInput 001 LayerName req nil
+K RemoveLayerVersionPermissionInput 002 LayerName len 1 ptr
+K RemoveLayerVersionPermissionInput 003 StatementId req nil
+K RemoveLayerVersionPermissionInput 004 StatementId len 1 ptr
+K RemoveLayerVersionPermissionInput 005 VersionNumber req nil
+K RemovePermissionInput 001 FunctionName req nil
+K RemovePermissionInput 002 FunctionName len 1 ptr
+K RemovePermissionInput 003 Qualifier len 1 ptr
+K RemovePermissionInput 004 StatementId req nil
+K RemovePermissionInput 005 StatementId len 1 ptr
+K ScalingConfig 001 MaximumConcurrency min 2 ptr
+K SelfManagedEventSource 001 Endpoints len 1 container
+K SelfManagedKafkaEventSourceConfig 001 ConsumerGroupId len 1 ptr
+K SourceAccessConfiguration 001 URI len 1 ptr
+K TagResourceInput 001 Resource req nil
+K TagResourceInput 002 Resource len 1 ptr
+K TagResourceInput 003 Tags req nil
+K UntagResourceInput 001 Resource req nil
+K UntagResourceInput 002 Resource len 1 ptr
+K UntagResourceInput 003 TagKeys req nil
+K UpdateAliasInput 001 FunctionName req nil
+K UpdateAliasInput 002 FunctionName len 1 ptr
+K UpdateAliasInput 003 FunctionVersion len 1 ptr
+K UpdateAliasInput 004 Name req nil
+K UpdateAliasInput 005 Name len 1 ptr
+K UpdateCodeSigningConfigInput 001 CodeSigningConfigArn req nil
+K UpdateCodeSigningConfigInput 002 CodeSigningConfigArn len 1 ptr
+K UpdateCodeSigningConfigInput 003 AllowedPublishers nest AllowedPublishers
+K UpdateEventSourceMappingInput 001 BatchSize min 1 ptr
+K UpdateEventSourceMappingInput 002 FunctionName len 1 ptr
+K UpdateEventSourceMappingInput 003 MaximumRecordAgeInSeconds min -1 ptr
+K UpdateEventSourceMappingInput 004 MaximumRetryAttempts min -1 ptr
+K UpdateEventSourceMappingInput 005 ParallelizationFactor min 1 ptr
+K UpdateEventSourceMappingInput 006 UUID req nil
+K UpdateEventSourceMappingInput 007 UUID len 1 ptr
+K UpdateEventSourceMappingInput 008 DocumentDBEventSourceConfig nest DocumentDBEventSourceConfig
+K UpdateEventSourceMappingInput 009 ScalingConfig nest ScalingConfig
+K UpdateEventSourceMappingInput 010 SourceAccessConfigurations each SourceAccessConfiguration slice
+K UpdateFunctionCodeInput 001 Architectures len 1 container
+K UpdateFunctionCodeInput 002 FunctionName req nil
+K UpdateFunctionCodeInput 003 FunctionName len 1 ptr
+K UpdateFunctionCodeInput 004 S3Bucket len 3 ptr
+K UpdateFunctionCodeInput 005 S3Key len 1 ptr
+K UpdateFunctionCodeInput 006 S3ObjectVersion len 1 ptr
+K UpdateFunctionConfigurationInput 001 FunctionName req nil
+K UpdateFunctionConfigurationInput 002 FunctionName len 1 ptr
+K UpdateFunctionConfigurationInput 003 MemorySize min 128 ptr
+K UpdateFunctionConfigurationInput 004 Timeout min 1 ptr
+K UpdateFunctionConfigurationInput 005 EphemeralStorage nest EphemeralStorage
+K UpdateFunctionConfigurationInput 006 FileSystemConfigs each FileSystemConfig slice
+K UpdateFunctionConfigurationInput 007 LoggingConfig nest LoggingConfig
+K UpdateFunctionEventInvokeConfigInput 001 FunctionName req nil
+K UpdateFunctionEventInvokeConfigInput 002 FunctionName len 1 ptr
+K UpdateFunctionEventInvokeConfigInput 003 MaximumEventAgeInSeconds min 60 ptr
+K UpdateFunctionEventInvokeConfigInput 004 Qualifier len 1 ptr
+K UpdateFunctionUrlConfigInput 001 FunctionName req nil
+K UpdateFunctionUrlConfigInput 002 FunctionName len 1 ptr
+K UpdateFunctionUrlConfigInput 003 Qualifier len 1 ptr
+G GetDurableExecutionHistory Marker NextMarker
+G GetDurableExecutionState Marker NextMarker
+G ListAliases Marker NextMarker
+G ListCapacityProviders Marker NextMarker
+G ListCodeSigningConfigs Marker NextMarker
+G ListDurableExecutionsByFunction Marker NextMarker
+G ListEventSourceMappings Marker NextMarker
+G ListFunctionEventInvokeConfigs Marker NextMarker
+G ListFunctionUrlConfigs Marker NextMarker
+G ListFunctionVersionsByCapacityProvider Marker NextMarker
+G ListFunctions Marker NextMarker
+G ListFunctionsByCodeSigningConfig Marker NextMarker
+G ListLayerVersions Marker NextMarker
+G ListLayers Marker NextMarker
+G ListProvisionedConcurrencyConfigs Marker NextMarker
+G ListVersionsByFunction Marker NextMarker

@@ -1,0 +1,1280 @@
+C CloudWatchEvents
+S ActivateEventSourceInput
+S ActivateEventSourceOutput
+S AuthResolverParameters
+S AuthSchemeResolver
+S CancelReplayInput
+S CancelReplayOutput
+S Client
+S CreateApiDestinationInput
+S CreateApiDestinationOutput
+S CreateArchiveInput
+S CreateArchiveOutput
+S CreateConnectionInput
+S CreateConnectionOutput
+S CreateEventBusInput
+S CreateEventBusOutput
+S CreatePartnerEventSourceInput
+S CreatePartnerEventSourceOutput
+S DeactivateEventSourceInput
+S DeactivateEventSourceOutput
+S DeauthorizeConnectionInput
+S DeauthorizeConnectionOutput
+S DeleteApiDestinationInput
+S DeleteApiDestinationOutput
+S DeleteArchiveInput
+S DeleteArchiveOutput
+S DeleteConnectionInput
+S DeleteConnectionOutput
+S DeleteEventBusInput
+S DeleteEventBusOutput
+S DeletePartnerEventSourceInput
+S DeletePartnerEventSourceOutput
+S DeleteRuleInput
+S DeleteRuleOutput
+S DescribeApiDestinationInput
+S DescribeApiDestinationOutput
+S DescribeArchiveInput
+S DescribeArchiveOutput
+S DescribeConnectionInput
+S DescribeConnectionOutput
+S DescribeEventBusInput
+S DescribeEventBusOutput
+S DescribeEventSourceInput
+S DescribeEventSourceOutput
+S DescribePartnerEventSourceInput
+S DescribePartnerEventSourceOutput
+S DescribeReplayInput
+S DescribeReplayOutput
+S DescribeRuleInput
+S DescribeRuleOutput
+S DisableRuleInput
+S DisableRuleOutput
+S EnableRuleInput
+S EnableRuleOutput
+S EndpointParameters
+S EndpointResolver
+S EndpointResolverFromURL
+S EndpointResolverFunc
+S EndpointResolverOptions
+S EndpointResolverV2
+S HTTPClient
+S HTTPSignerV4
+S ListApiDestinationsInput
+S ListApiDestinationsOutput
+S ListArchivesInput
+S ListArchivesOutput
+S ListConnectionsInput
+S ListConnectionsOutput
+S ListEventBusesInput
+S ListEventBusesOutput
+S ListEventSourcesInput
+S ListEventSourcesOutput
+S ListPartnerEventSourceAccountsInput
+S ListPartnerEventSourceAccountsOutput
+S ListPartnerEventSourcesInput
+S ListPartnerEventSourcesOutput
+S ListReplaysInput
+S ListReplaysOutput
+S ListRuleNamesByTargetInput
+S ListRuleNamesByTargetOutput
+S ListRulesInput
+S ListRulesOutput
+S ListTagsForResourceInput
+S ListTagsForResourceOutput
+S ListTargetsByRuleInput
+S ListTargetsByRuleOutput
+S New
+S NewDefaultEndpointResolver
+S NewDefaultEndpointResolverV2
+S NewFromConfig
+S Options
+S PutEventsInput
+S PutEventsOutput
+S PutPartnerEventsInput
+S PutPartnerEventsOutput
+S PutPermissionInput
+S PutPermissionOutput
+S PutRuleInput
+S PutRuleOutput
+S PutTargetsInput
+S PutTargetsOutput
+S RemovePermissionInput
+S RemovePermissionOutput
+S RemoveTargetsInput
+S RemoveTargetsOutput
+S ResolveEndpoint
+S ServiceAPIVersion
+S ServiceID
+S StartReplayInput
+S StartReplayOutput
+S TagResourceInput
+S TagResourceOutput
+S TestEventPatternInput
+S TestEventPatternOutput
+S TypeRegistry
+S UntagResourceInput
+S UntagResourceOutput
+S UpdateApiDestinationInput
+S UpdateApiDestinationOutput
+S UpdateArchiveInput
+S UpdateArchiveOutput
+S UpdateConnectionInput
+S UpdateConnectionOutput
+S WithAPIOptions
+S WithEndpointResolver
+S WithEndpointResolverV2
+S WithSigV4SigningName
+S WithSigV4SigningRegion
+O ActivateEventSource
+O CancelReplay
+O CreateApiDestination
+O CreateArchive
+O CreateConnection
+O CreateEventBus
+O CreatePartnerEventSource
+O DeactivateEventSource
+O DeauthorizeConnection
+O DeleteApiDestination
+O DeleteArchive
+O DeleteConnection
+O DeleteEventBus
+O DeletePartnerEventSource
+O DeleteRule
+O DescribeApiDestination
+O DescribeArchive
+O DescribeConnection
+O DescribeEventBus
+O DescribeEventSource
+O DescribePartnerEventSource
+O DescribeReplay
+O DescribeRule
+O DisableRule
+O EnableRule
+O ListApiDestinations
+O ListArchives
+O ListConnections
+O ListEventBuses
+O ListEventSources
+O ListPartnerEventSourceAccounts
+O ListPartnerEventSources
+O ListReplays
+O ListRuleNamesByTarget
+O ListRules
+O ListTagsForResource
+O ListTargetsByRule
+O PutEvents
+O PutPartnerEvents
+O PutPermission
+O PutRule
+O PutTargets
+O RemovePermission
+O RemoveTargets
+O StartReplay
+O TagResource
+O TestEventPattern
+O UntagResource
+O UpdateApiDestination
+O UpdateArchive
+O UpdateConnection
+X ErrCodeConcurrentModificationException ConcurrentModificationException
+X ErrCodeIllegalStatusException IllegalStatusException
+X ErrCodeInternalException InternalException
+X ErrCodeInvalidEventPatternException InvalidEventPatternException
+X ErrCodeInvalidStateException InvalidStateException
+X ErrCodeLimitExceededException LimitExceededException
+X ErrCodeManagedRuleException ManagedRuleException
+X ErrCodeOperationDisabledException OperationDisabledException
+X ErrCodePolicyLengthExceededException PolicyLengthExceededException
+X ErrCodeResourceAlreadyExistsException ResourceAlreadyExistsException
+X ErrCodeResourceNotFoundException ResourceNotFoundException
+I ApiDestination.InvocationRateLimitPerSecond int64 int32
+I Archive.RetentionDays int64 int32
+I CreateApiDestinationInput.InvocationRateLimitPerSecond int64 int32
+I CreateArchiveInput.RetentionDays int64 int32
+I DescribeApiDestinationOutput.InvocationRateLimitPerSecond int64 int32
+I DescribeArchiveOutput.RetentionDays int64 int32
+I EcsParameters.TaskCount int64 int32
+I ListApiDestinationsInput.Limit int64 int32
+I ListArchivesInput.Limit int64 int32
+I ListConnectionsInput.Limit int64 int32
+I ListEventBusesInput.Limit int64 int32
+I ListEventSourcesInput.Limit int64 int32
+I ListPartnerEventSourceAccountsInput.Limit int64 int32
+I ListPartnerEventSourcesInput.Limit int64 int32
+I ListReplaysInput.Limit int64 int32
+I ListRuleNamesByTargetInput.Limit int64 int32
+I ListRulesInput.Limit int64 int32
+I ListTargetsByRuleInput.Limit int64 int32
+I RetryPolicy.MaximumEventAgeInSeconds int64 int32
+I RetryPolicy.MaximumRetryAttempts int64 int32
+I UpdateApiDestinationInput.InvocationRateLimitPerSecond int64 int32
+I UpdateArchiveInput.RetentionDays int64 int32
+R BatchParameters.ArrayProperties BatchArrayProperties
+R BatchParameters.RetryStrategy BatchRetryStrategy
+R ConnectionAuthResponseParameters.ApiKeyAuthParameters ConnectionApiKeyAuthResponseParameters
+R ConnectionAuthResponseParameters.BasicAuthParameters ConnectionBasicAuthResponseParameters
+R ConnectionAuthResponseParameters.InvocationHttpParameters ConnectionHttpParameters
+R ConnectionAuthResponseParameters.OAuthParameters ConnectionOAuthResponseParameters
+R ConnectionOAuthResponseParameters.ClientParameters ConnectionOAuthClientResponseParameters
+R ConnectionOAuthResponseParameters.OAuthHttpParameters ConnectionHttpParameters
+R CreateConnectionAuthRequestParameters.ApiKeyAuthParameters CreateConnectionApiKeyAuthRequestParameters
+R CreateConnectionAuthRequestParameters.BasicAuthParameters CreateConnectionBasicAuthRequestParameters
+R CreateConnectionAuthRequestParameters.InvocationHttpParameters ConnectionHttpParameters
+R CreateConnectionAuthRequestParameters.OAuthParameters CreateConnectionOAuthRequestParameters
+R CreateConnectionInput.AuthParameters CreateConnectionAuthRequestParameters
+R CreateConnectionOAuthRequestParameters.ClientParameters CreateConnectionOAuthClientRequestParameters
+R CreateConnectionOAuthRequestParameters.OAuthHttpParameters ConnectionHttpParameters
+R DescribeConnectionOutput.AuthParameters ConnectionAuthResponseParameters
+R DescribeReplayOutput.Destination ReplayDestination
+R EcsParameters.NetworkConfiguration NetworkConfiguration
+R NetworkConfiguration.AwsvpcConfiguration AwsVpcConfiguration
+R PutPermissionInput.Condition Condition
+R StartReplayInput.Destination ReplayDestination
+R Target.BatchParameters BatchParameters
+R Target.DeadLetterConfig DeadLetterConfig
+R Target.EcsParameters EcsParameters
+R Target.HttpParameters HttpParameters
+R Target.InputTransformer InputTransformer
+R Target.KinesisParameters KinesisParameters
+R Target.RedshiftDataParameters RedshiftDataParameters
+R Target.RetryPolicy RetryPolicy
+R Target.RunCommandParameters RunCommandParameters
+R Target.SageMakerPipelineParameters SageMakerPipelineParameters
+R Target.SqsParameters SqsParameters
+R UpdateConnectionAuthRequestParameters.ApiKeyAuthParameters UpdateConnectionApiKeyAuthRequestParameters
+R UpdateConnectionAuthRequestParameters.BasicAuthParameters UpdateConnectionBasicAuthRequestParameters
+R UpdateConnectionAuthRequestParameters.InvocationHttpParameters ConnectionHttpParameters
+R UpdateConnectionAuthRequestParameters.OAuthParameters UpdateConnectionOAuthRequestParameters
+R UpdateConnectionInput.AuthParameters UpdateConnectionAuthRequestParameters
+R UpdateConnectionOAuthRequestParameters.ClientParameters UpdateConnectionOAuthClientRequestParameters
+R UpdateConnectionOAuthRequestParameters.OAuthHttpParameters ConnectionHttpParameters
+V ActivateEventSourceInput.Name string
+V ApiDestination.ApiDestinationArn string
+V ApiDestination.ConnectionArn string
+V ApiDestination.InvocationEndpoint string
+V ApiDestination.InvocationRateLimitPerSecond int32
+V ApiDestination.Name string
+V Archive.ArchiveName string
+V Archive.EventSourceArn string
+V Archive.RetentionDays int32
+V Archive.StateReason string
+V BatchParameters.JobDefinition string
+V BatchParameters.JobName string
+V CancelReplayInput.ReplayName string
+V CancelReplayOutput.ReplayArn string
+V CancelReplayOutput.StateReason string
+V CapacityProviderStrategyItem.CapacityProvider string
+V ConcurrentModificationException.ErrorCodeOverride string
+V ConcurrentModificationException.Message string
+V Condition.Key string
+V Condition.Type string
+V Condition.Value string
+V Connection.ConnectionArn string
+V Connection.Name string
+V Connection.StateReason string
+V ConnectionApiKeyAuthResponseParameters.ApiKeyName string
+V ConnectionBasicAuthResponseParameters.Username string
+V ConnectionBodyParameter.Key string
+V ConnectionBodyParameter.Value string
+V ConnectionHeaderParameter.Key string
+V ConnectionHeaderParameter.Value string
+V ConnectionOAuthClientResponseParameters.ClientID string
+V ConnectionOAuthResponseParameters.AuthorizationEndpoint string
+V ConnectionQueryStringParameter.Key string
+V ConnectionQueryStringParameter.Value string
+V CreateApiDestinationInput.ConnectionArn string
+V CreateApiDestinationInput.Description string
+V CreateApiDestinationInput.InvocationEndpoint string
+V CreateApiDestinationInput.InvocationRateLimitPerSecond int32
+V CreateApiDestinationInput.Name string
+V CreateApiDestinationOutput.ApiDestinationArn string
+V CreateArchiveInput.ArchiveName string
+V CreateArchiveInput.Description string
+V CreateArchiveInput.EventPattern string
+V CreateArchiveInput.EventSourceArn string
+V CreateArchiveInput.RetentionDays int32
+V CreateArchiveOutput.ArchiveArn string
+V CreateArchiveOutput.StateReason string
+V CreateConnectionApiKeyAuthRequestParameters.ApiKeyName string
+V CreateConnectionApiKeyAuthRequestParameters.ApiKeyValue string
+V CreateConnectionBasicAuthRequestParameters.Password string
+V CreateConnectionBasicAuthRequestParameters.Username string
+V CreateConnectionInput.Description string
+V CreateConnectionInput.Name string
+V CreateConnectionOAuthClientRequestParameters.ClientID string
+V CreateConnectionOAuthClientRequestParameters.ClientSecret string
+V CreateConnectionOAuthRequestParameters.AuthorizationEndpoint string
+V CreateConnectionOutput.ConnectionArn string
+V CreateEventBusInput.EventSourceName string
+V CreateEventBusInput.Name string
+V CreateEventBusOutput.EventBusArn string
+V CreatePartnerEventSourceInput.Account string
+V CreatePartnerEventSourceInput.Name string
+V CreatePartnerEventSourceOutput.EventSourceArn string
+V DeactivateEventSourceInput.Name string
+V DeadLetterConfig.Arn string
+V DeauthorizeConnectionInput.Name string
+V DeauthorizeConnectionOutput.ConnectionArn string
+V DeleteApiDestinationInput.Name string
+V DeleteArchiveInput.ArchiveName string
+V DeleteConnectionInput.Name string
+V DeleteConnectionOutput.ConnectionArn string
+V DeleteEventBusInput.Name string
+V DeletePartnerEventSourceInput.Account string
+V DeletePartnerEventSourceInput.Name string
+V DeleteRuleInput.EventBusName string
+V DeleteRuleInput.Name string
+V DescribeApiDestinationInput.Name string
+V DescribeApiDestinationOutput.ApiDestinationArn string
+V DescribeApiDestinationOutput.ConnectionArn string
+V DescribeApiDestinationOutput.Description string
+V DescribeApiDestinationOutput.InvocationEndpoint string
+V DescribeApiDestinationOutput.InvocationRateLimitPerSecond int32
+V DescribeApiDestinationOutput.Name string
+V DescribeArchiveInput.ArchiveName string
+V DescribeArchiveOutput.ArchiveArn string
+V DescribeArchiveOutput.ArchiveName string
+V DescribeArchiveOutput.Description string
+V DescribeArchiveOutput.EventPattern string
+V DescribeArchiveOutput.EventSourceArn string
+V DescribeArchiveOutput.RetentionDays int32
+V DescribeArchiveOutput.StateReason string
+V DescribeConnectionInput.Name string
+V DescribeConnectionOutput.ConnectionArn string
+V DescribeConnectionOutput.Description string
+V DescribeConnectionOutput.Name string
+V DescribeConnectionOutput.SecretArn string
+V DescribeConnectionOutput.StateReason string
+V DescribeEventBusInput.Name string
+V DescribeEventBusOutput.Arn string
+V DescribeEventBusOutput.Name string
+V DescribeEventBusOutput.Policy string
+V DescribeEventSourceInput.Name string
+V DescribeEventSourceOutput.Arn string
+V DescribeEventSourceOutput.CreatedBy string
+V DescribeEventSourceOutput.Name string
+V DescribePartnerEventSourceInput.Name string
+V DescribePartnerEventSourceOutput.Arn string
+V DescribePartnerEventSourceOutput.Name string
+V DescribeReplayInput.ReplayName string
+V DescribeReplayOutput.Description string
+V DescribeReplayOutput.EventSourceArn string
+V DescribeReplayOutput.ReplayArn string
+V DescribeReplayOutput.ReplayName string
+V DescribeReplayOutput.StateReason string
+V DescribeRuleInput.EventBusName string
+V DescribeRuleInput.Name string
+V DescribeRuleOutput.Arn string
+V DescribeRuleOutput.CreatedBy string
+V DescribeRuleOutput.Description string
+V DescribeRuleOutput.EventBusName string
+V DescribeRuleOutput.EventPattern string
+V DescribeRuleOutput.ManagedBy string
+V DescribeRuleOutput.Name string
+V DescribeRuleOutput.RoleArn string
+V DescribeRuleOutput.ScheduleExpression string
+V DisableRuleInput.EventBusName string
+V DisableRuleInput.Name string
+V EcsParameters.Group string
+V EcsParameters.PlatformVersion string
+V EcsParameters.ReferenceId string
+V EcsParameters.TaskCount int32
+V EcsParameters.TaskDefinitionArn string
+V EnableRuleInput.EventBusName string
+V EnableRuleInput.Name string
+V EndpointParameters.Endpoint string
+V EndpointParameters.Region string
+V EndpointParameters.UseDualStack bool
+V EndpointParameters.UseFIPS bool
+V EventBus.Arn string
+V EventBus.Name string
+V EventBus.Policy string
+V EventSource.Arn string
+V EventSource.CreatedBy string
+V EventSource.Name string
+V IllegalStatusException.ErrorCodeOverride string
+V IllegalStatusException.Message string
+V InputTransformer.InputTemplate string
+V InternalException.ErrorCodeOverride string
+V InternalException.Message string
+V InvalidEventPatternException.ErrorCodeOverride string
+V InvalidEventPatternException.Message string
+V InvalidStateException.ErrorCodeOverride string
+V InvalidStateException.Message string
+V KinesisParameters.PartitionKeyPath string
+V LimitExceededException.ErrorCodeOverride string
+V LimitExceededException.Message string
+V ListApiDestinationsInput.ConnectionArn string
+V ListApiDestinationsInput.Limit int32
+V ListApiDestinationsInput.NamePrefix string
+V ListApiDestinationsInput.NextToken string
+V ListApiDestinationsOutput.NextToken string
+V ListArchivesInput.EventSourceArn string
+V ListArchivesInput.Limit int32
+V ListArchivesInput.NamePrefix string
+V ListArchivesInput.NextToken string
+V ListArchivesOutput.NextToken string
+V ListConnectionsInput.Limit int32
+V ListConnectionsInput.NamePrefix string
+V ListConnectionsInput.NextToken string
+V ListConnectionsOutput.NextToken string
+V ListEventBusesInput.Limit int32
+V ListEventBusesInput.NamePrefix string
+V ListEventBusesInput.NextToken string
+V ListEventBusesOutput.NextToken string
+V ListEventSourcesInput.Limit int32
+V ListEventSourcesInput.NamePrefix string
+V ListEventSourcesInput.NextToken string
+V ListEventSourcesOutput.NextToken string
+V ListPartnerEventSourceAccountsInput.EventSourceName string
+V ListPartnerEventSourceAccountsInput.Limit int32
+V ListPartnerEventSourceAccountsInput.NextToken string
+V ListPartnerEventSourceAccountsOutput.NextToken string
+V ListPartnerEventSourcesInput.Limit int32
+V ListPartnerEventSourcesInput.NamePrefix string
+V ListPartnerEventSourcesInput.NextToken string
+V ListPartnerEventSourcesOutput.NextToken string
+V ListReplaysInput.EventSourceArn string
+V ListReplaysInput.Limit int32
+V ListReplaysInput.NamePrefix string
+V ListReplaysInput.NextToken string
+V ListReplaysOutput.NextToken string
+V ListRuleNamesByTargetInput.EventBusName string
+V ListRuleNamesByTargetInput.Limit int32
+V ListRuleNamesByTargetInput.NextToken string
+V ListRuleNamesByTargetInput.TargetArn string
+V ListRuleNamesByTargetOutput.NextToken string
+V ListRulesInput.EventBusName string
+V ListRulesInput.Limit int32
+V ListRulesInput.NamePrefix string
+V ListRulesInput.NextToken string
+V ListRulesOutput.NextToken string
+V ListTagsForResourceInput.ResourceARN string
+V ListTargetsByRuleInput.EventBusName string
+V ListTargetsByRuleInput.Limit int32
+V ListTargetsByRuleInput.NextToken string
+V ListTargetsByRuleInput.Rule string
+V ListTargetsByRuleOutput.NextToken string
+V ManagedRuleException.ErrorCodeOverride string
+V ManagedRuleException.Message string
+V OperationDisabledException.ErrorCodeOverride string
+V OperationDisabledException.Message string
+V Options.BaseEndpoint string
+V PartnerEventSource.Arn string
+V PartnerEventSource.Name string
+V PartnerEventSourceAccount.Account string
+V PlacementConstraint.Expression string
+V PlacementStrategy.Field string
+V PolicyLengthExceededException.ErrorCodeOverride string
+V PolicyLengthExceededException.Message string
+V PutEventsRequestEntry.Detail string
+V PutEventsRequestEntry.DetailType string
+V PutEventsRequestEntry.EventBusName string
+V PutEventsRequestEntry.Source string
+V PutEventsRequestEntry.TraceHeader string
+V PutEventsResultEntry.ErrorCode string
+V PutEventsResultEntry.ErrorMessage string
+V PutEventsResultEntry.EventId string
+V PutPartnerEventsRequestEntry.Detail string
+V PutPartnerEventsRequestEntry.DetailType string
+V PutPartnerEventsRequestEntry.Source string
+V PutPartnerEventsResultEntry.ErrorCode string
+V PutPartnerEventsResultEntry.ErrorMessage string
+V PutPartnerEventsResultEntry.EventId string
+V PutPermissionInput.Action string
+V PutPermissionInput.EventBusName string
+V PutPermissionInput.Policy string
+V PutPermissionInput.Principal string
+V PutPermissionInput.StatementId string
+V PutRuleInput.Description string
+V PutRuleInput.EventBusName string
+V PutRuleInput.EventPattern string
+V PutRuleInput.Name string
+V PutRuleInput.RoleArn string
+V PutRuleInput.ScheduleExpression string
+V PutRuleOutput.RuleArn string
+V PutTargetsInput.EventBusName string
+V PutTargetsInput.Rule string
+V PutTargetsResultEntry.ErrorCode string
+V PutTargetsResultEntry.ErrorMessage string
+V PutTargetsResultEntry.TargetId string
+V RedshiftDataParameters.Database string
+V RedshiftDataParameters.DbUser string
+V RedshiftDataParameters.SecretManagerArn string
+V RedshiftDataParameters.Sql string
+V RedshiftDataParameters.StatementName string
+V RemovePermissionInput.EventBusName string
+V RemovePermissionInput.StatementId string
+V RemoveTargetsInput.EventBusName string
+V RemoveTargetsInput.Rule string
+V RemoveTargetsResultEntry.ErrorCode string
+V RemoveTargetsResultEntry.ErrorMessage string
+V RemoveTargetsResultEntry.TargetId string
+V Replay.EventSourceArn string
+V Replay.ReplayName string
+V Replay.StateReason string
+V ReplayDestination.Arn string
+V ResourceAlreadyExistsException.ErrorCodeOverride string
+V ResourceAlreadyExistsException.Message string
+V ResourceNotFoundException.ErrorCodeOverride string
+V ResourceNotFoundException.Message string
+V RetryPolicy.MaximumEventAgeInSeconds int32
+V RetryPolicy.MaximumRetryAttempts int32
+V Rule.Arn string
+V Rule.Description string
+V Rule.EventBusName string
+V Rule.EventPattern string
+V Rule.ManagedBy string
+V Rule.Name string
+V Rule.RoleArn string
+V Rule.ScheduleExpression string
+V RunCommandTarget.Key string
+V SageMakerPipelineParameter.Name string
+V SageMakerPipelineParameter.Value string
+V SqsParameters.MessageGroupId string
+V StartReplayInput.Description string
+V StartReplayInput.EventSourceArn string
+V StartReplayInput.ReplayName string
+V StartReplayOutput.ReplayArn string
+V StartReplayOutput.StateReason string
+V Tag.Key string
+V Tag.Value string
+V TagResourceInput.ResourceARN string
+V Target.Arn string
+V Target.Id string
+V Target.Input string
+V Target.InputPath string
+V Target.RoleArn string
+V TestEventPatternInput.Event string
+V TestEventPatternInput.EventPattern string
+V UntagResourceInput.ResourceARN string
+V UpdateApiDestinationInput.ConnectionArn string
+V UpdateApiDestinationInput.Description string
+V UpdateApiDestinationInput.InvocationEndpoint string
+V UpdateApiDestinationInput.InvocationRateLimitPerSecond int32
+V UpdateApiDestinationInput.Name string
+V UpdateApiDestinationOutput.ApiDestinationArn string
+V UpdateArchiveInput.ArchiveName string
+V UpdateArchiveInput.Description string
+V UpdateArchiveInput.EventPattern string
+V UpdateArchiveInput.RetentionDays int32
+V UpdateArchiveOutput.ArchiveArn string
+V UpdateArchiveOutput.StateReason string
+V UpdateConnectionApiKeyAuthRequestParameters.ApiKeyName string
+V UpdateConnectionApiKeyAuthRequestParameters.ApiKeyValue string
+V UpdateConnectionBasicAuthRequestParameters.Password string
+V UpdateConnectionBasicAuthRequestParameters.Username string
+V UpdateConnectionInput.Description string
+V UpdateConnectionInput.Name string
+V UpdateConnectionOAuthClientRequestParameters.ClientID string
+V UpdateConnectionOAuthClientRequestParameters.ClientSecret string
+V UpdateConnectionOAuthRequestParameters.AuthorizationEndpoint string
+V UpdateConnectionOutput.ConnectionArn string
+Q HttpParameters.HeaderParameters
+Q HttpParameters.QueryStringParameters
+Q InputTransformer.InputPathsMap
+D Archive.EventCount int64
+D Archive.SizeBytes int64
+D ConnectionBodyParameter.IsValueSecret bool
+D ConnectionHeaderParameter.IsValueSecret bool
+D ConnectionQueryStringParameter.IsValueSecret bool
+D DeleteRuleInput.Force bool
+D DescribeArchiveOutput.EventCount int64
+D DescribeArchiveOutput.SizeBytes int64
+D EcsParameters.EnableECSManagedTags bool
+D EcsParameters.EnableExecuteCommand bool
+D RedshiftDataParameters.WithEvent bool
+D RemovePermissionInput.RemoveAllPermissions bool
+D RemoveTargetsInput.Force bool
+D TestEventPatternOutput.Result bool
+W BatchArrayProperties.Size int64 int32
+W BatchRetryStrategy.Attempts int64 int32
+W CapacityProviderStrategyItem.Base int64 int32
+W CapacityProviderStrategyItem.Weight int64 int32
+W PutEventsOutput.FailedEntryCount int64 int32
+W PutPartnerEventsOutput.FailedEntryCount int64 int32
+W PutTargetsOutput.FailedEntryCount int64 int32
+W RemoveTargetsOutput.FailedEntryCount int64 int32
+L AwsVpcConfiguration.SecurityGroups -
+L AwsVpcConfiguration.Subnets -
+L ConnectionHttpParameters.BodyParameters ConnectionBodyParameter
+L ConnectionHttpParameters.HeaderParameters ConnectionHeaderParameter
+L ConnectionHttpParameters.QueryStringParameters ConnectionQueryStringParameter
+L CreateEventBusInput.Tags Tag
+L EcsParameters.CapacityProviderStrategy CapacityProviderStrategyItem
+L EcsParameters.PlacementConstraints PlacementConstraint
+L EcsParameters.PlacementStrategy PlacementStrategy
+L EcsParameters.Tags Tag
+L HttpParameters.PathParameterValues -
+L ListApiDestinationsOutput.ApiDestinations ApiDestination
+L ListArchivesOutput.Archives Archive
+L ListConnectionsOutput.Connections Connection
+L ListEventBusesOutput.EventBuses EventBus
+L ListEventSourcesOutput.EventSources EventSource
+L ListPartnerEventSourceAccountsOutput.PartnerEventSourceAccounts PartnerEventSourceAccount
+L ListPartnerEventSourcesOutput.PartnerEventSources PartnerEventSource
+L ListReplaysOutput.Replays Replay
+L ListRuleNamesByTargetOutput.RuleNames -
+L ListRulesOutput.Rules Rule
+L ListTagsForResourceOutput.Tags Tag
+L ListTargetsByRuleOutput.Targets Target
+L PutEventsInput.Entries PutEventsRequestEntry
+L PutEventsOutput.Entries PutEventsResultEntry
+L PutEventsRequestEntry.Resources -
+L PutPartnerEventsInput.Entries PutPartnerEventsRequestEntry
+L PutPartnerEventsOutput.Entries PutPartnerEventsResultEntry
+L PutPartnerEventsRequestEntry.Resources -
+L PutRuleInput.Tags Tag
+L PutTargetsInput.Targets Target
+L PutTargetsOutput.FailedEntries PutTargetsResultEntry
+L RemoveTargetsInput.Ids -
+L RemoveTargetsOutput.FailedEntries RemoveTargetsResultEntry
+L ReplayDestination.FilterArns -
+L RunCommandParameters.RunCommandTargets RunCommandTarget
+L RunCommandTarget.Values -
+L SageMakerPipelineParameters.PipelineParameterList SageMakerPipelineParameter
+L TagResourceInput.Tags Tag
+L UntagResourceInput.TagKeys -
+F ApiDestination.ApiDestinationState ApiDestinationState
+F ApiDestination.HttpMethod ApiDestinationHttpMethod
+F Archive.State ArchiveState
+F AwsVpcConfiguration.AssignPublicIp AssignPublicIp
+F CancelReplayOutput.State ReplayState
+F Connection.AuthorizationType ConnectionAuthorizationType
+F Connection.ConnectionState ConnectionState
+F ConnectionOAuthResponseParameters.HttpMethod ConnectionOAuthHttpMethod
+F CreateApiDestinationInput.HttpMethod ApiDestinationHttpMethod
+F CreateApiDestinationOutput.ApiDestinationState ApiDestinationState
+F CreateArchiveOutput.State ArchiveState
+F CreateConnectionInput.AuthorizationType ConnectionAuthorizationType
+F CreateConnectionOAuthRequestParameters.HttpMethod ConnectionOAuthHttpMethod
+F CreateConnectionOutput.ConnectionState ConnectionState
+F DeauthorizeConnectionOutput.ConnectionState ConnectionState
+F DeleteConnectionOutput.ConnectionState ConnectionState
+F DescribeApiDestinationOutput.ApiDestinationState ApiDestinationState
+F DescribeApiDestinationOutput.HttpMethod ApiDestinationHttpMethod
+F DescribeArchiveOutput.State ArchiveState
+F DescribeConnectionOutput.AuthorizationType ConnectionAuthorizationType
+F DescribeConnectionOutput.ConnectionState ConnectionState
+F DescribeEventSourceOutput.State EventSourceState
+F DescribeReplayOutput.State ReplayState
+F DescribeRuleOutput.State RuleState
+F EcsParameters.LaunchType LaunchType
+F EcsParameters.PropagateTags PropagateTags
+F EventSource.State EventSourceState
+F ListArchivesInput.State ArchiveState
+F ListConnectionsInput.ConnectionState ConnectionState
+F ListReplaysInput.State ReplayState
+F PartnerEventSourceAccount.State EventSourceState
+F PlacementConstraint.Type PlacementConstraintType
+F PlacementStrategy.Type PlacementStrategyType
+F PutRuleInput.State RuleState
+F Replay.State ReplayState
+F Rule.State RuleState
+F StartReplayOutput.State ReplayState
+F UpdateApiDestinationInput.HttpMethod ApiDestinationHttpMethod
+F UpdateApiDestinationOutput.ApiDestinationState ApiDestinationState
+F UpdateArchiveOutput.State ArchiveState
+F UpdateConnectionInput.AuthorizationType ConnectionAuthorizationType
+F UpdateConnectionOAuthRequestParameters.HttpMethod ConnectionOAuthHttpMethod
+F UpdateConnectionOutput.ConnectionState ConnectionState
+N APIOptions
+N Account
+N Action
+N ApiDestinationArn
+N ApiDestinations
+N ApiKeyAuthParameters
+N ApiKeyName
+N ApiKeyValue
+N AppID
+N ArchiveArn
+N ArchiveName
+N Archives
+N Arn
+N ArrayProperties
+N Attempts
+N AuthParameters
+N AuthSchemePreference
+N AuthSchemeResolver
+N AuthSchemes
+N AuthorizationEndpoint
+N AwsvpcConfiguration
+N Base
+N BaseEndpoint
+N BasicAuthParameters
+N BatchParameters
+N BodyParameters
+N CapacityProvider
+N CapacityProviderStrategy
+N ClientID
+N ClientLogMode
+N ClientParameters
+N ClientSecret
+N Condition
+N ConnectionArn
+N Connections
+N CreatedBy
+N CreationTime
+N Credentials
+N Database
+N DbUser
+N DeadLetterConfig
+N DefaultsMode
+N Description
+N Destination
+N Detail
+N DetailType
+N DisableClockSkewCorrection
+N DisableHTTPS
+N EcsParameters
+N EnableECSManagedTags
+N EnableExecuteCommand
+N Endpoint
+N EndpointOptions
+N EndpointResolver
+N EndpointResolverV2
+N Entries
+N ErrorCode
+N ErrorCodeOverride
+N ErrorMessage
+N Event
+N EventBusArn
+N EventBusName
+N EventBuses
+N EventCount
+N EventEndTime
+N EventId
+N EventLastReplayedTime
+N EventPattern
+N EventSourceArn
+N EventSourceName
+N EventSources
+N EventStartTime
+N ExpirationTime
+N Expression
+N FailedEntries
+N FailedEntryCount
+N Field
+N FilterArns
+N Force
+N Group
+N HTTPClient
+N HTTPSignerV4
+N HeaderParameters
+N HttpParameters
+N Id
+N Ids
+N Input
+N InputPath
+N InputPathsMap
+N InputTemplate
+N InputTransformer
+N Interceptors
+N InvocationEndpoint
+N InvocationHttpParameters
+N InvocationRateLimitPerSecond
+N IsValueSecret
+N JobDefinition
+N JobName
+N Key
+N KinesisParameters
+N LastAuthorizedTime
+N LastModifiedTime
+N Limit
+N LogDeprecated
+N Logger
+N ManagedBy
+N MaximumEventAgeInSeconds
+N MaximumRetryAttempts
+N Message
+N MessageGroupId
+N MeterProvider
+N Name
+N NamePrefix
+N NetworkConfiguration
+N NextToken
+N OAuthHttpParameters
+N OAuthParameters
+N Operation
+N Options
+N PartitionKeyPath
+N PartnerEventSourceAccounts
+N PartnerEventSources
+N Password
+N PathParameterValues
+N PipelineParameterList
+N PlacementConstraints
+N PlacementStrategy
+N PlatformVersion
+N Policy
+N Principal
+N Protocol
+N QueryStringParameters
+N RedshiftDataParameters
+N ReferenceId
+N Region
+N RemoveAllPermissions
+N ReplayArn
+N ReplayEndTime
+N ReplayName
+N ReplayStartTime
+N Replays
+N ResolvedRegion
+N Resolver
+N ResourceARN
+N Resources
+N Result
+N ResultMetadata
+N RetentionDays
+N RetryMaxAttempts
+N RetryMode
+N RetryPolicy
+N RetryStrategy
+N Retryer
+N RoleArn
+N Rule
+N RuleArn
+N RuleNames
+N Rules
+N RunCommandParameters
+N RunCommandTargets
+N RuntimeEnvironment
+N SageMakerPipelineParameters
+N ScheduleExpression
+N SecretArn
+N SecretManagerArn
+N SecurityGroups
+N Size
+N SizeBytes
+N Source
+N Sql
+N SqsParameters
+N StateReason
+N StatementId
+N StatementName
+N Subnets
+N TagKeys
+N Tags
+N TargetArn
+N TargetId
+N Targets
+N TaskCount
+N TaskDefinitionArn
+N Time
+N TraceHeader
+N TracerProvider
+N Type
+N UseDualStack
+N UseDualStackEndpoint
+N UseFIPS
+N UseFIPSEndpoint
+N Username
+N Value
+N Values
+N Weight
+N WithEvent
+T ApiDestination
+T ApiDestinationHttpMethod
+T ApiDestinationState
+T Archive
+T ArchiveState
+T AssignPublicIp
+T AwsVpcConfiguration
+T BatchArrayProperties
+T BatchParameters
+T BatchRetryStrategy
+T CapacityProviderStrategyItem
+T ConcurrentModificationException
+T Condition
+T Connection
+T ConnectionApiKeyAuthResponseParameters
+T ConnectionAuthResponseParameters
+T ConnectionAuthorizationType
+T ConnectionBasicAuthResponseParameters
+T ConnectionBodyParameter
+T ConnectionHeaderParameter
+T ConnectionHttpParameters
+T ConnectionOAuthClientResponseParameters
+T ConnectionOAuthHttpMethod
+T ConnectionOAuthResponseParameters
+T ConnectionQueryStringParameter
+T ConnectionState
+T CreateConnectionApiKeyAuthRequestParameters
+T CreateConnectionAuthRequestParameters
+T CreateConnectionBasicAuthRequestParameters
+T CreateConnectionOAuthClientRequestParameters
+T CreateConnectionOAuthRequestParameters
+T DeadLetterConfig
+T EcsParameters
+T EventBus
+T EventSource
+T EventSourceState
+T HttpParameters
+T IllegalStatusException
+T InputTransformer
+T InternalException
+T InvalidEventPatternException
+T InvalidStateException
+T KinesisParameters
+T LaunchType
+T LimitExceededException
+T ManagedRuleException
+T NetworkConfiguration
+T OperationDisabledException
+T PartnerEventSource
+T PartnerEventSourceAccount
+T PlacementConstraint
+T PlacementConstraintType
+T PlacementStrategy
+T PlacementStrategyType
+T PolicyLengthExceededException
+T PropagateTags
+T PutEventsRequestEntry
+T PutEventsResultEntry
+T PutPartnerEventsRequestEntry
+T PutPartnerEventsResultEntry
+T PutTargetsResultEntry
+T RedshiftDataParameters
+T RemoveTargetsResultEntry
+T Replay
+T ReplayDestination
+T ReplayState
+T ResourceAlreadyExistsException
+T ResourceNotFoundException
+T RetryPolicy
+T Rule
+T RuleState
+T RunCommandParameters
+T RunCommandTarget
+T SageMakerPipelineParameter
+T SageMakerPipelineParameters
+T SqsParameters
+T Tag
+T Target
+T UpdateConnectionApiKeyAuthRequestParameters
+T UpdateConnectionAuthRequestParameters
+T UpdateConnectionBasicAuthRequestParameters
+T UpdateConnectionOAuthClientRequestParameters
+T UpdateConnectionOAuthRequestParameters
+E ApiDestinationHttpMethodDelete ApiDestinationHttpMethod
+E ApiDestinationHttpMethodGet ApiDestinationHttpMethod
+E ApiDestinationHttpMethodHead ApiDestinationHttpMethod
+E ApiDestinationHttpMethodOptions ApiDestinationHttpMethod
+E ApiDestinationHttpMethodPatch ApiDestinationHttpMethod
+E ApiDestinationHttpMethodPost ApiDestinationHttpMethod
+E ApiDestinationHttpMethodPut ApiDestinationHttpMethod
+E ApiDestinationStateActive ApiDestinationState
+E ApiDestinationStateInactive ApiDestinationState
+E ArchiveStateCreateFailed ArchiveState
+E ArchiveStateCreating ArchiveState
+E ArchiveStateDisabled ArchiveState
+E ArchiveStateEnabled ArchiveState
+E ArchiveStateUpdateFailed ArchiveState
+E ArchiveStateUpdating ArchiveState
+E AssignPublicIpDisabled AssignPublicIp
+E AssignPublicIpEnabled AssignPublicIp
+E ConnectionAuthorizationTypeApiKey ConnectionAuthorizationType
+E ConnectionAuthorizationTypeBasic ConnectionAuthorizationType
+E ConnectionAuthorizationTypeOauthClientCredentials ConnectionAuthorizationType
+E ConnectionOAuthHttpMethodGet ConnectionOAuthHttpMethod
+E ConnectionOAuthHttpMethodPost ConnectionOAuthHttpMethod
+E ConnectionOAuthHttpMethodPut ConnectionOAuthHttpMethod
+E ConnectionStateAuthorized ConnectionState
+E ConnectionStateAuthorizing ConnectionState
+E ConnectionStateCreating ConnectionState
+E ConnectionStateDeauthorized ConnectionState
+E ConnectionStateDeauthorizing ConnectionState
+E ConnectionStateDeleting ConnectionState
+E ConnectionStateUpdating ConnectionState
+E EventSourceStateActive EventSourceState
+E EventSourceStateDeleted EventSourceState
+E EventSourceStatePending EventSourceState
+E LaunchTypeEc2 LaunchType
+E LaunchTypeExternal LaunchType
+E LaunchTypeFargate LaunchType
+E PlacementConstraintTypeDistinctInstance PlacementConstraintType
+E PlacementConstraintTypeMemberOf PlacementConstraintType
+E PlacementStrategyTypeBinpack PlacementStrategyType
+E PlacementStrategyTypeRandom PlacementStrategyType
+E PlacementStrategyTypeSpread PlacementStrategyType
+E PropagateTagsTaskDefinition PropagateTags
+E ReplayStateCancelled ReplayState
+E ReplayStateCancelling ReplayState
+E ReplayStateCompleted ReplayState
+E ReplayStateFailed ReplayState
+E ReplayStateRunning ReplayState
+E ReplayStateStarting ReplayState
+E RuleStateDisabled RuleState
+E RuleStateEnabled RuleState
+H ConnectionBodyParameter.Value
+H ConnectionHeaderParameter.Value
+H ConnectionQueryStringParameter.Value
+H CreateConnectionApiKeyAuthRequestParameters.ApiKeyValue
+H CreateConnectionBasicAuthRequestParameters.Password
+H CreateConnectionOAuthClientRequestParameters.ClientSecret
+H UpdateConnectionApiKeyAuthRequestParameters.ApiKeyValue
+H UpdateConnectionBasicAuthRequestParameters.Password
+H UpdateConnectionOAuthClientRequestParameters.ClientSecret
+K ActivateEventSourceInput 001 Name req nil
+K ActivateEventSourceInput 002 Name len 1 ptr
+K AwsVpcConfiguration 001 Subnets req nil
+K BatchParameters 001 JobDefinition req nil
+K BatchParameters 002 JobName req nil
+K CancelReplayInput 001 ReplayName req nil
+K CancelReplayInput 002 ReplayName len 1 ptr
+K CapacityProviderStrategyItem 001 CapacityProvider req nil
+K CapacityProviderStrategyItem 002 CapacityProvider len 1 ptr
+K Condition 001 Key req nil
+K Condition 002 Type req nil
+K Condition 003 Value req nil
+K CreateApiDestinationInput 001 ConnectionArn req nil
+K CreateApiDestinationInput 002 ConnectionArn len 1 ptr
+K CreateApiDestinationInput 003 HttpMethod req empty
+K CreateApiDestinationInput 004 InvocationEndpoint req nil
+K CreateApiDestinationInput 005 InvocationEndpoint len 1 ptr
+K CreateApiDestinationInput 006 InvocationRateLimitPerSecond min 1 ptr
+K CreateApiDestinationInput 007 Name req nil
+K CreateApiDestinationInput 008 Name len 1 ptr
+K CreateArchiveInput 001 ArchiveName req nil
+K CreateArchiveInput 002 ArchiveName len 1 ptr
+K CreateArchiveInput 003 EventSourceArn req nil
+K CreateArchiveInput 004 EventSourceArn len 1 ptr
+K CreateConnectionApiKeyAuthRequestParameters 001 ApiKeyName req nil
+K CreateConnectionApiKeyAuthRequestParameters 002 ApiKeyName len 1 ptr
+K CreateConnectionApiKeyAuthRequestParameters 003 ApiKeyValue req nil
+K CreateConnectionApiKeyAuthRequestParameters 004 ApiKeyValue len 1 ptr
+K CreateConnectionAuthRequestParameters 001 ApiKeyAuthParameters nest CreateConnectionApiKeyAuthRequestParameters
+K CreateConnectionAuthRequestParameters 002 BasicAuthParameters nest CreateConnectionBasicAuthRequestParameters
+K CreateConnectionAuthRequestParameters 003 OAuthParameters nest CreateConnectionOAuthRequestParameters
+K CreateConnectionBasicAuthRequestParameters 001 Password req nil
+K CreateConnectionBasicAuthRequestParameters 002 Password len 1 ptr
+K CreateConnectionBasicAuthRequestParameters 003 Username req nil
+K CreateConnectionBasicAuthRequestParameters 004 Username len 1 ptr
+K CreateConnectionInput 001 AuthParameters req nil
+K CreateConnectionInput 002 AuthorizationType req empty
+K CreateConnectionInput 003 Name req nil
+K CreateConnectionInput 004 Name len 1 ptr
+K CreateConnectionInput 005 AuthParameters nest CreateConnectionAuthRequestParameters
+K CreateConnectionOAuthClientRequestParameters 001 ClientID req nil
+K CreateConnectionOAuthClientRequestParameters 002 ClientID len 1 ptr
+K CreateConnectionOAuthClientRequestParameters 003 ClientSecret req nil
+K CreateConnectionOAuthClientRequestParameters 004 ClientSecret len 1 ptr
+K CreateConnectionOAuthRequestParameters 001 AuthorizationEndpoint req nil
+K CreateConnectionOAuthRequestParameters 002 AuthorizationEndpoint len 1 ptr
+K CreateConnectionOAuthRequestParameters 003 ClientParameters req nil
+K CreateConnectionOAuthRequestParameters 004 HttpMethod req empty
+K CreateConnectionOAuthRequestParameters 005 ClientParameters nest CreateConnectionOAuthClientRequestParameters
+K CreateEventBusInput 001 EventSourceName len 1 ptr
+K CreateEventBusInput 002 Name req nil
+K CreateEventBusInput 003 Name len 1 ptr
+K CreateEventBusInput 004 Tags each Tag slice
+K CreatePartnerEventSourceInput 001 Account req nil
+K CreatePartnerEventSourceInput 002 Account len 12 ptr
+K CreatePartnerEventSourceInput 003 Name req nil
+K CreatePartnerEventSourceInput 004 Name len 1 ptr
+K DeactivateEventSourceInput 001 Name req nil
+K DeactivateEventSourceInput 002 Name len 1 ptr
+K DeadLetterConfig 001 Arn len 1 ptr
+K DeauthorizeConnectionInput 001 Name req nil
+K DeauthorizeConnectionInput 002 Name len 1 ptr
+K DeleteApiDestinationInput 001 Name req nil
+K DeleteApiDestinationInput 002 Name len 1 ptr
+K DeleteArchiveInput 001 ArchiveName req nil
+K DeleteArchiveInput 002 ArchiveName len 1 ptr
+K DeleteConnectionInput 001 Name req nil
+K DeleteConnectionInput 002 Name len 1 ptr
+K DeleteEventBusInput 001 Name req nil
+K DeleteEventBusInput 002 Name len 1 ptr
+K DeletePartnerEventSourceInput 001 Account req nil
+K DeletePartnerEventSourceInput 002 Account len 12 ptr
+K DeletePartnerEventSourceInput 003 Name req nil
+K DeletePartnerEventSourceInput 004 Name len 1 ptr
+K DeleteRuleInput 001 EventBusName len 1 ptr
+K DeleteRuleInput 002 Name req nil
+K DeleteRuleInput 003 Name len 1 ptr
+K DescribeApiDestinationInput 001 Name req nil
+K DescribeApiDestinationInput 002 Name len 1 ptr
+K DescribeArchiveInput 001 ArchiveName req nil
+K DescribeArchiveInput 002 ArchiveName len 1 ptr
+K DescribeConnectionInput 001 Name req nil
+K DescribeConnectionInput 002 Name len 1 ptr
+K DescribeEventBusInput 001 Name len 1 ptr
+K DescribeEventSourceInput 001 Name req nil
+K DescribeEventSourceInput 002 Name len 1 ptr
+K DescribePartnerEventSourceInput 001 Name req nil
+K DescribePartnerEventSourceInput 002 Name len 1 ptr
+K DescribeReplayInput 001 ReplayName req nil
+K DescribeReplayInput 002 ReplayName len 1 ptr
+K DescribeRuleInput 001 EventBusName len 1 ptr
+K DescribeRuleInput 002 Name req nil
+K DescribeRuleInput 003 Name len 1 ptr
+K DisableRuleInput 001 EventBusName len 1 ptr
+K DisableRuleInput 002 Name req nil
+K DisableRuleInput 003 Name len 1 ptr
+K EcsParameters 001 TaskCount min 1 ptr
+K EcsParameters 002 TaskDefinitionArn req nil
+K EcsParameters 003 TaskDefinitionArn len 1 ptr
+K EcsParameters 004 CapacityProviderStrategy each CapacityProviderStrategyItem slice
+K EcsParameters 005 NetworkConfiguration nest NetworkConfiguration
+K EcsParameters 006 Tags each Tag slice
+K EnableRuleInput 001 EventBusName len 1 ptr
+K EnableRuleInput 002 Name req nil
+K EnableRuleInput 003 Name len 1 ptr
+K InputTransformer 001 InputTemplate req nil
+K InputTransformer 002 InputTemplate len 1 ptr
+K KinesisParameters 001 PartitionKeyPath req nil
+K ListApiDestinationsInput 001 ConnectionArn len 1 ptr
+K ListApiDestinationsInput 002 Limit min 1 ptr
+K ListApiDestinationsInput 003 NamePrefix len 1 ptr
+K ListApiDestinationsInput 004 NextToken len 1 ptr
+K ListArchivesInput 001 EventSourceArn len 1 ptr
+K ListArchivesInput 002 Limit min 1 ptr
+K ListArchivesInput 003 NamePrefix len 1 ptr
+K ListArchivesInput 004 NextToken len 1 ptr
+K ListConnectionsInput 001 Limit min 1 ptr
+K ListConnectionsInput 002 NamePrefix len 1 ptr
+K ListConnectionsInput 003 NextToken len 1 ptr
+K ListEventBusesInput 001 Limit min 1 ptr
+K ListEventBusesInput 002 NamePrefix len 1 ptr
+K ListEventBusesInput 003 NextToken len 1 ptr
+K ListEventSourcesInput 001 Limit min 1 ptr
+K ListEventSourcesInput 002 NamePrefix len 1 ptr
+K ListEventSourcesInput 003 NextToken len 1 ptr
+K ListPartnerEventSourceAccountsInput 001 EventSourceName req nil
+K ListPartnerEventSourceAccountsInput 002 EventSourceName len 1 ptr
+K ListPartnerEventSourceAccountsInput 003 Limit min 1 ptr
+K ListPartnerEventSourceAccountsInput 004 NextToken len 1 ptr
+K ListPartnerEventSourcesInput 001 Limit min 1 ptr
+K ListPartnerEventSourcesInput 002 NamePrefix req nil
+K ListPartnerEventSourcesInput 003 NamePrefix len 1 ptr
+K ListPartnerEventSourcesInput 004 NextToken len 1 ptr
+K ListReplaysInput 001 EventSourceArn len 1 ptr
+K ListReplaysInput 002 Limit min 1 ptr
+K ListReplaysInput 003 NamePrefix len 1 ptr
+K ListReplaysInput 004 NextToken len 1 ptr
+K ListRuleNamesByTargetInput 001 EventBusName len 1 ptr
+K ListRuleNamesByTargetInput 002 Limit min 1 ptr
+K ListRuleNamesByTargetInput 003 NextToken len 1 ptr
+K ListRuleNamesByTargetInput 004 TargetArn req nil
+K ListRuleNamesByTargetInput 005 TargetArn len 1 ptr
+K ListRulesInput 001 EventBusName len 1 ptr
+K ListRulesInput 002 Limit min 1 ptr
+K ListRulesInput 003 NamePrefix len 1 ptr
+K ListRulesInput 004 NextToken len 1 ptr
+K ListTagsForResourceInput 001 ResourceARN req nil
+K ListTagsForResourceInput 002 ResourceARN len 1 ptr
+K ListTargetsByRuleInput 001 EventBusName len 1 ptr
+K ListTargetsByRuleInput 002 Limit min 1 ptr
+K ListTargetsByRuleInput 003 NextToken len 1 ptr
+K ListTargetsByRuleInput 004 Rule req nil
+K ListTargetsByRuleInput 005 Rule len 1 ptr
+K NetworkConfiguration 001 AwsvpcConfiguration nest AwsVpcConfiguration
+K PutEventsInput 001 Entries req nil
+K PutEventsInput 002 Entries len 1 container
+K PutEventsInput 003 Entries each PutEventsRequestEntry slice
+K PutEventsRequestEntry 001 EventBusName len 1 ptr
+K PutEventsRequestEntry 002 TraceHeader len 1 ptr
+K PutPartnerEventsInput 001 Entries req nil
+K PutPartnerEventsInput 002 Entries len 1 container
+K PutPartnerEventsInput 003 Entries each PutPartnerEventsRequestEntry slice
+K PutPartnerEventsRequestEntry 001 Source len 1 ptr
+K PutPermissionInput 001 Action len 1 ptr
+K PutPermissionInput 002 EventBusName len 1 ptr
+K PutPermissionInput 003 Principal len 1 ptr
+K PutPermissionInput 004 StatementId len 1 ptr
+K PutPermissionInput 005 Condition nest Condition
+K PutRuleInput 001 EventBusName len 1 ptr
+K PutRuleInput 002 Name req nil
+K PutRuleInput 003 Name len 1 ptr
+K PutRuleInput 004 RoleArn len 1 ptr
+K PutRuleInput 005 Tags each Tag slice
+K PutTargetsInput 001 EventBusName len 1 ptr
+K PutTargetsInput 002 Rule req nil
+K PutTargetsInput 003 Rule len 1 ptr
+K PutTargetsInput 004 Targets req nil
+K PutTargetsInput 005 Targets len 1 container
+K PutTargetsInput 006 Targets each Target slice
+K RedshiftDataParameters 001 Database req nil
+K RedshiftDataParameters 002 Database len 1 ptr
+K RedshiftDataParameters 003 DbUser len 1 ptr
+K RedshiftDataParameters 004 SecretManagerArn len 1 ptr
+K RedshiftDataParameters 005 Sql req nil
+K RedshiftDataParameters 006 Sql len 1 ptr
+K RedshiftDataParameters 007 StatementName len 1 ptr
+K RemovePermissionInput 001 EventBusName len 1 ptr
+K RemovePermissionInput 002 StatementId len 1 ptr
+K RemoveTargetsInput 001 EventBusName len 1 ptr
+K RemoveTargetsInput 002 Ids req nil
+K RemoveTargetsInput 003 Ids len 1 container
+K RemoveTargetsInput 004 Rule req nil
+K RemoveTargetsInput 005 Rule len 1 ptr
+K ReplayDestination 001 Arn req nil
+K ReplayDestination 002 Arn len 1 ptr
+K RetryPolicy 001 MaximumEventAgeInSeconds min 60 ptr
+K RunCommandParameters 001 RunCommandTargets req nil
+K RunCommandParameters 002 RunCommandTargets len 1 container
+K RunCommandParameters 003 RunCommandTargets each RunCommandTarget slice
+K RunCommandTarget 001 Key req nil
+K RunCommandTarget 002 Key len 1 ptr
+K RunCommandTarget 003 Values req nil
+K RunCommandTarget 004 Values len 1 container
+K SageMakerPipelineParameter 001 Name req nil
+K SageMakerPipelineParameter 002 Name len 1 ptr
+K SageMakerPipelineParameter 003 Value req nil
+K SageMakerPipelineParameters 001 PipelineParameterList each SageMakerPipelineParameter slice
+K StartReplayInput 001 Destination req nil
+K StartReplayInput 002 EventEndTime req nil
+K StartReplayInput 003 EventSourceArn req nil
+K StartReplayInput 004 EventSourceArn len 1 ptr
+K StartReplayInput 005 EventStartTime req nil
+K StartReplayInput 006 ReplayName req nil
+K StartReplayInput 007 ReplayName len 1 ptr
+K StartReplayInput 008 Destination nest ReplayDestination
+K Tag 001 Key req nil
+K Tag 002 Key len 1 ptr
+K Tag 003 Value req nil
+K TagResourceInput 001 ResourceARN req nil
+K TagResourceInput 002 ResourceARN len 1 ptr
+K TagResourceInput 003 Tags req nil
+K TagResourceInput 004 Tags each Tag slice
+K Target 001 Arn req nil
+K Target 002 Arn len 1 ptr
+K Target 003 Id req nil
+K Target 004 Id len 1 ptr
+K Target 005 RoleArn len 1 ptr
+K Target 006 BatchParameters nest BatchParameters
+K Target 007 DeadLetterConfig nest DeadLetterConfig
+K Target 008 EcsParameters nest EcsParameters
+K Target 009 InputTransformer nest InputTransformer
+K Target 010 KinesisParameters nest KinesisParameters
+K Target 011 RedshiftDataParameters nest RedshiftDataParameters
+K Target 012 RetryPolicy nest RetryPolicy
+K Target 013 RunCommandParameters nest RunCommandParameters
+K Target 014 SageMakerPipelineParameters nest SageMakerPipelineParameters
+K TestEventPatternInput 001 Event req nil
+K TestEventPatternInput 002 EventPattern req nil
+K UntagResourceInput 001 ResourceARN req nil
+K UntagResourceInput 002 ResourceARN len 1 ptr
+K UntagResourceInput 003 TagKeys req nil
+K UpdateApiDestinationInput 001 ConnectionArn len 1 ptr
+K UpdateApiDestinationInput 002 InvocationEndpoint len 1 ptr
+K UpdateApiDestinationInput 003 InvocationRateLimitPerSecond min 1 ptr
+K UpdateApiDestinationInput 004 Name req nil
+K UpdateApiDestinationInput 005 Name len 1 ptr
+K UpdateArchiveInput 001 ArchiveName req nil
+K UpdateArchiveInput 002 ArchiveName len 1 ptr
+K UpdateConnectionApiKeyAuthRequestParameters 001 ApiKeyName len 1 ptr
+K UpdateConnectionApiKeyAuthRequestParameters 002 ApiKeyValue len 1 ptr
+K UpdateConnectionAuthRequestParameters 001 ApiKeyAuthParameters nest UpdateConnectionApiKeyAuthRequestParameters
+K UpdateConnectionAuthRequestParameters 002 BasicAuthParameters nest UpdateConnectionBasicAuthRequestParameters
+K UpdateConnectionAuthRequestParameters 003 OAuthParameters nest UpdateConnectionOAuthRequestParameters
+K UpdateConnectionBasicAuthRequestParameters 001 Password len 1 ptr
+K UpdateConnectionBasicAuthRequestParameters 002 Username len 1 ptr
+K UpdateConnectionInput 001 Name req nil
+K UpdateConnectionInput 002 Name len 1 ptr
+K UpdateConnectionInput 003 AuthParameters nest UpdateConnectionAuthRequestParameters
+K UpdateConnectionOAuthClientRequestParameters 001 ClientID len 1 ptr
+K UpdateConnectionOAuthClientRequestParameters 002 ClientSecret len 1 ptr
+K UpdateConnectionOAuthRequestParameters 001 AuthorizationEndpoint len 1 ptr
+K UpdateConnectionOAuthRequestParameters 002 ClientParameters nest UpdateConnectionOAuthClientRequestParameters

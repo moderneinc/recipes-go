@@ -5,6 +5,8 @@
 package awssdkv2_test
 
 import (
+	"os"
+	"strings"
 	"testing"
 
 	"github.com/moderneinc/recipes-go/recipes/migration/awssdkv2"
@@ -70,9 +72,10 @@ func TestMigrateBlockedByAwsHelpersV2Dropped(t *testing.T) {
 	}
 }
 
-// rakyll/goproxy-s3's shape: a call through the uploader's S3 client. v2 narrowed
-// that field to the calls the uploader makes, which HeadObject is not one of.
-func TestMigrateBlockedByManagerS3Field(t *testing.T) {
+// rakyll/goproxy-s3's shape: a call through the uploader's S3 client. v2
+// narrowed that field to the calls the uploader makes, but it still holds the
+// client the uploader was built from, which a session-built one makes S3's own.
+func TestMigrateCallThroughManagerS3(t *testing.T) {
 	test.NewRecipeSpec().WithRecipe(&awssdkv2.MigrateAwsSdkGoToV2{}).RewriteRun(t,
 		test.Golang(`
 			package proxy
@@ -96,7 +99,95 @@ func TestMigrateBlockedByManagerS3Field(t *testing.T) {
 				_, err := c.uploader.S3.HeadObject(&s3.HeadObjectInput{Key: aws.String(key)})
 				return err
 			}
+		`, `
+			package proxy
+
+			import (
+				"context"
+
+				"github.com/aws/aws-sdk-go-v2/aws"
+				s3manager "github.com/aws/aws-sdk-go-v2/feature/s3/manager"
+				"github.com/aws/aws-sdk-go-v2/service/s3"
+			)
+
+			type cache struct {
+				uploader *s3manager.Uploader
+			}
+
+			func newCache() *cache {
+				return &cache{uploader: s3manager.NewUploader(s3.NewFromConfig(awsCompatConfig(context.TODO())))}
+			}
+
+			func (c *cache) exists(key string) error {
+				_, err := c.uploader.S3.(*s3.Client).HeadObject(context.TODO(), &s3.HeadObjectInput{Key: aws.String(key)})
+				return err
+			}
 		`),
+		test.Generated("zz_awssdkv2_config.go", configHelpersIn("proxy")),
+	)
+}
+
+// An uploader built over any S3API may hold a client that is not S3's own, so
+// a call through its S3 has nothing certain to reach.
+func TestMigrateBlockedByManagerS3FieldOfUnknownClient(t *testing.T) {
+	test.NewRecipeSpec().WithRecipe(&awssdkv2.MigrateAwsSdkGoToV2{}).RewriteRun(t,
+		test.Golang(`
+			package proxy
+
+			import (
+				"github.com/aws/aws-sdk-go/aws"
+				"github.com/aws/aws-sdk-go/service/s3"
+				"github.com/aws/aws-sdk-go/service/s3/s3iface"
+				"github.com/aws/aws-sdk-go/service/s3/s3manager"
+			)
+
+			type cache struct {
+				uploader *s3manager.Uploader
+			}
+
+			func newCache(api s3iface.S3API) *cache {
+				return &cache{uploader: s3manager.NewUploaderWithClient(api)}
+			}
+
+			func (c *cache) exists(key string) error {
+				_, err := c.uploader.S3.HeadObject(&s3.HeadObjectInput{Key: aws.String(key)})
+				return err
+			}
+		`),
+	)
+}
+
+// The proof spans the package: another file setting the field from an unknown
+// client holds back the file calling through it.
+func TestMigrateBlockedByManagerS3FieldSetElsewhere(t *testing.T) {
+	test.NewRecipeSpec().WithRecipe(&awssdkv2.MigrateAwsSdkGoToV2{}).RewriteRun(t,
+		test.Golang(`
+			package proxy
+
+			import (
+				"github.com/aws/aws-sdk-go/aws"
+				"github.com/aws/aws-sdk-go/service/s3"
+				"github.com/aws/aws-sdk-go/service/s3/s3manager"
+			)
+
+			type cache struct {
+				uploader *s3manager.Uploader
+			}
+
+			func (c *cache) exists(key string) error {
+				_, err := c.uploader.S3.HeadObject(&s3.HeadObjectInput{Key: aws.String(key)})
+				return err
+			}
+		`).WithPath("proxy/cache.go"),
+		test.Golang(`
+			package proxy
+
+			import "github.com/aws/aws-sdk-go/service/s3/s3manager"
+
+			func newCache(u func() *s3manager.Uploader) *cache {
+				return &cache{uploader: u()}
+			}
+		`).WithPath("proxy/new.go"),
 	)
 }
 
@@ -295,6 +386,127 @@ func TestMigrateBlockedByEndpointsPartitions(t *testing.T) {
 					ids = append(ids, id)
 				}
 				return ids
+			}
+		`),
+	)
+}
+
+// aws/aws-node-termination-handler's shape: a queue URL's region found by
+// looking through v1's partitions. v2 keeps that data internal; aws-sdk-go is
+// frozen, so a generated copy of the list v1's final release held answers the
+// same lookup.
+func TestMigrateDefaultPartitions(t *testing.T) {
+	test.NewRecipeSpec().WithRecipe(&awssdkv2.MigrateAwsSdkGoToV2{}).RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"strings"
+
+				"github.com/aws/aws-sdk-go/aws/endpoints"
+			)
+
+			func regionOf(queueURL string) string {
+				for _, partition := range endpoints.DefaultPartitions() {
+					for regionID := range partition.Regions() {
+						if strings.Contains(queueURL, regionID) {
+							return regionID
+						}
+					}
+				}
+				return ""
+			}
+		`, `
+			package main
+
+			import (
+				"strings"
+			)
+
+			func regionOf(queueURL string) string {
+				for _, partition := range awsCompatPartitions() {
+					for regionID := range partition.Regions() {
+						if strings.Contains(queueURL, regionID) {
+							return regionID
+						}
+					}
+				}
+				return ""
+			}
+		`),
+		test.Generated("zz_awssdkv2_partitions.go", partitionsHelpers(t)),
+	)
+}
+
+// partitionsHelpers is the generated copy of v1's partition data. aws-sdk-go is
+// frozen, so it does not change.
+func partitionsHelpers(t *testing.T) string {
+	b, err := os.ReadFile("testdata/partitions.go.txt")
+	if err != nil {
+		t.Fatal(err)
+	}
+	return string(b)
+}
+
+// An external test package's helpers go in a _test.go file: Go rejects a
+// directory whose non-test files declare two packages.
+func TestMigrateExternalTestPackageHelpers(t *testing.T) {
+	test.NewRecipeSpec().WithRecipe(&awssdkv2.MigrateAwsSdkGoToV2{}).RewriteRun(t,
+		test.Golang(`
+			package regions
+
+			func Known() []string { return nil }
+		`).WithPath("regions/regions.go"),
+		test.Golang(`
+			package regions_test
+
+			import (
+				"testing"
+
+				"github.com/aws/aws-sdk-go/aws/endpoints"
+			)
+
+			func TestPartitions(t *testing.T) {
+				if len(endpoints.DefaultPartitions()) == 0 {
+					t.Fatal("no partitions")
+				}
+			}
+		`, `
+			package regions_test
+
+			import (
+				"testing"
+			)
+
+			func TestPartitions(t *testing.T) {
+				if len(awsCompatPartitions()) == 0 {
+					t.Fatal("no partitions")
+				}
+			}
+		`).WithPath("regions/regions_test.go"),
+		test.Generated("regions/zz_awssdkv2_partitions_test.go", strings.Replace(partitionsHelpers(t), "package main", "package regions_test", 1)),
+	)
+}
+
+// hypnoglow/helm-s3's shape: v1's REST path escaper, which v2 keeps unchanged
+// in smithy's HTTP binding, bound back to the name the file spells.
+func TestMigrateRestEscapePath(t *testing.T) {
+	migrateSpec().RewriteRun(t,
+		test.Golang(`
+			package awsutil
+
+			import "github.com/aws/aws-sdk-go/private/protocol/rest"
+
+			func EscapePath(path string) string {
+				return rest.EscapePath(path, true)
+			}
+		`, `
+			package awsutil
+
+			import rest "github.com/aws/smithy-go/encoding/httpbinding"
+
+			func EscapePath(path string) string {
+				return rest.EscapePath(path, true)
 			}
 		`),
 	)

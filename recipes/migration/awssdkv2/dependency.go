@@ -21,6 +21,7 @@ import (
 )
 
 //go:generate go run ./internal/genmodules
+//go:generate go run ./internal/genmanifest
 
 // moduleVersion is one `require` line.
 type moduleVersion struct{ path, version string }
@@ -76,9 +77,11 @@ type awsUsageAcc struct {
 // go.mod names, the versions the toolchain selected, and the go.sum hashes it
 // recorded.
 type buildList struct {
-	required map[string]string
-	selected map[string]string
-	hashes   map[string]string
+	// goVersion is the module's go directive before the migration raises it.
+	goVersion string
+	required  map[string]string
+	selected  map[string]string
+	hashes    map[string]string
 }
 
 // usageFile is one file's part in the requirements: whether it imports v1, and
@@ -138,15 +141,37 @@ func recordAwsUsage(acc *awsUsageAcc, cu *golang.CompilationUnit) {
 		return
 	}
 	f := usageFile{dir: path.Dir(cu.SourcePath), v1: importsV1(cu)}
-	if f.v1 && !scanFile(cu).migratable {
+	// A mock regenerated against v2 imports only the service.
+	service := ""
+	if m, isMock := ifaceMockOf(cu); isMock {
+		service = m.service
+	} else if m, isMock := testifyMockOf(cu); isMock {
+		service = m.service
+	}
+	if service != "" {
+		if module, ok := v2ModuleFor(v2ServicePath(service)); ok {
+			f.modules = append(f.modules, module)
+		}
+		acc.files = append(acc.files, f)
+		return
+	}
+	// A test the rewrite cannot carry over is commented out where the rest of
+	// its package migrates, so it holds its package only through that decision.
+	if f.v1 && !strings.HasSuffix(cu.SourcePath, "_test.go") && !scanFile(cu).migratable {
 		acc.held[f.dir] = true
 	}
 	for _, rp := range cu.Imports.Elements {
 		path := rp.Element.Path()
 		switch service, _, isIface := ifacePackageName(path); {
+		case isIface && service == managerIfaceService:
+			// The regenerated manager interfaces import the manager and S3.
+			if module, ok := v2ModuleFor(v2ServicePkg + s3Service); ok {
+				f.modules = append(f.modules, module)
+			}
+			path = v2S3Manager
 		case isIface:
 			// The regenerated package lives in this module and imports the service.
-			path = v2ServicePkg + service
+			path = v2ServicePath(service)
 		case path == v1Awserr:
 			path = smithyGo
 		default:
@@ -166,6 +191,7 @@ func recordAwsUsage(acc *awsUsageAcc, cu *golang.CompilationUnit) {
 func recordBuildList(acc *awsUsageAcc, gm *golang.GoMod) {
 	bl := &buildList{required: map[string]string{}, selected: map[string]string{}, hashes: map[string]string{}}
 	if mrr := java.FindMarker[golang.GoResolutionResult](gm.Markers); mrr != nil {
+		bl.goVersion = mrr.GoVersion
 		for _, req := range mrr.Requires {
 			bl.required[req.ModulePath] = req.Version
 		}
@@ -212,6 +238,8 @@ func v2ModuleFor(importPath string) (string, bool) {
 type requirePlan struct {
 	versions map[string]string
 	sums     map[string]string
+	// goVersion is the highest go directive an imported module requires.
+	goVersion string
 }
 
 // plan resolves what the go.mod in dir requires once migrated: each imported
@@ -226,7 +254,7 @@ func (acc *awsUsageAcc) plan(dir string) *requirePlan {
 	if bl == nil {
 		bl = &buildList{}
 	}
-	p := &requirePlan{versions: map[string]string{}, sums: map[string]string{}}
+	p := &requirePlan{versions: map[string]string{}, sums: map[string]string{}, goVersion: v2MinGo}
 	raise := func(module, version string) {
 		if version != "" && semver.Compare(version, p.versions[module]) > 0 {
 			p.versions[module] = version
@@ -235,6 +263,9 @@ func (acc *awsUsageAcc) plan(dir string) *requirePlan {
 	for module := range acc.imported {
 		for _, mv := range v2Requirements[module] {
 			raise(mv.path, mv.version)
+		}
+		if goVersion := v2GoVersions[module]; goVersion != "" && version.Compare("go"+goVersion, "go"+p.goVersion) > 0 {
+			p.goVersion = goVersion
 		}
 	}
 	for module := range p.versions {
@@ -305,7 +336,7 @@ func applyAwsRequires(gm *golang.GoMod, acc *awsUsageAcc) java.Tree {
 	}
 	mrr := java.FindMarker[golang.GoResolutionResult](gm.Markers)
 	below117 := mrr != nil && mrr.GoVersion != "" && version.Compare("go"+mrr.GoVersion, "go1.17") < 0
-	gm = raiseGoDirective(gm, v2MinGo)
+	gm = raiseGoDirective(gm, plan.goVersion)
 	if below117 {
 		// Past 1.17 go.mod must name every module the build reads, which one
 		// written for an earlier release left to the graph. Their go.sum lines

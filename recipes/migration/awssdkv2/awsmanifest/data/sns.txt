@@ -609,3 +609,89 @@ E RouteTypePromotional RouteType
 E RouteTypeTransactional RouteType
 E SMSSandboxPhoneNumberVerificationStatusPending SMSSandboxPhoneNumberVerificationStatus
 E SMSSandboxPhoneNumberVerificationStatusVerified SMSSandboxPhoneNumberVerificationStatus
+H CheckIfPhoneNumberIsOptedOutInput.PhoneNumber
+H CreateSMSSandboxPhoneNumberInput.PhoneNumber
+H DeleteSMSSandboxPhoneNumberInput.PhoneNumber
+H ListPhoneNumbersOptedOutOutput.PhoneNumbers
+H OptInPhoneNumberInput.PhoneNumber
+H PhoneNumberInformation.PhoneNumber
+H PublishInput.PhoneNumber
+H SMSSandboxPhoneNumber.PhoneNumber
+H VerifySMSSandboxPhoneNumberInput.PhoneNumber
+K AddPermissionInput 001 AWSAccountId req nil
+K AddPermissionInput 002 ActionName req nil
+K AddPermissionInput 003 Label req nil
+K AddPermissionInput 004 TopicArn req nil
+K CheckIfPhoneNumberIsOptedOutInput 001 PhoneNumber req nil
+K ConfirmSubscriptionInput 001 Token req nil
+K ConfirmSubscriptionInput 002 TopicArn req nil
+K CreatePlatformApplicationInput 001 Attributes req nil
+K CreatePlatformApplicationInput 002 Name req nil
+K CreatePlatformApplicationInput 003 Platform req nil
+K CreatePlatformEndpointInput 001 PlatformApplicationArn req nil
+K CreatePlatformEndpointInput 002 Token req nil
+K CreateSMSSandboxPhoneNumberInput 001 PhoneNumber req nil
+K CreateTopicInput 001 Name req nil
+K CreateTopicInput 002 Tags each Tag slice
+K DeleteEndpointInput 001 EndpointArn req nil
+K DeletePlatformApplicationInput 001 PlatformApplicationArn req nil
+K DeleteSMSSandboxPhoneNumberInput 001 PhoneNumber req nil
+K DeleteTopicInput 001 TopicArn req nil
+K GetDataProtectionPolicyInput 001 ResourceArn req nil
+K GetEndpointAttributesInput 001 EndpointArn req nil
+K GetPlatformApplicationAttributesInput 001 PlatformApplicationArn req nil
+K GetSubscriptionAttributesInput 001 SubscriptionArn req nil
+K GetTopicAttributesInput 001 TopicArn req nil
+K ListEndpointsByPlatformApplicationInput 001 PlatformApplicationArn req nil
+K ListOriginationNumbersInput 001 MaxResults min 1 ptr
+K ListSMSSandboxPhoneNumbersInput 001 MaxResults min 1 ptr
+K ListSubscriptionsByTopicInput 001 TopicArn req nil
+K ListTagsForResourceInput 001 ResourceArn req nil
+K ListTagsForResourceInput 002 ResourceArn len 1 ptr
+K MessageAttributeValue 001 DataType req nil
+K OptInPhoneNumberInput 001 PhoneNumber req nil
+K PublishBatchInput 001 PublishBatchRequestEntries req nil
+K PublishBatchInput 002 TopicArn req nil
+K PublishBatchInput 003 PublishBatchRequestEntries each PublishBatchRequestEntry slice
+K PublishBatchRequestEntry 001 Id req nil
+K PublishBatchRequestEntry 002 Message req nil
+K PublishBatchRequestEntry 003 MessageAttributes each MessageAttributeValue map
+K PublishInput 001 Message req nil
+K PublishInput 002 MessageAttributes each MessageAttributeValue map
+K PutDataProtectionPolicyInput 001 DataProtectionPolicy req nil
+K PutDataProtectionPolicyInput 002 ResourceArn req nil
+K RemovePermissionInput 001 Label req nil
+K RemovePermissionInput 002 TopicArn req nil
+K SetEndpointAttributesInput 001 Attributes req nil
+K SetEndpointAttributesInput 002 EndpointArn req nil
+K SetPlatformApplicationAttributesInput 001 Attributes req nil
+K SetPlatformApplicationAttributesInput 002 PlatformApplicationArn req nil
+K SetSMSAttributesInput 001 Attributes req nil
+K SetSubscriptionAttributesInput 001 AttributeName req nil
+K SetSubscriptionAttributesInput 002 SubscriptionArn req nil
+K SetTopicAttributesInput 001 AttributeName req nil
+K SetTopicAttributesInput 002 TopicArn req nil
+K SubscribeInput 001 Protocol req nil
+K SubscribeInput 002 TopicArn req nil
+K Tag 001 Key req nil
+K Tag 002 Key len 1 ptr
+K Tag 003 Value req nil
+K TagResourceInput 001 ResourceArn req nil
+K TagResourceInput 002 ResourceArn len 1 ptr
+K TagResourceInput 003 Tags req nil
+K TagResourceInput 004 Tags each Tag slice
+K UnsubscribeInput 001 SubscriptionArn req nil
+K UntagResourceInput 001 ResourceArn req nil
+K UntagResourceInput 002 ResourceArn len 1 ptr
+K UntagResourceInput 003 TagKeys req nil
+K VerifySMSSandboxPhoneNumberInput 001 OneTimePassword req nil
+K VerifySMSSandboxPhoneNumberInput 002 OneTimePassword len 5 ptr
+K VerifySMSSandboxPhoneNumberInput 003 PhoneNumber req nil
+G ListEndpointsByPlatformApplication NextToken NextToken
+G ListOriginationNumbers NextToken NextToken
+G ListPhoneNumbersOptedOut NextToken NextToken
+G ListPlatformApplications NextToken NextToken
+G ListSMSSandboxPhoneNumbers NextToken NextToken
+G ListSubscriptions NextToken NextToken
+G ListSubscriptionsByTopic NextToken NextToken
+G ListTopics NextToken NextToken

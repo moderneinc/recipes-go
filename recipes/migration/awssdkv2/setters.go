@@ -26,14 +26,15 @@ func (s *fileScan) shapeSetterTarget(mi *java.MethodInvocation) (owner shapeRef,
 	if mi.Name == nil || !strings.HasPrefix(mi.Name.Name, setterPrefix) || mi.Name.Name == setterPrefix {
 		return shapeRef{}, "", nil, false
 	}
-	recv, isIdent := selectIdentifier(mi)
-	if !isIdent {
+	if mi.Select == nil {
 		return shapeRef{}, "", nil, false
 	}
-	owner, isShape := s.shapes[recv.Name]
+	// The receiver may be a field, or an element of a list, as well as a local.
+	owner, isShape := s.receiverShape(mi.Select.Element)
 	if !isShape {
 		return shapeRef{}, "", nil, false
 	}
+	owner.shape = awsmanifest.V1ShapeName(owner.service, owner.shape)
 	args := realArgs(mi)
 	if len(args) != 1 {
 		return shapeRef{}, "", nil, false
@@ -54,6 +55,13 @@ func (s *fileScan) assignableField(owner shapeRef, field string) bool {
 		return !awsmanifest.IsValueSlice(owner.service, owner.shape, field)
 	case awsmanifest.PointerScalar(owner.service, owner.shape, field) != "":
 		return true
+	// Any other field's setter took what an assignment to the field takes, a
+	// list, a map or a nested shape, which converts as one does.
+	case awsmanifest.IsValueSlice(owner.service, owner.shape, field),
+		awsmanifest.IsMapOfValues(owner.service, owner.shape, field),
+		awsmanifest.IsMapOfValueSlices(owner.service, owner.shape, field),
+		awsmanifest.FieldShape(owner.service, owner.shape, field) != "":
+		return true
 	}
 	return false
 }
@@ -65,9 +73,19 @@ func (v *migrateVisitor) setterAssignment(mi *java.MethodInvocation) (java.State
 	if !ok {
 		return nil, false
 	}
+	// An element of a list v2 holds by value is written in v2's list itself,
+	// not in the copy the read conversion hands back.
+	receiver := mi.Select.Element
+	if index, isIndex := receiver.(*java.ArrayAccess); isIndex {
+		if call, wrapped := index.Indexed.(*java.MethodInvocation); wrapped && call.Name != nil && call.Name.Name == compatPtrs && len(realArgs(call)) == 1 {
+			c := *index
+			c.Indexed = lstutil.SetExprPrefix(realArgs(call)[0], index.Indexed.GetPrefix())
+			receiver = &c
+		}
+	}
 	target := &java.FieldAccess{
 		Prefix: mi.Prefix,
-		Target: lstutil.SetExprPrefix(mi.Select.Element, java.EmptySpace),
+		Target: lstutil.SetExprPrefix(receiver, java.EmptySpace),
 		Name:   java.LeftPadded[*java.Identifier]{Element: &java.Identifier{Name: field}},
 	}
 
@@ -81,10 +99,24 @@ func (v *migrateVisitor) setterAssignment(mi *java.MethodInvocation) (java.State
 		}
 	case awsmanifest.FieldEnum(owner.service, owner.shape, field) != "":
 		assigned = v.enumConversion(value, owner.service, awsmanifest.FieldEnum(owner.service, owner.shape, field))
+	case awsmanifest.PointerScalar(owner.service, owner.shape, field) == "":
+		converted, ok := v.convertedFieldValue(owner.service, owner.shape, field, value)
+		if !ok {
+			// A nested shape v2 holds as v1 did.
+			if awsmanifest.FieldShape(owner.service, owner.shape, field) == "" {
+				return nil, false
+			}
+			converted = value
+		}
+		assigned = converted
 	default:
 		helper := awsHelperFor(awsmanifest.PointerScalar(owner.service, owner.shape, field))
 		if helper == "" {
 			return nil, false
+		}
+		// The setter took v1's width; v2's helper takes its own.
+		if from, to, changed := awsmanifest.ScalarChange(owner.service, owner.shape, field); changed {
+			value = narrowedValue(value, from, to)
 		}
 		v.awsUsed = true
 		v.needsAws = true

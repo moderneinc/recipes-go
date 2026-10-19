@@ -135,6 +135,8 @@ S UpdateShardCountInput
 S UpdateShardCountOutput
 S UpdateStreamModeInput
 S UpdateStreamModeOutput
+S UpdateStreamRecordDistributionStrategyInput
+S UpdateStreamRecordDistributionStrategyOutput
 S UpdateStreamWarmThroughputInput
 S UpdateStreamWarmThroughputOutput
 S WithAPIOptions
@@ -185,6 +187,7 @@ O UpdateChannel
 O UpdateMaxRecordSize
 O UpdateShardCount
 O UpdateStreamMode
+O UpdateStreamRecordDistributionStrategy
 O UpdateStreamWarmThroughput
 X ErrCodeAccessDeniedException AccessDeniedException
 X ErrCodeExpiredIteratorException ExpiredIteratorException
@@ -559,6 +562,8 @@ V UpdateShardCountOutput.TargetShardCount int32
 V UpdateStreamModeInput.StreamARN string
 V UpdateStreamModeInput.StreamId string
 V UpdateStreamModeInput.WarmThroughputMiBps int32
+V UpdateStreamRecordDistributionStrategyInput.StreamARN string
+V UpdateStreamRecordDistributionStrategyInput.StreamId string
 V UpdateStreamWarmThroughputInput.StreamARN string
 V UpdateStreamWarmThroughputInput.StreamId string
 V UpdateStreamWarmThroughputInput.StreamName string
@@ -595,6 +600,7 @@ F ChannelSummary.ChannelDestinationType ChannelDestinationType
 F ChannelSummary.ChannelStatus ChannelStatus
 F Consumer.ConsumerStatus ConsumerStatus
 F ConsumerDescription.ConsumerStatus ConsumerStatus
+F CreateStreamInput.RecordDistributionStrategy RecordDistributionStrategy
 F DisableEnhancedMonitoringInput.ShardLevelMetrics MetricsName
 F DisableEnhancedMonitoringOutput.CurrentShardLevelMetrics MetricsName
 F DisableEnhancedMonitoringOutput.DesiredShardLevelMetrics MetricsName
@@ -620,10 +626,12 @@ F StopStreamEncryptionInput.EncryptionType EncryptionType
 F StreamDescription.EncryptionType EncryptionType
 F StreamDescription.StreamStatus StreamStatus
 F StreamDescriptionSummary.EncryptionType EncryptionType
+F StreamDescriptionSummary.RecordDistributionStrategy RecordDistributionStrategy
 F StreamDescriptionSummary.StreamStatus StreamStatus
 F StreamModeDetails.StreamMode StreamMode
 F StreamSummary.StreamStatus StreamStatus
 F UpdateShardCountInput.ScalingType ScalingType
+F UpdateStreamRecordDistributionStrategyInput.RecordDistributionStrategy RecordDistributionStrategy
 N APIOptions
 N AccountIDEndpointMode
 N AccountId
@@ -845,6 +853,7 @@ T PutRecordsRequestEntry
 T PutRecordsResultEntry
 T Record
 T RecordConfiguration
+T RecordDistributionStrategy
 T RecordFormatType
 T ResourceInUseException
 T ResourceNotFoundException
@@ -907,6 +916,8 @@ E MinimumThroughputBillingCommitmentOutputStatusDisabled MinimumThroughputBillin
 E MinimumThroughputBillingCommitmentOutputStatusEnabled MinimumThroughputBillingCommitmentOutputStatus
 E MinimumThroughputBillingCommitmentOutputStatusEnabledUntilEarliestAllowedEnd MinimumThroughputBillingCommitmentOutputStatus
 E PartitionTransformTimeHour PartitionTransform
+E RecordDistributionStrategyAuto RecordDistributionStrategy
+E RecordDistributionStrategyUserPartitionKey RecordDistributionStrategy
 E RecordFormatTypeByteArray RecordFormatType
 E RecordFormatTypeGsrJson RecordFormatType
 E RecordFormatTypeJson RecordFormatType
@@ -938,3 +949,139 @@ E StreamStatusActive StreamStatus
 E StreamStatusCreating StreamStatus
 E StreamStatusDeleting StreamStatus
 E StreamStatusUpdating StreamStatus
+Y StreamExists 10 18
+Y StreamNotExists 10 18
+U SubscribeToShardEventStream
+K AddTagsToStreamInput 001 StreamARN len 1 ptr
+K AddTagsToStreamInput 002 StreamName len 1 ptr
+K AddTagsToStreamInput 003 Tags req nil
+K AddTagsToStreamInput 004 Tags len 1 container
+K CreateStreamInput 001 ShardCount min 1 ptr
+K CreateStreamInput 002 StreamName req nil
+K CreateStreamInput 003 StreamName len 1 ptr
+K CreateStreamInput 004 StreamModeDetails nest StreamModeDetails
+K DecreaseStreamRetentionPeriodInput 001 RetentionPeriodHours req nil
+K DecreaseStreamRetentionPeriodInput 002 StreamARN len 1 ptr
+K DecreaseStreamRetentionPeriodInput 003 StreamName len 1 ptr
+K DeleteResourcePolicyInput 001 ResourceARN req nil
+K DeleteResourcePolicyInput 002 ResourceARN len 1 ptr
+K DeleteStreamInput 001 StreamARN len 1 ptr
+K DeleteStreamInput 002 StreamName len 1 ptr
+K DeregisterStreamConsumerInput 001 ConsumerARN len 1 ptr
+K DeregisterStreamConsumerInput 002 ConsumerName len 1 ptr
+K DeregisterStreamConsumerInput 003 StreamARN len 1 ptr
+K DescribeStreamConsumerInput 001 ConsumerARN len 1 ptr
+K DescribeStreamConsumerInput 002 ConsumerName len 1 ptr
+K DescribeStreamConsumerInput 003 StreamARN len 1 ptr
+K DescribeStreamInput 001 ExclusiveStartShardId len 1 ptr
+K DescribeStreamInput 002 Limit min 1 ptr
+K DescribeStreamInput 003 StreamARN len 1 ptr
+K DescribeStreamInput 004 StreamName len 1 ptr
+K DescribeStreamSummaryInput 001 StreamARN len 1 ptr
+K DescribeStreamSummaryInput 002 StreamName len 1 ptr
+K DisableEnhancedMonitoringInput 001 ShardLevelMetrics req nil
+K DisableEnhancedMonitoringInput 002 ShardLevelMetrics len 1 container
+K DisableEnhancedMonitoringInput 003 StreamARN len 1 ptr
+K DisableEnhancedMonitoringInput 004 StreamName len 1 ptr
+K EnableEnhancedMonitoringInput 001 ShardLevelMetrics req nil
+K EnableEnhancedMonitoringInput 002 ShardLevelMetrics len 1 container
+K EnableEnhancedMonitoringInput 003 StreamARN len 1 ptr
+K EnableEnhancedMonitoringInput 004 StreamName len 1 ptr
+K GetRecordsInput 001 Limit min 1 ptr
+K GetRecordsInput 002 ShardIterator req nil
+K GetRecordsInput 003 ShardIterator len 1 ptr
+K GetRecordsInput 004 StreamARN len 1 ptr
+K GetResourcePolicyInput 001 ResourceARN req nil
+K GetResourcePolicyInput 002 ResourceARN len 1 ptr
+K GetShardIteratorInput 001 ShardId req nil
+K GetShardIteratorInput 002 ShardId len 1 ptr
+K GetShardIteratorInput 003 ShardIteratorType req empty
+K GetShardIteratorInput 004 StreamARN len 1 ptr
+K GetShardIteratorInput 005 StreamName len 1 ptr
+K IncreaseStreamRetentionPeriodInput 001 RetentionPeriodHours req nil
+K IncreaseStreamRetentionPeriodInput 002 StreamARN len 1 ptr
+K IncreaseStreamRetentionPeriodInput 003 StreamName len 1 ptr
+K ListShardsInput 001 ExclusiveStartShardId len 1 ptr
+K ListShardsInput 002 MaxResults min 1 ptr
+K ListShardsInput 003 NextToken len 1 ptr
+K ListShardsInput 004 StreamARN len 1 ptr
+K ListShardsInput 005 StreamName len 1 ptr
+K ListShardsInput 006 ShardFilter nest ShardFilter
+K ListStreamConsumersInput 001 MaxResults min 1 ptr
+K ListStreamConsumersInput 002 NextToken len 1 ptr
+K ListStreamConsumersInput 003 StreamARN req nil
+K ListStreamConsumersInput 004 StreamARN len 1 ptr
+K ListStreamsInput 001 ExclusiveStartStreamName len 1 ptr
+K ListStreamsInput 002 Limit min 1 ptr
+K ListStreamsInput 003 NextToken len 1 ptr
+K ListTagsForStreamInput 001 ExclusiveStartTagKey len 1 ptr
+K ListTagsForStreamInput 002 Limit min 1 ptr
+K ListTagsForStreamInput 003 StreamARN len 1 ptr
+K ListTagsForStreamInput 004 StreamName len 1 ptr
+K MergeShardsInput 001 AdjacentShardToMerge req nil
+K MergeShardsInput 002 AdjacentShardToMerge len 1 ptr
+K MergeShardsInput 003 ShardToMerge req nil
+K MergeShardsInput 004 ShardToMerge len 1 ptr
+K MergeShardsInput 005 StreamARN len 1 ptr
+K MergeShardsInput 006 StreamName len 1 ptr
+K PutRecordInput 001 Data req nil
+K PutRecordInput 002 PartitionKey req nil
+K PutRecordInput 003 PartitionKey len 1 ptr
+K PutRecordInput 004 StreamARN len 1 ptr
+K PutRecordInput 005 StreamName len 1 ptr
+K PutRecordsInput 001 Records req nil
+K PutRecordsInput 002 Records len 1 container
+K PutRecordsInput 003 StreamARN len 1 ptr
+K PutRecordsInput 004 StreamName len 1 ptr
+K PutRecordsInput 005 Records each PutRecordsRequestEntry slice
+K PutRecordsRequestEntry 001 Data req nil
+K PutRecordsRequestEntry 002 PartitionKey req nil
+K PutRecordsRequestEntry 003 PartitionKey len 1 ptr
+K PutResourcePolicyInput 001 Policy req nil
+K PutResourcePolicyInput 002 ResourceARN req nil
+K PutResourcePolicyInput 003 ResourceARN len 1 ptr
+K RegisterStreamConsumerInput 001 ConsumerName req nil
+K RegisterStreamConsumerInput 002 ConsumerName len 1 ptr
+K RegisterStreamConsumerInput 003 StreamARN req nil
+K RegisterStreamConsumerInput 004 StreamARN len 1 ptr
+K RemoveTagsFromStreamInput 001 StreamARN len 1 ptr
+K RemoveTagsFromStreamInput 002 StreamName len 1 ptr
+K RemoveTagsFromStreamInput 003 TagKeys req nil
+K RemoveTagsFromStreamInput 004 TagKeys len 1 container
+K ShardFilter 001 ShardId len 1 ptr
+K ShardFilter 002 Type req empty
+K SplitShardInput 001 NewStartingHashKey req nil
+K SplitShardInput 002 ShardToSplit req nil
+K SplitShardInput 003 ShardToSplit len 1 ptr
+K SplitShardInput 004 StreamARN len 1 ptr
+K SplitShardInput 005 StreamName len 1 ptr
+K StartStreamEncryptionInput 001 EncryptionType req empty
+K StartStreamEncryptionInput 002 KeyId req nil
+K StartStreamEncryptionInput 003 KeyId len 1 ptr
+K StartStreamEncryptionInput 004 StreamARN len 1 ptr
+K StartStreamEncryptionInput 005 StreamName len 1 ptr
+K StartingPosition 001 Type req empty
+K StopStreamEncryptionInput 001 EncryptionType req empty
+K StopStreamEncryptionInput 002 KeyId req nil
+K StopStreamEncryptionInput 003 KeyId len 1 ptr
+K StopStreamEncryptionInput 004 StreamARN len 1 ptr
+K StopStreamEncryptionInput 005 StreamName len 1 ptr
+K StreamModeDetails 001 StreamMode req empty
+K SubscribeToShardInput 001 ConsumerARN req nil
+K SubscribeToShardInput 002 ConsumerARN len 1 ptr
+K SubscribeToShardInput 003 ShardId req nil
+K SubscribeToShardInput 004 ShardId len 1 ptr
+K SubscribeToShardInput 005 StartingPosition req nil
+K SubscribeToShardInput 006 StartingPosition nest StartingPosition
+K UpdateShardCountInput 001 ScalingType req empty
+K UpdateShardCountInput 002 StreamARN len 1 ptr
+K UpdateShardCountInput 003 StreamName len 1 ptr
+K UpdateShardCountInput 004 TargetShardCount req nil
+K UpdateShardCountInput 005 TargetShardCount min 1 ptr
+K UpdateStreamModeInput 001 StreamARN req nil
+K UpdateStreamModeInput 002 StreamARN len 1 ptr
+K UpdateStreamModeInput 003 StreamModeDetails req nil
+K UpdateStreamModeInput 004 StreamModeDetails nest StreamModeDetails
+G ListChannels NextToken NextToken
+G ListStreamConsumers NextToken NextToken
+G ListStreams NextToken NextToken

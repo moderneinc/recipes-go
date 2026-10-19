@@ -1,0 +1,1258 @@
+C SES
+S AuthResolverParameters
+S AuthSchemeResolver
+S Client
+S CloneReceiptRuleSetInput
+S CloneReceiptRuleSetOutput
+S CreateConfigurationSetEventDestinationInput
+S CreateConfigurationSetEventDestinationOutput
+S CreateConfigurationSetInput
+S CreateConfigurationSetOutput
+S CreateConfigurationSetTrackingOptionsInput
+S CreateConfigurationSetTrackingOptionsOutput
+S CreateCustomVerificationEmailTemplateInput
+S CreateCustomVerificationEmailTemplateOutput
+S CreateReceiptFilterInput
+S CreateReceiptFilterOutput
+S CreateReceiptRuleInput
+S CreateReceiptRuleOutput
+S CreateReceiptRuleSetInput
+S CreateReceiptRuleSetOutput
+S CreateTemplateInput
+S CreateTemplateOutput
+S DeleteConfigurationSetEventDestinationInput
+S DeleteConfigurationSetEventDestinationOutput
+S DeleteConfigurationSetInput
+S DeleteConfigurationSetOutput
+S DeleteConfigurationSetTrackingOptionsInput
+S DeleteConfigurationSetTrackingOptionsOutput
+S DeleteCustomVerificationEmailTemplateInput
+S DeleteCustomVerificationEmailTemplateOutput
+S DeleteIdentityInput
+S DeleteIdentityOutput
+S DeleteIdentityPolicyInput
+S DeleteIdentityPolicyOutput
+S DeleteReceiptFilterInput
+S DeleteReceiptFilterOutput
+S DeleteReceiptRuleInput
+S DeleteReceiptRuleOutput
+S DeleteReceiptRuleSetInput
+S DeleteReceiptRuleSetOutput
+S DeleteTemplateInput
+S DeleteTemplateOutput
+S DeleteVerifiedEmailAddressInput
+S DeleteVerifiedEmailAddressOutput
+S DescribeActiveReceiptRuleSetInput
+S DescribeActiveReceiptRuleSetOutput
+S DescribeConfigurationSetInput
+S DescribeConfigurationSetOutput
+S DescribeReceiptRuleInput
+S DescribeReceiptRuleOutput
+S DescribeReceiptRuleSetInput
+S DescribeReceiptRuleSetOutput
+S EndpointParameters
+S EndpointResolver
+S EndpointResolverFromURL
+S EndpointResolverFunc
+S EndpointResolverOptions
+S EndpointResolverV2
+S GetAccountSendingEnabledInput
+S GetAccountSendingEnabledOutput
+S GetCustomVerificationEmailTemplateInput
+S GetCustomVerificationEmailTemplateOutput
+S GetIdentityDkimAttributesInput
+S GetIdentityDkimAttributesOutput
+S GetIdentityMailFromDomainAttributesInput
+S GetIdentityMailFromDomainAttributesOutput
+S GetIdentityNotificationAttributesInput
+S GetIdentityNotificationAttributesOutput
+S GetIdentityPoliciesInput
+S GetIdentityPoliciesOutput
+S GetIdentityVerificationAttributesAPIClient
+S GetIdentityVerificationAttributesInput
+S GetIdentityVerificationAttributesOutput
+S GetSendQuotaInput
+S GetSendQuotaOutput
+S GetSendStatisticsInput
+S GetSendStatisticsOutput
+S GetTemplateInput
+S GetTemplateOutput
+S HTTPClient
+S HTTPSignerV4
+S IdentityExistsWaiter
+S IdentityExistsWaiterOptions
+S ListConfigurationSetsInput
+S ListConfigurationSetsOutput
+S ListCustomVerificationEmailTemplatesAPIClient
+S ListCustomVerificationEmailTemplatesInput
+S ListCustomVerificationEmailTemplatesOutput
+S ListCustomVerificationEmailTemplatesPaginator
+S ListCustomVerificationEmailTemplatesPaginatorOptions
+S ListIdentitiesAPIClient
+S ListIdentitiesInput
+S ListIdentitiesOutput
+S ListIdentitiesPaginator
+S ListIdentitiesPaginatorOptions
+S ListIdentityPoliciesInput
+S ListIdentityPoliciesOutput
+S ListReceiptFiltersInput
+S ListReceiptFiltersOutput
+S ListReceiptRuleSetsInput
+S ListReceiptRuleSetsOutput
+S ListTemplatesInput
+S ListTemplatesOutput
+S ListVerifiedEmailAddressesInput
+S ListVerifiedEmailAddressesOutput
+S New
+S NewDefaultEndpointResolver
+S NewDefaultEndpointResolverV2
+S NewFromConfig
+S NewIdentityExistsWaiter
+S NewListCustomVerificationEmailTemplatesPaginator
+S NewListIdentitiesPaginator
+S Options
+S PutConfigurationSetDeliveryOptionsInput
+S PutConfigurationSetDeliveryOptionsOutput
+S PutIdentityPolicyInput
+S PutIdentityPolicyOutput
+S ReorderReceiptRuleSetInput
+S ReorderReceiptRuleSetOutput
+S ResolveEndpoint
+S SendBounceInput
+S SendBounceOutput
+S SendBulkTemplatedEmailInput
+S SendBulkTemplatedEmailOutput
+S SendCustomVerificationEmailInput
+S SendCustomVerificationEmailOutput
+S SendEmailInput
+S SendEmailOutput
+S SendRawEmailInput
+S SendRawEmailOutput
+S SendTemplatedEmailInput
+S SendTemplatedEmailOutput
+S ServiceAPIVersion
+S ServiceID
+S SetActiveReceiptRuleSetInput
+S SetActiveReceiptRuleSetOutput
+S SetIdentityDkimEnabledInput
+S SetIdentityDkimEnabledOutput
+S SetIdentityFeedbackForwardingEnabledInput
+S SetIdentityFeedbackForwardingEnabledOutput
+S SetIdentityHeadersInNotificationsEnabledInput
+S SetIdentityHeadersInNotificationsEnabledOutput
+S SetIdentityMailFromDomainInput
+S SetIdentityMailFromDomainOutput
+S SetIdentityNotificationTopicInput
+S SetIdentityNotificationTopicOutput
+S SetReceiptRulePositionInput
+S SetReceiptRulePositionOutput
+S TestRenderTemplateInput
+S TestRenderTemplateOutput
+S UpdateAccountSendingEnabledInput
+S UpdateAccountSendingEnabledOutput
+S UpdateConfigurationSetEventDestinationInput
+S UpdateConfigurationSetEventDestinationOutput
+S UpdateConfigurationSetReputationMetricsEnabledInput
+S UpdateConfigurationSetReputationMetricsEnabledOutput
+S UpdateConfigurationSetSendingEnabledInput
+S UpdateConfigurationSetSendingEnabledOutput
+S UpdateConfigurationSetTrackingOptionsInput
+S UpdateConfigurationSetTrackingOptionsOutput
+S UpdateCustomVerificationEmailTemplateInput
+S UpdateCustomVerificationEmailTemplateOutput
+S UpdateReceiptRuleInput
+S UpdateReceiptRuleOutput
+S UpdateTemplateInput
+S UpdateTemplateOutput
+S VerifyDomainDkimInput
+S VerifyDomainDkimOutput
+S VerifyDomainIdentityInput
+S VerifyDomainIdentityOutput
+S VerifyEmailAddressInput
+S VerifyEmailAddressOutput
+S VerifyEmailIdentityInput
+S VerifyEmailIdentityOutput
+S WithAPIOptions
+S WithEndpointResolver
+S WithEndpointResolverV2
+S WithSigV4SigningName
+S WithSigV4SigningRegion
+O CloneReceiptRuleSet
+O CreateConfigurationSet
+O CreateConfigurationSetEventDestination
+O CreateConfigurationSetTrackingOptions
+O CreateCustomVerificationEmailTemplate
+O CreateReceiptFilter
+O CreateReceiptRule
+O CreateReceiptRuleSet
+O CreateTemplate
+O DeleteConfigurationSet
+O DeleteConfigurationSetEventDestination
+O DeleteConfigurationSetTrackingOptions
+O DeleteCustomVerificationEmailTemplate
+O DeleteIdentity
+O DeleteIdentityPolicy
+O DeleteReceiptFilter
+O DeleteReceiptRule
+O DeleteReceiptRuleSet
+O DeleteTemplate
+O DeleteVerifiedEmailAddress
+O DescribeActiveReceiptRuleSet
+O DescribeConfigurationSet
+O DescribeReceiptRule
+O DescribeReceiptRuleSet
+O GetAccountSendingEnabled
+O GetCustomVerificationEmailTemplate
+O GetIdentityDkimAttributes
+O GetIdentityMailFromDomainAttributes
+O GetIdentityNotificationAttributes
+O GetIdentityPolicies
+O GetIdentityVerificationAttributes
+O GetSendQuota
+O GetSendStatistics
+O GetTemplate
+O ListConfigurationSets
+O ListCustomVerificationEmailTemplates
+O ListIdentities
+O ListIdentityPolicies
+O ListReceiptFilters
+O ListReceiptRuleSets
+O ListTemplates
+O ListVerifiedEmailAddresses
+O PutConfigurationSetDeliveryOptions
+O PutIdentityPolicy
+O ReorderReceiptRuleSet
+O SendBounce
+O SendBulkTemplatedEmail
+O SendCustomVerificationEmail
+O SendEmail
+O SendRawEmail
+O SendTemplatedEmail
+O SetActiveReceiptRuleSet
+O SetIdentityDkimEnabled
+O SetIdentityFeedbackForwardingEnabled
+O SetIdentityHeadersInNotificationsEnabled
+O SetIdentityMailFromDomain
+O SetIdentityNotificationTopic
+O SetReceiptRulePosition
+O TestRenderTemplate
+O UpdateAccountSendingEnabled
+O UpdateConfigurationSetEventDestination
+O UpdateConfigurationSetReputationMetricsEnabled
+O UpdateConfigurationSetSendingEnabled
+O UpdateConfigurationSetTrackingOptions
+O UpdateCustomVerificationEmailTemplate
+O UpdateReceiptRule
+O UpdateTemplate
+O VerifyDomainDkim
+O VerifyDomainIdentity
+O VerifyEmailAddress
+O VerifyEmailIdentity
+X ErrCodeAccountSendingPausedException AccountSendingPausedException
+X ErrCodeAlreadyExistsException AlreadyExists
+X ErrCodeCannotDeleteException CannotDelete
+X ErrCodeConfigurationSetAlreadyExistsException ConfigurationSetAlreadyExists
+X ErrCodeConfigurationSetDoesNotExistException ConfigurationSetDoesNotExist
+X ErrCodeConfigurationSetSendingPausedException ConfigurationSetSendingPausedException
+X ErrCodeCustomVerificationEmailInvalidContentException CustomVerificationEmailInvalidContent
+X ErrCodeCustomVerificationEmailTemplateAlreadyExistsException CustomVerificationEmailTemplateAlreadyExists
+X ErrCodeCustomVerificationEmailTemplateDoesNotExistException CustomVerificationEmailTemplateDoesNotExist
+X ErrCodeEventDestinationAlreadyExistsException EventDestinationAlreadyExists
+X ErrCodeEventDestinationDoesNotExistException EventDestinationDoesNotExist
+X ErrCodeFromEmailAddressNotVerifiedException FromEmailAddressNotVerified
+X ErrCodeInvalidCloudWatchDestinationException InvalidCloudWatchDestination
+X ErrCodeInvalidConfigurationSetException InvalidConfigurationSet
+X ErrCodeInvalidDeliveryOptionsException InvalidDeliveryOptions
+X ErrCodeInvalidFirehoseDestinationException InvalidFirehoseDestination
+X ErrCodeInvalidLambdaFunctionException InvalidLambdaFunction
+X ErrCodeInvalidPolicyException InvalidPolicy
+X ErrCodeInvalidRenderingParameterException InvalidRenderingParameter
+X ErrCodeInvalidS3ConfigurationException InvalidS3Configuration
+X ErrCodeInvalidSNSDestinationException InvalidSNSDestination
+X ErrCodeInvalidSnsTopicException InvalidSnsTopic
+X ErrCodeInvalidTemplateException InvalidTemplate
+X ErrCodeInvalidTrackingOptionsException InvalidTrackingOptions
+X ErrCodeLimitExceededException LimitExceeded
+X ErrCodeMailFromDomainNotVerifiedException MailFromDomainNotVerifiedException
+X ErrCodeMessageRejected MessageRejected
+X ErrCodeMissingRenderingAttributeException MissingRenderingAttribute
+X ErrCodeProductionAccessNotGrantedException ProductionAccessNotGranted
+X ErrCodeRuleDoesNotExistException RuleDoesNotExist
+X ErrCodeRuleSetDoesNotExistException RuleSetDoesNotExist
+X ErrCodeTemplateDoesNotExistException TemplateDoesNotExist
+X ErrCodeTrackingOptionsAlreadyExistsException TrackingOptionsAlreadyExistsException
+X ErrCodeTrackingOptionsDoesNotExistException TrackingOptionsDoesNotExistException
+I ListConfigurationSetsInput.MaxItems int64 int32
+I ListCustomVerificationEmailTemplatesInput.MaxResults int64 int32
+I ListIdentitiesInput.MaxItems int64 int32
+I ListTemplatesInput.MaxItems int64 int32
+R Body.Html Content
+R Body.Text Content
+R BouncedRecipientInfo.RecipientDsnFields RecipientDsnFields
+R BulkEmailDestination.Destination Destination
+R CreateConfigurationSetEventDestinationInput.EventDestination EventDestination
+R CreateConfigurationSetInput.ConfigurationSet ConfigurationSet
+R CreateConfigurationSetTrackingOptionsInput.TrackingOptions TrackingOptions
+R CreateReceiptFilterInput.Filter ReceiptFilter
+R CreateReceiptRuleInput.Rule ReceiptRule
+R CreateTemplateInput.Template Template
+R DescribeActiveReceiptRuleSetOutput.Metadata ReceiptRuleSetMetadata
+R DescribeConfigurationSetOutput.ConfigurationSet ConfigurationSet
+R DescribeConfigurationSetOutput.DeliveryOptions DeliveryOptions
+R DescribeConfigurationSetOutput.ReputationOptions ReputationOptions
+R DescribeConfigurationSetOutput.TrackingOptions TrackingOptions
+R DescribeReceiptRuleOutput.Rule ReceiptRule
+R DescribeReceiptRuleSetOutput.Metadata ReceiptRuleSetMetadata
+R EventDestination.CloudWatchDestination CloudWatchDestination
+R EventDestination.KinesisFirehoseDestination KinesisFirehoseDestination
+R EventDestination.SNSDestination SNSDestination
+R GetTemplateOutput.Template Template
+R Message.Body Body
+R Message.Subject Content
+R PutConfigurationSetDeliveryOptionsInput.DeliveryOptions DeliveryOptions
+R ReceiptAction.AddHeaderAction AddHeaderAction
+R ReceiptAction.BounceAction BounceAction
+R ReceiptAction.ConnectAction ConnectAction
+R ReceiptAction.LambdaAction LambdaAction
+R ReceiptAction.S3Action S3Action
+R ReceiptAction.SNSAction SNSAction
+R ReceiptAction.StopAction StopAction
+R ReceiptAction.WorkmailAction WorkmailAction
+R ReceiptFilter.IpFilter ReceiptIpFilter
+R SendBounceInput.MessageDsn MessageDsn
+R SendEmailInput.Destination Destination
+R SendEmailInput.Message Message
+R SendRawEmailInput.RawMessage RawMessage
+R SendTemplatedEmailInput.Destination Destination
+R UpdateConfigurationSetEventDestinationInput.EventDestination EventDestination
+R UpdateConfigurationSetTrackingOptionsInput.TrackingOptions TrackingOptions
+R UpdateReceiptRuleInput.Rule ReceiptRule
+R UpdateTemplateInput.Template Template
+V AccountSendingPausedException.ErrorCodeOverride string
+V AccountSendingPausedException.Message string
+V AddHeaderAction.HeaderName string
+V AddHeaderAction.HeaderValue string
+V AlreadyExistsException.ErrorCodeOverride string
+V AlreadyExistsException.Message string
+V AlreadyExistsException.Name string
+V BounceAction.Message string
+V BounceAction.Sender string
+V BounceAction.SmtpReplyCode string
+V BounceAction.StatusCode string
+V BounceAction.TopicArn string
+V BouncedRecipientInfo.Recipient string
+V BouncedRecipientInfo.RecipientArn string
+V BulkEmailDestination.ReplacementTemplateData string
+V BulkEmailDestinationStatus.Error string
+V BulkEmailDestinationStatus.MessageId string
+V CannotDeleteException.ErrorCodeOverride string
+V CannotDeleteException.Message string
+V CannotDeleteException.Name string
+V CloneReceiptRuleSetInput.OriginalRuleSetName string
+V CloneReceiptRuleSetInput.RuleSetName string
+V CloudWatchDimensionConfiguration.DefaultDimensionValue string
+V CloudWatchDimensionConfiguration.DimensionName string
+V ConfigurationSet.Name string
+V ConfigurationSetAlreadyExistsException.ConfigurationSetName string
+V ConfigurationSetAlreadyExistsException.ErrorCodeOverride string
+V ConfigurationSetAlreadyExistsException.Message string
+V ConfigurationSetDoesNotExistException.ConfigurationSetName string
+V ConfigurationSetDoesNotExistException.ErrorCodeOverride string
+V ConfigurationSetDoesNotExistException.Message string
+V ConfigurationSetSendingPausedException.ConfigurationSetName string
+V ConfigurationSetSendingPausedException.ErrorCodeOverride string
+V ConfigurationSetSendingPausedException.Message string
+V ConnectAction.IAMRoleARN string
+V ConnectAction.InstanceARN string
+V Content.Charset string
+V Content.Data string
+V CreateConfigurationSetEventDestinationInput.ConfigurationSetName string
+V CreateConfigurationSetTrackingOptionsInput.ConfigurationSetName string
+V CreateCustomVerificationEmailTemplateInput.FailureRedirectionURL string
+V CreateCustomVerificationEmailTemplateInput.FromEmailAddress string
+V CreateCustomVerificationEmailTemplateInput.SuccessRedirectionURL string
+V CreateCustomVerificationEmailTemplateInput.TemplateContent string
+V CreateCustomVerificationEmailTemplateInput.TemplateName string
+V CreateCustomVerificationEmailTemplateInput.TemplateSubject string
+V CreateReceiptRuleInput.After string
+V CreateReceiptRuleInput.RuleSetName string
+V CreateReceiptRuleSetInput.RuleSetName string
+V CustomVerificationEmailInvalidContentException.ErrorCodeOverride string
+V CustomVerificationEmailInvalidContentException.Message string
+V CustomVerificationEmailTemplate.FailureRedirectionURL string
+V CustomVerificationEmailTemplate.FromEmailAddress string
+V CustomVerificationEmailTemplate.SuccessRedirectionURL string
+V CustomVerificationEmailTemplate.TemplateName string
+V CustomVerificationEmailTemplate.TemplateSubject string
+V CustomVerificationEmailTemplateAlreadyExistsException.CustomVerificationEmailTemplateName string
+V CustomVerificationEmailTemplateAlreadyExistsException.ErrorCodeOverride string
+V CustomVerificationEmailTemplateAlreadyExistsException.Message string
+V CustomVerificationEmailTemplateDoesNotExistException.CustomVerificationEmailTemplateName string
+V CustomVerificationEmailTemplateDoesNotExistException.ErrorCodeOverride string
+V CustomVerificationEmailTemplateDoesNotExistException.Message string
+V DeleteConfigurationSetEventDestinationInput.ConfigurationSetName string
+V DeleteConfigurationSetEventDestinationInput.EventDestinationName string
+V DeleteConfigurationSetInput.ConfigurationSetName string
+V DeleteConfigurationSetTrackingOptionsInput.ConfigurationSetName string
+V DeleteCustomVerificationEmailTemplateInput.TemplateName string
+V DeleteIdentityInput.Identity string
+V DeleteIdentityPolicyInput.Identity string
+V DeleteIdentityPolicyInput.PolicyName string
+V DeleteReceiptFilterInput.FilterName string
+V DeleteReceiptRuleInput.RuleName string
+V DeleteReceiptRuleInput.RuleSetName string
+V DeleteReceiptRuleSetInput.RuleSetName string
+V DeleteTemplateInput.TemplateName string
+V DeleteVerifiedEmailAddressInput.EmailAddress string
+V DescribeConfigurationSetInput.ConfigurationSetName string
+V DescribeReceiptRuleInput.RuleName string
+V DescribeReceiptRuleInput.RuleSetName string
+V DescribeReceiptRuleSetInput.RuleSetName string
+V EndpointParameters.Endpoint string
+V EndpointParameters.Region string
+V EndpointParameters.UseDualStack bool
+V EndpointParameters.UseFIPS bool
+V EventDestination.Name string
+V EventDestinationAlreadyExistsException.ConfigurationSetName string
+V EventDestinationAlreadyExistsException.ErrorCodeOverride string
+V EventDestinationAlreadyExistsException.EventDestinationName string
+V EventDestinationAlreadyExistsException.Message string
+V EventDestinationDoesNotExistException.ConfigurationSetName string
+V EventDestinationDoesNotExistException.ErrorCodeOverride string
+V EventDestinationDoesNotExistException.EventDestinationName string
+V EventDestinationDoesNotExistException.Message string
+V ExtensionField.Name string
+V ExtensionField.Value string
+V FromEmailAddressNotVerifiedException.ErrorCodeOverride string
+V FromEmailAddressNotVerifiedException.FromEmailAddress string
+V FromEmailAddressNotVerifiedException.Message string
+V GetCustomVerificationEmailTemplateInput.TemplateName string
+V GetCustomVerificationEmailTemplateOutput.FailureRedirectionURL string
+V GetCustomVerificationEmailTemplateOutput.FromEmailAddress string
+V GetCustomVerificationEmailTemplateOutput.SuccessRedirectionURL string
+V GetCustomVerificationEmailTemplateOutput.TemplateContent string
+V GetCustomVerificationEmailTemplateOutput.TemplateName string
+V GetCustomVerificationEmailTemplateOutput.TemplateSubject string
+V GetIdentityPoliciesInput.Identity string
+V GetTemplateInput.TemplateName string
+V IdentityMailFromDomainAttributes.MailFromDomain string
+V IdentityNotificationAttributes.BounceTopic string
+V IdentityNotificationAttributes.ComplaintTopic string
+V IdentityNotificationAttributes.DeliveryTopic string
+V IdentityVerificationAttributes.VerificationToken string
+V InvalidCloudWatchDestinationException.ConfigurationSetName string
+V InvalidCloudWatchDestinationException.ErrorCodeOverride string
+V InvalidCloudWatchDestinationException.EventDestinationName string
+V InvalidCloudWatchDestinationException.Message string
+V InvalidConfigurationSetException.ErrorCodeOverride string
+V InvalidConfigurationSetException.Message string
+V InvalidDeliveryOptionsException.ErrorCodeOverride string
+V InvalidDeliveryOptionsException.Message string
+V InvalidFirehoseDestinationException.ConfigurationSetName string
+V InvalidFirehoseDestinationException.ErrorCodeOverride string
+V InvalidFirehoseDestinationException.EventDestinationName string
+V InvalidFirehoseDestinationException.Message string
+V InvalidLambdaFunctionException.ErrorCodeOverride string
+V InvalidLambdaFunctionException.FunctionArn string
+V InvalidLambdaFunctionException.Message string
+V InvalidPolicyException.ErrorCodeOverride string
+V InvalidPolicyException.Message string
+V InvalidRenderingParameterException.ErrorCodeOverride string
+V InvalidRenderingParameterException.Message string
+V InvalidRenderingParameterException.TemplateName string
+V InvalidS3ConfigurationException.Bucket string
+V InvalidS3ConfigurationException.ErrorCodeOverride string
+V InvalidS3ConfigurationException.Message string
+V InvalidSNSDestinationException.ConfigurationSetName string
+V InvalidSNSDestinationException.ErrorCodeOverride string
+V InvalidSNSDestinationException.EventDestinationName string
+V InvalidSNSDestinationException.Message string
+V InvalidSnsTopicException.ErrorCodeOverride string
+V InvalidSnsTopicException.Message string
+V InvalidSnsTopicException.Topic string
+V InvalidTemplateException.ErrorCodeOverride string
+V InvalidTemplateException.Message string
+V InvalidTemplateException.TemplateName string
+V InvalidTrackingOptionsException.ErrorCodeOverride string
+V InvalidTrackingOptionsException.Message string
+V KinesisFirehoseDestination.DeliveryStreamARN string
+V KinesisFirehoseDestination.IAMRoleARN string
+V LambdaAction.FunctionArn string
+V LambdaAction.TopicArn string
+V LimitExceededException.ErrorCodeOverride string
+V LimitExceededException.Message string
+V ListConfigurationSetsInput.MaxItems int32
+V ListConfigurationSetsInput.NextToken string
+V ListConfigurationSetsOutput.NextToken string
+V ListCustomVerificationEmailTemplatesInput.MaxResults int32
+V ListCustomVerificationEmailTemplatesInput.NextToken string
+V ListCustomVerificationEmailTemplatesOutput.NextToken string
+V ListIdentitiesInput.MaxItems int32
+V ListIdentitiesInput.NextToken string
+V ListIdentitiesOutput.NextToken string
+V ListIdentityPoliciesInput.Identity string
+V ListReceiptRuleSetsInput.NextToken string
+V ListReceiptRuleSetsOutput.NextToken string
+V ListTemplatesInput.MaxItems int32
+V ListTemplatesInput.NextToken string
+V ListTemplatesOutput.NextToken string
+V MailFromDomainNotVerifiedException.ErrorCodeOverride string
+V MailFromDomainNotVerifiedException.Message string
+V MessageDsn.ReportingMta string
+V MessageRejected.ErrorCodeOverride string
+V MessageRejected.Message string
+V MessageTag.Name string
+V MessageTag.Value string
+V MissingRenderingAttributeException.ErrorCodeOverride string
+V MissingRenderingAttributeException.Message string
+V MissingRenderingAttributeException.TemplateName string
+V Options.BaseEndpoint string
+V ProductionAccessNotGrantedException.ErrorCodeOverride string
+V ProductionAccessNotGrantedException.Message string
+V PutConfigurationSetDeliveryOptionsInput.ConfigurationSetName string
+V PutIdentityPolicyInput.Identity string
+V PutIdentityPolicyInput.Policy string
+V PutIdentityPolicyInput.PolicyName string
+V ReceiptFilter.Name string
+V ReceiptIpFilter.Cidr string
+V ReceiptRule.Name string
+V ReceiptRuleSetMetadata.Name string
+V RecipientDsnFields.DiagnosticCode string
+V RecipientDsnFields.FinalRecipient string
+V RecipientDsnFields.RemoteMta string
+V RecipientDsnFields.Status string
+V ReorderReceiptRuleSetInput.RuleSetName string
+V RuleDoesNotExistException.ErrorCodeOverride string
+V RuleDoesNotExistException.Message string
+V RuleDoesNotExistException.Name string
+V RuleSetDoesNotExistException.ErrorCodeOverride string
+V RuleSetDoesNotExistException.Message string
+V RuleSetDoesNotExistException.Name string
+V S3Action.BucketName string
+V S3Action.IamRoleArn string
+V S3Action.KmsKeyArn string
+V S3Action.ObjectKeyPrefix string
+V S3Action.TopicArn string
+V SNSAction.TopicArn string
+V SNSDestination.TopicARN string
+V SendBounceInput.BounceSender string
+V SendBounceInput.BounceSenderArn string
+V SendBounceInput.Explanation string
+V SendBounceInput.OriginalMessageId string
+V SendBounceOutput.MessageId string
+V SendBulkTemplatedEmailInput.ConfigurationSetName string
+V SendBulkTemplatedEmailInput.DefaultTemplateData string
+V SendBulkTemplatedEmailInput.ReturnPath string
+V SendBulkTemplatedEmailInput.ReturnPathArn string
+V SendBulkTemplatedEmailInput.Source string
+V SendBulkTemplatedEmailInput.SourceArn string
+V SendBulkTemplatedEmailInput.Template string
+V SendBulkTemplatedEmailInput.TemplateArn string
+V SendCustomVerificationEmailInput.ConfigurationSetName string
+V SendCustomVerificationEmailInput.EmailAddress string
+V SendCustomVerificationEmailInput.TemplateName string
+V SendCustomVerificationEmailOutput.MessageId string
+V SendEmailInput.ConfigurationSetName string
+V SendEmailInput.ReturnPath string
+V SendEmailInput.ReturnPathArn string
+V SendEmailInput.Source string
+V SendEmailInput.SourceArn string
+V SendEmailOutput.MessageId string
+V SendRawEmailInput.ConfigurationSetName string
+V SendRawEmailInput.FromArn string
+V SendRawEmailInput.ReturnPathArn string
+V SendRawEmailInput.Source string
+V SendRawEmailInput.SourceArn string
+V SendRawEmailOutput.MessageId string
+V SendTemplatedEmailInput.ConfigurationSetName string
+V SendTemplatedEmailInput.ReturnPath string
+V SendTemplatedEmailInput.ReturnPathArn string
+V SendTemplatedEmailInput.Source string
+V SendTemplatedEmailInput.SourceArn string
+V SendTemplatedEmailInput.Template string
+V SendTemplatedEmailInput.TemplateArn string
+V SendTemplatedEmailInput.TemplateData string
+V SendTemplatedEmailOutput.MessageId string
+V SetActiveReceiptRuleSetInput.RuleSetName string
+V SetIdentityDkimEnabledInput.Identity string
+V SetIdentityFeedbackForwardingEnabledInput.Identity string
+V SetIdentityHeadersInNotificationsEnabledInput.Identity string
+V SetIdentityMailFromDomainInput.Identity string
+V SetIdentityMailFromDomainInput.MailFromDomain string
+V SetIdentityNotificationTopicInput.Identity string
+V SetIdentityNotificationTopicInput.SnsTopic string
+V SetReceiptRulePositionInput.After string
+V SetReceiptRulePositionInput.RuleName string
+V SetReceiptRulePositionInput.RuleSetName string
+V StopAction.TopicArn string
+V Template.HtmlPart string
+V Template.SubjectPart string
+V Template.TemplateName string
+V Template.TextPart string
+V TemplateDoesNotExistException.ErrorCodeOverride string
+V TemplateDoesNotExistException.Message string
+V TemplateDoesNotExistException.TemplateName string
+V TemplateMetadata.Name string
+V TestRenderTemplateInput.TemplateData string
+V TestRenderTemplateInput.TemplateName string
+V TestRenderTemplateOutput.RenderedTemplate string
+V TrackingOptions.CustomRedirectDomain string
+V TrackingOptionsAlreadyExistsException.ConfigurationSetName string
+V TrackingOptionsAlreadyExistsException.ErrorCodeOverride string
+V TrackingOptionsAlreadyExistsException.Message string
+V TrackingOptionsDoesNotExistException.ConfigurationSetName string
+V TrackingOptionsDoesNotExistException.ErrorCodeOverride string
+V TrackingOptionsDoesNotExistException.Message string
+V UpdateConfigurationSetEventDestinationInput.ConfigurationSetName string
+V UpdateConfigurationSetReputationMetricsEnabledInput.ConfigurationSetName string
+V UpdateConfigurationSetSendingEnabledInput.ConfigurationSetName string
+V UpdateConfigurationSetTrackingOptionsInput.ConfigurationSetName string
+V UpdateCustomVerificationEmailTemplateInput.FailureRedirectionURL string
+V UpdateCustomVerificationEmailTemplateInput.FromEmailAddress string
+V UpdateCustomVerificationEmailTemplateInput.SuccessRedirectionURL string
+V UpdateCustomVerificationEmailTemplateInput.TemplateContent string
+V UpdateCustomVerificationEmailTemplateInput.TemplateName string
+V UpdateCustomVerificationEmailTemplateInput.TemplateSubject string
+V UpdateReceiptRuleInput.RuleSetName string
+V VerifyDomainDkimInput.Domain string
+V VerifyDomainIdentityInput.Domain string
+V VerifyDomainIdentityOutput.VerificationToken string
+V VerifyEmailAddressInput.EmailAddress string
+V VerifyEmailIdentityInput.EmailAddress string
+V WorkmailAction.OrganizationArn string
+V WorkmailAction.TopicArn string
+Q GetIdentityDkimAttributesOutput.DkimAttributes
+Q GetIdentityMailFromDomainAttributesOutput.MailFromDomainAttributes
+Q GetIdentityNotificationAttributesOutput.NotificationAttributes
+Q GetIdentityPoliciesOutput.Policies
+Q GetIdentityVerificationAttributesOutput.VerificationAttributes
+D EventDestination.Enabled bool
+D GetAccountSendingEnabledOutput.Enabled bool
+D GetSendQuotaOutput.Max24HourSend float64
+D GetSendQuotaOutput.MaxSendRate float64
+D GetSendQuotaOutput.SentLast24Hours float64
+D IdentityDkimAttributes.DkimEnabled bool
+D IdentityNotificationAttributes.ForwardingEnabled bool
+D IdentityNotificationAttributes.HeadersInBounceNotificationsEnabled bool
+D IdentityNotificationAttributes.HeadersInComplaintNotificationsEnabled bool
+D IdentityNotificationAttributes.HeadersInDeliveryNotificationsEnabled bool
+D ReceiptRule.Enabled bool
+D ReceiptRule.ScanEnabled bool
+D ReputationOptions.ReputationMetricsEnabled bool
+D ReputationOptions.SendingEnabled bool
+D SendDataPoint.Bounces int64
+D SendDataPoint.Complaints int64
+D SendDataPoint.DeliveryAttempts int64
+D SendDataPoint.Rejects int64
+D SetIdentityDkimEnabledInput.DkimEnabled bool
+D SetIdentityFeedbackForwardingEnabledInput.ForwardingEnabled bool
+D SetIdentityHeadersInNotificationsEnabledInput.Enabled bool
+D UpdateAccountSendingEnabledInput.Enabled bool
+D UpdateConfigurationSetReputationMetricsEnabledInput.Enabled bool
+D UpdateConfigurationSetSendingEnabledInput.Enabled bool
+L BulkEmailDestination.ReplacementTags MessageTag
+L CloudWatchDestination.DimensionConfigurations CloudWatchDimensionConfiguration
+L DescribeActiveReceiptRuleSetOutput.Rules ReceiptRule
+L DescribeConfigurationSetInput.ConfigurationSetAttributeNames ConfigurationSetAttribute
+L DescribeConfigurationSetOutput.EventDestinations EventDestination
+L DescribeReceiptRuleSetOutput.Rules ReceiptRule
+L Destination.BccAddresses -
+L Destination.CcAddresses -
+L Destination.ToAddresses -
+L EventDestination.MatchingEventTypes EventType
+L GetIdentityDkimAttributesInput.Identities -
+L GetIdentityMailFromDomainAttributesInput.Identities -
+L GetIdentityNotificationAttributesInput.Identities -
+L GetIdentityPoliciesInput.PolicyNames -
+L GetIdentityVerificationAttributesInput.Identities -
+L GetSendStatisticsOutput.SendDataPoints SendDataPoint
+L IdentityDkimAttributes.DkimTokens -
+L ListConfigurationSetsOutput.ConfigurationSets ConfigurationSet
+L ListCustomVerificationEmailTemplatesOutput.CustomVerificationEmailTemplates CustomVerificationEmailTemplate
+L ListIdentitiesOutput.Identities -
+L ListIdentityPoliciesOutput.PolicyNames -
+L ListReceiptFiltersOutput.Filters ReceiptFilter
+L ListReceiptRuleSetsOutput.RuleSets ReceiptRuleSetMetadata
+L ListTemplatesOutput.TemplatesMetadata TemplateMetadata
+L ListVerifiedEmailAddressesOutput.VerifiedEmailAddresses -
+L MessageDsn.ExtensionFields ExtensionField
+L ReceiptRule.Actions ReceiptAction
+L ReceiptRule.Recipients -
+L RecipientDsnFields.ExtensionFields ExtensionField
+L ReorderReceiptRuleSetInput.RuleNames -
+L SendBounceInput.BouncedRecipientInfoList BouncedRecipientInfo
+L SendBulkTemplatedEmailInput.DefaultTags MessageTag
+L SendBulkTemplatedEmailInput.Destinations BulkEmailDestination
+L SendBulkTemplatedEmailInput.ReplyToAddresses -
+L SendBulkTemplatedEmailOutput.Status BulkEmailDestinationStatus
+L SendEmailInput.ReplyToAddresses -
+L SendEmailInput.Tags MessageTag
+L SendRawEmailInput.Destinations -
+L SendRawEmailInput.Tags MessageTag
+L SendTemplatedEmailInput.ReplyToAddresses -
+L SendTemplatedEmailInput.Tags MessageTag
+L VerifyDomainDkimOutput.DkimTokens -
+F BouncedRecipientInfo.BounceType BounceType
+F BulkEmailDestinationStatus.Status BulkEmailStatus
+F CloudWatchDimensionConfiguration.DimensionValueSource DimensionValueSource
+F DeliveryOptions.TlsPolicy TlsPolicy
+F DescribeConfigurationSetInput.ConfigurationSetAttributeNames ConfigurationSetAttribute
+F EventDestination.MatchingEventTypes EventType
+F IdentityDkimAttributes.DkimVerificationStatus VerificationStatus
+F IdentityMailFromDomainAttributes.BehaviorOnMXFailure BehaviorOnMXFailure
+F IdentityMailFromDomainAttributes.MailFromDomainStatus CustomMailFromStatus
+F IdentityVerificationAttributes.VerificationStatus VerificationStatus
+F LambdaAction.InvocationType InvocationType
+F ListIdentitiesInput.IdentityType IdentityType
+F ReceiptIpFilter.Policy ReceiptFilterPolicy
+F ReceiptRule.TlsPolicy TlsPolicy
+F RecipientDsnFields.Action DsnAction
+F SNSAction.Encoding SNSActionEncoding
+F SetIdentityHeadersInNotificationsEnabledInput.NotificationType NotificationType
+F SetIdentityMailFromDomainInput.BehaviorOnMXFailure BehaviorOnMXFailure
+F SetIdentityNotificationTopicInput.NotificationType NotificationType
+F StopAction.Scope StopScope
+N APIOptions
+N Actions
+N AddHeaderAction
+N After
+N AppID
+N ArrivalDate
+N AuthSchemePreference
+N AuthSchemeResolver
+N AuthSchemes
+N BaseEndpoint
+N BccAddresses
+N Body
+N BounceAction
+N BounceSender
+N BounceSenderArn
+N BounceTopic
+N BouncedRecipientInfoList
+N Bounces
+N Bucket
+N BucketName
+N CcAddresses
+N Charset
+N Cidr
+N ClientLogMode
+N ClientOptions
+N CloudWatchDestination
+N ComplaintTopic
+N Complaints
+N ConfigurationSet
+N ConfigurationSetName
+N ConfigurationSets
+N ConnectAction
+N CreatedTimestamp
+N Credentials
+N CustomRedirectDomain
+N CustomVerificationEmailTemplateName
+N CustomVerificationEmailTemplates
+N Data
+N DefaultDimensionValue
+N DefaultTags
+N DefaultTemplateData
+N DefaultsMode
+N DeliveryAttempts
+N DeliveryOptions
+N DeliveryStreamARN
+N DeliveryTopic
+N Destination
+N Destinations
+N DiagnosticCode
+N DimensionConfigurations
+N DimensionName
+N DisableClockSkewCorrection
+N DisableHTTPS
+N DkimAttributes
+N DkimEnabled
+N DkimTokens
+N Domain
+N EmailAddress
+N Enabled
+N Endpoint
+N EndpointOptions
+N EndpointResolver
+N EndpointResolverV2
+N Error
+N ErrorCodeOverride
+N EventDestination
+N EventDestinationName
+N EventDestinations
+N Explanation
+N ExtensionFields
+N FailureRedirectionURL
+N Filter
+N FilterName
+N Filters
+N FinalRecipient
+N ForwardingEnabled
+N FromArn
+N FromEmailAddress
+N FunctionArn
+N HTTPClient
+N HTTPSignerV4
+N HeaderName
+N HeaderValue
+N HeadersInBounceNotificationsEnabled
+N HeadersInComplaintNotificationsEnabled
+N HeadersInDeliveryNotificationsEnabled
+N Html
+N HtmlPart
+N IAMRoleARN
+N IamRoleArn
+N Identities
+N Identity
+N InstanceARN
+N Interceptors
+N IpFilter
+N KinesisFirehoseDestination
+N KmsKeyArn
+N LambdaAction
+N LastAttemptDate
+N LastFreshStart
+N Limit
+N LogDeprecated
+N LogWaitAttempts
+N Logger
+N MailFromDomain
+N MailFromDomainAttributes
+N Max24HourSend
+N MaxDelay
+N MaxItems
+N MaxResults
+N MaxSendRate
+N Message
+N MessageDsn
+N MessageId
+N Metadata
+N MeterProvider
+N MinDelay
+N Name
+N NextToken
+N NotificationAttributes
+N ObjectKeyPrefix
+N Operation
+N Options
+N OrganizationArn
+N OriginalMessageId
+N OriginalRuleSetName
+N Policies
+N Policy
+N PolicyName
+N PolicyNames
+N RawMessage
+N Recipient
+N RecipientArn
+N RecipientDsnFields
+N Recipients
+N Region
+N Rejects
+N RemoteMta
+N RenderedTemplate
+N ReplacementTags
+N ReplacementTemplateData
+N ReplyToAddresses
+N ReportingMta
+N ReputationMetricsEnabled
+N ReputationOptions
+N ResolvedRegion
+N Resolver
+N ResultMetadata
+N RetryMaxAttempts
+N RetryMode
+N Retryable
+N Retryer
+N ReturnPath
+N ReturnPathArn
+N Rule
+N RuleName
+N RuleNames
+N RuleSetName
+N RuleSets
+N Rules
+N RuntimeEnvironment
+N S3Action
+N SNSAction
+N SNSDestination
+N ScanEnabled
+N SendDataPoints
+N Sender
+N SendingEnabled
+N SentLast24Hours
+N SmtpReplyCode
+N SnsTopic
+N Source
+N SourceArn
+N Status
+N StatusCode
+N StopAction
+N StopOnDuplicateToken
+N Subject
+N SubjectPart
+N SuccessRedirectionURL
+N Tags
+N Template
+N TemplateArn
+N TemplateContent
+N TemplateData
+N TemplateName
+N TemplateSubject
+N TemplatesMetadata
+N Text
+N TextPart
+N Timestamp
+N ToAddresses
+N Topic
+N TopicARN
+N TopicArn
+N TracerProvider
+N TrackingOptions
+N UseDualStack
+N UseDualStackEndpoint
+N UseFIPS
+N UseFIPSEndpoint
+N Value
+N VerificationAttributes
+N VerificationToken
+N VerifiedEmailAddresses
+N WorkmailAction
+T AccountSendingPausedException
+T AddHeaderAction
+T AlreadyExistsException
+T BehaviorOnMXFailure
+T Body
+T BounceAction
+T BounceType
+T BouncedRecipientInfo
+T BulkEmailDestination
+T BulkEmailDestinationStatus
+T BulkEmailStatus
+T CannotDeleteException
+T CloudWatchDestination
+T CloudWatchDimensionConfiguration
+T ConfigurationSet
+T ConfigurationSetAlreadyExistsException
+T ConfigurationSetAttribute
+T ConfigurationSetDoesNotExistException
+T ConfigurationSetSendingPausedException
+T ConnectAction
+T Content
+T CustomMailFromStatus
+T CustomVerificationEmailInvalidContentException
+T CustomVerificationEmailTemplate
+T CustomVerificationEmailTemplateAlreadyExistsException
+T CustomVerificationEmailTemplateDoesNotExistException
+T DeliveryOptions
+T Destination
+T DimensionValueSource
+T DsnAction
+T EventDestination
+T EventDestinationAlreadyExistsException
+T EventDestinationDoesNotExistException
+T EventType
+T ExtensionField
+T FromEmailAddressNotVerifiedException
+T IdentityDkimAttributes
+T IdentityMailFromDomainAttributes
+T IdentityNotificationAttributes
+T IdentityType
+T IdentityVerificationAttributes
+T InvalidCloudWatchDestinationException
+T InvalidConfigurationSetException
+T InvalidDeliveryOptionsException
+T InvalidFirehoseDestinationException
+T InvalidLambdaFunctionException
+T InvalidPolicyException
+T InvalidRenderingParameterException
+T InvalidS3ConfigurationException
+T InvalidSNSDestinationException
+T InvalidSnsTopicException
+T InvalidTemplateException
+T InvalidTrackingOptionsException
+T InvocationType
+T KinesisFirehoseDestination
+T LambdaAction
+T LimitExceededException
+T MailFromDomainNotVerifiedException
+T Message
+T MessageDsn
+T MessageRejected
+T MessageTag
+T MissingRenderingAttributeException
+T NotificationType
+T ProductionAccessNotGrantedException
+T RawMessage
+T ReceiptAction
+T ReceiptFilter
+T ReceiptFilterPolicy
+T ReceiptIpFilter
+T ReceiptRule
+T ReceiptRuleSetMetadata
+T RecipientDsnFields
+T ReputationOptions
+T RuleDoesNotExistException
+T RuleSetDoesNotExistException
+T S3Action
+T SNSAction
+T SNSActionEncoding
+T SNSDestination
+T SendDataPoint
+T StopAction
+T StopScope
+T Template
+T TemplateDoesNotExistException
+T TemplateMetadata
+T TlsPolicy
+T TrackingOptions
+T TrackingOptionsAlreadyExistsException
+T TrackingOptionsDoesNotExistException
+T VerificationStatus
+T WorkmailAction
+E BehaviorOnMXFailureRejectMessage BehaviorOnMXFailure
+E BehaviorOnMXFailureUseDefaultValue BehaviorOnMXFailure
+E BounceTypeContentRejected BounceType
+E BounceTypeDoesNotExist BounceType
+E BounceTypeExceededQuota BounceType
+E BounceTypeMessageTooLarge BounceType
+E BounceTypeTemporaryFailure BounceType
+E BounceTypeUndefined BounceType
+E BulkEmailStatusAccountDailyQuotaExceeded BulkEmailStatus
+E BulkEmailStatusAccountSendingPaused BulkEmailStatus
+E BulkEmailStatusAccountSuspended BulkEmailStatus
+E BulkEmailStatusAccountThrottled BulkEmailStatus
+E BulkEmailStatusConfigurationSetDoesNotExist BulkEmailStatus
+E BulkEmailStatusConfigurationSetSendingPaused BulkEmailStatus
+E BulkEmailStatusFailed BulkEmailStatus
+E BulkEmailStatusInvalidParameterValue BulkEmailStatus
+E BulkEmailStatusInvalidSendingPoolName BulkEmailStatus
+E BulkEmailStatusMailFromDomainNotVerified BulkEmailStatus
+E BulkEmailStatusMessageRejected BulkEmailStatus
+E BulkEmailStatusSuccess BulkEmailStatus
+E BulkEmailStatusTemplateDoesNotExist BulkEmailStatus
+E BulkEmailStatusTransientFailure BulkEmailStatus
+E ConfigurationSetAttributeDeliveryOptions ConfigurationSetAttribute
+E ConfigurationSetAttributeEventDestinations ConfigurationSetAttribute
+E ConfigurationSetAttributeReputationOptions ConfigurationSetAttribute
+E ConfigurationSetAttributeTrackingOptions ConfigurationSetAttribute
+E CustomMailFromStatusFailed CustomMailFromStatus
+E CustomMailFromStatusPending CustomMailFromStatus
+E CustomMailFromStatusSuccess CustomMailFromStatus
+E CustomMailFromStatusTemporaryFailure CustomMailFromStatus
+E DimensionValueSourceEmailHeader DimensionValueSource
+E DimensionValueSourceLinkTag DimensionValueSource
+E DimensionValueSourceMessageTag DimensionValueSource
+E DsnActionDelayed DsnAction
+E DsnActionDelivered DsnAction
+E DsnActionExpanded DsnAction
+E DsnActionFailed DsnAction
+E DsnActionRelayed DsnAction
+E EventTypeBounce EventType
+E EventTypeClick EventType
+E EventTypeComplaint EventType
+E EventTypeDelivery EventType
+E EventTypeOpen EventType
+E EventTypeReject EventType
+E EventTypeRenderingFailure EventType
+E EventTypeSend EventType
+E IdentityTypeDomain IdentityType
+E IdentityTypeEmailAddress IdentityType
+E InvocationTypeEvent InvocationType
+E InvocationTypeRequestResponse InvocationType
+E NotificationTypeBounce NotificationType
+E NotificationTypeComplaint NotificationType
+E NotificationTypeDelivery NotificationType
+E ReceiptFilterPolicyAllow ReceiptFilterPolicy
+E ReceiptFilterPolicyBlock ReceiptFilterPolicy
+E SNSActionEncodingBase64 SNSActionEncoding
+E SNSActionEncodingUtf8 SNSActionEncoding
+E StopScopeRuleSet StopScope
+E TlsPolicyOptional TlsPolicy
+E TlsPolicyRequire TlsPolicy
+E VerificationStatusFailed VerificationStatus
+E VerificationStatusNotStarted VerificationStatus
+E VerificationStatusPending VerificationStatus
+E VerificationStatusSuccess VerificationStatus
+E VerificationStatusTemporaryFailure VerificationStatus
+Y IdentityExists 3 20
+K AddHeaderAction 001 HeaderName req nil
+K AddHeaderAction 002 HeaderValue req nil
+K Body 001 Html nest Content
+K Body 002 Text nest Content
+K BounceAction 001 Message req nil
+K BounceAction 002 Sender req nil
+K BounceAction 003 SmtpReplyCode req nil
+K BouncedRecipientInfo 001 Recipient req nil
+K BouncedRecipientInfo 002 RecipientDsnFields nest RecipientDsnFields
+K BulkEmailDestination 001 Destination req nil
+K BulkEmailDestination 002 ReplacementTags each MessageTag slice
+K CloneReceiptRuleSetInput 001 OriginalRuleSetName req nil
+K CloneReceiptRuleSetInput 002 RuleSetName req nil
+K CloudWatchDestination 001 DimensionConfigurations req nil
+K CloudWatchDestination 002 DimensionConfigurations each CloudWatchDimensionConfiguration slice
+K CloudWatchDimensionConfiguration 001 DefaultDimensionValue req nil
+K CloudWatchDimensionConfiguration 002 DimensionName req nil
+K CloudWatchDimensionConfiguration 003 DimensionValueSource req empty
+K ConfigurationSet 001 Name req nil
+K Content 001 Data req nil
+K CreateConfigurationSetEventDestinationInput 001 ConfigurationSetName req nil
+K CreateConfigurationSetEventDestinationInput 002 EventDestination req nil
+K CreateConfigurationSetEventDestinationInput 003 EventDestination nest EventDestination
+K CreateConfigurationSetInput 001 ConfigurationSet req nil
+K CreateConfigurationSetInput 002 ConfigurationSet nest ConfigurationSet
+K CreateConfigurationSetTrackingOptionsInput 001 ConfigurationSetName req nil
+K CreateConfigurationSetTrackingOptionsInput 002 TrackingOptions req nil
+K CreateCustomVerificationEmailTemplateInput 001 FailureRedirectionURL req nil
+K CreateCustomVerificationEmailTemplateInput 002 FromEmailAddress req nil
+K CreateCustomVerificationEmailTemplateInput 003 SuccessRedirectionURL req nil
+K CreateCustomVerificationEmailTemplateInput 004 TemplateContent req nil
+K CreateCustomVerificationEmailTemplateInput 005 TemplateName req nil
+K CreateCustomVerificationEmailTemplateInput 006 TemplateSubject req nil
+K CreateReceiptFilterInput 001 Filter req nil
+K CreateReceiptFilterInput 002 Filter nest ReceiptFilter
+K CreateReceiptRuleInput 001 Rule req nil
+K CreateReceiptRuleInput 002 RuleSetName req nil
+K CreateReceiptRuleInput 003 Rule nest ReceiptRule
+K CreateReceiptRuleSetInput 001 RuleSetName req nil
+K CreateTemplateInput 001 Template req nil
+K CreateTemplateInput 002 Template nest Template
+K DeleteConfigurationSetEventDestinationInput 001 ConfigurationSetName req nil
+K DeleteConfigurationSetEventDestinationInput 002 EventDestinationName req nil
+K DeleteConfigurationSetInput 001 ConfigurationSetName req nil
+K DeleteConfigurationSetTrackingOptionsInput 001 ConfigurationSetName req nil
+K DeleteCustomVerificationEmailTemplateInput 001 TemplateName req nil
+K DeleteIdentityInput 001 Identity req nil
+K DeleteIdentityPolicyInput 001 Identity req nil
+K DeleteIdentityPolicyInput 002 PolicyName req nil
+K DeleteIdentityPolicyInput 003 PolicyName len 1 ptr
+K DeleteReceiptFilterInput 001 FilterName req nil
+K DeleteReceiptRuleInput 001 RuleName req nil
+K DeleteReceiptRuleInput 002 RuleSetName req nil
+K DeleteReceiptRuleSetInput 001 RuleSetName req nil
+K DeleteTemplateInput 001 TemplateName req nil
+K DeleteVerifiedEmailAddressInput 001 EmailAddress req nil
+K DescribeConfigurationSetInput 001 ConfigurationSetName req nil
+K DescribeReceiptRuleInput 001 RuleName req nil
+K DescribeReceiptRuleInput 002 RuleSetName req nil
+K DescribeReceiptRuleSetInput 001 RuleSetName req nil
+K EventDestination 001 MatchingEventTypes req nil
+K EventDestination 002 Name req nil
+K EventDestination 003 CloudWatchDestination nest CloudWatchDestination
+K EventDestination 004 KinesisFirehoseDestination nest KinesisFirehoseDestination
+K EventDestination 005 SNSDestination nest SNSDestination
+K ExtensionField 001 Name req nil
+K ExtensionField 002 Value req nil
+K GetCustomVerificationEmailTemplateInput 001 TemplateName req nil
+K GetIdentityDkimAttributesInput 001 Identities req nil
+K GetIdentityMailFromDomainAttributesInput 001 Identities req nil
+K GetIdentityNotificationAttributesInput 001 Identities req nil
+K GetIdentityPoliciesInput 001 Identity req nil
+K GetIdentityPoliciesInput 002 PolicyNames req nil
+K GetIdentityVerificationAttributesInput 001 Identities req nil
+K GetTemplateInput 001 TemplateName req nil
+K KinesisFirehoseDestination 001 DeliveryStreamARN req nil
+K KinesisFirehoseDestination 002 IAMRoleARN req nil
+K LambdaAction 001 FunctionArn req nil
+K ListCustomVerificationEmailTemplatesInput 001 MaxResults min 1 ptr
+K ListIdentityPoliciesInput 001 Identity req nil
+K Message 001 Body req nil
+K Message 002 Subject req nil
+K Message 003 Body nest Body
+K Message 004 Subject nest Content
+K MessageDsn 001 ReportingMta req nil
+K MessageDsn 002 ExtensionFields each ExtensionField slice
+K MessageTag 001 Name req nil
+K MessageTag 002 Value req nil
+K PutConfigurationSetDeliveryOptionsInput 001 ConfigurationSetName req nil
+K PutIdentityPolicyInput 001 Identity req nil
+K PutIdentityPolicyInput 002 Policy req nil
+K PutIdentityPolicyInput 003 Policy len 1 ptr
+K PutIdentityPolicyInput 004 PolicyName req nil
+K PutIdentityPolicyInput 005 PolicyName len 1 ptr
+K RawMessage 001 Data req nil
+K ReceiptAction 001 AddHeaderAction nest AddHeaderAction
+K ReceiptAction 002 BounceAction nest BounceAction
+K ReceiptAction 003 LambdaAction nest LambdaAction
+K ReceiptAction 004 S3Action nest S3Action
+K ReceiptAction 005 SNSAction nest SNSAction
+K ReceiptAction 006 StopAction nest StopAction
+K ReceiptAction 007 WorkmailAction nest WorkmailAction
+K ReceiptFilter 001 IpFilter req nil
+K ReceiptFilter 002 Name req nil
+K ReceiptFilter 003 IpFilter nest ReceiptIpFilter
+K ReceiptIpFilter 001 Cidr req nil
+K ReceiptIpFilter 002 Policy req empty
+K ReceiptRule 001 Name req nil
+K ReceiptRule 002 Actions each ReceiptAction slice
+K RecipientDsnFields 001 Action req empty
+K RecipientDsnFields 002 Status req nil
+K RecipientDsnFields 003 ExtensionFields each ExtensionField slice
+K ReorderReceiptRuleSetInput 001 RuleNames req nil
+K ReorderReceiptRuleSetInput 002 RuleSetName req nil
+K S3Action 001 BucketName req nil
+K SNSAction 001 TopicArn req nil
+K SNSDestination 001 TopicARN req nil
+K SendBounceInput 001 BounceSender req nil
+K SendBounceInput 002 BouncedRecipientInfoList req nil
+K SendBounceInput 003 OriginalMessageId req nil
+K SendBounceInput 004 BouncedRecipientInfoList each BouncedRecipientInfo slice
+K SendBounceInput 005 MessageDsn nest MessageDsn
+K SendBulkTemplatedEmailInput 001 Destinations req nil
+K SendBulkTemplatedEmailInput 002 Source req nil
+K SendBulkTemplatedEmailInput 003 Template req nil
+K SendBulkTemplatedEmailInput 004 DefaultTags each MessageTag slice
+K SendBulkTemplatedEmailInput 005 Destinations each BulkEmailDestination slice
+K SendCustomVerificationEmailInput 001 EmailAddress req nil
+K SendCustomVerificationEmailInput 002 TemplateName req nil
+K SendEmailInput 001 Destination req nil
+K SendEmailInput 002 Message req nil
+K SendEmailInput 003 Source req nil
+K SendEmailInput 004 Message nest Message
+K SendEmailInput 005 Tags each MessageTag slice
+K SendRawEmailInput 001 RawMessage req nil
+K SendRawEmailInput 002 RawMessage nest RawMessage
+K SendRawEmailInput 003 Tags each MessageTag slice
+K SendTemplatedEmailInput 001 Destination req nil
+K SendTemplatedEmailInput 002 Source req nil
+K SendTemplatedEmailInput 003 Template req nil
+K SendTemplatedEmailInput 004 TemplateData req nil
+K SendTemplatedEmailInput 005 Tags each MessageTag slice
+K SetIdentityDkimEnabledInput 001 DkimEnabled req none
+K SetIdentityDkimEnabledInput 002 Identity req nil
+K SetIdentityFeedbackForwardingEnabledInput 001 ForwardingEnabled req none
+K SetIdentityFeedbackForwardingEnabledInput 002 Identity req nil
+K SetIdentityHeadersInNotificationsEnabledInput 001 Enabled req none
+K SetIdentityHeadersInNotificationsEnabledInput 002 Identity req nil
+K SetIdentityHeadersInNotificationsEnabledInput 003 NotificationType req empty
+K SetIdentityMailFromDomainInput 001 Identity req nil
+K SetIdentityNotificationTopicInput 001 Identity req nil
+K SetIdentityNotificationTopicInput 002 NotificationType req empty
+K SetReceiptRulePositionInput 001 RuleName req nil
+K SetReceiptRulePositionInput 002 RuleSetName req nil
+K StopAction 001 Scope req empty
+K Template 001 TemplateName req nil
+K TestRenderTemplateInput 001 TemplateData req nil
+K TestRenderTemplateInput 002 TemplateName req nil
+K UpdateConfigurationSetEventDestinationInput 001 ConfigurationSetName req nil
+K UpdateConfigurationSetEventDestinationInput 002 EventDestination req nil
+K UpdateConfigurationSetEventDestinationInput 003 EventDestination nest EventDestination
+K UpdateConfigurationSetReputationMetricsEnabledInput 001 ConfigurationSetName req nil
+K UpdateConfigurationSetReputationMetricsEnabledInput 002 Enabled req none
+K UpdateConfigurationSetSendingEnabledInput 001 ConfigurationSetName req nil
+K UpdateConfigurationSetSendingEnabledInput 002 Enabled req none
+K UpdateConfigurationSetTrackingOptionsInput 001 ConfigurationSetName req nil
+K UpdateConfigurationSetTrackingOptionsInput 002 TrackingOptions req nil
+K UpdateCustomVerificationEmailTemplateInput 001 TemplateName req nil
+K UpdateReceiptRuleInput 001 Rule req nil
+K UpdateReceiptRuleInput 002 RuleSetName req nil
+K UpdateReceiptRuleInput 003 Rule nest ReceiptRule
+K UpdateTemplateInput 001 Template req nil
+K UpdateTemplateInput 002 Template nest Template
+K VerifyDomainDkimInput 001 Domain req nil
+K VerifyDomainIdentityInput 001 Domain req nil
+K VerifyEmailAddressInput 001 EmailAddress req nil
+K VerifyEmailIdentityInput 001 EmailAddress req nil
+K WorkmailAction 001 OrganizationArn req nil
+G ListCustomVerificationEmailTemplates NextToken NextToken
+G ListIdentities NextToken NextToken

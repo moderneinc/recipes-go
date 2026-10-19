@@ -21,7 +21,9 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/moderneinc/recipes-go/recipes/migration/awssdkv2/awsmanifest"
 	"github.com/moderneinc/recipes-go/recipes/migration/internal/pathswap"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 )
@@ -40,9 +42,13 @@ const (
 	v2Credentials = v2Module + "/credentials"
 	// v2 moved the assume-role credential helpers up alongside the rest of the
 	// credentials packages.
-	v1Stscreds   = v1Credentials + "/stscreds"
-	v2Stscreds   = v2Credentials + "/stscreds"
-	v2ServicePkg = v2Module + "/service/"
+	v1Stscreds = v1Credentials + "/stscreds"
+	v2Stscreds = v2Credentials + "/stscreds"
+	// v1Rest is v1's REST protocol package, and smithyHTTPBinding the home of
+	// the one helper of it callers reach for.
+	v1Rest            = v1Module + "/private/protocol/rest"
+	smithyHTTPBinding = smithyGo + "/encoding/httpbinding"
+	v2ServicePkg      = v2Module + "/service/"
 
 	contextPkg = "context"
 	// The name v2's config package binds by default.
@@ -112,8 +118,14 @@ var awsPackageSurvivors = func() map[string]bool {
 	return survivors
 }()
 
-// v1Endpoints held v1's endpoint resolution and partition data.
+// v1Endpoints held v1's endpoint resolution and partition data, and v1Client
+// the plumbing clients were built on. Of the latter only ConfigProvider, the
+// interface a session satisfied, has a counterpart: the config replacing it.
 const (
+	v1Client       = v1Aws + "/client"
+	clientReason   = "the v1 client plumbing has no v2 counterpart beyond ConfigProvider"
+	configProvider = "ConfigProvider"
+
 	v1Endpoints     = v1Aws + "/endpoints"
 	endpointsReason = "endpoint resolution moved onto the client's Options in v2, and its partition data has no public counterpart"
 )
@@ -122,7 +134,6 @@ const (
 // importing one cannot be migrated mechanically.
 var v1OnlyPackages = map[string]string{
 	v1Aws + "/defaults":     "v2 builds defaults through config.LoadDefaultConfig",
-	v1Aws + "/client":       "the v1 client plumbing has no v2 counterpart",
 	v1Aws + "/awsutil":      "awsutil has no v2 counterpart",
 	v1Aws + "/corehandlers": "the v1 handler stack was replaced by smithy middleware",
 	// v2 moved or dropped these service sub-packages, so the generic service
@@ -131,9 +142,6 @@ var v1OnlyPackages = map[string]string{
 	v1ServicePkg + "s3/s3crypto": "s3crypto has no v2 package: move to github.com/aws/amazon-s3-encryption-client-go/v3, whose default " +
 		"policy reads and writes the format v1's V2 client did, and set EnableLegacyUnauthenticatedModes to read objects v1's original client wrote; " +
 		"move on to v4's key-committing format only once every reader of the bucket is on v3",
-	v1ServicePkg + "dynamodb/dynamodbattribute": "dynamodbattribute moved to " + v2Module + "/feature/dynamodb/attributevalue, which writes differently: " +
-		"it ignores json struct tags (add dynamodbav tags, or set TagKey to \"json\" where the two agree), stores an empty string, byte slice or " +
-		"collection as itself where v1 stored NULL (tag such a field `,nullempty` to keep NULL), and its Marshaler and Unmarshaler take types.AttributeValue",
 }
 
 // blockedCallSuffixes are v1 operation shapes with no single-call v2 form: the
@@ -152,6 +160,8 @@ func MapPath(path string) (string, bool) {
 		return v2Config, true
 	case path == v1Stscreds:
 		return v2Stscreds, true
+	case path == v1Ec2RoleCreds:
+		return v2Ec2RoleCreds, true
 	case path == v1Credentials:
 		return v2Credentials, true
 	case path == v1Ec2Metadata:
@@ -160,6 +170,12 @@ func MapPath(path string) (string, bool) {
 		return v2S3Manager, true
 	case path == v1DynamoExpression:
 		return v2DynamoExpression, true
+	case path == gureguV1:
+		return gureguV2, true
+	case path == v1Rest:
+		// Of the REST protocol helpers only EscapePath has a public v2 home,
+		// unchanged in smithy's HTTP binding.
+		return smithyHTTPBinding, true
 	case path == v1Rdsutils:
 		return v2RdsAuth, true
 	case path == v1Aws+"/arn":
@@ -171,7 +187,11 @@ func MapPath(path string) (string, bool) {
 		if _, _, isIface := ifacePackageName(path); isIface {
 			return "", false
 		}
-		return v2ServicePkg + strings.TrimPrefix(path, v1ServicePkg), true
+		service, rest, _ := strings.Cut(strings.TrimPrefix(path, v1ServicePkg), "/")
+		if rest != "" {
+			rest = "/" + rest
+		}
+		return v2ServicePath(service) + rest, true
 	}
 	return "", false
 }
@@ -193,7 +213,7 @@ func importsV1(cu *golang.CompilationUnit) bool {
 		return false
 	}
 	for _, rp := range cu.Imports.Elements {
-		if underV1(rp.Element.Path()) {
+		if path := rp.Element.Path(); underV1(path) || path == gureguV1 {
 			return true
 		}
 	}
@@ -221,7 +241,7 @@ func serviceImports(cu *golang.CompilationUnit) map[string]string {
 		if _, _, isIface := ifacePackageName(path); isIface {
 			continue
 		}
-		if path == v1S3Manager || path == v1DynamoExpression || path == v1Rdsutils {
+		if path == v1S3Manager || path == v1DynamoExpression || path == v1Rdsutils || path == v1DynamodbAttribute {
 			continue
 		}
 		if name := pathswap.LocalName(rp.Element); name != "" && name != "_" && name != "." {
@@ -311,4 +331,47 @@ func sortedKeys[V any](m map[string]V) []string {
 	}
 	sort.Strings(out)
 	return out
+}
+
+// v2ServicePath is the import path of a v1 service's v2 package.
+func v2ServicePath(service string) string {
+	return v2ServicePkg + awsmanifest.V2Name(service)
+}
+
+// renamedService reports whether path is a v1 service package v2 spells
+// differently, whose files keep spelling it as v1 did.
+func renamedService(path string) bool {
+	service, isService := strings.CutPrefix(path, v1ServicePkg)
+	return isService && !strings.Contains(service, "/") && awsmanifest.V2Name(service) != service
+}
+
+// v1Libraries are third-party packages built on aws-sdk-go v1, whose values a
+// migrated file would hand v2's.
+var v1Libraries = map[string]string{}
+
+// shadowsPackage reports whether id, spelled as an imported package, is a
+// local of some other type: in4it/ecs-deploy declares ec2 := EC2{} in a file
+// importing the ec2 service. The parse-time type tells them apart where it is
+// known; a package qualifier carries the package's path.
+func shadowsPackage(id *java.Identifier) bool {
+	class := matcher.AsClass(id.Type)
+	if class == nil {
+		return false
+	}
+	fqn := class.FullyQualifiedName
+	// A type is named after its package's path; a package is the path alone.
+	return strings.Contains(fqn[strings.LastIndex(fqn, "/")+1:], ".")
+}
+
+// importsAs reports whether cu imports path under the name local.
+func importsAs(cu *golang.CompilationUnit, path, local string) bool {
+	if cu == nil || cu.Imports == nil {
+		return false
+	}
+	for _, rp := range cu.Imports.Elements {
+		if rp.Element.Path() == path && pathswap.LocalName(rp.Element) == local {
+			return true
+		}
+	}
+	return false
 }

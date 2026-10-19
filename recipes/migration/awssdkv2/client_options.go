@@ -72,11 +72,13 @@ type funcLiteralLift struct {
 	literal java.Expression
 }
 
-func (v *funcLiteralLift) VisitMethodDeclaration(md *java.MethodDeclaration, p any) java.J {
-	if v.literal == nil && (md.Name == nil || md.Name.Name == "") {
-		v.literal = md
+// A function literal in expression position is wrapped, as the parser wraps
+// one; Java's side of the tree takes nothing else there.
+func (v *funcLiteralLift) VisitStatementExpression(se *golang.StatementExpression, p any) java.J {
+	if md, isFunc := se.Statement.(*java.MethodDeclaration); isFunc && v.literal == nil && (md.Name == nil || md.Name.Name == "") {
+		v.literal = se
 	}
-	return v.GoVisitor.VisitMethodDeclaration(md, p)
+	return v.GoVisitor.VisitStatementExpression(se, p)
 }
 
 type placeholderBind struct {
@@ -92,34 +94,16 @@ func (v *placeholderBind) VisitIdentifier(id *java.Identifier, p any) java.J {
 	return lstutil.SetExprPrefix(v.value, id.Prefix)
 }
 
-// telia-oss/aws-env's shape: a client takes a trailing config held in a local
-// that is either nil or a literal setting the region. v1 skipped a nil config
-// and took the region from any other, which the option does too.
-const optionalRegionSource = `package p
+// A client takes trailing configs v1 merged over the session's, each setting
+// one carried replacing the session's. A generated merge does the same over
+// v2's config, which the client is then built from. The configs are literals
+// written at the call, or locals holding nothing but such literals and nil.
+const mergeConfigHelper = "awsCompatMergeConfig"
 
-var _ = func(o *%s.Options) {
-	if %s != nil {
-		o.Region = %s.Region
-	}
-}
-`
-
-// optionalRegionOption builds the option overriding the region from the
-// config held in name, when there is one.
-func optionalRegionOption(serviceLocal, name string) (java.Expression, bool) {
-	cu, err := parser.NewGoParser().Parse("opt.go", fmt.Sprintf(optionalRegionSource, serviceLocal, name, name))
-	if err != nil {
-		return nil, false
-	}
-	lift := visitor.Init(&funcLiteralLift{})
-	lift.Visit(cu, nil)
-	return lift.literal, lift.literal != nil
-}
-
-// regionConfigScan finds the locals holding nothing but a nil or a
-// region-only aws.Config literal, read only as a client constructor's
-// trailing config. A name used any other way is disqualified.
-type regionConfigScan struct {
+// clientConfigScan finds the locals holding nothing but nil or an aws.Config
+// literal, read only as a client constructor's trailing config. A name used any
+// other way is disqualified.
+type clientConfigScan struct {
 	visitor.GoVisitor
 	scan  *fileScan
 	uses  map[string]int
@@ -127,7 +111,7 @@ type regionConfigScan struct {
 	bad   map[string]bool
 }
 
-func (v *regionConfigScan) VisitVariableDeclarations(vd *java.VariableDeclarations, p any) java.J {
+func (v *clientConfigScan) VisitVariableDeclarations(vd *java.VariableDeclarations, p any) java.J {
 	ptr, isPointer := vd.TypeExpr.(*golang.PointerType)
 	if isPointer {
 		if fa, isField := ptr.Elem.(*java.FieldAccess); isField {
@@ -135,7 +119,7 @@ func (v *regionConfigScan) VisitVariableDeclarations(vd *java.VariableDeclaratio
 				for _, rp := range vd.Variables {
 					if d := rp.Element; d != nil && d.Name != nil {
 						v.clean[d.Name.Name]++
-						if d.Initializer != nil && !v.regionOnly(d.Initializer.Element) {
+						if d.Initializer != nil && !v.literalOrNil(d.Initializer.Element) {
 							v.bad[d.Name.Name] = true
 						}
 					}
@@ -146,20 +130,22 @@ func (v *regionConfigScan) VisitVariableDeclarations(vd *java.VariableDeclaratio
 	return v.GoVisitor.VisitVariableDeclarations(vd, p)
 }
 
-func (v *regionConfigScan) VisitAssignment(a *java.Assignment, p any) java.J {
-	if id, isIdent := a.Variable.(*java.Identifier); isIdent && v.clean[id.Name] > 0 {
-		v.clean[id.Name]++
-		if !v.regionOnly(a.Value.Element) {
-			v.bad[id.Name] = true
+func (v *clientConfigScan) VisitAssignment(a *java.Assignment, p any) java.J {
+	if id, isIdent := a.Variable.(*java.Identifier); isIdent {
+		if v.clean[id.Name] > 0 || java.HasMarker[golang.ShortVarDecl](a.Markers) && v.literalOrNil(a.Value.Element) {
+			v.clean[id.Name]++
+			if !v.literalOrNil(a.Value.Element) {
+				v.bad[id.Name] = true
+			}
 		}
 	}
 	return v.GoVisitor.VisitAssignment(a, p)
 }
 
-func (v *regionConfigScan) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+func (v *clientConfigScan) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
 	if _, isConstructor := v.scan.clientConstructorService(mi); isConstructor {
-		if args := realArgs(mi); len(args) == 2 {
-			if id, isIdent := args[1].(*java.Identifier); isIdent {
+		for _, arg := range realArgs(mi)[1:] {
+			if id, isIdent := arg.(*java.Identifier); isIdent {
 				v.clean[id.Name]++
 			}
 		}
@@ -167,33 +153,82 @@ func (v *regionConfigScan) VisitMethodInvocation(mi *java.MethodInvocation, p an
 	return v.GoVisitor.VisitMethodInvocation(mi, p)
 }
 
-func (v *regionConfigScan) VisitIdentifier(id *java.Identifier, p any) java.J {
+func (v *clientConfigScan) VisitIdentifier(id *java.Identifier, p any) java.J {
 	v.uses[id.Name]++
 	return id
 }
 
-// regionOnly reports whether expr is nil or `&aws.Config{Region: …}`.
-func (v *regionConfigScan) regionOnly(expr java.Expression) bool {
+// literalOrNil reports whether expr is nil or `&aws.Config{…}`.
+func (v *clientConfigScan) literalOrNil(expr java.Expression) bool {
 	if id, isIdent := expr.(*java.Identifier); isIdent {
 		return id.Name == "nil"
 	}
-	options, ok := v.scan.configLiteralOptions(expr)
-	return ok && len(options) == 1 && options[0].with == "WithRegion"
+	return v.scan.addressedConfigLiteral(expr)
 }
 
-// regionConfigLocals runs the scan over cu.
-func (s *fileScan) regionConfigLocals(cu *golang.CompilationUnit) map[string]bool {
-	scan := visitor.Init(&regionConfigScan{scan: s, uses: map[string]int{}, clean: map[string]int{}, bad: map[string]bool{}})
+// addressedConfigLiteral reports whether expr is `&aws.Config{…}`.
+func (s *fileScan) addressedConfigLiteral(expr java.Expression) bool {
+	unary, isUnary := expr.(*golang.Unary)
+	if !isUnary || unary.Operator.Element != golang.AddressOf {
+		return false
+	}
+	comp, isComposite := unary.Expression.(*golang.Composite)
+	return isComposite && s.awsConfigLiteral(comp)
+}
+
+// clientConfigLocals runs the scan over cu.
+func (s *fileScan) clientConfigLocals(cu *golang.CompilationUnit) map[string]bool {
+	scan := visitor.Init(&clientConfigScan{scan: s, uses: map[string]int{}, clean: map[string]int{}, bad: map[string]bool{}})
 	scan.Visit(cu, nil)
 	locals := map[string]bool{}
 	for name, clean := range scan.clean {
-		// Every appearance of the name is the declaration, an assignment or a
+		// Every appearance of the name is a declaration, an assignment or a
 		// constructor argument.
 		if !scan.bad[name] && clean > 1 && clean == scan.uses[name] {
 			locals[name] = true
 		}
 	}
 	return locals
+}
+
+// mergedConfig reports whether a trailing config is one the merge takes: a
+// literal written at the call, a local holding only such literals or kept as
+// v2's config, or a `...*aws.Config` parameter spread.
+func (s *fileScan) mergedConfig(expr java.Expression) bool {
+	if spread, isSpread := expr.(*golang.Variadic); isSpread && spread.Postfix {
+		id, isIdent := spread.Element.(*java.Identifier)
+		return isIdent && s.configVariadics[id.Name]
+	}
+	if id, isIdent := expr.(*java.Identifier); isIdent {
+		return s.clientConfigs[id.Name] || s.configKept[id.Name]
+	}
+	// A NewConfig chain is the literal its setters amount to.
+	if options, isChain := s.configChainOptions(expr); isChain {
+		_, ok := s.keptChainLiteral(options)
+		return ok
+	}
+	return s.addressedConfigLiteral(expr)
+}
+
+// configVariadicScan records the parameters declared `...*aws.Config`.
+type configVariadicScan struct {
+	visitor.GoVisitor
+	scan *fileScan
+}
+
+func (v *configVariadicScan) VisitVariableDeclarations(vd *java.VariableDeclarations, p any) java.J {
+	if ptr, isPointer := vd.TypeExpr.(*golang.PointerType); isPointer && vd.Varargs != nil {
+		if fa, isField := ptr.Elem.(*java.FieldAccess); isField {
+			if name, isAws := qualifiedRef(fa, v.scan.awsPkg); isAws && name == "Config" {
+				for _, rp := range vd.Variables {
+					if d := rp.Element; d != nil && d.Name != nil {
+						v.scan.configVariadics[d.Name.Name] = true
+					}
+				}
+			}
+		}
+	}
+	return v.GoVisitor.VisitVariableDeclarations(vd, p)
 }
 
 // clientConfigRegion reads the region out of the trailing config a v1 client
@@ -234,14 +269,17 @@ func (s *fileScan) convertibleClientConstructor(mi *java.MethodInvocation) bool 
 	if len(args) <= 1 {
 		return true
 	}
-	if len(args) != 2 {
-		return false
+	if len(args) == 2 {
+		if _, ok := s.clientConfigRegion(args[1]); ok {
+			return true
+		}
 	}
-	if id, isIdent := args[1].(*java.Identifier); isIdent && s.regionConfigs[id.Name] {
-		return true
+	for _, arg := range args[1:] {
+		if !s.mergedConfig(arg) {
+			return false
+		}
 	}
-	_, ok := s.clientConfigRegion(args[1])
-	return ok
+	return true
 }
 
 // v1 took the MFA token provider as a field on the session's options; v2 takes

@@ -5,7 +5,9 @@
 package awssdkv2_test
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -834,4 +836,1158 @@ func main() {
 	require.NoError(t, err)
 	require.NotContains(t, string(migrated), "session.")
 	assertBuilds(t, dir)
+}
+
+// S3's path-style addressing reaches the v2 client through the config's service
+// options: the v1 module and its migration have to address the same URL.
+func TestMigratedPathStyleAddressesAlike(t *testing.T) {
+	requireCompile(t)
+	dir := writeModule(t, map[string]string{
+		"go.mod": "\nmodule main\n\ngo 1.22\n",
+		"client.go": `
+package main
+
+import (
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3"
+)
+
+func head(endpoint string) {
+	sess := session.Must(session.NewSession(&aws.Config{
+		Region:           aws.String("us-east-1"),
+		Endpoint:         aws.String(endpoint),
+		Credentials:      credentials.NewStaticCredentials("id", "secret", ""),
+		S3ForcePathStyle: aws.Bool(true),
+	}))
+	s3.New(sess).HeadObject(&s3.HeadObjectInput{Bucket: aws.String("bucket"), Key: aws.String("key")})
+}
+`,
+		"main.go": `
+package main
+
+import "os"
+
+func main() { head(os.Args[1]) }
+`,
+	})
+	v1Bin := filepath.Join(t.TempDir(), "v1")
+	goCmd(t, dir, "build", "-o", v1Bin, ".")
+	require.Empty(t, migrateOnDisk(t, dir, &awssdkv2.MigrateAwsSdkGoModuleToV2{}))
+	assertBuilds(t, dir)
+	v2Bin := filepath.Join(t.TempDir(), "v2")
+	goCmd(t, dir, "build", "-o", v2Bin, ".")
+
+	requested := func(bin string) string {
+		var mu sync.Mutex
+		var paths []string
+		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			mu.Lock()
+			paths = append(paths, r.Host+" "+r.URL.Path)
+			mu.Unlock()
+		}))
+		defer srv.Close()
+		out, err := exec.Command(bin, srv.URL).CombinedOutput()
+		require.NoError(t, err, string(out))
+		mu.Lock()
+		defer mu.Unlock()
+		require.NotEmpty(t, paths)
+		return strings.Replace(paths[0], strings.TrimPrefix(srv.URL, "http://"), "server", 1)
+	}
+	v1, v2 := requested(v1Bin), requested(v2Bin)
+	t.Logf("v1 requested %q, v2 %q", v1, v2)
+	require.Equal(t, "server /bucket/key", v1)
+	require.Equal(t, v1, v2)
+}
+
+// DisableSSL sent v1's requests over http, to a custom endpoint given without a
+// scheme and to S3's own endpoint alike. The migrated binary must too.
+func TestMigratedDisableSSLRequestsAlike(t *testing.T) {
+	requireCompile(t)
+	dir := writeModule(t, map[string]string{
+		"go.mod": "\nmodule main\n\ngo 1.22\n",
+		"client.go": `
+package main
+
+import (
+	"errors"
+	"fmt"
+	"net/http"
+	"os"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3"
+)
+
+type recorder struct{}
+
+func (recorder) RoundTrip(r *http.Request) (*http.Response, error) {
+	fmt.Println(r.URL.Scheme)
+	os.Exit(0)
+	return nil, errors.New("unreachable")
+}
+
+var recordingClient = &http.Client{Transport: recorder{}}
+
+func head(endpoint string, insecure bool) {
+	sess := session.Must(session.NewSession(&aws.Config{
+		Region:      aws.String("us-east-1"),
+		Endpoint:    aws.String(endpoint),
+		DisableSSL:  aws.Bool(insecure),
+		Credentials: credentials.NewStaticCredentials("id", "secret", ""),
+		HTTPClient:  recordingClient,
+	}))
+	s3.New(sess).HeadObject(&s3.HeadObjectInput{Bucket: aws.String("bucket"), Key: aws.String("key")})
+}
+`,
+		"main.go": `
+package main
+
+import "os"
+
+func main() { head(os.Args[1], os.Args[2] == "true") }
+`,
+	})
+	v1Bin := filepath.Join(t.TempDir(), "v1")
+	goCmd(t, dir, "build", "-o", v1Bin, ".")
+	require.Empty(t, migrateOnDisk(t, dir, &awssdkv2.MigrateAwsSdkGoModuleToV2{}))
+	assertBuilds(t, dir)
+	v2Bin := filepath.Join(t.TempDir(), "v2")
+	goCmd(t, dir, "build", "-o", v2Bin, ".")
+
+	scheme := func(bin, endpoint, insecure string) string {
+		out, err := exec.Command(bin, endpoint, insecure).CombinedOutput()
+		require.NoError(t, err, string(out))
+		return strings.TrimSpace(string(out))
+	}
+	for _, c := range [][3]string{
+		{"minio:9000", "true", "http"},
+		{"https://minio:9000", "true", "https"},
+		{"", "true", "http"},
+		{"", "false", "https"},
+		{"minio:9000", "false", "https"},
+	} {
+		v1, v2 := scheme(v1Bin, c[0], c[1]), scheme(v2Bin, c[0], c[1])
+		require.Equal(t, c[2], v1, "v1 with endpoint %q, DisableSSL %s", c[0], c[1])
+		require.Equal(t, v1, v2, "endpoint %q, DisableSSL %s", c[0], c[1])
+	}
+}
+
+// profefe/profefe's shape: the uploader and downloader held as s3manageriface
+// interfaces, with mocks embedding them. v2 dropped the package; it is
+// regenerated in the module, the mocks take v2's methods, and the package's
+// tests still pass against them.
+func TestMigratedManagerIfaceBuildsAndTests(t *testing.T) {
+	requireCompile(t)
+	dir := writeModule(t, map[string]string{
+		"go.mod": "\nmodule example.com/prof\n\ngo 1.22\n",
+		"storage/storage.go": `
+package s3
+
+import (
+	"context"
+	"io"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/service/s3/s3iface"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager/s3manageriface"
+)
+
+type Storage struct {
+	svc        s3iface.S3API
+	uploader   s3manageriface.UploaderAPI
+	downloader s3manageriface.DownloaderAPI
+	bucket     string
+}
+
+func NewStorage(svc s3iface.S3API, bucket string) *Storage {
+	return &Storage{
+		svc:        svc,
+		uploader:   s3manager.NewUploaderWithClient(svc),
+		downloader: s3manager.NewDownloaderWithClient(svc),
+		bucket:     bucket,
+	}
+}
+
+func (st *Storage) Put(ctx context.Context, key string, r io.Reader) (string, error) {
+	resp, err := st.uploader.UploadWithContext(ctx, &s3manager.UploadInput{
+		Bucket: aws.String(st.bucket),
+		Key:    aws.String(key),
+		Body:   r,
+	})
+	if err != nil {
+		return "", err
+	}
+	return resp.Location, nil
+}
+
+func (st *Storage) Get(ctx context.Context, key string, w io.WriterAt) (int64, error) {
+	input := &s3.GetObjectInput{
+		Bucket: aws.String(st.bucket),
+		Key:    aws.String(key),
+	}
+	return st.downloader.DownloadWithContext(ctx, w, input)
+}
+`,
+		"storage/storage_test.go": `
+package s3
+
+import (
+	"context"
+	"io"
+	"strings"
+	"testing"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager/s3manageriface"
+)
+
+type mockUploaderAPI struct {
+	s3manageriface.UploaderAPI
+	inputs []*s3manager.UploadInput
+}
+
+func (m *mockUploaderAPI) UploadWithContext(ctx aws.Context, input *s3manager.UploadInput, _ ...func(*s3manager.Uploader)) (*s3manager.UploadOutput, error) {
+	m.inputs = append(m.inputs, input)
+	return &s3manager.UploadOutput{Location: *input.Key}, nil
+}
+
+type mockDownloaderAPI struct {
+	s3manageriface.DownloaderAPI
+}
+
+func (m *mockDownloaderAPI) DownloadWithContext(ctx aws.Context, wa io.WriterAt, input *s3.GetObjectInput, _ ...func(*s3manager.Downloader)) (int64, error) {
+	return 0, nil
+}
+
+func TestStorage(t *testing.T) {
+	up := &mockUploaderAPI{}
+	st := &Storage{uploader: up, downloader: &mockDownloaderAPI{}, bucket: "b"}
+	loc, err := st.Put(context.Background(), "k", strings.NewReader("x"))
+	if err != nil || loc != "k" || len(up.inputs) != 1 {
+		t.Fatal(loc, err)
+	}
+}
+`,
+	})
+	require.Empty(t, migrateOnDisk(t, dir, &awssdkv2.MigrateAwsSdkGoModuleToV2{}))
+	mocks, err := os.ReadFile(filepath.Join(dir, "storage", "storage_test.go"))
+	require.NoError(t, err)
+	require.Contains(t, string(mocks), "Upload(ctx context.Context, input *s3.PutObjectInput")
+	assertBuilds(t, dir)
+	if out, err := runGo(dir, "test", "./..."); err != nil {
+		t.Errorf("go test ./... after migration:\n%s", out)
+	}
+}
+
+// A MockGen mock of a v1 iface, as keikoproj/iam-manager keeps, is rendered
+// afresh against the regenerated interface; the client field still takes it
+// and the expectations recorded on it still match the calls made.
+func TestMigratedMockGenMockBuildsAndTests(t *testing.T) {
+	requireCompile(t)
+	dir := writeModule(t, map[string]string{
+		"go.mod": "\nmodule example.com/meter\n\ngo 1.22\n",
+		"meter.go": `
+package meter
+
+import (
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/marketplacemetering"
+	"github.com/aws/aws-sdk-go/service/marketplacemetering/marketplacemeteringiface"
+)
+
+type Meter struct {
+	Client marketplacemeteringiface.MarketplaceMeteringAPI
+}
+
+func (m *Meter) Customer(token string) (string, error) {
+	out, err := m.Client.ResolveCustomer(&marketplacemetering.ResolveCustomerInput{RegistrationToken: aws.String(token)})
+	if err != nil {
+		return "", err
+	}
+	return aws.StringValue(out.CustomerIdentifier), nil
+}
+
+func (m *Meter) Register(product string) error {
+	_, err := m.Client.RegisterUsage(&marketplacemetering.RegisterUsageInput{ProductCode: aws.String(product)})
+	return err
+}
+`,
+		"mocks/mock.go": `
+// Code generated by MockGen. DO NOT EDIT.
+// Source: github.com/aws/aws-sdk-go/service/marketplacemetering/marketplacemeteringiface (interfaces: MarketplaceMeteringAPI)
+
+// Package mocks is a generated GoMock package.
+package mocks
+
+import (
+	reflect "reflect"
+
+	request "github.com/aws/aws-sdk-go/aws/request"
+	marketplacemetering "github.com/aws/aws-sdk-go/service/marketplacemetering"
+	gomock "go.uber.org/mock/gomock"
+)
+
+type MockMarketplaceMeteringAPI struct {
+	ctrl     *gomock.Controller
+	recorder *MockMarketplaceMeteringAPIMockRecorder
+}
+
+type MockMarketplaceMeteringAPIMockRecorder struct {
+	mock *MockMarketplaceMeteringAPI
+}
+
+func NewMockMarketplaceMeteringAPI(ctrl *gomock.Controller) *MockMarketplaceMeteringAPI {
+	mock := &MockMarketplaceMeteringAPI{ctrl: ctrl}
+	mock.recorder = &MockMarketplaceMeteringAPIMockRecorder{mock}
+	return mock
+}
+
+func (m *MockMarketplaceMeteringAPI) EXPECT() *MockMarketplaceMeteringAPIMockRecorder {
+	return m.recorder
+}
+
+func (m *MockMarketplaceMeteringAPI) ResolveCustomerRequest(arg0 *marketplacemetering.ResolveCustomerInput) (*request.Request, *marketplacemetering.ResolveCustomerOutput) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ResolveCustomerRequest", arg0)
+	ret0, _ := ret[0].(*request.Request)
+	ret1, _ := ret[1].(*marketplacemetering.ResolveCustomerOutput)
+	return ret0, ret1
+}
+
+func (mr *MockMarketplaceMeteringAPIMockRecorder) ResolveCustomerRequest(arg0 any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ResolveCustomerRequest", reflect.TypeOf((*MockMarketplaceMeteringAPI)(nil).ResolveCustomerRequest), arg0)
+}
+`,
+		"meter_test.go": `
+package meter
+
+import (
+	"testing"
+
+	"example.com/meter/mocks"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/marketplacemetering"
+	"go.uber.org/mock/gomock"
+)
+
+func TestMeter(t *testing.T) {
+	client := mocks.NewMockMarketplaceMeteringAPI(gomock.NewController(t))
+	client.EXPECT().ResolveCustomer(&marketplacemetering.ResolveCustomerInput{RegistrationToken: aws.String("t")}).Return(&marketplacemetering.ResolveCustomerOutput{CustomerIdentifier: aws.String("c")}, nil)
+	var seen string
+	client.EXPECT().RegisterUsage(gomock.Any()).Do(func(in *marketplacemetering.RegisterUsageInput) {
+		seen = aws.StringValue(in.ProductCode)
+	}).Return(&marketplacemetering.RegisterUsageOutput{}, nil)
+	m := &Meter{Client: client}
+	if c, err := m.Customer("t"); err != nil || c != "c" {
+		t.Fatal(c, err)
+	}
+	if err := m.Register("p"); err != nil || seen != "p" {
+		t.Fatal(seen, err)
+	}
+}
+`,
+	})
+	require.Empty(t, migrateOnDisk(t, dir, &awssdkv2.MigrateAwsSdkGoModuleToV2{}))
+	assertBuilds(t, dir)
+	if out, err := runGo(dir, "test", "./..."); err != nil {
+		t.Errorf("go test ./... after migration:\n%s", out)
+	}
+}
+
+// A mockery mock is regenerated the same way, and the expectations recorded on
+// it still match the calls the migrated code makes.
+func TestMigratedMockeryMockBuildsAndTests(t *testing.T) {
+	requireCompile(t)
+	dir := writeModule(t, map[string]string{
+		"go.mod": "\nmodule example.com/meter\n\ngo 1.22\n\nrequire github.com/stretchr/testify v1.10.0\n",
+		"meter.go": `
+package meter
+
+import (
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/marketplacemetering"
+	"github.com/aws/aws-sdk-go/service/marketplacemetering/marketplacemeteringiface"
+)
+
+type Meter struct {
+	Client marketplacemeteringiface.MarketplaceMeteringAPI
+}
+
+func (m *Meter) Customer(token string) (string, error) {
+	out, err := m.Client.ResolveCustomer(&marketplacemetering.ResolveCustomerInput{RegistrationToken: aws.String(token)})
+	if err != nil {
+		return "", err
+	}
+	return aws.StringValue(out.CustomerIdentifier), nil
+}
+
+func (m *Meter) Register(product string) error {
+	_, err := m.Client.RegisterUsage(&marketplacemetering.RegisterUsageInput{ProductCode: aws.String(product)})
+	return err
+}
+`,
+		"mocks/MarketplaceMeteringAPI.go": `
+// Code generated by mockery v2.20.0. DO NOT EDIT.
+
+package mocks
+
+import (
+	request "github.com/aws/aws-sdk-go/aws/request"
+	mock "github.com/stretchr/testify/mock"
+
+	marketplacemetering "github.com/aws/aws-sdk-go/service/marketplacemetering"
+)
+
+// MarketplaceMeteringAPI is an autogenerated mock type for the MarketplaceMeteringAPI type
+type MarketplaceMeteringAPI struct {
+	mock.Mock
+}
+
+// ResolveCustomer provides a mock function with given fields: _a0
+func (_m *MarketplaceMeteringAPI) ResolveCustomer(_a0 *marketplacemetering.ResolveCustomerInput) (*marketplacemetering.ResolveCustomerOutput, error) {
+	ret := _m.Called(_a0)
+
+	var r0 *marketplacemetering.ResolveCustomerOutput
+	if rf, ok := ret.Get(0).(func(*marketplacemetering.ResolveCustomerInput) *marketplacemetering.ResolveCustomerOutput); ok {
+		r0 = rf(_a0)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*marketplacemetering.ResolveCustomerOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(*marketplacemetering.ResolveCustomerInput) error); ok {
+		r1 = rf(_a0)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// ResolveCustomerRequest provides a mock function with given fields: _a0
+func (_m *MarketplaceMeteringAPI) ResolveCustomerRequest(_a0 *marketplacemetering.ResolveCustomerInput) (*request.Request, *marketplacemetering.ResolveCustomerOutput) {
+	ret := _m.Called(_a0)
+
+	var r0 *request.Request
+	if rf, ok := ret.Get(0).(func(*marketplacemetering.ResolveCustomerInput) *request.Request); ok {
+		r0 = rf(_a0)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*request.Request)
+		}
+	}
+
+	var r1 *marketplacemetering.ResolveCustomerOutput
+	if rf, ok := ret.Get(1).(func(*marketplacemetering.ResolveCustomerInput) *marketplacemetering.ResolveCustomerOutput); ok {
+		r1 = rf(_a0)
+	} else {
+		if ret.Get(1) != nil {
+			r1 = ret.Get(1).(*marketplacemetering.ResolveCustomerOutput)
+		}
+	}
+
+	return r0, r1
+}
+
+type mockConstructorTestingTNewMarketplaceMeteringAPI interface {
+	mock.TestingT
+	Cleanup(func())
+}
+
+// NewMarketplaceMeteringAPI creates a new instance of MarketplaceMeteringAPI.
+func NewMarketplaceMeteringAPI(t mockConstructorTestingTNewMarketplaceMeteringAPI) *MarketplaceMeteringAPI {
+	mock := &MarketplaceMeteringAPI{}
+	mock.Mock.Test(t)
+
+	t.Cleanup(func() { mock.AssertExpectations(t) })
+
+	return mock
+}
+`,
+		"meter_test.go": `
+package meter
+
+import (
+	"testing"
+
+	"example.com/meter/mocks"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/marketplacemetering"
+	"github.com/stretchr/testify/mock"
+)
+
+func TestMeter(t *testing.T) {
+	client := mocks.NewMarketplaceMeteringAPI(t)
+	client.On("ResolveCustomer", &marketplacemetering.ResolveCustomerInput{RegistrationToken: aws.String("t")}).Return(&marketplacemetering.ResolveCustomerOutput{CustomerIdentifier: aws.String("c")}, nil).Once()
+	client.On("RegisterUsage", mock.MatchedBy(func(in *marketplacemetering.RegisterUsageInput) bool {
+		return aws.StringValue(in.ProductCode) == "p"
+	})).Return(&marketplacemetering.RegisterUsageOutput{}, nil)
+	m := &Meter{Client: client}
+	if c, err := m.Customer("t"); err != nil || c != "c" {
+		t.Fatal(c, err)
+	}
+	if err := m.Register("p"); err != nil {
+		t.Fatal(err)
+	}
+	client.AssertCalled(t, "RegisterUsage", mock.Anything)
+	client.AssertNumberOfCalls(t, "ResolveCustomer", 1)
+	client.AssertNotCalled(t, "MeterUsage", mock.Anything)
+}
+`,
+	})
+	require.Empty(t, migrateOnDisk(t, dir, &awssdkv2.MigrateAwsSdkGoModuleToV2{}))
+	assertBuilds(t, dir)
+	if out, err := runGo(dir, "test", "./..."); err != nil {
+		t.Errorf("go test ./... after migration:\n%s", out)
+	}
+}
+
+// A config built up through setters under conditions, as willnorris/imageproxy
+// builds one, sends its requests over the scheme v1's did, whichever settings
+// were applied and in whatever order.
+func TestMigratedConfigBuilderRequestsAlike(t *testing.T) {
+	requireCompile(t)
+	dir := writeModule(t, map[string]string{
+		"go.mod": "\nmodule main\n\ngo 1.22\n",
+		"client.go": `
+package main
+
+import (
+	"errors"
+	"fmt"
+	"net/http"
+	"os"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3"
+)
+
+type recorder struct{}
+
+func (recorder) RoundTrip(r *http.Request) (*http.Response, error) {
+	fmt.Println(r.URL.Scheme)
+	os.Exit(0)
+	return nil, errors.New("unreachable")
+}
+
+func head(endpoint, insecure string) {
+	config := aws.NewConfig().WithRegion("us-east-1").WithCredentials(credentials.NewStaticCredentials("id", "secret", "")).WithHTTPClient(&http.Client{Transport: recorder{}})
+	if endpoint != "" {
+		config = config.WithEndpoint(endpoint)
+	}
+	if insecure == "1" {
+		config = config.WithDisableSSL(true)
+	}
+	sess, err := session.NewSession(config)
+	if err != nil {
+		panic(err)
+	}
+	s3.New(sess).HeadObject(&s3.HeadObjectInput{Bucket: aws.String("bucket"), Key: aws.String("key")})
+}
+`,
+		"main.go": `
+package main
+
+import "os"
+
+func main() { head(os.Args[1], os.Args[2]) }
+`,
+	})
+	v1Bin := filepath.Join(t.TempDir(), "v1")
+	goCmd(t, dir, "build", "-o", v1Bin, ".")
+	require.Empty(t, migrateOnDisk(t, dir, &awssdkv2.MigrateAwsSdkGoModuleToV2{}))
+	client, err := os.ReadFile(filepath.Join(dir, "client.go"))
+	require.NoError(t, err)
+	require.Contains(t, string(client), "awsCompatNewConfig()")
+	assertBuilds(t, dir)
+	v2Bin := filepath.Join(t.TempDir(), "v2")
+	goCmd(t, dir, "build", "-o", v2Bin, ".")
+
+	scheme := func(bin, endpoint, insecure string) string {
+		out, err := exec.Command(bin, endpoint, insecure).CombinedOutput()
+		require.NoError(t, err, string(out))
+		return strings.TrimSpace(string(out))
+	}
+	for _, c := range [][3]string{
+		{"minio:9000", "1", "http"},
+		{"https://minio:9000", "1", "https"},
+		{"", "1", "http"},
+		{"", "0", "https"},
+		{"minio:9000", "0", "https"},
+	} {
+		v1, v2 := scheme(v1Bin, c[0], c[1]), scheme(v2Bin, c[0], c[1])
+		require.Equal(t, c[2], v1, "v1 with endpoint %q, disableSSL %s", c[0], c[1])
+		require.Equal(t, v1, v2, "endpoint %q, disableSSL %s", c[0], c[1])
+	}
+}
+
+// hypnoglow/helm-s3's awsutil package: functional options over a
+// session.Options value, one of which reads a bucket's region off the raw
+// response of a HEAD request it sends. The migrated package builds, and asks
+// the same server for the region as v1 did.
+func TestMigratedSessionOptionsValueBuilds(t *testing.T) {
+	requireCompile(t)
+	dir := writeModule(t, map[string]string{
+		"go.mod": "\nmodule example.com/hs3\n\ngo 1.22\n",
+		"awsutil/session.go": `
+package awsutil
+
+import (
+	"net/url"
+	"os"
+	"strconv"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3"
+)
+
+const (
+	// awsEndpoint can be set to a custom endpoint to use alternative AWS S3
+	// server like minio (https://minio.io).
+	awsEndpoint = "AWS_ENDPOINT"
+
+	// awsDisableSSL can be set to true to disable SSL for AWS S3 server.
+	awsDisableSSL = "AWS_DISABLE_SSL"
+
+	// awsBucketLocation can be set to an AWS region to force the session region
+	// if AWS_DEFAULT_REGION and AWS_REGION cannot be trusted.
+	awsBucketLocation = "HELM_S3_REGION"
+
+	// awsDynamicRegionEnabled can be set to a falsy value to disable dynamic
+	// bucket region discovery. By default, dynamic region discovery is enabled.
+	awsDynamicRegionEnabled = "HELM_S3_DYNAMIC_REGION_ENABLED"
+)
+
+// SessionOption is an option for session.
+type SessionOption func(*session.Options)
+
+// AssumeRoleTokenProvider is an option for setting custom assume role token provider.
+func AssumeRoleTokenProvider(provider func() (string, error)) SessionOption {
+	return func(options *session.Options) {
+		options.AssumeRoleTokenProvider = provider
+	}
+}
+
+// DynamicBucketRegion is an option for determining the Helm S3 bucket's AWS
+// region dynamically thus allowing the mixed use of buckets residing in
+// different regions without requiring manual updates on the HELM_S3_REGION,
+// AWS_REGION, or AWS_DEFAULT_REGION environment variables.
+//
+// This HEAD bucket solution works with all kinds of S3 URIs containing
+// the bucket name in the host part.
+//
+// The basic idea behind the HEAD bucket solution and the "official
+// confirmation" this behavior is expected and supported came from a comment on
+// the AWS SDK Go repository:
+// https://github.com/aws/aws-sdk-go/issues/720#issuecomment-243891223
+func DynamicBucketRegion(s3URL string) SessionOption {
+	return func(options *session.Options) {
+		if v, err := strconv.ParseBool(os.Getenv(awsDynamicRegionEnabled)); err == nil && !v {
+			return
+		}
+
+		parsedS3URL, err := url.Parse(s3URL)
+		if err != nil {
+			return
+		}
+
+		// Note: The dummy credentials are required in case no other credential
+		// provider is found, but even if the HEAD bucket request fails and
+		// returns a non-200 status code indicating no access to the bucket, the
+		// actual bucket region is returned in a response header.
+		//
+		// Note: A signing region **MUST** be configured, otherwise the signed
+		// request fails. The configured region itself is irrelevant, the
+		// endpoint officially works and returns the bucket region in a response
+		// header regardless of whether the signing region matches the bucket's
+		// region.
+		//
+		// Note: The default S3 endpoint **MUST** be configured to avoid making
+		// the request region specific thus avoiding regional redirect responses
+		// (301 Permanently moved) on HEAD bucket. This setting is only required
+		// because any other region than "us-east-1" would configure a
+		// region-specific endpoint as well, so it's more safe to explicitly
+		// configure the default endpoint.
+		//
+		// Source:
+		// https://github.com/aws/aws-sdk-go/issues/720#issuecomment-243891223
+		configuration := aws.NewConfig().
+			WithCredentials(credentials.NewStaticCredentials("dummy", "dummy", "")).
+			WithRegion("us-east-1").
+			WithEndpoint("s3.amazonaws.com")
+		sess := session.Must(session.NewSession())
+		s3Client := s3.New(sess, configuration)
+
+		bucketRegionHeader := "X-Amz-Bucket-Region"
+		input := &s3.HeadBucketInput{
+			Bucket: aws.String(parsedS3URL.Host),
+		}
+		request, _ := s3Client.HeadBucketRequest(input)
+		_ = request.Send()
+		if request.HTTPResponse == nil ||
+			len(request.HTTPResponse.Header[bucketRegionHeader]) == 0 {
+			return
+		}
+
+		options.Config.Region = aws.String(request.HTTPResponse.Header[bucketRegionHeader][0])
+	}
+}
+
+// Session returns an AWS session as described http://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html
+func Session(opts ...SessionOption) (*session.Session, error) {
+	disableSSL := os.Getenv(awsDisableSSL) == "true"
+
+	so := session.Options{
+		Config: aws.Config{
+			DisableSSL:       aws.Bool(disableSSL),
+			S3ForcePathStyle: aws.Bool(true),
+			Endpoint:         aws.String(os.Getenv(awsEndpoint)),
+		},
+		SharedConfigState:       session.SharedConfigEnable,
+		AssumeRoleTokenProvider: StderrTokenProvider,
+	}
+
+	bucketRegion := os.Getenv(awsBucketLocation)
+	// if not set, we don't update the config,
+	// so that the AWS SDK can still rely on either AWS_REGION or AWS_DEFAULT_REGION
+	if bucketRegion != "" {
+		so.Config.Region = aws.String(bucketRegion)
+	}
+
+	for _, opt := range opts {
+		opt(&so)
+	}
+
+	return session.NewSessionWithOptions(so)
+}
+`,
+		"awsutil/token.go": `
+package awsutil
+
+func StderrTokenProvider() (string, error) { return "", nil }
+`,
+		"main.go": `
+package main
+
+import (
+	"fmt"
+
+	"example.com/hs3/awsutil"
+)
+
+func main() {
+	sess, err := awsutil.Session(awsutil.AssumeRoleTokenProvider(awsutil.StderrTokenProvider))
+	fmt.Println(sess, err)
+}
+`,
+	})
+	require.Empty(t, migrateOnDisk(t, dir, &awssdkv2.MigrateAwsSdkGoModuleToV2{}))
+	session, err := os.ReadFile(filepath.Join(dir, "awsutil", "session.go"))
+	require.NoError(t, err)
+	t.Logf("migrated session.go:\n%s", session)
+	assertBuilds(t, dir)
+}
+
+// The raw response a v1 request held after Send, even for a failed call, is
+// what hypnoglow/helm-s3 reads a bucket's region from. The stand-in hands the
+// migrated binary the same response.
+func TestMigratedRequestReadsRawResponseAlike(t *testing.T) {
+	requireCompile(t)
+	dir := writeModule(t, map[string]string{
+		"go.mod": "\nmodule main\n\ngo 1.22\n",
+		"client.go": `
+package main
+
+import (
+	"fmt"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3"
+)
+
+func region(endpoint string) {
+	sess := session.Must(session.NewSession(&aws.Config{
+		Region:           aws.String("us-east-1"),
+		Endpoint:         aws.String(endpoint),
+		Credentials:      credentials.NewStaticCredentials("id", "secret", ""),
+		S3ForcePathStyle: aws.Bool(true),
+		MaxRetries:       aws.Int(0),
+	}))
+	client := s3.New(sess)
+	request, _ := client.HeadBucketRequest(&s3.HeadBucketInput{Bucket: aws.String("bucket")})
+	err := request.Send()
+	if request.HTTPResponse == nil {
+		fmt.Println("no response")
+		return
+	}
+	fmt.Println(request.HTTPResponse.StatusCode, request.HTTPResponse.Header.Get("X-Amz-Bucket-Region"), err != nil, request.Error != nil)
+}
+`,
+		"main.go": `
+package main
+
+import "os"
+
+func main() { region(os.Args[1]) }
+`,
+	})
+	v1Bin := filepath.Join(t.TempDir(), "v1")
+	goCmd(t, dir, "build", "-o", v1Bin, ".")
+	require.Empty(t, migrateOnDisk(t, dir, &awssdkv2.MigrateAwsSdkGoModuleToV2{}))
+	client, err := os.ReadFile(filepath.Join(dir, "client.go"))
+	require.NoError(t, err)
+	require.Contains(t, string(client), "awsCompatNewRequest(")
+	assertBuilds(t, dir)
+	v2Bin := filepath.Join(t.TempDir(), "v2")
+	goCmd(t, dir, "build", "-o", v2Bin, ".")
+
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("X-Amz-Bucket-Region", "eu-west-2")
+		w.WriteHeader(http.StatusForbidden)
+	}))
+	defer srv.Close()
+	run := func(bin string) string {
+		out, err := exec.Command(bin, srv.URL).CombinedOutput()
+		require.NoError(t, err, string(out))
+		return strings.TrimSpace(string(out))
+	}
+	v1, v2 := run(v1Bin), run(v2Bin)
+	t.Logf("v1 %q, v2 %q", v1, v2)
+	require.Equal(t, "403 eu-west-2 true true", v1)
+	require.Equal(t, v1, v2)
+}
+
+// in4it/ecs-deploy's shape: github.com/guregu/dynamo, built on aws-sdk-go v1,
+// over a session. Its v2 takes the config, a context at every call reaching
+// DynamoDB and an int limit; the migrated module builds against it.
+func TestMigratedGureguDynamoBuilds(t *testing.T) {
+	requireCompile(t)
+	dir := writeModule(t, map[string]string{
+		"go.mod": "\nmodule example.com/svc\n\ngo 1.22\n\nrequire github.com/guregu/dynamo v1.23.0\n",
+		"service/service.go": `
+package service
+
+import (
+	"math"
+	"time"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/guregu/dynamo"
+)
+
+type Deployment struct {
+	ServiceName string ` + "`" + `dynamo:"ServiceName,hash"` + "`" + `
+	Time        time.Time ` + "`" + `dynamo:"Time,range"` + "`" + `
+	Version     int64
+}
+
+type Service struct {
+	db    *dynamo.DB
+	table dynamo.Table
+}
+
+func New(table string) *Service {
+	s := &Service{}
+	s.db = dynamo.New(session.New(), &aws.Config{})
+	s.table = s.db.Table(table)
+	return s
+}
+
+func (s *Service) Put(d *Deployment) error {
+	return s.table.Put(d).If("$ = ?", "Version", d.Version-1).Run()
+}
+
+func (s *Service) Latest(name string, n int) ([]Deployment, error) {
+	var out []Deployment
+	err := s.table.Get("ServiceName", name).Range("Time", dynamo.LessOrEqual, time.Now()).Order(dynamo.Descending).Limit(int64(math.Max(float64(10), float64(n)))).All(&out)
+	return out, err
+}
+
+func (s *Service) One(name string, t time.Time) (Deployment, error) {
+	var d Deployment
+	err := s.table.Get("ServiceName", name).Range("Time", dynamo.Equal, t).Limit(1).One(&d)
+	return d, err
+}
+`,
+	})
+	require.Empty(t, migrateOnDisk(t, dir, &awssdkv2.MigrateAwsSdkGoModuleToV2{}))
+	migrated, err := os.ReadFile(filepath.Join(dir, "service", "service.go"))
+	require.NoError(t, err)
+	t.Logf("migrated service.go:\n%s", migrated)
+	require.Contains(t, string(migrated), `"github.com/guregu/dynamo/v2"`)
+	assertBuilds(t, dir)
+}
+
+// guregu/dynamo's v2 marshals items itself, so the item a migrated binary
+// stores is compared with the one v1 stored: each sends its PutItem to a fake
+// endpoint, which records the item.
+func TestMigratedGureguDynamoStoresAlike(t *testing.T) {
+	requireCompile(t)
+	dir := writeModule(t, map[string]string{
+		"go.mod": "\nmodule example.com/svc\n\ngo 1.22\n\nrequire github.com/guregu/dynamo v1.23.0\n",
+		"main.go": `
+package main
+
+import (
+	"os"
+	"time"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/guregu/dynamo"
+)
+
+type Element struct {
+	C, S        string
+	MemoryLimit int64    ` + "`" + `dynamo:"ML"` + "`" + `
+	Tags        []string ` + "`" + `dynamo:",set,omitempty"` + "`" + `
+}
+
+type Deployment struct {
+	ServiceName string ` + "`" + `dynamo:"ServiceName,hash"` + "`" + `
+	Time        time.Time ` + "`" + `dynamo:"Time,range"` + "`" + `
+	Version     int64
+	Empty       string
+	Services    []*Element
+	Labels      map[string]string
+}
+
+func main() {
+	sess := session.Must(session.NewSession(&aws.Config{
+		Region:      aws.String("us-east-1"),
+		Endpoint:    aws.String(os.Args[1]),
+		Credentials: credentials.NewStaticCredentials("id", "secret", ""),
+		MaxRetries:  aws.Int(0),
+	}))
+	db := dynamo.New(sess)
+	d := Deployment{
+		ServiceName: "svc",
+		Time:        time.Date(2026, 1, 2, 3, 4, 5, 0, time.UTC),
+		Version:     3,
+		Services:    []*Element{{C: "c", S: "s", MemoryLimit: 512, Tags: []string{"a", "b"}}, {C: "d", S: "t"}},
+		Labels:      map[string]string{"team": "x", "empty": ""},
+	}
+	db.Table("Services").Put(d).Run()
+}
+`,
+	})
+	v1Bin := filepath.Join(t.TempDir(), "v1")
+	goCmd(t, dir, "build", "-o", v1Bin, ".")
+	require.Empty(t, migrateOnDisk(t, dir, &awssdkv2.MigrateAwsSdkGoModuleToV2{}))
+	main, err := os.ReadFile(filepath.Join(dir, "main.go"))
+	require.NoError(t, err)
+	require.Contains(t, string(main), `"github.com/guregu/dynamo/v2"`)
+	assertBuilds(t, dir)
+	v2Bin := filepath.Join(t.TempDir(), "v2")
+	goCmd(t, dir, "build", "-o", v2Bin, ".")
+
+	stored := func(bin string) string {
+		var mu sync.Mutex
+		var item string
+		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			var body struct{ Item json.RawMessage }
+			raw, _ := io.ReadAll(r.Body)
+			_ = json.Unmarshal(raw, &body)
+			var canonical any
+			_ = json.Unmarshal(body.Item, &canonical)
+			out, _ := json.Marshal(canonical)
+			mu.Lock()
+			item = string(out)
+			mu.Unlock()
+			w.Header().Set("Content-Type", "application/x-amz-json-1.0")
+			_, _ = w.Write([]byte("{}"))
+		}))
+		defer srv.Close()
+		out, err := exec.Command(bin, srv.URL).CombinedOutput()
+		require.NoError(t, err, string(out))
+		mu.Lock()
+		defer mu.Unlock()
+		return item
+	}
+	v1, v2 := stored(v1Bin), stored(v2Bin)
+	t.Logf("v1 stored %s\nv2 stored %s", v1, v2)
+	require.NotEmpty(t, v1)
+	require.Equal(t, v1, v2)
+}
+
+// Items written through dynamodbattribute keep v1's encoding once the import
+// moves to the generated port: json tags still name attributes, and an empty
+// string or list is still stored as NULL, so items written before read back.
+func TestMigratedDynamodbAttributeStoresAlike(t *testing.T) {
+	requireCompile(t)
+	dir := writeModule(t, map[string]string{
+		"go.mod": "\nmodule example.com/leases\n\ngo 1.22\n",
+		"leases.go": `
+package leases
+
+import (
+	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+)
+
+type Lease struct {
+	ID    string   ` + "`json:\"id\"`" + `
+	Note  string   ` + "`json:\"note\"`" + `
+	Tags  []string ` + "`json:\"tags\"`" + `
+	Count int      ` + "`json:\"count\"`" + `
+}
+
+func Encode(l Lease) (map[string]*dynamodb.AttributeValue, error) {
+	return dynamodbattribute.MarshalMap(l)
+}
+
+func Decode(item map[string]*dynamodb.AttributeValue) (Lease, error) {
+	var l Lease
+	err := dynamodbattribute.UnmarshalMap(item, &l)
+	return l, err
+}
+`,
+		"leases_test.go": `
+package leases
+
+import (
+	"testing"
+
+	"github.com/aws/aws-sdk-go/aws"
+)
+
+func TestStorage(t *testing.T) {
+	item, err := Encode(Lease{ID: "a", Count: 3})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := aws.StringValue(item["id"].S); got != "a" {
+		t.Fatalf("id = %q", got)
+	}
+	if !aws.BoolValue(item["note"].NULL) || !aws.BoolValue(item["tags"].NULL) {
+		t.Fatalf("empty values not stored as NULL: %v", item)
+	}
+	if got := aws.StringValue(item["count"].N); got != "3" {
+		t.Fatalf("count = %q", got)
+	}
+	l, err := Decode(item)
+	if err != nil || l.ID != "a" || l.Count != 3 {
+		t.Fatal(l, err)
+	}
+}
+`,
+	})
+	require.Empty(t, migrateOnDisk(t, dir, &awssdkv2.MigrateAwsSdkGoModuleToV2{}))
+	assertBuilds(t, dir)
+	if out, err := runGo(dir, "test", "./..."); err != nil {
+		t.Errorf("go test ./... after migration:\n%s", out)
+	}
+}
+
+// kube-secret-syncer's stubs override ListSecretsPages on the iface they
+// embed. v2's paginator calls ListSecrets once per page, which the stub gains,
+// so the code under test still sees every page, the last flagged as such, and
+// the error a failing stub returns.
+func TestMigratedPageIteratorStubServesPages(t *testing.T) {
+	requireCompile(t)
+	dir := writeModule(t, map[string]string{
+		"go.mod": "\nmodule example.com/secrets\n\ngo 1.22\n",
+		"secrets.go": `
+package secrets
+
+import (
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/secretsmanager"
+	"github.com/aws/aws-sdk-go/service/secretsmanager/secretsmanageriface"
+)
+
+func Names(c secretsmanageriface.SecretsManagerAPI) ([]string, []bool, error) {
+	var names []string
+	var lasts []bool
+	err := c.ListSecretsPages(&secretsmanager.ListSecretsInput{MaxResults: aws.Int64(2)}, func(page *secretsmanager.ListSecretsOutput, lastPage bool) bool {
+		for _, s := range page.SecretList {
+			names = append(names, aws.StringValue(s.Name))
+		}
+		lasts = append(lasts, lastPage)
+		return !lastPage
+	})
+	return names, lasts, err
+}
+`,
+		"secrets_test.go": `
+package secrets
+
+import (
+	"errors"
+	"reflect"
+	"testing"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/secretsmanager"
+	"github.com/aws/aws-sdk-go/service/secretsmanager/secretsmanageriface"
+)
+
+type stub struct {
+	secretsmanageriface.SecretsManagerAPI
+	pages []*secretsmanager.ListSecretsOutput
+}
+
+func (s *stub) ListSecretsPages(input *secretsmanager.ListSecretsInput, fn func(*secretsmanager.ListSecretsOutput, bool) bool) error {
+	if input.NextToken != nil || aws.Int64Value(input.MaxResults) != 2 {
+		return errors.New("unexpected input")
+	}
+	for i, p := range s.pages {
+		if !fn(p, i == len(s.pages)-1) {
+			break
+		}
+	}
+	return nil
+}
+
+type failing struct {
+	secretsmanageriface.SecretsManagerAPI
+}
+
+func (failing) ListSecretsPages(*secretsmanager.ListSecretsInput, func(*secretsmanager.ListSecretsOutput, bool) bool) error {
+	return errors.New("denied")
+}
+
+func page(names ...string) *secretsmanager.ListSecretsOutput {
+	out := &secretsmanager.ListSecretsOutput{}
+	for _, n := range names {
+		out.SecretList = append(out.SecretList, &secretsmanager.SecretListEntry{Name: aws.String(n)})
+	}
+	return out
+}
+
+func TestStorage(t *testing.T) {
+	names, lasts, err := Names(&stub{pages: []*secretsmanager.ListSecretsOutput{page("a", "b"), page("c"), page("d")}})
+	if err != nil || !reflect.DeepEqual(names, []string{"a", "b", "c", "d"}) || !reflect.DeepEqual(lasts, []bool{false, false, true}) {
+		t.Fatal(names, lasts, err)
+	}
+	if _, _, err := Names(failing{}); err == nil || err.Error() != "denied" {
+		t.Fatal(err)
+	}
+}
+`,
+	})
+	require.Empty(t, migrateOnDisk(t, dir, &awssdkv2.MigrateAwsSdkGoModuleToV2{}))
+	assertBuilds(t, dir)
+	if out, err := runGo(dir, "test", "./..."); err != nil {
+		t.Errorf("go test ./... after migration:\n%s", out)
+	}
 }

@@ -141,35 +141,47 @@ type awsCompatOperation struct{ Name string }
 // awsCompatServiceNames maps v2's service ID to the name v1 reported, so a
 // value labelled with it keeps its label.
 var awsCompatServiceNames = map[string]string{
-	"API Gateway":      "apigateway",
-	"Athena":           "athena",
-	"Auto Scaling":     "autoscaling",
-	"CloudFormation":   "cloudformation",
-	"CloudWatch":       "monitoring",
-	"CloudWatch Logs":  "logs",
-	"DynamoDB":         "dynamodb",
-	"EC2":              "ec2",
-	"ECR":              "ecr",
-	"ECS":              "ecs",
-	"ElastiCache":      "elasticache",
-	"EventBridge":      "EventBridge",
-	"Firehose":         "firehose",
-	"Glue":             "glue",
-	"IAM":              "iam",
-	"KMS":              "kms",
-	"Kinesis":          "kinesis",
-	"Lambda":           "lambda",
-	"Organizations":    "organizations",
-	"RDS":              "rds",
-	"Route 53":         "route53",
-	"S3":               "s3",
-	"SFN":              "states",
-	"SNS":              "sns",
-	"SQS":              "sqs",
-	"SSM":              "ssm",
-	"STS":              "sts",
-	"Secrets Manager":  "secretsmanager",
-	"ServiceDiscovery": "servicediscovery",
+	"ACM":                       "acm",
+	"API Gateway":               "apigateway",
+	"App Mesh":                  "App Mesh",
+	"Application Auto Scaling":  "autoscaling",
+	"Athena":                    "athena",
+	"Auto Scaling":              "autoscaling",
+	"CloudFormation":            "cloudformation",
+	"CloudWatch":                "monitoring",
+	"CloudWatch Events":         "events",
+	"CloudWatch Logs":           "logs",
+	"CodeBuild":                 "codebuild",
+	"Cognito Identity Provider": "cognito-idp",
+	"Cost Explorer":             "ce",
+	"DynamoDB":                  "dynamodb",
+	"EC2":                       "ec2",
+	"ECR":                       "ecr",
+	"ECR PUBLIC":                "ECR PUBLIC",
+	"ECS":                       "ecs",
+	"EKS":                       "eks",
+	"ElastiCache":               "elasticache",
+	"Elastic Load Balancing v2": "elasticloadbalancing",
+	"EventBridge":               "EventBridge",
+	"Firehose":                  "firehose",
+	"Glue":                      "glue",
+	"IAM":                       "iam",
+	"KMS":                       "kms",
+	"Kinesis":                   "kinesis",
+	"Lambda":                    "lambda",
+	"Marketplace Metering":      "metering.marketplace",
+	"Organizations":             "organizations",
+	"RDS":                       "rds",
+	"Route 53":                  "route53",
+	"S3":                        "s3",
+	"SES":                       "email",
+	"SFN":                       "states",
+	"SNS":                       "sns",
+	"SQS":                       "sqs",
+	"SSM":                       "ssm",
+	"STS":                       "sts",
+	"Secrets Manager":           "secretsmanager",
+	"ServiceDiscovery":          "servicediscovery",
 }
 
 type awsCompatParamsKey struct{}
@@ -304,3 +316,65 @@ func awsCompatHandlersOn(s *middleware.Stack) (*awsCompatHandlers, error) {
 	return m, s.Deserialize.Add(m, middleware.After)
 }
 `
+
+// aidansteele/jwtex's shape: a Build handler adding the application's token to
+// the User-Agent. v2's middleware package adds the same `name/version` token
+// from an API option.
+func TestMigrateUserAgentHandler(t *testing.T) {
+	test.NewRecipeSpec().WithRecipe(&awssdkv2.MigrateAwsSdkGoToV2{}).RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"github.com/aws/aws-sdk-go/aws/request"
+				"github.com/aws/aws-sdk-go/aws/session"
+				"github.com/aws/aws-sdk-go/service/kms"
+			)
+
+			func client() *kms.KMS {
+				sess := session.Must(session.NewSession())
+				sess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler("jwtex", "0.1"))
+				return kms.New(sess)
+			}
+		`, `
+			package main
+
+			import (
+				"context"
+
+				awsmiddleware "github.com/aws/aws-sdk-go-v2/aws/middleware"
+				"github.com/aws/aws-sdk-go-v2/config"
+				"github.com/aws/aws-sdk-go-v2/service/kms"
+			)
+
+			func client() *kms.Client {
+				sess, err := config.LoadDefaultConfig(context.TODO())
+				if err != nil {
+					panic(err)
+				}
+				sess.APIOptions = append(sess.APIOptions, awsmiddleware.AddUserAgentKeyValue("jwtex", "0.1"))
+				return kms.NewFromConfig(sess)
+			}
+		`),
+	)
+}
+
+// Extra comments after the token have no slot in v2's User-Agent options.
+func TestMigrateBlockedByUserAgentHandlerWithComments(t *testing.T) {
+	test.NewRecipeSpec().WithRecipe(&awssdkv2.MigrateAwsSdkGoToV2{}).RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"github.com/aws/aws-sdk-go/aws/request"
+				"github.com/aws/aws-sdk-go/aws/session"
+			)
+
+			func load() *session.Session {
+				sess := session.Must(session.NewSession())
+				sess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler("jwtex", "0.1", "linux"))
+				return sess
+			}
+		`),
+	)
+}

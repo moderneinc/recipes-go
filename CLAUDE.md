@@ -62,9 +62,13 @@ builds. It reads the checkouts `TestParseRealRepos` fetches, so run that first.
 
 The v2 module versions, indirect requirements and go.sum hashes the migration
 writes come from `zz_modules_gen.go`, and the v1 service names a migrated request
-handler still reports from `zz_service_names_gen.go`. Regenerate both with
-`go generate ./recipes/migration/awssdkv2/` after adding a service to the
-manifest, then rerun the gated tests.
+handler still reports from `zz_service_names_gen.go`. The per-service manifests in
+`awsmanifest/data/` are generated from the v1 and v2 sources at those pinned
+versions. `go generate ./recipes/migration/awssdkv2/` refreshes all three; to add
+a service, write its manifest first with
+`go run ./internal/genmanifest <service>` from `recipes/migration/awssdkv2`, then
+run `go generate` and the gated tests. `go run ./internal/genmanifest -check`
+reports any manifest that differs from what the generator derives.
 
 ## Releasing
 

@@ -324,3 +324,57 @@ T ProvidedContext
 T RegionDisabledException
 T SessionDurationEscalationException
 T Tag
+H AssumeRoleWithSAMLInput.SAMLAssertion
+H AssumeRoleWithWebIdentityInput.WebIdentityToken
+H Credentials.SecretAccessKey
+K AssumeRoleInput 001 DurationSeconds min 900 ptr
+K AssumeRoleInput 002 ExternalId len 2 ptr
+K AssumeRoleInput 003 Policy len 1 ptr
+K AssumeRoleInput 004 RoleArn req nil
+K AssumeRoleInput 005 RoleArn len 20 ptr
+K AssumeRoleInput 006 RoleSessionName req nil
+K AssumeRoleInput 007 RoleSessionName len 2 ptr
+K AssumeRoleInput 008 SerialNumber len 9 ptr
+K AssumeRoleInput 009 SourceIdentity len 2 ptr
+K AssumeRoleInput 010 TokenCode len 6 ptr
+K AssumeRoleInput 011 PolicyArns each PolicyDescriptorType slice
+K AssumeRoleInput 012 ProvidedContexts each ProvidedContext slice
+K AssumeRoleInput 013 Tags each Tag slice
+K AssumeRoleWithSAMLInput 001 DurationSeconds min 900 ptr
+K AssumeRoleWithSAMLInput 002 Policy len 1 ptr
+K AssumeRoleWithSAMLInput 003 PrincipalArn req nil
+K AssumeRoleWithSAMLInput 004 PrincipalArn len 20 ptr
+K AssumeRoleWithSAMLInput 005 RoleArn req nil
+K AssumeRoleWithSAMLInput 006 RoleArn len 20 ptr
+K AssumeRoleWithSAMLInput 007 SAMLAssertion req nil
+K AssumeRoleWithSAMLInput 008 SAMLAssertion len 4 ptr
+K AssumeRoleWithSAMLInput 009 PolicyArns each PolicyDescriptorType slice
+K AssumeRoleWithWebIdentityInput 001 DurationSeconds min 900 ptr
+K AssumeRoleWithWebIdentityInput 002 Policy len 1 ptr
+K AssumeRoleWithWebIdentityInput 003 ProviderId len 4 ptr
+K AssumeRoleWithWebIdentityInput 004 RoleArn req nil
+K AssumeRoleWithWebIdentityInput 005 RoleArn len 20 ptr
+K AssumeRoleWithWebIdentityInput 006 RoleSessionName req nil
+K AssumeRoleWithWebIdentityInput 007 RoleSessionName len 2 ptr
+K AssumeRoleWithWebIdentityInput 008 WebIdentityToken req nil
+K AssumeRoleWithWebIdentityInput 009 WebIdentityToken len 4 ptr
+K AssumeRoleWithWebIdentityInput 010 PolicyArns each PolicyDescriptorType slice
+K DecodeAuthorizationMessageInput 001 EncodedMessage req nil
+K DecodeAuthorizationMessageInput 002 EncodedMessage len 1 ptr
+K GetAccessKeyInfoInput 001 AccessKeyId req nil
+K GetAccessKeyInfoInput 002 AccessKeyId len 16 ptr
+K GetFederationTokenInput 001 DurationSeconds min 900 ptr
+K GetFederationTokenInput 002 Name req nil
+K GetFederationTokenInput 003 Name len 2 ptr
+K GetFederationTokenInput 004 Policy len 1 ptr
+K GetFederationTokenInput 005 PolicyArns each PolicyDescriptorType slice
+K GetFederationTokenInput 006 Tags each Tag slice
+K GetSessionTokenInput 001 DurationSeconds min 900 ptr
+K GetSessionTokenInput 002 SerialNumber len 9 ptr
+K GetSessionTokenInput 003 TokenCode len 6 ptr
+K PolicyDescriptorType 001 Arn len 20 ptr
+K ProvidedContext 001 ContextAssertion len 4 ptr
+K ProvidedContext 002 ProviderArn len 20 ptr
+K Tag 001 Key req nil
+K Tag 002 Key len 1 ptr
+K Tag 003 Value req nil

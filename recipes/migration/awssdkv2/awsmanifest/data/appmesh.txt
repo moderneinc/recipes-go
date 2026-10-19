@@ -1,0 +1,1666 @@
+C AppMesh
+S AuthResolverParameters
+S AuthSchemeResolver
+S Client
+S CreateGatewayRouteInput
+S CreateGatewayRouteOutput
+S CreateMeshInput
+S CreateMeshOutput
+S CreateRouteInput
+S CreateRouteOutput
+S CreateVirtualGatewayInput
+S CreateVirtualGatewayOutput
+S CreateVirtualNodeInput
+S CreateVirtualNodeOutput
+S CreateVirtualRouterInput
+S CreateVirtualRouterOutput
+S CreateVirtualServiceInput
+S CreateVirtualServiceOutput
+S DeleteGatewayRouteInput
+S DeleteGatewayRouteOutput
+S DeleteMeshInput
+S DeleteMeshOutput
+S DeleteRouteInput
+S DeleteRouteOutput
+S DeleteVirtualGatewayInput
+S DeleteVirtualGatewayOutput
+S DeleteVirtualNodeInput
+S DeleteVirtualNodeOutput
+S DeleteVirtualRouterInput
+S DeleteVirtualRouterOutput
+S DeleteVirtualServiceInput
+S DeleteVirtualServiceOutput
+S DescribeGatewayRouteInput
+S DescribeGatewayRouteOutput
+S DescribeMeshInput
+S DescribeMeshOutput
+S DescribeRouteInput
+S DescribeRouteOutput
+S DescribeVirtualGatewayInput
+S DescribeVirtualGatewayOutput
+S DescribeVirtualNodeInput
+S DescribeVirtualNodeOutput
+S DescribeVirtualRouterInput
+S DescribeVirtualRouterOutput
+S DescribeVirtualServiceInput
+S DescribeVirtualServiceOutput
+S EndpointParameters
+S EndpointResolver
+S EndpointResolverFromURL
+S EndpointResolverFunc
+S EndpointResolverOptions
+S EndpointResolverV2
+S HTTPClient
+S HTTPSignerV4
+S IdempotencyTokenProvider
+S ListGatewayRoutesAPIClient
+S ListGatewayRoutesInput
+S ListGatewayRoutesOutput
+S ListGatewayRoutesPaginator
+S ListGatewayRoutesPaginatorOptions
+S ListMeshesAPIClient
+S ListMeshesInput
+S ListMeshesOutput
+S ListMeshesPaginator
+S ListMeshesPaginatorOptions
+S ListRoutesAPIClient
+S ListRoutesInput
+S ListRoutesOutput
+S ListRoutesPaginator
+S ListRoutesPaginatorOptions
+S ListTagsForResourceAPIClient
+S ListTagsForResourceInput
+S ListTagsForResourceOutput
+S ListTagsForResourcePaginator
+S ListTagsForResourcePaginatorOptions
+S ListVirtualGatewaysAPIClient
+S ListVirtualGatewaysInput
+S ListVirtualGatewaysOutput
+S ListVirtualGatewaysPaginator
+S ListVirtualGatewaysPaginatorOptions
+S ListVirtualNodesAPIClient
+S ListVirtualNodesInput
+S ListVirtualNodesOutput
+S ListVirtualNodesPaginator
+S ListVirtualNodesPaginatorOptions
+S ListVirtualRoutersAPIClient
+S ListVirtualRoutersInput
+S ListVirtualRoutersOutput
+S ListVirtualRoutersPaginator
+S ListVirtualRoutersPaginatorOptions
+S ListVirtualServicesAPIClient
+S ListVirtualServicesInput
+S ListVirtualServicesOutput
+S ListVirtualServicesPaginator
+S ListVirtualServicesPaginatorOptions
+S New
+S NewDefaultEndpointResolver
+S NewDefaultEndpointResolverV2
+S NewFromConfig
+S NewListGatewayRoutesPaginator
+S NewListMeshesPaginator
+S NewListRoutesPaginator
+S NewListTagsForResourcePaginator
+S NewListVirtualGatewaysPaginator
+S NewListVirtualNodesPaginator
+S NewListVirtualRoutersPaginator
+S NewListVirtualServicesPaginator
+S Options
+S ResolveEndpoint
+S ServiceAPIVersion
+S ServiceID
+S TagResourceInput
+S TagResourceOutput
+S TypeRegistry
+S UntagResourceInput
+S UntagResourceOutput
+S UpdateGatewayRouteInput
+S UpdateGatewayRouteOutput
+S UpdateMeshInput
+S UpdateMeshOutput
+S UpdateRouteInput
+S UpdateRouteOutput
+S UpdateVirtualGatewayInput
+S UpdateVirtualGatewayOutput
+S UpdateVirtualNodeInput
+S UpdateVirtualNodeOutput
+S UpdateVirtualRouterInput
+S UpdateVirtualRouterOutput
+S UpdateVirtualServiceInput
+S UpdateVirtualServiceOutput
+S WithAPIOptions
+S WithEndpointResolver
+S WithEndpointResolverV2
+S WithSigV4SigningName
+S WithSigV4SigningRegion
+O CreateGatewayRoute
+O CreateMesh
+O CreateRoute
+O CreateVirtualGateway
+O CreateVirtualNode
+O CreateVirtualRouter
+O CreateVirtualService
+O DeleteGatewayRoute
+O DeleteMesh
+O DeleteRoute
+O DeleteVirtualGateway
+O DeleteVirtualNode
+O DeleteVirtualRouter
+O DeleteVirtualService
+O DescribeGatewayRoute
+O DescribeMesh
+O DescribeRoute
+O DescribeVirtualGateway
+O DescribeVirtualNode
+O DescribeVirtualRouter
+O DescribeVirtualService
+O ListGatewayRoutes
+O ListMeshes
+O ListRoutes
+O ListTagsForResource
+O ListVirtualGateways
+O ListVirtualNodes
+O ListVirtualRouters
+O ListVirtualServices
+O TagResource
+O UntagResource
+O UpdateGatewayRoute
+O UpdateMesh
+O UpdateRoute
+O UpdateVirtualGateway
+O UpdateVirtualNode
+O UpdateVirtualRouter
+O UpdateVirtualService
+X ErrCodeBadRequestException BadRequestException
+X ErrCodeConflictException ConflictException
+X ErrCodeForbiddenException ForbiddenException
+X ErrCodeInternalServerErrorException InternalServerErrorException
+X ErrCodeLimitExceededException LimitExceededException
+X ErrCodeNotFoundException NotFoundException
+X ErrCodeResourceInUseException ResourceInUseException
+X ErrCodeServiceUnavailableException ServiceUnavailableException
+X ErrCodeTooManyRequestsException TooManyRequestsException
+X ErrCodeTooManyTagsException TooManyTagsException
+I GatewayRouteSpec.Priority int64 int32
+I GatewayRouteTarget.Port int64 int32
+I GrpcGatewayRouteMatch.Port int64 int32
+I GrpcRouteMatch.Port int64 int32
+I HealthCheckPolicy.HealthyThreshold int64 int32
+I HealthCheckPolicy.Port int64 int32
+I HealthCheckPolicy.UnhealthyThreshold int64 int32
+I HttpGatewayRouteMatch.Port int64 int32
+I HttpRouteMatch.Port int64 int32
+I ListGatewayRoutesInput.Limit int64 int32
+I ListMeshesInput.Limit int64 int32
+I ListRoutesInput.Limit int64 int32
+I ListTagsForResourceInput.Limit int64 int32
+I ListVirtualGatewaysInput.Limit int64 int32
+I ListVirtualNodesInput.Limit int64 int32
+I ListVirtualRoutersInput.Limit int64 int32
+I ListVirtualServicesInput.Limit int64 int32
+I OutlierDetection.MaxEjectionPercent int64 int32
+I PortMapping.Port int64 int32
+I RouteSpec.Priority int64 int32
+I TcpRouteMatch.Port int64 int32
+I VirtualGatewayGrpcConnectionPool.MaxRequests int64 int32
+I VirtualGatewayHealthCheckPolicy.HealthyThreshold int64 int32
+I VirtualGatewayHealthCheckPolicy.Port int64 int32
+I VirtualGatewayHealthCheckPolicy.UnhealthyThreshold int64 int32
+I VirtualGatewayHttp2ConnectionPool.MaxRequests int64 int32
+I VirtualGatewayHttpConnectionPool.MaxConnections int64 int32
+I VirtualGatewayHttpConnectionPool.MaxPendingRequests int64 int32
+I VirtualGatewayPortMapping.Port int64 int32
+I VirtualNodeGrpcConnectionPool.MaxRequests int64 int32
+I VirtualNodeHttp2ConnectionPool.MaxRequests int64 int32
+I VirtualNodeHttpConnectionPool.MaxConnections int64 int32
+I VirtualNodeHttpConnectionPool.MaxPendingRequests int64 int32
+I VirtualNodeTcpConnectionPool.MaxConnections int64 int32
+I WeightedTarget.Port int64 int32
+R BackendDefaults.ClientPolicy ClientPolicy
+R ClientPolicy.Tls ClientPolicyTls
+R ClientPolicyTls.Validation TlsValidationContext
+R CreateGatewayRouteInput.Spec GatewayRouteSpec
+R CreateGatewayRouteOutput.GatewayRoute GatewayRouteData
+R CreateMeshInput.Spec MeshSpec
+R CreateMeshOutput.Mesh MeshData
+R CreateRouteInput.Spec RouteSpec
+R CreateRouteOutput.Route RouteData
+R CreateVirtualGatewayInput.Spec VirtualGatewaySpec
+R CreateVirtualGatewayOutput.VirtualGateway VirtualGatewayData
+R CreateVirtualNodeInput.Spec VirtualNodeSpec
+R CreateVirtualNodeOutput.VirtualNode VirtualNodeData
+R CreateVirtualRouterInput.Spec VirtualRouterSpec
+R CreateVirtualRouterOutput.VirtualRouter VirtualRouterData
+R CreateVirtualServiceInput.Spec VirtualServiceSpec
+R CreateVirtualServiceOutput.VirtualService VirtualServiceData
+R DeleteGatewayRouteOutput.GatewayRoute GatewayRouteData
+R DeleteMeshOutput.Mesh MeshData
+R DeleteRouteOutput.Route RouteData
+R DeleteVirtualGatewayOutput.VirtualGateway VirtualGatewayData
+R DeleteVirtualNodeOutput.VirtualNode VirtualNodeData
+R DeleteVirtualRouterOutput.VirtualRouter VirtualRouterData
+R DeleteVirtualServiceOutput.VirtualService VirtualServiceData
+R DescribeGatewayRouteOutput.GatewayRoute GatewayRouteData
+R DescribeMeshOutput.Mesh MeshData
+R DescribeRouteOutput.Route RouteData
+R DescribeVirtualGatewayOutput.VirtualGateway VirtualGatewayData
+R DescribeVirtualNodeOutput.VirtualNode VirtualNodeData
+R DescribeVirtualRouterOutput.VirtualRouter VirtualRouterData
+R DescribeVirtualServiceOutput.VirtualService VirtualServiceData
+R GatewayRouteData.Metadata ResourceMetadata
+R GatewayRouteData.Spec GatewayRouteSpec
+R GatewayRouteData.Status GatewayRouteStatus
+R GatewayRouteSpec.GrpcRoute GrpcGatewayRoute
+R GatewayRouteSpec.Http2Route HttpGatewayRoute
+R GatewayRouteSpec.HttpRoute HttpGatewayRoute
+R GatewayRouteTarget.VirtualService GatewayRouteVirtualService
+R GrpcGatewayRoute.Action GrpcGatewayRouteAction
+R GrpcGatewayRoute.Match GrpcGatewayRouteMatch
+R GrpcGatewayRouteAction.Rewrite GrpcGatewayRouteRewrite
+R GrpcGatewayRouteAction.Target GatewayRouteTarget
+R GrpcGatewayRouteMatch.Hostname GatewayRouteHostnameMatch
+R GrpcGatewayRouteRewrite.Hostname GatewayRouteHostnameRewrite
+R GrpcRetryPolicy.PerRetryTimeout Duration
+R GrpcRoute.Action GrpcRouteAction
+R GrpcRoute.Match GrpcRouteMatch
+R GrpcRoute.RetryPolicy GrpcRetryPolicy
+R GrpcRoute.Timeout GrpcTimeout
+R GrpcTimeout.Idle Duration
+R GrpcTimeout.PerRequest Duration
+R HttpGatewayRoute.Action HttpGatewayRouteAction
+R HttpGatewayRoute.Match HttpGatewayRouteMatch
+R HttpGatewayRouteAction.Rewrite HttpGatewayRouteRewrite
+R HttpGatewayRouteAction.Target GatewayRouteTarget
+R HttpGatewayRouteMatch.Hostname GatewayRouteHostnameMatch
+R HttpGatewayRouteMatch.Path HttpPathMatch
+R HttpGatewayRouteRewrite.Hostname GatewayRouteHostnameRewrite
+R HttpGatewayRouteRewrite.Path HttpGatewayRoutePathRewrite
+R HttpGatewayRouteRewrite.Prefix HttpGatewayRoutePrefixRewrite
+R HttpQueryParameter.Match QueryParameterMatch
+R HttpRetryPolicy.PerRetryTimeout Duration
+R HttpRoute.Action HttpRouteAction
+R HttpRoute.Match HttpRouteMatch
+R HttpRoute.RetryPolicy HttpRetryPolicy
+R HttpRoute.Timeout HttpTimeout
+R HttpRouteMatch.Path HttpPathMatch
+R HttpTimeout.Idle Duration
+R HttpTimeout.PerRequest Duration
+R Listener.HealthCheck HealthCheckPolicy
+R Listener.OutlierDetection OutlierDetection
+R Listener.PortMapping PortMapping
+R Listener.Tls ListenerTls
+R ListenerTls.Validation ListenerTlsValidationContext
+R ListenerTlsValidationContext.SubjectAlternativeNames SubjectAlternativeNames
+R MeshData.Metadata ResourceMetadata
+R MeshData.Spec MeshSpec
+R MeshData.Status MeshStatus
+R MeshSpec.EgressFilter EgressFilter
+R MeshSpec.ServiceDiscovery MeshServiceDiscovery
+R OutlierDetection.BaseEjectionDuration Duration
+R OutlierDetection.Interval Duration
+R RouteData.Metadata ResourceMetadata
+R RouteData.Spec RouteSpec
+R RouteData.Status RouteStatus
+R RouteSpec.GrpcRoute GrpcRoute
+R RouteSpec.Http2Route HttpRoute
+R RouteSpec.HttpRoute HttpRoute
+R RouteSpec.TcpRoute TcpRoute
+R SubjectAlternativeNames.Match SubjectAlternativeNameMatchers
+R TcpRoute.Action TcpRouteAction
+R TcpRoute.Match TcpRouteMatch
+R TcpRoute.Timeout TcpTimeout
+R TcpTimeout.Idle Duration
+R TlsValidationContext.SubjectAlternativeNames SubjectAlternativeNames
+R UpdateGatewayRouteInput.Spec GatewayRouteSpec
+R UpdateGatewayRouteOutput.GatewayRoute GatewayRouteData
+R UpdateMeshInput.Spec MeshSpec
+R UpdateMeshOutput.Mesh MeshData
+R UpdateRouteInput.Spec RouteSpec
+R UpdateRouteOutput.Route RouteData
+R UpdateVirtualGatewayInput.Spec VirtualGatewaySpec
+R UpdateVirtualGatewayOutput.VirtualGateway VirtualGatewayData
+R UpdateVirtualNodeInput.Spec VirtualNodeSpec
+R UpdateVirtualNodeOutput.VirtualNode VirtualNodeData
+R UpdateVirtualRouterInput.Spec VirtualRouterSpec
+R UpdateVirtualRouterOutput.VirtualRouter VirtualRouterData
+R UpdateVirtualServiceInput.Spec VirtualServiceSpec
+R UpdateVirtualServiceOutput.VirtualService VirtualServiceData
+R VirtualGatewayBackendDefaults.ClientPolicy VirtualGatewayClientPolicy
+R VirtualGatewayClientPolicy.Tls VirtualGatewayClientPolicyTls
+R VirtualGatewayClientPolicyTls.Validation VirtualGatewayTlsValidationContext
+R VirtualGatewayData.Metadata ResourceMetadata
+R VirtualGatewayData.Spec VirtualGatewaySpec
+R VirtualGatewayData.Status VirtualGatewayStatus
+R VirtualGatewayListener.HealthCheck VirtualGatewayHealthCheckPolicy
+R VirtualGatewayListener.PortMapping VirtualGatewayPortMapping
+R VirtualGatewayListener.Tls VirtualGatewayListenerTls
+R VirtualGatewayListenerTls.Validation VirtualGatewayListenerTlsValidationContext
+R VirtualGatewayListenerTlsValidationContext.SubjectAlternativeNames SubjectAlternativeNames
+R VirtualGatewaySpec.BackendDefaults VirtualGatewayBackendDefaults
+R VirtualGatewaySpec.Logging VirtualGatewayLogging
+R VirtualGatewayTlsValidationContext.SubjectAlternativeNames SubjectAlternativeNames
+R VirtualNodeData.Metadata ResourceMetadata
+R VirtualNodeData.Spec VirtualNodeSpec
+R VirtualNodeData.Status VirtualNodeStatus
+R VirtualNodeSpec.BackendDefaults BackendDefaults
+R VirtualNodeSpec.Logging Logging
+R VirtualRouterData.Metadata ResourceMetadata
+R VirtualRouterData.Spec VirtualRouterSpec
+R VirtualRouterData.Status VirtualRouterStatus
+R VirtualRouterListener.PortMapping PortMapping
+R VirtualServiceBackend.ClientPolicy ClientPolicy
+R VirtualServiceData.Metadata ResourceMetadata
+R VirtualServiceData.Spec VirtualServiceSpec
+R VirtualServiceData.Status VirtualServiceStatus
+V AwsCloudMapInstanceAttribute.Key string
+V AwsCloudMapInstanceAttribute.Value string
+V AwsCloudMapServiceDiscovery.NamespaceName string
+V AwsCloudMapServiceDiscovery.ServiceName string
+V BadRequestException.ErrorCodeOverride string
+V BadRequestException.Message string
+V ClientPolicyTls.Enforce bool
+V ConflictException.ErrorCodeOverride string
+V ConflictException.Message string
+V CreateGatewayRouteInput.ClientToken string
+V CreateGatewayRouteInput.GatewayRouteName string
+V CreateGatewayRouteInput.MeshName string
+V CreateGatewayRouteInput.MeshOwner string
+V CreateGatewayRouteInput.VirtualGatewayName string
+V CreateMeshInput.ClientToken string
+V CreateMeshInput.MeshName string
+V CreateRouteInput.ClientToken string
+V CreateRouteInput.MeshName string
+V CreateRouteInput.MeshOwner string
+V CreateRouteInput.RouteName string
+V CreateRouteInput.VirtualRouterName string
+V CreateVirtualGatewayInput.ClientToken string
+V CreateVirtualGatewayInput.MeshName string
+V CreateVirtualGatewayInput.MeshOwner string
+V CreateVirtualGatewayInput.VirtualGatewayName string
+V CreateVirtualNodeInput.ClientToken string
+V CreateVirtualNodeInput.MeshName string
+V CreateVirtualNodeInput.MeshOwner string
+V CreateVirtualNodeInput.VirtualNodeName string
+V CreateVirtualRouterInput.ClientToken string
+V CreateVirtualRouterInput.MeshName string
+V CreateVirtualRouterInput.MeshOwner string
+V CreateVirtualRouterInput.VirtualRouterName string
+V CreateVirtualServiceInput.ClientToken string
+V CreateVirtualServiceInput.MeshName string
+V CreateVirtualServiceInput.MeshOwner string
+V CreateVirtualServiceInput.VirtualServiceName string
+V DeleteGatewayRouteInput.GatewayRouteName string
+V DeleteGatewayRouteInput.MeshName string
+V DeleteGatewayRouteInput.MeshOwner string
+V DeleteGatewayRouteInput.VirtualGatewayName string
+V DeleteMeshInput.MeshName string
+V DeleteRouteInput.MeshName string
+V DeleteRouteInput.MeshOwner string
+V DeleteRouteInput.RouteName string
+V DeleteRouteInput.VirtualRouterName string
+V DeleteVirtualGatewayInput.MeshName string
+V DeleteVirtualGatewayInput.MeshOwner string
+V DeleteVirtualGatewayInput.VirtualGatewayName string
+V DeleteVirtualNodeInput.MeshName string
+V DeleteVirtualNodeInput.MeshOwner string
+V DeleteVirtualNodeInput.VirtualNodeName string
+V DeleteVirtualRouterInput.MeshName string
+V DeleteVirtualRouterInput.MeshOwner string
+V DeleteVirtualRouterInput.VirtualRouterName string
+V DeleteVirtualServiceInput.MeshName string
+V DeleteVirtualServiceInput.MeshOwner string
+V DeleteVirtualServiceInput.VirtualServiceName string
+V DescribeGatewayRouteInput.GatewayRouteName string
+V DescribeGatewayRouteInput.MeshName string
+V DescribeGatewayRouteInput.MeshOwner string
+V DescribeGatewayRouteInput.VirtualGatewayName string
+V DescribeMeshInput.MeshName string
+V DescribeMeshInput.MeshOwner string
+V DescribeRouteInput.MeshName string
+V DescribeRouteInput.MeshOwner string
+V DescribeRouteInput.RouteName string
+V DescribeRouteInput.VirtualRouterName string
+V DescribeVirtualGatewayInput.MeshName string
+V DescribeVirtualGatewayInput.MeshOwner string
+V DescribeVirtualGatewayInput.VirtualGatewayName string
+V DescribeVirtualNodeInput.MeshName string
+V DescribeVirtualNodeInput.MeshOwner string
+V DescribeVirtualNodeInput.VirtualNodeName string
+V DescribeVirtualRouterInput.MeshName string
+V DescribeVirtualRouterInput.MeshOwner string
+V DescribeVirtualRouterInput.VirtualRouterName string
+V DescribeVirtualServiceInput.MeshName string
+V DescribeVirtualServiceInput.MeshOwner string
+V DescribeVirtualServiceInput.VirtualServiceName string
+V DnsServiceDiscovery.Hostname string
+V Duration.Value int64
+V EndpointParameters.Endpoint string
+V EndpointParameters.Region string
+V EndpointParameters.UseDualStack bool
+V EndpointParameters.UseFIPS bool
+V FileAccessLog.Path string
+V ForbiddenException.ErrorCodeOverride string
+V ForbiddenException.Message string
+V GatewayRouteData.GatewayRouteName string
+V GatewayRouteData.MeshName string
+V GatewayRouteData.VirtualGatewayName string
+V GatewayRouteHostnameMatch.Exact string
+V GatewayRouteHostnameMatch.Suffix string
+V GatewayRouteRef.Arn string
+V GatewayRouteRef.GatewayRouteName string
+V GatewayRouteRef.MeshName string
+V GatewayRouteRef.MeshOwner string
+V GatewayRouteRef.ResourceOwner string
+V GatewayRouteRef.Version int64
+V GatewayRouteRef.VirtualGatewayName string
+V GatewayRouteSpec.Priority int32
+V GatewayRouteTarget.Port int32
+V GatewayRouteVirtualService.VirtualServiceName string
+V GrpcGatewayRouteMatch.Port int32
+V GrpcGatewayRouteMatch.ServiceName string
+V GrpcGatewayRouteMetadata.Invert bool
+V GrpcGatewayRouteMetadata.Name string
+V GrpcRetryPolicy.MaxRetries int64
+V GrpcRouteMatch.MethodName string
+V GrpcRouteMatch.Port int32
+V GrpcRouteMatch.ServiceName string
+V GrpcRouteMetadata.Invert bool
+V GrpcRouteMetadata.Name string
+V HealthCheckPolicy.HealthyThreshold int32
+V HealthCheckPolicy.IntervalMillis int64
+V HealthCheckPolicy.Path string
+V HealthCheckPolicy.Port int32
+V HealthCheckPolicy.TimeoutMillis int64
+V HealthCheckPolicy.UnhealthyThreshold int32
+V HttpGatewayRouteHeader.Invert bool
+V HttpGatewayRouteHeader.Name string
+V HttpGatewayRouteMatch.Port int32
+V HttpGatewayRouteMatch.Prefix string
+V HttpGatewayRoutePathRewrite.Exact string
+V HttpGatewayRoutePrefixRewrite.Value string
+V HttpPathMatch.Exact string
+V HttpPathMatch.Regex string
+V HttpQueryParameter.Name string
+V HttpRetryPolicy.MaxRetries int64
+V HttpRouteHeader.Invert bool
+V HttpRouteHeader.Name string
+V HttpRouteMatch.Port int32
+V HttpRouteMatch.Prefix string
+V InternalServerErrorException.ErrorCodeOverride string
+V InternalServerErrorException.Message string
+V JsonFormatRef.Key string
+V JsonFormatRef.Value string
+V LimitExceededException.ErrorCodeOverride string
+V LimitExceededException.Message string
+V ListGatewayRoutesInput.Limit int32
+V ListGatewayRoutesInput.MeshName string
+V ListGatewayRoutesInput.MeshOwner string
+V ListGatewayRoutesInput.NextToken string
+V ListGatewayRoutesInput.VirtualGatewayName string
+V ListGatewayRoutesOutput.NextToken string
+V ListMeshesInput.Limit int32
+V ListMeshesInput.NextToken string
+V ListMeshesOutput.NextToken string
+V ListRoutesInput.Limit int32
+V ListRoutesInput.MeshName string
+V ListRoutesInput.MeshOwner string
+V ListRoutesInput.NextToken string
+V ListRoutesInput.VirtualRouterName string
+V ListRoutesOutput.NextToken string
+V ListTagsForResourceInput.Limit int32
+V ListTagsForResourceInput.NextToken string
+V ListTagsForResourceInput.ResourceArn string
+V ListTagsForResourceOutput.NextToken string
+V ListVirtualGatewaysInput.Limit int32
+V ListVirtualGatewaysInput.MeshName string
+V ListVirtualGatewaysInput.MeshOwner string
+V ListVirtualGatewaysInput.NextToken string
+V ListVirtualGatewaysOutput.NextToken string
+V ListVirtualNodesInput.Limit int32
+V ListVirtualNodesInput.MeshName string
+V ListVirtualNodesInput.MeshOwner string
+V ListVirtualNodesInput.NextToken string
+V ListVirtualNodesOutput.NextToken string
+V ListVirtualRoutersInput.Limit int32
+V ListVirtualRoutersInput.MeshName string
+V ListVirtualRoutersInput.MeshOwner string
+V ListVirtualRoutersInput.NextToken string
+V ListVirtualRoutersOutput.NextToken string
+V ListVirtualServicesInput.Limit int32
+V ListVirtualServicesInput.MeshName string
+V ListVirtualServicesInput.MeshOwner string
+V ListVirtualServicesInput.NextToken string
+V ListVirtualServicesOutput.NextToken string
+V ListenerTlsAcmCertificate.CertificateArn string
+V ListenerTlsFileCertificate.CertificateChain string
+V ListenerTlsFileCertificate.PrivateKey string
+V ListenerTlsSdsCertificate.SecretName string
+V MatchRange.End int64
+V MatchRange.Start int64
+V MeshData.MeshName string
+V MeshRef.Arn string
+V MeshRef.MeshName string
+V MeshRef.MeshOwner string
+V MeshRef.ResourceOwner string
+V MeshRef.Version int64
+V NotFoundException.ErrorCodeOverride string
+V NotFoundException.Message string
+V Options.BaseEndpoint string
+V OutlierDetection.MaxEjectionPercent int32
+V OutlierDetection.MaxServerErrors int64
+V PortMapping.Port int32
+V QueryParameterMatch.Exact string
+V ResourceInUseException.ErrorCodeOverride string
+V ResourceInUseException.Message string
+V ResourceMetadata.Arn string
+V ResourceMetadata.MeshOwner string
+V ResourceMetadata.ResourceOwner string
+V ResourceMetadata.Uid string
+V ResourceMetadata.Version int64
+V RouteData.MeshName string
+V RouteData.RouteName string
+V RouteData.VirtualRouterName string
+V RouteRef.Arn string
+V RouteRef.MeshName string
+V RouteRef.MeshOwner string
+V RouteRef.ResourceOwner string
+V RouteRef.RouteName string
+V RouteRef.Version int64
+V RouteRef.VirtualRouterName string
+V RouteSpec.Priority int32
+V ServiceUnavailableException.ErrorCodeOverride string
+V ServiceUnavailableException.Message string
+V TagRef.Key string
+V TagRef.Value string
+V TagResourceInput.ResourceArn string
+V TcpRouteMatch.Port int32
+V TlsValidationContextFileTrust.CertificateChain string
+V TlsValidationContextSdsTrust.SecretName string
+V TooManyRequestsException.ErrorCodeOverride string
+V TooManyRequestsException.Message string
+V TooManyTagsException.ErrorCodeOverride string
+V TooManyTagsException.Message string
+V UntagResourceInput.ResourceArn string
+V UpdateGatewayRouteInput.ClientToken string
+V UpdateGatewayRouteInput.GatewayRouteName string
+V UpdateGatewayRouteInput.MeshName string
+V UpdateGatewayRouteInput.MeshOwner string
+V UpdateGatewayRouteInput.VirtualGatewayName string
+V UpdateMeshInput.ClientToken string
+V UpdateMeshInput.MeshName string
+V UpdateRouteInput.ClientToken string
+V UpdateRouteInput.MeshName string
+V UpdateRouteInput.MeshOwner string
+V UpdateRouteInput.RouteName string
+V UpdateRouteInput.VirtualRouterName string
+V UpdateVirtualGatewayInput.ClientToken string
+V UpdateVirtualGatewayInput.MeshName string
+V UpdateVirtualGatewayInput.MeshOwner string
+V UpdateVirtualGatewayInput.VirtualGatewayName string
+V UpdateVirtualNodeInput.ClientToken string
+V UpdateVirtualNodeInput.MeshName string
+V UpdateVirtualNodeInput.MeshOwner string
+V UpdateVirtualNodeInput.VirtualNodeName string
+V UpdateVirtualRouterInput.ClientToken string
+V UpdateVirtualRouterInput.MeshName string
+V UpdateVirtualRouterInput.MeshOwner string
+V UpdateVirtualRouterInput.VirtualRouterName string
+V UpdateVirtualServiceInput.ClientToken string
+V UpdateVirtualServiceInput.MeshName string
+V UpdateVirtualServiceInput.MeshOwner string
+V UpdateVirtualServiceInput.VirtualServiceName string
+V VirtualGatewayClientPolicyTls.Enforce bool
+V VirtualGatewayData.MeshName string
+V VirtualGatewayData.VirtualGatewayName string
+V VirtualGatewayFileAccessLog.Path string
+V VirtualGatewayGrpcConnectionPool.MaxRequests int32
+V VirtualGatewayHealthCheckPolicy.HealthyThreshold int32
+V VirtualGatewayHealthCheckPolicy.IntervalMillis int64
+V VirtualGatewayHealthCheckPolicy.Path string
+V VirtualGatewayHealthCheckPolicy.Port int32
+V VirtualGatewayHealthCheckPolicy.TimeoutMillis int64
+V VirtualGatewayHealthCheckPolicy.UnhealthyThreshold int32
+V VirtualGatewayHttp2ConnectionPool.MaxRequests int32
+V VirtualGatewayHttpConnectionPool.MaxConnections int32
+V VirtualGatewayHttpConnectionPool.MaxPendingRequests int32
+V VirtualGatewayListenerTlsAcmCertificate.CertificateArn string
+V VirtualGatewayListenerTlsFileCertificate.CertificateChain string
+V VirtualGatewayListenerTlsFileCertificate.PrivateKey string
+V VirtualGatewayListenerTlsSdsCertificate.SecretName string
+V VirtualGatewayPortMapping.Port int32
+V VirtualGatewayRef.Arn string
+V VirtualGatewayRef.MeshName string
+V VirtualGatewayRef.MeshOwner string
+V VirtualGatewayRef.ResourceOwner string
+V VirtualGatewayRef.Version int64
+V VirtualGatewayRef.VirtualGatewayName string
+V VirtualGatewayTlsValidationContextFileTrust.CertificateChain string
+V VirtualGatewayTlsValidationContextSdsTrust.SecretName string
+V VirtualNodeData.MeshName string
+V VirtualNodeData.VirtualNodeName string
+V VirtualNodeGrpcConnectionPool.MaxRequests int32
+V VirtualNodeHttp2ConnectionPool.MaxRequests int32
+V VirtualNodeHttpConnectionPool.MaxConnections int32
+V VirtualNodeHttpConnectionPool.MaxPendingRequests int32
+V VirtualNodeRef.Arn string
+V VirtualNodeRef.MeshName string
+V VirtualNodeRef.MeshOwner string
+V VirtualNodeRef.ResourceOwner string
+V VirtualNodeRef.Version int64
+V VirtualNodeRef.VirtualNodeName string
+V VirtualNodeServiceProvider.VirtualNodeName string
+V VirtualNodeTcpConnectionPool.MaxConnections int32
+V VirtualRouterData.MeshName string
+V VirtualRouterData.VirtualRouterName string
+V VirtualRouterRef.Arn string
+V VirtualRouterRef.MeshName string
+V VirtualRouterRef.MeshOwner string
+V VirtualRouterRef.ResourceOwner string
+V VirtualRouterRef.Version int64
+V VirtualRouterRef.VirtualRouterName string
+V VirtualRouterServiceProvider.VirtualRouterName string
+V VirtualServiceBackend.VirtualServiceName string
+V VirtualServiceData.MeshName string
+V VirtualServiceData.VirtualServiceName string
+V VirtualServiceRef.Arn string
+V VirtualServiceRef.MeshName string
+V VirtualServiceRef.MeshOwner string
+V VirtualServiceRef.ResourceOwner string
+V VirtualServiceRef.Version int64
+V VirtualServiceRef.VirtualServiceName string
+V WeightedTarget.Port int32
+V WeightedTarget.VirtualNode string
+W WeightedTarget.Weight int64 int32
+L AwsCloudMapServiceDiscovery.Attributes AwsCloudMapInstanceAttribute
+L ClientPolicyTls.Ports -
+L CreateGatewayRouteInput.Tags TagRef
+L CreateMeshInput.Tags TagRef
+L CreateRouteInput.Tags TagRef
+L CreateVirtualGatewayInput.Tags TagRef
+L CreateVirtualNodeInput.Tags TagRef
+L CreateVirtualRouterInput.Tags TagRef
+L CreateVirtualServiceInput.Tags TagRef
+L GrpcGatewayRouteMatch.Metadata GrpcGatewayRouteMetadata
+L GrpcRetryPolicy.GrpcRetryEvents GrpcRetryPolicyEvent
+L GrpcRetryPolicy.HttpRetryEvents -
+L GrpcRetryPolicy.TcpRetryEvents TcpRetryPolicyEvent
+L GrpcRouteAction.WeightedTargets WeightedTarget
+L GrpcRouteMatch.Metadata GrpcRouteMetadata
+L HttpGatewayRouteMatch.Headers HttpGatewayRouteHeader
+L HttpGatewayRouteMatch.QueryParameters HttpQueryParameter
+L HttpRetryPolicy.HttpRetryEvents -
+L HttpRetryPolicy.TcpRetryEvents TcpRetryPolicyEvent
+L HttpRouteAction.WeightedTargets WeightedTarget
+L HttpRouteMatch.Headers HttpRouteHeader
+L HttpRouteMatch.QueryParameters HttpQueryParameter
+L ListGatewayRoutesOutput.GatewayRoutes GatewayRouteRef
+L ListMeshesOutput.Meshes MeshRef
+L ListRoutesOutput.Routes RouteRef
+L ListTagsForResourceOutput.Tags TagRef
+L ListVirtualGatewaysOutput.VirtualGateways VirtualGatewayRef
+L ListVirtualNodesOutput.VirtualNodes VirtualNodeRef
+L ListVirtualRoutersOutput.VirtualRouters VirtualRouterRef
+L ListVirtualServicesOutput.VirtualServices VirtualServiceRef
+L SubjectAlternativeNameMatchers.Exact -
+L TagResourceInput.Tags TagRef
+L TcpRouteAction.WeightedTargets WeightedTarget
+L TlsValidationContextAcmTrust.CertificateAuthorityArns -
+L UntagResourceInput.TagKeys -
+L VirtualGatewayClientPolicyTls.Ports -
+L VirtualGatewaySpec.Listeners VirtualGatewayListener
+L VirtualGatewayTlsValidationContextAcmTrust.CertificateAuthorityArns -
+L VirtualNodeSpec.Backends Backend
+L VirtualNodeSpec.Listeners Listener
+L VirtualRouterSpec.Listeners VirtualRouterListener
+F AwsCloudMapServiceDiscovery.IpPreference IpPreference
+F DnsServiceDiscovery.IpPreference IpPreference
+F DnsServiceDiscovery.ResponseType DnsResponseType
+F Duration.Unit DurationUnit
+F EgressFilter.Type EgressFilterType
+F GatewayRouteHostnameRewrite.DefaultTargetHostname DefaultGatewayRouteRewrite
+F GatewayRouteStatus.Status GatewayRouteStatusCode
+F GrpcRetryPolicy.GrpcRetryEvents GrpcRetryPolicyEvent
+F GrpcRetryPolicy.TcpRetryEvents TcpRetryPolicyEvent
+F HealthCheckPolicy.Protocol PortProtocol
+F HttpGatewayRouteMatch.Method HttpMethod
+F HttpGatewayRoutePrefixRewrite.DefaultPrefix DefaultGatewayRouteRewrite
+F HttpRetryPolicy.TcpRetryEvents TcpRetryPolicyEvent
+F HttpRouteMatch.Method HttpMethod
+F HttpRouteMatch.Scheme HttpScheme
+F ListenerTls.Mode ListenerTlsMode
+F MeshServiceDiscovery.IpPreference IpPreference
+F MeshStatus.Status MeshStatusCode
+F PortMapping.Protocol PortProtocol
+F RouteStatus.Status RouteStatusCode
+F VirtualGatewayHealthCheckPolicy.Protocol VirtualGatewayPortProtocol
+F VirtualGatewayListenerTls.Mode VirtualGatewayListenerTlsMode
+F VirtualGatewayPortMapping.Protocol VirtualGatewayPortProtocol
+F VirtualGatewayStatus.Status VirtualGatewayStatusCode
+F VirtualNodeStatus.Status VirtualNodeStatusCode
+F VirtualRouterStatus.Status VirtualRouterStatusCode
+F VirtualServiceStatus.Status VirtualServiceStatusCode
+N APIOptions
+N AccessLog
+N Action
+N AppID
+N Arn
+N Attributes
+N AuthSchemePreference
+N AuthSchemeResolver
+N AuthSchemes
+N BackendDefaults
+N Backends
+N BaseEjectionDuration
+N BaseEndpoint
+N Certificate
+N CertificateArn
+N CertificateAuthorityArns
+N CertificateChain
+N ClientLogMode
+N ClientPolicy
+N ClientToken
+N ConnectionPool
+N CreatedAt
+N Credentials
+N DefaultsMode
+N DisableClockSkewCorrection
+N DisableHTTPS
+N EgressFilter
+N End
+N Endpoint
+N EndpointOptions
+N EndpointResolver
+N EndpointResolverV2
+N Enforce
+N ErrorCodeOverride
+N Exact
+N Format
+N GatewayRoute
+N GatewayRouteName
+N GatewayRoutes
+N GrpcRoute
+N HTTPClient
+N HTTPSignerV4
+N Headers
+N HealthCheck
+N HealthyThreshold
+N Hostname
+N Http2Route
+N HttpRetryEvents
+N HttpRoute
+N IdempotencyTokenProvider
+N Idle
+N Interceptors
+N Interval
+N IntervalMillis
+N Invert
+N Key
+N LastUpdatedAt
+N Limit
+N Listeners
+N LogDeprecated
+N Logger
+N Logging
+N Match
+N MaxConnections
+N MaxEjectionPercent
+N MaxPendingRequests
+N MaxRequests
+N MaxRetries
+N MaxServerErrors
+N Mesh
+N MeshName
+N MeshOwner
+N Meshes
+N Message
+N Metadata
+N MeterProvider
+N MethodName
+N Name
+N NamespaceName
+N NextToken
+N Operation
+N Options
+N OutlierDetection
+N Path
+N PerRequest
+N PerRetryTimeout
+N Port
+N PortMapping
+N Ports
+N Prefix
+N Priority
+N PrivateKey
+N Protocol
+N Provider
+N QueryParameters
+N Regex
+N Region
+N ResolvedRegion
+N Resolver
+N ResourceArn
+N ResourceOwner
+N ResultMetadata
+N RetryMaxAttempts
+N RetryMode
+N RetryPolicy
+N Retryer
+N Rewrite
+N Route
+N RouteName
+N Routes
+N RuntimeEnvironment
+N SecretName
+N ServiceDiscovery
+N ServiceName
+N Spec
+N Start
+N Status
+N StopOnDuplicateToken
+N SubjectAlternativeNames
+N Suffix
+N Tag
+N TagKeys
+N Tags
+N Target
+N TcpRoute
+N Timeout
+N TimeoutMillis
+N Tls
+N TracerProvider
+N Trust
+N Uid
+N UnhealthyThreshold
+N UseDualStack
+N UseDualStackEndpoint
+N UseFIPS
+N UseFIPSEndpoint
+N Validation
+N Value
+N Version
+N VirtualGateway
+N VirtualGatewayName
+N VirtualGateways
+N VirtualNode
+N VirtualNodeName
+N VirtualNodes
+N VirtualRouter
+N VirtualRouterName
+N VirtualRouters
+N VirtualService
+N VirtualServiceName
+N VirtualServices
+N Weight
+N WeightedTargets
+T AccessLog
+T AccessLogMemberFile
+T AwsCloudMapInstanceAttribute
+T AwsCloudMapServiceDiscovery
+T Backend
+T BackendDefaults
+T BackendMemberVirtualService
+T BadRequestException
+T ClientPolicy
+T ClientPolicyTls
+T ClientTlsCertificate
+T ClientTlsCertificateMemberFile
+T ClientTlsCertificateMemberSds
+T ConflictException
+T DefaultGatewayRouteRewrite
+T DnsResponseType
+T DnsServiceDiscovery
+T Duration
+T DurationUnit
+T EgressFilter
+T EgressFilterType
+T FileAccessLog
+T ForbiddenException
+T GatewayRouteData
+T GatewayRouteHostnameMatch
+T GatewayRouteHostnameRewrite
+T GatewayRouteRef
+T GatewayRouteSpec
+T GatewayRouteStatus
+T GatewayRouteStatusCode
+T GatewayRouteTarget
+T GatewayRouteVirtualService
+T GrpcGatewayRoute
+T GrpcGatewayRouteAction
+T GrpcGatewayRouteMatch
+T GrpcGatewayRouteMetadata
+T GrpcGatewayRouteRewrite
+T GrpcMetadataMatchMethod
+T GrpcMetadataMatchMethodMemberExact
+T GrpcMetadataMatchMethodMemberPrefix
+T GrpcMetadataMatchMethodMemberRange
+T GrpcMetadataMatchMethodMemberRegex
+T GrpcMetadataMatchMethodMemberSuffix
+T GrpcRetryPolicy
+T GrpcRetryPolicyEvent
+T GrpcRoute
+T GrpcRouteAction
+T GrpcRouteMatch
+T GrpcRouteMetadata
+T GrpcRouteMetadataMatchMethod
+T GrpcRouteMetadataMatchMethodMemberExact
+T GrpcRouteMetadataMatchMethodMemberPrefix
+T GrpcRouteMetadataMatchMethodMemberRange
+T GrpcRouteMetadataMatchMethodMemberRegex
+T GrpcRouteMetadataMatchMethodMemberSuffix
+T GrpcTimeout
+T HeaderMatchMethod
+T HeaderMatchMethodMemberExact
+T HeaderMatchMethodMemberPrefix
+T HeaderMatchMethodMemberRange
+T HeaderMatchMethodMemberRegex
+T HeaderMatchMethodMemberSuffix
+T HealthCheckPolicy
+T HttpGatewayRoute
+T HttpGatewayRouteAction
+T HttpGatewayRouteHeader
+T HttpGatewayRouteMatch
+T HttpGatewayRoutePathRewrite
+T HttpGatewayRoutePrefixRewrite
+T HttpGatewayRouteRewrite
+T HttpMethod
+T HttpPathMatch
+T HttpQueryParameter
+T HttpRetryPolicy
+T HttpRoute
+T HttpRouteAction
+T HttpRouteHeader
+T HttpRouteMatch
+T HttpScheme
+T HttpTimeout
+T InternalServerErrorException
+T IpPreference
+T JsonFormatRef
+T LimitExceededException
+T Listener
+T ListenerTimeout
+T ListenerTimeoutMemberGrpc
+T ListenerTimeoutMemberHttp
+T ListenerTimeoutMemberHttp2
+T ListenerTimeoutMemberTcp
+T ListenerTls
+T ListenerTlsAcmCertificate
+T ListenerTlsCertificate
+T ListenerTlsCertificateMemberAcm
+T ListenerTlsCertificateMemberFile
+T ListenerTlsCertificateMemberSds
+T ListenerTlsFileCertificate
+T ListenerTlsMode
+T ListenerTlsSdsCertificate
+T ListenerTlsValidationContext
+T ListenerTlsValidationContextTrust
+T ListenerTlsValidationContextTrustMemberFile
+T ListenerTlsValidationContextTrustMemberSds
+T Logging
+T LoggingFormat
+T LoggingFormatMemberJson
+T LoggingFormatMemberText
+T MatchRange
+T MeshData
+T MeshRef
+T MeshServiceDiscovery
+T MeshSpec
+T MeshStatus
+T MeshStatusCode
+T NotFoundException
+T OutlierDetection
+T PortMapping
+T PortProtocol
+T QueryParameterMatch
+T ResourceInUseException
+T ResourceMetadata
+T RouteData
+T RouteRef
+T RouteSpec
+T RouteStatus
+T RouteStatusCode
+T ServiceDiscovery
+T ServiceDiscoveryMemberAwsCloudMap
+T ServiceDiscoveryMemberDns
+T ServiceUnavailableException
+T SubjectAlternativeNameMatchers
+T SubjectAlternativeNames
+T TagRef
+T TcpRetryPolicyEvent
+T TcpRoute
+T TcpRouteAction
+T TcpRouteMatch
+T TcpTimeout
+T TlsValidationContext
+T TlsValidationContextAcmTrust
+T TlsValidationContextFileTrust
+T TlsValidationContextSdsTrust
+T TlsValidationContextTrust
+T TlsValidationContextTrustMemberAcm
+T TlsValidationContextTrustMemberFile
+T TlsValidationContextTrustMemberSds
+T TooManyRequestsException
+T TooManyTagsException
+T UnknownUnionMember
+T VirtualGatewayAccessLog
+T VirtualGatewayAccessLogMemberFile
+T VirtualGatewayBackendDefaults
+T VirtualGatewayClientPolicy
+T VirtualGatewayClientPolicyTls
+T VirtualGatewayClientTlsCertificate
+T VirtualGatewayClientTlsCertificateMemberFile
+T VirtualGatewayClientTlsCertificateMemberSds
+T VirtualGatewayConnectionPool
+T VirtualGatewayConnectionPoolMemberGrpc
+T VirtualGatewayConnectionPoolMemberHttp
+T VirtualGatewayConnectionPoolMemberHttp2
+T VirtualGatewayData
+T VirtualGatewayFileAccessLog
+T VirtualGatewayGrpcConnectionPool
+T VirtualGatewayHealthCheckPolicy
+T VirtualGatewayHttp2ConnectionPool
+T VirtualGatewayHttpConnectionPool
+T VirtualGatewayListener
+T VirtualGatewayListenerTls
+T VirtualGatewayListenerTlsAcmCertificate
+T VirtualGatewayListenerTlsCertificate
+T VirtualGatewayListenerTlsCertificateMemberAcm
+T VirtualGatewayListenerTlsCertificateMemberFile
+T VirtualGatewayListenerTlsCertificateMemberSds
+T VirtualGatewayListenerTlsFileCertificate
+T VirtualGatewayListenerTlsMode
+T VirtualGatewayListenerTlsSdsCertificate
+T VirtualGatewayListenerTlsValidationContext
+T VirtualGatewayListenerTlsValidationContextTrust
+T VirtualGatewayListenerTlsValidationContextTrustMemberFile
+T VirtualGatewayListenerTlsValidationContextTrustMemberSds
+T VirtualGatewayLogging
+T VirtualGatewayPortMapping
+T VirtualGatewayPortProtocol
+T VirtualGatewayRef
+T VirtualGatewaySpec
+T VirtualGatewayStatus
+T VirtualGatewayStatusCode
+T VirtualGatewayTlsValidationContext
+T VirtualGatewayTlsValidationContextAcmTrust
+T VirtualGatewayTlsValidationContextFileTrust
+T VirtualGatewayTlsValidationContextSdsTrust
+T VirtualGatewayTlsValidationContextTrust
+T VirtualGatewayTlsValidationContextTrustMemberAcm
+T VirtualGatewayTlsValidationContextTrustMemberFile
+T VirtualGatewayTlsValidationContextTrustMemberSds
+T VirtualNodeConnectionPool
+T VirtualNodeConnectionPoolMemberGrpc
+T VirtualNodeConnectionPoolMemberHttp
+T VirtualNodeConnectionPoolMemberHttp2
+T VirtualNodeConnectionPoolMemberTcp
+T VirtualNodeData
+T VirtualNodeGrpcConnectionPool
+T VirtualNodeHttp2ConnectionPool
+T VirtualNodeHttpConnectionPool
+T VirtualNodeRef
+T VirtualNodeServiceProvider
+T VirtualNodeSpec
+T VirtualNodeStatus
+T VirtualNodeStatusCode
+T VirtualNodeTcpConnectionPool
+T VirtualRouterData
+T VirtualRouterListener
+T VirtualRouterRef
+T VirtualRouterServiceProvider
+T VirtualRouterSpec
+T VirtualRouterStatus
+T VirtualRouterStatusCode
+T VirtualServiceBackend
+T VirtualServiceData
+T VirtualServiceProvider
+T VirtualServiceProviderMemberVirtualNode
+T VirtualServiceProviderMemberVirtualRouter
+T VirtualServiceRef
+T VirtualServiceSpec
+T VirtualServiceStatus
+T VirtualServiceStatusCode
+T WeightedTarget
+E DefaultGatewayRouteRewriteDisabled DefaultGatewayRouteRewrite
+E DefaultGatewayRouteRewriteEnabled DefaultGatewayRouteRewrite
+E DnsResponseTypeEndpoints DnsResponseType
+E DnsResponseTypeLoadbalancer DnsResponseType
+E DurationUnitMs DurationUnit
+E DurationUnitS DurationUnit
+E EgressFilterTypeAllowAll EgressFilterType
+E EgressFilterTypeDropAll EgressFilterType
+E GatewayRouteStatusCodeActive GatewayRouteStatusCode
+E GatewayRouteStatusCodeDeleted GatewayRouteStatusCode
+E GatewayRouteStatusCodeInactive GatewayRouteStatusCode
+E GrpcRetryPolicyEventCancelled GrpcRetryPolicyEvent
+E GrpcRetryPolicyEventDeadlineExceeded GrpcRetryPolicyEvent
+E GrpcRetryPolicyEventInternal GrpcRetryPolicyEvent
+E GrpcRetryPolicyEventResourceExhausted GrpcRetryPolicyEvent
+E GrpcRetryPolicyEventUnavailable GrpcRetryPolicyEvent
+E HttpMethodConnect HttpMethod
+E HttpMethodDelete HttpMethod
+E HttpMethodGet HttpMethod
+E HttpMethodHead HttpMethod
+E HttpMethodOptions HttpMethod
+E HttpMethodPatch HttpMethod
+E HttpMethodPost HttpMethod
+E HttpMethodPut HttpMethod
+E HttpMethodTrace HttpMethod
+E HttpSchemeHttp HttpScheme
+E HttpSchemeHttps HttpScheme
+E IpPreferenceIPv4Only IpPreference
+E IpPreferenceIPv4Preferred IpPreference
+E IpPreferenceIPv6Only IpPreference
+E IpPreferenceIPv6Preferred IpPreference
+E ListenerTlsModeDisabled ListenerTlsMode
+E ListenerTlsModePermissive ListenerTlsMode
+E ListenerTlsModeStrict ListenerTlsMode
+E MeshStatusCodeActive MeshStatusCode
+E MeshStatusCodeDeleted MeshStatusCode
+E MeshStatusCodeInactive MeshStatusCode
+E PortProtocolGrpc PortProtocol
+E PortProtocolHttp PortProtocol
+E PortProtocolHttp2 PortProtocol
+E PortProtocolTcp PortProtocol
+E RouteStatusCodeActive RouteStatusCode
+E RouteStatusCodeDeleted RouteStatusCode
+E RouteStatusCodeInactive RouteStatusCode
+E TcpRetryPolicyEventConnectionError TcpRetryPolicyEvent
+E VirtualGatewayListenerTlsModeDisabled VirtualGatewayListenerTlsMode
+E VirtualGatewayListenerTlsModePermissive VirtualGatewayListenerTlsMode
+E VirtualGatewayListenerTlsModeStrict VirtualGatewayListenerTlsMode
+E VirtualGatewayPortProtocolGrpc VirtualGatewayPortProtocol
+E VirtualGatewayPortProtocolHttp VirtualGatewayPortProtocol
+E VirtualGatewayPortProtocolHttp2 VirtualGatewayPortProtocol
+E VirtualGatewayStatusCodeActive VirtualGatewayStatusCode
+E VirtualGatewayStatusCodeDeleted VirtualGatewayStatusCode
+E VirtualGatewayStatusCodeInactive VirtualGatewayStatusCode
+E VirtualNodeStatusCodeActive VirtualNodeStatusCode
+E VirtualNodeStatusCodeDeleted VirtualNodeStatusCode
+E VirtualNodeStatusCodeInactive VirtualNodeStatusCode
+E VirtualRouterStatusCodeActive VirtualRouterStatusCode
+E VirtualRouterStatusCodeDeleted VirtualRouterStatusCode
+E VirtualRouterStatusCodeInactive VirtualRouterStatusCode
+E VirtualServiceStatusCodeActive VirtualServiceStatusCode
+E VirtualServiceStatusCodeDeleted VirtualServiceStatusCode
+E VirtualServiceStatusCodeInactive VirtualServiceStatusCode
+U AccessLog
+U Backend
+U ClientTlsCertificate
+U GrpcMetadataMatchMethod
+U GrpcRouteMetadataMatchMethod
+U HeaderMatchMethod
+U ListenerTimeout
+U ListenerTlsCertificate
+U ListenerTlsValidationContextTrust
+U LoggingFormat
+U ServiceDiscovery
+U TlsValidationContextTrust
+U VirtualGatewayAccessLog
+U VirtualGatewayClientTlsCertificate
+U VirtualGatewayConnectionPool
+U VirtualGatewayListenerTlsCertificate
+U VirtualGatewayListenerTlsValidationContextTrust
+U VirtualGatewayTlsValidationContextTrust
+U VirtualNodeConnectionPool
+U VirtualServiceProvider
+K AccessLog 000 - unsupported
+K AwsCloudMapInstanceAttribute 001 Key req nil
+K AwsCloudMapInstanceAttribute 002 Key len 1 ptr
+K AwsCloudMapInstanceAttribute 003 Value req nil
+K AwsCloudMapInstanceAttribute 004 Value len 1 ptr
+K AwsCloudMapServiceDiscovery 001 NamespaceName req nil
+K AwsCloudMapServiceDiscovery 002 NamespaceName len 1 ptr
+K AwsCloudMapServiceDiscovery 003 ServiceName req nil
+K AwsCloudMapServiceDiscovery 004 ServiceName len 1 ptr
+K AwsCloudMapServiceDiscovery 005 Attributes each AwsCloudMapInstanceAttribute slice
+K Backend 000 - unsupported
+K BackendDefaults 001 ClientPolicy nest ClientPolicy
+K ClientPolicy 001 Tls nest ClientPolicyTls
+K ClientPolicyTls 000 - unsupported
+K ClientTlsCertificate 000 - unsupported
+K CreateGatewayRouteInput 001 GatewayRouteName req nil
+K CreateGatewayRouteInput 002 GatewayRouteName len 1 ptr
+K CreateGatewayRouteInput 003 MeshName req nil
+K CreateGatewayRouteInput 004 MeshName len 1 ptr
+K CreateGatewayRouteInput 005 MeshOwner len 12 ptr
+K CreateGatewayRouteInput 006 Spec req nil
+K CreateGatewayRouteInput 007 VirtualGatewayName req nil
+K CreateGatewayRouteInput 008 VirtualGatewayName len 1 ptr
+K CreateGatewayRouteInput 009 Spec nest GatewayRouteSpec
+K CreateGatewayRouteInput 010 Tags each TagRef slice
+K CreateMeshInput 001 MeshName req nil
+K CreateMeshInput 002 MeshName len 1 ptr
+K CreateMeshInput 003 Spec nest MeshSpec
+K CreateMeshInput 004 Tags each TagRef slice
+K CreateRouteInput 001 MeshName req nil
+K CreateRouteInput 002 MeshName len 1 ptr
+K CreateRouteInput 003 MeshOwner len 12 ptr
+K CreateRouteInput 004 RouteName req nil
+K CreateRouteInput 005 RouteName len 1 ptr
+K CreateRouteInput 006 Spec req nil
+K CreateRouteInput 007 VirtualRouterName req nil
+K CreateRouteInput 008 VirtualRouterName len 1 ptr
+K CreateRouteInput 009 Spec nest RouteSpec
+K CreateRouteInput 010 Tags each TagRef slice
+K CreateVirtualGatewayInput 001 MeshName req nil
+K CreateVirtualGatewayInput 002 MeshName len 1 ptr
+K CreateVirtualGatewayInput 003 MeshOwner len 12 ptr
+K CreateVirtualGatewayInput 004 Spec req nil
+K CreateVirtualGatewayInput 005 VirtualGatewayName req nil
+K CreateVirtualGatewayInput 006 VirtualGatewayName len 1 ptr
+K CreateVirtualGatewayInput 007 Spec nest VirtualGatewaySpec
+K CreateVirtualGatewayInput 008 Tags each TagRef slice
+K CreateVirtualNodeInput 001 MeshName req nil
+K CreateVirtualNodeInput 002 MeshName len 1 ptr
+K CreateVirtualNodeInput 003 MeshOwner len 12 ptr
+K CreateVirtualNodeInput 004 Spec req nil
+K CreateVirtualNodeInput 005 VirtualNodeName req nil
+K CreateVirtualNodeInput 006 VirtualNodeName len 1 ptr
+K CreateVirtualNodeInput 007 Spec nest VirtualNodeSpec
+K CreateVirtualNodeInput 008 Tags each TagRef slice
+K CreateVirtualRouterInput 001 MeshName req nil
+K CreateVirtualRouterInput 002 MeshName len 1 ptr
+K CreateVirtualRouterInput 003 MeshOwner len 12 ptr
+K CreateVirtualRouterInput 004 Spec req nil
+K CreateVirtualRouterInput 005 VirtualRouterName req nil
+K CreateVirtualRouterInput 006 VirtualRouterName len 1 ptr
+K CreateVirtualRouterInput 007 Spec nest VirtualRouterSpec
+K CreateVirtualRouterInput 008 Tags each TagRef slice
+K CreateVirtualServiceInput 001 MeshName req nil
+K CreateVirtualServiceInput 002 MeshName len 1 ptr
+K CreateVirtualServiceInput 003 MeshOwner len 12 ptr
+K CreateVirtualServiceInput 004 Spec req nil
+K CreateVirtualServiceInput 005 VirtualServiceName req nil
+K CreateVirtualServiceInput 006 Spec nest VirtualServiceSpec
+K CreateVirtualServiceInput 007 Tags each TagRef slice
+K DeleteGatewayRouteInput 001 GatewayRouteName req nil
+K DeleteGatewayRouteInput 002 GatewayRouteName len 1 ptr
+K DeleteGatewayRouteInput 003 MeshName req nil
+K DeleteGatewayRouteInput 004 MeshName len 1 ptr
+K DeleteGatewayRouteInput 005 MeshOwner len 12 ptr
+K DeleteGatewayRouteInput 006 VirtualGatewayName req nil
+K DeleteGatewayRouteInput 007 VirtualGatewayName len 1 ptr
+K DeleteMeshInput 001 MeshName req nil
+K DeleteMeshInput 002 MeshName len 1 ptr
+K DeleteRouteInput 001 MeshName req nil
+K DeleteRouteInput 002 MeshName len 1 ptr
+K DeleteRouteInput 003 MeshOwner len 12 ptr
+K DeleteRouteInput 004 RouteName req nil
+K DeleteRouteInput 005 RouteName len 1 ptr
+K DeleteRouteInput 006 VirtualRouterName req nil
+K DeleteRouteInput 007 VirtualRouterName len 1 ptr
+K DeleteVirtualGatewayInput 001 MeshName req nil
+K DeleteVirtualGatewayInput 002 MeshName len 1 ptr
+K DeleteVirtualGatewayInput 003 MeshOwner len 12 ptr
+K DeleteVirtualGatewayInput 004 VirtualGatewayName req nil
+K DeleteVirtualGatewayInput 005 VirtualGatewayName len 1 ptr
+K DeleteVirtualNodeInput 001 MeshName req nil
+K DeleteVirtualNodeInput 002 MeshName len 1 ptr
+K DeleteVirtualNodeInput 003 MeshOwner len 12 ptr
+K DeleteVirtualNodeInput 004 VirtualNodeName req nil
+K DeleteVirtualNodeInput 005 VirtualNodeName len 1 ptr
+K DeleteVirtualRouterInput 001 MeshName req nil
+K DeleteVirtualRouterInput 002 MeshName len 1 ptr
+K DeleteVirtualRouterInput 003 MeshOwner len 12 ptr
+K DeleteVirtualRouterInput 004 VirtualRouterName req nil
+K DeleteVirtualRouterInput 005 VirtualRouterName len 1 ptr
+K DeleteVirtualServiceInput 001 MeshName req nil
+K DeleteVirtualServiceInput 002 MeshName len 1 ptr
+K DeleteVirtualServiceInput 003 MeshOwner len 12 ptr
+K DeleteVirtualServiceInput 004 VirtualServiceName req nil
+K DeleteVirtualServiceInput 005 VirtualServiceName len 1 ptr
+K DescribeGatewayRouteInput 001 GatewayRouteName req nil
+K DescribeGatewayRouteInput 002 GatewayRouteName len 1 ptr
+K DescribeGatewayRouteInput 003 MeshName req nil
+K DescribeGatewayRouteInput 004 MeshName len 1 ptr
+K DescribeGatewayRouteInput 005 MeshOwner len 12 ptr
+K DescribeGatewayRouteInput 006 VirtualGatewayName req nil
+K DescribeGatewayRouteInput 007 VirtualGatewayName len 1 ptr
+K DescribeMeshInput 001 MeshName req nil
+K DescribeMeshInput 002 MeshName len 1 ptr
+K DescribeMeshInput 003 MeshOwner len 12 ptr
+K DescribeRouteInput 001 MeshName req nil
+K DescribeRouteInput 002 MeshName len 1 ptr
+K DescribeRouteInput 003 MeshOwner len 12 ptr
+K DescribeRouteInput 004 RouteName req nil
+K DescribeRouteInput 005 RouteName len 1 ptr
+K DescribeRouteInput 006 VirtualRouterName req nil
+K DescribeRouteInput 007 VirtualRouterName len 1 ptr
+K DescribeVirtualGatewayInput 001 MeshName req nil
+K DescribeVirtualGatewayInput 002 MeshName len 1 ptr
+K DescribeVirtualGatewayInput 003 MeshOwner len 12 ptr
+K DescribeVirtualGatewayInput 004 VirtualGatewayName req nil
+K DescribeVirtualGatewayInput 005 VirtualGatewayName len 1 ptr
+K DescribeVirtualNodeInput 001 MeshName req nil
+K DescribeVirtualNodeInput 002 MeshName len 1 ptr
+K DescribeVirtualNodeInput 003 MeshOwner len 12 ptr
+K DescribeVirtualNodeInput 004 VirtualNodeName req nil
+K DescribeVirtualNodeInput 005 VirtualNodeName len 1 ptr
+K DescribeVirtualRouterInput 001 MeshName req nil
+K DescribeVirtualRouterInput 002 MeshName len 1 ptr
+K DescribeVirtualRouterInput 003 MeshOwner len 12 ptr
+K DescribeVirtualRouterInput 004 VirtualRouterName req nil
+K DescribeVirtualRouterInput 005 VirtualRouterName len 1 ptr
+K DescribeVirtualServiceInput 001 MeshName req nil
+K DescribeVirtualServiceInput 002 MeshName len 1 ptr
+K DescribeVirtualServiceInput 003 MeshOwner len 12 ptr
+K DescribeVirtualServiceInput 004 VirtualServiceName req nil
+K DescribeVirtualServiceInput 005 VirtualServiceName len 1 ptr
+K DnsServiceDiscovery 001 Hostname req nil
+K EgressFilter 001 Type req empty
+K FileAccessLog 000 - unsupported
+K GatewayRouteHostnameMatch 001 Exact len 1 ptr
+K GatewayRouteHostnameMatch 002 Suffix len 1 ptr
+K GatewayRouteSpec 001 GrpcRoute nest GrpcGatewayRoute
+K GatewayRouteSpec 002 Http2Route nest HttpGatewayRoute
+K GatewayRouteSpec 003 HttpRoute nest HttpGatewayRoute
+K GatewayRouteTarget 001 Port min 1 ptr
+K GatewayRouteTarget 002 VirtualService req nil
+K GatewayRouteTarget 003 VirtualService nest GatewayRouteVirtualService
+K GatewayRouteVirtualService 001 VirtualServiceName req nil
+K GatewayRouteVirtualService 002 VirtualServiceName len 1 ptr
+K GrpcGatewayRoute 001 Action req nil
+K GrpcGatewayRoute 002 Match req nil
+K GrpcGatewayRoute 003 Action nest GrpcGatewayRouteAction
+K GrpcGatewayRoute 004 Match nest GrpcGatewayRouteMatch
+K GrpcGatewayRouteAction 001 Target req nil
+K GrpcGatewayRouteAction 002 Target nest GatewayRouteTarget
+K GrpcGatewayRouteMatch 001 Metadata len 1 container
+K GrpcGatewayRouteMatch 002 Port min 1 ptr
+K GrpcGatewayRouteMatch 003 Hostname nest GatewayRouteHostnameMatch
+K GrpcGatewayRouteMatch 004 Metadata each GrpcGatewayRouteMetadata slice
+K GrpcGatewayRouteMetadata 000 - unsupported
+K GrpcMetadataMatchMethod 000 - unsupported
+K GrpcRetryPolicy 001 GrpcRetryEvents len 1 container
+K GrpcRetryPolicy 002 HttpRetryEvents len 1 container
+K GrpcRetryPolicy 003 MaxRetries req nil
+K GrpcRetryPolicy 004 PerRetryTimeout req nil
+K GrpcRetryPolicy 005 TcpRetryEvents len 1 container
+K GrpcRoute 001 Action req nil
+K GrpcRoute 002 Match req nil
+K GrpcRoute 003 Action nest GrpcRouteAction
+K GrpcRoute 004 Match nest GrpcRouteMatch
+K GrpcRoute 005 RetryPolicy nest GrpcRetryPolicy
+K GrpcRouteAction 001 WeightedTargets req nil
+K GrpcRouteAction 002 WeightedTargets len 1 container
+K GrpcRouteAction 003 WeightedTargets each WeightedTarget slice
+K GrpcRouteMatch 001 Metadata len 1 container
+K GrpcRouteMatch 002 MethodName len 1 ptr
+K GrpcRouteMatch 003 Port min 1 ptr
+K GrpcRouteMatch 004 Metadata each GrpcRouteMetadata slice
+K GrpcRouteMetadata 000 - unsupported
+K GrpcRouteMetadataMatchMethod 000 - unsupported
+K HeaderMatchMethod 000 - unsupported
+K HealthCheckPolicy 001 HealthyThreshold req nil
+K HealthCheckPolicy 002 HealthyThreshold min 2 ptr
+K HealthCheckPolicy 003 IntervalMillis req nil
+K HealthCheckPolicy 004 IntervalMillis min 5000 ptr
+K HealthCheckPolicy 005 Port min 1 ptr
+K HealthCheckPolicy 006 Protocol req empty
+K HealthCheckPolicy 007 TimeoutMillis req nil
+K HealthCheckPolicy 008 TimeoutMillis min 2000 ptr
+K HealthCheckPolicy 009 UnhealthyThreshold req nil
+K HealthCheckPolicy 010 UnhealthyThreshold min 2 ptr
+K HttpGatewayRoute 001 Action req nil
+K HttpGatewayRoute 002 Match req nil
+K HttpGatewayRoute 003 Action nest HttpGatewayRouteAction
+K HttpGatewayRoute 004 Match nest HttpGatewayRouteMatch
+K HttpGatewayRouteAction 001 Target req nil
+K HttpGatewayRouteAction 002 Rewrite nest HttpGatewayRouteRewrite
+K HttpGatewayRouteAction 003 Target nest GatewayRouteTarget
+K HttpGatewayRouteHeader 000 - unsupported
+K HttpGatewayRouteMatch 001 Headers len 1 container
+K HttpGatewayRouteMatch 002 Port min 1 ptr
+K HttpGatewayRouteMatch 003 QueryParameters len 1 container
+K HttpGatewayRouteMatch 004 Headers each HttpGatewayRouteHeader slice
+K HttpGatewayRouteMatch 005 Hostname nest GatewayRouteHostnameMatch
+K HttpGatewayRouteMatch 006 Path nest HttpPathMatch
+K HttpGatewayRouteMatch 007 QueryParameters each HttpQueryParameter slice
+K HttpGatewayRoutePathRewrite 001 Exact len 1 ptr
+K HttpGatewayRoutePrefixRewrite 001 Value len 1 ptr
+K HttpGatewayRouteRewrite 001 Path nest HttpGatewayRoutePathRewrite
+K HttpGatewayRouteRewrite 002 Prefix nest HttpGatewayRoutePrefixRewrite
+K HttpPathMatch 001 Exact len 1 ptr
+K HttpPathMatch 002 Regex len 1 ptr
+K HttpQueryParameter 001 Name req nil
+K HttpRetryPolicy 001 HttpRetryEvents len 1 container
+K HttpRetryPolicy 002 MaxRetries req nil
+K HttpRetryPolicy 003 PerRetryTimeout req nil
+K HttpRetryPolicy 004 TcpRetryEvents len 1 container
+K HttpRoute 001 Action req nil
+K HttpRoute 002 Match req nil
+K HttpRoute 003 Action nest HttpRouteAction
+K HttpRoute 004 Match nest HttpRouteMatch
+K HttpRoute 005 RetryPolicy nest HttpRetryPolicy
+K HttpRouteAction 001 WeightedTargets req nil
+K HttpRouteAction 002 WeightedTargets len 1 container
+K HttpRouteAction 003 WeightedTargets each WeightedTarget slice
+K HttpRouteHeader 000 - unsupported
+K HttpRouteMatch 001 Headers len 1 container
+K HttpRouteMatch 002 Port min 1 ptr
+K HttpRouteMatch 003 QueryParameters len 1 container
+K HttpRouteMatch 004 Headers each HttpRouteHeader slice
+K HttpRouteMatch 005 Path nest HttpPathMatch
+K HttpRouteMatch 006 QueryParameters each HttpQueryParameter slice
+K JsonFormatRef 001 Key req nil
+K JsonFormatRef 002 Key len 1 ptr
+K JsonFormatRef 003 Value req nil
+K JsonFormatRef 004 Value len 1 ptr
+K ListGatewayRoutesInput 001 Limit min 1 ptr
+K ListGatewayRoutesInput 002 MeshName req nil
+K ListGatewayRoutesInput 003 MeshName len 1 ptr
+K ListGatewayRoutesInput 004 MeshOwner len 12 ptr
+K ListGatewayRoutesInput 005 VirtualGatewayName req nil
+K ListGatewayRoutesInput 006 VirtualGatewayName len 1 ptr
+K ListMeshesInput 001 Limit min 1 ptr
+K ListRoutesInput 001 Limit min 1 ptr
+K ListRoutesInput 002 MeshName req nil
+K ListRoutesInput 003 MeshName len 1 ptr
+K ListRoutesInput 004 MeshOwner len 12 ptr
+K ListRoutesInput 005 VirtualRouterName req nil
+K ListRoutesInput 006 VirtualRouterName len 1 ptr
+K ListTagsForResourceInput 001 Limit min 1 ptr
+K ListTagsForResourceInput 002 ResourceArn req nil
+K ListVirtualGatewaysInput 001 Limit min 1 ptr
+K ListVirtualGatewaysInput 002 MeshName req nil
+K ListVirtualGatewaysInput 003 MeshName len 1 ptr
+K ListVirtualGatewaysInput 004 MeshOwner len 12 ptr
+K ListVirtualNodesInput 001 Limit min 1 ptr
+K ListVirtualNodesInput 002 MeshName req nil
+K ListVirtualNodesInput 003 MeshName len 1 ptr
+K ListVirtualNodesInput 004 MeshOwner len 12 ptr
+K ListVirtualRoutersInput 001 Limit min 1 ptr
+K ListVirtualRoutersInput 002 MeshName req nil
+K ListVirtualRoutersInput 003 MeshName len 1 ptr
+K ListVirtualRoutersInput 004 MeshOwner len 12 ptr
+K ListVirtualServicesInput 001 Limit min 1 ptr
+K ListVirtualServicesInput 002 MeshName req nil
+K ListVirtualServicesInput 003 MeshName len 1 ptr
+K ListVirtualServicesInput 004 MeshOwner len 12 ptr
+K Listener 000 - unsupported
+K ListenerTls 000 - unsupported
+K ListenerTlsAcmCertificate 001 CertificateArn req nil
+K ListenerTlsCertificate 000 - unsupported
+K ListenerTlsFileCertificate 001 CertificateChain req nil
+K ListenerTlsFileCertificate 002 CertificateChain len 1 ptr
+K ListenerTlsFileCertificate 003 PrivateKey req nil
+K ListenerTlsFileCertificate 004 PrivateKey len 1 ptr
+K ListenerTlsSdsCertificate 001 SecretName req nil
+K ListenerTlsValidationContext 000 - unsupported
+K ListenerTlsValidationContextTrust 000 - unsupported
+K Logging 000 - unsupported
+K LoggingFormat 000 - unsupported
+K MatchRange 001 End req nil
+K MatchRange 002 Start req nil
+K MeshSpec 001 EgressFilter nest EgressFilter
+K OutlierDetection 001 BaseEjectionDuration req nil
+K OutlierDetection 002 Interval req nil
+K OutlierDetection 003 MaxEjectionPercent req nil
+K OutlierDetection 004 MaxServerErrors req nil
+K OutlierDetection 005 MaxServerErrors min 1 ptr
+K PortMapping 001 Port req nil
+K PortMapping 002 Port min 1 ptr
+K PortMapping 003 Protocol req empty
+K RouteSpec 001 GrpcRoute nest GrpcRoute
+K RouteSpec 002 Http2Route nest HttpRoute
+K RouteSpec 003 HttpRoute nest HttpRoute
+K RouteSpec 004 TcpRoute nest TcpRoute
+K ServiceDiscovery 000 - unsupported
+K SubjectAlternativeNameMatchers 001 Exact req nil
+K SubjectAlternativeNames 001 Match req nil
+K SubjectAlternativeNames 002 Match nest SubjectAlternativeNameMatchers
+K TagRef 001 Key req nil
+K TagRef 002 Key len 1 ptr
+K TagRef 003 Value req nil
+K TagResourceInput 001 ResourceArn req nil
+K TagResourceInput 002 Tags req nil
+K TagResourceInput 003 Tags each TagRef slice
+K TcpRoute 001 Action req nil
+K TcpRoute 002 Action nest TcpRouteAction
+K TcpRoute 003 Match nest TcpRouteMatch
+K TcpRouteAction 001 WeightedTargets req nil
+K TcpRouteAction 002 WeightedTargets len 1 container
+K TcpRouteAction 003 WeightedTargets each WeightedTarget slice
+K TcpRouteMatch 001 Port min 1 ptr
+K TlsValidationContext 000 - unsupported
+K TlsValidationContextAcmTrust 001 CertificateAuthorityArns req nil
+K TlsValidationContextAcmTrust 002 CertificateAuthorityArns len 1 container
+K TlsValidationContextFileTrust 001 CertificateChain req nil
+K TlsValidationContextFileTrust 002 CertificateChain len 1 ptr
+K TlsValidationContextSdsTrust 001 SecretName req nil
+K TlsValidationContextTrust 000 - unsupported
+K UntagResourceInput 001 ResourceArn req nil
+K UntagResourceInput 002 TagKeys req nil
+K UpdateGatewayRouteInput 001 GatewayRouteName req nil
+K UpdateGatewayRouteInput 002 GatewayRouteName len 1 ptr
+K UpdateGatewayRouteInput 003 MeshName req nil
+K UpdateGatewayRouteInput 004 MeshName len 1 ptr
+K UpdateGatewayRouteInput 005 MeshOwner len 12 ptr
+K UpdateGatewayRouteInput 006 Spec req nil
+K UpdateGatewayRouteInput 007 VirtualGatewayName req nil
+K UpdateGatewayRouteInput 008 VirtualGatewayName len 1 ptr
+K UpdateGatewayRouteInput 009 Spec nest GatewayRouteSpec
+K UpdateMeshInput 001 MeshName req nil
+K UpdateMeshInput 002 MeshName len 1 ptr
+K UpdateMeshInput 003 Spec nest MeshSpec
+K UpdateRouteInput 001 MeshName req nil
+K UpdateRouteInput 002 MeshName len 1 ptr
+K UpdateRouteInput 003 MeshOwner len 12 ptr
+K UpdateRouteInput 004 RouteName req nil
+K UpdateRouteInput 005 RouteName len 1 ptr
+K UpdateRouteInput 006 Spec req nil
+K UpdateRouteInput 007 VirtualRouterName req nil
+K UpdateRouteInput 008 VirtualRouterName len 1 ptr
+K UpdateRouteInput 009 Spec nest RouteSpec
+K UpdateVirtualGatewayInput 001 MeshName req nil
+K UpdateVirtualGatewayInput 002 MeshName len 1 ptr
+K UpdateVirtualGatewayInput 003 MeshOwner len 12 ptr
+K UpdateVirtualGatewayInput 004 Spec req nil
+K UpdateVirtualGatewayInput 005 VirtualGatewayName req nil
+K UpdateVirtualGatewayInput 006 VirtualGatewayName len 1 ptr
+K UpdateVirtualGatewayInput 007 Spec nest VirtualGatewaySpec
+K UpdateVirtualNodeInput 001 MeshName req nil
+K UpdateVirtualNodeInput 002 MeshName len 1 ptr
+K UpdateVirtualNodeInput 003 MeshOwner len 12 ptr
+K UpdateVirtualNodeInput 004 Spec req nil
+K UpdateVirtualNodeInput 005 VirtualNodeName req nil
+K UpdateVirtualNodeInput 006 VirtualNodeName len 1 ptr
+K UpdateVirtualNodeInput 007 Spec nest VirtualNodeSpec
+K UpdateVirtualRouterInput 001 MeshName req nil
+K UpdateVirtualRouterInput 002 MeshName len 1 ptr
+K UpdateVirtualRouterInput 003 MeshOwner len 12 ptr
+K UpdateVirtualRouterInput 004 Spec req nil
+K UpdateVirtualRouterInput 005 VirtualRouterName req nil
+K UpdateVirtualRouterInput 006 VirtualRouterName len 1 ptr
+K UpdateVirtualRouterInput 007 Spec nest VirtualRouterSpec
+K UpdateVirtualServiceInput 001 MeshName req nil
+K UpdateVirtualServiceInput 002 MeshName len 1 ptr
+K UpdateVirtualServiceInput 003 MeshOwner len 12 ptr
+K UpdateVirtualServiceInput 004 Spec req nil
+K UpdateVirtualServiceInput 005 VirtualServiceName req nil
+K UpdateVirtualServiceInput 006 VirtualServiceName len 1 ptr
+K UpdateVirtualServiceInput 007 Spec nest VirtualServiceSpec
+K VirtualGatewayAccessLog 000 - unsupported
+K VirtualGatewayBackendDefaults 001 ClientPolicy nest VirtualGatewayClientPolicy
+K VirtualGatewayClientPolicy 001 Tls nest VirtualGatewayClientPolicyTls
+K VirtualGatewayClientPolicyTls 000 - unsupported
+K VirtualGatewayClientTlsCertificate 000 - unsupported
+K VirtualGatewayConnectionPool 000 - unsupported
+K VirtualGatewayFileAccessLog 000 - unsupported
+K VirtualGatewayGrpcConnectionPool 001 MaxRequests req nil
+K VirtualGatewayGrpcConnectionPool 002 MaxRequests min 1 ptr
+K VirtualGatewayHealthCheckPolicy 001 HealthyThreshold req nil
+K VirtualGatewayHealthCheckPolicy 002 HealthyThreshold min 2 ptr
+K VirtualGatewayHealthCheckPolicy 003 IntervalMillis req nil
+K VirtualGatewayHealthCheckPolicy 004 IntervalMillis min 5000 ptr
+K VirtualGatewayHealthCheckPolicy 005 Port min 1 ptr
+K VirtualGatewayHealthCheckPolicy 006 Protocol req empty
+K VirtualGatewayHealthCheckPolicy 007 TimeoutMillis req nil
+K VirtualGatewayHealthCheckPolicy 008 TimeoutMillis min 2000 ptr
+K VirtualGatewayHealthCheckPolicy 009 UnhealthyThreshold req nil
+K VirtualGatewayHealthCheckPolicy 010 UnhealthyThreshold min 2 ptr
+K VirtualGatewayHttp2ConnectionPool 001 MaxRequests req nil
+K VirtualGatewayHttp2ConnectionPool 002 MaxRequests min 1 ptr
+K VirtualGatewayHttpConnectionPool 001 MaxConnections req nil
+K VirtualGatewayHttpConnectionPool 002 MaxConnections min 1 ptr
+K VirtualGatewayHttpConnectionPool 003 MaxPendingRequests min 1 ptr
+K VirtualGatewayListener 000 - unsupported
+K VirtualGatewayListenerTls 000 - unsupported
+K VirtualGatewayListenerTlsAcmCertificate 001 CertificateArn req nil
+K VirtualGatewayListenerTlsCertificate 000 - unsupported
+K VirtualGatewayListenerTlsFileCertificate 001 CertificateChain req nil
+K VirtualGatewayListenerTlsFileCertificate 002 CertificateChain len 1 ptr
+K VirtualGatewayListenerTlsFileCertificate 003 PrivateKey req nil
+K VirtualGatewayListenerTlsFileCertificate 004 PrivateKey len 1 ptr
+K VirtualGatewayListenerTlsSdsCertificate 001 SecretName req nil
+K VirtualGatewayListenerTlsValidationContext 000 - unsupported
+K VirtualGatewayListenerTlsValidationContextTrust 000 - unsupported
+K VirtualGatewayLogging 000 - unsupported
+K VirtualGatewayPortMapping 001 Port req nil
+K VirtualGatewayPortMapping 002 Port min 1 ptr
+K VirtualGatewayPortMapping 003 Protocol req empty
+K VirtualGatewaySpec 001 Listeners req nil
+K VirtualGatewaySpec 002 BackendDefaults nest VirtualGatewayBackendDefaults
+K VirtualGatewaySpec 003 Listeners each VirtualGatewayListener slice
+K VirtualGatewaySpec 004 Logging nest VirtualGatewayLogging
+K VirtualGatewayTlsValidationContext 000 - unsupported
+K VirtualGatewayTlsValidationContextAcmTrust 001 CertificateAuthorityArns req nil
+K VirtualGatewayTlsValidationContextAcmTrust 002 CertificateAuthorityArns len 1 container
+K VirtualGatewayTlsValidationContextFileTrust 001 CertificateChain req nil
+K VirtualGatewayTlsValidationContextFileTrust 002 CertificateChain len 1 ptr
+K VirtualGatewayTlsValidationContextSdsTrust 001 SecretName req nil
+K VirtualGatewayTlsValidationContextTrust 000 - unsupported
+K VirtualNodeConnectionPool 000 - unsupported
+K VirtualNodeGrpcConnectionPool 001 MaxRequests req nil
+K VirtualNodeGrpcConnectionPool 002 MaxRequests min 1 ptr
+K VirtualNodeHttp2ConnectionPool 001 MaxRequests req nil
+K VirtualNodeHttp2ConnectionPool 002 MaxRequests min 1 ptr
+K VirtualNodeHttpConnectionPool 001 MaxConnections req nil
+K VirtualNodeHttpConnectionPool 002 MaxConnections min 1 ptr
+K VirtualNodeHttpConnectionPool 003 MaxPendingRequests min 1 ptr
+K VirtualNodeServiceProvider 001 VirtualNodeName req nil
+K VirtualNodeServiceProvider 002 VirtualNodeName len 1 ptr
+K VirtualNodeSpec 000 - unsupported
+K VirtualNodeTcpConnectionPool 001 MaxConnections req nil
+K VirtualNodeTcpConnectionPool 002 MaxConnections min 1 ptr
+K VirtualRouterListener 001 PortMapping req nil
+K VirtualRouterListener 002 PortMapping nest PortMapping
+K VirtualRouterServiceProvider 001 VirtualRouterName req nil
+K VirtualRouterServiceProvider 002 VirtualRouterName len 1 ptr
+K VirtualRouterSpec 001 Listeners each VirtualRouterListener slice
+K VirtualServiceBackend 001 VirtualServiceName req nil
+K VirtualServiceBackend 002 ClientPolicy nest ClientPolicy
+K VirtualServiceProvider 000 - unsupported
+K VirtualServiceSpec 000 - unsupported
+K WeightedTarget 001 Port min 1 ptr
+K WeightedTarget 002 VirtualNode req nil
+K WeightedTarget 003 VirtualNode len 1 ptr
+K WeightedTarget 004 Weight req none
+G ListGatewayRoutes NextToken NextToken
+G ListMeshes NextToken NextToken
+G ListRoutes NextToken NextToken
+G ListTagsForResource NextToken NextToken
+G ListVirtualGateways NextToken NextToken
+G ListVirtualNodes NextToken NextToken
+G ListVirtualRouters NextToken NextToken
+G ListVirtualServices NextToken NextToken

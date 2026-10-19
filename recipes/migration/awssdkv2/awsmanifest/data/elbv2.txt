@@ -1,0 +1,1455 @@
+C ELBV2
+S AddListenerCertificatesInput
+S AddListenerCertificatesOutput
+S AddTagsInput
+S AddTagsOutput
+S AddTrustStoreRevocationsInput
+S AddTrustStoreRevocationsOutput
+S AuthResolverParameters
+S AuthSchemeResolver
+S Client
+S CreateListenerInput
+S CreateListenerOutput
+S CreateLoadBalancerInput
+S CreateLoadBalancerOutput
+S CreateRuleInput
+S CreateRuleOutput
+S CreateTargetGroupInput
+S CreateTargetGroupOutput
+S CreateTrustStoreInput
+S CreateTrustStoreOutput
+S DeleteListenerInput
+S DeleteListenerOutput
+S DeleteLoadBalancerInput
+S DeleteLoadBalancerOutput
+S DeleteRuleInput
+S DeleteRuleOutput
+S DeleteSharedTrustStoreAssociationInput
+S DeleteSharedTrustStoreAssociationOutput
+S DeleteTargetGroupInput
+S DeleteTargetGroupOutput
+S DeleteTrustStoreInput
+S DeleteTrustStoreOutput
+S DeregisterTargetsInput
+S DeregisterTargetsOutput
+S DescribeAccountLimitsAPIClient
+S DescribeAccountLimitsInput
+S DescribeAccountLimitsOutput
+S DescribeAccountLimitsPaginator
+S DescribeAccountLimitsPaginatorOptions
+S DescribeCapacityReservationInput
+S DescribeCapacityReservationOutput
+S DescribeListenerAttributesInput
+S DescribeListenerAttributesOutput
+S DescribeListenerCertificatesAPIClient
+S DescribeListenerCertificatesInput
+S DescribeListenerCertificatesOutput
+S DescribeListenerCertificatesPaginator
+S DescribeListenerCertificatesPaginatorOptions
+S DescribeListenersAPIClient
+S DescribeListenersInput
+S DescribeListenersOutput
+S DescribeListenersPaginator
+S DescribeListenersPaginatorOptions
+S DescribeLoadBalancerAttributesInput
+S DescribeLoadBalancerAttributesOutput
+S DescribeLoadBalancersAPIClient
+S DescribeLoadBalancersInput
+S DescribeLoadBalancersOutput
+S DescribeLoadBalancersPaginator
+S DescribeLoadBalancersPaginatorOptions
+S DescribeRulesAPIClient
+S DescribeRulesInput
+S DescribeRulesOutput
+S DescribeRulesPaginator
+S DescribeRulesPaginatorOptions
+S DescribeSSLPoliciesInput
+S DescribeSSLPoliciesOutput
+S DescribeTagsInput
+S DescribeTagsOutput
+S DescribeTargetGroupAttributesInput
+S DescribeTargetGroupAttributesOutput
+S DescribeTargetGroupsAPIClient
+S DescribeTargetGroupsInput
+S DescribeTargetGroupsOutput
+S DescribeTargetGroupsPaginator
+S DescribeTargetGroupsPaginatorOptions
+S DescribeTargetHealthAPIClient
+S DescribeTargetHealthInput
+S DescribeTargetHealthOutput
+S DescribeTrustStoreAssociationsAPIClient
+S DescribeTrustStoreAssociationsInput
+S DescribeTrustStoreAssociationsOutput
+S DescribeTrustStoreAssociationsPaginator
+S DescribeTrustStoreAssociationsPaginatorOptions
+S DescribeTrustStoreRevocationsAPIClient
+S DescribeTrustStoreRevocationsInput
+S DescribeTrustStoreRevocationsOutput
+S DescribeTrustStoreRevocationsPaginator
+S DescribeTrustStoreRevocationsPaginatorOptions
+S DescribeTrustStoresAPIClient
+S DescribeTrustStoresInput
+S DescribeTrustStoresOutput
+S DescribeTrustStoresPaginator
+S DescribeTrustStoresPaginatorOptions
+S EndpointParameters
+S EndpointResolver
+S EndpointResolverFromURL
+S EndpointResolverFunc
+S EndpointResolverOptions
+S EndpointResolverV2
+S GetResourcePolicyInput
+S GetResourcePolicyOutput
+S GetTrustStoreCaCertificatesBundleInput
+S GetTrustStoreCaCertificatesBundleOutput
+S GetTrustStoreRevocationContentInput
+S GetTrustStoreRevocationContentOutput
+S HTTPClient
+S HTTPSignerV4
+S LoadBalancerAvailableWaiter
+S LoadBalancerAvailableWaiterOptions
+S LoadBalancerExistsWaiter
+S LoadBalancerExistsWaiterOptions
+S LoadBalancersDeletedWaiter
+S LoadBalancersDeletedWaiterOptions
+S ModifyCapacityReservationInput
+S ModifyCapacityReservationOutput
+S ModifyIpPoolsInput
+S ModifyIpPoolsOutput
+S ModifyListenerAttributesInput
+S ModifyListenerAttributesOutput
+S ModifyListenerInput
+S ModifyListenerOutput
+S ModifyLoadBalancerAttributesInput
+S ModifyLoadBalancerAttributesOutput
+S ModifyRuleInput
+S ModifyRuleOutput
+S ModifyTargetGroupAttributesInput
+S ModifyTargetGroupAttributesOutput
+S ModifyTargetGroupInput
+S ModifyTargetGroupOutput
+S ModifyTrustStoreInput
+S ModifyTrustStoreOutput
+S New
+S NewDefaultEndpointResolver
+S NewDefaultEndpointResolverV2
+S NewDescribeAccountLimitsPaginator
+S NewDescribeListenerCertificatesPaginator
+S NewDescribeListenersPaginator
+S NewDescribeLoadBalancersPaginator
+S NewDescribeRulesPaginator
+S NewDescribeTargetGroupsPaginator
+S NewDescribeTrustStoreAssociationsPaginator
+S NewDescribeTrustStoreRevocationsPaginator
+S NewDescribeTrustStoresPaginator
+S NewFromConfig
+S NewLoadBalancerAvailableWaiter
+S NewLoadBalancerExistsWaiter
+S NewLoadBalancersDeletedWaiter
+S NewTargetDeregisteredWaiter
+S NewTargetInServiceWaiter
+S Options
+S RegisterTargetsInput
+S RegisterTargetsOutput
+S RemoveListenerCertificatesInput
+S RemoveListenerCertificatesOutput
+S RemoveTagsInput
+S RemoveTagsOutput
+S RemoveTrustStoreRevocationsInput
+S RemoveTrustStoreRevocationsOutput
+S ResolveEndpoint
+S ServiceAPIVersion
+S ServiceID
+S SetIpAddressTypeInput
+S SetIpAddressTypeOutput
+S SetRulePrioritiesInput
+S SetRulePrioritiesOutput
+S SetSecurityGroupsInput
+S SetSecurityGroupsOutput
+S SetSubnetsInput
+S SetSubnetsOutput
+S TargetDeregisteredWaiter
+S TargetDeregisteredWaiterOptions
+S TargetInServiceWaiter
+S TargetInServiceWaiterOptions
+S WithAPIOptions
+S WithEndpointResolver
+S WithEndpointResolverV2
+S WithSigV4SigningName
+S WithSigV4SigningRegion
+O AddListenerCertificates
+O AddTags
+O AddTrustStoreRevocations
+O CreateListener
+O CreateLoadBalancer
+O CreateRule
+O CreateTargetGroup
+O CreateTrustStore
+O DeleteListener
+O DeleteLoadBalancer
+O DeleteRule
+O DeleteSharedTrustStoreAssociation
+O DeleteTargetGroup
+O DeleteTrustStore
+O DeregisterTargets
+O DescribeAccountLimits
+O DescribeCapacityReservation
+O DescribeListenerAttributes
+O DescribeListenerCertificates
+O DescribeListeners
+O DescribeLoadBalancerAttributes
+O DescribeLoadBalancers
+O DescribeRules
+O DescribeSSLPolicies
+O DescribeTags
+O DescribeTargetGroupAttributes
+O DescribeTargetGroups
+O DescribeTargetHealth
+O DescribeTrustStoreAssociations
+O DescribeTrustStoreRevocations
+O DescribeTrustStores
+O GetResourcePolicy
+O GetTrustStoreCaCertificatesBundle
+O GetTrustStoreRevocationContent
+O ModifyCapacityReservation
+O ModifyIpPools
+O ModifyListener
+O ModifyListenerAttributes
+O ModifyLoadBalancerAttributes
+O ModifyRule
+O ModifyTargetGroup
+O ModifyTargetGroupAttributes
+O ModifyTrustStore
+O RegisterTargets
+O RemoveListenerCertificates
+O RemoveTags
+O RemoveTrustStoreRevocations
+O SetIpAddressType
+O SetRulePriorities
+O SetSecurityGroups
+O SetSubnets
+X ErrCodeALPNPolicyNotSupportedException ALPNPolicyNotFound
+X ErrCodeAllocationIdNotFoundException AllocationIdNotFound
+X ErrCodeAvailabilityZoneNotSupportedException AvailabilityZoneNotSupported
+X ErrCodeCaCertificatesBundleNotFoundException CaCertificatesBundleNotFound
+X ErrCodeCertificateNotFoundException CertificateNotFound
+X ErrCodeDeleteAssociationSameAccountException DeleteAssociationSameAccount
+X ErrCodeDuplicateListenerException DuplicateListener
+X ErrCodeDuplicateLoadBalancerNameException DuplicateLoadBalancerName
+X ErrCodeDuplicateTagKeysException DuplicateTagKeys
+X ErrCodeDuplicateTargetGroupNameException DuplicateTargetGroupName
+X ErrCodeDuplicateTrustStoreNameException DuplicateTrustStoreName
+X ErrCodeHealthUnavailableException HealthUnavailable
+X ErrCodeIncompatibleProtocolsException IncompatibleProtocols
+X ErrCodeInvalidCaCertificatesBundleException InvalidCaCertificatesBundle
+X ErrCodeInvalidConfigurationRequestException InvalidConfigurationRequest
+X ErrCodeInvalidLoadBalancerActionException InvalidLoadBalancerAction
+X ErrCodeInvalidRevocationContentException InvalidRevocationContent
+X ErrCodeInvalidSchemeException InvalidScheme
+X ErrCodeInvalidSecurityGroupException InvalidSecurityGroup
+X ErrCodeInvalidSubnetException InvalidSubnet
+X ErrCodeInvalidTargetException InvalidTarget
+X ErrCodeListenerNotFoundException ListenerNotFound
+X ErrCodeLoadBalancerNotFoundException LoadBalancerNotFound
+X ErrCodeOperationNotPermittedException OperationNotPermitted
+X ErrCodePriorityInUseException PriorityInUse
+X ErrCodeResourceInUseException ResourceInUse
+X ErrCodeResourceNotFoundException ResourceNotFound
+X ErrCodeRevocationContentNotFoundException RevocationContentNotFound
+X ErrCodeRevocationIdNotFoundException RevocationIdNotFound
+X ErrCodeRuleNotFoundException RuleNotFound
+X ErrCodeSSLPolicyNotFoundException SSLPolicyNotFound
+X ErrCodeSubnetNotFoundException SubnetNotFound
+X ErrCodeTargetGroupAssociationLimitException TargetGroupAssociationLimit
+X ErrCodeTargetGroupNotFoundException TargetGroupNotFound
+X ErrCodeTooManyActionsException TooManyActions
+X ErrCodeTooManyCertificatesException TooManyCertificates
+X ErrCodeTooManyListenersException TooManyListeners
+X ErrCodeTooManyLoadBalancersException TooManyLoadBalancers
+X ErrCodeTooManyRegistrationsForTargetIdException TooManyRegistrationsForTargetId
+X ErrCodeTooManyRulesException TooManyRules
+X ErrCodeTooManyTagsException TooManyTags
+X ErrCodeTooManyTargetGroupsException TooManyTargetGroups
+X ErrCodeTooManyTargetsException TooManyTargets
+X ErrCodeTooManyTrustStoreRevocationEntriesException TooManyTrustStoreRevocationEntries
+X ErrCodeTooManyTrustStoresException TooManyTrustStores
+X ErrCodeTooManyUniqueTargetGroupsPerLoadBalancerException TooManyUniqueTargetGroupsPerLoadBalancer
+X ErrCodeTrustStoreAssociationNotFoundException AssociationNotFound
+X ErrCodeTrustStoreInUseException TrustStoreInUse
+X ErrCodeTrustStoreNotFoundException TrustStoreNotFound
+X ErrCodeTrustStoreNotReadyException TrustStoreNotReady
+X ErrCodeUnsupportedProtocolException UnsupportedProtocol
+I Action.Order int64 int32
+I Cipher.Priority int64 int32
+I CreateListenerInput.Port int64 int32
+I CreateRuleInput.Priority int64 int32
+I CreateTargetGroupInput.HealthCheckIntervalSeconds int64 int32
+I CreateTargetGroupInput.HealthCheckTimeoutSeconds int64 int32
+I CreateTargetGroupInput.HealthyThresholdCount int64 int32
+I CreateTargetGroupInput.Port int64 int32
+I CreateTargetGroupInput.UnhealthyThresholdCount int64 int32
+I DescribeAccountLimitsInput.PageSize int64 int32
+I DescribeListenerCertificatesInput.PageSize int64 int32
+I DescribeListenersInput.PageSize int64 int32
+I DescribeLoadBalancersInput.PageSize int64 int32
+I DescribeRulesInput.PageSize int64 int32
+I DescribeSSLPoliciesInput.PageSize int64 int32
+I DescribeTargetGroupsInput.PageSize int64 int32
+I DescribeTrustStoreAssociationsInput.PageSize int64 int32
+I DescribeTrustStoreRevocationsInput.PageSize int64 int32
+I DescribeTrustStoresInput.PageSize int64 int32
+I Listener.Port int64 int32
+I ModifyListenerInput.Port int64 int32
+I ModifyTargetGroupInput.HealthCheckIntervalSeconds int64 int32
+I ModifyTargetGroupInput.HealthCheckTimeoutSeconds int64 int32
+I ModifyTargetGroupInput.HealthyThresholdCount int64 int32
+I ModifyTargetGroupInput.UnhealthyThresholdCount int64 int32
+I RulePriorityPair.Priority int64 int32
+I TargetDescription.Port int64 int32
+I TargetGroup.HealthCheckIntervalSeconds int64 int32
+I TargetGroup.HealthCheckTimeoutSeconds int64 int32
+I TargetGroup.HealthyThresholdCount int64 int32
+I TargetGroup.Port int64 int32
+I TargetGroup.UnhealthyThresholdCount int64 int32
+I TargetGroupStickinessConfig.DurationSeconds int64 int32
+I TargetGroupTuple.Weight int64 int32
+I TrustStore.NumberOfCaCertificates int64 int32
+R Action.AuthenticateCognitoConfig AuthenticateCognitoActionConfig
+R Action.AuthenticateOidcConfig AuthenticateOidcActionConfig
+R Action.FixedResponseConfig FixedResponseActionConfig
+R Action.ForwardConfig ForwardActionConfig
+R Action.JwtValidationConfig JwtValidationActionConfig
+R Action.RedirectConfig RedirectActionConfig
+R CreateListenerInput.MutualAuthentication MutualAuthenticationAttributes
+R CreateLoadBalancerInput.IpamPools IpamPools
+R CreateTargetGroupInput.Matcher Matcher
+R DescribeCapacityReservationOutput.MinimumLoadBalancerCapacity MinimumLoadBalancerCapacity
+R ForwardActionConfig.TargetGroupStickinessConfig TargetGroupStickinessConfig
+R Listener.MutualAuthentication MutualAuthenticationAttributes
+R LoadBalancer.IpamPools IpamPools
+R LoadBalancer.State LoadBalancerState
+R ModifyCapacityReservationInput.MinimumLoadBalancerCapacity MinimumLoadBalancerCapacity
+R ModifyCapacityReservationOutput.MinimumLoadBalancerCapacity MinimumLoadBalancerCapacity
+R ModifyIpPoolsInput.IpamPools IpamPools
+R ModifyIpPoolsOutput.IpamPools IpamPools
+R ModifyListenerInput.MutualAuthentication MutualAuthenticationAttributes
+R ModifyTargetGroupInput.Matcher Matcher
+R RuleCondition.HostHeaderConfig HostHeaderConditionConfig
+R RuleCondition.HttpHeaderConfig HttpHeaderConditionConfig
+R RuleCondition.HttpRequestMethodConfig HttpRequestMethodConditionConfig
+R RuleCondition.PathPatternConfig PathPatternConditionConfig
+R RuleCondition.QueryStringConfig QueryStringConditionConfig
+R RuleCondition.SourceIpConfig SourceIpConditionConfig
+R RuleTransform.HostHeaderRewriteConfig HostHeaderRewriteConfig
+R RuleTransform.UrlRewriteConfig UrlRewriteConfig
+R TargetGroup.Matcher Matcher
+R TargetHealthDescription.AdministrativeOverride AdministrativeOverride
+R TargetHealthDescription.AnomalyDetection AnomalyDetection
+R TargetHealthDescription.Target TargetDescription
+R TargetHealthDescription.TargetHealth TargetHealth
+R ZonalCapacityReservationState.State CapacityReservationStatus
+V ALPNPolicyNotSupportedException.ErrorCodeOverride string
+V ALPNPolicyNotSupportedException.Message string
+V Action.Order int32
+V Action.TargetGroupArn string
+V AddListenerCertificatesInput.ListenerArn string
+V AddTrustStoreRevocationsInput.TrustStoreArn string
+V AdministrativeOverride.Description string
+V AllocationIdNotFoundException.ErrorCodeOverride string
+V AllocationIdNotFoundException.Message string
+V AuthenticateCognitoActionConfig.Scope string
+V AuthenticateCognitoActionConfig.SessionCookieName string
+V AuthenticateCognitoActionConfig.SessionTimeout int64
+V AuthenticateCognitoActionConfig.UserPoolArn string
+V AuthenticateCognitoActionConfig.UserPoolClientId string
+V AuthenticateCognitoActionConfig.UserPoolDomain string
+V AuthenticateOidcActionConfig.AuthorizationEndpoint string
+V AuthenticateOidcActionConfig.ClientId string
+V AuthenticateOidcActionConfig.ClientSecret string
+V AuthenticateOidcActionConfig.Issuer string
+V AuthenticateOidcActionConfig.Scope string
+V AuthenticateOidcActionConfig.SessionCookieName string
+V AuthenticateOidcActionConfig.SessionTimeout int64
+V AuthenticateOidcActionConfig.TokenEndpoint string
+V AuthenticateOidcActionConfig.UseExistingClientSecret bool
+V AuthenticateOidcActionConfig.UserInfoEndpoint string
+V AvailabilityZone.OutpostId string
+V AvailabilityZone.SubnetId string
+V AvailabilityZone.ZoneName string
+V AvailabilityZoneNotSupportedException.ErrorCodeOverride string
+V AvailabilityZoneNotSupportedException.Message string
+V CaCertificatesBundleNotFoundException.ErrorCodeOverride string
+V CaCertificatesBundleNotFoundException.Message string
+V CapacityDecreaseRequestsLimitExceededException.ErrorCodeOverride string
+V CapacityDecreaseRequestsLimitExceededException.Message string
+V CapacityReservationPendingException.ErrorCodeOverride string
+V CapacityReservationPendingException.Message string
+V CapacityReservationStatus.Reason string
+V CapacityUnitsLimitExceededException.ErrorCodeOverride string
+V CapacityUnitsLimitExceededException.Message string
+V Certificate.CertificateArn string
+V Certificate.IsDefault bool
+V CertificateNotFoundException.ErrorCodeOverride string
+V CertificateNotFoundException.Message string
+V Cipher.Name string
+V Cipher.Priority int32
+V CreateListenerInput.LoadBalancerArn string
+V CreateListenerInput.Port int32
+V CreateListenerInput.SslPolicy string
+V CreateLoadBalancerInput.CustomerOwnedIpv4Pool string
+V CreateLoadBalancerInput.Name string
+V CreateRuleInput.ListenerArn string
+V CreateRuleInput.Priority int32
+V CreateTargetGroupInput.HealthCheckEnabled bool
+V CreateTargetGroupInput.HealthCheckIntervalSeconds int32
+V CreateTargetGroupInput.HealthCheckPath string
+V CreateTargetGroupInput.HealthCheckPort string
+V CreateTargetGroupInput.HealthCheckTimeoutSeconds int32
+V CreateTargetGroupInput.HealthyThresholdCount int32
+V CreateTargetGroupInput.Name string
+V CreateTargetGroupInput.Port int32
+V CreateTargetGroupInput.ProtocolVersion string
+V CreateTargetGroupInput.TargetControlPort int32
+V CreateTargetGroupInput.UnhealthyThresholdCount int32
+V CreateTargetGroupInput.VpcId string
+V CreateTrustStoreInput.CaCertificatesBundleS3Bucket string
+V CreateTrustStoreInput.CaCertificatesBundleS3Key string
+V CreateTrustStoreInput.CaCertificatesBundleS3ObjectVersion string
+V CreateTrustStoreInput.Name string
+V DeleteAssociationSameAccountException.ErrorCodeOverride string
+V DeleteAssociationSameAccountException.Message string
+V DeleteListenerInput.ListenerArn string
+V DeleteLoadBalancerInput.LoadBalancerArn string
+V DeleteRuleInput.RuleArn string
+V DeleteSharedTrustStoreAssociationInput.ResourceArn string
+V DeleteSharedTrustStoreAssociationInput.TrustStoreArn string
+V DeleteTargetGroupInput.TargetGroupArn string
+V DeleteTrustStoreInput.TrustStoreArn string
+V DeregisterTargetsInput.TargetGroupArn string
+V DescribeAccountLimitsInput.Marker string
+V DescribeAccountLimitsInput.PageSize int32
+V DescribeAccountLimitsOutput.NextMarker string
+V DescribeCapacityReservationInput.LoadBalancerArn string
+V DescribeCapacityReservationOutput.DecreaseRequestsRemaining int32
+V DescribeListenerAttributesInput.ListenerArn string
+V DescribeListenerCertificatesInput.ListenerArn string
+V DescribeListenerCertificatesInput.Marker string
+V DescribeListenerCertificatesInput.PageSize int32
+V DescribeListenerCertificatesOutput.NextMarker string
+V DescribeListenersInput.LoadBalancerArn string
+V DescribeListenersInput.Marker string
+V DescribeListenersInput.PageSize int32
+V DescribeListenersOutput.NextMarker string
+V DescribeLoadBalancerAttributesInput.LoadBalancerArn string
+V DescribeLoadBalancersInput.Marker string
+V DescribeLoadBalancersInput.PageSize int32
+V DescribeLoadBalancersOutput.NextMarker string
+V DescribeRulesInput.ListenerArn string
+V DescribeRulesInput.Marker string
+V DescribeRulesInput.PageSize int32
+V DescribeRulesOutput.NextMarker string
+V DescribeSSLPoliciesInput.Marker string
+V DescribeSSLPoliciesInput.PageSize int32
+V DescribeSSLPoliciesOutput.NextMarker string
+V DescribeTargetGroupAttributesInput.TargetGroupArn string
+V DescribeTargetGroupsInput.LoadBalancerArn string
+V DescribeTargetGroupsInput.Marker string
+V DescribeTargetGroupsInput.PageSize int32
+V DescribeTargetGroupsOutput.NextMarker string
+V DescribeTargetHealthInput.TargetGroupArn string
+V DescribeTrustStoreAssociationsInput.Marker string
+V DescribeTrustStoreAssociationsInput.PageSize int32
+V DescribeTrustStoreAssociationsInput.TrustStoreArn string
+V DescribeTrustStoreAssociationsOutput.NextMarker string
+V DescribeTrustStoreRevocation.NumberOfRevokedEntries int64
+V DescribeTrustStoreRevocation.RevocationId int64
+V DescribeTrustStoreRevocation.TrustStoreArn string
+V DescribeTrustStoreRevocationsInput.Marker string
+V DescribeTrustStoreRevocationsInput.PageSize int32
+V DescribeTrustStoreRevocationsInput.TrustStoreArn string
+V DescribeTrustStoreRevocationsOutput.NextMarker string
+V DescribeTrustStoresInput.Marker string
+V DescribeTrustStoresInput.PageSize int32
+V DescribeTrustStoresOutput.NextMarker string
+V DuplicateListenerException.ErrorCodeOverride string
+V DuplicateListenerException.Message string
+V DuplicateLoadBalancerNameException.ErrorCodeOverride string
+V DuplicateLoadBalancerNameException.Message string
+V DuplicateTagKeysException.ErrorCodeOverride string
+V DuplicateTagKeysException.Message string
+V DuplicateTargetGroupNameException.ErrorCodeOverride string
+V DuplicateTargetGroupNameException.Message string
+V DuplicateTrustStoreNameException.ErrorCodeOverride string
+V DuplicateTrustStoreNameException.Message string
+V EndpointParameters.Endpoint string
+V EndpointParameters.Region string
+V EndpointParameters.UseDualStack bool
+V EndpointParameters.UseFIPS bool
+V FixedResponseActionConfig.ContentType string
+V FixedResponseActionConfig.MessageBody string
+V FixedResponseActionConfig.StatusCode string
+V GetResourcePolicyInput.ResourceArn string
+V GetResourcePolicyOutput.Policy string
+V GetTrustStoreCaCertificatesBundleInput.TrustStoreArn string
+V GetTrustStoreCaCertificatesBundleOutput.Location string
+V GetTrustStoreRevocationContentInput.RevocationId int64
+V GetTrustStoreRevocationContentInput.TrustStoreArn string
+V GetTrustStoreRevocationContentOutput.Location string
+V HealthUnavailableException.ErrorCodeOverride string
+V HealthUnavailableException.Message string
+V HttpHeaderConditionConfig.HttpHeaderName string
+V IncompatibleProtocolsException.ErrorCodeOverride string
+V IncompatibleProtocolsException.Message string
+V InsufficientCapacityException.ErrorCodeOverride string
+V InsufficientCapacityException.Message string
+V InvalidCaCertificatesBundleException.ErrorCodeOverride string
+V InvalidCaCertificatesBundleException.Message string
+V InvalidConfigurationRequestException.ErrorCodeOverride string
+V InvalidConfigurationRequestException.Message string
+V InvalidLoadBalancerActionException.ErrorCodeOverride string
+V InvalidLoadBalancerActionException.Message string
+V InvalidRevocationContentException.ErrorCodeOverride string
+V InvalidRevocationContentException.Message string
+V InvalidSchemeException.ErrorCodeOverride string
+V InvalidSchemeException.Message string
+V InvalidSecurityGroupException.ErrorCodeOverride string
+V InvalidSecurityGroupException.Message string
+V InvalidSubnetException.ErrorCodeOverride string
+V InvalidSubnetException.Message string
+V InvalidTargetException.ErrorCodeOverride string
+V InvalidTargetException.Message string
+V IpamPools.Ipv4IpamPoolId string
+V JwtValidationActionAdditionalClaim.Name string
+V JwtValidationActionConfig.Issuer string
+V JwtValidationActionConfig.JwksEndpoint string
+V Limit.Max string
+V Limit.Name string
+V Listener.ListenerArn string
+V Listener.LoadBalancerArn string
+V Listener.Port int32
+V Listener.SslPolicy string
+V ListenerAttribute.Key string
+V ListenerAttribute.Value string
+V ListenerNotFoundException.ErrorCodeOverride string
+V ListenerNotFoundException.Message string
+V LoadBalancer.CanonicalHostedZoneId string
+V LoadBalancer.CustomerOwnedIpv4Pool string
+V LoadBalancer.DNSName string
+V LoadBalancer.EnforceSecurityGroupInboundRulesOnPrivateLinkTraffic string
+V LoadBalancer.LoadBalancerArn string
+V LoadBalancer.LoadBalancerName string
+V LoadBalancer.VpcId string
+V LoadBalancerAddress.AllocationId string
+V LoadBalancerAddress.IPv6Address string
+V LoadBalancerAddress.IpAddress string
+V LoadBalancerAddress.PrivateIPv4Address string
+V LoadBalancerAttribute.Key string
+V LoadBalancerAttribute.Value string
+V LoadBalancerNotFoundException.ErrorCodeOverride string
+V LoadBalancerNotFoundException.Message string
+V LoadBalancerState.Reason string
+V Matcher.GrpcCode string
+V Matcher.HttpCode string
+V MinimumLoadBalancerCapacity.CapacityUnits int32
+V ModifyCapacityReservationInput.LoadBalancerArn string
+V ModifyCapacityReservationInput.ResetCapacityReservation bool
+V ModifyCapacityReservationOutput.DecreaseRequestsRemaining int32
+V ModifyIpPoolsInput.LoadBalancerArn string
+V ModifyListenerAttributesInput.ListenerArn string
+V ModifyListenerInput.ListenerArn string
+V ModifyListenerInput.Port int32
+V ModifyListenerInput.SslPolicy string
+V ModifyLoadBalancerAttributesInput.LoadBalancerArn string
+V ModifyRuleInput.ResetTransforms bool
+V ModifyRuleInput.RuleArn string
+V ModifyTargetGroupAttributesInput.TargetGroupArn string
+V ModifyTargetGroupInput.HealthCheckEnabled bool
+V ModifyTargetGroupInput.HealthCheckIntervalSeconds int32
+V ModifyTargetGroupInput.HealthCheckPath string
+V ModifyTargetGroupInput.HealthCheckPort string
+V ModifyTargetGroupInput.HealthCheckTimeoutSeconds int32
+V ModifyTargetGroupInput.HealthyThresholdCount int32
+V ModifyTargetGroupInput.TargetGroupArn string
+V ModifyTargetGroupInput.UnhealthyThresholdCount int32
+V ModifyTrustStoreInput.CaCertificatesBundleS3Bucket string
+V ModifyTrustStoreInput.CaCertificatesBundleS3Key string
+V ModifyTrustStoreInput.CaCertificatesBundleS3ObjectVersion string
+V ModifyTrustStoreInput.TrustStoreArn string
+V MutualAuthenticationAttributes.IgnoreClientCertificateExpiry bool
+V MutualAuthenticationAttributes.Mode string
+V MutualAuthenticationAttributes.TrustStoreArn string
+V OperationNotPermittedException.ErrorCodeOverride string
+V OperationNotPermittedException.Message string
+V Options.BaseEndpoint string
+V PriorRequestNotCompleteException.ErrorCodeOverride string
+V PriorRequestNotCompleteException.Message string
+V PriorityInUseException.ErrorCodeOverride string
+V PriorityInUseException.Message string
+V QueryStringKeyValuePair.Key string
+V QueryStringKeyValuePair.Value string
+V RedirectActionConfig.Host string
+V RedirectActionConfig.Path string
+V RedirectActionConfig.Port string
+V RedirectActionConfig.Protocol string
+V RedirectActionConfig.Query string
+V RegisterTargetsInput.TargetGroupArn string
+V RemoveListenerCertificatesInput.ListenerArn string
+V RemoveTrustStoreRevocationsInput.TrustStoreArn string
+V ResourceInUseException.ErrorCodeOverride string
+V ResourceInUseException.Message string
+V ResourceNotFoundException.ErrorCodeOverride string
+V ResourceNotFoundException.Message string
+V RevocationContent.S3Bucket string
+V RevocationContent.S3Key string
+V RevocationContent.S3ObjectVersion string
+V RevocationContentNotFoundException.ErrorCodeOverride string
+V RevocationContentNotFoundException.Message string
+V RevocationIdNotFoundException.ErrorCodeOverride string
+V RevocationIdNotFoundException.Message string
+V RewriteConfig.Regex string
+V RewriteConfig.Replace string
+V Rule.IsDefault bool
+V Rule.Priority string
+V Rule.RuleArn string
+V RuleCondition.Field string
+V RuleNotFoundException.ErrorCodeOverride string
+V RuleNotFoundException.Message string
+V RulePriorityPair.Priority int32
+V RulePriorityPair.RuleArn string
+V SSLPolicyNotFoundException.ErrorCodeOverride string
+V SSLPolicyNotFoundException.Message string
+V SetIpAddressTypeInput.LoadBalancerArn string
+V SetSecurityGroupsInput.LoadBalancerArn string
+V SetSubnetsInput.LoadBalancerArn string
+V SslPolicy.Name string
+V SubnetMapping.AllocationId string
+V SubnetMapping.IPv6Address string
+V SubnetMapping.PrivateIPv4Address string
+V SubnetMapping.SourceNatIpv6Prefix string
+V SubnetMapping.SubnetId string
+V SubnetNotFoundException.ErrorCodeOverride string
+V SubnetNotFoundException.Message string
+V Tag.Key string
+V Tag.Value string
+V TagDescription.ResourceArn string
+V TargetDescription.AvailabilityZone string
+V TargetDescription.Id string
+V TargetDescription.Port int32
+V TargetDescription.QuicServerId string
+V TargetGroup.HealthCheckEnabled bool
+V TargetGroup.HealthCheckIntervalSeconds int32
+V TargetGroup.HealthCheckPath string
+V TargetGroup.HealthCheckPort string
+V TargetGroup.HealthCheckTimeoutSeconds int32
+V TargetGroup.HealthyThresholdCount int32
+V TargetGroup.Port int32
+V TargetGroup.ProtocolVersion string
+V TargetGroup.TargetControlPort int32
+V TargetGroup.TargetGroupArn string
+V TargetGroup.TargetGroupName string
+V TargetGroup.UnhealthyThresholdCount int32
+V TargetGroup.VpcId string
+V TargetGroupAssociationLimitException.ErrorCodeOverride string
+V TargetGroupAssociationLimitException.Message string
+V TargetGroupAttribute.Key string
+V TargetGroupAttribute.Value string
+V TargetGroupNotFoundException.ErrorCodeOverride string
+V TargetGroupNotFoundException.Message string
+V TargetGroupStickinessConfig.DurationSeconds int32
+V TargetGroupStickinessConfig.Enabled bool
+V TargetGroupTuple.TargetGroupArn string
+V TargetGroupTuple.Weight int32
+V TargetHealth.Description string
+V TargetHealthDescription.HealthCheckPort string
+V TooManyActionsException.ErrorCodeOverride string
+V TooManyActionsException.Message string
+V TooManyCertificatesException.ErrorCodeOverride string
+V TooManyCertificatesException.Message string
+V TooManyListenersException.ErrorCodeOverride string
+V TooManyListenersException.Message string
+V TooManyLoadBalancersException.ErrorCodeOverride string
+V TooManyLoadBalancersException.Message string
+V TooManyRegistrationsForTargetIdException.ErrorCodeOverride string
+V TooManyRegistrationsForTargetIdException.Message string
+V TooManyRulesException.ErrorCodeOverride string
+V TooManyRulesException.Message string
+V TooManyTagsException.ErrorCodeOverride string
+V TooManyTagsException.Message string
+V TooManyTargetGroupsException.ErrorCodeOverride string
+V TooManyTargetGroupsException.Message string
+V TooManyTargetsException.ErrorCodeOverride string
+V TooManyTargetsException.Message string
+V TooManyTrustStoreRevocationEntriesException.ErrorCodeOverride string
+V TooManyTrustStoreRevocationEntriesException.Message string
+V TooManyTrustStoresException.ErrorCodeOverride string
+V TooManyTrustStoresException.Message string
+V TooManyUniqueTargetGroupsPerLoadBalancerException.ErrorCodeOverride string
+V TooManyUniqueTargetGroupsPerLoadBalancerException.Message string
+V TrustStore.Name string
+V TrustStore.NumberOfCaCertificates int32
+V TrustStore.TotalRevokedEntries int64
+V TrustStore.TrustStoreArn string
+V TrustStoreAssociation.ResourceArn string
+V TrustStoreAssociationNotFoundException.ErrorCodeOverride string
+V TrustStoreAssociationNotFoundException.Message string
+V TrustStoreInUseException.ErrorCodeOverride string
+V TrustStoreInUseException.Message string
+V TrustStoreNotFoundException.ErrorCodeOverride string
+V TrustStoreNotFoundException.Message string
+V TrustStoreNotReadyException.ErrorCodeOverride string
+V TrustStoreNotReadyException.Message string
+V TrustStoreRevocation.NumberOfRevokedEntries int64
+V TrustStoreRevocation.RevocationId int64
+V TrustStoreRevocation.TrustStoreArn string
+V UnsupportedProtocolException.ErrorCodeOverride string
+V UnsupportedProtocolException.Message string
+V ZonalCapacityReservationState.AvailabilityZone string
+V ZonalCapacityReservationState.EffectiveCapacityUnits float64
+Q AuthenticateCognitoActionConfig.AuthenticationRequestExtraParams
+Q AuthenticateOidcActionConfig.AuthenticationRequestExtraParams
+L AddListenerCertificatesInput.Certificates Certificate
+L AddListenerCertificatesOutput.Certificates Certificate
+L AddTagsInput.ResourceArns -
+L AddTagsInput.Tags Tag
+L AddTrustStoreRevocationsInput.RevocationContents RevocationContent
+L AddTrustStoreRevocationsOutput.TrustStoreRevocations TrustStoreRevocation
+L AvailabilityZone.LoadBalancerAddresses LoadBalancerAddress
+L CreateListenerInput.AlpnPolicy -
+L CreateListenerInput.Certificates Certificate
+L CreateListenerInput.DefaultActions Action
+L CreateListenerInput.Tags Tag
+L CreateListenerOutput.Listeners Listener
+L CreateLoadBalancerInput.SecurityGroups -
+L CreateLoadBalancerInput.SubnetMappings SubnetMapping
+L CreateLoadBalancerInput.Subnets -
+L CreateLoadBalancerInput.Tags Tag
+L CreateLoadBalancerOutput.LoadBalancers LoadBalancer
+L CreateRuleInput.Actions Action
+L CreateRuleInput.Conditions RuleCondition
+L CreateRuleInput.Tags Tag
+L CreateRuleOutput.Rules Rule
+L CreateTargetGroupInput.Tags Tag
+L CreateTargetGroupOutput.TargetGroups TargetGroup
+L CreateTrustStoreInput.Tags Tag
+L CreateTrustStoreOutput.TrustStores TrustStore
+L DeregisterTargetsInput.Targets TargetDescription
+L DescribeAccountLimitsOutput.Limits Limit
+L DescribeListenerCertificatesOutput.Certificates Certificate
+L DescribeListenersInput.ListenerArns -
+L DescribeListenersOutput.Listeners Listener
+L DescribeLoadBalancerAttributesOutput.Attributes LoadBalancerAttribute
+L DescribeLoadBalancersInput.LoadBalancerArns -
+L DescribeLoadBalancersInput.Names -
+L DescribeLoadBalancersOutput.LoadBalancers LoadBalancer
+L DescribeRulesInput.RuleArns -
+L DescribeRulesOutput.Rules Rule
+L DescribeSSLPoliciesInput.Names -
+L DescribeSSLPoliciesOutput.SslPolicies SslPolicy
+L DescribeTagsInput.ResourceArns -
+L DescribeTagsOutput.TagDescriptions TagDescription
+L DescribeTargetGroupAttributesOutput.Attributes TargetGroupAttribute
+L DescribeTargetGroupsInput.Names -
+L DescribeTargetGroupsInput.TargetGroupArns -
+L DescribeTargetGroupsOutput.TargetGroups TargetGroup
+L DescribeTargetHealthInput.Include DescribeTargetHealthInputIncludeEnum
+L DescribeTargetHealthInput.Targets TargetDescription
+L DescribeTargetHealthOutput.TargetHealthDescriptions TargetHealthDescription
+L DescribeTrustStoreAssociationsOutput.TrustStoreAssociations TrustStoreAssociation
+L DescribeTrustStoreRevocationsInput.RevocationIds -
+L DescribeTrustStoreRevocationsOutput.TrustStoreRevocations DescribeTrustStoreRevocation
+L DescribeTrustStoresInput.Names -
+L DescribeTrustStoresInput.TrustStoreArns -
+L DescribeTrustStoresOutput.TrustStores TrustStore
+L ForwardActionConfig.TargetGroups TargetGroupTuple
+L HostHeaderConditionConfig.Values -
+L HttpHeaderConditionConfig.Values -
+L HttpRequestMethodConditionConfig.Values -
+L Listener.AlpnPolicy -
+L Listener.Certificates Certificate
+L Listener.DefaultActions Action
+L LoadBalancer.AvailabilityZones AvailabilityZone
+L LoadBalancer.SecurityGroups -
+L ModifyListenerInput.AlpnPolicy -
+L ModifyListenerInput.Certificates Certificate
+L ModifyListenerInput.DefaultActions Action
+L ModifyListenerOutput.Listeners Listener
+L ModifyLoadBalancerAttributesInput.Attributes LoadBalancerAttribute
+L ModifyLoadBalancerAttributesOutput.Attributes LoadBalancerAttribute
+L ModifyRuleInput.Actions Action
+L ModifyRuleInput.Conditions RuleCondition
+L ModifyRuleOutput.Rules Rule
+L ModifyTargetGroupAttributesInput.Attributes TargetGroupAttribute
+L ModifyTargetGroupAttributesOutput.Attributes TargetGroupAttribute
+L ModifyTargetGroupOutput.TargetGroups TargetGroup
+L ModifyTrustStoreOutput.TrustStores TrustStore
+L PathPatternConditionConfig.Values -
+L QueryStringConditionConfig.Values QueryStringKeyValuePair
+L RegisterTargetsInput.Targets TargetDescription
+L RemoveListenerCertificatesInput.Certificates Certificate
+L RemoveTagsInput.ResourceArns -
+L RemoveTagsInput.TagKeys -
+L RemoveTrustStoreRevocationsInput.RevocationIds -
+L Rule.Actions Action
+L Rule.Conditions RuleCondition
+L RuleCondition.Values -
+L SetRulePrioritiesInput.RulePriorities RulePriorityPair
+L SetRulePrioritiesOutput.Rules Rule
+L SetSecurityGroupsInput.SecurityGroups -
+L SetSecurityGroupsOutput.SecurityGroupIds -
+L SetSubnetsInput.SubnetMappings SubnetMapping
+L SetSubnetsInput.Subnets -
+L SetSubnetsOutput.AvailabilityZones AvailabilityZone
+L SourceIpConditionConfig.Values -
+L SslPolicy.Ciphers Cipher
+L SslPolicy.SslProtocols -
+L SslPolicy.SupportedLoadBalancerTypes -
+L TagDescription.Tags Tag
+L TargetGroup.LoadBalancerArns -
+F Action.Type ActionTypeEnum
+F AdministrativeOverride.Reason TargetAdministrativeOverrideReasonEnum
+F AdministrativeOverride.State TargetAdministrativeOverrideStateEnum
+F AnomalyDetection.MitigationInEffect MitigationInEffectEnum
+F AnomalyDetection.Result AnomalyResultEnum
+F AuthenticateCognitoActionConfig.OnUnauthenticatedRequest AuthenticateCognitoActionConditionalBehaviorEnum
+F AuthenticateOidcActionConfig.OnUnauthenticatedRequest AuthenticateOidcActionConditionalBehaviorEnum
+F CapacityReservationStatus.Code CapacityReservationStateEnum
+F CreateListenerInput.Protocol ProtocolEnum
+F CreateLoadBalancerInput.EnablePrefixForIpv6SourceNat EnablePrefixForIpv6SourceNatEnum
+F CreateLoadBalancerInput.IpAddressType IpAddressType
+F CreateLoadBalancerInput.Scheme LoadBalancerSchemeEnum
+F CreateLoadBalancerInput.Type LoadBalancerTypeEnum
+F CreateTargetGroupInput.HealthCheckProtocol ProtocolEnum
+F CreateTargetGroupInput.IpAddressType TargetGroupIpAddressTypeEnum
+F CreateTargetGroupInput.Protocol ProtocolEnum
+F CreateTargetGroupInput.TargetType TargetTypeEnum
+F DescribeSSLPoliciesInput.LoadBalancerType LoadBalancerTypeEnum
+F DescribeTargetHealthInput.Include DescribeTargetHealthInputIncludeEnum
+F DescribeTrustStoreRevocation.RevocationType RevocationType
+F JwtValidationActionAdditionalClaim.Format JwtValidationActionAdditionalClaimFormatEnum
+F Listener.Protocol ProtocolEnum
+F LoadBalancer.EnablePrefixForIpv6SourceNat EnablePrefixForIpv6SourceNatEnum
+F LoadBalancer.IpAddressType IpAddressType
+F LoadBalancer.Scheme LoadBalancerSchemeEnum
+F LoadBalancer.Type LoadBalancerTypeEnum
+F LoadBalancerState.Code LoadBalancerStateEnum
+F ModifyIpPoolsInput.RemoveIpamPools RemoveIpamPoolEnum
+F ModifyListenerInput.Protocol ProtocolEnum
+F ModifyTargetGroupInput.HealthCheckProtocol ProtocolEnum
+F MutualAuthenticationAttributes.AdvertiseTrustStoreCaNames AdvertiseTrustStoreCaNamesEnum
+F MutualAuthenticationAttributes.TrustStoreAssociationStatus TrustStoreAssociationStatusEnum
+F RedirectActionConfig.StatusCode RedirectActionStatusCodeEnum
+F RevocationContent.RevocationType RevocationType
+F RuleTransform.Type TransformTypeEnum
+F SetIpAddressTypeInput.IpAddressType IpAddressType
+F SetIpAddressTypeOutput.IpAddressType IpAddressType
+F SetSecurityGroupsInput.EnforceSecurityGroupInboundRulesOnPrivateLinkTraffic EnforceSecurityGroupInboundRulesOnPrivateLinkTrafficEnum
+F SetSecurityGroupsOutput.EnforceSecurityGroupInboundRulesOnPrivateLinkTraffic EnforceSecurityGroupInboundRulesOnPrivateLinkTrafficEnum
+F SetSubnetsInput.EnablePrefixForIpv6SourceNat EnablePrefixForIpv6SourceNatEnum
+F SetSubnetsInput.IpAddressType IpAddressType
+F SetSubnetsOutput.EnablePrefixForIpv6SourceNat EnablePrefixForIpv6SourceNatEnum
+F SetSubnetsOutput.IpAddressType IpAddressType
+F SourceIpConditionConfig.IpAddressType SourceIpAddressTypeEnum
+F TargetGroup.HealthCheckProtocol ProtocolEnum
+F TargetGroup.IpAddressType TargetGroupIpAddressTypeEnum
+F TargetGroup.Protocol ProtocolEnum
+F TargetGroup.TargetType TargetTypeEnum
+F TargetHealth.Reason TargetHealthReasonEnum
+F TargetHealth.State TargetHealthStateEnum
+F TrustStore.Status TrustStoreStatus
+F TrustStoreRevocation.RevocationType RevocationType
+N APIOptions
+N Actions
+N AdditionalClaims
+N AdministrativeOverride
+N AllocationId
+N AlpnPolicy
+N AnomalyDetection
+N AppID
+N Attributes
+N AuthSchemePreference
+N AuthSchemeResolver
+N AuthSchemes
+N AuthenticateCognitoConfig
+N AuthenticateOidcConfig
+N AuthenticationRequestExtraParams
+N AuthorizationEndpoint
+N AvailabilityZone
+N AvailabilityZones
+N BaseEndpoint
+N CaCertificatesBundleS3Bucket
+N CaCertificatesBundleS3Key
+N CaCertificatesBundleS3ObjectVersion
+N CanonicalHostedZoneId
+N CapacityReservationState
+N CapacityUnits
+N CertificateArn
+N Certificates
+N Ciphers
+N ClientId
+N ClientLogMode
+N ClientOptions
+N ClientSecret
+N Conditions
+N ContentType
+N CreatedTime
+N Credentials
+N CustomerOwnedIpv4Pool
+N DNSName
+N DecreaseRequestsRemaining
+N DefaultActions
+N DefaultsMode
+N Description
+N DisableClockSkewCorrection
+N DisableHTTPS
+N DurationSeconds
+N EffectiveCapacityUnits
+N Enabled
+N Endpoint
+N EndpointOptions
+N EndpointResolver
+N EndpointResolverV2
+N EnforceSecurityGroupInboundRulesOnPrivateLinkTraffic
+N ErrorCodeOverride
+N Field
+N FixedResponseConfig
+N ForwardConfig
+N GrpcCode
+N HTTPClient
+N HTTPSignerV4
+N HealthCheckEnabled
+N HealthCheckIntervalSeconds
+N HealthCheckPath
+N HealthCheckPort
+N HealthCheckTimeoutSeconds
+N HealthyThresholdCount
+N Host
+N HostHeaderConfig
+N HostHeaderRewriteConfig
+N HttpCode
+N HttpHeaderConfig
+N HttpHeaderName
+N HttpRequestMethodConfig
+N IPv6Address
+N Id
+N IgnoreClientCertificateExpiry
+N Interceptors
+N IpAddress
+N IpamPools
+N Ipv4IpamPoolId
+N IsDefault
+N Issuer
+N JwksEndpoint
+N JwtValidationConfig
+N Key
+N LastModifiedTime
+N Limit
+N Limits
+N ListenerArn
+N ListenerArns
+N Listeners
+N LoadBalancerAddresses
+N LoadBalancerArn
+N LoadBalancerArns
+N LoadBalancerName
+N LoadBalancers
+N Location
+N LogDeprecated
+N LogWaitAttempts
+N Logger
+N Marker
+N Matcher
+N Max
+N MaxDelay
+N Message
+N MessageBody
+N MeterProvider
+N MinDelay
+N MinimumLoadBalancerCapacity
+N Mode
+N MutualAuthentication
+N Name
+N Names
+N NextMarker
+N NumberOfCaCertificates
+N NumberOfRevokedEntries
+N Operation
+N Options
+N Order
+N OutpostId
+N PageSize
+N Path
+N PathPatternConfig
+N Policy
+N Port
+N Priority
+N PrivateIPv4Address
+N Protocol
+N ProtocolVersion
+N Query
+N QueryStringConfig
+N QuicServerId
+N Reason
+N RedirectConfig
+N Regex
+N RegexValues
+N Region
+N Replace
+N ResetCapacityReservation
+N ResetTransforms
+N ResolvedRegion
+N Resolver
+N ResourceArn
+N ResourceArns
+N ResultMetadata
+N RetryMaxAttempts
+N RetryMode
+N Retryable
+N Retryer
+N RevocationContents
+N RevocationId
+N RevocationIds
+N Rewrites
+N RuleArn
+N RuleArns
+N RulePriorities
+N Rules
+N RuntimeEnvironment
+N S3Bucket
+N S3Key
+N S3ObjectVersion
+N Scope
+N SecurityGroupIds
+N SecurityGroups
+N SessionCookieName
+N SessionTimeout
+N SourceIpConfig
+N SourceNatIpv6Prefix
+N SourceNatIpv6Prefixes
+N SslPolicies
+N SslPolicy
+N SslProtocols
+N State
+N StatusCode
+N StopOnDuplicateToken
+N SubnetId
+N SubnetMappings
+N Subnets
+N SupportedLoadBalancerTypes
+N TagDescriptions
+N TagKeys
+N Tags
+N Target
+N TargetControlPort
+N TargetGroupArn
+N TargetGroupArns
+N TargetGroupName
+N TargetGroupStickinessConfig
+N TargetGroups
+N TargetHealth
+N TargetHealthDescriptions
+N Targets
+N TokenEndpoint
+N TotalRevokedEntries
+N TracerProvider
+N Transforms
+N TrustStoreArn
+N TrustStoreArns
+N TrustStoreAssociations
+N TrustStoreRevocations
+N TrustStores
+N UnhealthyThresholdCount
+N UrlRewriteConfig
+N UseDualStack
+N UseDualStackEndpoint
+N UseExistingClientSecret
+N UseFIPS
+N UseFIPSEndpoint
+N UserInfoEndpoint
+N UserPoolArn
+N UserPoolClientId
+N UserPoolDomain
+N Value
+N Values
+N VpcId
+N Weight
+N ZoneName
+T ALPNPolicyNotSupportedException
+T Action
+T ActionTypeEnum
+T AdministrativeOverride
+T AdvertiseTrustStoreCaNamesEnum
+T AllocationIdNotFoundException
+T AnomalyDetection
+T AnomalyResultEnum
+T AuthenticateCognitoActionConditionalBehaviorEnum
+T AuthenticateCognitoActionConfig
+T AuthenticateOidcActionConditionalBehaviorEnum
+T AuthenticateOidcActionConfig
+T AvailabilityZone
+T AvailabilityZoneNotSupportedException
+T CaCertificatesBundleNotFoundException
+T CapacityDecreaseRequestsLimitExceededException
+T CapacityReservationPendingException
+T CapacityReservationStateEnum
+T CapacityReservationStatus
+T CapacityUnitsLimitExceededException
+T Certificate
+T CertificateNotFoundException
+T Cipher
+T DeleteAssociationSameAccountException
+T DescribeTargetHealthInputIncludeEnum
+T DescribeTrustStoreRevocation
+T DuplicateListenerException
+T DuplicateLoadBalancerNameException
+T DuplicateTagKeysException
+T DuplicateTargetGroupNameException
+T DuplicateTrustStoreNameException
+T EnablePrefixForIpv6SourceNatEnum
+T EnforceSecurityGroupInboundRulesOnPrivateLinkTrafficEnum
+T FixedResponseActionConfig
+T ForwardActionConfig
+T HealthUnavailableException
+T HostHeaderConditionConfig
+T HostHeaderRewriteConfig
+T HttpHeaderConditionConfig
+T HttpRequestMethodConditionConfig
+T IncompatibleProtocolsException
+T InsufficientCapacityException
+T InvalidCaCertificatesBundleException
+T InvalidConfigurationRequestException
+T InvalidLoadBalancerActionException
+T InvalidRevocationContentException
+T InvalidSchemeException
+T InvalidSecurityGroupException
+T InvalidSubnetException
+T InvalidTargetException
+T IpAddressType
+T IpamPools
+T JwtValidationActionAdditionalClaim
+T JwtValidationActionAdditionalClaimFormatEnum
+T JwtValidationActionConfig
+T Limit
+T Listener
+T ListenerAttribute
+T ListenerNotFoundException
+T LoadBalancer
+T LoadBalancerAddress
+T LoadBalancerAttribute
+T LoadBalancerNotFoundException
+T LoadBalancerSchemeEnum
+T LoadBalancerState
+T LoadBalancerStateEnum
+T LoadBalancerTypeEnum
+T Matcher
+T MinimumLoadBalancerCapacity
+T MitigationInEffectEnum
+T MutualAuthenticationAttributes
+T OperationNotPermittedException
+T PathPatternConditionConfig
+T PriorRequestNotCompleteException
+T PriorityInUseException
+T ProtocolEnum
+T QueryStringConditionConfig
+T QueryStringKeyValuePair
+T RedirectActionConfig
+T RedirectActionStatusCodeEnum
+T RemoveIpamPoolEnum
+T ResourceInUseException
+T ResourceNotFoundException
+T RevocationContent
+T RevocationContentNotFoundException
+T RevocationIdNotFoundException
+T RevocationType
+T RewriteConfig
+T Rule
+T RuleCondition
+T RuleNotFoundException
+T RulePriorityPair
+T RuleTransform
+T SSLPolicyNotFoundException
+T SourceIpAddressTypeEnum
+T SourceIpConditionConfig
+T SslPolicy
+T SubnetMapping
+T SubnetNotFoundException
+T Tag
+T TagDescription
+T TargetAdministrativeOverrideReasonEnum
+T TargetAdministrativeOverrideStateEnum
+T TargetDescription
+T TargetGroup
+T TargetGroupAssociationLimitException
+T TargetGroupAttribute
+T TargetGroupIpAddressTypeEnum
+T TargetGroupNotFoundException
+T TargetGroupStickinessConfig
+T TargetGroupTuple
+T TargetHealth
+T TargetHealthDescription
+T TargetHealthReasonEnum
+T TargetHealthStateEnum
+T TargetTypeEnum
+T TooManyActionsException
+T TooManyCertificatesException
+T TooManyListenersException
+T TooManyLoadBalancersException
+T TooManyRegistrationsForTargetIdException
+T TooManyRulesException
+T TooManyTagsException
+T TooManyTargetGroupsException
+T TooManyTargetsException
+T TooManyTrustStoreRevocationEntriesException
+T TooManyTrustStoresException
+T TooManyUniqueTargetGroupsPerLoadBalancerException
+T TransformTypeEnum
+T TrustStore
+T TrustStoreAssociation
+T TrustStoreAssociationNotFoundException
+T TrustStoreAssociationStatusEnum
+T TrustStoreInUseException
+T TrustStoreNotFoundException
+T TrustStoreNotReadyException
+T TrustStoreRevocation
+T TrustStoreStatus
+T UnsupportedProtocolException
+T UrlRewriteConfig
+T ZonalCapacityReservationState
+E ActionTypeEnumAuthenticateCognito ActionTypeEnum
+E ActionTypeEnumAuthenticateOidc ActionTypeEnum
+E ActionTypeEnumFixedResponse ActionTypeEnum
+E ActionTypeEnumForward ActionTypeEnum
+E ActionTypeEnumJwtValidation ActionTypeEnum
+E ActionTypeEnumRedirect ActionTypeEnum
+E AdvertiseTrustStoreCaNamesEnumOff AdvertiseTrustStoreCaNamesEnum
+E AdvertiseTrustStoreCaNamesEnumOn AdvertiseTrustStoreCaNamesEnum
+E AnomalyResultEnumAnomalous AnomalyResultEnum
+E AnomalyResultEnumNormal AnomalyResultEnum
+E AuthenticateCognitoActionConditionalBehaviorEnumAllow AuthenticateCognitoActionConditionalBehaviorEnum
+E AuthenticateCognitoActionConditionalBehaviorEnumAuthenticate AuthenticateCognitoActionConditionalBehaviorEnum
+E AuthenticateCognitoActionConditionalBehaviorEnumDeny AuthenticateCognitoActionConditionalBehaviorEnum
+E AuthenticateOidcActionConditionalBehaviorEnumAllow AuthenticateOidcActionConditionalBehaviorEnum
+E AuthenticateOidcActionConditionalBehaviorEnumAuthenticate AuthenticateOidcActionConditionalBehaviorEnum
+E AuthenticateOidcActionConditionalBehaviorEnumDeny AuthenticateOidcActionConditionalBehaviorEnum
+E CapacityReservationStateEnumFailed CapacityReservationStateEnum
+E CapacityReservationStateEnumPending CapacityReservationStateEnum
+E CapacityReservationStateEnumProvisioned CapacityReservationStateEnum
+E CapacityReservationStateEnumRebalancing CapacityReservationStateEnum
+E DescribeTargetHealthInputIncludeEnumAll DescribeTargetHealthInputIncludeEnum
+E DescribeTargetHealthInputIncludeEnumAnomaly DescribeTargetHealthInputIncludeEnum
+E EnablePrefixForIpv6SourceNatEnumOff EnablePrefixForIpv6SourceNatEnum
+E EnablePrefixForIpv6SourceNatEnumOn EnablePrefixForIpv6SourceNatEnum
+E EnforceSecurityGroupInboundRulesOnPrivateLinkTrafficEnumOff EnforceSecurityGroupInboundRulesOnPrivateLinkTrafficEnum
+E EnforceSecurityGroupInboundRulesOnPrivateLinkTrafficEnumOn EnforceSecurityGroupInboundRulesOnPrivateLinkTrafficEnum
+E IpAddressTypeDualstack IpAddressType
+E IpAddressTypeDualstackWithoutPublicIpv4 IpAddressType
+E IpAddressTypeIpv4 IpAddressType
+E JwtValidationActionAdditionalClaimFormatEnumSingleString JwtValidationActionAdditionalClaimFormatEnum
+E JwtValidationActionAdditionalClaimFormatEnumSpaceSeparatedValues JwtValidationActionAdditionalClaimFormatEnum
+E JwtValidationActionAdditionalClaimFormatEnumStringArray JwtValidationActionAdditionalClaimFormatEnum
+E LoadBalancerSchemeEnumInternal LoadBalancerSchemeEnum
+E LoadBalancerSchemeEnumInternetFacing LoadBalancerSchemeEnum
+E LoadBalancerStateEnumActive LoadBalancerStateEnum
+E LoadBalancerStateEnumActiveImpaired LoadBalancerStateEnum
+E LoadBalancerStateEnumFailed LoadBalancerStateEnum
+E LoadBalancerStateEnumProvisioning LoadBalancerStateEnum
+E LoadBalancerTypeEnumApplication LoadBalancerTypeEnum
+E LoadBalancerTypeEnumGateway LoadBalancerTypeEnum
+E LoadBalancerTypeEnumNetwork LoadBalancerTypeEnum
+E MitigationInEffectEnumNo MitigationInEffectEnum
+E MitigationInEffectEnumYes MitigationInEffectEnum
+E ProtocolEnumGeneve ProtocolEnum
+E ProtocolEnumHttp ProtocolEnum
+E ProtocolEnumHttps ProtocolEnum
+E ProtocolEnumQuic ProtocolEnum
+E ProtocolEnumTcp ProtocolEnum
+E ProtocolEnumTcpQuic ProtocolEnum
+E ProtocolEnumTcpUdp ProtocolEnum
+E ProtocolEnumTls ProtocolEnum
+E ProtocolEnumUdp ProtocolEnum
+E RedirectActionStatusCodeEnumHttp301 RedirectActionStatusCodeEnum
+E RedirectActionStatusCodeEnumHttp302 RedirectActionStatusCodeEnum
+E RemoveIpamPoolEnumIpv4 RemoveIpamPoolEnum
+E RevocationTypeCrl RevocationType
+E SourceIpAddressTypeEnumIpv4 SourceIpAddressTypeEnum
+E SourceIpAddressTypeEnumIpv6 SourceIpAddressTypeEnum
+E TargetAdministrativeOverrideReasonEnumInternalError TargetAdministrativeOverrideReasonEnum
+E TargetAdministrativeOverrideReasonEnumNoOverrideEngaged TargetAdministrativeOverrideReasonEnum
+E TargetAdministrativeOverrideReasonEnumZonalShiftDelegatedToDns TargetAdministrativeOverrideReasonEnum
+E TargetAdministrativeOverrideReasonEnumZonalShiftEngaged TargetAdministrativeOverrideReasonEnum
+E TargetAdministrativeOverrideStateEnumNoOverride TargetAdministrativeOverrideStateEnum
+E TargetAdministrativeOverrideStateEnumUnknown TargetAdministrativeOverrideStateEnum
+E TargetAdministrativeOverrideStateEnumZonalShiftActive TargetAdministrativeOverrideStateEnum
+E TargetAdministrativeOverrideStateEnumZonalShiftDelegatedToDns TargetAdministrativeOverrideStateEnum
+E TargetGroupIpAddressTypeEnumIpv4 TargetGroupIpAddressTypeEnum
+E TargetGroupIpAddressTypeEnumIpv6 TargetGroupIpAddressTypeEnum
+E TargetHealthReasonEnumDeregistrationInProgress TargetHealthReasonEnum
+E TargetHealthReasonEnumFailedHealthChecks TargetHealthReasonEnum
+E TargetHealthReasonEnumHealthCheckDisabled TargetHealthReasonEnum
+E TargetHealthReasonEnumInitialHealthChecking TargetHealthReasonEnum
+E TargetHealthReasonEnumInternalError TargetHealthReasonEnum
+E TargetHealthReasonEnumInvalidState TargetHealthReasonEnum
+E TargetHealthReasonEnumIpUnusable TargetHealthReasonEnum
+E TargetHealthReasonEnumNotInUse TargetHealthReasonEnum
+E TargetHealthReasonEnumNotRegistered TargetHealthReasonEnum
+E TargetHealthReasonEnumRegistrationInProgress TargetHealthReasonEnum
+E TargetHealthReasonEnumResponseCodeMismatch TargetHealthReasonEnum
+E TargetHealthReasonEnumTimeout TargetHealthReasonEnum
+E TargetHealthStateEnumDraining TargetHealthStateEnum
+E TargetHealthStateEnumHealthy TargetHealthStateEnum
+E TargetHealthStateEnumInitial TargetHealthStateEnum
+E TargetHealthStateEnumUnavailable TargetHealthStateEnum
+E TargetHealthStateEnumUnhealthy TargetHealthStateEnum
+E TargetHealthStateEnumUnhealthyDraining TargetHealthStateEnum
+E TargetHealthStateEnumUnused TargetHealthStateEnum
+E TargetTypeEnumAlb TargetTypeEnum
+E TargetTypeEnumInstance TargetTypeEnum
+E TargetTypeEnumIp TargetTypeEnum
+E TargetTypeEnumLambda TargetTypeEnum
+E TransformTypeEnumHostHeaderRewrite TransformTypeEnum
+E TransformTypeEnumUrlRewrite TransformTypeEnum
+E TrustStoreAssociationStatusEnumActive TrustStoreAssociationStatusEnum
+E TrustStoreAssociationStatusEnumRemoved TrustStoreAssociationStatusEnum
+E TrustStoreStatusActive TrustStoreStatus
+E TrustStoreStatusCreating TrustStoreStatus
+Y LoadBalancerAvailable 15 40
+Y LoadBalancerExists 15 40
+Y LoadBalancersDeleted 15 40
+Y TargetDeregistered 15 40
+Y TargetInService 15 40
+K Action 001 Order min 1 ptr
+K Action 002 Type req empty
+K Action 003 AuthenticateCognitoConfig nest AuthenticateCognitoActionConfig
+K Action 004 AuthenticateOidcConfig nest AuthenticateOidcActionConfig
+K Action 005 FixedResponseConfig nest FixedResponseActionConfig
+K Action 006 RedirectConfig nest RedirectActionConfig
+K AddListenerCertificatesInput 001 Certificates req nil
+K AddListenerCertificatesInput 002 ListenerArn req nil
+K AddTagsInput 001 ResourceArns req nil
+K AddTagsInput 002 Tags req nil
+K AddTagsInput 003 Tags len 1 container
+K AddTagsInput 004 Tags each Tag slice
+K AddTrustStoreRevocationsInput 001 TrustStoreArn req nil
+K AuthenticateCognitoActionConfig 001 UserPoolArn req nil
+K AuthenticateCognitoActionConfig 002 UserPoolClientId req nil
+K AuthenticateCognitoActionConfig 003 UserPoolDomain req nil
+K AuthenticateOidcActionConfig 001 AuthorizationEndpoint req nil
+K AuthenticateOidcActionConfig 002 ClientId req nil
+K AuthenticateOidcActionConfig 003 Issuer req nil
+K AuthenticateOidcActionConfig 004 TokenEndpoint req nil
+K AuthenticateOidcActionConfig 005 UserInfoEndpoint req nil
+K CreateListenerInput 001 DefaultActions req nil
+K CreateListenerInput 002 LoadBalancerArn req nil
+K CreateListenerInput 003 Port min 1 ptr
+K CreateListenerInput 004 Tags len 1 container
+K CreateListenerInput 005 DefaultActions each Action slice
+K CreateListenerInput 006 Tags each Tag slice
+K CreateLoadBalancerInput 001 Name req nil
+K CreateLoadBalancerInput 002 Tags len 1 container
+K CreateLoadBalancerInput 003 Tags each Tag slice
+K CreateRuleInput 001 Actions req nil
+K CreateRuleInput 002 Conditions req nil
+K CreateRuleInput 003 ListenerArn req nil
+K CreateRuleInput 004 Priority req nil
+K CreateRuleInput 005 Priority min 1 ptr
+K CreateRuleInput 006 Tags len 1 container
+K CreateRuleInput 007 Actions each Action slice
+K CreateRuleInput 008 Tags each Tag slice
+K CreateTargetGroupInput 001 HealthCheckIntervalSeconds min 5 ptr
+K CreateTargetGroupInput 002 HealthCheckPath len 1 ptr
+K CreateTargetGroupInput 003 HealthCheckTimeoutSeconds min 2 ptr
+K CreateTargetGroupInput 004 HealthyThresholdCount min 2 ptr
+K CreateTargetGroupInput 005 Name req nil
+K CreateTargetGroupInput 006 Port min 1 ptr
+K CreateTargetGroupInput 007 Tags len 1 container
+K CreateTargetGroupInput 008 UnhealthyThresholdCount min 2 ptr
+K CreateTargetGroupInput 009 Tags each Tag slice
+K CreateTrustStoreInput 001 CaCertificatesBundleS3Bucket req nil
+K CreateTrustStoreInput 002 CaCertificatesBundleS3Key req nil
+K CreateTrustStoreInput 003 Name req nil
+K CreateTrustStoreInput 004 Name len 1 ptr
+K CreateTrustStoreInput 005 Tags len 1 container
+K CreateTrustStoreInput 006 Tags each Tag slice
+K DeleteListenerInput 001 ListenerArn req nil
+K DeleteLoadBalancerInput 001 LoadBalancerArn req nil
+K DeleteRuleInput 001 RuleArn req nil
+K DeleteSharedTrustStoreAssociationInput 001 ResourceArn req nil
+K DeleteSharedTrustStoreAssociationInput 002 TrustStoreArn req nil
+K DeleteTargetGroupInput 001 TargetGroupArn req nil
+K DeleteTrustStoreInput 001 TrustStoreArn req nil
+K DeregisterTargetsInput 001 TargetGroupArn req nil
+K DeregisterTargetsInput 002 Targets req nil
+K DeregisterTargetsInput 003 Targets each TargetDescription slice
+K DescribeAccountLimitsInput 001 PageSize min 1 ptr
+K DescribeListenerCertificatesInput 001 ListenerArn req nil
+K DescribeListenerCertificatesInput 002 PageSize min 1 ptr
+K DescribeListenersInput 001 PageSize min 1 ptr
+K DescribeLoadBalancerAttributesInput 001 LoadBalancerArn req nil
+K DescribeLoadBalancersInput 001 PageSize min 1 ptr
+K DescribeRulesInput 001 PageSize min 1 ptr
+K DescribeSSLPoliciesInput 001 PageSize min 1 ptr
+K DescribeTagsInput 001 ResourceArns req nil
+K DescribeTargetGroupAttributesInput 001 TargetGroupArn req nil
+K DescribeTargetGroupsInput 001 PageSize min 1 ptr
+K DescribeTargetHealthInput 001 TargetGroupArn req nil
+K DescribeTargetHealthInput 002 Targets each TargetDescription slice
+K DescribeTrustStoreAssociationsInput 001 PageSize min 1 ptr
+K DescribeTrustStoreAssociationsInput 002 TrustStoreArn req nil
+K DescribeTrustStoreRevocationsInput 001 PageSize min 1 ptr
+K DescribeTrustStoreRevocationsInput 002 TrustStoreArn req nil
+K DescribeTrustStoresInput 001 PageSize min 1 ptr
+K FixedResponseActionConfig 001 StatusCode req nil
+K GetResourcePolicyInput 001 ResourceArn req nil
+K GetTrustStoreCaCertificatesBundleInput 001 TrustStoreArn req nil
+K GetTrustStoreRevocationContentInput 001 RevocationId req nil
+K GetTrustStoreRevocationContentInput 002 TrustStoreArn req nil
+K ModifyListenerInput 001 ListenerArn req nil
+K ModifyListenerInput 002 Port min 1 ptr
+K ModifyListenerInput 003 DefaultActions each Action slice
+K ModifyLoadBalancerAttributesInput 001 Attributes req nil
+K ModifyLoadBalancerAttributesInput 002 LoadBalancerArn req nil
+K ModifyRuleInput 001 RuleArn req nil
+K ModifyRuleInput 002 Actions each Action slice
+K ModifyTargetGroupAttributesInput 001 Attributes req nil
+K ModifyTargetGroupAttributesInput 002 TargetGroupArn req nil
+K ModifyTargetGroupInput 001 HealthCheckIntervalSeconds min 5 ptr
+K ModifyTargetGroupInput 002 HealthCheckPath len 1 ptr
+K ModifyTargetGroupInput 003 HealthCheckTimeoutSeconds min 2 ptr
+K ModifyTargetGroupInput 004 HealthyThresholdCount min 2 ptr
+K ModifyTargetGroupInput 005 TargetGroupArn req nil
+K ModifyTargetGroupInput 006 UnhealthyThresholdCount min 2 ptr
+K ModifyTrustStoreInput 001 CaCertificatesBundleS3Bucket req nil
+K ModifyTrustStoreInput 002 CaCertificatesBundleS3Key req nil
+K ModifyTrustStoreInput 003 TrustStoreArn req nil
+K RedirectActionConfig 001 Host len 1 ptr
+K RedirectActionConfig 002 Path len 1 ptr
+K RedirectActionConfig 003 StatusCode req empty
+K RegisterTargetsInput 001 TargetGroupArn req nil
+K RegisterTargetsInput 002 Targets req nil
+K RegisterTargetsInput 003 Targets each TargetDescription slice
+K RemoveListenerCertificatesInput 001 Certificates req nil
+K RemoveListenerCertificatesInput 002 ListenerArn req nil
+K RemoveTagsInput 001 ResourceArns req nil
+K RemoveTagsInput 002 TagKeys req nil
+K RemoveTrustStoreRevocationsInput 001 RevocationIds req nil
+K RemoveTrustStoreRevocationsInput 002 TrustStoreArn req nil
+K RulePriorityPair 001 Priority min 1 ptr
+K SetIpAddressTypeInput 001 IpAddressType req empty
+K SetIpAddressTypeInput 002 LoadBalancerArn req nil
+K SetRulePrioritiesInput 001 RulePriorities req nil
+K SetRulePrioritiesInput 002 RulePriorities each RulePriorityPair slice
+K SetSecurityGroupsInput 001 LoadBalancerArn req nil
+K SetSecurityGroupsInput 002 SecurityGroups req nil
+K SetSubnetsInput 001 LoadBalancerArn req nil
+K Tag 001 Key req nil
+K Tag 002 Key len 1 ptr
+K TargetDescription 001 Id req nil
+K TargetDescription 002 Port min 1 ptr
+G DescribeAccountLimits Marker NextMarker
+G DescribeListenerCertificates Marker NextMarker
+G DescribeListeners Marker NextMarker
+G DescribeLoadBalancers Marker NextMarker
+G DescribeRules Marker NextMarker
+G DescribeTargetGroups Marker NextMarker
+G DescribeTrustStoreAssociations Marker NextMarker
+G DescribeTrustStoreRevocations Marker NextMarker
+G DescribeTrustStores Marker NextMarker

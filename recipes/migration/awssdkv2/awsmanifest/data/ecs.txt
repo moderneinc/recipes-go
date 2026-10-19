@@ -608,6 +608,7 @@ R Volume.EfsVolumeConfiguration EFSVolumeConfiguration
 R Volume.FsxWindowsFileServerVolumeConfiguration FSxWindowsFileServerVolumeConfiguration
 R Volume.Host HostVolumeProperties
 R Volume.S3filesVolumeConfiguration S3FilesVolumeConfiguration
+R VpcLatticeConfiguration.AdvancedConfiguration VpcLatticeAdvancedConfiguration
 V AcceleratorCountRequest.Max int32
 V AcceleratorCountRequest.Min int32
 V AcceleratorTotalMemoryMiBRequest.Max int32
@@ -1216,6 +1217,8 @@ V ServiceRevisionLoadBalancer.TargetGroupArn string
 V ServiceRevisionSummary.Arn string
 V ServiceRevisionSummary.RequestedProductionTrafficWeight float64
 V ServiceRevisionSummary.RequestedTestTrafficWeight float64
+V ServiceRevisionVpcLatticeConfiguration.ProductionListenerRule string
+V ServiceRevisionVpcLatticeConfiguration.TargetGroupArn string
 V ServiceVolumeConfiguration.Name string
 V Session.SessionId string
 V Session.StreamUrl string
@@ -1366,6 +1369,9 @@ V Volume.ConfiguredAtLaunch bool
 V Volume.Name string
 V VolumeFrom.ReadOnly bool
 V VolumeFrom.SourceContainer string
+V VpcLatticeAdvancedConfiguration.AlternateTargetGroupArn string
+V VpcLatticeAdvancedConfiguration.ProductionListenerRule string
+V VpcLatticeAdvancedConfiguration.TestListenerRule string
 V VpcLatticeConfiguration.PortName string
 V VpcLatticeConfiguration.RoleArn string
 V VpcLatticeConfiguration.TargetGroupArn string
@@ -2642,6 +2648,7 @@ T ServiceRevisionCleanup
 T ServiceRevisionLoadBalancer
 T ServiceRevisionOverrides
 T ServiceRevisionSummary
+T ServiceRevisionVpcLatticeConfiguration
 T ServiceVolumeConfiguration
 T Session
 T Setting
@@ -2690,6 +2697,7 @@ T VersionConsistency
 T VersionInfo
 T Volume
 T VolumeFrom
+T VpcLatticeAdvancedConfiguration
 T VpcLatticeConfiguration
 E AcceleratorManufacturerAmazonWebServices AcceleratorManufacturer
 E AcceleratorManufacturerAmd AcceleratorManufacturer
@@ -3045,3 +3053,230 @@ E UlimitNameSigpending UlimitName
 E UlimitNameStack UlimitName
 E VersionConsistencyDisabled VersionConsistency
 E VersionConsistencyEnabled VersionConsistency
+H Session.TokenValue
+Y ServicesInactive 15 40
+Y ServicesStable 15 40
+Y TasksRunning 6 100
+Y TasksStopped 6 100
+K AttachmentStateChange 001 AttachmentArn req nil
+K AttachmentStateChange 002 Status req nil
+K Attribute 001 Name req nil
+K AutoScalingGroupProvider 001 AutoScalingGroupArn req nil
+K AutoScalingGroupProvider 002 ManagedScaling nest ManagedScaling
+K AutoScalingGroupProviderUpdate 001 ManagedScaling nest ManagedScaling
+K AwsVpcConfiguration 001 Subnets req nil
+K CapacityProviderStrategyItem 001 CapacityProvider req nil
+K ClusterServiceConnectDefaultsRequest 001 Namespace req nil
+K ContainerDefinition 001 DependsOn each ContainerDependency slice
+K ContainerDefinition 002 EnvironmentFiles each EnvironmentFile slice
+K ContainerDefinition 003 ExtraHosts each HostEntry slice
+K ContainerDefinition 004 FirelensConfiguration nest FirelensConfiguration
+K ContainerDefinition 005 HealthCheck nest HealthCheck
+K ContainerDefinition 006 LinuxParameters nest LinuxParameters
+K ContainerDefinition 007 LogConfiguration nest LogConfiguration
+K ContainerDefinition 008 RepositoryCredentials nest RepositoryCredentials
+K ContainerDefinition 009 ResourceRequirements each ResourceRequirement slice
+K ContainerDefinition 010 Secrets each Secret slice
+K ContainerDefinition 011 Ulimits each Ulimit slice
+K ContainerDependency 001 Condition req empty
+K ContainerDependency 002 ContainerName req nil
+K ContainerOverride 001 EnvironmentFiles each EnvironmentFile slice
+K ContainerOverride 002 ResourceRequirements each ResourceRequirement slice
+K CreateCapacityProviderInput 001 AutoScalingGroupProvider req nil
+K CreateCapacityProviderInput 002 Name req nil
+K CreateCapacityProviderInput 003 AutoScalingGroupProvider nest AutoScalingGroupProvider
+K CreateCapacityProviderInput 004 Tags each Tag slice
+K CreateClusterInput 001 DefaultCapacityProviderStrategy each CapacityProviderStrategyItem slice
+K CreateClusterInput 002 ServiceConnectDefaults nest ClusterServiceConnectDefaultsRequest
+K CreateClusterInput 003 Tags each Tag slice
+K CreateServiceInput 001 ServiceName req nil
+K CreateServiceInput 002 CapacityProviderStrategy each CapacityProviderStrategyItem slice
+K CreateServiceInput 003 DeploymentConfiguration nest DeploymentConfiguration
+K CreateServiceInput 004 DeploymentController nest DeploymentController
+K CreateServiceInput 005 NetworkConfiguration nest NetworkConfiguration
+K CreateServiceInput 006 ServiceConnectConfiguration nest ServiceConnectConfiguration
+K CreateServiceInput 007 Tags each Tag slice
+K CreateServiceInput 008 VolumeConfigurations each ServiceVolumeConfiguration slice
+K CreateTaskSetInput 001 Cluster req nil
+K CreateTaskSetInput 002 Service req nil
+K CreateTaskSetInput 003 TaskDefinition req nil
+K CreateTaskSetInput 004 CapacityProviderStrategy each CapacityProviderStrategyItem slice
+K CreateTaskSetInput 005 NetworkConfiguration nest NetworkConfiguration
+K CreateTaskSetInput 006 Tags each Tag slice
+K DeleteAccountSettingInput 001 Name req empty
+K DeleteAttributesInput 001 Attributes req nil
+K DeleteAttributesInput 002 Attributes each Attribute slice
+K DeleteCapacityProviderInput 001 CapacityProvider req nil
+K DeleteClusterInput 001 Cluster req nil
+K DeleteServiceInput 001 Service req nil
+K DeleteTaskDefinitionsInput 001 TaskDefinitions req nil
+K DeleteTaskSetInput 001 Cluster req nil
+K DeleteTaskSetInput 002 Service req nil
+K DeleteTaskSetInput 003 TaskSet req nil
+K DeploymentAlarms 001 AlarmNames req nil
+K DeploymentAlarms 002 Enable req none
+K DeploymentAlarms 003 Rollback req none
+K DeploymentCircuitBreaker 001 Enable req none
+K DeploymentCircuitBreaker 002 Rollback req none
+K DeploymentConfiguration 001 Alarms nest DeploymentAlarms
+K DeploymentConfiguration 002 DeploymentCircuitBreaker nest DeploymentCircuitBreaker
+K DeploymentController 001 Type req empty
+K DeregisterContainerInstanceInput 001 ContainerInstance req nil
+K DeregisterTaskDefinitionInput 001 TaskDefinition req nil
+K DescribeContainerInstancesInput 001 ContainerInstances req nil
+K DescribeServicesInput 001 Services req nil
+K DescribeTaskDefinitionInput 001 TaskDefinition req nil
+K DescribeTaskSetsInput 001 Cluster req nil
+K DescribeTaskSetsInput 002 Service req nil
+K DescribeTasksInput 001 Tasks req nil
+K Device 001 HostPath req nil
+K EBSTagSpecification 001 ResourceType req empty
+K EBSTagSpecification 002 Tags each Tag slice
+K EFSVolumeConfiguration 001 FileSystemId req nil
+K EnvironmentFile 001 Type req empty
+K EnvironmentFile 002 Value req nil
+K EphemeralStorage 001 SizeInGiB req none
+K ExecuteCommandInput 001 Command req nil
+K ExecuteCommandInput 002 Interactive req none
+K ExecuteCommandInput 003 Task req nil
+K FSxWindowsFileServerAuthorizationConfig 001 CredentialsParameter req nil
+K FSxWindowsFileServerAuthorizationConfig 002 Domain req nil
+K FSxWindowsFileServerVolumeConfiguration 001 AuthorizationConfig req nil
+K FSxWindowsFileServerVolumeConfiguration 002 FileSystemId req nil
+K FSxWindowsFileServerVolumeConfiguration 003 RootDirectory req nil
+K FSxWindowsFileServerVolumeConfiguration 004 AuthorizationConfig nest FSxWindowsFileServerAuthorizationConfig
+K FirelensConfiguration 001 Type req empty
+K GetTaskProtectionInput 001 Cluster req nil
+K HealthCheck 001 Command req nil
+K HostEntry 001 Hostname req nil
+K HostEntry 002 IpAddress req nil
+K InferenceAccelerator 001 DeviceName req nil
+K InferenceAccelerator 002 DeviceType req nil
+K LinuxParameters 001 Devices each Device slice
+K LinuxParameters 002 Tmpfs each Tmpfs slice
+K ListAttributesInput 001 TargetType req empty
+K ListServicesByNamespaceInput 001 Namespace req nil
+K ListTagsForResourceInput 001 ResourceArn req nil
+K LogConfiguration 001 LogDriver req empty
+K LogConfiguration 002 SecretOptions each Secret slice
+K ManagedAgentStateChange 001 ContainerName req nil
+K ManagedAgentStateChange 002 ManagedAgentName req empty
+K ManagedAgentStateChange 003 Status req nil
+K ManagedScaling 001 MaximumScalingStepSize min 1 ptr
+K ManagedScaling 002 MinimumScalingStepSize min 1 ptr
+K ManagedScaling 003 TargetCapacity min 1 ptr
+K NetworkConfiguration 001 AwsvpcConfiguration nest AwsVpcConfiguration
+K PlatformDevice 001 Id req nil
+K PlatformDevice 002 Type req empty
+K ProxyConfiguration 001 ContainerName req nil
+K PutAccountSettingDefaultInput 001 Name req empty
+K PutAccountSettingDefaultInput 002 Value req nil
+K PutAccountSettingInput 001 Name req empty
+K PutAccountSettingInput 002 Value req nil
+K PutAttributesInput 001 Attributes req nil
+K PutAttributesInput 002 Attributes each Attribute slice
+K PutClusterCapacityProvidersInput 001 CapacityProviders req nil
+K PutClusterCapacityProvidersInput 002 Cluster req nil
+K PutClusterCapacityProvidersInput 003 DefaultCapacityProviderStrategy req nil
+K PutClusterCapacityProvidersInput 004 DefaultCapacityProviderStrategy each CapacityProviderStrategyItem slice
+K RegisterContainerInstanceInput 001 Attributes each Attribute slice
+K RegisterContainerInstanceInput 002 PlatformDevices each PlatformDevice slice
+K RegisterContainerInstanceInput 003 Tags each Tag slice
+K RegisterTaskDefinitionInput 001 ContainerDefinitions req nil
+K RegisterTaskDefinitionInput 002 Family req nil
+K RegisterTaskDefinitionInput 003 ContainerDefinitions each ContainerDefinition slice
+K RegisterTaskDefinitionInput 004 EphemeralStorage nest EphemeralStorage
+K RegisterTaskDefinitionInput 005 InferenceAccelerators each InferenceAccelerator slice
+K RegisterTaskDefinitionInput 006 ProxyConfiguration nest ProxyConfiguration
+K RegisterTaskDefinitionInput 007 Tags each Tag slice
+K RegisterTaskDefinitionInput 008 Volumes each Volume slice
+K RepositoryCredentials 001 CredentialsParameter req nil
+K ResourceRequirement 001 Type req empty
+K ResourceRequirement 002 Value req nil
+K RunTaskInput 001 TaskDefinition req nil
+K RunTaskInput 002 CapacityProviderStrategy each CapacityProviderStrategyItem slice
+K RunTaskInput 003 NetworkConfiguration nest NetworkConfiguration
+K RunTaskInput 004 Overrides nest TaskOverride
+K RunTaskInput 005 Tags each Tag slice
+K RunTaskInput 006 VolumeConfigurations each TaskVolumeConfiguration slice
+K Secret 001 Name req nil
+K Secret 002 ValueFrom req nil
+K ServiceConnectClientAlias 001 Port req nil
+K ServiceConnectConfiguration 001 Enabled req none
+K ServiceConnectConfiguration 002 LogConfiguration nest LogConfiguration
+K ServiceConnectConfiguration 003 Services each ServiceConnectService slice
+K ServiceConnectService 001 PortName req nil
+K ServiceConnectService 002 ClientAliases each ServiceConnectClientAlias slice
+K ServiceConnectService 003 Tls nest ServiceConnectTlsConfiguration
+K ServiceConnectTlsConfiguration 001 IssuerCertificateAuthority req nil
+K ServiceManagedEBSVolumeConfiguration 001 RoleArn req nil
+K ServiceManagedEBSVolumeConfiguration 002 TagSpecifications each EBSTagSpecification slice
+K ServiceVolumeConfiguration 001 Name req nil
+K ServiceVolumeConfiguration 002 ManagedEBSVolume nest ServiceManagedEBSVolumeConfiguration
+K StartTaskInput 001 ContainerInstances req nil
+K StartTaskInput 002 TaskDefinition req nil
+K StartTaskInput 003 NetworkConfiguration nest NetworkConfiguration
+K StartTaskInput 004 Overrides nest TaskOverride
+K StartTaskInput 005 Tags each Tag slice
+K StartTaskInput 006 VolumeConfigurations each TaskVolumeConfiguration slice
+K StopTaskInput 001 Task req nil
+K SubmitAttachmentStateChangesInput 001 Attachments req nil
+K SubmitAttachmentStateChangesInput 002 Attachments each AttachmentStateChange slice
+K SubmitTaskStateChangeInput 001 Attachments each AttachmentStateChange slice
+K SubmitTaskStateChangeInput 002 ManagedAgents each ManagedAgentStateChange slice
+K Tag 001 Key len 1 ptr
+K TagResourceInput 001 ResourceArn req nil
+K TagResourceInput 002 Tags req nil
+K TagResourceInput 003 Tags each Tag slice
+K TaskManagedEBSVolumeConfiguration 001 RoleArn req nil
+K TaskManagedEBSVolumeConfiguration 002 TagSpecifications each EBSTagSpecification slice
+K TaskManagedEBSVolumeConfiguration 003 TerminationPolicy nest TaskManagedEBSVolumeTerminationPolicy
+K TaskManagedEBSVolumeTerminationPolicy 001 DeleteOnTermination req nil
+K TaskOverride 001 ContainerOverrides each ContainerOverride slice
+K TaskOverride 002 EphemeralStorage nest EphemeralStorage
+K TaskVolumeConfiguration 001 Name req nil
+K TaskVolumeConfiguration 002 ManagedEBSVolume nest TaskManagedEBSVolumeConfiguration
+K Tmpfs 001 ContainerPath req nil
+K Tmpfs 002 Size req none
+K Ulimit 001 HardLimit req none
+K Ulimit 002 Name req empty
+K Ulimit 003 SoftLimit req none
+K UntagResourceInput 001 ResourceArn req nil
+K UntagResourceInput 002 TagKeys req nil
+K UpdateCapacityProviderInput 001 AutoScalingGroupProvider req nil
+K UpdateCapacityProviderInput 002 Name req nil
+K UpdateCapacityProviderInput 003 AutoScalingGroupProvider nest AutoScalingGroupProviderUpdate
+K UpdateClusterInput 001 Cluster req nil
+K UpdateClusterInput 002 ServiceConnectDefaults nest ClusterServiceConnectDefaultsRequest
+K UpdateClusterSettingsInput 001 Cluster req nil
+K UpdateClusterSettingsInput 002 Settings req nil
+K UpdateContainerAgentInput 001 ContainerInstance req nil
+K UpdateContainerInstancesStateInput 001 ContainerInstances req nil
+K UpdateContainerInstancesStateInput 002 Status req empty
+K UpdateServiceInput 001 Service req nil
+K UpdateServiceInput 002 CapacityProviderStrategy each CapacityProviderStrategyItem slice
+K UpdateServiceInput 003 DeploymentConfiguration nest DeploymentConfiguration
+K UpdateServiceInput 004 NetworkConfiguration nest NetworkConfiguration
+K UpdateServiceInput 005 ServiceConnectConfiguration nest ServiceConnectConfiguration
+K UpdateServiceInput 006 VolumeConfigurations each ServiceVolumeConfiguration slice
+K UpdateServicePrimaryTaskSetInput 001 Cluster req nil
+K UpdateServicePrimaryTaskSetInput 002 PrimaryTaskSet req nil
+K UpdateServicePrimaryTaskSetInput 003 Service req nil
+K UpdateTaskProtectionInput 001 Cluster req nil
+K UpdateTaskProtectionInput 002 ProtectionEnabled req none
+K UpdateTaskProtectionInput 003 Tasks req nil
+K UpdateTaskSetInput 001 Cluster req nil
+K UpdateTaskSetInput 002 Scale req nil
+K UpdateTaskSetInput 003 Service req nil
+K UpdateTaskSetInput 004 TaskSet req nil
+K Volume 001 EfsVolumeConfiguration nest EFSVolumeConfiguration
+K Volume 002 FsxWindowsFileServerVolumeConfiguration nest FSxWindowsFileServerVolumeConfiguration
+G ListAccountSettings NextToken NextToken
+G ListAttributes NextToken NextToken
+G ListClusters NextToken NextToken
+G ListContainerInstances NextToken NextToken
+G ListServices NextToken NextToken
+G ListServicesByNamespace NextToken NextToken
+G ListTaskDefinitionFamilies NextToken NextToken
+G ListTaskDefinitions NextToken NextToken
+G ListTasks NextToken NextToken

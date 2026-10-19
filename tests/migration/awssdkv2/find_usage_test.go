@@ -100,7 +100,7 @@ func TestFindReportsRelocatedSubpackages(t *testing.T) {
 			package main
 
 			import (
-				/*~~(dynamodbattribute moved to github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue, which writes differently: it ignores json struct tags (add dynamodbav tags, or set TagKey to "json" where the two agree), stores an empty string, byte slice or collection as itself where v1 stored NULL (tag such a field `+"`"+`,nullempty`+"`"+` to keep NULL), and its Marshaler and Unmarshaler take types.AttributeValue)~~>*/_ "github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+				/*~~(migrates to a port of this package generated under internal/awscompat/dynamodbattribute, which stores and reads items as v1 did; v2's attributevalue ignores json struct tags and stores empty values as themselves where v1 stored NULL. A type implementing its Marshaler or Unmarshaler holds the package on v1)~~>*/_ "github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 				/*~~(migrates to github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression)~~>*/_ "github.com/aws/aws-sdk-go/service/dynamodb/expression"
 				/*~~(migrates to github.com/aws/aws-sdk-go-v2/feature/rds/auth)~~>*/_ "github.com/aws/aws-sdk-go/service/rds/rdsutils"
 				/*~~(s3crypto has no v2 package: move to github.com/aws/amazon-s3-encryption-client-go/v3, whose default policy reads and writes the format v1's V2 client did, and set EnableLegacyUnauthenticatedModes to read objects v1's original client wrote; move on to v4's key-committing format only once every reader of the bucket is on v3)~~>*/_ "github.com/aws/aws-sdk-go/service/s3/s3crypto"

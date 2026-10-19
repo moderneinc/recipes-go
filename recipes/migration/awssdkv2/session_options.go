@@ -5,10 +5,13 @@
 package awssdkv2
 
 import (
+	"fmt"
 	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/parser"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
+	"strings"
 )
 
 // session.Options configured the session v2 configures through LoadDefaultConfig
@@ -17,6 +20,7 @@ import (
 // the fields with a loader option carry over.
 const (
 	assumeRoleTokenProvider         = "AssumeRoleTokenProvider"
+	assumeRoleDuration              = "AssumeRoleDuration"
 	withAssumeRoleCredentialOptions = "WithAssumeRoleCredentialOptions"
 
 	sessionOptions    = "Options"
@@ -62,6 +66,7 @@ func (s *fileScan) convertibleOptions(comp *golang.Composite) ([]configOption, b
 // a list of loader options, or names a config the caller already holds — which
 // v2 takes as it stands, and which nothing else can be mixed with.
 func (s *fileScan) optionsOrCarriedConfig(comp *golang.Composite) (options []configOption, carried java.Expression, ok bool) {
+	var tokenProvider, duration java.Expression
 	for _, rp := range comp.Elements.Elements {
 		if _, isEmpty := rp.Element.(*java.Empty); isEmpty {
 			continue
@@ -84,13 +89,11 @@ func (s *fileScan) optionsOrCarriedConfig(comp *golang.Composite) (options []con
 		case sharedProfile:
 			options = append(options, configOption{with: withSharedConfigProfile, value: kv.Value.Element})
 		case assumeRoleTokenProvider:
-			option, built := s.tokenProviderOption(kv.Value.Element)
-			if !built {
-				return nil, nil, false
-			}
-			options = append(options, option)
+			tokenProvider = kv.Value.Element
+		case assumeRoleDuration:
+			duration = kv.Value.Element
 		case sessionConfig:
-			if nested, isLiteral := s.configLiteralOptions(kv.Value.Element); isLiteral {
+			if nested, isLiteral := s.sessionArgOptions(kv.Value.Element); isLiteral {
 				options = append(options, nested...)
 				continue
 			}
@@ -101,6 +104,15 @@ func (s *fileScan) optionsOrCarriedConfig(comp *golang.Composite) (options []con
 			return nil, nil, false
 		}
 	}
+	// v2 holds one function setting the assume-role options, so both settings
+	// go in it.
+	if tokenProvider != nil || duration != nil {
+		option, built := s.assumeRoleOption(tokenProvider, duration)
+		if !built {
+			return nil, nil, false
+		}
+		options = append(options, option)
+	}
 	if carried != nil && len(options) > 0 {
 		// A carried config and a loader option cannot both apply: the loader
 		// would build a config of its own and throw the carried one away.
@@ -109,18 +121,48 @@ func (s *fileScan) optionsOrCarriedConfig(comp *golang.Composite) (options []con
 	return options, carried, true
 }
 
-// tokenProviderOption wraps v1's MFA token provider in the assume-role options
-// v2 configures it through.
-func (s *fileScan) tokenProviderOption(value java.Expression) (configOption, bool) {
-	if s.stscredsPkg == "" {
+// assumeRoleOption sets v2's assume-role options to v1's MFA token provider and
+// role duration, whichever were given.
+func (s *fileScan) assumeRoleOption(tokenProvider, duration java.Expression) (configOption, bool) {
+	local := s.stscredsPkg
+	if local == "" {
+		// The v2 package is imported where the option is written.
+		if s.bindsStscreds {
+			return configOption{}, false
+		}
+		local = "stscreds"
+	}
+	var body []string
+	if tokenProvider != nil {
+		body = append(body, "o.TokenProvider = "+tokenProviderPlaceholder)
+	}
+	if duration != nil {
+		body = append(body, "o.Duration = "+durationPlaceholder)
+	}
+	cu, err := parser.NewGoParser().Parse("assume.go", fmt.Sprintf("package p\n\nvar _ = func(o *%s.AssumeRoleOptions) {\n\t%s\n}\n", local, strings.Join(body, "\n\t")))
+	if err != nil {
 		return configOption{}, false
 	}
-	literal, built := tokenProviderLiteral(s.stscredsPkg, value)
-	if !built {
+	lift := visitor.Init(&funcLiteralLift{})
+	lift.Visit(cu, nil)
+	if lift.literal == nil {
 		return configOption{}, false
+	}
+	literal := lift.literal
+	for name, value := range map[string]java.Expression{tokenProviderPlaceholder: tokenProvider, durationPlaceholder: duration} {
+		if value == nil {
+			continue
+		}
+		bound, ok := visitor.Init(&placeholderBind{name: name, value: value}).Visit(literal, nil).(java.Expression)
+		if !ok {
+			return configOption{}, false
+		}
+		literal = bound
 	}
 	return configOption{with: withAssumeRoleCredentialOptions, value: literal}, true
 }
+
+const durationPlaceholder = "awsDurationPlaceholder"
 
 func (s *fileScan) enablesSharedConfig(expr java.Expression) bool {
 	fa, isField := expr.(*java.FieldAccess)
@@ -182,6 +224,12 @@ func (v *sessionRefScan) VisitFieldAccess(fa *java.FieldAccess, p any) java.J {
 func (v *migrateVisitor) loadConfigFromOptions(mi *java.MethodInvocation) java.J {
 	args := realArgs(mi)
 	if len(args) != 1 {
+		return mi
+	}
+	if local, isValue := v.scan.optionsValue(args[0]); isValue {
+		if ctx := v.contextExpr(); ctx != nil {
+			return v.optionsLoad(mi, ctx, local)
+		}
 		return mi
 	}
 	comp, isOptions := v.scan.sessionOptionsLiteral(args[0])
@@ -305,4 +353,90 @@ func (s *fileScan) declaresSession(expr java.Expression) bool {
 	}
 	name, isSession := qualifiedRef(fa, s.sessionPkg)
 	return isSession && name == "Session"
+}
+
+// A function returning a session returned nil beside its error. v2's config is
+// a value, so the zero config stands where the nil did.
+
+// sessionResults returns the positions of md's results declared as a session.
+func (s *fileScan) sessionResults(md *java.MethodDeclaration) map[int]bool {
+	positions := map[int]bool{}
+	if md.ReturnType == nil || s.sessionPkg == "" {
+		return positions
+	}
+	list, isList := md.ReturnType.(*golang.TypeList)
+	if !isList {
+		if s.declaresSession(md.ReturnType) {
+			positions[0] = true
+		}
+		return positions
+	}
+	i := 0
+	for _, rp := range list.Types.Elements {
+		switch e := rp.Element.(type) {
+		case *java.VariableDeclarations:
+			for range e.Variables {
+				if s.declaresSession(e.TypeExpr) {
+					positions[i] = true
+				}
+				i++
+			}
+		default:
+			if expr, isExpr := rp.Element.(java.Expression); isExpr && s.declaresSession(expr) {
+				positions[i] = true
+			}
+			i++
+		}
+	}
+	return positions
+}
+
+// zeroConfig builds `aws.Config{}`.
+func (v *migrateVisitor) zeroConfig(prefix java.Space) java.Expression {
+	v.awsUsed, v.needsAws = true, true
+	return &golang.Composite{
+		Prefix: prefix,
+		TypeExpr: &java.FieldAccess{
+			Target: &java.Identifier{Name: v.scan.awsQualifier(), Type: lstutil.NamedType(v2Aws)},
+			Name:   java.LeftPadded[*java.Identifier]{Element: &java.Identifier{Name: "Config"}},
+			Type:   lstutil.NamedType(v2Aws + ".Config"),
+		},
+	}
+}
+
+func isNil(expr java.Expression) bool {
+	id, isIdent := expr.(*java.Identifier)
+	return isIdent && id.Name == "nil"
+}
+
+func (v *migrateVisitor) VisitGoReturn(r *golang.Return, p any) java.J {
+	r = v.GoVisitor.VisitGoReturn(r, p).(*golang.Return)
+	if len(v.sessionResults) == 0 {
+		return r
+	}
+	var out []java.RightPadded[java.Expression]
+	for i, rp := range r.Expressions {
+		if v.sessionResults[i] && isNil(rp.Element) {
+			if out == nil {
+				out = append([]java.RightPadded[java.Expression](nil), r.Expressions...)
+			}
+			out[i].Element = v.zeroConfig(rp.Element.GetPrefix())
+		}
+	}
+	if out == nil {
+		return r
+	}
+	c := *r
+	c.Expressions = out
+	return &c
+}
+
+func (v *migrateVisitor) VisitReturn(r *java.Return, p any) java.J {
+	r = v.GoVisitor.VisitReturn(r, p).(*java.Return)
+	if v.sessionResults[0] && r.Expression != nil && isNil(r.Expression) {
+		c := *r
+		c.Expression = v.zeroConfig(r.Expression.GetPrefix())
+		return &c
+	}
+	return r
 }

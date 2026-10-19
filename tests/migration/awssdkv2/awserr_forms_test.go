@@ -122,22 +122,48 @@ func TestMigrateBlockedByAwserrTypeSwitch(t *testing.T) {
 
 // codacy/helm-ssm's shape: a mock answers with an error built by awserr.New, and
 // a test compares its text. The generated stand-in answers smithy's APIError
-// with the same code and message, and reads as v1's did.
+// with the same code and message, and reads as v1's did — the error it wraps
+// included.
 func TestMigrateAwserrNewInMock(t *testing.T) {
 	test.NewRecipeSpec().WithRecipe(&awssdkv2.MigrateAwsSdkGoToV2{}).RewriteRun(t,
 		test.Golang(`
 			package main
 
-			import "github.com/aws/aws-sdk-go/aws/awserr"
+			import (
+				"errors"
+
+				"github.com/aws/aws-sdk-go/aws"
+				"github.com/aws/aws-sdk-go/aws/awserr"
+			)
 
 			func notFound() error {
 				return awserr.New("ParameterNotFound", "Parameter does not exist in SSM", nil)
 			}
+
+			func wrapped(err error) error {
+				return awserr.New("Failure", "it failed", errors.New("cause"))
+			}
+
+			func failed() error {
+				return awserr.NewRequestFailure(aws.ErrMissingEndpoint, 500, "bad-request")
+			}
 		`, `
 			package main
 
+			import (
+				"errors"
+			)
+
 			func notFound() error {
-				return awsCompatNewError("ParameterNotFound", "Parameter does not exist in SSM")
+				return awsCompatNewError("ParameterNotFound", "Parameter does not exist in SSM", nil)
+			}
+
+			func wrapped(err error) error {
+				return awsCompatNewError("Failure", "it failed", errors.New("cause"))
+			}
+
+			func failed() error {
+				return awsCompatRequestFailure(awsCompatNewError("MissingEndpoint", "'Endpoint' configuration is required for this service", nil), 500, "bad-request")
 			}
 		`),
 		test.Generated("zz_awssdkv2_errors.go", `
@@ -151,33 +177,132 @@ func TestMigrateAwserrNewInMock(t *testing.T) {
 				"github.com/aws/smithy-go"
 			)
 
-			// awsCompatError stands in for an error aws-sdk-go v1's awserr.New built with
-			// nothing wrapped. It answers smithy's APIError as v1's answered awserr.Error,
-			// and reads as v1's did.
-			type awsCompatError struct{ code, message string }
+			// awsCompatError stands in for an error aws-sdk-go v1's awserr.New built. It
+			// answers smithy's APIError as v1's answered awserr.Error, and reads as v1's
+			// did.
+			type awsCompatError struct {
+				code, message string
+				orig          error
+			}
 
-			func (e *awsCompatError) Error() string                 { return fmt.Sprintf("%s: %s", e.code, e.message) }
+			func (e *awsCompatError) Error() string {
+				msg := fmt.Sprintf("%s: %s", e.code, e.message)
+				if e.orig != nil {
+					msg = fmt.Sprintf("%s\ncaused by: %s", msg, e.orig.Error())
+				}
+				return msg
+			}
 			func (e *awsCompatError) ErrorCode() string             { return e.code }
 			func (e *awsCompatError) ErrorMessage() string          { return e.message }
 			func (e *awsCompatError) ErrorFault() smithy.ErrorFault { return smithy.FaultUnknown }
 
-			func awsCompatNewError(code, message string) smithy.APIError {
-				return &awsCompatError{code: code, message: message}
+			func awsCompatNewError(code, message string, orig error) smithy.APIError {
+				return &awsCompatError{code: code, message: message, orig: orig}
+			}
+
+			// awsCompatRequestFailureError stands in for aws-sdk-go v1's RequestFailure,
+			// adding the response's status and request ID to the error it wraps.
+			type awsCompatRequestFailureError struct {
+				*awsCompatError
+				status    int
+				requestID string
+			}
+
+			func (e *awsCompatRequestFailureError) Error() string {
+				msg := fmt.Sprintf("%s: %s\n\tstatus code: %d, request id: %s", e.code, e.message, e.status, e.requestID)
+				if e.orig != nil {
+					msg = fmt.Sprintf("%s\ncaused by: %s", msg, e.orig.Error())
+				}
+				return msg
+			}
+			func (e *awsCompatRequestFailureError) HTTPStatusCode() int      { return e.status }
+			func (e *awsCompatRequestFailureError) ServiceRequestID() string { return e.requestID }
+
+			func awsCompatRequestFailure(err smithy.APIError, status int, requestID string) smithy.APIError {
+				inner, ok := err.(*awsCompatError)
+				if !ok {
+					inner = &awsCompatError{code: err.ErrorCode(), message: err.ErrorMessage()}
+				}
+				return &awsCompatRequestFailureError{awsCompatError: inner, status: status, requestID: requestID}
 			}
 		`),
 	)
 }
 
-// An error wrapped inside has nowhere to go in smithy's generic error.
-func TestMigrateBlockedByAwserrNewWrapping(t *testing.T) {
-	test.NewRecipeSpec().WithRecipe(&awssdkv2.MigrateAwsSdkGoToV2{}).RewriteRun(t,
+// An error code v1's own credential chain raised. v2 reports that failure as an
+// ordinary error, so the comparison would quietly never match, and the file is
+// held back instead. NoCredentialProviders alone is raised by a generated
+// helper, which TestMigrateNoCredentialProvidersCheck covers.
+func TestMigrateBlockedByClientSideErrorCode(t *testing.T) {
+	for name, check := range map[string]string{
+		"compared": `if aerr.Code() == "EnvAccessKeyNotFound" { return true }`,
+		"case":     `switch aerr.Code() { case "RequestCanceled": return true }`,
+	} {
+		t.Run(name, func(t *testing.T) {
+			test.NewRecipeSpec().WithRecipe(&awssdkv2.MigrateAwsSdkGoToV2{}).RewriteRun(t,
+				test.Golang(`
+					package main
+
+					import "github.com/aws/aws-sdk-go/aws/awserr"
+
+					func expired(err error) bool {
+						if aerr, ok := err.(awserr.Error); ok {
+							`+check+`
+						}
+						return false
+					}
+				`),
+			)
+		})
+	}
+}
+
+// gilbertchen/duplicacy's shape: a failed response's status read through
+// awserr.RequestFailure. v2 wraps every failed response in awshttp's
+// ResponseError, which answers the status under its own name.
+func TestMigrateRequestFailureStatus(t *testing.T) {
+	migrateSpec().RewriteRun(t,
 		test.Golang(`
-			package main
+			package storage
 
-			import "github.com/aws/aws-sdk-go/aws/awserr"
+			import (
+				"github.com/aws/aws-sdk-go/aws"
+				"github.com/aws/aws-sdk-go/aws/awserr"
+				"github.com/aws/aws-sdk-go/service/s3"
+			)
 
-			func wrapped(err error) error {
-				return awserr.New("Failure", "it failed", err)
+			func exists(client *s3.S3, bucket, key string) (bool, error) {
+				_, err := client.HeadObject(&s3.HeadObjectInput{Bucket: aws.String(bucket), Key: aws.String(key)})
+				if err != nil {
+					if e, ok := err.(awserr.RequestFailure); ok && (e.StatusCode() == 403 || e.StatusCode() == 404) {
+						return false, nil
+					}
+					return false, err
+				}
+				return true, nil
+			}
+		`, `
+			package storage
+
+			import (
+				"context"
+				"errors"
+
+				"github.com/aws/aws-sdk-go-v2/aws"
+				awshttp "github.com/aws/aws-sdk-go-v2/aws/transport/http"
+				"github.com/aws/aws-sdk-go-v2/service/s3"
+			)
+
+			func exists(client *s3.Client, bucket, key string) (bool, error) {
+				_, err := client.HeadObject(context.TODO(), &s3.HeadObjectInput{Bucket: aws.String(bucket), Key: aws.String(key)})
+				if err != nil {
+					var e *awshttp.ResponseError
+					if errors.As(err, &e) && (e.HTTPStatusCode() == 403 || e.HTTPStatusCode() == 404) {
+						return false, nil
+					}
+					return false, err
+				}
+				return true, nil
 			}
 		`),
 	)

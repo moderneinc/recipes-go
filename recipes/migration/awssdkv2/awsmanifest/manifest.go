@@ -15,6 +15,8 @@ package awsmanifest
 
 import (
 	"embed"
+	"sort"
+	"strconv"
 	"strings"
 	"sync"
 	"unicode"
@@ -92,6 +94,28 @@ type manifest struct {
 	// an enum somewhere in the service, which makes the name alone no evidence
 	// of an enum.
 	nonEnumFieldNames map[string]bool
+	// renames maps a v1 shape to the name v2 gave it.
+	renames map[string]string
+	// sensitive lists the `Shape.Field` v1 tagged sensitive and v2 does not.
+	sensitive []string
+	// waiters maps a v1 waiter to its delay in seconds and its attempts.
+	waiters map[string][2]int
+	// interfaces are the types-package interfaces, every one a union.
+	interfaces map[string]bool
+	// validations maps a v1 shape with a Validate method to its rules, in
+	// v1's order; unvalidatable holds those whose rules v2 cannot express.
+	validations   map[string][]ValidationRule
+	unvalidatable map[string]bool
+	// pageTokens maps an operation to the input and output fields its v2
+	// paginator carries the page token in.
+	pageTokens map[string][2]string
+}
+
+// ValidationRule is one check of a v1 Validate method. Kind is req, len, min,
+// nest or each; Arg the length, the minimum or the nested shape; Form how the
+// field is read in v2.
+type ValidationRule struct {
+	Field, Kind, Arg, Form string
 }
 
 var (
@@ -129,6 +153,12 @@ func load(service string) *manifest {
 		depointeredFields:   map[string]string{},
 		narrowedFields:      map[string]string{},
 		nonEnumFieldNames:   map[string]bool{},
+		renames:             map[string]string{},
+		waiters:             map[string][2]int{},
+		interfaces:          map[string]bool{},
+		validations:         map[string][]ValidationRule{},
+		unvalidatable:       map[string]bool{},
+		pageTokens:          map[string][2]string{},
 	}
 	for _, line := range strings.Split(string(raw), "\n") {
 		if len(line) < 3 {
@@ -185,9 +215,74 @@ func load(service string) *manifest {
 			}
 		case 'N':
 			m.nonEnumFieldNames[name] = true
+		case 'M':
+			from, to, _ := strings.Cut(name, " ")
+			m.renames[from] = to
+		case 'H':
+			m.sensitive = append(m.sensitive, name)
+		case 'U':
+			m.interfaces[name] = true
+		case 'K':
+			parts := strings.Fields(name)
+			if len(parts) < 4 {
+				continue
+			}
+			shape := parts[0]
+			if parts[2] == "-" {
+				if parts[3] == "unsupported" {
+					m.unvalidatable[shape] = true
+				} else {
+					m.validations[shape] = []ValidationRule{}
+				}
+				continue
+			}
+			rule := ValidationRule{Field: parts[2], Kind: parts[3]}
+			switch rest := parts[4:]; {
+			case rule.Kind == "req" && len(rest) == 1:
+				rule.Form = rest[0]
+			case rule.Kind == "nest" && len(rest) == 1:
+				rule.Arg = rest[0]
+			case len(rest) == 2:
+				rule.Arg, rule.Form = rest[0], rest[1]
+			default:
+				m.unvalidatable[shape] = true
+				continue
+			}
+			m.validations[shape] = append(m.validations[shape], rule)
+		case 'G':
+			parts := strings.Fields(name)
+			if len(parts) == 3 {
+				m.pageTokens[parts[0]] = [2]string{parts[1], parts[2]}
+			}
+		case 'Y':
+			parts := strings.Fields(name)
+			if len(parts) == 3 {
+				delay, _ := strconv.Atoi(parts[1])
+				attempts, _ := strconv.Atoi(parts[2])
+				m.waiters[parts[0]] = [2]int{delay, attempts}
+			}
 		}
 	}
 	m.unions, m.unionVariants = unionsOf(m.types)
+	// A union with a single member is a union all the same, which only the
+	// interface record says.
+	for name := range m.interfaces {
+		if !m.unions[name] {
+			m.unions[name] = true
+			for t := range m.types {
+				if variant, ok := strings.CutPrefix(t, name+"Member"); ok && variant != "" {
+					m.unionVariants[variant] = true
+				}
+			}
+		}
+	}
+	// A list of a union holds v2's interface, not a value of a shape, so it
+	// takes no conversion between v1's pointers and v2's values.
+	for field, elem := range m.listFields {
+		if m.unions[elem] {
+			delete(m.listFields, field)
+		}
+	}
 	// A variant spelled like another shape's field cannot tell a union read
 	// from an ordinary one: S3's MetricsFilter has a Prefix member, and half of
 	// S3's shapes a Prefix field.
@@ -283,12 +378,20 @@ func Place(service, name string) Placement {
 		return IsClient
 	case m.consts[name] != "":
 		return InTypesConst
-	case m.types[name]:
+	case m.types[name], m.renames[name] != "":
 		return InTypes
 	case m.service[name]:
 		return InService
 	}
 	return Unknown
+}
+
+// TypesName returns the name v2 gives a v1 shape in its types package.
+func TypesName(service, name string) string {
+	if m := load(service); m != nil && m.renames[name] != "" {
+		return m.renames[name]
+	}
+	return name
 }
 
 // TypesAlias is the local name an added types import binds. Aliasing every one
@@ -476,4 +579,108 @@ func ClientType(service string) (string, bool) {
 		return "", false
 	}
 	return m.clientType, true
+}
+
+// SensitiveFields lists the `Shape.Field` v1 printed masked, by v1 shape name.
+func SensitiveFields(service string) []string {
+	if m := load(service); m != nil {
+		return m.sensitive
+	}
+	return nil
+}
+
+// v2PackageNames are the v1 service packages v2 spells differently.
+var v2PackageNames = map[string]string{
+	"elb":   "elasticloadbalancing",
+	"elbv2": "elasticloadbalancingv2",
+}
+
+// V2Name is the name of a v1 service's package in v2.
+func V2Name(service string) string {
+	if name, renamed := v2PackageNames[service]; renamed {
+		return name
+	}
+	return service
+}
+
+// V1Name is the v1 service a v2 package name stands for.
+func V1Name(v2Name string) string {
+	for v1, v2 := range v2PackageNames {
+		if v2 == v2Name {
+			return v1
+		}
+	}
+	return v2Name
+}
+
+// UnionMember names the v2 type standing for a v1 union shape's field set, as
+// ServiceDiscoveryMemberDns stands for ServiceDiscovery's Dns.
+func UnionMember(service, union, field string) (string, bool) {
+	m := load(service)
+	if m == nil || !m.unions[union] {
+		return "", false
+	}
+	member := union + "Member" + field
+	return member, m.types[member]
+}
+
+// WaiterTiming answers a v1 waiter's delay in seconds and its attempts.
+func WaiterTiming(service, waiter string) (delay, attempts int, ok bool) {
+	m := load(service)
+	if m == nil {
+		return 0, 0, false
+	}
+	t, ok := m.waiters[waiter]
+	return t[0], t[1], ok
+}
+
+// V1ShapeName is the v1 name of a shape known by the name v2 gave it.
+func V1ShapeName(service, name string) string {
+	if m := load(service); m != nil {
+		for v1, v2 := range m.renames {
+			if v2 == name {
+				return v1
+			}
+		}
+	}
+	return name
+}
+
+// PageTokens returns the input field an operation's v2 paginator sends its
+// token in and the output field it reads the next one from.
+func PageTokens(service, operation string) (input, output string, ok bool) {
+	m := load(service)
+	if m == nil {
+		return "", "", false
+	}
+	tokens, ok := m.pageTokens[operation]
+	return tokens[0], tokens[1], ok
+}
+
+// Validation returns the rules of a v1 shape's Validate method, and whether it
+// has one whose rules v2 can express.
+func Validation(service, shape string) ([]ValidationRule, bool) {
+	m := load(service)
+	if m == nil || m.unvalidatable[shape] {
+		return nil, false
+	}
+	rules, ok := m.validations[shape]
+	return rules, ok
+}
+
+// ValidatedShapes lists the v1 shapes of a service with a Validate method v2
+// can express.
+func ValidatedShapes(service string) []string {
+	m := load(service)
+	if m == nil {
+		return nil
+	}
+	shapes := make([]string, 0, len(m.validations))
+	for shape := range m.validations {
+		if !m.unvalidatable[shape] {
+			shapes = append(shapes, shape)
+		}
+	}
+	sort.Strings(shapes)
+	return shapes
 }

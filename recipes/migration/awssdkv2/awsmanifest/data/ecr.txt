@@ -1340,3 +1340,169 @@ E UpstreamRegistryGitHubContainerRegistry UpstreamRegistry
 E UpstreamRegistryGitLabContainerRegistry UpstreamRegistry
 E UpstreamRegistryK8s UpstreamRegistry
 E UpstreamRegistryQuay UpstreamRegistry
+Y ImageScanComplete 5 60
+Y LifecyclePolicyPreviewComplete 5 20
+K BatchCheckLayerAvailabilityInput 001 LayerDigests req nil
+K BatchCheckLayerAvailabilityInput 002 LayerDigests len 1 container
+K BatchCheckLayerAvailabilityInput 003 RepositoryName req nil
+K BatchCheckLayerAvailabilityInput 004 RepositoryName len 2 ptr
+K BatchDeleteImageInput 001 ImageIds req nil
+K BatchDeleteImageInput 002 ImageIds len 1 container
+K BatchDeleteImageInput 003 RepositoryName req nil
+K BatchDeleteImageInput 004 RepositoryName len 2 ptr
+K BatchDeleteImageInput 005 ImageIds each ImageIdentifier slice
+K BatchGetImageInput 001 AcceptedMediaTypes len 1 container
+K BatchGetImageInput 002 ImageIds req nil
+K BatchGetImageInput 003 ImageIds len 1 container
+K BatchGetImageInput 004 RepositoryName req nil
+K BatchGetImageInput 005 RepositoryName len 2 ptr
+K BatchGetImageInput 006 ImageIds each ImageIdentifier slice
+K BatchGetRepositoryScanningConfigurationInput 001 RepositoryNames req nil
+K BatchGetRepositoryScanningConfigurationInput 002 RepositoryNames len 1 container
+K CompleteLayerUploadInput 001 LayerDigests req nil
+K CompleteLayerUploadInput 002 LayerDigests len 1 container
+K CompleteLayerUploadInput 003 RepositoryName req nil
+K CompleteLayerUploadInput 004 RepositoryName len 2 ptr
+K CompleteLayerUploadInput 005 UploadId req nil
+K CreatePullThroughCacheRuleInput 001 CredentialArn len 50 ptr
+K CreatePullThroughCacheRuleInput 002 EcrRepositoryPrefix req nil
+K CreatePullThroughCacheRuleInput 003 EcrRepositoryPrefix len 2 ptr
+K CreatePullThroughCacheRuleInput 004 UpstreamRegistryUrl req nil
+K CreateRepositoryCreationTemplateInput 001 AppliedFor req nil
+K CreateRepositoryCreationTemplateInput 002 Prefix req nil
+K CreateRepositoryCreationTemplateInput 003 Prefix len 1 ptr
+K CreateRepositoryCreationTemplateInput 004 EncryptionConfiguration nest EncryptionConfigurationForRepositoryCreationTemplate
+K CreateRepositoryCreationTemplateInput 005 ResourceTags each Tag slice
+K CreateRepositoryInput 001 RepositoryName req nil
+K CreateRepositoryInput 002 RepositoryName len 2 ptr
+K CreateRepositoryInput 003 EncryptionConfiguration nest EncryptionConfiguration
+K CreateRepositoryInput 004 Tags each Tag slice
+K DeleteLifecyclePolicyInput 001 RepositoryName req nil
+K DeleteLifecyclePolicyInput 002 RepositoryName len 2 ptr
+K DeletePullThroughCacheRuleInput 001 EcrRepositoryPrefix req nil
+K DeletePullThroughCacheRuleInput 002 EcrRepositoryPrefix len 2 ptr
+K DeleteRepositoryCreationTemplateInput 001 Prefix req nil
+K DeleteRepositoryCreationTemplateInput 002 Prefix len 1 ptr
+K DeleteRepositoryInput 001 RepositoryName req nil
+K DeleteRepositoryInput 002 RepositoryName len 2 ptr
+K DeleteRepositoryPolicyInput 001 RepositoryName req nil
+K DeleteRepositoryPolicyInput 002 RepositoryName len 2 ptr
+K DescribeImageReplicationStatusInput 001 ImageId req nil
+K DescribeImageReplicationStatusInput 002 RepositoryName req nil
+K DescribeImageReplicationStatusInput 003 RepositoryName len 2 ptr
+K DescribeImageReplicationStatusInput 004 ImageId nest ImageIdentifier
+K DescribeImageScanFindingsInput 001 ImageId req nil
+K DescribeImageScanFindingsInput 002 MaxResults min 1 ptr
+K DescribeImageScanFindingsInput 003 RepositoryName req nil
+K DescribeImageScanFindingsInput 004 RepositoryName len 2 ptr
+K DescribeImageScanFindingsInput 005 ImageId nest ImageIdentifier
+K DescribeImagesInput 001 ImageIds len 1 container
+K DescribeImagesInput 002 MaxResults min 1 ptr
+K DescribeImagesInput 003 RepositoryName req nil
+K DescribeImagesInput 004 RepositoryName len 2 ptr
+K DescribeImagesInput 005 ImageIds each ImageIdentifier slice
+K DescribePullThroughCacheRulesInput 001 EcrRepositoryPrefixes len 1 container
+K DescribePullThroughCacheRulesInput 002 MaxResults min 1 ptr
+K DescribeRepositoriesInput 001 MaxResults min 1 ptr
+K DescribeRepositoriesInput 002 RepositoryNames len 1 container
+K DescribeRepositoryCreationTemplatesInput 001 MaxResults min 1 ptr
+K EncryptionConfiguration 001 EncryptionType req empty
+K EncryptionConfiguration 002 KmsKey len 1 ptr
+K EncryptionConfigurationForRepositoryCreationTemplate 001 EncryptionType req empty
+K GetAuthorizationTokenInput 001 RegistryIds len 1 container
+K GetDownloadUrlForLayerInput 001 LayerDigest req nil
+K GetDownloadUrlForLayerInput 002 RepositoryName req nil
+K GetDownloadUrlForLayerInput 003 RepositoryName len 2 ptr
+K GetLifecyclePolicyInput 001 RepositoryName req nil
+K GetLifecyclePolicyInput 002 RepositoryName len 2 ptr
+K GetLifecyclePolicyPreviewInput 001 ImageIds len 1 container
+K GetLifecyclePolicyPreviewInput 002 MaxResults min 1 ptr
+K GetLifecyclePolicyPreviewInput 003 RepositoryName req nil
+K GetLifecyclePolicyPreviewInput 004 RepositoryName len 2 ptr
+K GetLifecyclePolicyPreviewInput 005 ImageIds each ImageIdentifier slice
+K GetRepositoryPolicyInput 001 RepositoryName req nil
+K GetRepositoryPolicyInput 002 RepositoryName len 2 ptr
+K ImageIdentifier 001 ImageTag len 1 ptr
+K InitiateLayerUploadInput 001 RepositoryName req nil
+K InitiateLayerUploadInput 002 RepositoryName len 2 ptr
+K ListImagesInput 001 MaxResults min 1 ptr
+K ListImagesInput 002 RepositoryName req nil
+K ListImagesInput 003 RepositoryName len 2 ptr
+K ListTagsForResourceInput 001 ResourceArn req nil
+K PutImageInput 001 ImageManifest req nil
+K PutImageInput 002 ImageManifest len 1 ptr
+K PutImageInput 003 ImageTag len 1 ptr
+K PutImageInput 004 RepositoryName req nil
+K PutImageInput 005 RepositoryName len 2 ptr
+K PutImageScanningConfigurationInput 001 ImageScanningConfiguration req nil
+K PutImageScanningConfigurationInput 002 RepositoryName req nil
+K PutImageScanningConfigurationInput 003 RepositoryName len 2 ptr
+K PutImageTagMutabilityInput 001 ImageTagMutability req empty
+K PutImageTagMutabilityInput 002 RepositoryName req nil
+K PutImageTagMutabilityInput 003 RepositoryName len 2 ptr
+K PutLifecyclePolicyInput 001 LifecyclePolicyText req nil
+K PutLifecyclePolicyInput 002 LifecyclePolicyText len 100 ptr
+K PutLifecyclePolicyInput 003 RepositoryName req nil
+K PutLifecyclePolicyInput 004 RepositoryName len 2 ptr
+K PutRegistryPolicyInput 001 PolicyText req nil
+K PutRegistryScanningConfigurationInput 001 Rules each RegistryScanningRule slice
+K PutReplicationConfigurationInput 001 ReplicationConfiguration req nil
+K PutReplicationConfigurationInput 002 ReplicationConfiguration nest ReplicationConfiguration
+K RegistryScanningRule 001 RepositoryFilters req nil
+K RegistryScanningRule 002 ScanFrequency req empty
+K RegistryScanningRule 003 RepositoryFilters each ScanningRepositoryFilter slice
+K ReplicationConfiguration 001 Rules req nil
+K ReplicationConfiguration 002 Rules each ReplicationRule slice
+K ReplicationDestination 001 Region req nil
+K ReplicationDestination 002 Region len 2 ptr
+K ReplicationDestination 003 RegistryId req nil
+K ReplicationRule 001 Destinations req nil
+K ReplicationRule 002 RepositoryFilters len 1 container
+K ReplicationRule 003 Destinations each ReplicationDestination slice
+K ReplicationRule 004 RepositoryFilters each RepositoryFilter slice
+K RepositoryFilter 001 Filter req nil
+K RepositoryFilter 002 Filter len 2 ptr
+K RepositoryFilter 003 FilterType req empty
+K ScanningRepositoryFilter 001 Filter req nil
+K ScanningRepositoryFilter 002 Filter len 1 ptr
+K ScanningRepositoryFilter 003 FilterType req empty
+K SetRepositoryPolicyInput 001 PolicyText req nil
+K SetRepositoryPolicyInput 002 RepositoryName req nil
+K SetRepositoryPolicyInput 003 RepositoryName len 2 ptr
+K StartImageScanInput 001 ImageId req nil
+K StartImageScanInput 002 RepositoryName req nil
+K StartImageScanInput 003 RepositoryName len 2 ptr
+K StartImageScanInput 004 ImageId nest ImageIdentifier
+K StartLifecyclePolicyPreviewInput 001 LifecyclePolicyText len 100 ptr
+K StartLifecyclePolicyPreviewInput 002 RepositoryName req nil
+K StartLifecyclePolicyPreviewInput 003 RepositoryName len 2 ptr
+K Tag 001 Key req nil
+K Tag 002 Value req nil
+K TagResourceInput 001 ResourceArn req nil
+K TagResourceInput 002 Tags req nil
+K TagResourceInput 003 Tags each Tag slice
+K UntagResourceInput 001 ResourceArn req nil
+K UntagResourceInput 002 TagKeys req nil
+K UpdatePullThroughCacheRuleInput 001 CredentialArn req nil
+K UpdatePullThroughCacheRuleInput 002 CredentialArn len 50 ptr
+K UpdatePullThroughCacheRuleInput 003 EcrRepositoryPrefix req nil
+K UpdatePullThroughCacheRuleInput 004 EcrRepositoryPrefix len 2 ptr
+K UpdateRepositoryCreationTemplateInput 001 Prefix req nil
+K UpdateRepositoryCreationTemplateInput 002 Prefix len 1 ptr
+K UpdateRepositoryCreationTemplateInput 003 EncryptionConfiguration nest EncryptionConfigurationForRepositoryCreationTemplate
+K UpdateRepositoryCreationTemplateInput 004 ResourceTags each Tag slice
+K UploadLayerPartInput 001 LayerPartBlob req nil
+K UploadLayerPartInput 002 PartFirstByte req nil
+K UploadLayerPartInput 003 PartLastByte req nil
+K UploadLayerPartInput 004 RepositoryName req nil
+K UploadLayerPartInput 005 RepositoryName len 2 ptr
+K UploadLayerPartInput 006 UploadId req nil
+K ValidatePullThroughCacheRuleInput 001 EcrRepositoryPrefix req nil
+K ValidatePullThroughCacheRuleInput 002 EcrRepositoryPrefix len 2 ptr
+G DescribeImageScanFindings NextToken NextToken
+G DescribeImages NextToken NextToken
+G DescribePullThroughCacheRules NextToken NextToken
+G DescribeRepositories NextToken NextToken
+G DescribeRepositoryCreationTemplates NextToken NextToken
+G GetLifecyclePolicyPreview NextToken NextToken
+G ListImages NextToken NextToken

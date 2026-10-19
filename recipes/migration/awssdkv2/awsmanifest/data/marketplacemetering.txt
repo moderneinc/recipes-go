@@ -1,0 +1,264 @@
+C MarketplaceMetering
+S AuthResolverParameters
+S AuthSchemeResolver
+S BatchMeterUsageInput
+S BatchMeterUsageOutput
+S Client
+S EndpointParameters
+S EndpointResolver
+S EndpointResolverFromURL
+S EndpointResolverFunc
+S EndpointResolverOptions
+S EndpointResolverV2
+S HTTPClient
+S HTTPSignerV4
+S IdempotencyTokenProvider
+S MeterUsageInput
+S MeterUsageOutput
+S New
+S NewDefaultEndpointResolver
+S NewDefaultEndpointResolverV2
+S NewFromConfig
+S Options
+S RegisterUsageInput
+S RegisterUsageOutput
+S ResolveCustomerInput
+S ResolveCustomerOutput
+S ResolveEndpoint
+S ServiceAPIVersion
+S ServiceID
+S TypeRegistry
+S WithAPIOptions
+S WithEndpointResolver
+S WithEndpointResolverV2
+S WithSigV4SigningName
+S WithSigV4SigningRegion
+O BatchMeterUsage
+O MeterUsage
+O RegisterUsage
+O ResolveCustomer
+X ErrCodeCustomerNotEntitledException CustomerNotEntitledException
+X ErrCodeDisabledApiException DisabledApiException
+X ErrCodeDuplicateRequestException DuplicateRequestException
+X ErrCodeExpiredTokenException ExpiredTokenException
+X ErrCodeInternalServiceErrorException InternalServiceErrorException
+X ErrCodeInvalidCustomerIdentifierException InvalidCustomerIdentifierException
+X ErrCodeInvalidEndpointRegionException InvalidEndpointRegionException
+X ErrCodeInvalidProductCodeException InvalidProductCodeException
+X ErrCodeInvalidPublicKeyVersionException InvalidPublicKeyVersionException
+X ErrCodeInvalidRegionException InvalidRegionException
+X ErrCodeInvalidTagException InvalidTagException
+X ErrCodeInvalidTokenException InvalidTokenException
+X ErrCodeInvalidUsageAllocationsException InvalidUsageAllocationsException
+X ErrCodeInvalidUsageDimensionException InvalidUsageDimensionException
+X ErrCodePlatformNotSupportedException PlatformNotSupportedException
+X ErrCodeThrottlingException ThrottlingException
+X ErrCodeTimestampOutOfBoundsException TimestampOutOfBoundsException
+I MeterUsageInput.UsageQuantity int64 int32
+I RegisterUsageInput.PublicKeyVersion int64 int32
+I UsageAllocation.AllocatedUsageQuantity int64 int32
+I UsageRecord.Quantity int64 int32
+R ResolveCustomerOutput.Metadata Metadata
+R UsageRecordResult.UsageRecord UsageRecord
+V BatchMeterUsageInput.ProductCode string
+V CustomerNotEntitledException.ErrorCodeOverride string
+V CustomerNotEntitledException.Message string
+V DisabledApiException.ErrorCodeOverride string
+V DisabledApiException.Message string
+V DuplicateRequestException.ErrorCodeOverride string
+V DuplicateRequestException.Message string
+V EndpointParameters.Endpoint string
+V EndpointParameters.Region string
+V EndpointParameters.UseDualStack bool
+V EndpointParameters.UseFIPS bool
+V ExpiredTokenException.ErrorCodeOverride string
+V ExpiredTokenException.Message string
+V IdempotencyConflictException.ErrorCodeOverride string
+V IdempotencyConflictException.Message string
+V InternalServiceErrorException.ErrorCodeOverride string
+V InternalServiceErrorException.Message string
+V InvalidCustomerIdentifierException.ErrorCodeOverride string
+V InvalidCustomerIdentifierException.Message string
+V InvalidEndpointRegionException.ErrorCodeOverride string
+V InvalidEndpointRegionException.Message string
+V InvalidLicenseException.ErrorCodeOverride string
+V InvalidLicenseException.Message string
+V InvalidProductCodeException.ErrorCodeOverride string
+V InvalidProductCodeException.Message string
+V InvalidPublicKeyVersionException.ErrorCodeOverride string
+V InvalidPublicKeyVersionException.Message string
+V InvalidRegionException.ErrorCodeOverride string
+V InvalidRegionException.Message string
+V InvalidTagException.ErrorCodeOverride string
+V InvalidTagException.Message string
+V InvalidTokenException.ErrorCodeOverride string
+V InvalidTokenException.Message string
+V InvalidUsageAllocationsException.ErrorCodeOverride string
+V InvalidUsageAllocationsException.Message string
+V InvalidUsageDimensionException.ErrorCodeOverride string
+V InvalidUsageDimensionException.Message string
+V Metadata.AgreementId string
+V MeterUsageInput.ClientToken string
+V MeterUsageInput.DryRun bool
+V MeterUsageInput.ProductCode string
+V MeterUsageInput.UsageDimension string
+V MeterUsageInput.UsageQuantity int32
+V MeterUsageOutput.MeteringRecordId string
+V Options.BaseEndpoint string
+V PlatformNotSupportedException.ErrorCodeOverride string
+V PlatformNotSupportedException.Message string
+V RegisterUsageInput.Nonce string
+V RegisterUsageInput.ProductCode string
+V RegisterUsageInput.PublicKeyVersion int32
+V RegisterUsageOutput.Signature string
+V ResolveCustomerInput.RegistrationToken string
+V ResolveCustomerOutput.CustomerAWSAccountId string
+V ResolveCustomerOutput.CustomerIdentifier string
+V ResolveCustomerOutput.LicenseArn string
+V ResolveCustomerOutput.ProductCode string
+V Tag.Key string
+V Tag.Value string
+V ThrottlingException.ErrorCodeOverride string
+V ThrottlingException.Message string
+V TimestampOutOfBoundsException.ErrorCodeOverride string
+V TimestampOutOfBoundsException.Message string
+V UsageAllocation.AllocatedUsageQuantity int32
+V UsageRecord.CustomerAWSAccountId string
+V UsageRecord.CustomerIdentifier string
+V UsageRecord.Dimension string
+V UsageRecord.LicenseArn string
+V UsageRecord.Quantity int32
+V UsageRecordResult.MeteringRecordId string
+L BatchMeterUsageInput.UsageRecords UsageRecord
+L BatchMeterUsageOutput.Results UsageRecordResult
+L BatchMeterUsageOutput.UnprocessedRecords UsageRecord
+L MeterUsageInput.UsageAllocations UsageAllocation
+L UsageAllocation.Tags Tag
+L UsageRecord.UsageAllocations UsageAllocation
+F UsageRecordResult.Status UsageRecordResultStatus
+N APIOptions
+N AgreementId
+N AllocatedUsageQuantity
+N AppID
+N AuthSchemePreference
+N AuthSchemeResolver
+N AuthSchemes
+N BaseEndpoint
+N ClientLogMode
+N ClientToken
+N Credentials
+N CustomerAWSAccountId
+N CustomerIdentifier
+N DefaultsMode
+N Dimension
+N DisableClockSkewCorrection
+N DisableHTTPS
+N DryRun
+N Endpoint
+N EndpointOptions
+N EndpointResolver
+N EndpointResolverV2
+N ErrorCodeOverride
+N HTTPClient
+N HTTPSignerV4
+N IdempotencyTokenProvider
+N Interceptors
+N Key
+N LicenseArn
+N LogDeprecated
+N Logger
+N Message
+N Metadata
+N MeterProvider
+N MeteringRecordId
+N Nonce
+N Operation
+N Options
+N ProductCode
+N Protocol
+N PublicKeyRotationTimestamp
+N PublicKeyVersion
+N Quantity
+N Region
+N RegistrationToken
+N ResolvedRegion
+N Resolver
+N ResultMetadata
+N Results
+N RetryMaxAttempts
+N RetryMode
+N Retryer
+N RuntimeEnvironment
+N Signature
+N Tags
+N Timestamp
+N TracerProvider
+N UnprocessedRecords
+N UsageAllocations
+N UsageDimension
+N UsageQuantity
+N UsageRecord
+N UsageRecords
+N UseDualStack
+N UseDualStackEndpoint
+N UseFIPS
+N UseFIPSEndpoint
+N Value
+T CustomerNotEntitledException
+T DisabledApiException
+T DuplicateRequestException
+T ExpiredTokenException
+T IdempotencyConflictException
+T InternalServiceErrorException
+T InvalidCustomerIdentifierException
+T InvalidEndpointRegionException
+T InvalidLicenseException
+T InvalidProductCodeException
+T InvalidPublicKeyVersionException
+T InvalidRegionException
+T InvalidTagException
+T InvalidTokenException
+T InvalidUsageAllocationsException
+T InvalidUsageDimensionException
+T Metadata
+T PlatformNotSupportedException
+T Tag
+T ThrottlingException
+T TimestampOutOfBoundsException
+T UsageAllocation
+T UsageRecord
+T UsageRecordResult
+T UsageRecordResultStatus
+E UsageRecordResultStatusCustomerNotSubscribed UsageRecordResultStatus
+E UsageRecordResultStatusDuplicateRecord UsageRecordResultStatus
+E UsageRecordResultStatusSuccess UsageRecordResultStatus
+K BatchMeterUsageInput 001 ProductCode req nil
+K BatchMeterUsageInput 002 ProductCode len 1 ptr
+K BatchMeterUsageInput 003 UsageRecords req nil
+K BatchMeterUsageInput 004 UsageRecords each UsageRecord slice
+K MeterUsageInput 001 ProductCode req nil
+K MeterUsageInput 002 ProductCode len 1 ptr
+K MeterUsageInput 003 Timestamp req nil
+K MeterUsageInput 004 UsageAllocations len 1 container
+K MeterUsageInput 005 UsageDimension req nil
+K MeterUsageInput 006 UsageDimension len 1 ptr
+K MeterUsageInput 007 UsageAllocations each UsageAllocation slice
+K RegisterUsageInput 001 ProductCode req nil
+K RegisterUsageInput 002 ProductCode len 1 ptr
+K RegisterUsageInput 003 PublicKeyVersion req nil
+K RegisterUsageInput 004 PublicKeyVersion min 1 ptr
+K ResolveCustomerInput 001 RegistrationToken req nil
+K Tag 001 Key req nil
+K Tag 002 Key len 1 ptr
+K Tag 003 Value req nil
+K Tag 004 Value len 1 ptr
+K UsageAllocation 001 AllocatedUsageQuantity req nil
+K UsageAllocation 002 Tags len 1 container
+K UsageAllocation 003 Tags each Tag slice
+K UsageRecord 001 CustomerIdentifier req nil
+K UsageRecord 002 CustomerIdentifier len 1 ptr
+K UsageRecord 003 Dimension req nil
+K UsageRecord 004 Dimension len 1 ptr
+K UsageRecord 005 Timestamp req nil
+K UsageRecord 006 UsageAllocations len 1 container
+K UsageRecord 007 UsageAllocations each UsageAllocation slice

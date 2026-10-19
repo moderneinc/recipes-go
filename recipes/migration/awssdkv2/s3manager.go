@@ -110,7 +110,7 @@ func (v *migrateVisitor) managerConstructor(mi *java.MethodInvocation) (java.J, 
 		return c, true
 	}
 	args := realArgs(c)
-	if len(args) != 1 {
+	if len(args) == 0 {
 		return nil, false
 	}
 	local := v.scan.s3Qualifier()
@@ -124,7 +124,12 @@ func (v *migrateVisitor) managerConstructor(mi *java.MethodInvocation) (java.J, 
 	}
 	out := *c
 	out.Arguments = c.Arguments
-	out.Arguments.Elements = []java.RightPadded[java.Expression]{{Element: client}}
+	// The options v1 took set the same fields on v2's manager.
+	elements := []java.RightPadded[java.Expression]{{Element: client}}
+	for _, opt := range args[1:] {
+		elements = append(elements, java.RightPadded[java.Expression]{Element: lstutil.SetExprPrefix(opt, java.SingleSpace)})
+	}
+	out.Arguments.Elements = elements
 	return &out, true
 }
 
@@ -287,7 +292,9 @@ func (s *fileScan) attributedManager(expr java.Expression) bool {
 			return true
 		}
 	}
-	return false
+	// The interfaces s3manageriface declared over them take the same calls.
+	name, under := strings.CutPrefix(fqn, v1S3ManagerIface+".")
+	return under && (name == "UploaderAPI" || name == "DownloaderAPI")
 }
 
 // managerCall gives a transfer-manager call the context v2 takes, dropping the
@@ -372,7 +379,27 @@ func (v *migrateVisitor) relocatedToManager(target *java.Identifier) *java.Ident
 // managerFields are the transfer-manager fields v2 kept with the same meaning
 // and type. Its S3 is a client interface narrowed to the calls the manager
 // makes, MaxUploadParts became an int32, and RequestOptions is gone.
-var managerFields = map[string]bool{"PartSize": true, "Concurrency": true, "LeavePartsOnError": true}
+var managerFields = map[string]bool{"PartSize": true, "Concurrency": true, "LeavePartsOnError": true, maxUploadParts: true}
+
+// v1's uploader held its part limit as an int and named the default as an
+// untyped constant; v2 types both int32. A write converts to v2's width, a read
+// back to v1's, and the constant becomes the untyped value it was.
+const (
+	maxUploadParts      = "MaxUploadParts"
+	maxUploadPartsValue = "10000"
+)
+
+// managerPartsLimit reports whether fa reads or writes an uploader's part
+// limit.
+func (s *fileScan) managerPartsLimit(fa *java.FieldAccess) bool {
+	return fa.Name.Element != nil && fa.Name.Element.Name == maxUploadParts && s.managerPkg != "" && s.managerValue(fa.Target)
+}
+
+// managerPartsConstant reports whether fa names the default part limit.
+func (s *fileScan) managerPartsConstant(fa *java.FieldAccess) bool {
+	name, isManager := qualifiedRef(fa, s.managerPkg)
+	return isManager && name == maxUploadParts
+}
 
 // managerValue reports whether expr holds a transfer manager: a name the scan
 // bound to one, a field declared as one, or a value attribution types as one.
@@ -388,4 +415,103 @@ func (s *fileScan) managerValue(expr java.Expression) bool {
 		}
 	}
 	return s.attributedManager(expr)
+}
+
+// v2 narrowed a manager's S3 field to the calls the manager makes, though it
+// still holds the client the manager was built from. Where every manager a
+// field holds is built over a session, or over a client known to be S3's own,
+// that client is a *s3.Client, and a call the narrowed field lacks reaches it
+// through an assertion. A field set from anything else, in any file of the
+// package, leaves the readers on v1.
+
+// managerFieldScan records each field name the file sets from anything other
+// than a proven constructor. The field may be declared in another file of the
+// package, so every struct key and field write counts, whatever it holds; a
+// name another struct shares only holds a reader back that need not be.
+type managerFieldScan struct {
+	visitor.GoVisitor
+	scan *fileScan
+}
+
+func (v *managerFieldScan) VisitKeyValue(kv *golang.KeyValue, p any) java.J {
+	if key, isIdent := kv.Key.(*java.Identifier); isIdent {
+		v.scan.recordManagerSource(key.Name, kv.Value.Element)
+	}
+	return v.GoVisitor.VisitKeyValue(kv, p)
+}
+
+func (v *managerFieldScan) VisitAssignment(a *java.Assignment, p any) java.J {
+	if fa, isField := a.Variable.(*java.FieldAccess); isField && fa.Name.Element != nil {
+		v.scan.recordManagerSource(fa.Name.Element.Name, a.Value.Element)
+	}
+	return v.GoVisitor.VisitAssignment(a, p)
+}
+
+// recordManagerSource notes a value a manager field is set from.
+func (s *fileScan) recordManagerSource(field string, value java.Expression) {
+	if !s.provenManager(value) {
+		s.managerFieldsUnproven[field] = true
+	}
+}
+
+// provenManager reports whether value builds a manager over a session, or over
+// a variable holding S3's own client.
+func (s *fileScan) provenManager(value java.Expression) bool {
+	mi, isCall := value.(*java.MethodInvocation)
+	if !isCall {
+		return false
+	}
+	call, ok := qualifiedCall(mi, s.managerPkg)
+	args := realArgs(mi)
+	if !ok || len(args) != 1 {
+		return false
+	}
+	switch call {
+	case "NewUploader", "NewDownloader":
+		return true
+	case "NewUploaderWithClient", "NewDownloaderWithClient":
+		id, isIdent := args[0].(*java.Identifier)
+		return isIdent && s.clients[id.Name] == s3Service
+	}
+	return false
+}
+
+// managerClientCall reports whether fa reads a manager field's S3 to call
+// something on it, returning the field's name.
+func (s *fileScan) managerClientCall(fa *java.FieldAccess, cursor *visitor.Cursor) (string, bool) {
+	if fa.Name.Element == nil || fa.Name.Element.Name != "S3" {
+		return "", false
+	}
+	field, isField := fa.Target.(*java.FieldAccess)
+	if !isField || field.Name.Element == nil || s.managerVars[field.Name.Element.Name] == "" {
+		return "", false
+	}
+	call, isCall := parentTree(cursor).(*java.MethodInvocation)
+	if !isCall || call.Select == nil || call.Select.Element != java.Expression(fa) {
+		return "", false
+	}
+	return field.Name.Element.Name, true
+}
+
+// managerClient asserts a manager's S3 back to the client it holds.
+func (v *migrateVisitor) managerClient(fa *java.FieldAccess) java.Expression {
+	if !v.scan.usesService(s3Service) {
+		v.needsS3 = true
+	}
+	local := v.scan.s3Qualifier()
+	if local == "" {
+		local = s3Service
+	}
+	return &golang.TypeAssertion{
+		Prefix: fa.Prefix,
+		Left:   java.RightPadded[java.Expression]{Element: lstutil.SetExprPrefix(fa, java.EmptySpace)},
+		AssertedType: &java.ControlParentheses{Tree: java.RightPadded[java.Expression]{Element: &golang.PointerType{
+			Elem: &java.FieldAccess{
+				Target: &java.Identifier{Name: local, Type: lstutil.NamedType(v2ServicePkg + s3Service)},
+				Name:   java.LeftPadded[*java.Identifier]{Element: &java.Identifier{Name: "Client"}},
+				Type:   lstutil.NamedType(v2ServicePkg + s3Service + ".Client"),
+			},
+		}}},
+		Type: lstutil.NamedType(v2ServicePkg + s3Service + ".Client"),
+	}
 }

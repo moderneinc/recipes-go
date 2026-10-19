@@ -340,7 +340,9 @@ R DisableKinesisStreamingDestinationOutput.EnableKinesisStreamingConfiguration E
 R EnableKinesisStreamingDestinationInput.EnableKinesisStreamingConfiguration EnableKinesisStreamingConfiguration
 R EnableKinesisStreamingDestinationOutput.EnableKinesisStreamingConfiguration EnableKinesisStreamingConfiguration
 R ExecuteStatementOutput.ConsumedCapacity ConsumedCapacity
+R ExportDescription.FilterSpecification FilterSpecification
 R ExportDescription.IncrementalExportSpecification IncrementalExportSpecification
+R ExportTableToPointInTimeInput.FilterSpecification FilterSpecification
 R ExportTableToPointInTimeInput.IncrementalExportSpecification IncrementalExportSpecification
 R ExportTableToPointInTimeOutput.ExportDescription ExportDescription
 R GetItemOutput.ConsumedCapacity ConsumedCapacity
@@ -626,6 +628,9 @@ V ExportTableToPointInTimeInput.S3SseKmsKeyId string
 V ExportTableToPointInTimeInput.TableArn string
 V FailureException.ExceptionDescription string
 V FailureException.ExceptionName string
+V FilterSpecification.FilterExpression string
+V FilterSpecification.KeyConditionExpression string
+V FilterSpecification.ProjectionExpression string
 V Get.ProjectionExpression string
 V Get.TableName string
 V GetItemInput.ConsistentRead bool
@@ -1262,6 +1267,7 @@ N FailureCode
 N FailureException
 N FailureMessage
 N FilterExpression
+N FilterSpecification
 N Get
 N GlobalSecondaryIndexOverride
 N GlobalSecondaryIndexUpdates
@@ -1571,6 +1577,7 @@ T ExportSummary
 T ExportType
 T ExportViewType
 T FailureException
+T FilterSpecification
 T Get
 T GlobalSecondaryIndex
 T GlobalSecondaryIndexAutoScalingUpdate
@@ -1872,3 +1879,359 @@ E VectorDistanceFunctionEuclidean VectorDistanceFunction
 E WitnessStatusActive WitnessStatus
 E WitnessStatusCreating WitnessStatus
 E WitnessStatusDeleting WitnessStatus
+Y TableExists 20 25
+Y TableNotExists 20 25
+U AttributeValue
+K AttributeDefinition 001 AttributeName req nil
+K AttributeDefinition 002 AttributeName len 1 ptr
+K AttributeDefinition 003 AttributeType req empty
+K AutoScalingPolicyUpdate 001 PolicyName len 1 ptr
+K AutoScalingPolicyUpdate 002 TargetTrackingScalingPolicyConfiguration req nil
+K AutoScalingPolicyUpdate 003 TargetTrackingScalingPolicyConfiguration nest AutoScalingTargetTrackingScalingPolicyConfigurationUpdate
+K AutoScalingSettingsUpdate 001 AutoScalingRoleArn len 1 ptr
+K AutoScalingSettingsUpdate 002 MaximumUnits min 1 ptr
+K AutoScalingSettingsUpdate 003 MinimumUnits min 1 ptr
+K AutoScalingSettingsUpdate 004 ScalingPolicyUpdate nest AutoScalingPolicyUpdate
+K AutoScalingTargetTrackingScalingPolicyConfigurationUpdate 001 TargetValue req nil
+K BatchExecuteStatementInput 001 Statements req nil
+K BatchExecuteStatementInput 002 Statements len 1 container
+K BatchExecuteStatementInput 003 Statements each BatchStatementRequest slice
+K BatchGetItemInput 001 RequestItems req nil
+K BatchGetItemInput 002 RequestItems len 1 container
+K BatchGetItemInput 003 RequestItems each KeysAndAttributes map
+K BatchStatementRequest 001 Parameters len 1 container
+K BatchStatementRequest 002 Statement req nil
+K BatchStatementRequest 003 Statement len 1 ptr
+K BatchWriteItemInput 001 RequestItems req nil
+K BatchWriteItemInput 002 RequestItems len 1 container
+K Condition 001 ComparisonOperator req empty
+K ConditionCheck 001 ConditionExpression req nil
+K ConditionCheck 002 Key req nil
+K ConditionCheck 003 TableName req nil
+K ConditionCheck 004 TableName len 1 ptr
+K CreateBackupInput 001 BackupName req nil
+K CreateBackupInput 002 BackupName len 3 ptr
+K CreateBackupInput 003 TableName req nil
+K CreateBackupInput 004 TableName len 1 ptr
+K CreateGlobalSecondaryIndexAction 001 IndexName req nil
+K CreateGlobalSecondaryIndexAction 002 IndexName len 3 ptr
+K CreateGlobalSecondaryIndexAction 003 KeySchema req nil
+K CreateGlobalSecondaryIndexAction 004 KeySchema len 1 container
+K CreateGlobalSecondaryIndexAction 005 Projection req nil
+K CreateGlobalSecondaryIndexAction 006 KeySchema each KeySchemaElement slice
+K CreateGlobalSecondaryIndexAction 007 Projection nest Projection
+K CreateGlobalSecondaryIndexAction 008 ProvisionedThroughput nest ProvisionedThroughput
+K CreateGlobalTableInput 001 GlobalTableName req nil
+K CreateGlobalTableInput 002 GlobalTableName len 3 ptr
+K CreateGlobalTableInput 003 ReplicationGroup req nil
+K CreateReplicaAction 001 RegionName req nil
+K CreateReplicationGroupMemberAction 001 GlobalSecondaryIndexes len 1 container
+K CreateReplicationGroupMemberAction 002 RegionName req nil
+K CreateReplicationGroupMemberAction 003 GlobalSecondaryIndexes each ReplicaGlobalSecondaryIndex slice
+K CreateReplicationGroupMemberAction 004 ProvisionedThroughputOverride nest ProvisionedThroughputOverride
+K CreateTableInput 001 AttributeDefinitions req nil
+K CreateTableInput 002 KeySchema req nil
+K CreateTableInput 003 KeySchema len 1 container
+K CreateTableInput 004 TableName req nil
+K CreateTableInput 005 TableName len 1 ptr
+K CreateTableInput 006 AttributeDefinitions each AttributeDefinition slice
+K CreateTableInput 007 GlobalSecondaryIndexes each GlobalSecondaryIndex slice
+K CreateTableInput 008 KeySchema each KeySchemaElement slice
+K CreateTableInput 009 LocalSecondaryIndexes each LocalSecondaryIndex slice
+K CreateTableInput 010 ProvisionedThroughput nest ProvisionedThroughput
+K CreateTableInput 011 StreamSpecification nest StreamSpecification
+K CreateTableInput 012 Tags each Tag slice
+K CsvOptions 001 Delimiter len 1 ptr
+K CsvOptions 002 HeaderList len 1 container
+K Delete 001 Key req nil
+K Delete 002 TableName req nil
+K Delete 003 TableName len 1 ptr
+K DeleteBackupInput 001 BackupArn req nil
+K DeleteBackupInput 002 BackupArn len 37 ptr
+K DeleteGlobalSecondaryIndexAction 001 IndexName req nil
+K DeleteGlobalSecondaryIndexAction 002 IndexName len 3 ptr
+K DeleteItemInput 001 Key req nil
+K DeleteItemInput 002 TableName req nil
+K DeleteItemInput 003 TableName len 1 ptr
+K DeleteReplicaAction 001 RegionName req nil
+K DeleteReplicationGroupMemberAction 001 RegionName req nil
+K DeleteResourcePolicyInput 001 ExpectedRevisionId len 1 ptr
+K DeleteResourcePolicyInput 002 ResourceArn req nil
+K DeleteResourcePolicyInput 003 ResourceArn len 1 ptr
+K DeleteTableInput 001 TableName req nil
+K DeleteTableInput 002 TableName len 1 ptr
+K DescribeBackupInput 001 BackupArn req nil
+K DescribeBackupInput 002 BackupArn len 37 ptr
+K DescribeContinuousBackupsInput 001 TableName req nil
+K DescribeContinuousBackupsInput 002 TableName len 1 ptr
+K DescribeContributorInsightsInput 001 IndexName len 3 ptr
+K DescribeContributorInsightsInput 002 TableName req nil
+K DescribeContributorInsightsInput 003 TableName len 1 ptr
+K DescribeExportInput 001 ExportArn req nil
+K DescribeExportInput 002 ExportArn len 37 ptr
+K DescribeGlobalTableInput 001 GlobalTableName req nil
+K DescribeGlobalTableInput 002 GlobalTableName len 3 ptr
+K DescribeGlobalTableSettingsInput 001 GlobalTableName req nil
+K DescribeGlobalTableSettingsInput 002 GlobalTableName len 3 ptr
+K DescribeImportInput 001 ImportArn req nil
+K DescribeImportInput 002 ImportArn len 37 ptr
+K DescribeKinesisStreamingDestinationInput 001 TableName req nil
+K DescribeKinesisStreamingDestinationInput 002 TableName len 1 ptr
+K DescribeTableInput 001 TableName req nil
+K DescribeTableInput 002 TableName len 1 ptr
+K DescribeTableReplicaAutoScalingInput 001 TableName req nil
+K DescribeTableReplicaAutoScalingInput 002 TableName len 1 ptr
+K DescribeTimeToLiveInput 001 TableName req nil
+K DescribeTimeToLiveInput 002 TableName len 1 ptr
+K DisableKinesisStreamingDestinationInput 001 StreamArn req nil
+K DisableKinesisStreamingDestinationInput 002 StreamArn len 37 ptr
+K DisableKinesisStreamingDestinationInput 003 TableName req nil
+K DisableKinesisStreamingDestinationInput 004 TableName len 1 ptr
+K EnableKinesisStreamingDestinationInput 001 StreamArn req nil
+K EnableKinesisStreamingDestinationInput 002 StreamArn len 37 ptr
+K EnableKinesisStreamingDestinationInput 003 TableName req nil
+K EnableKinesisStreamingDestinationInput 004 TableName len 1 ptr
+K ExecuteStatementInput 001 Limit min 1 ptr
+K ExecuteStatementInput 002 NextToken len 1 ptr
+K ExecuteStatementInput 003 Parameters len 1 container
+K ExecuteStatementInput 004 Statement req nil
+K ExecuteStatementInput 005 Statement len 1 ptr
+K ExecuteTransactionInput 001 ClientRequestToken len 1 ptr
+K ExecuteTransactionInput 002 TransactStatements req nil
+K ExecuteTransactionInput 003 TransactStatements len 1 container
+K ExecuteTransactionInput 004 TransactStatements each ParameterizedStatement slice
+K ExportTableToPointInTimeInput 001 S3Bucket req nil
+K ExportTableToPointInTimeInput 002 S3SseKmsKeyId len 1 ptr
+K ExportTableToPointInTimeInput 003 TableArn req nil
+K ExportTableToPointInTimeInput 004 TableArn len 1 ptr
+K Get 001 Key req nil
+K Get 002 TableName req nil
+K Get 003 TableName len 1 ptr
+K GetItemInput 001 AttributesToGet len 1 container
+K GetItemInput 002 Key req nil
+K GetItemInput 003 TableName req nil
+K GetItemInput 004 TableName len 1 ptr
+K GetResourcePolicyInput 001 ResourceArn req nil
+K GetResourcePolicyInput 002 ResourceArn len 1 ptr
+K GlobalSecondaryIndex 001 IndexName req nil
+K GlobalSecondaryIndex 002 IndexName len 3 ptr
+K GlobalSecondaryIndex 003 KeySchema req nil
+K GlobalSecondaryIndex 004 KeySchema len 1 container
+K GlobalSecondaryIndex 005 Projection req nil
+K GlobalSecondaryIndex 006 KeySchema each KeySchemaElement slice
+K GlobalSecondaryIndex 007 Projection nest Projection
+K GlobalSecondaryIndex 008 ProvisionedThroughput nest ProvisionedThroughput
+K GlobalSecondaryIndexAutoScalingUpdate 001 IndexName len 3 ptr
+K GlobalSecondaryIndexAutoScalingUpdate 002 ProvisionedWriteCapacityAutoScalingUpdate nest AutoScalingSettingsUpdate
+K GlobalSecondaryIndexUpdate 001 Create nest CreateGlobalSecondaryIndexAction
+K GlobalSecondaryIndexUpdate 002 Delete nest DeleteGlobalSecondaryIndexAction
+K GlobalSecondaryIndexUpdate 003 Update nest UpdateGlobalSecondaryIndexAction
+K GlobalTableGlobalSecondaryIndexSettingsUpdate 001 IndexName req nil
+K GlobalTableGlobalSecondaryIndexSettingsUpdate 002 IndexName len 3 ptr
+K GlobalTableGlobalSecondaryIndexSettingsUpdate 003 ProvisionedWriteCapacityUnits min 1 ptr
+K GlobalTableGlobalSecondaryIndexSettingsUpdate 004 ProvisionedWriteCapacityAutoScalingSettingsUpdate nest AutoScalingSettingsUpdate
+K ImportTableInput 001 InputFormat req empty
+K ImportTableInput 002 S3BucketSource req nil
+K ImportTableInput 003 TableCreationParameters req nil
+K ImportTableInput 004 InputFormatOptions nest InputFormatOptions
+K ImportTableInput 005 S3BucketSource nest S3BucketSource
+K ImportTableInput 006 TableCreationParameters nest TableCreationParameters
+K InputFormatOptions 001 Csv nest CsvOptions
+K KeySchemaElement 001 AttributeName req nil
+K KeySchemaElement 002 AttributeName len 1 ptr
+K KeySchemaElement 003 KeyType req empty
+K KeysAndAttributes 001 AttributesToGet len 1 container
+K KeysAndAttributes 002 Keys req nil
+K KeysAndAttributes 003 Keys len 1 container
+K ListBackupsInput 001 ExclusiveStartBackupArn len 37 ptr
+K ListBackupsInput 002 Limit min 1 ptr
+K ListBackupsInput 003 TableName len 1 ptr
+K ListContributorInsightsInput 001 TableName len 1 ptr
+K ListExportsInput 001 MaxResults min 1 ptr
+K ListExportsInput 002 TableArn len 1 ptr
+K ListGlobalTablesInput 001 ExclusiveStartGlobalTableName len 3 ptr
+K ListGlobalTablesInput 002 Limit min 1 ptr
+K ListImportsInput 001 NextToken len 112 ptr
+K ListImportsInput 002 PageSize min 1 ptr
+K ListImportsInput 003 TableArn len 1 ptr
+K ListTablesInput 001 ExclusiveStartTableName len 3 ptr
+K ListTablesInput 002 Limit min 1 ptr
+K ListTagsOfResourceInput 001 ResourceArn req nil
+K ListTagsOfResourceInput 002 ResourceArn len 1 ptr
+K LocalSecondaryIndex 001 IndexName req nil
+K LocalSecondaryIndex 002 IndexName len 3 ptr
+K LocalSecondaryIndex 003 KeySchema req nil
+K LocalSecondaryIndex 004 KeySchema len 1 container
+K LocalSecondaryIndex 005 Projection req nil
+K LocalSecondaryIndex 006 KeySchema each KeySchemaElement slice
+K LocalSecondaryIndex 007 Projection nest Projection
+K ParameterizedStatement 001 Parameters len 1 container
+K ParameterizedStatement 002 Statement req nil
+K ParameterizedStatement 003 Statement len 1 ptr
+K PointInTimeRecoverySpecification 001 PointInTimeRecoveryEnabled req nil
+K Projection 001 NonKeyAttributes len 1 container
+K ProvisionedThroughput 001 ReadCapacityUnits req nil
+K ProvisionedThroughput 002 ReadCapacityUnits min 1 ptr
+K ProvisionedThroughput 003 WriteCapacityUnits req nil
+K ProvisionedThroughput 004 WriteCapacityUnits min 1 ptr
+K ProvisionedThroughputOverride 001 ReadCapacityUnits min 1 ptr
+K Put 001 Item req nil
+K Put 002 TableName req nil
+K Put 003 TableName len 1 ptr
+K PutItemInput 001 Item req nil
+K PutItemInput 002 TableName req nil
+K PutItemInput 003 TableName len 1 ptr
+K PutResourcePolicyInput 001 ExpectedRevisionId len 1 ptr
+K PutResourcePolicyInput 002 Policy req nil
+K PutResourcePolicyInput 003 ResourceArn req nil
+K PutResourcePolicyInput 004 ResourceArn len 1 ptr
+K QueryInput 001 AttributesToGet len 1 container
+K QueryInput 002 IndexName len 3 ptr
+K QueryInput 003 Limit min 1 ptr
+K QueryInput 004 TableName req nil
+K QueryInput 005 TableName len 1 ptr
+K QueryInput 006 KeyConditions each Condition map
+K QueryInput 007 QueryFilter each Condition map
+K ReplicaAutoScalingUpdate 001 RegionName req nil
+K ReplicaAutoScalingUpdate 002 ReplicaGlobalSecondaryIndexUpdates each ReplicaGlobalSecondaryIndexAutoScalingUpdate slice
+K ReplicaAutoScalingUpdate 003 ReplicaProvisionedReadCapacityAutoScalingUpdate nest AutoScalingSettingsUpdate
+K ReplicaGlobalSecondaryIndex 001 IndexName req nil
+K ReplicaGlobalSecondaryIndex 002 IndexName len 3 ptr
+K ReplicaGlobalSecondaryIndex 003 ProvisionedThroughputOverride nest ProvisionedThroughputOverride
+K ReplicaGlobalSecondaryIndexAutoScalingUpdate 001 IndexName len 3 ptr
+K ReplicaGlobalSecondaryIndexAutoScalingUpdate 002 ProvisionedReadCapacityAutoScalingUpdate nest AutoScalingSettingsUpdate
+K ReplicaGlobalSecondaryIndexSettingsUpdate 001 IndexName req nil
+K ReplicaGlobalSecondaryIndexSettingsUpdate 002 IndexName len 3 ptr
+K ReplicaGlobalSecondaryIndexSettingsUpdate 003 ProvisionedReadCapacityUnits min 1 ptr
+K ReplicaGlobalSecondaryIndexSettingsUpdate 004 ProvisionedReadCapacityAutoScalingSettingsUpdate nest AutoScalingSettingsUpdate
+K ReplicaSettingsUpdate 001 RegionName req nil
+K ReplicaSettingsUpdate 002 ReplicaGlobalSecondaryIndexSettingsUpdate len 1 container
+K ReplicaSettingsUpdate 003 ReplicaProvisionedReadCapacityUnits min 1 ptr
+K ReplicaSettingsUpdate 004 ReplicaGlobalSecondaryIndexSettingsUpdate each ReplicaGlobalSecondaryIndexSettingsUpdate slice
+K ReplicaSettingsUpdate 005 ReplicaProvisionedReadCapacityAutoScalingSettingsUpdate nest AutoScalingSettingsUpdate
+K ReplicaUpdate 001 Create nest CreateReplicaAction
+K ReplicaUpdate 002 Delete nest DeleteReplicaAction
+K ReplicationGroupUpdate 001 Create nest CreateReplicationGroupMemberAction
+K ReplicationGroupUpdate 002 Delete nest DeleteReplicationGroupMemberAction
+K ReplicationGroupUpdate 003 Update nest UpdateReplicationGroupMemberAction
+K RestoreTableFromBackupInput 001 BackupArn req nil
+K RestoreTableFromBackupInput 002 BackupArn len 37 ptr
+K RestoreTableFromBackupInput 003 TargetTableName req nil
+K RestoreTableFromBackupInput 004 TargetTableName len 3 ptr
+K RestoreTableFromBackupInput 005 GlobalSecondaryIndexOverride each GlobalSecondaryIndex slice
+K RestoreTableFromBackupInput 006 LocalSecondaryIndexOverride each LocalSecondaryIndex slice
+K RestoreTableFromBackupInput 007 ProvisionedThroughputOverride nest ProvisionedThroughput
+K RestoreTableToPointInTimeInput 001 SourceTableArn len 1 ptr
+K RestoreTableToPointInTimeInput 002 SourceTableName len 3 ptr
+K RestoreTableToPointInTimeInput 003 TargetTableName req nil
+K RestoreTableToPointInTimeInput 004 TargetTableName len 3 ptr
+K RestoreTableToPointInTimeInput 005 GlobalSecondaryIndexOverride each GlobalSecondaryIndex slice
+K RestoreTableToPointInTimeInput 006 LocalSecondaryIndexOverride each LocalSecondaryIndex slice
+K RestoreTableToPointInTimeInput 007 ProvisionedThroughputOverride nest ProvisionedThroughput
+K S3BucketSource 001 S3Bucket req nil
+K ScanInput 001 AttributesToGet len 1 container
+K ScanInput 002 IndexName len 3 ptr
+K ScanInput 003 Limit min 1 ptr
+K ScanInput 004 TableName req nil
+K ScanInput 005 TableName len 1 ptr
+K ScanInput 006 TotalSegments min 1 ptr
+K ScanInput 007 ScanFilter each Condition map
+K StreamSpecification 001 StreamEnabled req nil
+K TableCreationParameters 001 AttributeDefinitions req nil
+K TableCreationParameters 002 KeySchema req nil
+K TableCreationParameters 003 KeySchema len 1 container
+K TableCreationParameters 004 TableName req nil
+K TableCreationParameters 005 TableName len 3 ptr
+K TableCreationParameters 006 AttributeDefinitions each AttributeDefinition slice
+K TableCreationParameters 007 GlobalSecondaryIndexes each GlobalSecondaryIndex slice
+K TableCreationParameters 008 KeySchema each KeySchemaElement slice
+K TableCreationParameters 009 ProvisionedThroughput nest ProvisionedThroughput
+K Tag 001 Key req nil
+K Tag 002 Key len 1 ptr
+K Tag 003 Value req nil
+K TagResourceInput 001 ResourceArn req nil
+K TagResourceInput 002 ResourceArn len 1 ptr
+K TagResourceInput 003 Tags req nil
+K TagResourceInput 004 Tags each Tag slice
+K TimeToLiveSpecification 001 AttributeName req nil
+K TimeToLiveSpecification 002 AttributeName len 1 ptr
+K TimeToLiveSpecification 003 Enabled req nil
+K TransactGetItem 001 Get req nil
+K TransactGetItem 002 Get nest Get
+K TransactGetItemsInput 001 TransactItems req nil
+K TransactGetItemsInput 002 TransactItems len 1 container
+K TransactGetItemsInput 003 TransactItems each TransactGetItem slice
+K TransactWriteItem 001 ConditionCheck nest ConditionCheck
+K TransactWriteItem 002 Delete nest Delete
+K TransactWriteItem 003 Put nest Put
+K TransactWriteItem 004 Update nest Update
+K TransactWriteItemsInput 001 ClientRequestToken len 1 ptr
+K TransactWriteItemsInput 002 TransactItems req nil
+K TransactWriteItemsInput 003 TransactItems len 1 container
+K TransactWriteItemsInput 004 TransactItems each TransactWriteItem slice
+K UntagResourceInput 001 ResourceArn req nil
+K UntagResourceInput 002 ResourceArn len 1 ptr
+K UntagResourceInput 003 TagKeys req nil
+K Update 001 Key req nil
+K Update 002 TableName req nil
+K Update 003 TableName len 1 ptr
+K Update 004 UpdateExpression req nil
+K UpdateContinuousBackupsInput 001 PointInTimeRecoverySpecification req nil
+K UpdateContinuousBackupsInput 002 TableName req nil
+K UpdateContinuousBackupsInput 003 TableName len 1 ptr
+K UpdateContinuousBackupsInput 004 PointInTimeRecoverySpecification nest PointInTimeRecoverySpecification
+K UpdateContributorInsightsInput 001 ContributorInsightsAction req empty
+K UpdateContributorInsightsInput 002 IndexName len 3 ptr
+K UpdateContributorInsightsInput 003 TableName req nil
+K UpdateContributorInsightsInput 004 TableName len 1 ptr
+K UpdateGlobalSecondaryIndexAction 001 IndexName req nil
+K UpdateGlobalSecondaryIndexAction 002 IndexName len 3 ptr
+K UpdateGlobalSecondaryIndexAction 003 ProvisionedThroughput nest ProvisionedThroughput
+K UpdateGlobalTableInput 001 GlobalTableName req nil
+K UpdateGlobalTableInput 002 GlobalTableName len 3 ptr
+K UpdateGlobalTableInput 003 ReplicaUpdates req nil
+K UpdateGlobalTableInput 004 ReplicaUpdates each ReplicaUpdate slice
+K UpdateGlobalTableSettingsInput 001 GlobalTableGlobalSecondaryIndexSettingsUpdate len 1 container
+K UpdateGlobalTableSettingsInput 002 GlobalTableName req nil
+K UpdateGlobalTableSettingsInput 003 GlobalTableName len 3 ptr
+K UpdateGlobalTableSettingsInput 004 GlobalTableProvisionedWriteCapacityUnits min 1 ptr
+K UpdateGlobalTableSettingsInput 005 ReplicaSettingsUpdate len 1 container
+K UpdateGlobalTableSettingsInput 006 GlobalTableGlobalSecondaryIndexSettingsUpdate each GlobalTableGlobalSecondaryIndexSettingsUpdate slice
+K UpdateGlobalTableSettingsInput 007 GlobalTableProvisionedWriteCapacityAutoScalingSettingsUpdate nest AutoScalingSettingsUpdate
+K UpdateGlobalTableSettingsInput 008 ReplicaSettingsUpdate each ReplicaSettingsUpdate slice
+K UpdateItemInput 001 Key req nil
+K UpdateItemInput 002 TableName req nil
+K UpdateItemInput 003 TableName len 1 ptr
+K UpdateKinesisStreamingDestinationInput 001 StreamArn req nil
+K UpdateKinesisStreamingDestinationInput 002 StreamArn len 37 ptr
+K UpdateKinesisStreamingDestinationInput 003 TableName req nil
+K UpdateKinesisStreamingDestinationInput 004 TableName len 1 ptr
+K UpdateReplicationGroupMemberAction 001 GlobalSecondaryIndexes len 1 container
+K UpdateReplicationGroupMemberAction 002 RegionName req nil
+K UpdateReplicationGroupMemberAction 003 GlobalSecondaryIndexes each ReplicaGlobalSecondaryIndex slice
+K UpdateReplicationGroupMemberAction 004 ProvisionedThroughputOverride nest ProvisionedThroughputOverride
+K UpdateTableInput 001 ReplicaUpdates len 1 container
+K UpdateTableInput 002 TableName req nil
+K UpdateTableInput 003 TableName len 1 ptr
+K UpdateTableInput 004 AttributeDefinitions each AttributeDefinition slice
+K UpdateTableInput 005 GlobalSecondaryIndexUpdates each GlobalSecondaryIndexUpdate slice
+K UpdateTableInput 006 ProvisionedThroughput nest ProvisionedThroughput
+K UpdateTableInput 007 ReplicaUpdates each ReplicationGroupUpdate slice
+K UpdateTableInput 008 StreamSpecification nest StreamSpecification
+K UpdateTableReplicaAutoScalingInput 001 GlobalSecondaryIndexUpdates len 1 container
+K UpdateTableReplicaAutoScalingInput 002 ReplicaUpdates len 1 container
+K UpdateTableReplicaAutoScalingInput 003 TableName req nil
+K UpdateTableReplicaAutoScalingInput 004 TableName len 1 ptr
+K UpdateTableReplicaAutoScalingInput 005 GlobalSecondaryIndexUpdates each GlobalSecondaryIndexAutoScalingUpdate slice
+K UpdateTableReplicaAutoScalingInput 006 ProvisionedWriteCapacityAutoScalingUpdate nest AutoScalingSettingsUpdate
+K UpdateTableReplicaAutoScalingInput 007 ReplicaUpdates each ReplicaAutoScalingUpdate slice
+K UpdateTimeToLiveInput 001 TableName req nil
+K UpdateTimeToLiveInput 002 TableName len 1 ptr
+K UpdateTimeToLiveInput 003 TimeToLiveSpecification req nil
+K UpdateTimeToLiveInput 004 TimeToLiveSpecification nest TimeToLiveSpecification
+G ListContributorInsights NextToken NextToken
+G ListExports NextToken NextToken
+G ListImports NextToken NextToken
+G ListTables ExclusiveStartTableName LastEvaluatedTableName
+G Query ExclusiveStartKey LastEvaluatedKey
+G Scan ExclusiveStartKey LastEvaluatedKey

@@ -3007,6 +3007,7 @@ F CreatePatchBaselineInput.AvailableSecurityUpdatesComplianceStatus PatchComplia
 F CreatePatchBaselineInput.OperatingSystem OperatingSystem
 F CreatePatchBaselineInput.RejectedPatchesAction PatchAction
 F DeleteInventoryInput.SchemaDeleteOption InventorySchemaDeleteOption
+F DeleteResourcePolicyInput.DeletionMode DeletionMode
 F DescribeActivationsFilter.FilterKey DescribeActivationsFilterKeys
 F DescribeDocumentPermissionInput.PermissionType DocumentPermissionType
 F DescribeMaintenanceWindowScheduleInput.ResourceType MaintenanceWindowResourceType
@@ -3870,6 +3871,7 @@ T ConnectionStatus
 T CreateAssociationBatchRequestEntry
 T Credentials
 T CustomSchemaCountLimitExceededException
+T DeletionMode
 T DescribeActivationsFilter
 T DescribeActivationsFilterKeys
 T DocumentAlreadyExists
@@ -4328,6 +4330,8 @@ E ComplianceUploadTypeComplete ComplianceUploadType
 E ComplianceUploadTypePartial ComplianceUploadType
 E ConnectionStatusConnected ConnectionStatus
 E ConnectionStatusNotConnected ConnectionStatus
+E DeletionModeRemoveSharing DeletionMode
+E DeletionModeRollbackMigration DeletionMode
 E DescribeActivationsFilterKeysActivationIds DescribeActivationsFilterKeys
 E DescribeActivationsFilterKeysDefaultInstanceName DescribeActivationsFilterKeys
 E DescribeActivationsFilterKeysIamRole DescribeActivationsFilterKeys
@@ -4711,3 +4715,851 @@ E ValidationFindingScopeTypeAzureTenant ValidationFindingScopeType
 E ValidationFindingTypeError ValidationFindingType
 E ValidationFindingTypeInfo ValidationFindingType
 E ValidationFindingTypeWarn ValidationFindingType
+H AssociationDescription.Parameters
+H AssociationVersionInfo.Parameters
+H Command.Parameters
+H CreateAssociationBatchRequestEntry.Parameters
+H CreateAssociationInput.Parameters
+H CreateMaintenanceWindowInput.Description
+H GetMaintenanceWindowExecutionTaskInvocationOutput.OwnerInformation
+H GetMaintenanceWindowExecutionTaskInvocationOutput.Parameters
+H GetMaintenanceWindowExecutionTaskOutput.TaskParameters
+H GetMaintenanceWindowOutput.Description
+H GetMaintenanceWindowTaskOutput.Description
+H GetMaintenanceWindowTaskOutput.TaskParameters
+H InstanceInformation.IPAddress
+H InstancePatchState.OwnerInformation
+H InstanceProperty.IPAddress
+H MaintenanceWindowExecutionTaskInvocationIdentity.OwnerInformation
+H MaintenanceWindowExecutionTaskInvocationIdentity.Parameters
+H MaintenanceWindowIdentity.Description
+H MaintenanceWindowLambdaParameters.Payload
+H MaintenanceWindowRunCommandParameters.Parameters
+H MaintenanceWindowStepFunctionsParameters.Input
+H MaintenanceWindowTarget.Description
+H MaintenanceWindowTarget.OwnerInformation
+H MaintenanceWindowTask.Description
+H MaintenanceWindowTask.TaskParameters
+H MaintenanceWindowTaskParameterValueExpression.Values
+H Parameter.Value
+H ParameterHistory.Value
+H PatchSource.Configuration
+H PutParameterInput.Value
+H RegisterTargetWithMaintenanceWindowInput.Description
+H RegisterTargetWithMaintenanceWindowInput.OwnerInformation
+H RegisterTaskWithMaintenanceWindowInput.Description
+H RegisterTaskWithMaintenanceWindowInput.TaskParameters
+H SendCommandInput.Parameters
+H UpdateAssociationInput.Parameters
+H UpdateMaintenanceWindowInput.Description
+H UpdateMaintenanceWindowOutput.Description
+H UpdateMaintenanceWindowTargetInput.Description
+H UpdateMaintenanceWindowTargetInput.OwnerInformation
+H UpdateMaintenanceWindowTargetOutput.Description
+H UpdateMaintenanceWindowTargetOutput.OwnerInformation
+H UpdateMaintenanceWindowTaskInput.Description
+H UpdateMaintenanceWindowTaskInput.TaskParameters
+H UpdateMaintenanceWindowTaskOutput.Description
+H UpdateMaintenanceWindowTaskOutput.TaskParameters
+Y CommandExecuted 5 20
+U CloudConnectorConfiguration
+U ConfigurationTargets
+U ExecutionInputs
+U ExecutionPreview
+U NodeType
+K AddTagsToResourceInput 001 ResourceId req nil
+K AddTagsToResourceInput 002 ResourceType req empty
+K AddTagsToResourceInput 003 Tags req nil
+K AddTagsToResourceInput 004 Tags each Tag slice
+K Alarm 001 Name req nil
+K Alarm 002 Name len 1 ptr
+K AlarmConfiguration 001 Alarms req nil
+K AlarmConfiguration 002 Alarms len 1 container
+K AlarmConfiguration 003 Alarms each Alarm slice
+K AssociateOpsItemRelatedItemInput 001 AssociationType req nil
+K AssociateOpsItemRelatedItemInput 002 OpsItemId req nil
+K AssociateOpsItemRelatedItemInput 003 ResourceType req nil
+K AssociateOpsItemRelatedItemInput 004 ResourceUri req nil
+K AssociationExecutionFilter 001 Key req empty
+K AssociationExecutionFilter 002 Type req empty
+K AssociationExecutionFilter 003 Value req nil
+K AssociationExecutionFilter 004 Value len 1 ptr
+K AssociationExecutionTargetsFilter 001 Key req empty
+K AssociationExecutionTargetsFilter 002 Value req nil
+K AssociationExecutionTargetsFilter 003 Value len 1 ptr
+K AssociationFilter 001 Key req empty
+K AssociationFilter 002 Value req nil
+K AssociationFilter 003 Value len 1 ptr
+K AssociationStatus 001 Date req nil
+K AssociationStatus 002 Message req nil
+K AssociationStatus 003 Message len 1 ptr
+K AssociationStatus 004 Name req empty
+K AttachmentsSource 001 Values len 1 container
+K AutomationExecutionFilter 001 Key req empty
+K AutomationExecutionFilter 002 Values req nil
+K AutomationExecutionFilter 003 Values len 1 container
+K BaselineOverride 001 ApprovalRules nest PatchRuleGroup
+K BaselineOverride 002 GlobalFilters nest PatchFilterGroup
+K BaselineOverride 003 Sources each PatchSource slice
+K CancelCommandInput 001 CommandId req nil
+K CancelCommandInput 002 CommandId len 36 ptr
+K CancelMaintenanceWindowExecutionInput 001 WindowExecutionId req nil
+K CancelMaintenanceWindowExecutionInput 002 WindowExecutionId len 36 ptr
+K CloudWatchOutputConfig 001 CloudWatchLogGroupName len 1 ptr
+K CommandFilter 001 Key req empty
+K CommandFilter 002 Value req nil
+K CommandFilter 003 Value len 1 ptr
+K ComplianceExecutionSummary 001 ExecutionTime req nil
+K ComplianceItemEntry 001 Severity req empty
+K ComplianceItemEntry 002 Status req empty
+K ComplianceStringFilter 001 Key len 1 ptr
+K ComplianceStringFilter 002 Values len 1 container
+K CreateActivationInput 001 IamRole req nil
+K CreateActivationInput 002 RegistrationLimit min 1 ptr
+K CreateActivationInput 003 RegistrationMetadata each RegistrationMetadataItem slice
+K CreateActivationInput 004 Tags each Tag slice
+K CreateAssociationBatchInput 001 Entries req nil
+K CreateAssociationBatchInput 002 Entries len 1 container
+K CreateAssociationBatchInput 003 Entries each CreateAssociationBatchRequestEntry slice
+K CreateAssociationBatchRequestEntry 001 AutomationTargetParameterName len 1 ptr
+K CreateAssociationBatchRequestEntry 002 Duration min 1 ptr
+K CreateAssociationBatchRequestEntry 003 MaxConcurrency len 1 ptr
+K CreateAssociationBatchRequestEntry 004 MaxErrors len 1 ptr
+K CreateAssociationBatchRequestEntry 005 Name req nil
+K CreateAssociationBatchRequestEntry 006 ScheduleExpression len 1 ptr
+K CreateAssociationBatchRequestEntry 007 ScheduleOffset min 1 ptr
+K CreateAssociationBatchRequestEntry 008 TargetLocations len 1 container
+K CreateAssociationBatchRequestEntry 009 AlarmConfiguration nest AlarmConfiguration
+K CreateAssociationBatchRequestEntry 010 OutputLocation nest InstanceAssociationOutputLocation
+K CreateAssociationBatchRequestEntry 011 TargetLocations each TargetLocation slice
+K CreateAssociationBatchRequestEntry 012 Targets each Target slice
+K CreateAssociationInput 001 AutomationTargetParameterName len 1 ptr
+K CreateAssociationInput 002 Duration min 1 ptr
+K CreateAssociationInput 003 MaxConcurrency len 1 ptr
+K CreateAssociationInput 004 MaxErrors len 1 ptr
+K CreateAssociationInput 005 Name req nil
+K CreateAssociationInput 006 ScheduleExpression len 1 ptr
+K CreateAssociationInput 007 ScheduleOffset min 1 ptr
+K CreateAssociationInput 008 TargetLocations len 1 container
+K CreateAssociationInput 009 AlarmConfiguration nest AlarmConfiguration
+K CreateAssociationInput 010 OutputLocation nest InstanceAssociationOutputLocation
+K CreateAssociationInput 011 Tags each Tag slice
+K CreateAssociationInput 012 TargetLocations each TargetLocation slice
+K CreateAssociationInput 013 Targets each Target slice
+K CreateDocumentInput 001 Content req nil
+K CreateDocumentInput 002 Content len 1 ptr
+K CreateDocumentInput 003 Name req nil
+K CreateDocumentInput 004 Requires len 1 container
+K CreateDocumentInput 005 Attachments each AttachmentsSource slice
+K CreateDocumentInput 006 Requires each DocumentRequires slice
+K CreateDocumentInput 007 Tags each Tag slice
+K CreateMaintenanceWindowInput 001 AllowUnassociatedTargets req none
+K CreateMaintenanceWindowInput 002 ClientToken len 1 ptr
+K CreateMaintenanceWindowInput 003 Cutoff req none
+K CreateMaintenanceWindowInput 004 Description len 1 ptr
+K CreateMaintenanceWindowInput 005 Duration req nil
+K CreateMaintenanceWindowInput 006 Duration min 1 ptr
+K CreateMaintenanceWindowInput 007 Name req nil
+K CreateMaintenanceWindowInput 008 Name len 3 ptr
+K CreateMaintenanceWindowInput 009 Schedule req nil
+K CreateMaintenanceWindowInput 010 Schedule len 1 ptr
+K CreateMaintenanceWindowInput 011 ScheduleOffset min 1 ptr
+K CreateMaintenanceWindowInput 012 Tags each Tag slice
+K CreateOpsItemInput 001 Category len 1 ptr
+K CreateOpsItemInput 002 Description req nil
+K CreateOpsItemInput 003 Description len 1 ptr
+K CreateOpsItemInput 004 Priority min 1 ptr
+K CreateOpsItemInput 005 Severity len 1 ptr
+K CreateOpsItemInput 006 Source req nil
+K CreateOpsItemInput 007 Source len 1 ptr
+K CreateOpsItemInput 008 Title req nil
+K CreateOpsItemInput 009 Title len 1 ptr
+K CreateOpsItemInput 010 RelatedOpsItems each RelatedOpsItem slice
+K CreateOpsItemInput 011 Tags each Tag slice
+K CreateOpsMetadataInput 001 Metadata len 1 container
+K CreateOpsMetadataInput 002 ResourceId req nil
+K CreateOpsMetadataInput 003 ResourceId len 1 ptr
+K CreateOpsMetadataInput 004 Metadata each MetadataValue map
+K CreateOpsMetadataInput 005 Tags each Tag slice
+K CreatePatchBaselineInput 001 ClientToken len 1 ptr
+K CreatePatchBaselineInput 002 Description len 1 ptr
+K CreatePatchBaselineInput 003 Name req nil
+K CreatePatchBaselineInput 004 Name len 3 ptr
+K CreatePatchBaselineInput 005 ApprovalRules nest PatchRuleGroup
+K CreatePatchBaselineInput 006 GlobalFilters nest PatchFilterGroup
+K CreatePatchBaselineInput 007 Sources each PatchSource slice
+K CreatePatchBaselineInput 008 Tags each Tag slice
+K CreateResourceDataSyncInput 001 SyncName req nil
+K CreateResourceDataSyncInput 002 SyncName len 1 ptr
+K CreateResourceDataSyncInput 003 SyncType len 1 ptr
+K CreateResourceDataSyncInput 004 S3Destination nest ResourceDataSyncS3Destination
+K CreateResourceDataSyncInput 005 SyncSource nest ResourceDataSyncSource
+K DeleteActivationInput 001 ActivationId req nil
+K DeleteDocumentInput 001 Name req nil
+K DeleteInventoryInput 001 TypeName req nil
+K DeleteInventoryInput 002 TypeName len 1 ptr
+K DeleteMaintenanceWindowInput 001 WindowId req nil
+K DeleteMaintenanceWindowInput 002 WindowId len 20 ptr
+K DeleteOpsItemInput 001 OpsItemId req nil
+K DeleteOpsMetadataInput 001 OpsMetadataArn req nil
+K DeleteOpsMetadataInput 002 OpsMetadataArn len 1 ptr
+K DeleteParameterInput 001 Name req nil
+K DeleteParameterInput 002 Name len 1 ptr
+K DeleteParametersInput 001 Names req nil
+K DeleteParametersInput 002 Names len 1 container
+K DeletePatchBaselineInput 001 BaselineId req nil
+K DeletePatchBaselineInput 002 BaselineId len 20 ptr
+K DeleteResourceDataSyncInput 001 SyncName req nil
+K DeleteResourceDataSyncInput 002 SyncName len 1 ptr
+K DeleteResourceDataSyncInput 003 SyncType len 1 ptr
+K DeleteResourcePolicyInput 001 PolicyHash req nil
+K DeleteResourcePolicyInput 002 PolicyId req nil
+K DeleteResourcePolicyInput 003 ResourceArn req nil
+K DeleteResourcePolicyInput 004 ResourceArn len 20 ptr
+K DeregisterManagedInstanceInput 001 InstanceId req nil
+K DeregisterManagedInstanceInput 002 InstanceId len 20 ptr
+K DeregisterPatchBaselineForPatchGroupInput 001 BaselineId req nil
+K DeregisterPatchBaselineForPatchGroupInput 002 BaselineId len 20 ptr
+K DeregisterPatchBaselineForPatchGroupInput 003 PatchGroup req nil
+K DeregisterPatchBaselineForPatchGroupInput 004 PatchGroup len 1 ptr
+K DeregisterTargetFromMaintenanceWindowInput 001 WindowId req nil
+K DeregisterTargetFromMaintenanceWindowInput 002 WindowId len 20 ptr
+K DeregisterTargetFromMaintenanceWindowInput 003 WindowTargetId req nil
+K DeregisterTargetFromMaintenanceWindowInput 004 WindowTargetId len 36 ptr
+K DeregisterTaskFromMaintenanceWindowInput 001 WindowId req nil
+K DeregisterTaskFromMaintenanceWindowInput 002 WindowId len 20 ptr
+K DeregisterTaskFromMaintenanceWindowInput 003 WindowTaskId req nil
+K DeregisterTaskFromMaintenanceWindowInput 004 WindowTaskId len 36 ptr
+K DescribeActivationsInput 001 MaxResults min 1 ptr
+K DescribeAssociationExecutionTargetsInput 001 AssociationId req nil
+K DescribeAssociationExecutionTargetsInput 002 ExecutionId req nil
+K DescribeAssociationExecutionTargetsInput 003 Filters len 1 container
+K DescribeAssociationExecutionTargetsInput 004 MaxResults min 1 ptr
+K DescribeAssociationExecutionTargetsInput 005 Filters each AssociationExecutionTargetsFilter slice
+K DescribeAssociationExecutionsInput 001 AssociationId req nil
+K DescribeAssociationExecutionsInput 002 Filters len 1 container
+K DescribeAssociationExecutionsInput 003 MaxResults min 1 ptr
+K DescribeAssociationExecutionsInput 004 Filters each AssociationExecutionFilter slice
+K DescribeAutomationExecutionsInput 001 Filters len 1 container
+K DescribeAutomationExecutionsInput 002 MaxResults min 1 ptr
+K DescribeAutomationExecutionsInput 003 Filters each AutomationExecutionFilter slice
+K DescribeAutomationStepExecutionsInput 001 AutomationExecutionId req nil
+K DescribeAutomationStepExecutionsInput 002 AutomationExecutionId len 36 ptr
+K DescribeAutomationStepExecutionsInput 003 Filters len 1 container
+K DescribeAutomationStepExecutionsInput 004 MaxResults min 1 ptr
+K DescribeAutomationStepExecutionsInput 005 Filters each StepExecutionFilter slice
+K DescribeAvailablePatchesInput 001 MaxResults min 1 ptr
+K DescribeAvailablePatchesInput 002 Filters each PatchOrchestratorFilter slice
+K DescribeDocumentInput 001 Name req nil
+K DescribeDocumentPermissionInput 001 MaxResults min 1 ptr
+K DescribeDocumentPermissionInput 002 Name req nil
+K DescribeDocumentPermissionInput 003 PermissionType req empty
+K DescribeEffectiveInstanceAssociationsInput 001 InstanceId req nil
+K DescribeEffectiveInstanceAssociationsInput 002 MaxResults min 1 ptr
+K DescribeEffectivePatchesForPatchBaselineInput 001 BaselineId req nil
+K DescribeEffectivePatchesForPatchBaselineInput 002 BaselineId len 20 ptr
+K DescribeEffectivePatchesForPatchBaselineInput 003 MaxResults min 1 ptr
+K DescribeInstanceAssociationsStatusInput 001 InstanceId req nil
+K DescribeInstanceAssociationsStatusInput 002 MaxResults min 1 ptr
+K DescribeInstanceInformationInput 001 MaxResults min 5 ptr
+K DescribeInstanceInformationInput 002 Filters each InstanceInformationStringFilter slice
+K DescribeInstanceInformationInput 003 InstanceInformationFilterList each InstanceInformationFilter slice
+K DescribeInstancePatchStatesForPatchGroupInput 001 MaxResults min 10 ptr
+K DescribeInstancePatchStatesForPatchGroupInput 002 PatchGroup req nil
+K DescribeInstancePatchStatesForPatchGroupInput 003 PatchGroup len 1 ptr
+K DescribeInstancePatchStatesForPatchGroupInput 004 Filters each InstancePatchStateFilter slice
+K DescribeInstancePatchStatesInput 001 InstanceIds req nil
+K DescribeInstancePatchStatesInput 002 MaxResults min 10 ptr
+K DescribeInstancePatchesInput 001 InstanceId req nil
+K DescribeInstancePatchesInput 002 MaxResults min 10 ptr
+K DescribeInstancePatchesInput 003 Filters each PatchOrchestratorFilter slice
+K DescribeInstancePropertiesInput 001 FiltersWithOperator len 1 container
+K DescribeInstancePropertiesInput 002 InstancePropertyFilterList len 1 container
+K DescribeInstancePropertiesInput 003 MaxResults min 5 ptr
+K DescribeInstancePropertiesInput 004 FiltersWithOperator each InstancePropertyStringFilter slice
+K DescribeInstancePropertiesInput 005 InstancePropertyFilterList each InstancePropertyFilter slice
+K DescribeInventoryDeletionsInput 001 MaxResults min 1 ptr
+K DescribeMaintenanceWindowExecutionTaskInvocationsInput 001 MaxResults min 10 ptr
+K DescribeMaintenanceWindowExecutionTaskInvocationsInput 002 TaskId req nil
+K DescribeMaintenanceWindowExecutionTaskInvocationsInput 003 TaskId len 36 ptr
+K DescribeMaintenanceWindowExecutionTaskInvocationsInput 004 WindowExecutionId req nil
+K DescribeMaintenanceWindowExecutionTaskInvocationsInput 005 WindowExecutionId len 36 ptr
+K DescribeMaintenanceWindowExecutionTaskInvocationsInput 006 Filters each MaintenanceWindowFilter slice
+K DescribeMaintenanceWindowExecutionTasksInput 001 MaxResults min 10 ptr
+K DescribeMaintenanceWindowExecutionTasksInput 002 WindowExecutionId req nil
+K DescribeMaintenanceWindowExecutionTasksInput 003 WindowExecutionId len 36 ptr
+K DescribeMaintenanceWindowExecutionTasksInput 004 Filters each MaintenanceWindowFilter slice
+K DescribeMaintenanceWindowExecutionsInput 001 MaxResults min 10 ptr
+K DescribeMaintenanceWindowExecutionsInput 002 WindowId req nil
+K DescribeMaintenanceWindowExecutionsInput 003 WindowId len 20 ptr
+K DescribeMaintenanceWindowExecutionsInput 004 Filters each MaintenanceWindowFilter slice
+K DescribeMaintenanceWindowScheduleInput 001 MaxResults min 1 ptr
+K DescribeMaintenanceWindowScheduleInput 002 WindowId len 20 ptr
+K DescribeMaintenanceWindowScheduleInput 003 Filters each PatchOrchestratorFilter slice
+K DescribeMaintenanceWindowScheduleInput 004 Targets each Target slice
+K DescribeMaintenanceWindowTargetsInput 001 MaxResults min 10 ptr
+K DescribeMaintenanceWindowTargetsInput 002 WindowId req nil
+K DescribeMaintenanceWindowTargetsInput 003 WindowId len 20 ptr
+K DescribeMaintenanceWindowTargetsInput 004 Filters each MaintenanceWindowFilter slice
+K DescribeMaintenanceWindowTasksInput 001 MaxResults min 10 ptr
+K DescribeMaintenanceWindowTasksInput 002 WindowId req nil
+K DescribeMaintenanceWindowTasksInput 003 WindowId len 20 ptr
+K DescribeMaintenanceWindowTasksInput 004 Filters each MaintenanceWindowFilter slice
+K DescribeMaintenanceWindowsForTargetInput 001 MaxResults min 1 ptr
+K DescribeMaintenanceWindowsForTargetInput 002 ResourceType req empty
+K DescribeMaintenanceWindowsForTargetInput 003 Targets req nil
+K DescribeMaintenanceWindowsForTargetInput 004 Targets each Target slice
+K DescribeMaintenanceWindowsInput 001 MaxResults min 10 ptr
+K DescribeMaintenanceWindowsInput 002 Filters each MaintenanceWindowFilter slice
+K DescribeOpsItemsInput 001 MaxResults min 1 ptr
+K DescribeOpsItemsInput 002 OpsItemFilters each OpsItemFilter slice
+K DescribeParametersInput 001 MaxResults min 1 ptr
+K DescribeParametersInput 002 Filters each ParametersFilter slice
+K DescribeParametersInput 003 ParameterFilters each ParameterStringFilter slice
+K DescribePatchBaselinesInput 001 MaxResults min 1 ptr
+K DescribePatchBaselinesInput 002 Filters each PatchOrchestratorFilter slice
+K DescribePatchGroupStateInput 001 PatchGroup req nil
+K DescribePatchGroupStateInput 002 PatchGroup len 1 ptr
+K DescribePatchGroupsInput 001 MaxResults min 1 ptr
+K DescribePatchGroupsInput 002 Filters each PatchOrchestratorFilter slice
+K DescribePatchPropertiesInput 001 MaxResults min 1 ptr
+K DescribePatchPropertiesInput 002 OperatingSystem req empty
+K DescribePatchPropertiesInput 003 Property req empty
+K DescribeSessionsInput 001 Filters len 1 container
+K DescribeSessionsInput 002 MaxResults min 1 ptr
+K DescribeSessionsInput 003 State req empty
+K DescribeSessionsInput 004 Filters each SessionFilter slice
+K DisassociateOpsItemRelatedItemInput 001 AssociationId req nil
+K DisassociateOpsItemRelatedItemInput 002 OpsItemId req nil
+K DocumentFilter 001 Key req empty
+K DocumentFilter 002 Value req nil
+K DocumentFilter 003 Value len 1 ptr
+K DocumentKeyValuesFilter 001 Key len 1 ptr
+K DocumentRequires 001 Name req nil
+K DocumentReviewCommentSource 001 Content len 1 ptr
+K DocumentReviews 001 Action req empty
+K DocumentReviews 002 Comment each DocumentReviewCommentSource slice
+K GetAutomationExecutionInput 001 AutomationExecutionId req nil
+K GetAutomationExecutionInput 002 AutomationExecutionId len 36 ptr
+K GetCalendarStateInput 001 CalendarNames req nil
+K GetCommandInvocationInput 001 CommandId req nil
+K GetCommandInvocationInput 002 CommandId len 36 ptr
+K GetCommandInvocationInput 003 InstanceId req nil
+K GetCommandInvocationInput 004 PluginName len 4 ptr
+K GetConnectionStatusInput 001 Target req nil
+K GetConnectionStatusInput 002 Target len 1 ptr
+K GetDeployablePatchSnapshotForInstanceInput 001 InstanceId req nil
+K GetDeployablePatchSnapshotForInstanceInput 002 SnapshotId req nil
+K GetDeployablePatchSnapshotForInstanceInput 003 SnapshotId len 36 ptr
+K GetDeployablePatchSnapshotForInstanceInput 004 BaselineOverride nest BaselineOverride
+K GetDocumentInput 001 Name req nil
+K GetInventoryInput 001 Aggregators len 1 container
+K GetInventoryInput 002 Filters len 1 container
+K GetInventoryInput 003 MaxResults min 1 ptr
+K GetInventoryInput 004 ResultAttributes len 1 container
+K GetInventoryInput 005 Aggregators each InventoryAggregator slice
+K GetInventoryInput 006 Filters each InventoryFilter slice
+K GetInventoryInput 007 ResultAttributes each ResultAttribute slice
+K GetInventorySchemaInput 001 MaxResults min 50 ptr
+K GetMaintenanceWindowExecutionInput 001 WindowExecutionId req nil
+K GetMaintenanceWindowExecutionInput 002 WindowExecutionId len 36 ptr
+K GetMaintenanceWindowExecutionTaskInput 001 TaskId req nil
+K GetMaintenanceWindowExecutionTaskInput 002 TaskId len 36 ptr
+K GetMaintenanceWindowExecutionTaskInput 003 WindowExecutionId req nil
+K GetMaintenanceWindowExecutionTaskInput 004 WindowExecutionId len 36 ptr
+K GetMaintenanceWindowExecutionTaskInvocationInput 001 InvocationId req nil
+K GetMaintenanceWindowExecutionTaskInvocationInput 002 InvocationId len 36 ptr
+K GetMaintenanceWindowExecutionTaskInvocationInput 003 TaskId req nil
+K GetMaintenanceWindowExecutionTaskInvocationInput 004 TaskId len 36 ptr
+K GetMaintenanceWindowExecutionTaskInvocationInput 005 WindowExecutionId req nil
+K GetMaintenanceWindowExecutionTaskInvocationInput 006 WindowExecutionId len 36 ptr
+K GetMaintenanceWindowInput 001 WindowId req nil
+K GetMaintenanceWindowInput 002 WindowId len 20 ptr
+K GetMaintenanceWindowTaskInput 001 WindowId req nil
+K GetMaintenanceWindowTaskInput 002 WindowId len 20 ptr
+K GetMaintenanceWindowTaskInput 003 WindowTaskId req nil
+K GetMaintenanceWindowTaskInput 004 WindowTaskId len 36 ptr
+K GetOpsItemInput 001 OpsItemArn len 20 ptr
+K GetOpsItemInput 002 OpsItemId req nil
+K GetOpsMetadataInput 001 MaxResults min 1 ptr
+K GetOpsMetadataInput 002 OpsMetadataArn req nil
+K GetOpsMetadataInput 003 OpsMetadataArn len 1 ptr
+K GetOpsSummaryInput 001 Aggregators len 1 container
+K GetOpsSummaryInput 002 Filters len 1 container
+K GetOpsSummaryInput 003 MaxResults min 1 ptr
+K GetOpsSummaryInput 004 ResultAttributes len 1 container
+K GetOpsSummaryInput 005 SyncName len 1 ptr
+K GetOpsSummaryInput 006 Aggregators each OpsAggregator slice
+K GetOpsSummaryInput 007 Filters each OpsFilter slice
+K GetOpsSummaryInput 008 ResultAttributes each OpsResultAttribute slice
+K GetParameterHistoryInput 001 MaxResults min 1 ptr
+K GetParameterHistoryInput 002 Name req nil
+K GetParameterHistoryInput 003 Name len 1 ptr
+K GetParameterInput 001 Name req nil
+K GetParameterInput 002 Name len 1 ptr
+K GetParametersByPathInput 001 MaxResults min 1 ptr
+K GetParametersByPathInput 002 Path req nil
+K GetParametersByPathInput 003 Path len 1 ptr
+K GetParametersByPathInput 004 ParameterFilters each ParameterStringFilter slice
+K GetParametersInput 001 Names req nil
+K GetParametersInput 002 Names len 1 container
+K GetPatchBaselineForPatchGroupInput 001 PatchGroup req nil
+K GetPatchBaselineForPatchGroupInput 002 PatchGroup len 1 ptr
+K GetPatchBaselineInput 001 BaselineId req nil
+K GetPatchBaselineInput 002 BaselineId len 20 ptr
+K GetResourcePoliciesInput 001 MaxResults min 1 ptr
+K GetResourcePoliciesInput 002 ResourceArn req nil
+K GetResourcePoliciesInput 003 ResourceArn len 20 ptr
+K GetServiceSettingInput 001 SettingId req nil
+K GetServiceSettingInput 002 SettingId len 1 ptr
+K InstanceAssociationOutputLocation 001 S3Location nest S3OutputLocation
+K InstanceInformationFilter 001 Key req empty
+K InstanceInformationFilter 002 ValueSet req nil
+K InstanceInformationFilter 003 ValueSet len 1 container
+K InstanceInformationStringFilter 001 Key req nil
+K InstanceInformationStringFilter 002 Key len 1 ptr
+K InstanceInformationStringFilter 003 Values req nil
+K InstanceInformationStringFilter 004 Values len 1 container
+K InstancePatchStateFilter 001 Key req nil
+K InstancePatchStateFilter 002 Key len 1 ptr
+K InstancePatchStateFilter 003 Type req empty
+K InstancePatchStateFilter 004 Values req nil
+K InstancePatchStateFilter 005 Values len 1 container
+K InstancePropertyFilter 001 Key req empty
+K InstancePropertyFilter 002 ValueSet req nil
+K InstancePropertyFilter 003 ValueSet len 1 container
+K InstancePropertyStringFilter 001 Key req nil
+K InstancePropertyStringFilter 002 Key len 1 ptr
+K InstancePropertyStringFilter 003 Values req nil
+K InstancePropertyStringFilter 004 Values len 1 container
+K InventoryAggregator 001 Aggregators len 1 container
+K InventoryAggregator 002 Expression len 1 ptr
+K InventoryAggregator 003 Groups len 1 container
+K InventoryAggregator 004 Aggregators each InventoryAggregator slice
+K InventoryAggregator 005 Groups each InventoryGroup slice
+K InventoryFilter 001 Key req nil
+K InventoryFilter 002 Key len 1 ptr
+K InventoryFilter 003 Values req nil
+K InventoryFilter 004 Values len 1 container
+K InventoryGroup 001 Filters req nil
+K InventoryGroup 002 Filters len 1 container
+K InventoryGroup 003 Name req nil
+K InventoryGroup 004 Name len 1 ptr
+K InventoryGroup 005 Filters each InventoryFilter slice
+K InventoryItem 001 CaptureTime req nil
+K InventoryItem 002 SchemaVersion req nil
+K InventoryItem 003 TypeName req nil
+K InventoryItem 004 TypeName len 1 ptr
+K LabelParameterVersionInput 001 Labels req nil
+K LabelParameterVersionInput 002 Labels len 1 container
+K LabelParameterVersionInput 003 Name req nil
+K LabelParameterVersionInput 004 Name len 1 ptr
+K ListAssociationVersionsInput 001 AssociationId req nil
+K ListAssociationVersionsInput 002 MaxResults min 1 ptr
+K ListAssociationsInput 001 AssociationFilterList len 1 container
+K ListAssociationsInput 002 MaxResults min 1 ptr
+K ListAssociationsInput 003 AssociationFilterList each AssociationFilter slice
+K ListCommandInvocationsInput 001 CommandId len 36 ptr
+K ListCommandInvocationsInput 002 Filters len 1 container
+K ListCommandInvocationsInput 003 MaxResults min 1 ptr
+K ListCommandInvocationsInput 004 Filters each CommandFilter slice
+K ListCommandsInput 001 CommandId len 36 ptr
+K ListCommandsInput 002 Filters len 1 container
+K ListCommandsInput 003 MaxResults min 1 ptr
+K ListCommandsInput 004 Filters each CommandFilter slice
+K ListComplianceItemsInput 001 MaxResults min 1 ptr
+K ListComplianceItemsInput 002 ResourceIds len 1 container
+K ListComplianceItemsInput 003 ResourceTypes len 1 container
+K ListComplianceItemsInput 004 Filters each ComplianceStringFilter slice
+K ListComplianceSummariesInput 001 MaxResults min 1 ptr
+K ListComplianceSummariesInput 002 Filters each ComplianceStringFilter slice
+K ListDocumentMetadataHistoryInput 001 MaxResults min 1 ptr
+K ListDocumentMetadataHistoryInput 002 Metadata req empty
+K ListDocumentMetadataHistoryInput 003 Name req nil
+K ListDocumentVersionsInput 001 MaxResults min 1 ptr
+K ListDocumentVersionsInput 002 Name req nil
+K ListDocumentsInput 001 DocumentFilterList len 1 container
+K ListDocumentsInput 002 MaxResults min 1 ptr
+K ListDocumentsInput 003 DocumentFilterList each DocumentFilter slice
+K ListDocumentsInput 004 Filters each DocumentKeyValuesFilter slice
+K ListInventoryEntriesInput 001 Filters len 1 container
+K ListInventoryEntriesInput 002 InstanceId req nil
+K ListInventoryEntriesInput 003 MaxResults min 1 ptr
+K ListInventoryEntriesInput 004 TypeName req nil
+K ListInventoryEntriesInput 005 TypeName len 1 ptr
+K ListInventoryEntriesInput 006 Filters each InventoryFilter slice
+K ListOpsItemEventsInput 001 MaxResults min 1 ptr
+K ListOpsItemEventsInput 002 Filters each OpsItemEventFilter slice
+K ListOpsItemRelatedItemsInput 001 MaxResults min 1 ptr
+K ListOpsItemRelatedItemsInput 002 Filters each OpsItemRelatedItemsFilter slice
+K ListOpsMetadataInput 001 MaxResults min 1 ptr
+K ListOpsMetadataInput 002 Filters each OpsMetadataFilter slice
+K ListResourceComplianceSummariesInput 001 MaxResults min 1 ptr
+K ListResourceComplianceSummariesInput 002 Filters each ComplianceStringFilter slice
+K ListResourceDataSyncInput 001 MaxResults min 1 ptr
+K ListResourceDataSyncInput 002 SyncType len 1 ptr
+K ListTagsForResourceInput 001 ResourceId req nil
+K ListTagsForResourceInput 002 ResourceType req empty
+K LoggingInfo 001 S3BucketName req nil
+K LoggingInfo 002 S3BucketName len 3 ptr
+K LoggingInfo 003 S3Region req nil
+K LoggingInfo 004 S3Region len 3 ptr
+K MaintenanceWindowAutomationParameters 001 Parameters len 1 container
+K MaintenanceWindowFilter 001 Key len 1 ptr
+K MaintenanceWindowLambdaParameters 001 ClientContext len 1 ptr
+K MaintenanceWindowLambdaParameters 002 Qualifier len 1 ptr
+K MaintenanceWindowRunCommandParameters 001 OutputS3BucketName len 3 ptr
+K MaintenanceWindowRunCommandParameters 002 TimeoutSeconds min 30 ptr
+K MaintenanceWindowRunCommandParameters 003 CloudWatchOutputConfig nest CloudWatchOutputConfig
+K MaintenanceWindowStepFunctionsParameters 001 Name len 1 ptr
+K MaintenanceWindowTaskInvocationParameters 001 Automation nest MaintenanceWindowAutomationParameters
+K MaintenanceWindowTaskInvocationParameters 002 Lambda nest MaintenanceWindowLambdaParameters
+K MaintenanceWindowTaskInvocationParameters 003 RunCommand nest MaintenanceWindowRunCommandParameters
+K MaintenanceWindowTaskInvocationParameters 004 StepFunctions nest MaintenanceWindowStepFunctionsParameters
+K MetadataValue 001 Value len 1 ptr
+K ModifyDocumentPermissionInput 001 Name req nil
+K ModifyDocumentPermissionInput 002 PermissionType req empty
+K OpsAggregator 001 AggregatorType len 1 ptr
+K OpsAggregator 002 Aggregators len 1 container
+K OpsAggregator 003 AttributeName len 1 ptr
+K OpsAggregator 004 Filters len 1 container
+K OpsAggregator 005 TypeName len 1 ptr
+K OpsAggregator 006 Aggregators each OpsAggregator slice
+K OpsAggregator 007 Filters each OpsFilter slice
+K OpsFilter 001 Key req nil
+K OpsFilter 002 Key len 1 ptr
+K OpsFilter 003 Values req nil
+K OpsFilter 004 Values len 1 container
+K OpsItemEventFilter 001 Key req empty
+K OpsItemEventFilter 002 Operator req empty
+K OpsItemEventFilter 003 Values req nil
+K OpsItemFilter 001 Key req empty
+K OpsItemFilter 002 Operator req empty
+K OpsItemFilter 003 Values req nil
+K OpsItemRelatedItemsFilter 001 Key req empty
+K OpsItemRelatedItemsFilter 002 Operator req empty
+K OpsItemRelatedItemsFilter 003 Values req nil
+K OpsMetadataFilter 001 Key req nil
+K OpsMetadataFilter 002 Key len 1 ptr
+K OpsMetadataFilter 003 Values req nil
+K OpsMetadataFilter 004 Values len 1 container
+K OpsResultAttribute 001 TypeName req nil
+K OpsResultAttribute 002 TypeName len 1 ptr
+K ParameterStringFilter 001 Key req nil
+K ParameterStringFilter 002 Key len 1 ptr
+K ParameterStringFilter 003 Option len 1 ptr
+K ParameterStringFilter 004 Values len 1 container
+K ParametersFilter 001 Key req empty
+K ParametersFilter 002 Values req nil
+K ParametersFilter 003 Values len 1 container
+K PatchFilter 001 Key req empty
+K PatchFilter 002 Values req nil
+K PatchFilter 003 Values len 1 container
+K PatchFilterGroup 001 PatchFilters req nil
+K PatchFilterGroup 002 PatchFilters each PatchFilter slice
+K PatchOrchestratorFilter 001 Key len 1 ptr
+K PatchRule 001 ApproveUntilDate len 1 ptr
+K PatchRule 002 PatchFilterGroup req nil
+K PatchRule 003 PatchFilterGroup nest PatchFilterGroup
+K PatchRuleGroup 001 PatchRules req nil
+K PatchRuleGroup 002 PatchRules each PatchRule slice
+K PatchSource 001 Configuration req nil
+K PatchSource 002 Configuration len 1 ptr
+K PatchSource 003 Name req nil
+K PatchSource 004 Products req nil
+K PatchSource 005 Products len 1 container
+K PutComplianceItemsInput 001 ComplianceType req nil
+K PutComplianceItemsInput 002 ComplianceType len 1 ptr
+K PutComplianceItemsInput 003 ExecutionSummary req nil
+K PutComplianceItemsInput 004 Items req nil
+K PutComplianceItemsInput 005 ResourceId req nil
+K PutComplianceItemsInput 006 ResourceId len 1 ptr
+K PutComplianceItemsInput 007 ResourceType req nil
+K PutComplianceItemsInput 008 ResourceType len 1 ptr
+K PutComplianceItemsInput 009 ExecutionSummary nest ComplianceExecutionSummary
+K PutComplianceItemsInput 010 Items each ComplianceItemEntry slice
+K PutInventoryInput 001 InstanceId req nil
+K PutInventoryInput 002 Items req nil
+K PutInventoryInput 003 Items len 1 container
+K PutInventoryInput 004 Items each InventoryItem slice
+K PutParameterInput 001 KeyId len 1 ptr
+K PutParameterInput 002 Name req nil
+K PutParameterInput 003 Name len 1 ptr
+K PutParameterInput 004 Policies len 1 ptr
+K PutParameterInput 005 Value req nil
+K PutParameterInput 006 Tags each Tag slice
+K PutResourcePolicyInput 001 Policy req nil
+K PutResourcePolicyInput 002 ResourceArn req nil
+K PutResourcePolicyInput 003 ResourceArn len 20 ptr
+K RegisterDefaultPatchBaselineInput 001 BaselineId req nil
+K RegisterDefaultPatchBaselineInput 002 BaselineId len 20 ptr
+K RegisterPatchBaselineForPatchGroupInput 001 BaselineId req nil
+K RegisterPatchBaselineForPatchGroupInput 002 BaselineId len 20 ptr
+K RegisterPatchBaselineForPatchGroupInput 003 PatchGroup req nil
+K RegisterPatchBaselineForPatchGroupInput 004 PatchGroup len 1 ptr
+K RegisterTargetWithMaintenanceWindowInput 001 ClientToken len 1 ptr
+K RegisterTargetWithMaintenanceWindowInput 002 Description len 1 ptr
+K RegisterTargetWithMaintenanceWindowInput 003 Name len 3 ptr
+K RegisterTargetWithMaintenanceWindowInput 004 OwnerInformation len 1 ptr
+K RegisterTargetWithMaintenanceWindowInput 005 ResourceType req empty
+K RegisterTargetWithMaintenanceWindowInput 006 Targets req nil
+K RegisterTargetWithMaintenanceWindowInput 007 WindowId req nil
+K RegisterTargetWithMaintenanceWindowInput 008 WindowId len 20 ptr
+K RegisterTargetWithMaintenanceWindowInput 009 Targets each Target slice
+K RegisterTaskWithMaintenanceWindowInput 001 ClientToken len 1 ptr
+K RegisterTaskWithMaintenanceWindowInput 002 Description len 1 ptr
+K RegisterTaskWithMaintenanceWindowInput 003 MaxConcurrency len 1 ptr
+K RegisterTaskWithMaintenanceWindowInput 004 MaxErrors len 1 ptr
+K RegisterTaskWithMaintenanceWindowInput 005 Name len 3 ptr
+K RegisterTaskWithMaintenanceWindowInput 006 TaskArn req nil
+K RegisterTaskWithMaintenanceWindowInput 007 TaskArn len 1 ptr
+K RegisterTaskWithMaintenanceWindowInput 008 TaskType req empty
+K RegisterTaskWithMaintenanceWindowInput 009 WindowId req nil
+K RegisterTaskWithMaintenanceWindowInput 010 WindowId len 20 ptr
+K RegisterTaskWithMaintenanceWindowInput 011 AlarmConfiguration nest AlarmConfiguration
+K RegisterTaskWithMaintenanceWindowInput 012 LoggingInfo nest LoggingInfo
+K RegisterTaskWithMaintenanceWindowInput 013 Targets each Target slice
+K RegisterTaskWithMaintenanceWindowInput 014 TaskInvocationParameters nest MaintenanceWindowTaskInvocationParameters
+K RegistrationMetadataItem 001 Key req nil
+K RegistrationMetadataItem 002 Key len 1 ptr
+K RegistrationMetadataItem 003 Value req nil
+K RegistrationMetadataItem 004 Value len 1 ptr
+K RelatedOpsItem 001 OpsItemId req nil
+K RemoveTagsFromResourceInput 001 ResourceId req nil
+K RemoveTagsFromResourceInput 002 ResourceType req empty
+K RemoveTagsFromResourceInput 003 TagKeys req nil
+K ResetServiceSettingInput 001 SettingId req nil
+K ResetServiceSettingInput 002 SettingId len 1 ptr
+K ResourceDataSyncAwsOrganizationsSource 001 OrganizationSourceType req nil
+K ResourceDataSyncAwsOrganizationsSource 002 OrganizationSourceType len 1 ptr
+K ResourceDataSyncAwsOrganizationsSource 003 OrganizationalUnits len 1 container
+K ResourceDataSyncAwsOrganizationsSource 004 OrganizationalUnits each ResourceDataSyncOrganizationalUnit slice
+K ResourceDataSyncDestinationDataSharing 001 DestinationDataSharingType len 1 ptr
+K ResourceDataSyncOrganizationalUnit 001 OrganizationalUnitId len 1 ptr
+K ResourceDataSyncS3Destination 001 AWSKMSKeyARN len 1 ptr
+K ResourceDataSyncS3Destination 002 BucketName req nil
+K ResourceDataSyncS3Destination 003 BucketName len 1 ptr
+K ResourceDataSyncS3Destination 004 Prefix len 1 ptr
+K ResourceDataSyncS3Destination 005 Region req nil
+K ResourceDataSyncS3Destination 006 Region len 1 ptr
+K ResourceDataSyncS3Destination 007 SyncFormat req empty
+K ResourceDataSyncS3Destination 008 DestinationDataSharing nest ResourceDataSyncDestinationDataSharing
+K ResourceDataSyncSource 001 SourceRegions req nil
+K ResourceDataSyncSource 002 SourceType req nil
+K ResourceDataSyncSource 003 SourceType len 1 ptr
+K ResourceDataSyncSource 004 AwsOrganizationsSource nest ResourceDataSyncAwsOrganizationsSource
+K ResultAttribute 001 TypeName req nil
+K ResultAttribute 002 TypeName len 1 ptr
+K ResumeSessionInput 001 SessionId req nil
+K ResumeSessionInput 002 SessionId len 1 ptr
+K Runbook 001 DocumentName req nil
+K Runbook 002 MaxConcurrency len 1 ptr
+K Runbook 003 MaxErrors len 1 ptr
+K Runbook 004 Parameters len 1 container
+K Runbook 005 TargetLocations len 1 container
+K Runbook 006 TargetParameterName len 1 ptr
+K Runbook 007 TargetLocations each TargetLocation slice
+K Runbook 008 Targets each Target slice
+K S3OutputLocation 001 OutputS3BucketName len 3 ptr
+K S3OutputLocation 002 OutputS3Region len 3 ptr
+K SendAutomationSignalInput 001 AutomationExecutionId req nil
+K SendAutomationSignalInput 002 AutomationExecutionId len 36 ptr
+K SendAutomationSignalInput 003 Payload len 1 container
+K SendAutomationSignalInput 004 SignalType req empty
+K SendCommandInput 001 DocumentName req nil
+K SendCommandInput 002 MaxConcurrency len 1 ptr
+K SendCommandInput 003 MaxErrors len 1 ptr
+K SendCommandInput 004 OutputS3BucketName len 3 ptr
+K SendCommandInput 005 OutputS3Region len 3 ptr
+K SendCommandInput 006 TimeoutSeconds min 30 ptr
+K SendCommandInput 007 AlarmConfiguration nest AlarmConfiguration
+K SendCommandInput 008 CloudWatchOutputConfig nest CloudWatchOutputConfig
+K SendCommandInput 009 Targets each Target slice
+K SessionFilter 001 Key req empty
+K SessionFilter 002 Value req nil
+K SessionFilter 003 Value len 1 ptr
+K StartAssociationsOnceInput 001 AssociationIds req nil
+K StartAssociationsOnceInput 002 AssociationIds len 1 container
+K StartAutomationExecutionInput 001 ClientToken len 36 ptr
+K StartAutomationExecutionInput 002 DocumentName req nil
+K StartAutomationExecutionInput 003 MaxConcurrency len 1 ptr
+K StartAutomationExecutionInput 004 MaxErrors len 1 ptr
+K StartAutomationExecutionInput 005 Parameters len 1 container
+K StartAutomationExecutionInput 006 TargetLocations len 1 container
+K StartAutomationExecutionInput 007 TargetParameterName len 1 ptr
+K StartAutomationExecutionInput 008 AlarmConfiguration nest AlarmConfiguration
+K StartAutomationExecutionInput 009 Tags each Tag slice
+K StartAutomationExecutionInput 010 TargetLocations each TargetLocation slice
+K StartAutomationExecutionInput 011 Targets each Target slice
+K StartChangeRequestExecutionInput 001 ChangeDetails len 1 ptr
+K StartChangeRequestExecutionInput 002 ChangeRequestName len 1 ptr
+K StartChangeRequestExecutionInput 003 ClientToken len 36 ptr
+K StartChangeRequestExecutionInput 004 DocumentName req nil
+K StartChangeRequestExecutionInput 005 Parameters len 1 container
+K StartChangeRequestExecutionInput 006 Runbooks req nil
+K StartChangeRequestExecutionInput 007 Runbooks len 1 container
+K StartChangeRequestExecutionInput 008 Runbooks each Runbook slice
+K StartChangeRequestExecutionInput 009 Tags each Tag slice
+K StartSessionInput 001 Reason len 1 ptr
+K StartSessionInput 002 Target req nil
+K StartSessionInput 003 Target len 1 ptr
+K StepExecutionFilter 001 Key req empty
+K StepExecutionFilter 002 Values req nil
+K StepExecutionFilter 003 Values len 1 container
+K StopAutomationExecutionInput 001 AutomationExecutionId req nil
+K StopAutomationExecutionInput 002 AutomationExecutionId len 36 ptr
+K Tag 001 Key req nil
+K Tag 002 Key len 1 ptr
+K Tag 003 Value req nil
+K Target 001 Key len 1 ptr
+K TargetLocation 001 Accounts len 1 container
+K TargetLocation 002 ExecutionRoleName len 1 ptr
+K TargetLocation 003 Regions len 1 container
+K TargetLocation 004 TargetLocationMaxConcurrency len 1 ptr
+K TargetLocation 005 TargetLocationMaxErrors len 1 ptr
+K TargetLocation 006 TargetLocationAlarmConfiguration nest AlarmConfiguration
+K TerminateSessionInput 001 SessionId req nil
+K TerminateSessionInput 002 SessionId len 1 ptr
+K UnlabelParameterVersionInput 001 Labels req nil
+K UnlabelParameterVersionInput 002 Labels len 1 container
+K UnlabelParameterVersionInput 003 Name req nil
+K UnlabelParameterVersionInput 004 Name len 1 ptr
+K UnlabelParameterVersionInput 005 ParameterVersion req nil
+K UpdateAssociationInput 001 AssociationId req nil
+K UpdateAssociationInput 002 AutomationTargetParameterName len 1 ptr
+K UpdateAssociationInput 003 Duration min 1 ptr
+K UpdateAssociationInput 004 MaxConcurrency len 1 ptr
+K UpdateAssociationInput 005 MaxErrors len 1 ptr
+K UpdateAssociationInput 006 ScheduleExpression len 1 ptr
+K UpdateAssociationInput 007 ScheduleOffset min 1 ptr
+K UpdateAssociationInput 008 TargetLocations len 1 container
+K UpdateAssociationInput 009 AlarmConfiguration nest AlarmConfiguration
+K UpdateAssociationInput 010 OutputLocation nest InstanceAssociationOutputLocation
+K UpdateAssociationInput 011 TargetLocations each TargetLocation slice
+K UpdateAssociationInput 012 Targets each Target slice
+K UpdateAssociationStatusInput 001 AssociationStatus req nil
+K UpdateAssociationStatusInput 002 InstanceId req nil
+K UpdateAssociationStatusInput 003 Name req nil
+K UpdateAssociationStatusInput 004 AssociationStatus nest AssociationStatus
+K UpdateDocumentDefaultVersionInput 001 DocumentVersion req nil
+K UpdateDocumentDefaultVersionInput 002 Name req nil
+K UpdateDocumentInput 001 Content req nil
+K UpdateDocumentInput 002 Content len 1 ptr
+K UpdateDocumentInput 003 Name req nil
+K UpdateDocumentInput 004 Attachments each AttachmentsSource slice
+K UpdateDocumentMetadataInput 001 DocumentReviews req nil
+K UpdateDocumentMetadataInput 002 Name req nil
+K UpdateDocumentMetadataInput 003 DocumentReviews nest DocumentReviews
+K UpdateMaintenanceWindowInput 001 Description len 1 ptr
+K UpdateMaintenanceWindowInput 002 Duration min 1 ptr
+K UpdateMaintenanceWindowInput 003 Name len 3 ptr
+K UpdateMaintenanceWindowInput 004 Schedule len 1 ptr
+K UpdateMaintenanceWindowInput 005 ScheduleOffset min 1 ptr
+K UpdateMaintenanceWindowInput 006 WindowId req nil
+K UpdateMaintenanceWindowInput 007 WindowId len 20 ptr
+K UpdateMaintenanceWindowTargetInput 001 Description len 1 ptr
+K UpdateMaintenanceWindowTargetInput 002 Name len 3 ptr
+K UpdateMaintenanceWindowTargetInput 003 OwnerInformation len 1 ptr
+K UpdateMaintenanceWindowTargetInput 004 WindowId req nil
+K UpdateMaintenanceWindowTargetInput 005 WindowId len 20 ptr
+K UpdateMaintenanceWindowTargetInput 006 WindowTargetId req nil
+K UpdateMaintenanceWindowTargetInput 007 WindowTargetId len 36 ptr
+K UpdateMaintenanceWindowTargetInput 008 Targets each Target slice
+K UpdateMaintenanceWindowTaskInput 001 Description len 1 ptr
+K UpdateMaintenanceWindowTaskInput 002 MaxConcurrency len 1 ptr
+K UpdateMaintenanceWindowTaskInput 003 MaxErrors len 1 ptr
+K UpdateMaintenanceWindowTaskInput 004 Name len 3 ptr
+K UpdateMaintenanceWindowTaskInput 005 TaskArn len 1 ptr
+K UpdateMaintenanceWindowTaskInput 006 WindowId req nil
+K UpdateMaintenanceWindowTaskInput 007 WindowId len 20 ptr
+K UpdateMaintenanceWindowTaskInput 008 WindowTaskId req nil
+K UpdateMaintenanceWindowTaskInput 009 WindowTaskId len 36 ptr
+K UpdateMaintenanceWindowTaskInput 010 AlarmConfiguration nest AlarmConfiguration
+K UpdateMaintenanceWindowTaskInput 011 LoggingInfo nest LoggingInfo
+K UpdateMaintenanceWindowTaskInput 012 Targets each Target slice
+K UpdateMaintenanceWindowTaskInput 013 TaskInvocationParameters nest MaintenanceWindowTaskInvocationParameters
+K UpdateManagedInstanceRoleInput 001 IamRole req nil
+K UpdateManagedInstanceRoleInput 002 InstanceId req nil
+K UpdateManagedInstanceRoleInput 003 InstanceId len 20 ptr
+K UpdateOpsItemInput 001 Category len 1 ptr
+K UpdateOpsItemInput 002 Description len 1 ptr
+K UpdateOpsItemInput 003 OpsItemArn len 20 ptr
+K UpdateOpsItemInput 004 OpsItemId req nil
+K UpdateOpsItemInput 005 Priority min 1 ptr
+K UpdateOpsItemInput 006 Severity len 1 ptr
+K UpdateOpsItemInput 007 Title len 1 ptr
+K UpdateOpsItemInput 008 RelatedOpsItems each RelatedOpsItem slice
+K UpdateOpsMetadataInput 001 KeysToDelete len 1 container
+K UpdateOpsMetadataInput 002 MetadataToUpdate len 1 container
+K UpdateOpsMetadataInput 003 OpsMetadataArn req nil
+K UpdateOpsMetadataInput 004 OpsMetadataArn len 1 ptr
+K UpdateOpsMetadataInput 005 MetadataToUpdate each MetadataValue map
+K UpdatePatchBaselineInput 001 BaselineId req nil
+K UpdatePatchBaselineInput 002 BaselineId len 20 ptr
+K UpdatePatchBaselineInput 003 Description len 1 ptr
+K UpdatePatchBaselineInput 004 Name len 3 ptr
+K UpdatePatchBaselineInput 005 ApprovalRules nest PatchRuleGroup
+K UpdatePatchBaselineInput 006 GlobalFilters nest PatchFilterGroup
+K UpdatePatchBaselineInput 007 Sources each PatchSource slice
+K UpdateResourceDataSyncInput 001 SyncName req nil
+K UpdateResourceDataSyncInput 002 SyncName len 1 ptr
+K UpdateResourceDataSyncInput 003 SyncSource req nil
+K UpdateResourceDataSyncInput 004 SyncType req nil
+K UpdateResourceDataSyncInput 005 SyncType len 1 ptr
+K UpdateResourceDataSyncInput 006 SyncSource nest ResourceDataSyncSource
+K UpdateServiceSettingInput 001 SettingId req nil
+K UpdateServiceSettingInput 002 SettingId len 1 ptr
+K UpdateServiceSettingInput 003 SettingValue req nil
+K UpdateServiceSettingInput 004 SettingValue len 1 ptr
+G DescribeActivations NextToken NextToken
+G DescribeAssociationExecutionTargets NextToken NextToken
+G DescribeAssociationExecutions NextToken NextToken
+G DescribeAutomationExecutions NextToken NextToken
+G DescribeAutomationStepExecutions NextToken NextToken
+G DescribeAvailablePatches NextToken NextToken
+G DescribeEffectiveInstanceAssociations NextToken NextToken
+G DescribeEffectivePatchesForPatchBaseline NextToken NextToken
+G DescribeInstanceAssociationsStatus NextToken NextToken
+G DescribeInstanceInformation NextToken NextToken
+G DescribeInstancePatchStates NextToken NextToken
+G DescribeInstancePatchStatesForPatchGroup NextToken NextToken
+G DescribeInstancePatches NextToken NextToken
+G DescribeInstanceProperties NextToken NextToken
+G DescribeInventoryDeletions NextToken NextToken
+G DescribeMaintenanceWindowExecutionTaskInvocations NextToken NextToken
+G DescribeMaintenanceWindowExecutionTasks NextToken NextToken
+G DescribeMaintenanceWindowExecutions NextToken NextToken
+G DescribeMaintenanceWindowSchedule NextToken NextToken
+G DescribeMaintenanceWindowTargets NextToken NextToken
+G DescribeMaintenanceWindowTasks NextToken NextToken
+G DescribeMaintenanceWindows NextToken NextToken
+G DescribeMaintenanceWindowsForTarget NextToken NextToken
+G DescribeOpsItems NextToken NextToken
+G DescribeParameters NextToken NextToken
+G DescribePatchBaselines NextToken NextToken
+G DescribePatchGroups NextToken NextToken
+G DescribePatchProperties NextToken NextToken
+G DescribeSessions NextToken NextToken
+G GetInventory NextToken NextToken
+G GetInventorySchema NextToken NextToken
+G GetOpsSummary NextToken NextToken
+G GetParameterHistory NextToken NextToken
+G GetParametersByPath NextToken NextToken
+G GetResourcePolicies NextToken NextToken
+G ListAssociationVersions NextToken NextToken
+G ListAssociations NextToken NextToken
+G ListCloudConnectors NextToken NextToken
+G ListCommandInvocations NextToken NextToken
+G ListCommands NextToken NextToken
+G ListComplianceItems NextToken NextToken
+G ListComplianceSummaries NextToken NextToken
+G ListDocumentVersions NextToken NextToken
+G ListDocuments NextToken NextToken
+G ListNodes NextToken NextToken
+G ListNodesSummary NextToken NextToken
+G ListOpsItemEvents NextToken NextToken
+G ListOpsItemRelatedItems NextToken NextToken
+G ListOpsMetadata NextToken NextToken
+G ListResourceComplianceSummaries NextToken NextToken
+G ListResourceDataSync NextToken NextToken
+G ValidateCloudConnector NextToken NextToken

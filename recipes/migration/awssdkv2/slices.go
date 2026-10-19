@@ -9,6 +9,7 @@ import (
 	"github.com/moderneinc/recipes-go/recipes/migration/awssdkv2/awsmanifest"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
 // The helpers the migration leans on, and the file they are written to. v2
@@ -138,11 +139,9 @@ func (s *fileScan) valueSliceRead(fa *java.FieldAccess) (elem shapeRef, isRead b
 	if fa.Name.Element == nil {
 		return shapeRef{}, false
 	}
-	target, ok := fa.Target.(*java.Identifier)
-	if !ok {
-		return shapeRef{}, false
-	}
-	owner, known := s.shapes[target.Name]
+	// The owner may itself be reached through a list, as in
+	// `out.Reservations[0].Instances`.
+	owner, known := s.receiverShape(fa.Target)
 	if !known {
 		return shapeRef{}, false
 	}
@@ -213,4 +212,138 @@ func (s *fileScan) rangeElementShape(loop *java.ForEachLoop) (name string, ref s
 		return "", shapeRef{}, false
 	}
 	return value.Name, elem, true
+}
+
+// The pointers handed back for a map v2 holds by value are copies, and the list
+// handed back for a slice is a new one, so a write into either through them
+// would be lost. An element written directly — `m[k] = &v` — is written into
+// v2's own list or map instead, as the value the pointer pointed at. A write of
+// a pointer that may be nil, or through one handed back, holds the file back.
+
+// valueElementWrite reports whether a writes an element of a list or map v2
+// holds by value, returning the value to store when the pointer written is
+// provably not nil.
+func (s *fileScan) valueElementWrite(a *java.Assignment) (value java.Expression, isWrite, ok bool) {
+	index, isIndex := a.Variable.(*java.ArrayAccess)
+	if !isIndex {
+		return nil, false, false
+	}
+	fa, isField := index.Indexed.(*java.FieldAccess)
+	if !isField {
+		return nil, false, false
+	}
+	helper, isMap := s.valueMapRead(fa)
+	_, isSlice := s.valueSliceRead(fa)
+	if !isMap && !isSlice {
+		return nil, false, false
+	}
+	if isMap && helper != compatPtrsMap {
+		return nil, true, false
+	}
+	inner, unwrapped := s.pointerValueSource(a.Value.Element)
+	return inner, true, unwrapped
+}
+
+// valueElementDerefWrite reports whether target writes through a pointer
+// handed back for an element of a list or map v2 holds by value.
+func (s *fileScan) valueElementDerefWrite(target java.Expression) bool {
+	unary, isUnary := target.(*golang.Unary)
+	if !isUnary || unary.Operator.Element != golang.Indirection {
+		return false
+	}
+	index, isIndex := unary.Expression.(*java.ArrayAccess)
+	if !isIndex {
+		return false
+	}
+	fa, isField := index.Indexed.(*java.FieldAccess)
+	if !isField {
+		return false
+	}
+	_, isMap := s.valueMapRead(fa)
+	_, isSlice := s.valueSliceRead(fa)
+	return isMap || isSlice
+}
+
+// unwrappedElementWrite drops the conversion the visit wrapped the written
+// list or map in, and stores the value the pointer pointed at.
+func unwrappedElementWrite(a *java.Assignment, value java.Expression) *java.Assignment {
+	index, isIndex := a.Variable.(*java.ArrayAccess)
+	if !isIndex {
+		return a
+	}
+	c := *index
+	if mi, wrapped := index.Indexed.(*java.MethodInvocation); wrapped && mi.Name != nil && (mi.Name.Name == compatPtrs || mi.Name.Name == compatPtrsMap) {
+		if args := realArgs(mi); len(args) == 1 {
+			c.Indexed = lstutil.SetExprPrefix(args[0], index.Indexed.GetPrefix())
+		}
+	}
+	out := *a
+	out.Variable = &c
+	out.Value = java.LeftPadded[java.Expression]{Before: a.Value.Before, Element: lstutil.SetExprPrefix(value, a.Value.Element.GetPrefix()), Markers: a.Value.Markers}
+	return &out
+}
+
+// appendAliased reports whether a appends to a list v2 holds by value a
+// pointer the enclosing block goes on using. v1's list held the pointer, so a
+// later write through it changed the list; v2's holds a copy taken at the
+// append, which the write would miss.
+func (s *fileScan) appendAliased(a *java.Assignment, cursor *visitor.Cursor) (string, bool) {
+	fa, isField := a.Variable.(*java.FieldAccess)
+	if !isField {
+		return "", false
+	}
+	if _, isSlice := s.valueSliceRead(fa); !isSlice {
+		return "", false
+	}
+	call, isCall := a.Value.Element.(*java.MethodInvocation)
+	if !isCall || call.Select != nil || call.Name == nil || call.Name.Name != "append" {
+		return "", false
+	}
+	var names []string
+	for _, arg := range realArgs(call)[1:] {
+		if id, isIdent := arg.(*java.Identifier); isIdent {
+			names = append(names, id.Name)
+		}
+	}
+	if len(names) == 0 {
+		return "", false
+	}
+	// The statements after this one in its block.
+	var block *java.Block
+	var stmt java.J = a
+	for c := cursor.Parent(); c != nil; c = c.Parent() {
+		if b, isBlock := c.Value().(*java.Block); isBlock {
+			block = b
+			break
+		}
+		if j, isJ := c.Value().(java.J); isJ {
+			stmt = j
+		}
+	}
+	if block == nil {
+		return "", false
+	}
+	after := false
+	for _, rp := range block.Statements {
+		if java.Tree(rp.Element) == stmt {
+			after = true
+			continue
+		}
+		if !after {
+			continue
+		}
+		for _, name := range names {
+			if referencesName(rp.Element, name) {
+				return name, true
+			}
+		}
+	}
+	return "", false
+}
+
+// referencesName reports whether tree names name anywhere.
+func referencesName(tree java.J, name string) bool {
+	scan := visitor.Init(&usedNameScan{names: map[string]bool{}})
+	scan.Visit(tree, nil)
+	return scan.names[name]
 }

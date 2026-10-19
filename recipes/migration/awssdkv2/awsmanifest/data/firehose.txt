@@ -1254,3 +1254,370 @@ E SnowflakeS3BackupModeAllData SnowflakeS3BackupMode
 E SnowflakeS3BackupModeFailedDataOnly SnowflakeS3BackupMode
 E SplunkS3BackupModeAllEvents SplunkS3BackupMode
 E SplunkS3BackupModeFailedEventsOnly SplunkS3BackupMode
+H HttpEndpointCommonAttribute.AttributeName
+H HttpEndpointCommonAttribute.AttributeValue
+H HttpEndpointConfiguration.AccessKey
+H HttpEndpointConfiguration.Url
+H HttpEndpointDescription.Url
+H RedshiftDestinationConfiguration.Password
+H RedshiftDestinationConfiguration.Username
+H RedshiftDestinationDescription.Username
+H RedshiftDestinationUpdate.Password
+H RedshiftDestinationUpdate.Username
+H SnowflakeDestinationConfiguration.AccountUrl
+H SnowflakeDestinationConfiguration.ContentColumnName
+H SnowflakeDestinationConfiguration.Database
+H SnowflakeDestinationConfiguration.KeyPassphrase
+H SnowflakeDestinationConfiguration.MetaDataColumnName
+H SnowflakeDestinationConfiguration.PrivateKey
+H SnowflakeDestinationConfiguration.Schema
+H SnowflakeDestinationConfiguration.Table
+H SnowflakeDestinationConfiguration.User
+H SnowflakeDestinationDescription.AccountUrl
+H SnowflakeDestinationDescription.ContentColumnName
+H SnowflakeDestinationDescription.Database
+H SnowflakeDestinationDescription.MetaDataColumnName
+H SnowflakeDestinationDescription.Schema
+H SnowflakeDestinationDescription.Table
+H SnowflakeDestinationDescription.User
+H SnowflakeDestinationUpdate.AccountUrl
+H SnowflakeDestinationUpdate.ContentColumnName
+H SnowflakeDestinationUpdate.Database
+H SnowflakeDestinationUpdate.KeyPassphrase
+H SnowflakeDestinationUpdate.MetaDataColumnName
+H SnowflakeDestinationUpdate.PrivateKey
+H SnowflakeDestinationUpdate.Schema
+H SnowflakeDestinationUpdate.Table
+H SnowflakeDestinationUpdate.User
+H SnowflakeRoleConfiguration.SnowflakeRole
+H SnowflakeVpcConfiguration.PrivateLinkVpceId
+K AmazonOpenSearchServerlessBufferingHints 001 SizeInMBs min 1 ptr
+K AmazonOpenSearchServerlessDestinationConfiguration 001 CollectionEndpoint len 1 ptr
+K AmazonOpenSearchServerlessDestinationConfiguration 002 IndexName req nil
+K AmazonOpenSearchServerlessDestinationConfiguration 003 IndexName len 1 ptr
+K AmazonOpenSearchServerlessDestinationConfiguration 004 RoleARN req nil
+K AmazonOpenSearchServerlessDestinationConfiguration 005 RoleARN len 1 ptr
+K AmazonOpenSearchServerlessDestinationConfiguration 006 S3Configuration req nil
+K AmazonOpenSearchServerlessDestinationConfiguration 007 BufferingHints nest AmazonOpenSearchServerlessBufferingHints
+K AmazonOpenSearchServerlessDestinationConfiguration 008 ProcessingConfiguration nest ProcessingConfiguration
+K AmazonOpenSearchServerlessDestinationConfiguration 009 S3Configuration nest S3DestinationConfiguration
+K AmazonOpenSearchServerlessDestinationConfiguration 010 VpcConfiguration nest VpcConfiguration
+K AmazonOpenSearchServerlessDestinationUpdate 001 CollectionEndpoint len 1 ptr
+K AmazonOpenSearchServerlessDestinationUpdate 002 IndexName len 1 ptr
+K AmazonOpenSearchServerlessDestinationUpdate 003 RoleARN len 1 ptr
+K AmazonOpenSearchServerlessDestinationUpdate 004 BufferingHints nest AmazonOpenSearchServerlessBufferingHints
+K AmazonOpenSearchServerlessDestinationUpdate 005 ProcessingConfiguration nest ProcessingConfiguration
+K AmazonOpenSearchServerlessDestinationUpdate 006 S3Update nest S3DestinationUpdate
+K AmazonopensearchserviceBufferingHints 001 SizeInMBs min 1 ptr
+K AmazonopensearchserviceDestinationConfiguration 001 ClusterEndpoint len 1 ptr
+K AmazonopensearchserviceDestinationConfiguration 002 DomainARN len 1 ptr
+K AmazonopensearchserviceDestinationConfiguration 003 IndexName req nil
+K AmazonopensearchserviceDestinationConfiguration 004 IndexName len 1 ptr
+K AmazonopensearchserviceDestinationConfiguration 005 RoleARN req nil
+K AmazonopensearchserviceDestinationConfiguration 006 RoleARN len 1 ptr
+K AmazonopensearchserviceDestinationConfiguration 007 S3Configuration req nil
+K AmazonopensearchserviceDestinationConfiguration 008 BufferingHints nest AmazonopensearchserviceBufferingHints
+K AmazonopensearchserviceDestinationConfiguration 009 DocumentIdOptions nest DocumentIdOptions
+K AmazonopensearchserviceDestinationConfiguration 010 ProcessingConfiguration nest ProcessingConfiguration
+K AmazonopensearchserviceDestinationConfiguration 011 S3Configuration nest S3DestinationConfiguration
+K AmazonopensearchserviceDestinationConfiguration 012 VpcConfiguration nest VpcConfiguration
+K AmazonopensearchserviceDestinationUpdate 001 ClusterEndpoint len 1 ptr
+K AmazonopensearchserviceDestinationUpdate 002 DomainARN len 1 ptr
+K AmazonopensearchserviceDestinationUpdate 003 IndexName len 1 ptr
+K AmazonopensearchserviceDestinationUpdate 004 RoleARN len 1 ptr
+K AmazonopensearchserviceDestinationUpdate 005 BufferingHints nest AmazonopensearchserviceBufferingHints
+K AmazonopensearchserviceDestinationUpdate 006 DocumentIdOptions nest DocumentIdOptions
+K AmazonopensearchserviceDestinationUpdate 007 ProcessingConfiguration nest ProcessingConfiguration
+K AmazonopensearchserviceDestinationUpdate 008 S3Update nest S3DestinationUpdate
+K AuthenticationConfiguration 001 Connectivity req empty
+K AuthenticationConfiguration 002 RoleARN req nil
+K AuthenticationConfiguration 003 RoleARN len 1 ptr
+K BufferingHints 001 SizeInMBs min 1 ptr
+K CatalogConfiguration 001 CatalogARN len 1 ptr
+K CopyCommand 001 DataTableName req nil
+K CopyCommand 002 DataTableName len 1 ptr
+K CreateDeliveryStreamInput 001 DeliveryStreamName req nil
+K CreateDeliveryStreamInput 002 DeliveryStreamName len 1 ptr
+K CreateDeliveryStreamInput 003 Tags len 1 container
+K CreateDeliveryStreamInput 004 AmazonOpenSearchServerlessDestinationConfiguration nest AmazonOpenSearchServerlessDestinationConfiguration
+K CreateDeliveryStreamInput 005 AmazonopensearchserviceDestinationConfiguration nest AmazonopensearchserviceDestinationConfiguration
+K CreateDeliveryStreamInput 006 DeliveryStreamEncryptionConfigurationInput nest DeliveryStreamEncryptionConfigurationInput
+K CreateDeliveryStreamInput 007 ElasticsearchDestinationConfiguration nest ElasticsearchDestinationConfiguration
+K CreateDeliveryStreamInput 008 ExtendedS3DestinationConfiguration nest ExtendedS3DestinationConfiguration
+K CreateDeliveryStreamInput 009 HttpEndpointDestinationConfiguration nest HttpEndpointDestinationConfiguration
+K CreateDeliveryStreamInput 010 IcebergDestinationConfiguration nest IcebergDestinationConfiguration
+K CreateDeliveryStreamInput 011 KinesisStreamSourceConfiguration nest KinesisStreamSourceConfiguration
+K CreateDeliveryStreamInput 012 MSKSourceConfiguration nest MSKSourceConfiguration
+K CreateDeliveryStreamInput 013 RedshiftDestinationConfiguration nest RedshiftDestinationConfiguration
+K CreateDeliveryStreamInput 014 S3DestinationConfiguration nest S3DestinationConfiguration
+K CreateDeliveryStreamInput 015 SnowflakeDestinationConfiguration nest SnowflakeDestinationConfiguration
+K CreateDeliveryStreamInput 016 SplunkDestinationConfiguration nest SplunkDestinationConfiguration
+K CreateDeliveryStreamInput 017 Tags each Tag slice
+K DataFormatConversionConfiguration 001 OutputFormatConfiguration nest OutputFormatConfiguration
+K DataFormatConversionConfiguration 002 SchemaConfiguration nest SchemaConfiguration
+K DeleteDeliveryStreamInput 001 DeliveryStreamName req nil
+K DeleteDeliveryStreamInput 002 DeliveryStreamName len 1 ptr
+K DeliveryStreamEncryptionConfigurationInput 001 KeyARN len 1 ptr
+K DeliveryStreamEncryptionConfigurationInput 002 KeyType req empty
+K DescribeDeliveryStreamInput 001 DeliveryStreamName req nil
+K DescribeDeliveryStreamInput 002 DeliveryStreamName len 1 ptr
+K DescribeDeliveryStreamInput 003 ExclusiveStartDestinationId len 1 ptr
+K DescribeDeliveryStreamInput 004 Limit min 1 ptr
+K DestinationTableConfiguration 001 DestinationDatabaseName req nil
+K DestinationTableConfiguration 002 DestinationDatabaseName len 1 ptr
+K DestinationTableConfiguration 003 DestinationTableName req nil
+K DestinationTableConfiguration 004 DestinationTableName len 1 ptr
+K DocumentIdOptions 001 DefaultDocumentIdFormat req empty
+K ElasticsearchBufferingHints 001 SizeInMBs min 1 ptr
+K ElasticsearchDestinationConfiguration 001 ClusterEndpoint len 1 ptr
+K ElasticsearchDestinationConfiguration 002 DomainARN len 1 ptr
+K ElasticsearchDestinationConfiguration 003 IndexName req nil
+K ElasticsearchDestinationConfiguration 004 IndexName len 1 ptr
+K ElasticsearchDestinationConfiguration 005 RoleARN req nil
+K ElasticsearchDestinationConfiguration 006 RoleARN len 1 ptr
+K ElasticsearchDestinationConfiguration 007 S3Configuration req nil
+K ElasticsearchDestinationConfiguration 008 BufferingHints nest ElasticsearchBufferingHints
+K ElasticsearchDestinationConfiguration 009 DocumentIdOptions nest DocumentIdOptions
+K ElasticsearchDestinationConfiguration 010 ProcessingConfiguration nest ProcessingConfiguration
+K ElasticsearchDestinationConfiguration 011 S3Configuration nest S3DestinationConfiguration
+K ElasticsearchDestinationConfiguration 012 VpcConfiguration nest VpcConfiguration
+K ElasticsearchDestinationUpdate 001 ClusterEndpoint len 1 ptr
+K ElasticsearchDestinationUpdate 002 DomainARN len 1 ptr
+K ElasticsearchDestinationUpdate 003 IndexName len 1 ptr
+K ElasticsearchDestinationUpdate 004 RoleARN len 1 ptr
+K ElasticsearchDestinationUpdate 005 BufferingHints nest ElasticsearchBufferingHints
+K ElasticsearchDestinationUpdate 006 DocumentIdOptions nest DocumentIdOptions
+K ElasticsearchDestinationUpdate 007 ProcessingConfiguration nest ProcessingConfiguration
+K ElasticsearchDestinationUpdate 008 S3Update nest S3DestinationUpdate
+K EncryptionConfiguration 001 KMSEncryptionConfig nest KMSEncryptionConfig
+K ExtendedS3DestinationConfiguration 001 BucketARN req nil
+K ExtendedS3DestinationConfiguration 002 BucketARN len 1 ptr
+K ExtendedS3DestinationConfiguration 003 RoleARN req nil
+K ExtendedS3DestinationConfiguration 004 RoleARN len 1 ptr
+K ExtendedS3DestinationConfiguration 005 BufferingHints nest BufferingHints
+K ExtendedS3DestinationConfiguration 006 DataFormatConversionConfiguration nest DataFormatConversionConfiguration
+K ExtendedS3DestinationConfiguration 007 EncryptionConfiguration nest EncryptionConfiguration
+K ExtendedS3DestinationConfiguration 008 ProcessingConfiguration nest ProcessingConfiguration
+K ExtendedS3DestinationConfiguration 009 S3BackupConfiguration nest S3DestinationConfiguration
+K ExtendedS3DestinationUpdate 001 BucketARN len 1 ptr
+K ExtendedS3DestinationUpdate 002 RoleARN len 1 ptr
+K ExtendedS3DestinationUpdate 003 BufferingHints nest BufferingHints
+K ExtendedS3DestinationUpdate 004 DataFormatConversionConfiguration nest DataFormatConversionConfiguration
+K ExtendedS3DestinationUpdate 005 EncryptionConfiguration nest EncryptionConfiguration
+K ExtendedS3DestinationUpdate 006 ProcessingConfiguration nest ProcessingConfiguration
+K ExtendedS3DestinationUpdate 007 S3BackupUpdate nest S3DestinationUpdate
+K HttpEndpointBufferingHints 001 SizeInMBs min 1 ptr
+K HttpEndpointCommonAttribute 001 AttributeName req nil
+K HttpEndpointCommonAttribute 002 AttributeName len 1 ptr
+K HttpEndpointCommonAttribute 003 AttributeValue req nil
+K HttpEndpointConfiguration 001 Name len 1 ptr
+K HttpEndpointConfiguration 002 Url req nil
+K HttpEndpointConfiguration 003 Url len 1 ptr
+K HttpEndpointDestinationConfiguration 001 EndpointConfiguration req nil
+K HttpEndpointDestinationConfiguration 002 RoleARN len 1 ptr
+K HttpEndpointDestinationConfiguration 003 S3Configuration req nil
+K HttpEndpointDestinationConfiguration 004 BufferingHints nest HttpEndpointBufferingHints
+K HttpEndpointDestinationConfiguration 005 EndpointConfiguration nest HttpEndpointConfiguration
+K HttpEndpointDestinationConfiguration 006 ProcessingConfiguration nest ProcessingConfiguration
+K HttpEndpointDestinationConfiguration 007 RequestConfiguration nest HttpEndpointRequestConfiguration
+K HttpEndpointDestinationConfiguration 008 S3Configuration nest S3DestinationConfiguration
+K HttpEndpointDestinationConfiguration 009 SecretsManagerConfiguration nest SecretsManagerConfiguration
+K HttpEndpointDestinationUpdate 001 RoleARN len 1 ptr
+K HttpEndpointDestinationUpdate 002 BufferingHints nest HttpEndpointBufferingHints
+K HttpEndpointDestinationUpdate 003 EndpointConfiguration nest HttpEndpointConfiguration
+K HttpEndpointDestinationUpdate 004 ProcessingConfiguration nest ProcessingConfiguration
+K HttpEndpointDestinationUpdate 005 RequestConfiguration nest HttpEndpointRequestConfiguration
+K HttpEndpointDestinationUpdate 006 S3Update nest S3DestinationUpdate
+K HttpEndpointDestinationUpdate 007 SecretsManagerConfiguration nest SecretsManagerConfiguration
+K HttpEndpointRequestConfiguration 001 CommonAttributes each HttpEndpointCommonAttribute slice
+K IcebergDestinationConfiguration 001 CatalogConfiguration req nil
+K IcebergDestinationConfiguration 002 RoleARN req nil
+K IcebergDestinationConfiguration 003 RoleARN len 1 ptr
+K IcebergDestinationConfiguration 004 S3Configuration req nil
+K IcebergDestinationConfiguration 005 BufferingHints nest BufferingHints
+K IcebergDestinationConfiguration 006 CatalogConfiguration nest CatalogConfiguration
+K IcebergDestinationConfiguration 007 DestinationTableConfigurationList each DestinationTableConfiguration slice
+K IcebergDestinationConfiguration 008 ProcessingConfiguration nest ProcessingConfiguration
+K IcebergDestinationConfiguration 009 S3Configuration nest S3DestinationConfiguration
+K IcebergDestinationUpdate 001 RoleARN len 1 ptr
+K IcebergDestinationUpdate 002 BufferingHints nest BufferingHints
+K IcebergDestinationUpdate 003 CatalogConfiguration nest CatalogConfiguration
+K IcebergDestinationUpdate 004 DestinationTableConfigurationList each DestinationTableConfiguration slice
+K IcebergDestinationUpdate 005 ProcessingConfiguration nest ProcessingConfiguration
+K IcebergDestinationUpdate 006 S3Configuration nest S3DestinationConfiguration
+K KMSEncryptionConfig 001 AWSKMSKeyARN req nil
+K KMSEncryptionConfig 002 AWSKMSKeyARN len 1 ptr
+K KinesisStreamSourceConfiguration 001 KinesisStreamARN req nil
+K KinesisStreamSourceConfiguration 002 KinesisStreamARN len 1 ptr
+K KinesisStreamSourceConfiguration 003 RoleARN req nil
+K KinesisStreamSourceConfiguration 004 RoleARN len 1 ptr
+K ListDeliveryStreamsInput 001 ExclusiveStartDeliveryStreamName len 1 ptr
+K ListDeliveryStreamsInput 002 Limit min 1 ptr
+K ListTagsForDeliveryStreamInput 001 DeliveryStreamName req nil
+K ListTagsForDeliveryStreamInput 002 DeliveryStreamName len 1 ptr
+K ListTagsForDeliveryStreamInput 003 ExclusiveStartTagKey len 1 ptr
+K ListTagsForDeliveryStreamInput 004 Limit min 1 ptr
+K MSKSourceConfiguration 001 AuthenticationConfiguration req nil
+K MSKSourceConfiguration 002 MSKClusterARN req nil
+K MSKSourceConfiguration 003 MSKClusterARN len 1 ptr
+K MSKSourceConfiguration 004 TopicName req nil
+K MSKSourceConfiguration 005 TopicName len 1 ptr
+K MSKSourceConfiguration 006 AuthenticationConfiguration nest AuthenticationConfiguration
+K OrcSerDe 001 BlockSizeBytes min 6.7108864e+07 ptr
+K OrcSerDe 002 RowIndexStride min 1000 ptr
+K OrcSerDe 003 StripeSizeBytes min 8.388608e+06 ptr
+K OutputFormatConfiguration 001 Serializer nest Serializer
+K ParquetSerDe 001 BlockSizeBytes min 6.7108864e+07 ptr
+K ParquetSerDe 002 PageSizeBytes min 65536 ptr
+K ProcessingConfiguration 001 Processors each Processor slice
+K Processor 001 Type req empty
+K Processor 002 Parameters each ProcessorParameter slice
+K ProcessorParameter 001 ParameterName req empty
+K ProcessorParameter 002 ParameterValue req nil
+K ProcessorParameter 003 ParameterValue len 1 ptr
+K PutRecordBatchInput 001 DeliveryStreamName req nil
+K PutRecordBatchInput 002 DeliveryStreamName len 1 ptr
+K PutRecordBatchInput 003 Records req nil
+K PutRecordBatchInput 004 Records len 1 container
+K PutRecordBatchInput 005 Records each Record slice
+K PutRecordInput 001 DeliveryStreamName req nil
+K PutRecordInput 002 DeliveryStreamName len 1 ptr
+K PutRecordInput 003 Record req nil
+K PutRecordInput 004 Record nest Record
+K Record 001 Data req nil
+K RedshiftDestinationConfiguration 001 ClusterJDBCURL req nil
+K RedshiftDestinationConfiguration 002 ClusterJDBCURL len 1 ptr
+K RedshiftDestinationConfiguration 003 CopyCommand req nil
+K RedshiftDestinationConfiguration 004 Password len 6 ptr
+K RedshiftDestinationConfiguration 005 RoleARN req nil
+K RedshiftDestinationConfiguration 006 RoleARN len 1 ptr
+K RedshiftDestinationConfiguration 007 S3Configuration req nil
+K RedshiftDestinationConfiguration 008 Username len 1 ptr
+K RedshiftDestinationConfiguration 009 CopyCommand nest CopyCommand
+K RedshiftDestinationConfiguration 010 ProcessingConfiguration nest ProcessingConfiguration
+K RedshiftDestinationConfiguration 011 S3BackupConfiguration nest S3DestinationConfiguration
+K RedshiftDestinationConfiguration 012 S3Configuration nest S3DestinationConfiguration
+K RedshiftDestinationConfiguration 013 SecretsManagerConfiguration nest SecretsManagerConfiguration
+K RedshiftDestinationUpdate 001 ClusterJDBCURL len 1 ptr
+K RedshiftDestinationUpdate 002 Password len 6 ptr
+K RedshiftDestinationUpdate 003 RoleARN len 1 ptr
+K RedshiftDestinationUpdate 004 Username len 1 ptr
+K RedshiftDestinationUpdate 005 CopyCommand nest CopyCommand
+K RedshiftDestinationUpdate 006 ProcessingConfiguration nest ProcessingConfiguration
+K RedshiftDestinationUpdate 007 S3BackupUpdate nest S3DestinationUpdate
+K RedshiftDestinationUpdate 008 S3Update nest S3DestinationUpdate
+K RedshiftDestinationUpdate 009 SecretsManagerConfiguration nest SecretsManagerConfiguration
+K S3DestinationConfiguration 001 BucketARN req nil
+K S3DestinationConfiguration 002 BucketARN len 1 ptr
+K S3DestinationConfiguration 003 RoleARN req nil
+K S3DestinationConfiguration 004 RoleARN len 1 ptr
+K S3DestinationConfiguration 005 BufferingHints nest BufferingHints
+K S3DestinationConfiguration 006 EncryptionConfiguration nest EncryptionConfiguration
+K S3DestinationUpdate 001 BucketARN len 1 ptr
+K S3DestinationUpdate 002 RoleARN len 1 ptr
+K S3DestinationUpdate 003 BufferingHints nest BufferingHints
+K S3DestinationUpdate 004 EncryptionConfiguration nest EncryptionConfiguration
+K SchemaConfiguration 001 CatalogId len 1 ptr
+K SchemaConfiguration 002 DatabaseName len 1 ptr
+K SchemaConfiguration 003 Region len 1 ptr
+K SchemaConfiguration 004 RoleARN len 1 ptr
+K SchemaConfiguration 005 TableName len 1 ptr
+K SchemaConfiguration 006 VersionId len 1 ptr
+K SecretsManagerConfiguration 001 Enabled req nil
+K SecretsManagerConfiguration 002 RoleARN len 1 ptr
+K SecretsManagerConfiguration 003 SecretARN len 1 ptr
+K Serializer 001 OrcSerDe nest OrcSerDe
+K Serializer 002 ParquetSerDe nest ParquetSerDe
+K SnowflakeBufferingHints 001 SizeInMBs min 1 ptr
+K SnowflakeDestinationConfiguration 001 AccountUrl req nil
+K SnowflakeDestinationConfiguration 002 AccountUrl len 24 ptr
+K SnowflakeDestinationConfiguration 003 ContentColumnName len 1 ptr
+K SnowflakeDestinationConfiguration 004 Database req nil
+K SnowflakeDestinationConfiguration 005 Database len 1 ptr
+K SnowflakeDestinationConfiguration 006 KeyPassphrase len 7 ptr
+K SnowflakeDestinationConfiguration 007 MetaDataColumnName len 1 ptr
+K SnowflakeDestinationConfiguration 008 PrivateKey len 256 ptr
+K SnowflakeDestinationConfiguration 009 RoleARN req nil
+K SnowflakeDestinationConfiguration 010 RoleARN len 1 ptr
+K SnowflakeDestinationConfiguration 011 S3Configuration req nil
+K SnowflakeDestinationConfiguration 012 Schema req nil
+K SnowflakeDestinationConfiguration 013 Schema len 1 ptr
+K SnowflakeDestinationConfiguration 014 Table req nil
+K SnowflakeDestinationConfiguration 015 Table len 1 ptr
+K SnowflakeDestinationConfiguration 016 User len 1 ptr
+K SnowflakeDestinationConfiguration 017 BufferingHints nest SnowflakeBufferingHints
+K SnowflakeDestinationConfiguration 018 ProcessingConfiguration nest ProcessingConfiguration
+K SnowflakeDestinationConfiguration 019 S3Configuration nest S3DestinationConfiguration
+K SnowflakeDestinationConfiguration 020 SecretsManagerConfiguration nest SecretsManagerConfiguration
+K SnowflakeDestinationConfiguration 021 SnowflakeRoleConfiguration nest SnowflakeRoleConfiguration
+K SnowflakeDestinationConfiguration 022 SnowflakeVpcConfiguration nest SnowflakeVpcConfiguration
+K SnowflakeDestinationUpdate 001 AccountUrl len 24 ptr
+K SnowflakeDestinationUpdate 002 ContentColumnName len 1 ptr
+K SnowflakeDestinationUpdate 003 Database len 1 ptr
+K SnowflakeDestinationUpdate 004 KeyPassphrase len 7 ptr
+K SnowflakeDestinationUpdate 005 MetaDataColumnName len 1 ptr
+K SnowflakeDestinationUpdate 006 PrivateKey len 256 ptr
+K SnowflakeDestinationUpdate 007 RoleARN len 1 ptr
+K SnowflakeDestinationUpdate 008 Schema len 1 ptr
+K SnowflakeDestinationUpdate 009 Table len 1 ptr
+K SnowflakeDestinationUpdate 010 User len 1 ptr
+K SnowflakeDestinationUpdate 011 BufferingHints nest SnowflakeBufferingHints
+K SnowflakeDestinationUpdate 012 ProcessingConfiguration nest ProcessingConfiguration
+K SnowflakeDestinationUpdate 013 S3Update nest S3DestinationUpdate
+K SnowflakeDestinationUpdate 014 SecretsManagerConfiguration nest SecretsManagerConfiguration
+K SnowflakeDestinationUpdate 015 SnowflakeRoleConfiguration nest SnowflakeRoleConfiguration
+K SnowflakeRoleConfiguration 001 SnowflakeRole len 1 ptr
+K SnowflakeVpcConfiguration 001 PrivateLinkVpceId req nil
+K SnowflakeVpcConfiguration 002 PrivateLinkVpceId len 47 ptr
+K SplunkBufferingHints 001 SizeInMBs min 1 ptr
+K SplunkDestinationConfiguration 001 HECAcknowledgmentTimeoutInSeconds min 180 ptr
+K SplunkDestinationConfiguration 002 HECEndpoint req nil
+K SplunkDestinationConfiguration 003 HECEndpointType req empty
+K SplunkDestinationConfiguration 004 S3Configuration req nil
+K SplunkDestinationConfiguration 005 BufferingHints nest SplunkBufferingHints
+K SplunkDestinationConfiguration 006 ProcessingConfiguration nest ProcessingConfiguration
+K SplunkDestinationConfiguration 007 S3Configuration nest S3DestinationConfiguration
+K SplunkDestinationConfiguration 008 SecretsManagerConfiguration nest SecretsManagerConfiguration
+K SplunkDestinationUpdate 001 HECAcknowledgmentTimeoutInSeconds min 180 ptr
+K SplunkDestinationUpdate 002 BufferingHints nest SplunkBufferingHints
+K SplunkDestinationUpdate 003 ProcessingConfiguration nest ProcessingConfiguration
+K SplunkDestinationUpdate 004 S3Update nest S3DestinationUpdate
+K SplunkDestinationUpdate 005 SecretsManagerConfiguration nest SecretsManagerConfiguration
+K StartDeliveryStreamEncryptionInput 001 DeliveryStreamName req nil
+K StartDeliveryStreamEncryptionInput 002 DeliveryStreamName len 1 ptr
+K StartDeliveryStreamEncryptionInput 003 DeliveryStreamEncryptionConfigurationInput nest DeliveryStreamEncryptionConfigurationInput
+K StopDeliveryStreamEncryptionInput 001 DeliveryStreamName req nil
+K StopDeliveryStreamEncryptionInput 002 DeliveryStreamName len 1 ptr
+K Tag 001 Key req nil
+K Tag 002 Key len 1 ptr
+K TagDeliveryStreamInput 001 DeliveryStreamName req nil
+K TagDeliveryStreamInput 002 DeliveryStreamName len 1 ptr
+K TagDeliveryStreamInput 003 Tags req nil
+K TagDeliveryStreamInput 004 Tags len 1 container
+K TagDeliveryStreamInput 005 Tags each Tag slice
+K UntagDeliveryStreamInput 001 DeliveryStreamName req nil
+K UntagDeliveryStreamInput 002 DeliveryStreamName len 1 ptr
+K UntagDeliveryStreamInput 003 TagKeys req nil
+K UntagDeliveryStreamInput 004 TagKeys len 1 container
+K UpdateDestinationInput 001 CurrentDeliveryStreamVersionId req nil
+K UpdateDestinationInput 002 CurrentDeliveryStreamVersionId len 1 ptr
+K UpdateDestinationInput 003 DeliveryStreamName req nil
+K UpdateDestinationInput 004 DeliveryStreamName len 1 ptr
+K UpdateDestinationInput 005 DestinationId req nil
+K UpdateDestinationInput 006 DestinationId len 1 ptr
+K UpdateDestinationInput 007 AmazonOpenSearchServerlessDestinationUpdate nest AmazonOpenSearchServerlessDestinationUpdate
+K UpdateDestinationInput 008 AmazonopensearchserviceDestinationUpdate nest AmazonopensearchserviceDestinationUpdate
+K UpdateDestinationInput 009 ElasticsearchDestinationUpdate nest ElasticsearchDestinationUpdate
+K UpdateDestinationInput 010 ExtendedS3DestinationUpdate nest ExtendedS3DestinationUpdate
+K UpdateDestinationInput 011 HttpEndpointDestinationUpdate nest HttpEndpointDestinationUpdate
+K UpdateDestinationInput 012 IcebergDestinationUpdate nest IcebergDestinationUpdate
+K UpdateDestinationInput 013 RedshiftDestinationUpdate nest RedshiftDestinationUpdate
+K UpdateDestinationInput 014 S3DestinationUpdate nest S3DestinationUpdate
+K UpdateDestinationInput 015 SnowflakeDestinationUpdate nest SnowflakeDestinationUpdate
+K UpdateDestinationInput 016 SplunkDestinationUpdate nest SplunkDestinationUpdate
+K VpcConfiguration 001 RoleARN req nil
+K VpcConfiguration 002 RoleARN len 1 ptr
+K VpcConfiguration 003 SecurityGroupIds req nil
+K VpcConfiguration 004 SecurityGroupIds len 1 container
+K VpcConfiguration 005 SubnetIds req nil
+K VpcConfiguration 006 SubnetIds len 1 container

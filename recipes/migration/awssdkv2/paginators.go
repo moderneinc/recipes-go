@@ -166,11 +166,18 @@ func (s *fileScan) inputShape(expr java.Expression) (service, shape string, ok b
 		service, shape, ok = s.compositeShape(comp)
 		return service, shape, ok && strings.HasSuffix(shape, "Input")
 	}
-	id, isIdent := expr.(*java.Identifier)
-	if !isIdent {
-		return "", "", false
+	var ref shapeRef
+	var held bool
+	switch e := expr.(type) {
+	case *java.Identifier:
+		ref, held = s.shapes[e.Name]
+	case *java.FieldAccess:
+		// An input held in a struct field: the field's declared type, or what
+		// attribution says it holds.
+		if ref, held = s.attributedShape(e); !held && e.Name.Element != nil {
+			ref, held = s.shapes[e.Name.Element.Name]
+		}
 	}
-	ref, held := s.shapes[id.Name]
 	if !held || !strings.HasSuffix(ref.shape, "Input") {
 		return "", "", false
 	}
@@ -215,11 +222,11 @@ func (v *migrateVisitor) paginate(mi *java.MethodInvocation) (java.J, bool) {
 // its methods and the page they yield are named here instead.
 func attributePaginator(tree java.J, service, serviceLocal, operation, output string) java.J {
 	attributed := visitor.Init(&paginatorAttrib{
-		servicePath:  v2ServicePkg + service,
+		servicePath:  v2ServicePath(service),
 		serviceLocal: serviceLocal,
 		constructor:  "New" + operation + "Paginator",
-		pagerType:    v2ServicePkg + service + "." + operation + "Paginator",
-		outputType:   v2ServicePkg + service + "." + output,
+		pagerType:    v2ServicePath(service) + "." + operation + "Paginator",
+		outputType:   v2ServicePath(service) + "." + output,
 	}).Visit(tree, nil)
 	if out, ok := attributed.(java.J); ok {
 		return out

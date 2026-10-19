@@ -10,6 +10,8 @@ S AuthSchemeResolver
 S Client
 S CompositeAlarmExistsWaiter
 S CompositeAlarmExistsWaiterOptions
+S CreateResourceMetricsConfigurationInput
+S CreateResourceMetricsConfigurationOutput
 S DeleteAlarmMuteRuleInput
 S DeleteAlarmMuteRuleOutput
 S DeleteAlarmsInput
@@ -22,6 +24,8 @@ S DeleteInsightRulesInput
 S DeleteInsightRulesOutput
 S DeleteMetricStreamInput
 S DeleteMetricStreamOutput
+S DeleteResourceMetricsConfigurationInput
+S DeleteResourceMetricsConfigurationOutput
 S DescribeAlarmContributorsInput
 S DescribeAlarmContributorsOutput
 S DescribeAlarmHistoryAPIClient
@@ -84,6 +88,8 @@ S GetMetricWidgetImageInput
 S GetMetricWidgetImageOutput
 S GetOTelEnrichmentInput
 S GetOTelEnrichmentOutput
+S GetResourceMetricsConfigurationInput
+S GetResourceMetricsConfigurationOutput
 S HTTPClient
 S HTTPSignerV4
 S ListAlarmMuteRulesAPIClient
@@ -172,18 +178,24 @@ S TagResourceOutput
 S TypeRegistry
 S UntagResourceInput
 S UntagResourceOutput
+S UpdateOTelEnrichmentInput
+S UpdateOTelEnrichmentOutput
+S UpdateResourceMetricsConfigurationInput
+S UpdateResourceMetricsConfigurationOutput
 S WithAPIOptions
 S WithEndpointResolver
 S WithEndpointResolverV2
 S WithSigV4SigningName
 S WithSigV4SigningRegion
 O AssociateDatasetKmsKey
+O CreateResourceMetricsConfiguration
 O DeleteAlarmMuteRule
 O DeleteAlarms
 O DeleteAnomalyDetector
 O DeleteDashboards
 O DeleteInsightRules
 O DeleteMetricStream
+O DeleteResourceMetricsConfiguration
 O DescribeAlarmContributors
 O DescribeAlarmHistory
 O DescribeAlarms
@@ -204,6 +216,7 @@ O GetMetricStatistics
 O GetMetricStream
 O GetMetricWidgetImage
 O GetOTelEnrichment
+O GetResourceMetricsConfiguration
 O ListAlarmMuteRules
 O ListDashboards
 O ListManagedInsightRules
@@ -227,6 +240,8 @@ O StopMetricStreams
 O StopOTelEnrichment
 O TagResource
 O UntagResource
+O UpdateOTelEnrichment
+O UpdateResourceMetricsConfiguration
 X ErrCodeConcurrentModificationException ConcurrentModificationException
 X ErrCodeDashboardInvalidInputError InvalidParameterInput
 X ErrCodeDashboardNotFoundError ResourceNotFound
@@ -268,12 +283,14 @@ R AnomalyDetector.Configuration AnomalyDetectorConfiguration
 R AnomalyDetector.MetricCharacteristics MetricCharacteristics
 R AnomalyDetector.MetricMathAnomalyDetector MetricMathAnomalyDetector
 R AnomalyDetector.SingleMetricAnomalyDetector SingleMetricAnomalyDetector
+R CreateResourceMetricsConfigurationOutput.ResourceMetricsConfiguration ResourceMetricsConfiguration
 R DeleteAnomalyDetectorInput.MetricMathAnomalyDetector MetricMathAnomalyDetector
 R DeleteAnomalyDetectorInput.SingleMetricAnomalyDetector SingleMetricAnomalyDetector
 R EntityMetricData.Entity Entity
 R GetAlarmMuteRuleOutput.MuteTargets MuteTargets
 R GetAlarmMuteRuleOutput.Rule Rule
 R GetMetricDataInput.LabelOptions LabelOptions
+R GetResourceMetricsConfigurationOutput.ResourceMetricsConfiguration ResourceMetricsConfiguration
 R LogAlarm.ScheduledQueryConfiguration ScheduledQueryConfiguration
 R LogAlarm.WarmUpConfiguration WarmUpConfiguration
 R ManagedRuleDescription.RuleState ManagedRuleState
@@ -292,6 +309,7 @@ R PutLogAlarmInput.WarmUpConfiguration WarmUpConfiguration
 R PutMetricAlarmInput.WarmUpConfiguration WarmUpConfiguration
 R Rule.Schedule Schedule
 R ScheduledQueryConfiguration.ScheduleConfiguration ScheduleConfiguration
+R UpdateResourceMetricsConfigurationOutput.ResourceMetricsConfiguration ResourceMetricsConfiguration
 V AlarmContributor.ContributorId string
 V AlarmContributor.StateReason string
 V AlarmHistoryItem.AlarmContributorId string
@@ -325,6 +343,7 @@ V ConcurrentModificationException.ErrorCodeOverride string
 V ConcurrentModificationException.Message string
 V ConflictException.ErrorCodeOverride string
 V ConflictException.Message string
+V CreateResourceMetricsConfigurationInput.ResourceArn string
 V DashboardEntry.DashboardArn string
 V DashboardEntry.DashboardName string
 V DashboardEntry.Size int64
@@ -345,6 +364,7 @@ V DeleteAnomalyDetectorInput.MetricName string
 V DeleteAnomalyDetectorInput.Namespace string
 V DeleteAnomalyDetectorInput.Stat string
 V DeleteMetricStreamInput.Name string
+V DeleteResourceMetricsConfigurationInput.ResourceArn string
 V DescribeAlarmContributorsInput.AlarmName string
 V DescribeAlarmContributorsInput.NextToken string
 V DescribeAlarmContributorsOutput.NextToken string
@@ -417,6 +437,7 @@ V GetMetricStreamOutput.RoleArn string
 V GetMetricStreamOutput.State string
 V GetMetricWidgetImageInput.MetricWidget string
 V GetMetricWidgetImageInput.OutputFormat string
+V GetResourceMetricsConfigurationInput.ResourceArn string
 V InsightRule.ApplyOnTransformedLogs bool
 V InsightRule.Definition string
 V InsightRule.ManagedRule bool
@@ -536,6 +557,7 @@ V MetricStreamStatisticsMetric.MetricName string
 V MetricStreamStatisticsMetric.Namespace string
 V MissingRequiredParameterException.ErrorCodeOverride string
 V MissingRequiredParameterException.Message string
+V OTelEnrichmentMetricSelector.Namespace string
 V Options.BaseEndpoint string
 V PartialFailure.ExceptionType string
 V PartialFailure.FailureCode string
@@ -592,6 +614,7 @@ V PutMetricStreamInput.RoleArn string
 V PutMetricStreamOutput.Arn string
 V ResourceConflict.ErrorCodeOverride string
 V ResourceConflict.Message string
+V ResourceMetricsConfiguration.ResourceArn string
 V ResourceNotFound.ErrorCodeOverride string
 V ResourceNotFound.Message string
 V ResourceNotFoundException.ErrorCodeOverride string
@@ -623,6 +646,9 @@ V Tag.Key string
 V Tag.Value string
 V TagResourceInput.ResourceARN string
 V UntagResourceInput.ResourceARN string
+V UpdateResourceMetricsConfigurationInput.ResourceArn string
+V ValidationException.ErrorCodeOverride string
+V ValidationException.Message string
 V WallClockWindow.Timezone string
 V WarmUpConfiguration.OnlyStartEvaluatingAfterWarmUpPeriodEnds bool
 V WarmUpConfiguration.WarmUpPeriodDurationInMinutes int32
@@ -815,6 +841,7 @@ N ContributorAttributes
 N ContributorId
 N Contributors
 N Counts
+N CreatedAt
 N CreationDate
 N Credentials
 N DashboardArn
@@ -915,6 +942,7 @@ N MetricDatapoints
 N MetricMathAnomalyDetector
 N MetricName
 N MetricNames
+N MetricSelections
 N MetricStat
 N MetricTimezone
 N MetricWidget
@@ -952,7 +980,9 @@ N RequestMinCompressSizeBytes
 N ResolvedRegion
 N Resolver
 N ResourceARN
+N ResourceArn
 N ResourceId
+N ResourceMetricsConfiguration
 N ResourceType
 N ResultMetadata
 N RetryMaxAttempts
@@ -1003,6 +1033,7 @@ N Timezone
 N TracerProvider
 N TreatMissingData
 N UniqueContributors
+N UpdatedAt
 N UseDualStack
 N UseDualStackEndpoint
 N UseFIPS
@@ -1077,11 +1108,14 @@ T MetricStreamStatisticsConfiguration
 T MetricStreamStatisticsMetric
 T MissingRequiredParameterException
 T MuteTargets
+T OTelEnrichmentMetricSelector
 T OTelEnrichmentStatus
 T PartialFailure
 T Range
 T RecentlyActive
 T ResourceConflict
+T ResourceMetricSelection
+T ResourceMetricsConfiguration
 T ResourceNotFound
 T ResourceNotFoundException
 T Rule
@@ -1098,6 +1132,7 @@ T StatisticSet
 T StatusCode
 T Tag
 T UnknownUnionMember
+T ValidationException
 T WallClockWindow
 T WarmUpConfiguration
 E ActionsSuppressedByAlarm ActionsSuppressedBy
@@ -1176,3 +1211,205 @@ E StatusCodeComplete StatusCode
 E StatusCodeForbidden StatusCode
 E StatusCodeInternalError StatusCode
 E StatusCodePartialData StatusCode
+Y AlarmExists 5 40
+Y CompositeAlarmExists 5 40
+U EvaluationCriteria
+U EvaluationWindow
+K AnomalyDetectorConfiguration 001 ExcludedTimeRanges each Range slice
+K DeleteAlarmsInput 001 AlarmNames req nil
+K DeleteAnomalyDetectorInput 001 MetricName len 1 ptr
+K DeleteAnomalyDetectorInput 002 Namespace len 1 ptr
+K DeleteAnomalyDetectorInput 003 Dimensions each Dimension slice
+K DeleteAnomalyDetectorInput 004 MetricMathAnomalyDetector nest MetricMathAnomalyDetector
+K DeleteAnomalyDetectorInput 005 SingleMetricAnomalyDetector nest SingleMetricAnomalyDetector
+K DeleteDashboardsInput 001 DashboardNames req nil
+K DeleteInsightRulesInput 001 RuleNames req nil
+K DeleteMetricStreamInput 001 Name req nil
+K DeleteMetricStreamInput 002 Name len 1 ptr
+K DescribeAlarmHistoryInput 001 AlarmName len 1 ptr
+K DescribeAlarmHistoryInput 002 MaxRecords min 1 ptr
+K DescribeAlarmsForMetricInput 001 MetricName req nil
+K DescribeAlarmsForMetricInput 002 MetricName len 1 ptr
+K DescribeAlarmsForMetricInput 003 Namespace req nil
+K DescribeAlarmsForMetricInput 004 Namespace len 1 ptr
+K DescribeAlarmsForMetricInput 005 Period min 1 ptr
+K DescribeAlarmsForMetricInput 006 Dimensions each Dimension slice
+K DescribeAlarmsInput 001 ActionPrefix len 1 ptr
+K DescribeAlarmsInput 002 AlarmNamePrefix len 1 ptr
+K DescribeAlarmsInput 003 ChildrenOfAlarmName len 1 ptr
+K DescribeAlarmsInput 004 MaxRecords min 1 ptr
+K DescribeAlarmsInput 005 ParentsOfAlarmName len 1 ptr
+K DescribeAnomalyDetectorsInput 001 MaxResults min 1 ptr
+K DescribeAnomalyDetectorsInput 002 MetricName len 1 ptr
+K DescribeAnomalyDetectorsInput 003 Namespace len 1 ptr
+K DescribeAnomalyDetectorsInput 004 Dimensions each Dimension slice
+K DescribeInsightRulesInput 001 MaxResults min 1 ptr
+K Dimension 001 Name req nil
+K Dimension 002 Name len 1 ptr
+K Dimension 003 Value req nil
+K Dimension 004 Value len 1 ptr
+K DimensionFilter 001 Name req nil
+K DimensionFilter 002 Name len 1 ptr
+K DimensionFilter 003 Value len 1 ptr
+K DisableAlarmActionsInput 001 AlarmNames req nil
+K DisableInsightRulesInput 001 RuleNames req nil
+K EnableAlarmActionsInput 001 AlarmNames req nil
+K EnableInsightRulesInput 001 RuleNames req nil
+K GetDashboardInput 001 DashboardName req nil
+K GetInsightRuleReportInput 001 EndTime req nil
+K GetInsightRuleReportInput 002 OrderBy len 1 ptr
+K GetInsightRuleReportInput 003 Period req nil
+K GetInsightRuleReportInput 004 Period min 1 ptr
+K GetInsightRuleReportInput 005 RuleName req nil
+K GetInsightRuleReportInput 006 RuleName len 1 ptr
+K GetInsightRuleReportInput 007 StartTime req nil
+K GetMetricDataInput 001 EndTime req nil
+K GetMetricDataInput 002 MetricDataQueries req nil
+K GetMetricDataInput 003 StartTime req nil
+K GetMetricDataInput 004 MetricDataQueries each MetricDataQuery slice
+K GetMetricStatisticsInput 001 EndTime req nil
+K GetMetricStatisticsInput 002 ExtendedStatistics len 1 container
+K GetMetricStatisticsInput 003 MetricName req nil
+K GetMetricStatisticsInput 004 MetricName len 1 ptr
+K GetMetricStatisticsInput 005 Namespace req nil
+K GetMetricStatisticsInput 006 Namespace len 1 ptr
+K GetMetricStatisticsInput 007 Period req nil
+K GetMetricStatisticsInput 008 Period min 1 ptr
+K GetMetricStatisticsInput 009 StartTime req nil
+K GetMetricStatisticsInput 010 Statistics len 1 container
+K GetMetricStatisticsInput 011 Dimensions each Dimension slice
+K GetMetricStreamInput 001 Name req nil
+K GetMetricStreamInput 002 Name len 1 ptr
+K GetMetricWidgetImageInput 001 MetricWidget req nil
+K ListManagedInsightRulesInput 001 MaxResults min 1 ptr
+K ListManagedInsightRulesInput 002 ResourceARN req nil
+K ListManagedInsightRulesInput 003 ResourceARN len 1 ptr
+K ListMetricStreamsInput 001 MaxResults min 1 ptr
+K ListMetricsInput 001 MetricName len 1 ptr
+K ListMetricsInput 002 Namespace len 1 ptr
+K ListMetricsInput 003 OwningAccount len 1 ptr
+K ListMetricsInput 004 Dimensions each DimensionFilter slice
+K ListTagsForResourceInput 001 ResourceARN req nil
+K ListTagsForResourceInput 002 ResourceARN len 1 ptr
+K ManagedRule 001 ResourceARN req nil
+K ManagedRule 002 ResourceARN len 1 ptr
+K ManagedRule 003 TemplateName req nil
+K ManagedRule 004 TemplateName len 1 ptr
+K ManagedRule 005 Tags each Tag slice
+K Metric 001 MetricName len 1 ptr
+K Metric 002 Namespace len 1 ptr
+K Metric 003 Dimensions each Dimension slice
+K MetricDataQuery 001 AccountId len 1 ptr
+K MetricDataQuery 002 Expression len 1 ptr
+K MetricDataQuery 003 Id req nil
+K MetricDataQuery 004 Id len 1 ptr
+K MetricDataQuery 005 Period min 1 ptr
+K MetricDataQuery 006 MetricStat nest MetricStat
+K MetricDatum 001 MetricName req nil
+K MetricDatum 002 MetricName len 1 ptr
+K MetricDatum 003 StorageResolution min 1 ptr
+K MetricDatum 004 Dimensions each Dimension slice
+K MetricDatum 005 StatisticValues nest StatisticSet
+K MetricMathAnomalyDetector 001 MetricDataQueries each MetricDataQuery slice
+K MetricStat 001 Metric req nil
+K MetricStat 002 Period req nil
+K MetricStat 003 Period min 1 ptr
+K MetricStat 004 Stat req nil
+K MetricStat 005 Metric nest Metric
+K MetricStreamFilter 001 Namespace len 1 ptr
+K MetricStreamStatisticsConfiguration 001 AdditionalStatistics req nil
+K MetricStreamStatisticsConfiguration 002 IncludeMetrics req nil
+K MetricStreamStatisticsConfiguration 003 IncludeMetrics each MetricStreamStatisticsMetric slice
+K MetricStreamStatisticsMetric 001 MetricName req nil
+K MetricStreamStatisticsMetric 002 MetricName len 1 ptr
+K MetricStreamStatisticsMetric 003 Namespace req nil
+K MetricStreamStatisticsMetric 004 Namespace len 1 ptr
+K PutAnomalyDetectorInput 001 MetricName len 1 ptr
+K PutAnomalyDetectorInput 002 Namespace len 1 ptr
+K PutAnomalyDetectorInput 003 Configuration nest AnomalyDetectorConfiguration
+K PutAnomalyDetectorInput 004 Dimensions each Dimension slice
+K PutAnomalyDetectorInput 005 MetricMathAnomalyDetector nest MetricMathAnomalyDetector
+K PutAnomalyDetectorInput 006 SingleMetricAnomalyDetector nest SingleMetricAnomalyDetector
+K PutCompositeAlarmInput 001 ActionsSuppressor len 1 ptr
+K PutCompositeAlarmInput 002 AlarmName req nil
+K PutCompositeAlarmInput 003 AlarmName len 1 ptr
+K PutCompositeAlarmInput 004 AlarmRule req nil
+K PutCompositeAlarmInput 005 AlarmRule len 1 ptr
+K PutCompositeAlarmInput 006 Tags each Tag slice
+K PutDashboardInput 001 DashboardBody req nil
+K PutDashboardInput 002 DashboardName req nil
+K PutInsightRuleInput 001 RuleDefinition req nil
+K PutInsightRuleInput 002 RuleDefinition len 1 ptr
+K PutInsightRuleInput 003 RuleName req nil
+K PutInsightRuleInput 004 RuleName len 1 ptr
+K PutInsightRuleInput 005 RuleState len 1 ptr
+K PutInsightRuleInput 006 Tags each Tag slice
+K PutManagedInsightRulesInput 001 ManagedRules req nil
+K PutManagedInsightRulesInput 002 ManagedRules each ManagedRule slice
+K PutMetricAlarmInput 001 AlarmName req nil
+K PutMetricAlarmInput 002 AlarmName len 1 ptr
+K PutMetricAlarmInput 003 ComparisonOperator req empty
+K PutMetricAlarmInput 004 DatapointsToAlarm min 1 ptr
+K PutMetricAlarmInput 005 EvaluateLowSampleCountPercentile len 1 ptr
+K PutMetricAlarmInput 006 EvaluationPeriods req nil
+K PutMetricAlarmInput 007 EvaluationPeriods min 1 ptr
+K PutMetricAlarmInput 008 MetricName len 1 ptr
+K PutMetricAlarmInput 009 Namespace len 1 ptr
+K PutMetricAlarmInput 010 Period min 1 ptr
+K PutMetricAlarmInput 011 ThresholdMetricId len 1 ptr
+K PutMetricAlarmInput 012 TreatMissingData len 1 ptr
+K PutMetricAlarmInput 013 Dimensions each Dimension slice
+K PutMetricAlarmInput 014 Metrics each MetricDataQuery slice
+K PutMetricAlarmInput 015 Tags each Tag slice
+K PutMetricDataInput 001 MetricData req nil
+K PutMetricDataInput 002 Namespace req nil
+K PutMetricDataInput 003 Namespace len 1 ptr
+K PutMetricDataInput 004 MetricData each MetricDatum slice
+K PutMetricStreamInput 001 FirehoseArn req nil
+K PutMetricStreamInput 002 FirehoseArn len 1 ptr
+K PutMetricStreamInput 003 Name req nil
+K PutMetricStreamInput 004 Name len 1 ptr
+K PutMetricStreamInput 005 OutputFormat req empty
+K PutMetricStreamInput 006 OutputFormat len 1 enum
+K PutMetricStreamInput 007 RoleArn req nil
+K PutMetricStreamInput 008 RoleArn len 1 ptr
+K PutMetricStreamInput 009 ExcludeFilters each MetricStreamFilter slice
+K PutMetricStreamInput 010 IncludeFilters each MetricStreamFilter slice
+K PutMetricStreamInput 011 StatisticsConfigurations each MetricStreamStatisticsConfiguration slice
+K PutMetricStreamInput 012 Tags each Tag slice
+K Range 001 EndTime req nil
+K Range 002 StartTime req nil
+K SetAlarmStateInput 001 AlarmName req nil
+K SetAlarmStateInput 002 AlarmName len 1 ptr
+K SetAlarmStateInput 003 StateReason req nil
+K SetAlarmStateInput 004 StateValue req empty
+K SingleMetricAnomalyDetector 001 AccountId len 1 ptr
+K SingleMetricAnomalyDetector 002 MetricName len 1 ptr
+K SingleMetricAnomalyDetector 003 Namespace len 1 ptr
+K SingleMetricAnomalyDetector 004 Dimensions each Dimension slice
+K StartMetricStreamsInput 001 Names req nil
+K StatisticSet 001 Maximum req nil
+K StatisticSet 002 Minimum req nil
+K StatisticSet 003 SampleCount req nil
+K StatisticSet 004 Sum req nil
+K StopMetricStreamsInput 001 Names req nil
+K Tag 001 Key req nil
+K Tag 002 Key len 1 ptr
+K Tag 003 Value req nil
+K TagResourceInput 001 ResourceARN req nil
+K TagResourceInput 002 ResourceARN len 1 ptr
+K TagResourceInput 003 Tags req nil
+K TagResourceInput 004 Tags each Tag slice
+K UntagResourceInput 001 ResourceARN req nil
+K UntagResourceInput 002 ResourceARN len 1 ptr
+K UntagResourceInput 003 TagKeys req nil
+G DescribeAlarmHistory NextToken NextToken
+G DescribeAlarms NextToken NextToken
+G DescribeAnomalyDetectors NextToken NextToken
+G DescribeInsightRules NextToken NextToken
+G GetMetricData NextToken NextToken
+G ListAlarmMuteRules NextToken NextToken
+G ListDashboards NextToken NextToken
+G ListManagedInsightRules NextToken NextToken
+G ListMetricStreams NextToken NextToken
+G ListMetrics NextToken NextToken

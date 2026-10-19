@@ -1331,3 +1331,270 @@ E StatementTypeUtility StatementType
 E ThrottleReasonConcurrentQueryLimitExceeded ThrottleReason
 E WorkGroupStateDisabled WorkGroupState
 E WorkGroupStateEnabled WorkGroupState
+K AclConfiguration 001 S3AclOption req empty
+K BatchGetNamedQueryInput 001 NamedQueryIds req nil
+K BatchGetNamedQueryInput 002 NamedQueryIds len 1 container
+K BatchGetPreparedStatementInput 001 PreparedStatementNames req nil
+K BatchGetPreparedStatementInput 002 WorkGroup req nil
+K BatchGetQueryExecutionInput 001 QueryExecutionIds req nil
+K BatchGetQueryExecutionInput 002 QueryExecutionIds len 1 container
+K CancelCapacityReservationInput 001 Name req nil
+K CancelCapacityReservationInput 002 Name len 1 ptr
+K CreateCapacityReservationInput 001 Name req nil
+K CreateCapacityReservationInput 002 Name len 1 ptr
+K CreateCapacityReservationInput 003 TargetDpus req nil
+K CreateCapacityReservationInput 004 TargetDpus min 24 ptr
+K CreateCapacityReservationInput 005 Tags each Tag slice
+K CreateDataCatalogInput 001 Description len 1 ptr
+K CreateDataCatalogInput 002 Name req nil
+K CreateDataCatalogInput 003 Name len 1 ptr
+K CreateDataCatalogInput 004 Type req empty
+K CreateDataCatalogInput 005 Tags each Tag slice
+K CreateNamedQueryInput 001 ClientRequestToken len 32 ptr
+K CreateNamedQueryInput 002 Database req nil
+K CreateNamedQueryInput 003 Database len 1 ptr
+K CreateNamedQueryInput 004 Description len 1 ptr
+K CreateNamedQueryInput 005 Name req nil
+K CreateNamedQueryInput 006 Name len 1 ptr
+K CreateNamedQueryInput 007 QueryString req nil
+K CreateNamedQueryInput 008 QueryString len 1 ptr
+K CreateNotebookInput 001 ClientRequestToken len 1 ptr
+K CreateNotebookInput 002 Name req nil
+K CreateNotebookInput 003 Name len 1 ptr
+K CreateNotebookInput 004 WorkGroup req nil
+K CreatePreparedStatementInput 001 Description len 1 ptr
+K CreatePreparedStatementInput 002 QueryStatement req nil
+K CreatePreparedStatementInput 003 QueryStatement len 1 ptr
+K CreatePreparedStatementInput 004 StatementName req nil
+K CreatePreparedStatementInput 005 StatementName len 1 ptr
+K CreatePreparedStatementInput 006 WorkGroup req nil
+K CreatePresignedNotebookUrlInput 001 SessionId req nil
+K CreatePresignedNotebookUrlInput 002 SessionId len 1 ptr
+K CreateWorkGroupInput 001 Name req nil
+K CreateWorkGroupInput 002 Configuration nest WorkGroupConfiguration
+K CreateWorkGroupInput 003 Tags each Tag slice
+K CustomerContentEncryptionConfiguration 001 KmsKey req nil
+K CustomerContentEncryptionConfiguration 002 KmsKey len 1 ptr
+K DeleteCapacityReservationInput 001 Name req nil
+K DeleteCapacityReservationInput 002 Name len 1 ptr
+K DeleteDataCatalogInput 001 Name req nil
+K DeleteDataCatalogInput 002 Name len 1 ptr
+K DeleteNamedQueryInput 001 NamedQueryId len 1 ptr
+K DeleteNotebookInput 001 NotebookId req nil
+K DeleteNotebookInput 002 NotebookId len 1 ptr
+K DeletePreparedStatementInput 001 StatementName req nil
+K DeletePreparedStatementInput 002 StatementName len 1 ptr
+K DeletePreparedStatementInput 003 WorkGroup req nil
+K DeleteWorkGroupInput 001 WorkGroup req nil
+K EncryptionConfiguration 001 EncryptionOption req empty
+K EngineConfiguration 001 CoordinatorDpuSize min 1 ptr
+K EngineConfiguration 002 DefaultExecutorDpuSize min 1 ptr
+K EngineConfiguration 003 MaxConcurrentDpus req nil
+K EngineConfiguration 004 MaxConcurrentDpus min 2 ptr
+K EngineVersion 001 EffectiveEngineVersion len 1 ptr
+K EngineVersion 002 SelectedEngineVersion len 1 ptr
+K ExportNotebookInput 001 NotebookId req nil
+K ExportNotebookInput 002 NotebookId len 1 ptr
+K FilterDefinition 001 Name len 1 ptr
+K GetCalculationExecutionCodeInput 001 CalculationExecutionId req nil
+K GetCalculationExecutionCodeInput 002 CalculationExecutionId len 1 ptr
+K GetCalculationExecutionInput 001 CalculationExecutionId req nil
+K GetCalculationExecutionInput 002 CalculationExecutionId len 1 ptr
+K GetCalculationExecutionStatusInput 001 CalculationExecutionId req nil
+K GetCalculationExecutionStatusInput 002 CalculationExecutionId len 1 ptr
+K GetCapacityAssignmentConfigurationInput 001 CapacityReservationName req nil
+K GetCapacityAssignmentConfigurationInput 002 CapacityReservationName len 1 ptr
+K GetCapacityReservationInput 001 Name req nil
+K GetCapacityReservationInput 002 Name len 1 ptr
+K GetDataCatalogInput 001 Name req nil
+K GetDataCatalogInput 002 Name len 1 ptr
+K GetDatabaseInput 001 CatalogName req nil
+K GetDatabaseInput 002 CatalogName len 1 ptr
+K GetDatabaseInput 003 DatabaseName req nil
+K GetDatabaseInput 004 DatabaseName len 1 ptr
+K GetNamedQueryInput 001 NamedQueryId req nil
+K GetNamedQueryInput 002 NamedQueryId len 1 ptr
+K GetNotebookMetadataInput 001 NotebookId req nil
+K GetNotebookMetadataInput 002 NotebookId len 1 ptr
+K GetPreparedStatementInput 001 StatementName req nil
+K GetPreparedStatementInput 002 StatementName len 1 ptr
+K GetPreparedStatementInput 003 WorkGroup req nil
+K GetQueryExecutionInput 001 QueryExecutionId req nil
+K GetQueryExecutionInput 002 QueryExecutionId len 1 ptr
+K GetQueryResultsInput 001 MaxResults min 1 ptr
+K GetQueryResultsInput 002 NextToken len 1 ptr
+K GetQueryResultsInput 003 QueryExecutionId req nil
+K GetQueryResultsInput 004 QueryExecutionId len 1 ptr
+K GetQueryRuntimeStatisticsInput 001 QueryExecutionId req nil
+K GetQueryRuntimeStatisticsInput 002 QueryExecutionId len 1 ptr
+K GetSessionInput 001 SessionId req nil
+K GetSessionInput 002 SessionId len 1 ptr
+K GetSessionStatusInput 001 SessionId req nil
+K GetSessionStatusInput 002 SessionId len 1 ptr
+K GetTableMetadataInput 001 CatalogName req nil
+K GetTableMetadataInput 002 CatalogName len 1 ptr
+K GetTableMetadataInput 003 DatabaseName req nil
+K GetTableMetadataInput 004 DatabaseName len 1 ptr
+K GetTableMetadataInput 005 TableName req nil
+K GetTableMetadataInput 006 TableName len 1 ptr
+K GetWorkGroupInput 001 WorkGroup req nil
+K ImportNotebookInput 001 ClientRequestToken len 1 ptr
+K ImportNotebookInput 002 Name req nil
+K ImportNotebookInput 003 Name len 1 ptr
+K ImportNotebookInput 004 Payload len 1 ptr
+K ImportNotebookInput 005 Type req empty
+K ImportNotebookInput 006 WorkGroup req nil
+K ListApplicationDPUSizesInput 001 MaxResults min 1 ptr
+K ListApplicationDPUSizesInput 002 NextToken len 1 ptr
+K ListCalculationExecutionsInput 001 MaxResults min 1 ptr
+K ListCalculationExecutionsInput 002 SessionId req nil
+K ListCalculationExecutionsInput 003 SessionId len 1 ptr
+K ListCapacityReservationsInput 001 MaxResults min 1 ptr
+K ListCapacityReservationsInput 002 NextToken len 1 ptr
+K ListDataCatalogsInput 001 MaxResults min 2 ptr
+K ListDataCatalogsInput 002 NextToken len 1 ptr
+K ListDatabasesInput 001 CatalogName req nil
+K ListDatabasesInput 002 CatalogName len 1 ptr
+K ListDatabasesInput 003 MaxResults min 1 ptr
+K ListDatabasesInput 004 NextToken len 1 ptr
+K ListEngineVersionsInput 001 MaxResults min 1 ptr
+K ListEngineVersionsInput 002 NextToken len 1 ptr
+K ListExecutorsInput 001 MaxResults min 1 ptr
+K ListExecutorsInput 002 SessionId req nil
+K ListExecutorsInput 003 SessionId len 1 ptr
+K ListNamedQueriesInput 001 NextToken len 1 ptr
+K ListNotebookMetadataInput 001 MaxResults min 1 ptr
+K ListNotebookMetadataInput 002 NextToken len 1 ptr
+K ListNotebookMetadataInput 003 WorkGroup req nil
+K ListNotebookMetadataInput 004 Filters nest FilterDefinition
+K ListNotebookSessionsInput 001 MaxResults min 1 ptr
+K ListNotebookSessionsInput 002 NextToken len 1 ptr
+K ListNotebookSessionsInput 003 NotebookId req nil
+K ListNotebookSessionsInput 004 NotebookId len 1 ptr
+K ListPreparedStatementsInput 001 MaxResults min 1 ptr
+K ListPreparedStatementsInput 002 NextToken len 1 ptr
+K ListPreparedStatementsInput 003 WorkGroup req nil
+K ListQueryExecutionsInput 001 NextToken len 1 ptr
+K ListSessionsInput 001 MaxResults min 1 ptr
+K ListSessionsInput 002 WorkGroup req nil
+K ListTableMetadataInput 001 CatalogName req nil
+K ListTableMetadataInput 002 CatalogName len 1 ptr
+K ListTableMetadataInput 003 DatabaseName req nil
+K ListTableMetadataInput 004 DatabaseName len 1 ptr
+K ListTableMetadataInput 005 MaxResults min 1 ptr
+K ListTableMetadataInput 006 NextToken len 1 ptr
+K ListTagsForResourceInput 001 MaxResults min 75 ptr
+K ListTagsForResourceInput 002 NextToken len 1 ptr
+K ListTagsForResourceInput 003 ResourceARN req nil
+K ListTagsForResourceInput 004 ResourceARN len 1 ptr
+K ListWorkGroupsInput 001 MaxResults min 1 ptr
+K ListWorkGroupsInput 002 NextToken len 1 ptr
+K PutCapacityAssignmentConfigurationInput 001 CapacityAssignments req nil
+K PutCapacityAssignmentConfigurationInput 002 CapacityReservationName req nil
+K PutCapacityAssignmentConfigurationInput 003 CapacityReservationName len 1 ptr
+K QueryExecutionContext 001 Catalog len 1 ptr
+K QueryExecutionContext 002 Database len 1 ptr
+K QueryResultsS3AccessGrantsConfiguration 001 AuthenticationType req empty
+K QueryResultsS3AccessGrantsConfiguration 002 EnableS3AccessGrants req nil
+K ResultConfiguration 001 ExpectedBucketOwner len 12 ptr
+K ResultConfiguration 002 AclConfiguration nest AclConfiguration
+K ResultConfiguration 003 EncryptionConfiguration nest EncryptionConfiguration
+K ResultConfigurationUpdates 001 ExpectedBucketOwner len 12 ptr
+K ResultConfigurationUpdates 002 AclConfiguration nest AclConfiguration
+K ResultConfigurationUpdates 003 EncryptionConfiguration nest EncryptionConfiguration
+K ResultReuseByAgeConfiguration 001 Enabled req none
+K ResultReuseConfiguration 001 ResultReuseByAgeConfiguration nest ResultReuseByAgeConfiguration
+K StartCalculationExecutionInput 001 ClientRequestToken len 32 ptr
+K StartCalculationExecutionInput 002 Description len 1 ptr
+K StartCalculationExecutionInput 003 SessionId req nil
+K StartCalculationExecutionInput 004 SessionId len 1 ptr
+K StartQueryExecutionInput 001 ClientRequestToken len 32 ptr
+K StartQueryExecutionInput 002 ExecutionParameters len 1 container
+K StartQueryExecutionInput 003 QueryString req nil
+K StartQueryExecutionInput 004 QueryString len 1 ptr
+K StartQueryExecutionInput 005 QueryExecutionContext nest QueryExecutionContext
+K StartQueryExecutionInput 006 ResultConfiguration nest ResultConfiguration
+K StartQueryExecutionInput 007 ResultReuseConfiguration nest ResultReuseConfiguration
+K StartSessionInput 001 ClientRequestToken len 32 ptr
+K StartSessionInput 002 Description len 1 ptr
+K StartSessionInput 003 EngineConfiguration req nil
+K StartSessionInput 004 NotebookVersion len 1 ptr
+K StartSessionInput 005 SessionIdleTimeoutInMinutes min 1 ptr
+K StartSessionInput 006 WorkGroup req nil
+K StartSessionInput 007 EngineConfiguration nest EngineConfiguration
+K StopCalculationExecutionInput 001 CalculationExecutionId req nil
+K StopCalculationExecutionInput 002 CalculationExecutionId len 1 ptr
+K StopQueryExecutionInput 001 QueryExecutionId len 1 ptr
+K Tag 001 Key len 1 ptr
+K TagResourceInput 001 ResourceARN req nil
+K TagResourceInput 002 ResourceARN len 1 ptr
+K TagResourceInput 003 Tags req nil
+K TagResourceInput 004 Tags each Tag slice
+K TerminateSessionInput 001 SessionId req nil
+K TerminateSessionInput 002 SessionId len 1 ptr
+K UntagResourceInput 001 ResourceARN req nil
+K UntagResourceInput 002 ResourceARN len 1 ptr
+K UntagResourceInput 003 TagKeys req nil
+K UpdateCapacityReservationInput 001 Name req nil
+K UpdateCapacityReservationInput 002 Name len 1 ptr
+K UpdateCapacityReservationInput 003 TargetDpus req nil
+K UpdateCapacityReservationInput 004 TargetDpus min 24 ptr
+K UpdateDataCatalogInput 001 Description len 1 ptr
+K UpdateDataCatalogInput 002 Name req nil
+K UpdateDataCatalogInput 003 Name len 1 ptr
+K UpdateDataCatalogInput 004 Type req empty
+K UpdateNamedQueryInput 001 Name req nil
+K UpdateNamedQueryInput 002 Name len 1 ptr
+K UpdateNamedQueryInput 003 NamedQueryId req nil
+K UpdateNamedQueryInput 004 NamedQueryId len 1 ptr
+K UpdateNamedQueryInput 005 QueryString req nil
+K UpdateNamedQueryInput 006 QueryString len 1 ptr
+K UpdateNotebookInput 001 ClientRequestToken len 1 ptr
+K UpdateNotebookInput 002 NotebookId req nil
+K UpdateNotebookInput 003 NotebookId len 1 ptr
+K UpdateNotebookInput 004 Payload req nil
+K UpdateNotebookInput 005 Payload len 1 ptr
+K UpdateNotebookInput 006 SessionId len 1 ptr
+K UpdateNotebookInput 007 Type req empty
+K UpdateNotebookMetadataInput 001 ClientRequestToken len 1 ptr
+K UpdateNotebookMetadataInput 002 Name req nil
+K UpdateNotebookMetadataInput 003 Name len 1 ptr
+K UpdateNotebookMetadataInput 004 NotebookId req nil
+K UpdateNotebookMetadataInput 005 NotebookId len 1 ptr
+K UpdatePreparedStatementInput 001 Description len 1 ptr
+K UpdatePreparedStatementInput 002 QueryStatement req nil
+K UpdatePreparedStatementInput 003 QueryStatement len 1 ptr
+K UpdatePreparedStatementInput 004 StatementName req nil
+K UpdatePreparedStatementInput 005 StatementName len 1 ptr
+K UpdatePreparedStatementInput 006 WorkGroup req nil
+K UpdateWorkGroupInput 001 WorkGroup req nil
+K UpdateWorkGroupInput 002 ConfigurationUpdates nest WorkGroupConfigurationUpdates
+K WorkGroupConfiguration 001 AdditionalConfiguration len 1 ptr
+K WorkGroupConfiguration 002 BytesScannedCutoffPerQuery min 1e+07 ptr
+K WorkGroupConfiguration 003 ExecutionRole len 20 ptr
+K WorkGroupConfiguration 004 CustomerContentEncryptionConfiguration nest CustomerContentEncryptionConfiguration
+K WorkGroupConfiguration 005 EngineVersion nest EngineVersion
+K WorkGroupConfiguration 006 QueryResultsS3AccessGrantsConfiguration nest QueryResultsS3AccessGrantsConfiguration
+K WorkGroupConfiguration 007 ResultConfiguration nest ResultConfiguration
+K WorkGroupConfigurationUpdates 001 AdditionalConfiguration len 1 ptr
+K WorkGroupConfigurationUpdates 002 BytesScannedCutoffPerQuery min 1e+07 ptr
+K WorkGroupConfigurationUpdates 003 ExecutionRole len 20 ptr
+K WorkGroupConfigurationUpdates 004 CustomerContentEncryptionConfiguration nest CustomerContentEncryptionConfiguration
+K WorkGroupConfigurationUpdates 005 EngineVersion nest EngineVersion
+K WorkGroupConfigurationUpdates 006 QueryResultsS3AccessGrantsConfiguration nest QueryResultsS3AccessGrantsConfiguration
+K WorkGroupConfigurationUpdates 007 ResultConfigurationUpdates nest ResultConfigurationUpdates
+G GetQueryResults NextToken NextToken
+G ListApplicationDPUSizes NextToken NextToken
+G ListCalculationExecutions NextToken NextToken
+G ListCapacityReservations NextToken NextToken
+G ListDataCatalogs NextToken NextToken
+G ListDatabases NextToken NextToken
+G ListEngineVersions NextToken NextToken
+G ListExecutors NextToken NextToken
+G ListNamedQueries NextToken NextToken
+G ListPreparedStatements NextToken NextToken
+G ListQueryExecutions NextToken NextToken
+G ListSessions NextToken NextToken
+G ListTableMetadata NextToken NextToken
+G ListTagsForResource NextToken NextToken
+G ListWorkGroups NextToken NextToken

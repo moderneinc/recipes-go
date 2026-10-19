@@ -142,7 +142,8 @@ func testsNotNil(cond java.Expression, key string) bool {
 		return false
 	}
 	switch bin.Operator.Element {
-	case java.LogicalAnd:
+	// A tree read back over RPC carries `&&` as And.
+	case java.LogicalAnd, java.And:
 		return testsNotNil(bin.Left, key) || testsNotNil(bin.Right, key)
 	case java.NotEqual:
 		nilSide := func(e java.Expression) bool {
@@ -248,9 +249,11 @@ func (v *readAllBindingScan) VisitAssignment(a *java.Assignment, p any) java.J {
 }
 
 // attributeRead reports whether fa reads a scalar member of an AttributeValue:
-// a member name on a value attribution types as one, or does not type at all.
+// a member name on a value attribution types as one, or does not type at all in
+// a file importing DynamoDB. A file holding one it never imports the service
+// for, such as one returned from its own package, is known by the type alone.
 func (s *fileScan) attributeRead(fa *java.FieldAccess) bool {
-	if fa.Name.Element == nil || attributeMembers[fa.Name.Element.Name] == "" || !s.usesService(dynamodbService) {
+	if fa.Name.Element == nil || attributeMembers[fa.Name.Element.Name] == "" {
 		return false
 	}
 	if id, isIdent := fa.Target.(*java.Identifier); isIdent {
@@ -260,7 +263,7 @@ func (s *fileScan) attributeRead(fa *java.FieldAccess) bool {
 	}
 	fqn := matcher.GetFullyQualifiedName(matcher.TypeOfExpression(fa.Target))
 	if fqn == "" {
-		return true
+		return s.usesService(dynamodbService)
 	}
 	return strings.HasSuffix(fqn, "/service/dynamodb."+attributeValue) || strings.HasSuffix(fqn, "/service/dynamodb/types."+attributeValue)
 }
