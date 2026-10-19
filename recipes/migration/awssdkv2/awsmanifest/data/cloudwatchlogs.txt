@@ -725,6 +725,7 @@ V Delivery.FieldDelimiter string
 V Delivery.Id string
 V DeliveryDestination.Arn string
 V DeliveryDestination.Name string
+V DeliveryDestination.RoleArn string
 V DeliveryDestinationConfiguration.DestinationResourceArn string
 V DeliverySource.Arn string
 V DeliverySource.LogType string
@@ -1116,6 +1117,7 @@ V PutDataProtectionPolicyOutput.LastUpdatedTime int64
 V PutDataProtectionPolicyOutput.LogGroupIdentifier string
 V PutDataProtectionPolicyOutput.PolicyDocument string
 V PutDeliveryDestinationInput.Name string
+V PutDeliveryDestinationInput.RoleArn string
 V PutDeliveryDestinationPolicyInput.DeliveryDestinationName string
 V PutDeliveryDestinationPolicyInput.DeliveryDestinationPolicy string
 V PutDeliverySourceInput.LogType string
@@ -2276,3 +2278,272 @@ E TypeBoolean Type
 E TypeDouble Type
 E TypeInteger Type
 E TypeString Type
+U GetLogObjectResponseStream
+U IntegrationDetails
+U ResourceConfig
+U StartLiveTailResponseStream
+K AssociateKmsKeyInput 001 KmsKeyId req nil
+K AssociateKmsKeyInput 002 LogGroupName len 1 ptr
+K AssociateKmsKeyInput 003 ResourceIdentifier len 1 ptr
+K CancelExportTaskInput 001 TaskId req nil
+K CancelExportTaskInput 002 TaskId len 1 ptr
+K CreateDeliveryInput 001 DeliveryDestinationArn req nil
+K CreateDeliveryInput 002 DeliverySourceName req nil
+K CreateDeliveryInput 003 DeliverySourceName len 1 ptr
+K CreateDeliveryInput 004 Tags len 1 container
+K CreateExportTaskInput 001 Destination req nil
+K CreateExportTaskInput 002 Destination len 1 ptr
+K CreateExportTaskInput 003 From req nil
+K CreateExportTaskInput 004 LogGroupName req nil
+K CreateExportTaskInput 005 LogGroupName len 1 ptr
+K CreateExportTaskInput 006 LogStreamNamePrefix len 1 ptr
+K CreateExportTaskInput 007 TaskName len 1 ptr
+K CreateExportTaskInput 008 To req nil
+K CreateLogAnomalyDetectorInput 001 AnomalyVisibilityTime min 7 ptr
+K CreateLogAnomalyDetectorInput 002 DetectorName len 1 ptr
+K CreateLogAnomalyDetectorInput 003 LogGroupArnList req nil
+K CreateLogAnomalyDetectorInput 004 Tags len 1 container
+K CreateLogGroupInput 001 LogGroupName req nil
+K CreateLogGroupInput 002 LogGroupName len 1 ptr
+K CreateLogGroupInput 003 Tags len 1 container
+K CreateLogStreamInput 001 LogGroupName req nil
+K CreateLogStreamInput 002 LogGroupName len 1 ptr
+K CreateLogStreamInput 003 LogStreamName req nil
+K CreateLogStreamInput 004 LogStreamName len 1 ptr
+K DeleteAccountPolicyInput 001 PolicyName req nil
+K DeleteAccountPolicyInput 002 PolicyType req empty
+K DeleteDataProtectionPolicyInput 001 LogGroupIdentifier req nil
+K DeleteDataProtectionPolicyInput 002 LogGroupIdentifier len 1 ptr
+K DeleteDeliveryDestinationInput 001 Name req nil
+K DeleteDeliveryDestinationInput 002 Name len 1 ptr
+K DeleteDeliveryDestinationPolicyInput 001 DeliveryDestinationName req nil
+K DeleteDeliveryDestinationPolicyInput 002 DeliveryDestinationName len 1 ptr
+K DeleteDeliveryInput 001 Id req nil
+K DeleteDeliveryInput 002 Id len 1 ptr
+K DeleteDeliverySourceInput 001 Name req nil
+K DeleteDeliverySourceInput 002 Name len 1 ptr
+K DeleteDestinationInput 001 DestinationName req nil
+K DeleteDestinationInput 002 DestinationName len 1 ptr
+K DeleteLogAnomalyDetectorInput 001 AnomalyDetectorArn req nil
+K DeleteLogAnomalyDetectorInput 002 AnomalyDetectorArn len 1 ptr
+K DeleteLogGroupInput 001 LogGroupName req nil
+K DeleteLogGroupInput 002 LogGroupName len 1 ptr
+K DeleteLogStreamInput 001 LogGroupName req nil
+K DeleteLogStreamInput 002 LogGroupName len 1 ptr
+K DeleteLogStreamInput 003 LogStreamName req nil
+K DeleteLogStreamInput 004 LogStreamName len 1 ptr
+K DeleteMetricFilterInput 001 FilterName req nil
+K DeleteMetricFilterInput 002 FilterName len 1 ptr
+K DeleteMetricFilterInput 003 LogGroupName req nil
+K DeleteMetricFilterInput 004 LogGroupName len 1 ptr
+K DeleteQueryDefinitionInput 001 QueryDefinitionId req nil
+K DeleteRetentionPolicyInput 001 LogGroupName req nil
+K DeleteRetentionPolicyInput 002 LogGroupName len 1 ptr
+K DeleteSubscriptionFilterInput 001 FilterName req nil
+K DeleteSubscriptionFilterInput 002 FilterName len 1 ptr
+K DeleteSubscriptionFilterInput 003 LogGroupName req nil
+K DeleteSubscriptionFilterInput 004 LogGroupName len 1 ptr
+K DeliveryDestinationConfiguration 001 DestinationResourceArn req nil
+K DescribeAccountPoliciesInput 001 PolicyType req empty
+K DescribeDeliveriesInput 001 Limit min 1 ptr
+K DescribeDeliveriesInput 002 NextToken len 1 ptr
+K DescribeDeliveryDestinationsInput 001 Limit min 1 ptr
+K DescribeDeliveryDestinationsInput 002 NextToken len 1 ptr
+K DescribeDeliverySourcesInput 001 Limit min 1 ptr
+K DescribeDeliverySourcesInput 002 NextToken len 1 ptr
+K DescribeDestinationsInput 001 DestinationNamePrefix len 1 ptr
+K DescribeDestinationsInput 002 Limit min 1 ptr
+K DescribeDestinationsInput 003 NextToken len 1 ptr
+K DescribeExportTasksInput 001 Limit min 1 ptr
+K DescribeExportTasksInput 002 NextToken len 1 ptr
+K DescribeExportTasksInput 003 TaskId len 1 ptr
+K DescribeLogGroupsInput 001 Limit min 1 ptr
+K DescribeLogGroupsInput 002 LogGroupNamePrefix len 1 ptr
+K DescribeLogGroupsInput 003 NextToken len 1 ptr
+K DescribeLogStreamsInput 001 Limit min 1 ptr
+K DescribeLogStreamsInput 002 LogGroupIdentifier len 1 ptr
+K DescribeLogStreamsInput 003 LogGroupName len 1 ptr
+K DescribeLogStreamsInput 004 LogStreamNamePrefix len 1 ptr
+K DescribeLogStreamsInput 005 NextToken len 1 ptr
+K DescribeMetricFiltersInput 001 FilterNamePrefix len 1 ptr
+K DescribeMetricFiltersInput 002 Limit min 1 ptr
+K DescribeMetricFiltersInput 003 LogGroupName len 1 ptr
+K DescribeMetricFiltersInput 004 NextToken len 1 ptr
+K DescribeQueriesInput 001 LogGroupName len 1 ptr
+K DescribeQueriesInput 002 MaxResults min 1 ptr
+K DescribeQueriesInput 003 NextToken len 1 ptr
+K DescribeQueryDefinitionsInput 001 MaxResults min 1 ptr
+K DescribeQueryDefinitionsInput 002 NextToken len 1 ptr
+K DescribeQueryDefinitionsInput 003 QueryDefinitionNamePrefix len 1 ptr
+K DescribeResourcePoliciesInput 001 Limit min 1 ptr
+K DescribeResourcePoliciesInput 002 NextToken len 1 ptr
+K DescribeSubscriptionFiltersInput 001 FilterNamePrefix len 1 ptr
+K DescribeSubscriptionFiltersInput 002 Limit min 1 ptr
+K DescribeSubscriptionFiltersInput 003 LogGroupName req nil
+K DescribeSubscriptionFiltersInput 004 LogGroupName len 1 ptr
+K DescribeSubscriptionFiltersInput 005 NextToken len 1 ptr
+K DisassociateKmsKeyInput 001 LogGroupName len 1 ptr
+K DisassociateKmsKeyInput 002 ResourceIdentifier len 1 ptr
+K FilterLogEventsInput 001 Limit min 1 ptr
+K FilterLogEventsInput 002 LogGroupIdentifier len 1 ptr
+K FilterLogEventsInput 003 LogGroupName len 1 ptr
+K FilterLogEventsInput 004 LogStreamNamePrefix len 1 ptr
+K FilterLogEventsInput 005 LogStreamNames len 1 container
+K FilterLogEventsInput 006 NextToken len 1 ptr
+K GetDataProtectionPolicyInput 001 LogGroupIdentifier req nil
+K GetDataProtectionPolicyInput 002 LogGroupIdentifier len 1 ptr
+K GetDeliveryDestinationInput 001 Name req nil
+K GetDeliveryDestinationInput 002 Name len 1 ptr
+K GetDeliveryDestinationPolicyInput 001 DeliveryDestinationName req nil
+K GetDeliveryDestinationPolicyInput 002 DeliveryDestinationName len 1 ptr
+K GetDeliveryInput 001 Id req nil
+K GetDeliveryInput 002 Id len 1 ptr
+K GetDeliverySourceInput 001 Name req nil
+K GetDeliverySourceInput 002 Name len 1 ptr
+K GetLogAnomalyDetectorInput 001 AnomalyDetectorArn req nil
+K GetLogAnomalyDetectorInput 002 AnomalyDetectorArn len 1 ptr
+K GetLogEventsInput 001 Limit min 1 ptr
+K GetLogEventsInput 002 LogGroupIdentifier len 1 ptr
+K GetLogEventsInput 003 LogGroupName len 1 ptr
+K GetLogEventsInput 004 LogStreamName req nil
+K GetLogEventsInput 005 LogStreamName len 1 ptr
+K GetLogEventsInput 006 NextToken len 1 ptr
+K GetLogGroupFieldsInput 001 LogGroupIdentifier len 1 ptr
+K GetLogGroupFieldsInput 002 LogGroupName len 1 ptr
+K GetLogRecordInput 001 LogRecordPointer req nil
+K GetQueryResultsInput 001 QueryId req nil
+K InputLogEvent 001 Message req nil
+K InputLogEvent 002 Message len 1 ptr
+K InputLogEvent 003 Timestamp req nil
+K ListAnomaliesInput 001 AnomalyDetectorArn len 1 ptr
+K ListAnomaliesInput 002 Limit min 1 ptr
+K ListAnomaliesInput 003 NextToken len 1 ptr
+K ListLogAnomalyDetectorsInput 001 FilterLogGroupArn len 1 ptr
+K ListLogAnomalyDetectorsInput 002 Limit min 1 ptr
+K ListLogAnomalyDetectorsInput 003 NextToken len 1 ptr
+K ListTagsForResourceInput 001 ResourceArn req nil
+K ListTagsForResourceInput 002 ResourceArn len 1 ptr
+K ListTagsLogGroupInput 001 LogGroupName req nil
+K ListTagsLogGroupInput 002 LogGroupName len 1 ptr
+K MetricTransformation 001 MetricName req nil
+K MetricTransformation 002 MetricNamespace req nil
+K MetricTransformation 003 MetricValue req nil
+K PutAccountPolicyInput 001 PolicyDocument req nil
+K PutAccountPolicyInput 002 PolicyName req nil
+K PutAccountPolicyInput 003 PolicyType req empty
+K PutDataProtectionPolicyInput 001 LogGroupIdentifier req nil
+K PutDataProtectionPolicyInput 002 LogGroupIdentifier len 1 ptr
+K PutDataProtectionPolicyInput 003 PolicyDocument req nil
+K PutDeliveryDestinationInput 001 DeliveryDestinationConfiguration req nil
+K PutDeliveryDestinationInput 002 Name req nil
+K PutDeliveryDestinationInput 003 Name len 1 ptr
+K PutDeliveryDestinationInput 004 Tags len 1 container
+K PutDeliveryDestinationInput 005 DeliveryDestinationConfiguration nest DeliveryDestinationConfiguration
+K PutDeliveryDestinationPolicyInput 001 DeliveryDestinationName req nil
+K PutDeliveryDestinationPolicyInput 002 DeliveryDestinationName len 1 ptr
+K PutDeliveryDestinationPolicyInput 003 DeliveryDestinationPolicy req nil
+K PutDeliveryDestinationPolicyInput 004 DeliveryDestinationPolicy len 1 ptr
+K PutDeliverySourceInput 001 LogType req nil
+K PutDeliverySourceInput 002 LogType len 1 ptr
+K PutDeliverySourceInput 003 Name req nil
+K PutDeliverySourceInput 004 Name len 1 ptr
+K PutDeliverySourceInput 005 ResourceArn req nil
+K PutDeliverySourceInput 006 Tags len 1 container
+K PutDestinationInput 001 DestinationName req nil
+K PutDestinationInput 002 DestinationName len 1 ptr
+K PutDestinationInput 003 RoleArn req nil
+K PutDestinationInput 004 RoleArn len 1 ptr
+K PutDestinationInput 005 Tags len 1 container
+K PutDestinationInput 006 TargetArn req nil
+K PutDestinationInput 007 TargetArn len 1 ptr
+K PutDestinationPolicyInput 001 AccessPolicy req nil
+K PutDestinationPolicyInput 002 AccessPolicy len 1 ptr
+K PutDestinationPolicyInput 003 DestinationName req nil
+K PutDestinationPolicyInput 004 DestinationName len 1 ptr
+K PutLogEventsInput 001 LogEvents req nil
+K PutLogEventsInput 002 LogEvents len 1 container
+K PutLogEventsInput 003 LogGroupName req nil
+K PutLogEventsInput 004 LogGroupName len 1 ptr
+K PutLogEventsInput 005 LogStreamName req nil
+K PutLogEventsInput 006 LogStreamName len 1 ptr
+K PutLogEventsInput 007 SequenceToken len 1 ptr
+K PutLogEventsInput 008 LogEvents each InputLogEvent slice
+K PutMetricFilterInput 001 FilterName req nil
+K PutMetricFilterInput 002 FilterName len 1 ptr
+K PutMetricFilterInput 003 FilterPattern req nil
+K PutMetricFilterInput 004 LogGroupName req nil
+K PutMetricFilterInput 005 LogGroupName len 1 ptr
+K PutMetricFilterInput 006 MetricTransformations req nil
+K PutMetricFilterInput 007 MetricTransformations len 1 container
+K PutMetricFilterInput 008 MetricTransformations each MetricTransformation slice
+K PutQueryDefinitionInput 001 ClientToken len 36 ptr
+K PutQueryDefinitionInput 002 Name req nil
+K PutQueryDefinitionInput 003 Name len 1 ptr
+K PutQueryDefinitionInput 004 QueryString req nil
+K PutQueryDefinitionInput 005 QueryString len 1 ptr
+K PutResourcePolicyInput 001 PolicyDocument len 1 ptr
+K PutRetentionPolicyInput 001 LogGroupName req nil
+K PutRetentionPolicyInput 002 LogGroupName len 1 ptr
+K PutRetentionPolicyInput 003 RetentionInDays req nil
+K PutSubscriptionFilterInput 001 DestinationArn req nil
+K PutSubscriptionFilterInput 002 DestinationArn len 1 ptr
+K PutSubscriptionFilterInput 003 FilterName req nil
+K PutSubscriptionFilterInput 004 FilterName len 1 ptr
+K PutSubscriptionFilterInput 005 FilterPattern req nil
+K PutSubscriptionFilterInput 006 LogGroupName req nil
+K PutSubscriptionFilterInput 007 LogGroupName len 1 ptr
+K PutSubscriptionFilterInput 008 RoleArn len 1 ptr
+K StartLiveTailInput 001 LogGroupIdentifiers req nil
+K StartLiveTailInput 002 LogGroupIdentifiers len 1 container
+K StartLiveTailInput 003 LogStreamNamePrefixes len 1 container
+K StartLiveTailInput 004 LogStreamNames len 1 container
+K StartQueryInput 001 EndTime req nil
+K StartQueryInput 002 Limit min 1 ptr
+K StartQueryInput 003 LogGroupName len 1 ptr
+K StartQueryInput 004 QueryString req nil
+K StartQueryInput 005 StartTime req nil
+K StopQueryInput 001 QueryId req nil
+K TagLogGroupInput 001 LogGroupName req nil
+K TagLogGroupInput 002 LogGroupName len 1 ptr
+K TagLogGroupInput 003 Tags req nil
+K TagLogGroupInput 004 Tags len 1 container
+K TagResourceInput 001 ResourceArn req nil
+K TagResourceInput 002 ResourceArn len 1 ptr
+K TagResourceInput 003 Tags req nil
+K TagResourceInput 004 Tags len 1 container
+K TestMetricFilterInput 001 FilterPattern req nil
+K TestMetricFilterInput 002 LogEventMessages req nil
+K TestMetricFilterInput 003 LogEventMessages len 1 container
+K UntagLogGroupInput 001 LogGroupName req nil
+K UntagLogGroupInput 002 LogGroupName len 1 ptr
+K UntagLogGroupInput 003 Tags req nil
+K UntagLogGroupInput 004 Tags len 1 container
+K UntagResourceInput 001 ResourceArn req nil
+K UntagResourceInput 002 ResourceArn len 1 ptr
+K UntagResourceInput 003 TagKeys req nil
+K UpdateAnomalyInput 001 AnomalyDetectorArn req nil
+K UpdateAnomalyInput 002 AnomalyDetectorArn len 1 ptr
+K UpdateAnomalyInput 003 AnomalyId len 36 ptr
+K UpdateAnomalyInput 004 PatternId len 32 ptr
+K UpdateLogAnomalyDetectorInput 001 AnomalyDetectorArn req nil
+K UpdateLogAnomalyDetectorInput 002 AnomalyDetectorArn len 1 ptr
+K UpdateLogAnomalyDetectorInput 003 AnomalyVisibilityTime min 7 ptr
+K UpdateLogAnomalyDetectorInput 004 Enabled req nil
+G DescribeConfigurationTemplates NextToken NextToken
+G DescribeDeliveries NextToken NextToken
+G DescribeDeliveryDestinations NextToken NextToken
+G DescribeDeliverySources NextToken NextToken
+G DescribeDestinations NextToken NextToken
+G DescribeLogGroups NextToken NextToken
+G DescribeLogStreams NextToken NextToken
+G DescribeMetricFilters NextToken NextToken
+G DescribeSubscriptionFilters NextToken NextToken
+G FilterLogEvents NextToken NextToken
+G GetLogEvents NextToken NextForwardToken
+G GetScheduledQueryHistory NextToken NextToken
+G ListAggregateLogGroupSummaries NextToken NextToken
+G ListAnomalies NextToken NextToken
+G ListLogAnomalyDetectors NextToken NextToken
+G ListLogGroupsForQuery NextToken NextToken
+G ListScheduledQueries NextToken NextToken
+G ListSourcesForS3TableIntegration NextToken NextToken

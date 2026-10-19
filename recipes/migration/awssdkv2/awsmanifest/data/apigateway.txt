@@ -2027,6 +2027,8 @@ E RoutingModeRoutingRuleThenBasePathMapping RoutingMode
 E SecurityPolicySecurityPolicyTls122018Edge SecurityPolicy
 E SecurityPolicySecurityPolicyTls12Pfs2025Edge SecurityPolicy
 E SecurityPolicySecurityPolicyTls1312202106 SecurityPolicy
+E SecurityPolicySecurityPolicyTls1312Ext2FipsPq202509 SecurityPolicy
+E SecurityPolicySecurityPolicyTls1312Ext2Pq202509 SecurityPolicy
 E SecurityPolicySecurityPolicyTls1312FipsPfsPq202509 SecurityPolicy
 E SecurityPolicySecurityPolicyTls1312FipsPq202509 SecurityPolicy
 E SecurityPolicySecurityPolicyTls1312PfsPq202509 SecurityPolicy
@@ -2043,3 +2045,422 @@ E VpcLinkStatusAvailable VpcLinkStatus
 E VpcLinkStatusDeleting VpcLinkStatus
 E VpcLinkStatusFailed VpcLinkStatus
 E VpcLinkStatusPending VpcLinkStatus
+K CreateAuthorizerInput 001 Name req nil
+K CreateAuthorizerInput 002 RestApiId req nil
+K CreateAuthorizerInput 003 RestApiId len 1 ptr
+K CreateAuthorizerInput 004 Type req empty
+K CreateBasePathMappingInput 001 DomainName req nil
+K CreateBasePathMappingInput 002 DomainName len 1 ptr
+K CreateBasePathMappingInput 003 RestApiId req nil
+K CreateDeploymentInput 001 RestApiId req nil
+K CreateDeploymentInput 002 RestApiId len 1 ptr
+K CreateDocumentationPartInput 001 Location req nil
+K CreateDocumentationPartInput 002 Properties req nil
+K CreateDocumentationPartInput 003 RestApiId req nil
+K CreateDocumentationPartInput 004 RestApiId len 1 ptr
+K CreateDocumentationPartInput 005 Location nest DocumentationPartLocation
+K CreateDocumentationVersionInput 001 DocumentationVersion req nil
+K CreateDocumentationVersionInput 002 RestApiId req nil
+K CreateDocumentationVersionInput 003 RestApiId len 1 ptr
+K CreateDomainNameInput 001 DomainName req nil
+K CreateModelInput 001 ContentType req nil
+K CreateModelInput 002 Name req nil
+K CreateModelInput 003 RestApiId req nil
+K CreateModelInput 004 RestApiId len 1 ptr
+K CreateRequestValidatorInput 001 RestApiId req nil
+K CreateRequestValidatorInput 002 RestApiId len 1 ptr
+K CreateResourceInput 001 ParentId req nil
+K CreateResourceInput 002 ParentId len 1 ptr
+K CreateResourceInput 003 PathPart req nil
+K CreateResourceInput 004 RestApiId req nil
+K CreateResourceInput 005 RestApiId len 1 ptr
+K CreateRestApiInput 001 Name req nil
+K CreateStageInput 001 DeploymentId req nil
+K CreateStageInput 002 RestApiId req nil
+K CreateStageInput 003 RestApiId len 1 ptr
+K CreateStageInput 004 StageName req nil
+K CreateUsagePlanInput 001 Name req nil
+K CreateUsagePlanKeyInput 001 KeyId req nil
+K CreateUsagePlanKeyInput 002 KeyType req nil
+K CreateUsagePlanKeyInput 003 UsagePlanId req nil
+K CreateUsagePlanKeyInput 004 UsagePlanId len 1 ptr
+K CreateVpcLinkInput 001 Name req nil
+K CreateVpcLinkInput 002 TargetArns req nil
+K DeleteApiKeyInput 001 ApiKey req nil
+K DeleteApiKeyInput 002 ApiKey len 1 ptr
+K DeleteAuthorizerInput 001 AuthorizerId req nil
+K DeleteAuthorizerInput 002 AuthorizerId len 1 ptr
+K DeleteAuthorizerInput 003 RestApiId req nil
+K DeleteAuthorizerInput 004 RestApiId len 1 ptr
+K DeleteBasePathMappingInput 001 BasePath req nil
+K DeleteBasePathMappingInput 002 BasePath len 1 ptr
+K DeleteBasePathMappingInput 003 DomainName req nil
+K DeleteBasePathMappingInput 004 DomainName len 1 ptr
+K DeleteClientCertificateInput 001 ClientCertificateId req nil
+K DeleteClientCertificateInput 002 ClientCertificateId len 1 ptr
+K DeleteDeploymentInput 001 DeploymentId req nil
+K DeleteDeploymentInput 002 DeploymentId len 1 ptr
+K DeleteDeploymentInput 003 RestApiId req nil
+K DeleteDeploymentInput 004 RestApiId len 1 ptr
+K DeleteDocumentationPartInput 001 DocumentationPartId req nil
+K DeleteDocumentationPartInput 002 DocumentationPartId len 1 ptr
+K DeleteDocumentationPartInput 003 RestApiId req nil
+K DeleteDocumentationPartInput 004 RestApiId len 1 ptr
+K DeleteDocumentationVersionInput 001 DocumentationVersion req nil
+K DeleteDocumentationVersionInput 002 DocumentationVersion len 1 ptr
+K DeleteDocumentationVersionInput 003 RestApiId req nil
+K DeleteDocumentationVersionInput 004 RestApiId len 1 ptr
+K DeleteDomainNameInput 001 DomainName req nil
+K DeleteDomainNameInput 002 DomainName len 1 ptr
+K DeleteGatewayResponseInput 001 ResponseType req empty
+K DeleteGatewayResponseInput 002 ResponseType len 1 enum
+K DeleteGatewayResponseInput 003 RestApiId req nil
+K DeleteGatewayResponseInput 004 RestApiId len 1 ptr
+K DeleteIntegrationInput 001 HttpMethod req nil
+K DeleteIntegrationInput 002 HttpMethod len 1 ptr
+K DeleteIntegrationInput 003 ResourceId req nil
+K DeleteIntegrationInput 004 ResourceId len 1 ptr
+K DeleteIntegrationInput 005 RestApiId req nil
+K DeleteIntegrationInput 006 RestApiId len 1 ptr
+K DeleteIntegrationResponseInput 001 HttpMethod req nil
+K DeleteIntegrationResponseInput 002 HttpMethod len 1 ptr
+K DeleteIntegrationResponseInput 003 ResourceId req nil
+K DeleteIntegrationResponseInput 004 ResourceId len 1 ptr
+K DeleteIntegrationResponseInput 005 RestApiId req nil
+K DeleteIntegrationResponseInput 006 RestApiId len 1 ptr
+K DeleteIntegrationResponseInput 007 StatusCode req nil
+K DeleteIntegrationResponseInput 008 StatusCode len 1 ptr
+K DeleteMethodInput 001 HttpMethod req nil
+K DeleteMethodInput 002 HttpMethod len 1 ptr
+K DeleteMethodInput 003 ResourceId req nil
+K DeleteMethodInput 004 ResourceId len 1 ptr
+K DeleteMethodInput 005 RestApiId req nil
+K DeleteMethodInput 006 RestApiId len 1 ptr
+K DeleteMethodResponseInput 001 HttpMethod req nil
+K DeleteMethodResponseInput 002 HttpMethod len 1 ptr
+K DeleteMethodResponseInput 003 ResourceId req nil
+K DeleteMethodResponseInput 004 ResourceId len 1 ptr
+K DeleteMethodResponseInput 005 RestApiId req nil
+K DeleteMethodResponseInput 006 RestApiId len 1 ptr
+K DeleteMethodResponseInput 007 StatusCode req nil
+K DeleteMethodResponseInput 008 StatusCode len 1 ptr
+K DeleteModelInput 001 ModelName req nil
+K DeleteModelInput 002 ModelName len 1 ptr
+K DeleteModelInput 003 RestApiId req nil
+K DeleteModelInput 004 RestApiId len 1 ptr
+K DeleteRequestValidatorInput 001 RequestValidatorId req nil
+K DeleteRequestValidatorInput 002 RequestValidatorId len 1 ptr
+K DeleteRequestValidatorInput 003 RestApiId req nil
+K DeleteRequestValidatorInput 004 RestApiId len 1 ptr
+K DeleteResourceInput 001 ResourceId req nil
+K DeleteResourceInput 002 ResourceId len 1 ptr
+K DeleteResourceInput 003 RestApiId req nil
+K DeleteResourceInput 004 RestApiId len 1 ptr
+K DeleteRestApiInput 001 RestApiId req nil
+K DeleteRestApiInput 002 RestApiId len 1 ptr
+K DeleteStageInput 001 RestApiId req nil
+K DeleteStageInput 002 RestApiId len 1 ptr
+K DeleteStageInput 003 StageName req nil
+K DeleteStageInput 004 StageName len 1 ptr
+K DeleteUsagePlanInput 001 UsagePlanId req nil
+K DeleteUsagePlanInput 002 UsagePlanId len 1 ptr
+K DeleteUsagePlanKeyInput 001 KeyId req nil
+K DeleteUsagePlanKeyInput 002 KeyId len 1 ptr
+K DeleteUsagePlanKeyInput 003 UsagePlanId req nil
+K DeleteUsagePlanKeyInput 004 UsagePlanId len 1 ptr
+K DeleteVpcLinkInput 001 VpcLinkId req nil
+K DeleteVpcLinkInput 002 VpcLinkId len 1 ptr
+K DocumentationPartLocation 001 Type req empty
+K FlushStageAuthorizersCacheInput 001 RestApiId req nil
+K FlushStageAuthorizersCacheInput 002 RestApiId len 1 ptr
+K FlushStageAuthorizersCacheInput 003 StageName req nil
+K FlushStageAuthorizersCacheInput 004 StageName len 1 ptr
+K FlushStageCacheInput 001 RestApiId req nil
+K FlushStageCacheInput 002 RestApiId len 1 ptr
+K FlushStageCacheInput 003 StageName req nil
+K FlushStageCacheInput 004 StageName len 1 ptr
+K GetApiKeyInput 001 ApiKey req nil
+K GetApiKeyInput 002 ApiKey len 1 ptr
+K GetAuthorizerInput 001 AuthorizerId req nil
+K GetAuthorizerInput 002 AuthorizerId len 1 ptr
+K GetAuthorizerInput 003 RestApiId req nil
+K GetAuthorizerInput 004 RestApiId len 1 ptr
+K GetAuthorizersInput 001 RestApiId req nil
+K GetAuthorizersInput 002 RestApiId len 1 ptr
+K GetBasePathMappingInput 001 BasePath req nil
+K GetBasePathMappingInput 002 BasePath len 1 ptr
+K GetBasePathMappingInput 003 DomainName req nil
+K GetBasePathMappingInput 004 DomainName len 1 ptr
+K GetBasePathMappingsInput 001 DomainName req nil
+K GetBasePathMappingsInput 002 DomainName len 1 ptr
+K GetClientCertificateInput 001 ClientCertificateId req nil
+K GetClientCertificateInput 002 ClientCertificateId len 1 ptr
+K GetDeploymentInput 001 DeploymentId req nil
+K GetDeploymentInput 002 DeploymentId len 1 ptr
+K GetDeploymentInput 003 RestApiId req nil
+K GetDeploymentInput 004 RestApiId len 1 ptr
+K GetDeploymentsInput 001 RestApiId req nil
+K GetDeploymentsInput 002 RestApiId len 1 ptr
+K GetDocumentationPartInput 001 DocumentationPartId req nil
+K GetDocumentationPartInput 002 DocumentationPartId len 1 ptr
+K GetDocumentationPartInput 003 RestApiId req nil
+K GetDocumentationPartInput 004 RestApiId len 1 ptr
+K GetDocumentationPartsInput 001 RestApiId req nil
+K GetDocumentationPartsInput 002 RestApiId len 1 ptr
+K GetDocumentationVersionInput 001 DocumentationVersion req nil
+K GetDocumentationVersionInput 002 DocumentationVersion len 1 ptr
+K GetDocumentationVersionInput 003 RestApiId req nil
+K GetDocumentationVersionInput 004 RestApiId len 1 ptr
+K GetDocumentationVersionsInput 001 RestApiId req nil
+K GetDocumentationVersionsInput 002 RestApiId len 1 ptr
+K GetDomainNameInput 001 DomainName req nil
+K GetDomainNameInput 002 DomainName len 1 ptr
+K GetExportInput 001 ExportType req nil
+K GetExportInput 002 ExportType len 1 ptr
+K GetExportInput 003 RestApiId req nil
+K GetExportInput 004 RestApiId len 1 ptr
+K GetExportInput 005 StageName req nil
+K GetExportInput 006 StageName len 1 ptr
+K GetGatewayResponseInput 001 ResponseType req empty
+K GetGatewayResponseInput 002 ResponseType len 1 enum
+K GetGatewayResponseInput 003 RestApiId req nil
+K GetGatewayResponseInput 004 RestApiId len 1 ptr
+K GetGatewayResponsesInput 001 RestApiId req nil
+K GetGatewayResponsesInput 002 RestApiId len 1 ptr
+K GetIntegrationInput 001 HttpMethod req nil
+K GetIntegrationInput 002 HttpMethod len 1 ptr
+K GetIntegrationInput 003 ResourceId req nil
+K GetIntegrationInput 004 ResourceId len 1 ptr
+K GetIntegrationInput 005 RestApiId req nil
+K GetIntegrationInput 006 RestApiId len 1 ptr
+K GetIntegrationResponseInput 001 HttpMethod req nil
+K GetIntegrationResponseInput 002 HttpMethod len 1 ptr
+K GetIntegrationResponseInput 003 ResourceId req nil
+K GetIntegrationResponseInput 004 ResourceId len 1 ptr
+K GetIntegrationResponseInput 005 RestApiId req nil
+K GetIntegrationResponseInput 006 RestApiId len 1 ptr
+K GetIntegrationResponseInput 007 StatusCode req nil
+K GetIntegrationResponseInput 008 StatusCode len 1 ptr
+K GetMethodInput 001 HttpMethod req nil
+K GetMethodInput 002 HttpMethod len 1 ptr
+K GetMethodInput 003 ResourceId req nil
+K GetMethodInput 004 ResourceId len 1 ptr
+K GetMethodInput 005 RestApiId req nil
+K GetMethodInput 006 RestApiId len 1 ptr
+K GetMethodResponseInput 001 HttpMethod req nil
+K GetMethodResponseInput 002 HttpMethod len 1 ptr
+K GetMethodResponseInput 003 ResourceId req nil
+K GetMethodResponseInput 004 ResourceId len 1 ptr
+K GetMethodResponseInput 005 RestApiId req nil
+K GetMethodResponseInput 006 RestApiId len 1 ptr
+K GetMethodResponseInput 007 StatusCode req nil
+K GetMethodResponseInput 008 StatusCode len 1 ptr
+K GetModelInput 001 ModelName req nil
+K GetModelInput 002 ModelName len 1 ptr
+K GetModelInput 003 RestApiId req nil
+K GetModelInput 004 RestApiId len 1 ptr
+K GetModelTemplateInput 001 ModelName req nil
+K GetModelTemplateInput 002 ModelName len 1 ptr
+K GetModelTemplateInput 003 RestApiId req nil
+K GetModelTemplateInput 004 RestApiId len 1 ptr
+K GetModelsInput 001 RestApiId req nil
+K GetModelsInput 002 RestApiId len 1 ptr
+K GetRequestValidatorInput 001 RequestValidatorId req nil
+K GetRequestValidatorInput 002 RequestValidatorId len 1 ptr
+K GetRequestValidatorInput 003 RestApiId req nil
+K GetRequestValidatorInput 004 RestApiId len 1 ptr
+K GetRequestValidatorsInput 001 RestApiId req nil
+K GetRequestValidatorsInput 002 RestApiId len 1 ptr
+K GetResourceInput 001 ResourceId req nil
+K GetResourceInput 002 ResourceId len 1 ptr
+K GetResourceInput 003 RestApiId req nil
+K GetResourceInput 004 RestApiId len 1 ptr
+K GetResourcesInput 001 RestApiId req nil
+K GetResourcesInput 002 RestApiId len 1 ptr
+K GetRestApiInput 001 RestApiId req nil
+K GetRestApiInput 002 RestApiId len 1 ptr
+K GetSdkInput 001 RestApiId req nil
+K GetSdkInput 002 RestApiId len 1 ptr
+K GetSdkInput 003 SdkType req nil
+K GetSdkInput 004 SdkType len 1 ptr
+K GetSdkInput 005 StageName req nil
+K GetSdkInput 006 StageName len 1 ptr
+K GetSdkTypeInput 001 Id req nil
+K GetSdkTypeInput 002 Id len 1 ptr
+K GetStageInput 001 RestApiId req nil
+K GetStageInput 002 RestApiId len 1 ptr
+K GetStageInput 003 StageName req nil
+K GetStageInput 004 StageName len 1 ptr
+K GetStagesInput 001 RestApiId req nil
+K GetStagesInput 002 RestApiId len 1 ptr
+K GetTagsInput 001 ResourceArn req nil
+K GetTagsInput 002 ResourceArn len 1 ptr
+K GetUsageInput 001 EndDate req nil
+K GetUsageInput 002 StartDate req nil
+K GetUsageInput 003 UsagePlanId req nil
+K GetUsageInput 004 UsagePlanId len 1 ptr
+K GetUsagePlanInput 001 UsagePlanId req nil
+K GetUsagePlanInput 002 UsagePlanId len 1 ptr
+K GetUsagePlanKeyInput 001 KeyId req nil
+K GetUsagePlanKeyInput 002 KeyId len 1 ptr
+K GetUsagePlanKeyInput 003 UsagePlanId req nil
+K GetUsagePlanKeyInput 004 UsagePlanId len 1 ptr
+K GetUsagePlanKeysInput 001 UsagePlanId req nil
+K GetUsagePlanKeysInput 002 UsagePlanId len 1 ptr
+K GetVpcLinkInput 001 VpcLinkId req nil
+K GetVpcLinkInput 002 VpcLinkId len 1 ptr
+K ImportApiKeysInput 001 Body req nil
+K ImportApiKeysInput 002 Format req empty
+K ImportDocumentationPartsInput 001 Body req nil
+K ImportDocumentationPartsInput 002 RestApiId req nil
+K ImportDocumentationPartsInput 003 RestApiId len 1 ptr
+K ImportRestApiInput 001 Body req nil
+K PutGatewayResponseInput 001 ResponseType req empty
+K PutGatewayResponseInput 002 ResponseType len 1 enum
+K PutGatewayResponseInput 003 RestApiId req nil
+K PutGatewayResponseInput 004 RestApiId len 1 ptr
+K PutIntegrationInput 001 HttpMethod req nil
+K PutIntegrationInput 002 HttpMethod len 1 ptr
+K PutIntegrationInput 003 ResourceId req nil
+K PutIntegrationInput 004 ResourceId len 1 ptr
+K PutIntegrationInput 005 RestApiId req nil
+K PutIntegrationInput 006 RestApiId len 1 ptr
+K PutIntegrationInput 007 Type req empty
+K PutIntegrationResponseInput 001 HttpMethod req nil
+K PutIntegrationResponseInput 002 HttpMethod len 1 ptr
+K PutIntegrationResponseInput 003 ResourceId req nil
+K PutIntegrationResponseInput 004 ResourceId len 1 ptr
+K PutIntegrationResponseInput 005 RestApiId req nil
+K PutIntegrationResponseInput 006 RestApiId len 1 ptr
+K PutIntegrationResponseInput 007 StatusCode req nil
+K PutIntegrationResponseInput 008 StatusCode len 1 ptr
+K PutMethodInput 001 AuthorizationType req nil
+K PutMethodInput 002 HttpMethod req nil
+K PutMethodInput 003 HttpMethod len 1 ptr
+K PutMethodInput 004 ResourceId req nil
+K PutMethodInput 005 ResourceId len 1 ptr
+K PutMethodInput 006 RestApiId req nil
+K PutMethodInput 007 RestApiId len 1 ptr
+K PutMethodResponseInput 001 HttpMethod req nil
+K PutMethodResponseInput 002 HttpMethod len 1 ptr
+K PutMethodResponseInput 003 ResourceId req nil
+K PutMethodResponseInput 004 ResourceId len 1 ptr
+K PutMethodResponseInput 005 RestApiId req nil
+K PutMethodResponseInput 006 RestApiId len 1 ptr
+K PutMethodResponseInput 007 StatusCode req nil
+K PutMethodResponseInput 008 StatusCode len 1 ptr
+K PutRestApiInput 001 Body req nil
+K PutRestApiInput 002 RestApiId req nil
+K PutRestApiInput 003 RestApiId len 1 ptr
+K TagResourceInput 001 ResourceArn req nil
+K TagResourceInput 002 ResourceArn len 1 ptr
+K TagResourceInput 003 Tags req nil
+K TestInvokeAuthorizerInput 001 AuthorizerId req nil
+K TestInvokeAuthorizerInput 002 AuthorizerId len 1 ptr
+K TestInvokeAuthorizerInput 003 RestApiId req nil
+K TestInvokeAuthorizerInput 004 RestApiId len 1 ptr
+K TestInvokeMethodInput 001 HttpMethod req nil
+K TestInvokeMethodInput 002 HttpMethod len 1 ptr
+K TestInvokeMethodInput 003 ResourceId req nil
+K TestInvokeMethodInput 004 ResourceId len 1 ptr
+K TestInvokeMethodInput 005 RestApiId req nil
+K TestInvokeMethodInput 006 RestApiId len 1 ptr
+K UntagResourceInput 001 ResourceArn req nil
+K UntagResourceInput 002 ResourceArn len 1 ptr
+K UntagResourceInput 003 TagKeys req nil
+K UpdateApiKeyInput 001 ApiKey req nil
+K UpdateApiKeyInput 002 ApiKey len 1 ptr
+K UpdateAuthorizerInput 001 AuthorizerId req nil
+K UpdateAuthorizerInput 002 AuthorizerId len 1 ptr
+K UpdateAuthorizerInput 003 RestApiId req nil
+K UpdateAuthorizerInput 004 RestApiId len 1 ptr
+K UpdateBasePathMappingInput 001 BasePath req nil
+K UpdateBasePathMappingInput 002 BasePath len 1 ptr
+K UpdateBasePathMappingInput 003 DomainName req nil
+K UpdateBasePathMappingInput 004 DomainName len 1 ptr
+K UpdateClientCertificateInput 001 ClientCertificateId req nil
+K UpdateClientCertificateInput 002 ClientCertificateId len 1 ptr
+K UpdateDeploymentInput 001 DeploymentId req nil
+K UpdateDeploymentInput 002 DeploymentId len 1 ptr
+K UpdateDeploymentInput 003 RestApiId req nil
+K UpdateDeploymentInput 004 RestApiId len 1 ptr
+K UpdateDocumentationPartInput 001 DocumentationPartId req nil
+K UpdateDocumentationPartInput 002 DocumentationPartId len 1 ptr
+K UpdateDocumentationPartInput 003 RestApiId req nil
+K UpdateDocumentationPartInput 004 RestApiId len 1 ptr
+K UpdateDocumentationVersionInput 001 DocumentationVersion req nil
+K UpdateDocumentationVersionInput 002 DocumentationVersion len 1 ptr
+K UpdateDocumentationVersionInput 003 RestApiId req nil
+K UpdateDocumentationVersionInput 004 RestApiId len 1 ptr
+K UpdateDomainNameInput 001 DomainName req nil
+K UpdateDomainNameInput 002 DomainName len 1 ptr
+K UpdateGatewayResponseInput 001 ResponseType req empty
+K UpdateGatewayResponseInput 002 ResponseType len 1 enum
+K UpdateGatewayResponseInput 003 RestApiId req nil
+K UpdateGatewayResponseInput 004 RestApiId len 1 ptr
+K UpdateIntegrationInput 001 HttpMethod req nil
+K UpdateIntegrationInput 002 HttpMethod len 1 ptr
+K UpdateIntegrationInput 003 ResourceId req nil
+K UpdateIntegrationInput 004 ResourceId len 1 ptr
+K UpdateIntegrationInput 005 RestApiId req nil
+K UpdateIntegrationInput 006 RestApiId len 1 ptr
+K UpdateIntegrationResponseInput 001 HttpMethod req nil
+K UpdateIntegrationResponseInput 002 HttpMethod len 1 ptr
+K UpdateIntegrationResponseInput 003 ResourceId req nil
+K UpdateIntegrationResponseInput 004 ResourceId len 1 ptr
+K UpdateIntegrationResponseInput 005 RestApiId req nil
+K UpdateIntegrationResponseInput 006 RestApiId len 1 ptr
+K UpdateIntegrationResponseInput 007 StatusCode req nil
+K UpdateIntegrationResponseInput 008 StatusCode len 1 ptr
+K UpdateMethodInput 001 HttpMethod req nil
+K UpdateMethodInput 002 HttpMethod len 1 ptr
+K UpdateMethodInput 003 ResourceId req nil
+K UpdateMethodInput 004 ResourceId len 1 ptr
+K UpdateMethodInput 005 RestApiId req nil
+K UpdateMethodInput 006 RestApiId len 1 ptr
+K UpdateMethodResponseInput 001 HttpMethod req nil
+K UpdateMethodResponseInput 002 HttpMethod len 1 ptr
+K UpdateMethodResponseInput 003 ResourceId req nil
+K UpdateMethodResponseInput 004 ResourceId len 1 ptr
+K UpdateMethodResponseInput 005 RestApiId req nil
+K UpdateMethodResponseInput 006 RestApiId len 1 ptr
+K UpdateMethodResponseInput 007 StatusCode req nil
+K UpdateMethodResponseInput 008 StatusCode len 1 ptr
+K UpdateModelInput 001 ModelName req nil
+K UpdateModelInput 002 ModelName len 1 ptr
+K UpdateModelInput 003 RestApiId req nil
+K UpdateModelInput 004 RestApiId len 1 ptr
+K UpdateRequestValidatorInput 001 RequestValidatorId req nil
+K UpdateRequestValidatorInput 002 RequestValidatorId len 1 ptr
+K UpdateRequestValidatorInput 003 RestApiId req nil
+K UpdateRequestValidatorInput 004 RestApiId len 1 ptr
+K UpdateResourceInput 001 ResourceId req nil
+K UpdateResourceInput 002 ResourceId len 1 ptr
+K UpdateResourceInput 003 RestApiId req nil
+K UpdateResourceInput 004 RestApiId len 1 ptr
+K UpdateRestApiInput 001 RestApiId req nil
+K UpdateRestApiInput 002 RestApiId len 1 ptr
+K UpdateStageInput 001 RestApiId req nil
+K UpdateStageInput 002 RestApiId len 1 ptr
+K UpdateStageInput 003 StageName req nil
+K UpdateStageInput 004 StageName len 1 ptr
+K UpdateUsageInput 001 KeyId req nil
+K UpdateUsageInput 002 KeyId len 1 ptr
+K UpdateUsageInput 003 UsagePlanId req nil
+K UpdateUsageInput 004 UsagePlanId len 1 ptr
+K UpdateUsagePlanInput 001 UsagePlanId req nil
+K UpdateUsagePlanInput 002 UsagePlanId len 1 ptr
+K UpdateVpcLinkInput 001 VpcLinkId req nil
+K UpdateVpcLinkInput 002 VpcLinkId len 1 ptr
+G GetApiKeys Position Position
+G GetBasePathMappings Position Position
+G GetClientCertificates Position Position
+G GetDeployments Position Position
+G GetDomainNames Position Position
+G GetModels Position Position
+G GetResources Position Position
+G GetRestApis Position Position
+G GetUsage Position Position
+G GetUsagePlanKeys Position Position
+G GetUsagePlans Position Position
+G GetVpcLinks Position Position

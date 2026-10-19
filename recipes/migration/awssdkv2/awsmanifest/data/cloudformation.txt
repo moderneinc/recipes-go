@@ -610,6 +610,7 @@ V ChangeSetSummary.StatusReason string
 V ConcurrentResourcesLimitExceededException.ErrorCodeOverride string
 V ConcurrentResourcesLimitExceededException.Message string
 V ContinueUpdateRollbackInput.ClientRequestToken string
+V ContinueUpdateRollbackInput.ForceRollback bool
 V ContinueUpdateRollbackInput.RoleARN string
 V ContinueUpdateRollbackInput.StackName string
 V CreateChangeSetInput.ChangeSetName string
@@ -1720,6 +1721,7 @@ N FailedStackInstancesCount
 N FailureToleranceCount
 N FailureTolerancePercentage
 N Filters
+N ForceRollback
 N GeneratedTemplateId
 N GeneratedTemplateName
 N HTTPClient
@@ -2531,3 +2533,337 @@ E WarningTypeExcludedResources WarningType
 E WarningTypeMutuallyExclusiveProperties WarningType
 E WarningTypeMutuallyExclusiveTypes WarningType
 E WarningTypeUnsupportedProperties WarningType
+Y ChangeSetCreateComplete 30 120
+Y StackCreateComplete 30 120
+Y StackDeleteComplete 30 120
+Y StackExists 5 20
+Y StackImportComplete 30 120
+Y StackRollbackComplete 30 120
+Y StackUpdateComplete 30 120
+Y TypeRegistrationComplete 30 120
+K ActivateTypeInput 001 ExecutionRoleArn len 1 ptr
+K ActivateTypeInput 002 MajorVersion min 1 ptr
+K ActivateTypeInput 003 PublisherId len 1 ptr
+K ActivateTypeInput 004 TypeName len 10 ptr
+K ActivateTypeInput 005 TypeNameAlias len 10 ptr
+K ActivateTypeInput 006 LoggingConfig nest LoggingConfig
+K BatchDescribeTypeConfigurationsInput 001 TypeConfigurationIdentifiers req nil
+K BatchDescribeTypeConfigurationsInput 002 TypeConfigurationIdentifiers len 1 container
+K BatchDescribeTypeConfigurationsInput 003 TypeConfigurationIdentifiers each TypeConfigurationIdentifier slice
+K CancelUpdateStackInput 001 ClientRequestToken len 1 ptr
+K CancelUpdateStackInput 002 StackName req nil
+K ContinueUpdateRollbackInput 001 ClientRequestToken len 1 ptr
+K ContinueUpdateRollbackInput 002 RoleARN len 20 ptr
+K ContinueUpdateRollbackInput 003 StackName req nil
+K ContinueUpdateRollbackInput 004 StackName len 1 ptr
+K CreateChangeSetInput 001 ChangeSetName req nil
+K CreateChangeSetInput 002 ChangeSetName len 1 ptr
+K CreateChangeSetInput 003 ClientToken len 1 ptr
+K CreateChangeSetInput 004 Description len 1 ptr
+K CreateChangeSetInput 005 RoleARN len 20 ptr
+K CreateChangeSetInput 006 StackName req nil
+K CreateChangeSetInput 007 StackName len 1 ptr
+K CreateChangeSetInput 008 TemplateBody len 1 ptr
+K CreateChangeSetInput 009 TemplateURL len 1 ptr
+K CreateChangeSetInput 010 ResourcesToImport each ResourceToImport slice
+K CreateChangeSetInput 011 RollbackConfiguration nest RollbackConfiguration
+K CreateChangeSetInput 012 Tags each Tag slice
+K CreateGeneratedTemplateInput 001 GeneratedTemplateName req nil
+K CreateGeneratedTemplateInput 002 GeneratedTemplateName len 1 ptr
+K CreateGeneratedTemplateInput 003 Resources len 1 container
+K CreateGeneratedTemplateInput 004 Resources each ResourceDefinition slice
+K CreateStackInput 001 ClientRequestToken len 1 ptr
+K CreateStackInput 002 RoleARN len 20 ptr
+K CreateStackInput 003 StackName req nil
+K CreateStackInput 004 StackPolicyBody len 1 ptr
+K CreateStackInput 005 StackPolicyURL len 1 ptr
+K CreateStackInput 006 TemplateBody len 1 ptr
+K CreateStackInput 007 TemplateURL len 1 ptr
+K CreateStackInput 008 TimeoutInMinutes min 1 ptr
+K CreateStackInput 009 RollbackConfiguration nest RollbackConfiguration
+K CreateStackInput 010 Tags each Tag slice
+K CreateStackInstancesInput 001 OperationId len 1 ptr
+K CreateStackInstancesInput 002 Regions req nil
+K CreateStackInstancesInput 003 StackSetName req nil
+K CreateStackInstancesInput 004 DeploymentTargets nest DeploymentTargets
+K CreateStackInstancesInput 005 OperationPreferences nest StackSetOperationPreferences
+K CreateStackSetInput 001 AdministrationRoleARN len 20 ptr
+K CreateStackSetInput 002 ClientRequestToken len 1 ptr
+K CreateStackSetInput 003 Description len 1 ptr
+K CreateStackSetInput 004 ExecutionRoleName len 1 ptr
+K CreateStackSetInput 005 StackSetName req nil
+K CreateStackSetInput 006 TemplateBody len 1 ptr
+K CreateStackSetInput 007 TemplateURL len 1 ptr
+K CreateStackSetInput 008 Tags each Tag slice
+K DeactivateTypeInput 001 TypeName len 10 ptr
+K DeleteChangeSetInput 001 ChangeSetName req nil
+K DeleteChangeSetInput 002 ChangeSetName len 1 ptr
+K DeleteChangeSetInput 003 StackName len 1 ptr
+K DeleteGeneratedTemplateInput 001 GeneratedTemplateName req nil
+K DeleteGeneratedTemplateInput 002 GeneratedTemplateName len 1 ptr
+K DeleteStackInput 001 ClientRequestToken len 1 ptr
+K DeleteStackInput 002 RoleARN len 20 ptr
+K DeleteStackInput 003 StackName req nil
+K DeleteStackInstancesInput 001 OperationId len 1 ptr
+K DeleteStackInstancesInput 002 Regions req nil
+K DeleteStackInstancesInput 003 RetainStacks req nil
+K DeleteStackInstancesInput 004 StackSetName req nil
+K DeleteStackInstancesInput 005 DeploymentTargets nest DeploymentTargets
+K DeleteStackInstancesInput 006 OperationPreferences nest StackSetOperationPreferences
+K DeleteStackSetInput 001 StackSetName req nil
+K DeploymentTargets 001 AccountsUrl len 1 ptr
+K DeregisterTypeInput 001 TypeName len 10 ptr
+K DeregisterTypeInput 002 VersionId len 1 ptr
+K DescribeAccountLimitsInput 001 NextToken len 1 ptr
+K DescribeChangeSetHooksInput 001 ChangeSetName req nil
+K DescribeChangeSetHooksInput 002 ChangeSetName len 1 ptr
+K DescribeChangeSetHooksInput 003 NextToken len 1 ptr
+K DescribeChangeSetHooksInput 004 StackName len 1 ptr
+K DescribeChangeSetInput 001 ChangeSetName req nil
+K DescribeChangeSetInput 002 ChangeSetName len 1 ptr
+K DescribeChangeSetInput 003 NextToken len 1 ptr
+K DescribeChangeSetInput 004 StackName len 1 ptr
+K DescribeGeneratedTemplateInput 001 GeneratedTemplateName req nil
+K DescribeGeneratedTemplateInput 002 GeneratedTemplateName len 1 ptr
+K DescribePublisherInput 001 PublisherId len 1 ptr
+K DescribeResourceScanInput 001 ResourceScanId req nil
+K DescribeStackDriftDetectionStatusInput 001 StackDriftDetectionId req nil
+K DescribeStackDriftDetectionStatusInput 002 StackDriftDetectionId len 1 ptr
+K DescribeStackEventsInput 001 NextToken len 1 ptr
+K DescribeStackInstanceInput 001 StackInstanceAccount req nil
+K DescribeStackInstanceInput 002 StackInstanceRegion req nil
+K DescribeStackInstanceInput 003 StackSetName req nil
+K DescribeStackResourceDriftsInput 001 MaxResults min 1 ptr
+K DescribeStackResourceDriftsInput 002 NextToken len 1 ptr
+K DescribeStackResourceDriftsInput 003 StackName req nil
+K DescribeStackResourceDriftsInput 004 StackName len 1 ptr
+K DescribeStackResourceDriftsInput 005 StackResourceDriftStatusFilters len 1 container
+K DescribeStackResourceInput 001 LogicalResourceId req nil
+K DescribeStackResourceInput 002 StackName req nil
+K DescribeStackSetInput 001 StackSetName req nil
+K DescribeStackSetOperationInput 001 OperationId req nil
+K DescribeStackSetOperationInput 002 OperationId len 1 ptr
+K DescribeStackSetOperationInput 003 StackSetName req nil
+K DescribeStacksInput 001 NextToken len 1 ptr
+K DescribeTypeInput 001 PublicVersionNumber len 5 ptr
+K DescribeTypeInput 002 PublisherId len 1 ptr
+K DescribeTypeInput 003 TypeName len 10 ptr
+K DescribeTypeInput 004 VersionId len 1 ptr
+K DescribeTypeRegistrationInput 001 RegistrationToken req nil
+K DescribeTypeRegistrationInput 002 RegistrationToken len 1 ptr
+K DetectStackDriftInput 001 LogicalResourceIds len 1 container
+K DetectStackDriftInput 002 StackName req nil
+K DetectStackDriftInput 003 StackName len 1 ptr
+K DetectStackResourceDriftInput 001 LogicalResourceId req nil
+K DetectStackResourceDriftInput 002 StackName req nil
+K DetectStackResourceDriftInput 003 StackName len 1 ptr
+K DetectStackSetDriftInput 001 OperationId len 1 ptr
+K DetectStackSetDriftInput 002 StackSetName req nil
+K DetectStackSetDriftInput 003 OperationPreferences nest StackSetOperationPreferences
+K EstimateTemplateCostInput 001 TemplateBody len 1 ptr
+K EstimateTemplateCostInput 002 TemplateURL len 1 ptr
+K ExecuteChangeSetInput 001 ChangeSetName req nil
+K ExecuteChangeSetInput 002 ChangeSetName len 1 ptr
+K ExecuteChangeSetInput 003 ClientRequestToken len 1 ptr
+K ExecuteChangeSetInput 004 StackName len 1 ptr
+K GetGeneratedTemplateInput 001 GeneratedTemplateName req nil
+K GetGeneratedTemplateInput 002 GeneratedTemplateName len 1 ptr
+K GetStackPolicyInput 001 StackName req nil
+K GetTemplateInput 001 ChangeSetName len 1 ptr
+K GetTemplateSummaryInput 001 StackName len 1 ptr
+K GetTemplateSummaryInput 002 TemplateBody len 1 ptr
+K GetTemplateSummaryInput 003 TemplateURL len 1 ptr
+K ImportStacksToStackSetInput 001 OperationId len 1 ptr
+K ImportStacksToStackSetInput 002 StackIdsUrl len 1 ptr
+K ImportStacksToStackSetInput 003 StackSetName req nil
+K ImportStacksToStackSetInput 004 OperationPreferences nest StackSetOperationPreferences
+K ListChangeSetsInput 001 NextToken len 1 ptr
+K ListChangeSetsInput 002 StackName req nil
+K ListChangeSetsInput 003 StackName len 1 ptr
+K ListExportsInput 001 NextToken len 1 ptr
+K ListGeneratedTemplatesInput 001 MaxResults min 1 ptr
+K ListGeneratedTemplatesInput 002 NextToken len 1 ptr
+K ListImportsInput 001 ExportName req nil
+K ListImportsInput 002 NextToken len 1 ptr
+K ListResourceScanRelatedResourcesInput 001 MaxResults min 1 ptr
+K ListResourceScanRelatedResourcesInput 002 NextToken len 1 ptr
+K ListResourceScanRelatedResourcesInput 003 ResourceScanId req nil
+K ListResourceScanRelatedResourcesInput 004 Resources req nil
+K ListResourceScanRelatedResourcesInput 005 Resources each ScannedResourceIdentifier slice
+K ListResourceScanResourcesInput 001 NextToken len 1 ptr
+K ListResourceScanResourcesInput 002 ResourceScanId req nil
+K ListResourceScanResourcesInput 003 TagKey len 1 ptr
+K ListResourceScanResourcesInput 004 TagValue len 1 ptr
+K ListResourceScansInput 001 NextToken len 1 ptr
+K ListStackInstanceResourceDriftsInput 001 MaxResults min 1 ptr
+K ListStackInstanceResourceDriftsInput 002 NextToken len 1 ptr
+K ListStackInstanceResourceDriftsInput 003 OperationId req nil
+K ListStackInstanceResourceDriftsInput 004 OperationId len 1 ptr
+K ListStackInstanceResourceDriftsInput 005 StackInstanceAccount req nil
+K ListStackInstanceResourceDriftsInput 006 StackInstanceRegion req nil
+K ListStackInstanceResourceDriftsInput 007 StackInstanceResourceDriftStatuses len 1 container
+K ListStackInstanceResourceDriftsInput 008 StackSetName req nil
+K ListStackInstancesInput 001 MaxResults min 1 ptr
+K ListStackInstancesInput 002 NextToken len 1 ptr
+K ListStackInstancesInput 003 StackSetName req nil
+K ListStackInstancesInput 004 Filters each StackInstanceFilter slice
+K ListStackResourcesInput 001 NextToken len 1 ptr
+K ListStackResourcesInput 002 StackName req nil
+K ListStackSetAutoDeploymentTargetsInput 001 MaxResults min 1 ptr
+K ListStackSetAutoDeploymentTargetsInput 002 NextToken len 1 ptr
+K ListStackSetAutoDeploymentTargetsInput 003 StackSetName req nil
+K ListStackSetOperationResultsInput 001 MaxResults min 1 ptr
+K ListStackSetOperationResultsInput 002 NextToken len 1 ptr
+K ListStackSetOperationResultsInput 003 OperationId req nil
+K ListStackSetOperationResultsInput 004 OperationId len 1 ptr
+K ListStackSetOperationResultsInput 005 StackSetName req nil
+K ListStackSetOperationResultsInput 006 Filters each OperationResultFilter slice
+K ListStackSetOperationsInput 001 MaxResults min 1 ptr
+K ListStackSetOperationsInput 002 NextToken len 1 ptr
+K ListStackSetOperationsInput 003 StackSetName req nil
+K ListStackSetsInput 001 MaxResults min 1 ptr
+K ListStackSetsInput 002 NextToken len 1 ptr
+K ListStacksInput 001 NextToken len 1 ptr
+K ListTypeRegistrationsInput 001 MaxResults min 1 ptr
+K ListTypeRegistrationsInput 002 NextToken len 1 ptr
+K ListTypeRegistrationsInput 003 TypeName len 10 ptr
+K ListTypeVersionsInput 001 MaxResults min 1 ptr
+K ListTypeVersionsInput 002 NextToken len 1 ptr
+K ListTypeVersionsInput 003 PublisherId len 1 ptr
+K ListTypeVersionsInput 004 TypeName len 10 ptr
+K ListTypesInput 001 MaxResults min 1 ptr
+K ListTypesInput 002 NextToken len 1 ptr
+K ListTypesInput 003 Filters nest TypeFilters
+K LoggingConfig 001 LogGroupName req nil
+K LoggingConfig 002 LogGroupName len 1 ptr
+K LoggingConfig 003 LogRoleArn req nil
+K LoggingConfig 004 LogRoleArn len 1 ptr
+K OperationResultFilter 001 Values len 6 ptr
+K PublishTypeInput 001 PublicVersionNumber len 5 ptr
+K PublishTypeInput 002 TypeName len 10 ptr
+K RecordHandlerProgressInput 001 BearerToken req nil
+K RecordHandlerProgressInput 002 BearerToken len 1 ptr
+K RecordHandlerProgressInput 003 ClientRequestToken len 1 ptr
+K RecordHandlerProgressInput 004 OperationStatus req empty
+K RecordHandlerProgressInput 005 ResourceModel len 1 ptr
+K RegisterPublisherInput 001 ConnectionArn len 1 ptr
+K RegisterTypeInput 001 ClientRequestToken len 1 ptr
+K RegisterTypeInput 002 ExecutionRoleArn len 1 ptr
+K RegisterTypeInput 003 SchemaHandlerPackage req nil
+K RegisterTypeInput 004 SchemaHandlerPackage len 1 ptr
+K RegisterTypeInput 005 TypeName req nil
+K RegisterTypeInput 006 TypeName len 10 ptr
+K RegisterTypeInput 007 LoggingConfig nest LoggingConfig
+K ResourceDefinition 001 ResourceIdentifier req nil
+K ResourceDefinition 002 ResourceIdentifier len 1 container
+K ResourceDefinition 003 ResourceType req nil
+K ResourceDefinition 004 ResourceType len 1 ptr
+K ResourceToImport 001 LogicalResourceId req nil
+K ResourceToImport 002 ResourceIdentifier req nil
+K ResourceToImport 003 ResourceIdentifier len 1 container
+K ResourceToImport 004 ResourceType req nil
+K ResourceToImport 005 ResourceType len 1 ptr
+K RollbackConfiguration 001 RollbackTriggers each RollbackTrigger slice
+K RollbackStackInput 001 ClientRequestToken len 1 ptr
+K RollbackStackInput 002 RoleARN len 20 ptr
+K RollbackStackInput 003 StackName req nil
+K RollbackStackInput 004 StackName len 1 ptr
+K RollbackTrigger 001 Arn req nil
+K RollbackTrigger 002 Type req nil
+K ScannedResourceIdentifier 001 ResourceIdentifier req nil
+K ScannedResourceIdentifier 002 ResourceType req nil
+K ScannedResourceIdentifier 003 ResourceType len 1 ptr
+K SetStackPolicyInput 001 StackName req nil
+K SetStackPolicyInput 002 StackPolicyBody len 1 ptr
+K SetStackPolicyInput 003 StackPolicyURL len 1 ptr
+K SetTypeConfigurationInput 001 Configuration req nil
+K SetTypeConfigurationInput 002 Configuration len 1 ptr
+K SetTypeConfigurationInput 003 ConfigurationAlias len 1 ptr
+K SetTypeConfigurationInput 004 TypeName len 10 ptr
+K SetTypeDefaultVersionInput 001 TypeName len 10 ptr
+K SetTypeDefaultVersionInput 002 VersionId len 1 ptr
+K SignalResourceInput 001 LogicalResourceId req nil
+K SignalResourceInput 002 StackName req nil
+K SignalResourceInput 003 StackName len 1 ptr
+K SignalResourceInput 004 Status req empty
+K SignalResourceInput 005 UniqueId req nil
+K SignalResourceInput 006 UniqueId len 1 ptr
+K StackInstanceFilter 001 Values len 1 ptr
+K StackSetOperationPreferences 001 MaxConcurrentCount min 1 ptr
+K StackSetOperationPreferences 002 MaxConcurrentPercentage min 1 ptr
+K StartResourceScanInput 001 ClientRequestToken len 1 ptr
+K StopStackSetOperationInput 001 OperationId req nil
+K StopStackSetOperationInput 002 OperationId len 1 ptr
+K StopStackSetOperationInput 003 StackSetName req nil
+K Tag 001 Key req nil
+K Tag 002 Key len 1 ptr
+K Tag 003 Value req nil
+K Tag 004 Value len 1 ptr
+K TestTypeInput 001 LogDeliveryBucket len 3 ptr
+K TestTypeInput 002 TypeName len 10 ptr
+K TestTypeInput 003 VersionId len 1 ptr
+K TypeConfigurationIdentifier 001 TypeConfigurationAlias len 1 ptr
+K TypeConfigurationIdentifier 002 TypeName len 10 ptr
+K TypeFilters 001 PublisherId len 1 ptr
+K TypeFilters 002 TypeNamePrefix len 1 ptr
+K UpdateGeneratedTemplateInput 001 AddResources len 1 container
+K UpdateGeneratedTemplateInput 002 GeneratedTemplateName req nil
+K UpdateGeneratedTemplateInput 003 GeneratedTemplateName len 1 ptr
+K UpdateGeneratedTemplateInput 004 NewGeneratedTemplateName len 1 ptr
+K UpdateGeneratedTemplateInput 005 RemoveResources len 1 container
+K UpdateGeneratedTemplateInput 006 AddResources each ResourceDefinition slice
+K UpdateStackInput 001 ClientRequestToken len 1 ptr
+K UpdateStackInput 002 RoleARN len 20 ptr
+K UpdateStackInput 003 StackName req nil
+K UpdateStackInput 004 StackPolicyBody len 1 ptr
+K UpdateStackInput 005 StackPolicyDuringUpdateBody len 1 ptr
+K UpdateStackInput 006 StackPolicyDuringUpdateURL len 1 ptr
+K UpdateStackInput 007 StackPolicyURL len 1 ptr
+K UpdateStackInput 008 TemplateBody len 1 ptr
+K UpdateStackInput 009 TemplateURL len 1 ptr
+K UpdateStackInput 010 RollbackConfiguration nest RollbackConfiguration
+K UpdateStackInput 011 Tags each Tag slice
+K UpdateStackInstancesInput 001 OperationId len 1 ptr
+K UpdateStackInstancesInput 002 Regions req nil
+K UpdateStackInstancesInput 003 StackSetName req nil
+K UpdateStackInstancesInput 004 DeploymentTargets nest DeploymentTargets
+K UpdateStackInstancesInput 005 OperationPreferences nest StackSetOperationPreferences
+K UpdateStackSetInput 001 AdministrationRoleARN len 20 ptr
+K UpdateStackSetInput 002 Description len 1 ptr
+K UpdateStackSetInput 003 ExecutionRoleName len 1 ptr
+K UpdateStackSetInput 004 OperationId len 1 ptr
+K UpdateStackSetInput 005 StackSetName req nil
+K UpdateStackSetInput 006 TemplateBody len 1 ptr
+K UpdateStackSetInput 007 TemplateURL len 1 ptr
+K UpdateStackSetInput 008 DeploymentTargets nest DeploymentTargets
+K UpdateStackSetInput 009 OperationPreferences nest StackSetOperationPreferences
+K UpdateStackSetInput 010 Tags each Tag slice
+K UpdateTerminationProtectionInput 001 EnableTerminationProtection req nil
+K UpdateTerminationProtectionInput 002 StackName req nil
+K UpdateTerminationProtectionInput 003 StackName len 1 ptr
+K ValidateTemplateInput 001 TemplateBody len 1 ptr
+K ValidateTemplateInput 002 TemplateURL len 1 ptr
+G DescribeAccountLimits NextToken NextToken
+G DescribeChangeSet NextToken NextToken
+G DescribeEvents NextToken NextToken
+G DescribeStackEvents NextToken NextToken
+G DescribeStackResourceDrifts NextToken NextToken
+G DescribeStacks NextToken NextToken
+G ListChangeSets NextToken NextToken
+G ListExports NextToken NextToken
+G ListGeneratedTemplates NextToken NextToken
+G ListImports NextToken NextToken
+G ListResourceScanRelatedResources NextToken NextToken
+G ListResourceScanResources NextToken NextToken
+G ListResourceScans NextToken NextToken
+G ListStackInstances NextToken NextToken
+G ListStackRefactorActions NextToken NextToken
+G ListStackRefactors NextToken NextToken
+G ListStackResources NextToken NextToken
+G ListStackSetOperationResults NextToken NextToken
+G ListStackSetOperations NextToken NextToken
+G ListStackSets NextToken NextToken
+G ListStacks NextToken NextToken
+G ListTypeRegistrations NextToken NextToken
+G ListTypeVersions NextToken NextToken
+G ListTypes NextToken NextToken

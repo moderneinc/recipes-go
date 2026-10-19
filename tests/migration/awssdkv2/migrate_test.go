@@ -208,9 +208,9 @@ func TestMigrateExpandsSessionMust(t *testing.T) {
 			)
 
 			func load(ctx context.Context, region string) error {
-				sess, err := config.LoadDefaultConfig(ctx, config.WithRegion(region))
-				if err != nil {
-					panic(err)
+				sess, cfgErr := config.LoadDefaultConfig(ctx, config.WithRegion(region))
+				if cfgErr != nil {
+					panic(cfgErr)
 				}
 				svc := s3.NewFromConfig(sess)
 				_, err := svc.ListBuckets(ctx, &s3.ListBucketsInput{})
@@ -294,8 +294,9 @@ func TestMigrateBlockedByPaginator(t *testing.T) {
 
 // The constant names carry over unchanged, but each belongs to an enum: v1's
 // *string field took any of them, v2's typed field takes only its own.
-// ObjectStorageClass is not StorageClass, so this file waits.
-func TestMigrateBlockedByMismatchedEnumConstant(t *testing.T) {
+// ObjectStorageClass is not StorageClass, so the constant converts, carrying
+// the same string v1 sent.
+func TestMigrateMismatchedEnumConstantConverts(t *testing.T) {
 	migrateSpec().RewriteRun(t,
 		test.Golang(`
 			package main
@@ -317,6 +318,30 @@ func TestMigrateBlockedByMismatchedEnumConstant(t *testing.T) {
 				_, err = svc.PutObject(&s3.PutObjectInput{
 					Bucket:       aws.String(bucket),
 					StorageClass: aws.String(s3.ObjectStorageClassStandard),
+				})
+				return err
+			}
+		`, `
+			package main
+
+			import (
+				"context"
+
+				"github.com/aws/aws-sdk-go-v2/aws"
+				"github.com/aws/aws-sdk-go-v2/config"
+				"github.com/aws/aws-sdk-go-v2/service/s3"
+				s3types "github.com/aws/aws-sdk-go-v2/service/s3/types"
+			)
+
+			func put(ctx context.Context, bucket string) error {
+				sess, err := config.LoadDefaultConfig(ctx)
+				if err != nil {
+					return err
+				}
+				svc := s3.NewFromConfig(sess)
+				_, err = svc.PutObject(ctx, &s3.PutObjectInput{
+					Bucket:       aws.String(bucket),
+					StorageClass: s3types.StorageClass(s3types.ObjectStorageClassStandard),
 				})
 				return err
 			}
@@ -361,9 +386,9 @@ func TestMigrateConfigBuiltInAVariable(t *testing.T) {
 	)
 }
 
-// A config local something else reads, or writes a second field to, is not one
-// the region can simply be lifted out of.
-func TestMigrateBlockedByReusedConfigVariable(t *testing.T) {
+// A config local with a second field written after its literal stays as v2's
+// config, and what it holds becomes the loader's options.
+func TestMigrateConfigVariableWrittenAfterLiteral(t *testing.T) {
 	migrateSpec().RewriteRun(t,
 		test.Golang(`
 			package main
@@ -381,7 +406,71 @@ func TestMigrateBlockedByReusedConfigVariable(t *testing.T) {
 				_, err := session.NewSession(&s3config)
 				return err
 			}
+		`, `
+			package main
+
+			import (
+				"context"
+
+				"github.com/aws/aws-sdk-go-v2/aws"
+				"github.com/aws/aws-sdk-go-v2/config"
+			)
+
+			func load(ctx context.Context, region, endpoint string) error {
+				s3config := aws.Config{Region: region}
+				s3config.BaseEndpoint = aws.String(awsCompatEndpoint(endpoint))
+				_, err := config.LoadDefaultConfig(ctx, awsCompatConfigOptions(&s3config)...)
+				return err
+			}
 		`),
+		test.Generated("zz_awssdkv2_config.go", configHelpersIn("main")),
+	)
+}
+
+// A config local something else reads stays v2's config, read back as the
+// loader's options where it reaches the session.
+func TestMigrateReusedConfigVariable(t *testing.T) {
+	migrateSpec().RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"context"
+
+				"github.com/aws/aws-sdk-go/aws"
+				"github.com/aws/aws-sdk-go/aws/session"
+			)
+
+			func keep(*aws.Config) {}
+
+			func load(ctx context.Context, region, endpoint string) error {
+				s3config := aws.Config{Region: aws.String(region)}
+				s3config.Endpoint = aws.String(endpoint)
+				keep(&s3config)
+				_, err := session.NewSession(&s3config)
+				return err
+			}
+		`, `
+			package main
+
+			import (
+				"context"
+
+				"github.com/aws/aws-sdk-go-v2/aws"
+				"github.com/aws/aws-sdk-go-v2/config"
+			)
+
+			func keep(*aws.Config) {}
+
+			func load(ctx context.Context, region, endpoint string) error {
+				s3config := aws.Config{Region: region}
+				s3config.BaseEndpoint = aws.String(awsCompatEndpoint(endpoint))
+				keep(&s3config)
+				_, err := config.LoadDefaultConfig(ctx, awsCompatConfigOptions(&s3config)...)
+				return err
+			}
+		`),
+		test.Generated("zz_awssdkv2_config.go", configHelpersIn("main")),
 	)
 }
 
@@ -417,8 +506,27 @@ func TestMigrateWholeModule(t *testing.T) {
 				go 1.24
 
 				require (
-					github.com/aws/aws-sdk-go-v2 v1.47.0
-					github.com/aws/aws-sdk-go-v2/config v1.33.5
+					github.com/aws/aws-sdk-go-v2 v1.47.3
+					github.com/aws/aws-sdk-go-v2/config v1.33.9
+					github.com/aws/aws-sdk-go-v2/service/s3 v1.114.3
+				)
+
+				require (
+					github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.7.22 // indirect
+					github.com/aws/aws-sdk-go-v2/credentials v1.20.9 // indirect
+					github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.20.3 // indirect
+					github.com/aws/aws-sdk-go-v2/internal/configsources v1.5.6 // indirect
+					github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.8.6 // indirect
+					github.com/aws/aws-sdk-go-v2/internal/v4a v1.5.6 // indirect
+					github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.21 // indirect
+					github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.11.7 // indirect
+					github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.14.6 // indirect
+					github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.20.6 // indirect
+					github.com/aws/aws-sdk-go-v2/service/signin v1.10.4 // indirect
+					github.com/aws/aws-sdk-go-v2/service/sso v1.38.4 // indirect
+					github.com/aws/aws-sdk-go-v2/service/ssooidc v1.43.4 // indirect
+					github.com/aws/aws-sdk-go-v2/service/sts v1.51.4 // indirect
+					github.com/aws/smithy-go v1.28.5 // indirect
 				)
 			`),
 			test.Golang(`
@@ -489,8 +597,27 @@ func TestMigrateLeavesBehindWhatItCannotTake(t *testing.T) {
 
 				require (
 					github.com/aws/aws-sdk-go v1.55.8
-					github.com/aws/aws-sdk-go-v2 v1.47.0
-					github.com/aws/aws-sdk-go-v2/config v1.33.5
+					github.com/aws/aws-sdk-go-v2 v1.47.3
+					github.com/aws/aws-sdk-go-v2/config v1.33.9
+					github.com/aws/aws-sdk-go-v2/service/s3 v1.114.3
+				)
+
+				require (
+					github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.7.22 // indirect
+					github.com/aws/aws-sdk-go-v2/credentials v1.20.9 // indirect
+					github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.20.3 // indirect
+					github.com/aws/aws-sdk-go-v2/internal/configsources v1.5.6 // indirect
+					github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.8.6 // indirect
+					github.com/aws/aws-sdk-go-v2/internal/v4a v1.5.6 // indirect
+					github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.21 // indirect
+					github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.11.7 // indirect
+					github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.14.6 // indirect
+					github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.20.6 // indirect
+					github.com/aws/aws-sdk-go-v2/service/signin v1.10.4 // indirect
+					github.com/aws/aws-sdk-go-v2/service/sso v1.38.4 // indirect
+					github.com/aws/aws-sdk-go-v2/service/ssooidc v1.43.4 // indirect
+					github.com/aws/aws-sdk-go-v2/service/sts v1.51.4 // indirect
+					github.com/aws/smithy-go v1.28.5 // indirect
 				)
 			`),
 			test.Golang(`
@@ -533,7 +660,7 @@ func TestMigrateLeavesBehindWhatItCannotTake(t *testing.T) {
 					_, err = svc.HeadBucket(ctx, &s3.HeadBucketInput{Bucket: aws.String(bucket)})
 					return err
 				}
-			`),
+			`).WithPath("clean/clean.go"),
 			test.Golang(`
 				package legacy
 
@@ -547,7 +674,7 @@ func TestMigrateLeavesBehindWhatItCannotTake(t *testing.T) {
 				func instrument(ctx context.Context, sess *session.Session) {
 					sess.Handlers.Send.PushFront(func(r *request.Request) {})
 				}
-			`),
+			`).WithPath("legacy/legacy.go"),
 		),
 	)
 }
@@ -942,7 +1069,14 @@ func TestMigrateConvertsValueSlicesAtTheBoundary(t *testing.T) {
 				go 1.24
 
 				require (
-					github.com/aws/aws-sdk-go-v2 v1.47.0
+					github.com/aws/aws-sdk-go-v2 v1.47.3
+					github.com/aws/aws-sdk-go-v2/service/cloudwatch v1.73.3
+				)
+
+				require (
+					github.com/aws/aws-sdk-go-v2/internal/configsources v1.5.6 // indirect
+					github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.8.6 // indirect
+					github.com/aws/smithy-go v1.28.5 // indirect
 				)
 			`),
 			test.Golang(`
@@ -1054,6 +1188,52 @@ func TestMigrateAwserrToSmithy(t *testing.T) {
 	)
 }
 
+// aws/aws-node-termination-handler's shape: one check per code, each binding
+// the same name. They share one declaration, since a second would redeclare
+// it, and the comment leading a check stays above its declaration.
+func TestMigrateSuccessiveAwserrChecks(t *testing.T) {
+	migrateSpec().RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"github.com/aws/aws-sdk-go/aws/awserr"
+			)
+
+			func classify(err error) string {
+				// the instance ID errors
+				if aerr, ok := err.(awserr.Error); ok && aerr.Code() == "InvalidInstanceID" {
+					return "invalid"
+				}
+				if aerr, ok := err.(awserr.Error); ok && aerr.Code() == "InvalidInstanceID.NotFound" {
+					return "missing"
+				}
+				return ""
+			}
+		`, `
+			package main
+
+			import (
+				"errors"
+
+				"github.com/aws/smithy-go"
+			)
+
+			func classify(err error) string {
+				// the instance ID errors
+				var aerr smithy.APIError
+				if errors.As(err, &aerr) && aerr.ErrorCode() == "InvalidInstanceID" {
+					return "invalid"
+				}
+				if errors.As(err, &aerr) && aerr.ErrorCode() == "InvalidInstanceID.NotFound" {
+					return "missing"
+				}
+				return ""
+			}
+		`),
+	)
+}
+
 // v2 deleted the per-service iface packages. A caller holding the interface —
 // the shape mocks embed so they only implement what they use — gets a
 // replacement generated into its own module, since the v2 SDK has nowhere to
@@ -1071,6 +1251,20 @@ func TestMigrateGeneratesIfacePackage(t *testing.T) {
 				module example.com/who
 
 				go 1.24
+
+				require (
+					github.com/aws/aws-sdk-go-v2/service/sts v1.51.4
+				)
+
+				require (
+					github.com/aws/aws-sdk-go-v2 v1.47.3 // indirect
+					github.com/aws/aws-sdk-go-v2/internal/configsources v1.5.6 // indirect
+					github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.8.6 // indirect
+					github.com/aws/aws-sdk-go-v2/internal/v4a v1.5.6 // indirect
+					github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.21 // indirect
+					github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.14.6 // indirect
+					github.com/aws/smithy-go v1.28.5 // indirect
+				)
 			`),
 			test.Golang(`
 				package who
@@ -1200,6 +1394,22 @@ func TestMigrateHelpersWhenGoModVisitedLast(t *testing.T) {
 				module example.com/who
 
 				go 1.24
+
+				require (
+					github.com/aws/aws-sdk-go-v2/service/dynamodb v1.70.3
+					github.com/aws/aws-sdk-go-v2/service/sts v1.51.4
+				)
+
+				require (
+					github.com/aws/aws-sdk-go-v2 v1.47.3 // indirect
+					github.com/aws/aws-sdk-go-v2/internal/configsources v1.5.6 // indirect
+					github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.8.6 // indirect
+					github.com/aws/aws-sdk-go-v2/internal/v4a v1.5.6 // indirect
+					github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.21 // indirect
+					github.com/aws/aws-sdk-go-v2/service/internal/endpoint-discovery v1.13.6 // indirect
+					github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.14.6 // indirect
+					github.com/aws/smithy-go v1.28.5 // indirect
+				)
 			`),
 			test.Generated("internal/awsiface/stsiface/zz_awssdkv2_iface.go", stsIface),
 			test.Generated("zz_awssdkv2_compat.go", compatHelpersIn("who")),
@@ -1330,7 +1540,7 @@ func TestMigrateNarrowedFieldsAndShapeMaps(t *testing.T) {
 				if err != nil {
 					return 0, nil, err
 				}
-				cmd := awsCompatPtrs(out.Messages)[0].MessageAttributes["command"]
+				cmd := awsCompatPtrsMap(awsCompatPtrs(out.Messages)[0].MessageAttributes)["command"]
 				return int64(in.MaxNumberOfMessages), cmd.StringValue, nil
 			}
 		`),
@@ -1514,6 +1724,44 @@ func TestMigrateSessionMustBeforeErrDeclaration(t *testing.T) {
 	)
 }
 
+// `_, err :=` declares nothing new but err either, so it counts as err alone.
+func TestMigrateSessionMustBeforeBlankAndErrDeclaration(t *testing.T) {
+	test.NewRecipeSpec().WithRecipe(&awssdkv2.MigrateAwsSdkGoToV2{}).RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"github.com/aws/aws-sdk-go/aws/session"
+				"github.com/aws/aws-sdk-go/service/sqs"
+			)
+
+			func send() error {
+				sess := session.Must(session.NewSession())
+				_, err := sqs.New(sess).SendMessage(&sqs.SendMessageInput{})
+				return err
+			}
+		`, `
+			package main
+
+			import (
+				"context"
+
+				"github.com/aws/aws-sdk-go-v2/config"
+				"github.com/aws/aws-sdk-go-v2/service/sqs"
+			)
+
+			func send() error {
+				sess, cfgErr := config.LoadDefaultConfig(context.TODO())
+				if cfgErr != nil {
+					panic(cfgErr)
+				}
+				_, err := sqs.NewFromConfig(sess).SendMessage(context.TODO(), &sqs.SendMessageInput{})
+				return err
+			}
+		`),
+	)
+}
+
 // Only an Options literal handed straight to NewSessionWithOptions folds into
 // loader options. One built in a local, or a parameter of the type, still names
 // the session package once its import is gone.
@@ -1584,6 +1832,20 @@ func TestMigrateIfaceWithContextOperation(t *testing.T) {
 				module example.com/who
 
 				go 1.24
+
+				require (
+					github.com/aws/aws-sdk-go-v2/service/sts v1.51.4
+				)
+
+				require (
+					github.com/aws/aws-sdk-go-v2 v1.47.3 // indirect
+					github.com/aws/aws-sdk-go-v2/internal/configsources v1.5.6 // indirect
+					github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.8.6 // indirect
+					github.com/aws/aws-sdk-go-v2/internal/v4a v1.5.6 // indirect
+					github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.21 // indirect
+					github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.14.6 // indirect
+					github.com/aws/smithy-go v1.28.5 // indirect
+				)
 			`),
 			test.Golang(`
 				package who
@@ -1679,6 +1941,46 @@ func TestMigrateS3TransferManager(t *testing.T) {
 	)
 }
 
+// A manager used straight off its constructor is held in no variable, so only
+// the receiver's own shape says the call is the manager's.
+func TestMigrateS3TransferManagerChainedOnConstructor(t *testing.T) {
+	test.NewRecipeSpec().WithRecipe(&awssdkv2.MigrateAwsSdkGoToV2{}).RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"context"
+				"io"
+
+				"github.com/aws/aws-sdk-go/aws"
+				"github.com/aws/aws-sdk-go/service/s3"
+				"github.com/aws/aws-sdk-go/service/s3/s3manager"
+			)
+
+			func put(ctx context.Context, svc *s3.S3, bucket string, w io.WriterAt) error {
+				_, err := s3manager.NewDownloaderWithClient(svc).Download(w, &s3.GetObjectInput{Bucket: aws.String(bucket)})
+				return err
+			}
+		`, `
+			package main
+
+			import (
+				"context"
+				"io"
+
+				"github.com/aws/aws-sdk-go-v2/aws"
+				s3manager "github.com/aws/aws-sdk-go-v2/feature/s3/manager"
+				"github.com/aws/aws-sdk-go-v2/service/s3"
+			)
+
+			func put(ctx context.Context, svc *s3.Client, bucket string, w io.WriterAt) error {
+				_, err := s3manager.NewDownloader(svc).Download(ctx, w, &s3.GetObjectInput{Bucket: aws.String(bucket)})
+				return err
+			}
+		`),
+	)
+}
+
 // v1's session.New built a session in an expression and deferred a load failure
 // to the first call. v2's loader returns that failure and an expression has
 // nowhere to put it, so the load moves into a generated helper.
@@ -1695,8 +1997,27 @@ func TestMigrateInlineSessionNew(t *testing.T) {
 				go 1.24
 
 				require (
-					github.com/aws/aws-sdk-go-v2 v1.47.0
-					github.com/aws/aws-sdk-go-v2/config v1.33.5
+					github.com/aws/aws-sdk-go-v2 v1.47.3
+					github.com/aws/aws-sdk-go-v2/config v1.33.9
+					github.com/aws/aws-sdk-go-v2/service/s3 v1.114.3
+				)
+
+				require (
+					github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.7.22 // indirect
+					github.com/aws/aws-sdk-go-v2/credentials v1.20.9 // indirect
+					github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.20.3 // indirect
+					github.com/aws/aws-sdk-go-v2/internal/configsources v1.5.6 // indirect
+					github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.8.6 // indirect
+					github.com/aws/aws-sdk-go-v2/internal/v4a v1.5.6 // indirect
+					github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.21 // indirect
+					github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.11.7 // indirect
+					github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.14.6 // indirect
+					github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.20.6 // indirect
+					github.com/aws/aws-sdk-go-v2/service/signin v1.10.4 // indirect
+					github.com/aws/aws-sdk-go-v2/service/sso v1.38.4 // indirect
+					github.com/aws/aws-sdk-go-v2/service/ssooidc v1.43.4 // indirect
+					github.com/aws/aws-sdk-go-v2/service/sts v1.51.4 // indirect
+					github.com/aws/smithy-go v1.28.5 // indirect
 				)
 			`),
 			test.Golang(`
@@ -1947,28 +2268,52 @@ func TestMigrateEc2MetadataRegion(t *testing.T) {
 				return awsCompatIMDSRegion(ctx, metadata)
 			}
 		`),
-		test.Generated("zz_awssdkv2_imds.go", `
-			// Code generated by MigrateAwsSdkGoToV2. DO NOT EDIT.
+		test.Generated("zz_awssdkv2_imds.go", imdsHelpersIn("main")),
+	)
+}
 
+// contentful-labs/kube-secret-syncer's shape: IAMInfo, and the metadata
+// client and its result named as types.
+func TestMigrateEc2MetadataIAMInfo(t *testing.T) {
+	test.NewRecipeSpec().WithRecipe(&awssdkv2.MigrateAwsSdkGoToV2{}).RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"github.com/aws/aws-sdk-go/aws/ec2metadata"
+				"github.com/aws/aws-sdk-go/aws/session"
+			)
+
+			func profile(sess *session.Session) (string, error) {
+				var metadata *ec2metadata.EC2Metadata = ec2metadata.New(sess)
+				var info ec2metadata.EC2IAMInfo
+				info, err := metadata.IAMInfo()
+				if err != nil {
+					return "", err
+				}
+				return info.InstanceProfileArn, nil
+			}
+		`, `
 			package main
 
 			import (
 				"context"
 
-				"github.com/aws/aws-sdk-go-v2/feature/ec2/imds"
+				"github.com/aws/aws-sdk-go-v2/aws"
+				ec2metadata "github.com/aws/aws-sdk-go-v2/feature/ec2/imds"
 			)
 
-			// awsCompatIMDSRegion stands in for aws-sdk-go v1's EC2Metadata.Region. v2 takes
-			// a context and answers with an output struct, so the call site keeps the shape
-			// it was written in by going through here.
-			func awsCompatIMDSRegion(ctx context.Context, c *imds.Client) (string, error) {
-				out, err := c.GetRegion(ctx, &imds.GetRegionInput{})
+			func profile(sess aws.Config) (string, error) {
+				var metadata *ec2metadata.Client = ec2metadata.NewFromConfig(sess)
+				var info ec2metadata.IAMInfo
+				info, err := awsCompatIMDSIAMInfo(context.TODO(), metadata)
 				if err != nil {
 					return "", err
 				}
-				return out.Region, nil
+				return info.InstanceProfileArn, nil
 			}
 		`),
+		test.Generated("zz_awssdkv2_imds.go", imdsHelpersIn("main")),
 	)
 }
 
@@ -2443,10 +2788,11 @@ func TestMigrateConfigOptionsBeyondRegion(t *testing.T) {
 			)
 
 			func load(ctx context.Context, region, endpoint, id, secret string) error {
-				_, err := config.LoadDefaultConfig(ctx, config.WithRegion(region), config.WithBaseEndpoint(endpoint), config.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(id, secret, "")))
+				_, err := config.LoadDefaultConfig(ctx, config.WithRegion(region), config.WithBaseEndpoint(awsCompatEndpoint(endpoint)), config.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(id, secret, "")))
 				return err
 			}
 		`),
+		test.Generated("zz_awssdkv2_config.go", configHelpersIn("main")),
 	)
 }
 
@@ -2689,6 +3035,50 @@ func TestMigrateNestedShapeRead(t *testing.T) {
 	)
 }
 
+// aws/aws-node-termination-handler's shape: an element of a list reached
+// through an element of another, whose pointer is then dereferenced.
+func TestMigrateChainedValueSliceIndex(t *testing.T) {
+	migrateSpec().RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"context"
+
+				"github.com/aws/aws-sdk-go/service/ec2"
+			)
+
+			func first(ctx context.Context, client *ec2.EC2) (ec2.Instance, error) {
+				result, err := client.DescribeInstances(&ec2.DescribeInstancesInput{})
+				if err != nil {
+					return ec2.Instance{}, err
+				}
+				instance := result.Reservations[0].Instances[0]
+				return *instance, nil
+			}
+		`, `
+			package main
+
+			import (
+				"context"
+
+				"github.com/aws/aws-sdk-go-v2/service/ec2"
+				ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
+			)
+
+			func first(ctx context.Context, client *ec2.Client) (ec2types.Instance, error) {
+				result, err := client.DescribeInstances(ctx, &ec2.DescribeInstancesInput{})
+				if err != nil {
+					return ec2types.Instance{}, err
+				}
+				instance := awsCompatPtrs(awsCompatPtrs(result.Reservations)[0].Instances)[0]
+				return *instance, nil
+			}
+		`),
+		test.Generated("zz_awssdkv2_compat.go", compatHelpersIn("main")),
+	)
+}
+
 // v1's fluent setters are gone in v2; the assignment that replaces one puts the
 // value into whatever v2 holds the field in.
 func TestMigrateFluentSetter(t *testing.T) {
@@ -2868,7 +3258,7 @@ func TestMigrateImperativeConfigWithPathStyle(t *testing.T) {
 					awsConfig.Region = region
 				}
 				if endpoint != "" {
-					awsConfig.BaseEndpoint = aws.String(endpoint)
+					awsConfig.BaseEndpoint = aws.String(awsCompatEndpoint(endpoint))
 				}
 				if forcePathStyle {
 					awsUsePathStyle = true
@@ -3065,17 +3455,18 @@ const configHelpers = `
 
 				import (
 					"context"
+					"regexp"
 
 					"github.com/aws/aws-sdk-go-v2/aws"
-					"github.com/aws/aws-sdk-go-v2/config"
+					awsconfig "github.com/aws/aws-sdk-go-v2/config"
 				)
 
 				// awsCompatConfig stands in for aws-sdk-go v1's session.New, which built a
 				// session in an expression and deferred a load failure to the first call. v2
 				// returns that failure, and an expression cannot, so it panics the way
 				// session.Must did.
-				func awsCompatConfig(ctx context.Context, optFns ...func(*config.LoadOptions) error) aws.Config {
-					cfg, err := config.LoadDefaultConfig(ctx, optFns...)
+				func awsCompatConfig(ctx context.Context, optFns ...func(*awsconfig.LoadOptions) error) aws.Config {
+					cfg, err := awsconfig.LoadDefaultConfig(ctx, optFns...)
 					if err != nil {
 						panic(err)
 					}
@@ -3087,9 +3478,9 @@ const configHelpers = `
 				// loader reads the file and the profile itself, so the provider is taken off a
 				// config loaded for exactly that.
 				func awsCompatSharedCredentials(ctx context.Context, file, profile string) aws.CredentialsProvider {
-					cfg, err := config.LoadDefaultConfig(ctx,
-						config.WithSharedCredentialsFiles([]string{file}),
-						config.WithSharedConfigProfile(profile))
+					cfg, err := awsconfig.LoadDefaultConfig(ctx,
+						awsconfig.WithSharedCredentialsFiles([]string{file}),
+						awsconfig.WithSharedConfigProfile(profile))
 					if err != nil {
 						panic(err)
 					}
@@ -3102,6 +3493,83 @@ const configHelpers = `
 				// it did.
 				func awsCompatSessionConfig(cfg aws.Config) (aws.Config, error) {
 					return cfg, nil
+				}
+
+				// awsCompatEndpoint gives an endpoint written without a scheme the https one
+				// aws-sdk-go v1 added; v2 takes the URL as it is given. Empty stays empty,
+				// which both read as no endpoint at all.
+				func awsCompatEndpoint(endpoint string) string {
+					if endpoint == "" || awsCompatSchemeRE.MatchString(endpoint) {
+						return endpoint
+					}
+					return "https://" + endpoint
+				}
+
+				var awsCompatSchemeRE = regexp.MustCompile("^([^:]+)://")
+
+				// awsCompatConfigOptions stands in for a session built from aws-sdk-go v1
+				// configs: each setting one carries becomes the loader option setting it, and
+				// everything else loads as it would have.
+				func awsCompatConfigOptions(cfgs ...*aws.Config) []func(*awsconfig.LoadOptions) error {
+					var opts []func(*awsconfig.LoadOptions) error
+					for _, c := range cfgs {
+						if c == nil {
+							continue
+						}
+						if c.Region != "" {
+							opts = append(opts, awsconfig.WithRegion(c.Region))
+						}
+						if c.Credentials != nil {
+							opts = append(opts, awsconfig.WithCredentialsProvider(c.Credentials))
+						}
+						if c.BaseEndpoint != nil {
+							opts = append(opts, awsconfig.WithBaseEndpoint(*c.BaseEndpoint))
+						}
+						if c.RetryMaxAttempts != 0 {
+							opts = append(opts, awsconfig.WithRetryMaxAttempts(c.RetryMaxAttempts))
+						}
+						if c.HTTPClient != nil {
+							opts = append(opts, awsconfig.WithHTTPClient(c.HTTPClient))
+						}
+						if c.Retryer != nil {
+							opts = append(opts, awsconfig.WithRetryer(c.Retryer))
+						}
+						if len(c.ServiceOptions) > 0 {
+							opts = append(opts, awsconfig.WithServiceOptions(c.ServiceOptions...))
+						}
+					}
+					return opts
+				}
+
+				// awsCompatMergeConfig stands in for the configs aws-sdk-go v1 merged over a
+				// session's when building a client: each setting one carries replaces the
+				// session's, and a nil config carries none.
+				func awsCompatMergeConfig(base aws.Config, overrides ...*aws.Config) aws.Config {
+					for _, o := range overrides {
+						if o == nil {
+							continue
+						}
+						if o.Region != "" {
+							base.Region = o.Region
+						}
+						if o.Credentials != nil {
+							base.Credentials = o.Credentials
+						}
+						if o.BaseEndpoint != nil {
+							base.BaseEndpoint = o.BaseEndpoint
+						}
+						if o.RetryMaxAttempts != 0 {
+							base.RetryMaxAttempts = o.RetryMaxAttempts
+						}
+						if o.HTTPClient != nil {
+							base.HTTPClient = o.HTTPClient
+						}
+						if o.Retryer != nil {
+							base.Retryer = o.Retryer
+						}
+						base.ServiceOptions = append(base.ServiceOptions, o.ServiceOptions...)
+					}
+					return base
 				}
 			`
 
@@ -3191,6 +3659,23 @@ func TestMigrateAdjunctFileFollowsShapes(t *testing.T) {
 				module example.com/app
 
 				go 1.24
+
+				require (
+					github.com/aws/aws-sdk-go-v2/service/s3 v1.114.3
+				)
+
+				require (
+					github.com/aws/aws-sdk-go-v2 v1.47.3 // indirect
+					github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.7.22 // indirect
+					github.com/aws/aws-sdk-go-v2/internal/configsources v1.5.6 // indirect
+					github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.8.6 // indirect
+					github.com/aws/aws-sdk-go-v2/internal/v4a v1.5.6 // indirect
+					github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.21 // indirect
+					github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.11.7 // indirect
+					github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.14.6 // indirect
+					github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.20.6 // indirect
+					github.com/aws/smithy-go v1.28.5 // indirect
+				)
 			`),
 			test.Golang(`
 				package main
@@ -3260,6 +3745,57 @@ func TestMigrateAdjunctFileFollowsShapes(t *testing.T) {
 	)
 }
 
+// in4it/ecs-deploy's shape: a test file reading SDK values without naming the
+// SDK, in a package another file holds back. The package stays on v1 whole, so
+// the file keeps reading the v1 shapes it was written against.
+func TestMigrateLeavesAdjunctFileInHeldBackPackage(t *testing.T) {
+	requireModuleCache(t, "github.com/aws/aws-sdk-go@v1.55.8")
+	test.NewRecipeSpec().WithRecipe(&awssdkv2.MigrateAwsSdkGoToV2{}).RewriteRun(t,
+		test.GoProject("app",
+			test.GoMod(`
+				module example.com/app
+
+				go 1.24
+
+				require github.com/aws/aws-sdk-go v1.55.8
+			`),
+			test.Golang(`
+				package main
+
+				import (
+					"github.com/aws/aws-sdk-go/aws/session"
+					"github.com/aws/aws-sdk-go/service/s3"
+				)
+
+				var sess *session.Session
+
+				func keys(svc *s3.S3, bucket string) ([]*s3.Object, error) {
+					if sess == nil {
+						return nil, nil
+					}
+					out, err := svc.ListObjects(&s3.ListObjectsInput{Bucket: &bucket})
+					if err != nil {
+						return nil, err
+					}
+					return out.Contents, nil
+				}
+			`).WithPath("app/keys.go"),
+			test.Golang(`
+				package main
+
+				import "fmt"
+
+				func describe() {
+					objects, _ := keys(nil, "b")
+					for _, k := range objects {
+						fmt.Println(*k.Key, *k.StorageClass)
+					}
+				}
+			`).WithPath("app/describe.go"),
+		),
+	)
+}
+
 // A file that never names the SDK is visited all the same — it may hold values
 // of its shapes, handed to it by the file that fetched them — but nothing in it
 // is rewritten on a guess. Without a type to go on, it is left exactly as it is.
@@ -3308,4 +3844,732 @@ func requireModuleCache(t *testing.T, module string) {
 		t.Skipf("%s is not in the module cache; run `go mod download %s` in a scratch module to prime it",
 			module, module)
 	}
+}
+
+// v2 moved the expression builder into a feature module under the same package
+// name, and its Names and Values feed an input's fields as they did in v1.
+func TestMigrateDynamoDBExpressionBuilder(t *testing.T) {
+	migrateSpec().RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"context"
+
+				"github.com/aws/aws-sdk-go/aws"
+				"github.com/aws/aws-sdk-go/service/dynamodb"
+				"github.com/aws/aws-sdk-go/service/dynamodb/expression"
+			)
+
+			func active(ctx context.Context, svc *dynamodb.DynamoDB, since int64) (int64, error) {
+				filter := expression.Name("updated").GreaterThan(expression.Value(since))
+				expr, err := expression.NewBuilder().WithFilter(filter).Build()
+				if err != nil {
+					return 0, err
+				}
+				out, err := svc.Scan(&dynamodb.ScanInput{
+					TableName:                 aws.String("t"),
+					FilterExpression:          expr.Filter(),
+					ExpressionAttributeNames:  expr.Names(),
+					ExpressionAttributeValues: expr.Values(),
+				})
+				if err != nil {
+					return 0, err
+				}
+				return *out.Count, nil
+			}
+		`, `
+			package main
+
+			import (
+				"context"
+
+				"github.com/aws/aws-sdk-go-v2/aws"
+				"github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression"
+				"github.com/aws/aws-sdk-go-v2/service/dynamodb"
+			)
+
+			func active(ctx context.Context, svc *dynamodb.Client, since int64) (int64, error) {
+				filter := expression.Name("updated").GreaterThan(expression.Value(since))
+				expr, err := expression.NewBuilder().WithFilter(filter).Build()
+				if err != nil {
+					return 0, err
+				}
+				out, err := svc.Scan(ctx, &dynamodb.ScanInput{
+					TableName:                 aws.String("t"),
+					FilterExpression:          expr.Filter(),
+					ExpressionAttributeNames:  expr.Names(),
+					ExpressionAttributeValues: expr.Values(),
+				})
+				if err != nil {
+					return 0, err
+				}
+				return int64(out.Count), nil
+			}
+		`),
+	)
+}
+
+// v2's encoder stores an empty collection or a struct by rules of its own, so an
+// operand that is not a scalar holds the file back rather than change what the
+// condition compares against.
+func TestMigrateBlockedByNonScalarExpressionValue(t *testing.T) {
+	migrateSpec().RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"github.com/aws/aws-sdk-go/service/dynamodb/expression"
+			)
+
+			func tagged(tags []string) (expression.Expression, error) {
+				return expression.NewBuilder().
+					WithFilter(expression.Name("tags").Equal(expression.Value(tags))).
+					Build()
+			}
+		`),
+	)
+}
+
+// v1 stored an empty string as NULL and v2 stores it as itself, so the literal
+// the condition compares against would change.
+func TestMigrateBlockedByEmptyStringExpressionValue(t *testing.T) {
+	migrateSpec().RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"github.com/aws/aws-sdk-go/service/dynamodb/expression"
+			)
+
+			func unnamed() (expression.Expression, error) {
+				return expression.NewBuilder().
+					WithFilter(expression.Name("name").Equal(expression.Value(""))).
+					Build()
+			}
+		`),
+	)
+}
+
+// Names returns map[string]string in v2 where v1 returned map[string]*string, so
+// a read of it outside an input field is a read of a different type.
+func TestMigrateBlockedByExpressionNamesRead(t *testing.T) {
+	migrateSpec().RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"github.com/aws/aws-sdk-go/service/dynamodb/expression"
+			)
+
+			func alias(expr expression.Expression) string {
+				return *expr.Names()["#n"]
+			}
+		`),
+	)
+}
+
+// v2 moved or dropped these sub-packages; each holds the file back under a
+// reason naming where it went, rather than an import of a path v2 lacks.
+func TestMigrateBlockedByRelocatedSubpackages(t *testing.T) {
+	for name, src := range map[string]string{
+		"dynamodbattribute": `
+			package main
+
+			import (
+				"github.com/aws/aws-sdk-go/service/dynamodb"
+				"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+			)
+
+			func decode(out *dynamodb.GetItemOutput, v interface{}) error {
+				return dynamodbattribute.UnmarshalMap(out.Item, v)
+			}
+		`,
+		"s3crypto": `
+			package main
+
+			import (
+				"github.com/aws/aws-sdk-go/aws/session"
+				"github.com/aws/aws-sdk-go/service/s3/s3crypto"
+			)
+
+			func client(sess *session.Session) (*s3crypto.DecryptionClientV2, error) {
+				return s3crypto.NewDecryptionClientV2(sess, s3crypto.NewCryptoRegistry())
+			}
+		`,
+	} {
+		t.Run(name, func(t *testing.T) { migrateSpec().RewriteRun(t, test.Golang(src)) })
+	}
+}
+
+// v2 moved the token signer to feature/rds/auth as package auth; the import is
+// bound back to the name the file spells, and the call gains a context while the
+// session's credentials become the config's provider.
+func TestMigrateRdsAuthToken(t *testing.T) {
+	migrateSpec().RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"context"
+
+				"github.com/aws/aws-sdk-go/aws/session"
+				"github.com/aws/aws-sdk-go/service/rds/rdsutils"
+			)
+
+			func token(ctx context.Context, sess *session.Session, endpoint string) (string, error) {
+				return rdsutils.BuildAuthToken(endpoint, "us-east-1", "app", sess.Config.Credentials)
+			}
+		`, `
+			package main
+
+			import (
+				"context"
+
+				"github.com/aws/aws-sdk-go-v2/aws"
+				rdsutils "github.com/aws/aws-sdk-go-v2/feature/rds/auth"
+			)
+
+			func token(ctx context.Context, sess aws.Config, endpoint string) (string, error) {
+				return rdsutils.BuildAuthToken(ctx, endpoint, "us-east-1", "app", sess.Credentials)
+			}
+		`),
+	)
+}
+
+// A static pair becomes v2's static provider, which satisfies the
+// CredentialsProvider v2's BuildAuthToken takes.
+func TestMigrateRdsAuthTokenWithStaticCredentials(t *testing.T) {
+	migrateSpec().RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"github.com/aws/aws-sdk-go/aws/credentials"
+				"github.com/aws/aws-sdk-go/service/rds/rdsutils"
+			)
+
+			func token(id, secret string) (string, error) {
+				return rdsutils.BuildAuthToken("db:5432", "us-east-1", "app", credentials.NewStaticCredentials(id, secret, ""))
+			}
+		`, `
+			package main
+
+			import (
+				"context"
+
+				"github.com/aws/aws-sdk-go-v2/credentials"
+				rdsutils "github.com/aws/aws-sdk-go-v2/feature/rds/auth"
+			)
+
+			func token(id, secret string) (string, error) {
+				return rdsutils.BuildAuthToken(context.TODO(), "db:5432", "us-east-1", "app", credentials.NewStaticCredentialsProvider(id, secret, ""))
+			}
+		`),
+	)
+}
+
+// v2 dropped the connection-string builder, so a file using it is held back.
+func TestMigrateBlockedByRdsConnectionStringBuilder(t *testing.T) {
+	migrateSpec().RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"github.com/aws/aws-sdk-go/aws/session"
+				"github.com/aws/aws-sdk-go/service/rds/rdsutils"
+			)
+
+			func dsn(sess *session.Session) (string, error) {
+				return rdsutils.NewConnectionStringBuilder("db:3306", "us-east-1", "app", "orders", sess.Config.Credentials).
+					WithTCPFormat().
+					Build()
+			}
+		`),
+	)
+}
+
+// Credentials reached through a value the file did not build keep v1's type in
+// v2, which BuildAuthToken no longer takes.
+func TestMigrateBlockedByRdsCredentialsFromElsewhere(t *testing.T) {
+	migrateSpec().RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"example.com/platform/secrets"
+
+				"github.com/aws/aws-sdk-go/service/rds/rdsutils"
+			)
+
+			func token(h *secrets.Holder) (string, error) {
+				return rdsutils.BuildAuthToken("db:5432", "us-east-1", "app", h.Creds)
+			}
+		`),
+	)
+}
+
+// A session assigned from its constructor holds the config once migrated, so a
+// reach through its Config field is rewritten as for a declared session.
+func TestMigrateConfigReadOnConstructedSession(t *testing.T) {
+	migrateSpec().RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"fmt"
+
+				"github.com/aws/aws-sdk-go/aws"
+				"github.com/aws/aws-sdk-go/aws/session"
+			)
+
+			func main() {
+				sess := session.Must(session.NewSession(&aws.Config{Region: aws.String("us-east-1")}))
+				fmt.Println(*sess.Config.Region)
+			}
+		`, `
+			package main
+
+			import (
+				"context"
+				"fmt"
+
+				"github.com/aws/aws-sdk-go-v2/config"
+			)
+
+			func main() {
+				sess, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion("us-east-1"))
+				if err != nil {
+					panic(err)
+				}
+				fmt.Println(sess.Region)
+			}
+		`),
+	)
+}
+
+func imdsHelpersIn(pkg string) string {
+	return strings.Replace(imdsHelpers, "package main", "package "+pkg, 1)
+}
+
+const imdsHelpers = `
+				// Code generated by MigrateAwsSdkGoToV2. DO NOT EDIT.
+
+				package main
+
+				import (
+					"context"
+					"fmt"
+					"io"
+
+					"github.com/aws/aws-sdk-go-v2/feature/ec2/imds"
+				)
+
+				// awsCompatIMDSRegion stands in for aws-sdk-go v1's EC2Metadata.Region. v2 takes
+				// a context and answers with an output struct, so the call site keeps the shape
+				// it was written in by going through here.
+				func awsCompatIMDSRegion(ctx context.Context, c *imds.Client) (string, error) {
+					out, err := c.GetRegion(ctx, &imds.GetRegionInput{})
+					if err != nil {
+						return "", err
+					}
+					return out.Region, nil
+				}
+
+				// awsCompatIMDSAvailable stands in for aws-sdk-go v1's EC2Metadata.Available,
+				// which reported whether the instance ID could be read.
+				func awsCompatIMDSAvailable(ctx context.Context, c *imds.Client) bool {
+					out, err := c.GetMetadata(ctx, &imds.GetMetadataInput{Path: "instance-id"})
+					if err != nil {
+						return false
+					}
+					defer out.Content.Close()
+					_, err = io.ReadAll(out.Content)
+					return err == nil
+				}
+
+				// awsCompatIMDSIAMInfo stands in for aws-sdk-go v1's EC2Metadata.IAMInfo, which
+				// also failed where the metadata reported a code other than Success.
+				func awsCompatIMDSIAMInfo(ctx context.Context, c *imds.Client) (imds.IAMInfo, error) {
+					out, err := c.GetIAMInfo(ctx, &imds.GetIAMInfoInput{})
+					if err != nil {
+						return imds.IAMInfo{}, err
+					}
+					if out.IAMInfo.Code != "Success" {
+						return imds.IAMInfo{}, fmt.Errorf("EC2MetadataError: failed to get EC2 IAM Info (%s)", out.IAMInfo.Code)
+					}
+					return out.IAMInfo, nil
+				}
+`
+
+// aws/aws-node-termination-handler's shape: a NewConfig chain held in a local
+// that reaches the session only through its options' Config. The local folds
+// into the load, and the credentials read off the session's config become a
+// Retrieve on v2's.
+func TestMigrateOptionsConfigLocal(t *testing.T) {
+	migrateSpec().RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"fmt"
+
+				"github.com/aws/aws-sdk-go/aws"
+				"github.com/aws/aws-sdk-go/aws/endpoints"
+				"github.com/aws/aws-sdk-go/aws/session"
+				"github.com/aws/aws-sdk-go/service/ec2"
+			)
+
+			func run(region, endpoint string) *ec2.EC2 {
+				cfg := aws.NewConfig().WithRegion(region).WithEndpoint(endpoint).WithSTSRegionalEndpoint(endpoints.RegionalSTSEndpoint)
+				sess := session.Must(session.NewSessionWithOptions(session.Options{
+					Config:            *cfg,
+					SharedConfigState: session.SharedConfigEnable,
+				}))
+				creds, err := sess.Config.Credentials.Get()
+				if err != nil {
+					panic(err)
+				}
+				fmt.Println(creds.ProviderName)
+				return ec2.New(sess)
+			}
+		`, `
+			package main
+
+			import (
+				"context"
+				"fmt"
+
+				"github.com/aws/aws-sdk-go-v2/config"
+				"github.com/aws/aws-sdk-go-v2/service/ec2"
+			)
+
+			func run(region, endpoint string) *ec2.Client {
+				sess, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion(region), config.WithBaseEndpoint(awsCompatEndpoint(endpoint)))
+				if err != nil {
+					panic(err)
+				}
+				creds, err := sess.Credentials.Retrieve(context.TODO())
+				if err != nil {
+					panic(err)
+				}
+				fmt.Println(creds.Source)
+				return ec2.NewFromConfig(sess)
+			}
+		`),
+		test.Generated("zz_awssdkv2_config.go", configHelpersIn("main")),
+	)
+}
+
+// in4it/ecs-deploy's shape: a service v2 spells differently, elbv2 being
+// elasticloadbalancingv2. The import is bound back to the name the file spells,
+// and its types package takes an alias of that name.
+func TestMigrateRenamedServicePackage(t *testing.T) {
+	migrateSpec().RewriteRun(t,
+		test.Golang(`
+			package ecs
+
+			import (
+				"github.com/aws/aws-sdk-go/aws"
+				"github.com/aws/aws-sdk-go/aws/session"
+				"github.com/aws/aws-sdk-go/service/elbv2"
+			)
+
+			func listeners(sess *session.Session, arn string) ([]*elbv2.Listener, error) {
+				svc := elbv2.New(sess)
+				out, err := svc.DescribeListeners(&elbv2.DescribeListenersInput{LoadBalancerArn: aws.String(arn)})
+				if err != nil {
+					return nil, err
+				}
+				return out.Listeners, nil
+			}
+		`, `
+			package ecs
+
+			import (
+				"context"
+
+				"github.com/aws/aws-sdk-go-v2/aws"
+				elbv2 "github.com/aws/aws-sdk-go-v2/service/elasticloadbalancingv2"
+				elbv2types "github.com/aws/aws-sdk-go-v2/service/elasticloadbalancingv2/types"
+			)
+
+			func listeners(sess aws.Config, arn string) ([]*elbv2types.Listener, error) {
+				svc := elbv2.NewFromConfig(sess)
+				out, err := svc.DescribeListeners(context.TODO(), &elbv2.DescribeListenersInput{LoadBalancerArn: aws.String(arn)})
+				if err != nil {
+					return nil, err
+				}
+				return awsCompatPtrs(out.Listeners), nil
+			}
+		`),
+		test.Generated("zz_awssdkv2_compat.go", compatHelpersIn("ecs")),
+	)
+}
+
+// in4it/ecs-deploy's shape: fluent setters for a map v2 holds by value and for
+// a nested shape, which become the assignments a field takes.
+func TestMigrateFluentSetterOfMapAndShape(t *testing.T) {
+	migrateSpec().RewriteRun(t,
+		test.Golang(`
+			package ecs
+
+			import (
+				"github.com/aws/aws-sdk-go/aws"
+				"github.com/aws/aws-sdk-go/service/cloudwatchlogs"
+				"github.com/aws/aws-sdk-go/service/ecs"
+			)
+
+			func logGroup(name, cluster string) *cloudwatchlogs.CreateLogGroupInput {
+				input := &cloudwatchlogs.CreateLogGroupInput{LogGroupName: aws.String(name)}
+				tags := make(map[string]*string)
+				tags["Cluster"] = aws.String(cluster)
+				input.SetTags(tags)
+				return input
+			}
+
+			func volume(name, path string) *ecs.Volume {
+				volume := &ecs.Volume{Name: aws.String(name)}
+				volume.SetHost(&ecs.HostVolumeProperties{SourcePath: aws.String(path)})
+				return volume
+			}
+		`, `
+			package ecs
+
+			import (
+				"github.com/aws/aws-sdk-go-v2/aws"
+				"github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs"
+				ecstypes "github.com/aws/aws-sdk-go-v2/service/ecs/types"
+			)
+
+			func logGroup(name, cluster string) *cloudwatchlogs.CreateLogGroupInput {
+				input := &cloudwatchlogs.CreateLogGroupInput{LogGroupName: aws.String(name)}
+				tags := make(map[string]*string)
+				tags["Cluster"] = aws.String(cluster)
+				input.Tags = awsCompatValsMap(tags)
+				return input
+			}
+
+			func volume(name, path string) *ecstypes.Volume {
+				volume := &ecstypes.Volume{Name: aws.String(name)}
+				volume.Host = &ecstypes.HostVolumeProperties{SourcePath: aws.String(path)}
+				return volume
+			}
+		`),
+		test.Generated("zz_awssdkv2_compat.go", compatHelpersIn("ecs")),
+	)
+}
+
+// in4it/ecs-deploy's shape: a waiter given a context and an attempt bound. v2
+// bounds the wait by duration, which is the bound's attempts at the constant
+// delay v1 waited between them.
+func TestMigrateWaiterWithAttemptBound(t *testing.T) {
+	migrateSpec().RewriteRun(t,
+		test.Golang(`
+			package ecs
+
+			import (
+				"context"
+
+				"github.com/aws/aws-sdk-go/aws"
+				"github.com/aws/aws-sdk-go/aws/request"
+				"github.com/aws/aws-sdk-go/service/ecs"
+			)
+
+			func stable(svc *ecs.ECS, cluster, service string, maxWaitMinutes int) error {
+				maxAttempts := maxWaitMinutes * 4
+				input := &ecs.DescribeServicesInput{
+					Cluster:  aws.String(cluster),
+					Services: []*string{aws.String(service)},
+				}
+				return svc.WaitUntilServicesStableWithContext(context.Background(), input, request.WithWaiterMaxAttempts(maxAttempts))
+			}
+		`, `
+			package ecs
+
+			import (
+				"context"
+				"time"
+
+				"github.com/aws/aws-sdk-go-v2/aws"
+				"github.com/aws/aws-sdk-go-v2/service/ecs"
+			)
+
+			func stable(svc *ecs.Client, cluster, service string, maxWaitMinutes int) error {
+				maxAttempts := maxWaitMinutes * 4
+				input := &ecs.DescribeServicesInput{
+					Cluster:  aws.String(cluster),
+					Services: awsCompatVals([]*string{aws.String(service)}),
+				}
+				return ecs.NewServicesStableWaiter(svc).Wait(context.Background(), input, time.Duration(maxAttempts) * 15 * time.Second)
+			}
+		`),
+		test.Generated("zz_awssdkv2_compat.go", compatHelpersIn("ecs")),
+	)
+}
+
+// in4it/ecs-deploy's shape: a fluent setter for a count v2 narrowed from int64
+// to int32, given the program's int64.
+func TestMigrateFluentSetterNarrowed(t *testing.T) {
+	migrateSpec().RewriteRun(t,
+		test.Golang(`
+			package ecs
+
+			import "github.com/aws/aws-sdk-go/service/elbv2"
+
+			func threshold(input *elbv2.CreateTargetGroupInput, healthy int64) {
+				input.SetHealthyThresholdCount(healthy)
+			}
+		`, `
+			package ecs
+
+			import (
+				"github.com/aws/aws-sdk-go-v2/aws"
+				elbv2 "github.com/aws/aws-sdk-go-v2/service/elasticloadbalancingv2"
+			)
+
+			func threshold(input *elbv2.CreateTargetGroupInput, healthy int64) {
+				input.HealthyThresholdCount = aws.Int32(int32(healthy))
+			}
+		`),
+	)
+}
+
+// in4it/ecs-deploy's shape: a field v2 narrowed from *int64 to *int32, read
+// through aws.Int64Value. It is read at v2's width and widened back.
+func TestMigrateNarrowedFieldValueRead(t *testing.T) {
+	migrateSpec().RewriteRun(t,
+		test.Golang(`
+			package ecs
+
+			import (
+				"github.com/aws/aws-sdk-go/aws"
+				"github.com/aws/aws-sdk-go/service/autoscaling"
+			)
+
+			func sizes(g *autoscaling.Group) (int64, int64) {
+				return aws.Int64Value(g.MinSize), aws.Int64Value(g.MaxSize)
+			}
+		`, `
+			package ecs
+
+			import (
+				"github.com/aws/aws-sdk-go-v2/aws"
+				autoscalingtypes "github.com/aws/aws-sdk-go-v2/service/autoscaling/types"
+			)
+
+			func sizes(g *autoscalingtypes.AutoScalingGroup) (int64, int64) {
+				return int64(aws.ToInt32(g.MinSize)), int64(aws.ToInt32(g.MaxSize))
+			}
+		`),
+	)
+}
+
+// in4it/ecs-deploy's shape: a shape compared with its empty literal, which v1
+// allowed since its shapes held only pointers. v2's hold lists, so the test
+// becomes the generated zero check.
+func TestMigrateShapeComparedWithEmptyLiteral(t *testing.T) {
+	migrateSpec().RewriteRun(t,
+		test.Golang(`
+			package ecs
+
+			import "github.com/aws/aws-sdk-go/service/ecs"
+
+			func configured(dc *ecs.DeploymentConfiguration) bool {
+				return (ecs.DeploymentConfiguration{}) != *dc
+			}
+		`, `
+			package ecs
+
+			import ecstypes "github.com/aws/aws-sdk-go-v2/service/ecs/types"
+
+			func configured(dc *ecstypes.DeploymentConfiguration) bool {
+				return !awsCompatIsZero(*dc)
+			}
+		`),
+		test.Generated("zz_awssdkv2_zero.go", `
+			// Code generated by MigrateAwsSdkGoToV2. DO NOT EDIT.
+
+			package ecs
+
+			import "reflect"
+
+			// awsCompatIsZero reports whether a shape has no field set, which aws-sdk-go
+			// v1 tested by comparing it with its empty literal.
+			func awsCompatIsZero(v any) bool {
+				return reflect.ValueOf(v).IsZero()
+			}
+		`),
+	)
+}
+
+// pshima/consul-snapshot's shape: golang.org/x/net/context bound to the name
+// context, whose Context is the standard library's. The context v2's calls
+// take comes from it rather than from a second import of the name.
+func TestMigrateContextFromXNet(t *testing.T) {
+	migrateSpec().RewriteRun(t,
+		test.Golang(`
+			package restore
+
+			import (
+				"github.com/aws/aws-sdk-go/aws"
+				"github.com/aws/aws-sdk-go/service/s3"
+				"golang.org/x/net/context"
+			)
+
+			var _ context.Context
+
+			func get(svc *s3.S3, bucket string) error {
+				_, err := svc.HeadBucket(&s3.HeadBucketInput{Bucket: aws.String(bucket)})
+				return err
+			}
+		`, `
+			package restore
+
+			import (
+				"github.com/aws/aws-sdk-go-v2/aws"
+				"github.com/aws/aws-sdk-go-v2/service/s3"
+				"golang.org/x/net/context"
+			)
+
+			var _ context.Context
+
+			func get(svc *s3.Client, bucket string) error {
+				_, err := svc.HeadBucket(context.TODO(), &s3.HeadBucketInput{Bucket: aws.String(bucket)})
+				return err
+			}
+		`),
+	)
+}
+
+// keikoproj/governor's shape: a field v2 narrowed from *int64 to *int32, set to
+// the address of an int64. Narrowing needs a copy, so the value is converted
+// and its address taken by v2's helper.
+func TestMigrateNarrowedFieldFromAddress(t *testing.T) {
+	migrateSpec().RewriteRun(t,
+		test.Golang(`
+			package reaper
+
+			import "github.com/aws/aws-sdk-go/service/autoscaling"
+
+			type mock struct{ DesiredCapacity int64 }
+
+			func group(m mock) *autoscaling.Group {
+				return &autoscaling.Group{DesiredCapacity: &m.DesiredCapacity}
+			}
+		`, `
+			package reaper
+
+			import (
+				"github.com/aws/aws-sdk-go-v2/aws"
+				autoscalingtypes "github.com/aws/aws-sdk-go-v2/service/autoscaling/types"
+			)
+
+			type mock struct{ DesiredCapacity int64 }
+
+			func group(m mock) *autoscalingtypes.AutoScalingGroup {
+				return &autoscalingtypes.AutoScalingGroup{DesiredCapacity: aws.Int32(int32(m.DesiredCapacity))}
+			}
+		`),
+	)
 }

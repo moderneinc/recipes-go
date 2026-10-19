@@ -1500,6 +1500,7 @@ F CreateReplicationGroupInput.Durability Durability
 F CreateReplicationGroupInput.IpDiscovery IpDiscovery
 F CreateReplicationGroupInput.NetworkType NetworkType
 F CreateReplicationGroupInput.TransitEncryptionMode TransitEncryptionMode
+F CreateServerlessCacheInput.ConnectionType ConnectionType
 F CreateServerlessCacheInput.NetworkType NetworkType
 F DataStorage.Unit DataStorageUnit
 F DescribeEventsInput.SourceType SourceType
@@ -1546,6 +1547,7 @@ F ReplicationGroupPendingModifiedValues.AuthTokenStatus AuthTokenUpdateStatus
 F ReplicationGroupPendingModifiedValues.AutomaticFailoverStatus PendingAutomaticFailoverStatus
 F ReplicationGroupPendingModifiedValues.ClusterMode ClusterMode
 F ReplicationGroupPendingModifiedValues.TransitEncryptionMode TransitEncryptionMode
+F ServerlessCache.ConnectionType ConnectionType
 F ServerlessCache.NetworkType NetworkType
 F ServerlessCache.StorageEncryptionType StorageEncryptionType
 F ServiceUpdate.ServiceUpdateSeverity ServiceUpdateSeverity
@@ -1938,6 +1940,7 @@ T CloudWatchLogsDestinationDetails
 T ClusterMode
 T ClusterQuotaForCustomerExceededFault
 T ConfigureShard
+T ConnectionType
 T CustomerNodeEndpoint
 T DataStorage
 T DataStorageUnit
@@ -2094,6 +2097,8 @@ E ChangeTypeRequiresReboot ChangeType
 E ClusterModeCompatible ClusterMode
 E ClusterModeDisabled ClusterMode
 E ClusterModeEnabled ClusterMode
+E ConnectionTypePublic ConnectionType
+E ConnectionTypeVpc ConnectionType
 E DataStorageUnitGb DataStorageUnit
 E DataTieringStatusDisabled DataTieringStatus
 E DataTieringStatusEnabled DataTieringStatus
@@ -2171,3 +2176,161 @@ E UpdateActionStatusScheduling UpdateActionStatus
 E UpdateActionStatusStopped UpdateActionStatus
 E UpdateActionStatusStopping UpdateActionStatus
 E UpdateActionStatusWaitingToStart UpdateActionStatus
+Y CacheClusterAvailable 15 40
+Y CacheClusterDeleted 15 40
+Y ReplicationGroupAvailable 15 40
+Y ReplicationGroupDeleted 15 40
+K AddTagsToResourceInput 001 ResourceName req nil
+K AddTagsToResourceInput 002 Tags req nil
+K AuthenticationMode 001 Passwords len 1 container
+K AuthorizeCacheSecurityGroupIngressInput 001 CacheSecurityGroupName req nil
+K AuthorizeCacheSecurityGroupIngressInput 002 EC2SecurityGroupName req nil
+K AuthorizeCacheSecurityGroupIngressInput 003 EC2SecurityGroupOwnerId req nil
+K BatchApplyUpdateActionInput 001 ServiceUpdateName req nil
+K BatchStopUpdateActionInput 001 ServiceUpdateName req nil
+K CacheUsageLimits 001 DataStorage nest DataStorage
+K CompleteMigrationInput 001 ReplicationGroupId req nil
+K ConfigureShard 001 NewReplicaCount req nil
+K ConfigureShard 002 NodeGroupId req nil
+K ConfigureShard 003 NodeGroupId len 1 ptr
+K CopyServerlessCacheSnapshotInput 001 SourceServerlessCacheSnapshotName req nil
+K CopyServerlessCacheSnapshotInput 002 TargetServerlessCacheSnapshotName req nil
+K CopySnapshotInput 001 SourceSnapshotName req nil
+K CopySnapshotInput 002 TargetSnapshotName req nil
+K CreateCacheClusterInput 001 CacheClusterId req nil
+K CreateCacheParameterGroupInput 001 CacheParameterGroupFamily req nil
+K CreateCacheParameterGroupInput 002 CacheParameterGroupName req nil
+K CreateCacheParameterGroupInput 003 Description req nil
+K CreateCacheSecurityGroupInput 001 CacheSecurityGroupName req nil
+K CreateCacheSecurityGroupInput 002 Description req nil
+K CreateCacheSubnetGroupInput 001 CacheSubnetGroupDescription req nil
+K CreateCacheSubnetGroupInput 002 CacheSubnetGroupName req nil
+K CreateCacheSubnetGroupInput 003 SubnetIds req nil
+K CreateGlobalReplicationGroupInput 001 GlobalReplicationGroupIdSuffix req nil
+K CreateGlobalReplicationGroupInput 002 PrimaryReplicationGroupId req nil
+K CreateReplicationGroupInput 001 ReplicationGroupDescription req nil
+K CreateReplicationGroupInput 002 ReplicationGroupId req nil
+K CreateReplicationGroupInput 003 UserGroupIds len 1 container
+K CreateReplicationGroupInput 004 NodeGroupConfiguration each NodeGroupConfiguration slice
+K CreateServerlessCacheInput 001 Engine req nil
+K CreateServerlessCacheInput 002 ServerlessCacheName req nil
+K CreateServerlessCacheInput 003 CacheUsageLimits nest CacheUsageLimits
+K CreateServerlessCacheSnapshotInput 001 ServerlessCacheName req nil
+K CreateServerlessCacheSnapshotInput 002 ServerlessCacheSnapshotName req nil
+K CreateSnapshotInput 001 SnapshotName req nil
+K CreateUserGroupInput 001 Engine req nil
+K CreateUserGroupInput 002 UserGroupId req nil
+K CreateUserGroupInput 003 UserIds len 1 container
+K CreateUserInput 001 AccessString req nil
+K CreateUserInput 002 Engine req nil
+K CreateUserInput 003 Passwords len 1 container
+K CreateUserInput 004 UserId req nil
+K CreateUserInput 005 UserId len 1 ptr
+K CreateUserInput 006 UserName req nil
+K CreateUserInput 007 UserName len 1 ptr
+K CreateUserInput 008 AuthenticationMode nest AuthenticationMode
+K DataStorage 001 Unit req empty
+K DecreaseNodeGroupsInGlobalReplicationGroupInput 001 ApplyImmediately req nil
+K DecreaseNodeGroupsInGlobalReplicationGroupInput 002 GlobalReplicationGroupId req nil
+K DecreaseNodeGroupsInGlobalReplicationGroupInput 003 NodeGroupCount req nil
+K DecreaseReplicaCountInput 001 ApplyImmediately req nil
+K DecreaseReplicaCountInput 002 ReplicationGroupId req nil
+K DecreaseReplicaCountInput 003 ReplicaConfiguration each ConfigureShard slice
+K DeleteCacheClusterInput 001 CacheClusterId req nil
+K DeleteCacheParameterGroupInput 001 CacheParameterGroupName req nil
+K DeleteCacheSecurityGroupInput 001 CacheSecurityGroupName req nil
+K DeleteCacheSubnetGroupInput 001 CacheSubnetGroupName req nil
+K DeleteGlobalReplicationGroupInput 001 GlobalReplicationGroupId req nil
+K DeleteGlobalReplicationGroupInput 002 RetainPrimaryReplicationGroup req nil
+K DeleteReplicationGroupInput 001 ReplicationGroupId req nil
+K DeleteServerlessCacheInput 001 ServerlessCacheName req nil
+K DeleteServerlessCacheSnapshotInput 001 ServerlessCacheSnapshotName req nil
+K DeleteSnapshotInput 001 SnapshotName req nil
+K DeleteUserGroupInput 001 UserGroupId req nil
+K DeleteUserInput 001 UserId req nil
+K DeleteUserInput 002 UserId len 1 ptr
+K DescribeCacheParametersInput 001 CacheParameterGroupName req nil
+K DescribeEngineDefaultParametersInput 001 CacheParameterGroupFamily req nil
+K DescribeUsersInput 001 UserId len 1 ptr
+K DescribeUsersInput 002 Filters each Filter slice
+K DisassociateGlobalReplicationGroupInput 001 GlobalReplicationGroupId req nil
+K DisassociateGlobalReplicationGroupInput 002 ReplicationGroupId req nil
+K DisassociateGlobalReplicationGroupInput 003 ReplicationGroupRegion req nil
+K ExportServerlessCacheSnapshotInput 001 S3BucketName req nil
+K ExportServerlessCacheSnapshotInput 002 ServerlessCacheSnapshotName req nil
+K FailoverGlobalReplicationGroupInput 001 GlobalReplicationGroupId req nil
+K FailoverGlobalReplicationGroupInput 002 PrimaryRegion req nil
+K FailoverGlobalReplicationGroupInput 003 PrimaryReplicationGroupId req nil
+K Filter 001 Name req nil
+K Filter 002 Values req nil
+K Filter 003 Values len 1 container
+K IncreaseNodeGroupsInGlobalReplicationGroupInput 001 ApplyImmediately req nil
+K IncreaseNodeGroupsInGlobalReplicationGroupInput 002 GlobalReplicationGroupId req nil
+K IncreaseNodeGroupsInGlobalReplicationGroupInput 003 NodeGroupCount req nil
+K IncreaseNodeGroupsInGlobalReplicationGroupInput 004 RegionalConfigurations each RegionalConfiguration slice
+K IncreaseReplicaCountInput 001 ApplyImmediately req nil
+K IncreaseReplicaCountInput 002 ReplicationGroupId req nil
+K IncreaseReplicaCountInput 003 ReplicaConfiguration each ConfigureShard slice
+K ListTagsForResourceInput 001 ResourceName req nil
+K ModifyCacheClusterInput 001 CacheClusterId req nil
+K ModifyCacheParameterGroupInput 001 CacheParameterGroupName req nil
+K ModifyCacheParameterGroupInput 002 ParameterNameValues req nil
+K ModifyCacheSubnetGroupInput 001 CacheSubnetGroupName req nil
+K ModifyGlobalReplicationGroupInput 001 ApplyImmediately req nil
+K ModifyGlobalReplicationGroupInput 002 GlobalReplicationGroupId req nil
+K ModifyReplicationGroupInput 001 ReplicationGroupId req nil
+K ModifyReplicationGroupShardConfigurationInput 001 ApplyImmediately req nil
+K ModifyReplicationGroupShardConfigurationInput 002 NodeGroupCount req nil
+K ModifyReplicationGroupShardConfigurationInput 003 ReplicationGroupId req nil
+K ModifyReplicationGroupShardConfigurationInput 004 ReshardingConfiguration each ReshardingConfiguration slice
+K ModifyServerlessCacheInput 001 ServerlessCacheName req nil
+K ModifyServerlessCacheInput 002 CacheUsageLimits nest CacheUsageLimits
+K ModifyUserGroupInput 001 UserGroupId req nil
+K ModifyUserGroupInput 002 UserIdsToAdd len 1 container
+K ModifyUserGroupInput 003 UserIdsToRemove len 1 container
+K ModifyUserInput 001 Passwords len 1 container
+K ModifyUserInput 002 UserId req nil
+K ModifyUserInput 003 UserId len 1 ptr
+K ModifyUserInput 004 AuthenticationMode nest AuthenticationMode
+K NodeGroupConfiguration 001 NodeGroupId len 1 ptr
+K PurchaseReservedCacheNodesOfferingInput 001 ReservedCacheNodesOfferingId req nil
+K RebalanceSlotsInGlobalReplicationGroupInput 001 ApplyImmediately req nil
+K RebalanceSlotsInGlobalReplicationGroupInput 002 GlobalReplicationGroupId req nil
+K RebootCacheClusterInput 001 CacheClusterId req nil
+K RebootCacheClusterInput 002 CacheNodeIdsToReboot req nil
+K RegionalConfiguration 001 ReplicationGroupId req nil
+K RegionalConfiguration 002 ReplicationGroupRegion req nil
+K RegionalConfiguration 003 ReshardingConfiguration req nil
+K RegionalConfiguration 004 ReshardingConfiguration each ReshardingConfiguration slice
+K RemoveTagsFromResourceInput 001 ResourceName req nil
+K RemoveTagsFromResourceInput 002 TagKeys req nil
+K ResetCacheParameterGroupInput 001 CacheParameterGroupName req nil
+K ReshardingConfiguration 001 NodeGroupId len 1 ptr
+K RevokeCacheSecurityGroupIngressInput 001 CacheSecurityGroupName req nil
+K RevokeCacheSecurityGroupIngressInput 002 EC2SecurityGroupName req nil
+K RevokeCacheSecurityGroupIngressInput 003 EC2SecurityGroupOwnerId req nil
+K StartMigrationInput 001 CustomerNodeEndpointList req nil
+K StartMigrationInput 002 ReplicationGroupId req nil
+K TestFailoverInput 001 NodeGroupId req nil
+K TestFailoverInput 002 NodeGroupId len 1 ptr
+K TestFailoverInput 003 ReplicationGroupId req nil
+K TestMigrationInput 001 CustomerNodeEndpointList req nil
+K TestMigrationInput 002 ReplicationGroupId req nil
+G DescribeCacheClusters Marker Marker
+G DescribeCacheEngineVersions Marker Marker
+G DescribeCacheParameterGroups Marker Marker
+G DescribeCacheParameters Marker Marker
+G DescribeCacheSecurityGroups Marker Marker
+G DescribeCacheSubnetGroups Marker Marker
+G DescribeEvents Marker Marker
+G DescribeGlobalReplicationGroups Marker Marker
+G DescribeReplicationGroups Marker Marker
+G DescribeReservedCacheNodes Marker Marker
+G DescribeReservedCacheNodesOfferings Marker Marker
+G DescribeServerlessCacheSnapshots NextToken NextToken
+G DescribeServerlessCaches NextToken NextToken
+G DescribeServiceUpdates Marker Marker
+G DescribeSnapshots Marker Marker
+G DescribeUpdateActions Marker Marker
+G DescribeUserGroups Marker Marker
+G DescribeUsers Marker Marker

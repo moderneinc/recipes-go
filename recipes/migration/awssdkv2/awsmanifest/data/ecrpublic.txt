@@ -1,0 +1,601 @@
+C ECRPublic
+S AuthResolverParameters
+S AuthSchemeResolver
+S BatchCheckLayerAvailabilityInput
+S BatchCheckLayerAvailabilityOutput
+S BatchDeleteImageInput
+S BatchDeleteImageOutput
+S Client
+S CompleteLayerUploadInput
+S CompleteLayerUploadOutput
+S CreateRepositoryInput
+S CreateRepositoryOutput
+S DeleteRepositoryInput
+S DeleteRepositoryOutput
+S DeleteRepositoryPolicyInput
+S DeleteRepositoryPolicyOutput
+S DescribeImageTagsAPIClient
+S DescribeImageTagsInput
+S DescribeImageTagsOutput
+S DescribeImageTagsPaginator
+S DescribeImageTagsPaginatorOptions
+S DescribeImagesAPIClient
+S DescribeImagesInput
+S DescribeImagesOutput
+S DescribeImagesPaginator
+S DescribeImagesPaginatorOptions
+S DescribeRegistriesAPIClient
+S DescribeRegistriesInput
+S DescribeRegistriesOutput
+S DescribeRegistriesPaginator
+S DescribeRegistriesPaginatorOptions
+S DescribeRepositoriesAPIClient
+S DescribeRepositoriesInput
+S DescribeRepositoriesOutput
+S DescribeRepositoriesPaginator
+S DescribeRepositoriesPaginatorOptions
+S EndpointParameters
+S EndpointResolver
+S EndpointResolverFromURL
+S EndpointResolverFunc
+S EndpointResolverOptions
+S EndpointResolverV2
+S GetAuthorizationTokenInput
+S GetAuthorizationTokenOutput
+S GetRegistryCatalogDataInput
+S GetRegistryCatalogDataOutput
+S GetRepositoryCatalogDataInput
+S GetRepositoryCatalogDataOutput
+S GetRepositoryPolicyInput
+S GetRepositoryPolicyOutput
+S HTTPClient
+S HTTPSignerV4
+S InitiateLayerUploadInput
+S InitiateLayerUploadOutput
+S ListTagsForResourceInput
+S ListTagsForResourceOutput
+S New
+S NewDefaultEndpointResolver
+S NewDefaultEndpointResolverV2
+S NewDescribeImageTagsPaginator
+S NewDescribeImagesPaginator
+S NewDescribeRegistriesPaginator
+S NewDescribeRepositoriesPaginator
+S NewFromConfig
+S Options
+S PutImageInput
+S PutImageOutput
+S PutRegistryCatalogDataInput
+S PutRegistryCatalogDataOutput
+S PutRepositoryCatalogDataInput
+S PutRepositoryCatalogDataOutput
+S ResolveEndpoint
+S ServiceAPIVersion
+S ServiceID
+S SetRepositoryPolicyInput
+S SetRepositoryPolicyOutput
+S TagResourceInput
+S TagResourceOutput
+S TypeRegistry
+S UntagResourceInput
+S UntagResourceOutput
+S UploadLayerPartInput
+S UploadLayerPartOutput
+S WithAPIOptions
+S WithEndpointResolver
+S WithEndpointResolverV2
+S WithSigV4SigningName
+S WithSigV4SigningRegion
+O BatchCheckLayerAvailability
+O BatchDeleteImage
+O CompleteLayerUpload
+O CreateRepository
+O DeleteRepository
+O DeleteRepositoryPolicy
+O DescribeImageTags
+O DescribeImages
+O DescribeRegistries
+O DescribeRepositories
+O GetAuthorizationToken
+O GetRegistryCatalogData
+O GetRepositoryCatalogData
+O GetRepositoryPolicy
+O InitiateLayerUpload
+O ListTagsForResource
+O PutImage
+O PutRegistryCatalogData
+O PutRepositoryCatalogData
+O SetRepositoryPolicy
+O TagResource
+O UntagResource
+O UploadLayerPart
+X ErrCodeEmptyUploadException EmptyUploadException
+X ErrCodeImageAlreadyExistsException ImageAlreadyExistsException
+X ErrCodeImageDigestDoesNotMatchException ImageDigestDoesNotMatchException
+X ErrCodeImageNotFoundException ImageNotFoundException
+X ErrCodeImageTagAlreadyExistsException ImageTagAlreadyExistsException
+X ErrCodeInvalidLayerException InvalidLayerException
+X ErrCodeInvalidLayerPartException InvalidLayerPartException
+X ErrCodeInvalidParameterException InvalidParameterException
+X ErrCodeInvalidTagParameterException InvalidTagParameterException
+X ErrCodeLayerAlreadyExistsException LayerAlreadyExistsException
+X ErrCodeLayerPartTooSmallException LayerPartTooSmallException
+X ErrCodeLayersNotFoundException LayersNotFoundException
+X ErrCodeLimitExceededException LimitExceededException
+X ErrCodeReferencedImagesNotFoundException ReferencedImagesNotFoundException
+X ErrCodeRegistryNotFoundException RegistryNotFoundException
+X ErrCodeRepositoryAlreadyExistsException RepositoryAlreadyExistsException
+X ErrCodeRepositoryCatalogDataNotFoundException RepositoryCatalogDataNotFoundException
+X ErrCodeRepositoryNotEmptyException RepositoryNotEmptyException
+X ErrCodeRepositoryNotFoundException RepositoryNotFoundException
+X ErrCodeRepositoryPolicyNotFoundException RepositoryPolicyNotFoundException
+X ErrCodeServerException ServerException
+X ErrCodeTooManyTagsException TooManyTagsException
+X ErrCodeUnsupportedCommandException UnsupportedCommandException
+X ErrCodeUploadNotFoundException UploadNotFoundException
+I DescribeImageTagsInput.MaxResults int64 int32
+I DescribeImagesInput.MaxResults int64 int32
+I DescribeRegistriesInput.MaxResults int64 int32
+I DescribeRepositoriesInput.MaxResults int64 int32
+R CreateRepositoryInput.CatalogData RepositoryCatalogDataInput
+R CreateRepositoryOutput.CatalogData RepositoryCatalogData
+R CreateRepositoryOutput.Repository Repository
+R DeleteRepositoryOutput.Repository Repository
+R GetAuthorizationTokenOutput.AuthorizationData AuthorizationData
+R GetRegistryCatalogDataOutput.RegistryCatalogData RegistryCatalogData
+R GetRepositoryCatalogDataOutput.CatalogData RepositoryCatalogData
+R Image.ImageId ImageIdentifier
+R ImageFailure.ImageId ImageIdentifier
+R ImageTagDetail.ImageDetail ReferencedImageDetail
+R PutImageOutput.Image Image
+R PutRegistryCatalogDataOutput.RegistryCatalogData RegistryCatalogData
+R PutRepositoryCatalogDataInput.CatalogData RepositoryCatalogDataInput
+R PutRepositoryCatalogDataOutput.CatalogData RepositoryCatalogData
+V AuthorizationData.AuthorizationToken string
+V BatchCheckLayerAvailabilityInput.RegistryId string
+V BatchCheckLayerAvailabilityInput.RepositoryName string
+V BatchDeleteImageInput.RegistryId string
+V BatchDeleteImageInput.RepositoryName string
+V CompleteLayerUploadInput.RegistryId string
+V CompleteLayerUploadInput.RepositoryName string
+V CompleteLayerUploadInput.UploadId string
+V CompleteLayerUploadOutput.LayerDigest string
+V CompleteLayerUploadOutput.RegistryId string
+V CompleteLayerUploadOutput.RepositoryName string
+V CompleteLayerUploadOutput.UploadId string
+V CreateRepositoryInput.RepositoryName string
+V DeleteRepositoryInput.RegistryId string
+V DeleteRepositoryInput.RepositoryName string
+V DeleteRepositoryPolicyInput.RegistryId string
+V DeleteRepositoryPolicyInput.RepositoryName string
+V DeleteRepositoryPolicyOutput.PolicyText string
+V DeleteRepositoryPolicyOutput.RegistryId string
+V DeleteRepositoryPolicyOutput.RepositoryName string
+V DescribeImageTagsInput.MaxResults int32
+V DescribeImageTagsInput.NextToken string
+V DescribeImageTagsInput.RegistryId string
+V DescribeImageTagsInput.RepositoryName string
+V DescribeImageTagsOutput.NextToken string
+V DescribeImagesInput.MaxResults int32
+V DescribeImagesInput.NextToken string
+V DescribeImagesInput.RegistryId string
+V DescribeImagesInput.RepositoryName string
+V DescribeImagesOutput.NextToken string
+V DescribeRegistriesInput.MaxResults int32
+V DescribeRegistriesInput.NextToken string
+V DescribeRegistriesOutput.NextToken string
+V DescribeRepositoriesInput.MaxResults int32
+V DescribeRepositoriesInput.NextToken string
+V DescribeRepositoriesInput.RegistryId string
+V DescribeRepositoriesOutput.NextToken string
+V EmptyUploadException.ErrorCodeOverride string
+V EmptyUploadException.Message string
+V EndpointParameters.Endpoint string
+V EndpointParameters.Region string
+V EndpointParameters.UseDualStack bool
+V EndpointParameters.UseFIPS bool
+V GetRepositoryCatalogDataInput.RegistryId string
+V GetRepositoryCatalogDataInput.RepositoryName string
+V GetRepositoryPolicyInput.RegistryId string
+V GetRepositoryPolicyInput.RepositoryName string
+V GetRepositoryPolicyOutput.PolicyText string
+V GetRepositoryPolicyOutput.RegistryId string
+V GetRepositoryPolicyOutput.RepositoryName string
+V Image.ImageManifest string
+V Image.ImageManifestMediaType string
+V Image.RegistryId string
+V Image.RepositoryName string
+V ImageAlreadyExistsException.ErrorCodeOverride string
+V ImageAlreadyExistsException.Message string
+V ImageDetail.ArtifactMediaType string
+V ImageDetail.ImageDigest string
+V ImageDetail.ImageManifestMediaType string
+V ImageDetail.ImageSizeInBytes int64
+V ImageDetail.RegistryId string
+V ImageDetail.RepositoryName string
+V ImageDigestDoesNotMatchException.ErrorCodeOverride string
+V ImageDigestDoesNotMatchException.Message string
+V ImageFailure.FailureReason string
+V ImageIdentifier.ImageDigest string
+V ImageIdentifier.ImageTag string
+V ImageNotFoundException.ErrorCodeOverride string
+V ImageNotFoundException.Message string
+V ImageTagAlreadyExistsException.ErrorCodeOverride string
+V ImageTagAlreadyExistsException.Message string
+V ImageTagDetail.ImageTag string
+V InitiateLayerUploadInput.RegistryId string
+V InitiateLayerUploadInput.RepositoryName string
+V InitiateLayerUploadOutput.PartSize int64
+V InitiateLayerUploadOutput.UploadId string
+V InvalidLayerException.ErrorCodeOverride string
+V InvalidLayerException.Message string
+V InvalidLayerPartException.ErrorCodeOverride string
+V InvalidLayerPartException.LastValidByteReceived int64
+V InvalidLayerPartException.Message string
+V InvalidLayerPartException.RegistryId string
+V InvalidLayerPartException.RepositoryName string
+V InvalidLayerPartException.UploadId string
+V InvalidParameterException.ErrorCodeOverride string
+V InvalidParameterException.Message string
+V InvalidTagParameterException.ErrorCodeOverride string
+V InvalidTagParameterException.Message string
+V Layer.LayerDigest string
+V Layer.LayerSize int64
+V Layer.MediaType string
+V LayerAlreadyExistsException.ErrorCodeOverride string
+V LayerAlreadyExistsException.Message string
+V LayerFailure.FailureReason string
+V LayerFailure.LayerDigest string
+V LayerPartTooSmallException.ErrorCodeOverride string
+V LayerPartTooSmallException.Message string
+V LayersNotFoundException.ErrorCodeOverride string
+V LayersNotFoundException.Message string
+V LimitExceededException.ErrorCodeOverride string
+V LimitExceededException.Message string
+V ListTagsForResourceInput.ResourceArn string
+V Options.BaseEndpoint string
+V PutImageInput.ImageDigest string
+V PutImageInput.ImageManifest string
+V PutImageInput.ImageManifestMediaType string
+V PutImageInput.ImageTag string
+V PutImageInput.RegistryId string
+V PutImageInput.RepositoryName string
+V PutRegistryCatalogDataInput.DisplayName string
+V PutRepositoryCatalogDataInput.RegistryId string
+V PutRepositoryCatalogDataInput.RepositoryName string
+V ReferencedImageDetail.ArtifactMediaType string
+V ReferencedImageDetail.ImageDigest string
+V ReferencedImageDetail.ImageManifestMediaType string
+V ReferencedImageDetail.ImageSizeInBytes int64
+V ReferencedImagesNotFoundException.ErrorCodeOverride string
+V ReferencedImagesNotFoundException.Message string
+V Registry.RegistryArn string
+V Registry.RegistryId string
+V Registry.RegistryUri string
+V Registry.Verified bool
+V RegistryAlias.Name string
+V RegistryCatalogData.DisplayName string
+V RegistryNotFoundException.ErrorCodeOverride string
+V RegistryNotFoundException.Message string
+V Repository.RegistryId string
+V Repository.RepositoryArn string
+V Repository.RepositoryName string
+V Repository.RepositoryUri string
+V RepositoryAlreadyExistsException.ErrorCodeOverride string
+V RepositoryAlreadyExistsException.Message string
+V RepositoryCatalogData.AboutText string
+V RepositoryCatalogData.Description string
+V RepositoryCatalogData.LogoUrl string
+V RepositoryCatalogData.MarketplaceCertified bool
+V RepositoryCatalogData.UsageText string
+V RepositoryCatalogDataInput.AboutText string
+V RepositoryCatalogDataInput.Description string
+V RepositoryCatalogDataInput.UsageText string
+V RepositoryCatalogDataNotFoundException.ErrorCodeOverride string
+V RepositoryCatalogDataNotFoundException.Message string
+V RepositoryNotEmptyException.ErrorCodeOverride string
+V RepositoryNotEmptyException.Message string
+V RepositoryNotFoundException.ErrorCodeOverride string
+V RepositoryNotFoundException.Message string
+V RepositoryPolicyNotFoundException.ErrorCodeOverride string
+V RepositoryPolicyNotFoundException.Message string
+V ServerException.ErrorCodeOverride string
+V ServerException.Message string
+V SetRepositoryPolicyInput.PolicyText string
+V SetRepositoryPolicyInput.RegistryId string
+V SetRepositoryPolicyInput.RepositoryName string
+V SetRepositoryPolicyOutput.PolicyText string
+V SetRepositoryPolicyOutput.RegistryId string
+V SetRepositoryPolicyOutput.RepositoryName string
+V Tag.Key string
+V Tag.Value string
+V TagResourceInput.ResourceArn string
+V TooManyTagsException.ErrorCodeOverride string
+V TooManyTagsException.Message string
+V UnsupportedCommandException.ErrorCodeOverride string
+V UnsupportedCommandException.Message string
+V UntagResourceInput.ResourceArn string
+V UploadLayerPartInput.PartFirstByte int64
+V UploadLayerPartInput.PartLastByte int64
+V UploadLayerPartInput.RegistryId string
+V UploadLayerPartInput.RepositoryName string
+V UploadLayerPartInput.UploadId string
+V UploadLayerPartOutput.LastByteReceived int64
+V UploadLayerPartOutput.RegistryId string
+V UploadLayerPartOutput.RepositoryName string
+V UploadLayerPartOutput.UploadId string
+V UploadNotFoundException.ErrorCodeOverride string
+V UploadNotFoundException.Message string
+D DeleteRepositoryInput.Force bool
+D RegistryAlias.DefaultRegistryAlias bool
+D RegistryAlias.PrimaryRegistryAlias bool
+D SetRepositoryPolicyInput.Force bool
+L BatchCheckLayerAvailabilityInput.LayerDigests -
+L BatchCheckLayerAvailabilityOutput.Failures LayerFailure
+L BatchCheckLayerAvailabilityOutput.Layers Layer
+L BatchDeleteImageInput.ImageIds ImageIdentifier
+L BatchDeleteImageOutput.Failures ImageFailure
+L BatchDeleteImageOutput.ImageIds ImageIdentifier
+L CompleteLayerUploadInput.LayerDigests -
+L CreateRepositoryInput.Tags Tag
+L DescribeImageTagsOutput.ImageTagDetails ImageTagDetail
+L DescribeImagesInput.ImageIds ImageIdentifier
+L DescribeImagesOutput.ImageDetails ImageDetail
+L DescribeRegistriesOutput.Registries Registry
+L DescribeRepositoriesInput.RepositoryNames -
+L DescribeRepositoriesOutput.Repositories Repository
+L ImageDetail.ImageTags -
+L ListTagsForResourceOutput.Tags Tag
+L Registry.Aliases RegistryAlias
+L RepositoryCatalogData.Architectures -
+L RepositoryCatalogData.OperatingSystems -
+L RepositoryCatalogDataInput.Architectures -
+L RepositoryCatalogDataInput.OperatingSystems -
+L TagResourceInput.Tags Tag
+L UntagResourceInput.TagKeys -
+F ImageFailure.FailureCode ImageFailureCode
+F Layer.LayerAvailability LayerAvailability
+F LayerFailure.FailureCode LayerFailureCode
+F RegistryAlias.Status RegistryAliasStatus
+N APIOptions
+N AboutText
+N Aliases
+N AppID
+N Architectures
+N ArtifactMediaType
+N AuthSchemePreference
+N AuthSchemeResolver
+N AuthSchemes
+N AuthorizationData
+N AuthorizationToken
+N BaseEndpoint
+N CatalogData
+N ClientLogMode
+N CreatedAt
+N Credentials
+N DefaultRegistryAlias
+N DefaultsMode
+N Description
+N DisableClockSkewCorrection
+N DisableHTTPS
+N DisplayName
+N Endpoint
+N EndpointOptions
+N EndpointResolver
+N EndpointResolverV2
+N ErrorCodeOverride
+N ExpiresAt
+N FailureReason
+N Failures
+N Force
+N HTTPClient
+N HTTPSignerV4
+N Image
+N ImageDetail
+N ImageDetails
+N ImageDigest
+N ImageId
+N ImageIds
+N ImageManifest
+N ImageManifestMediaType
+N ImagePushedAt
+N ImageSizeInBytes
+N ImageTag
+N ImageTagDetails
+N ImageTags
+N Interceptors
+N Key
+N LastByteReceived
+N LastValidByteReceived
+N LayerDigest
+N LayerDigests
+N LayerPartBlob
+N LayerSize
+N Layers
+N Limit
+N LogDeprecated
+N Logger
+N LogoImageBlob
+N LogoUrl
+N MarketplaceCertified
+N MaxResults
+N MediaType
+N Message
+N MeterProvider
+N Name
+N NextToken
+N OperatingSystems
+N Operation
+N Options
+N PartFirstByte
+N PartLastByte
+N PartSize
+N PolicyText
+N PrimaryRegistryAlias
+N Protocol
+N Region
+N Registries
+N RegistryArn
+N RegistryCatalogData
+N RegistryId
+N RegistryUri
+N Repositories
+N Repository
+N RepositoryArn
+N RepositoryName
+N RepositoryNames
+N RepositoryUri
+N ResolvedRegion
+N Resolver
+N ResourceArn
+N ResultMetadata
+N RetryMaxAttempts
+N RetryMode
+N Retryer
+N RuntimeEnvironment
+N StopOnDuplicateToken
+N TagKeys
+N Tags
+N TracerProvider
+N UploadId
+N UsageText
+N UseDualStack
+N UseDualStackEndpoint
+N UseFIPS
+N UseFIPSEndpoint
+N Value
+N Verified
+T AuthorizationData
+T EmptyUploadException
+T Image
+T ImageAlreadyExistsException
+T ImageDetail
+T ImageDigestDoesNotMatchException
+T ImageFailure
+T ImageFailureCode
+T ImageIdentifier
+T ImageNotFoundException
+T ImageTagAlreadyExistsException
+T ImageTagDetail
+T InvalidLayerException
+T InvalidLayerPartException
+T InvalidParameterException
+T InvalidTagParameterException
+T Layer
+T LayerAlreadyExistsException
+T LayerAvailability
+T LayerFailure
+T LayerFailureCode
+T LayerPartTooSmallException
+T LayersNotFoundException
+T LimitExceededException
+T ReferencedImageDetail
+T ReferencedImagesNotFoundException
+T Registry
+T RegistryAlias
+T RegistryAliasStatus
+T RegistryCatalogData
+T RegistryNotFoundException
+T Repository
+T RepositoryAlreadyExistsException
+T RepositoryCatalogData
+T RepositoryCatalogDataInput
+T RepositoryCatalogDataNotFoundException
+T RepositoryNotEmptyException
+T RepositoryNotFoundException
+T RepositoryPolicyNotFoundException
+T ServerException
+T Tag
+T TooManyTagsException
+T UnsupportedCommandException
+T UploadNotFoundException
+E ImageFailureCodeImageNotFound ImageFailureCode
+E ImageFailureCodeImageReferencedByManifestList ImageFailureCode
+E ImageFailureCodeImageTagDoesNotMatchDigest ImageFailureCode
+E ImageFailureCodeInvalidImageDigest ImageFailureCode
+E ImageFailureCodeInvalidImageTag ImageFailureCode
+E ImageFailureCodeKmsError ImageFailureCode
+E ImageFailureCodeMissingDigestAndTag ImageFailureCode
+E LayerAvailabilityAvailable LayerAvailability
+E LayerAvailabilityUnavailable LayerAvailability
+E LayerFailureCodeInvalidLayerDigest LayerFailureCode
+E LayerFailureCodeMissingLayerDigest LayerFailureCode
+E RegistryAliasStatusActive RegistryAliasStatus
+E RegistryAliasStatusPending RegistryAliasStatus
+E RegistryAliasStatusRejected RegistryAliasStatus
+K BatchCheckLayerAvailabilityInput 001 LayerDigests req nil
+K BatchCheckLayerAvailabilityInput 002 LayerDigests len 1 container
+K BatchCheckLayerAvailabilityInput 003 RegistryId len 2 ptr
+K BatchCheckLayerAvailabilityInput 004 RepositoryName req nil
+K BatchCheckLayerAvailabilityInput 005 RepositoryName len 2 ptr
+K BatchDeleteImageInput 001 ImageIds req nil
+K BatchDeleteImageInput 002 ImageIds len 1 container
+K BatchDeleteImageInput 003 RegistryId len 2 ptr
+K BatchDeleteImageInput 004 RepositoryName req nil
+K BatchDeleteImageInput 005 RepositoryName len 2 ptr
+K BatchDeleteImageInput 006 ImageIds each ImageIdentifier slice
+K CompleteLayerUploadInput 001 LayerDigests req nil
+K CompleteLayerUploadInput 002 LayerDigests len 1 container
+K CompleteLayerUploadInput 003 RegistryId len 2 ptr
+K CompleteLayerUploadInput 004 RepositoryName req nil
+K CompleteLayerUploadInput 005 RepositoryName len 2 ptr
+K CompleteLayerUploadInput 006 UploadId req nil
+K CreateRepositoryInput 001 RepositoryName req nil
+K CreateRepositoryInput 002 RepositoryName len 2 ptr
+K CreateRepositoryInput 003 Tags each Tag slice
+K DeleteRepositoryInput 001 RepositoryName req nil
+K DeleteRepositoryInput 002 RepositoryName len 2 ptr
+K DeleteRepositoryPolicyInput 001 RepositoryName req nil
+K DeleteRepositoryPolicyInput 002 RepositoryName len 2 ptr
+K DescribeImageTagsInput 001 MaxResults min 1 ptr
+K DescribeImageTagsInput 002 RepositoryName req nil
+K DescribeImageTagsInput 003 RepositoryName len 2 ptr
+K DescribeImagesInput 001 ImageIds len 1 container
+K DescribeImagesInput 002 MaxResults min 1 ptr
+K DescribeImagesInput 003 RepositoryName req nil
+K DescribeImagesInput 004 RepositoryName len 2 ptr
+K DescribeImagesInput 005 ImageIds each ImageIdentifier slice
+K DescribeRegistriesInput 001 MaxResults min 1 ptr
+K DescribeRepositoriesInput 001 MaxResults min 1 ptr
+K DescribeRepositoriesInput 002 RepositoryNames len 1 container
+K GetRepositoryCatalogDataInput 001 RepositoryName req nil
+K GetRepositoryCatalogDataInput 002 RepositoryName len 2 ptr
+K GetRepositoryPolicyInput 001 RepositoryName req nil
+K GetRepositoryPolicyInput 002 RepositoryName len 2 ptr
+K ImageIdentifier 001 ImageTag len 1 ptr
+K InitiateLayerUploadInput 001 RegistryId len 2 ptr
+K InitiateLayerUploadInput 002 RepositoryName req nil
+K InitiateLayerUploadInput 003 RepositoryName len 2 ptr
+K ListTagsForResourceInput 001 ResourceArn req nil
+K ListTagsForResourceInput 002 ResourceArn len 1 ptr
+K PutImageInput 001 ImageManifest req nil
+K PutImageInput 002 ImageManifest len 1 ptr
+K PutImageInput 003 ImageTag len 1 ptr
+K PutImageInput 004 RegistryId len 2 ptr
+K PutImageInput 005 RepositoryName req nil
+K PutImageInput 006 RepositoryName len 2 ptr
+K PutRepositoryCatalogDataInput 001 CatalogData req nil
+K PutRepositoryCatalogDataInput 002 RepositoryName req nil
+K PutRepositoryCatalogDataInput 003 RepositoryName len 2 ptr
+K SetRepositoryPolicyInput 001 PolicyText req nil
+K SetRepositoryPolicyInput 002 RepositoryName req nil
+K SetRepositoryPolicyInput 003 RepositoryName len 2 ptr
+K Tag 001 Key len 1 ptr
+K TagResourceInput 001 ResourceArn req nil
+K TagResourceInput 002 ResourceArn len 1 ptr
+K TagResourceInput 003 Tags req nil
+K TagResourceInput 004 Tags each Tag slice
+K UntagResourceInput 001 ResourceArn req nil
+K UntagResourceInput 002 ResourceArn len 1 ptr
+K UntagResourceInput 003 TagKeys req nil
+K UploadLayerPartInput 001 LayerPartBlob req nil
+K UploadLayerPartInput 002 PartFirstByte req nil
+K UploadLayerPartInput 003 PartLastByte req nil
+K UploadLayerPartInput 004 RegistryId len 2 ptr
+K UploadLayerPartInput 005 RepositoryName req nil
+K UploadLayerPartInput 006 RepositoryName len 2 ptr
+K UploadLayerPartInput 007 UploadId req nil
+G DescribeImageTags NextToken NextToken
+G DescribeImages NextToken NextToken
+G DescribeRegistries NextToken NextToken
+G DescribeRepositories NextToken NextToken

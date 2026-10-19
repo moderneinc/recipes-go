@@ -1592,3 +1592,253 @@ E VPCRegionUsIsofEast1 VPCRegion
 E VPCRegionUsIsofSouth1 VPCRegion
 E VPCRegionUsWest1 VPCRegion
 E VPCRegionUsWest2 VPCRegion
+Y ResourceRecordSetsChanged 30 60
+K ActivateKeySigningKeyInput 001 HostedZoneId req nil
+K ActivateKeySigningKeyInput 002 HostedZoneId len 1 ptr
+K ActivateKeySigningKeyInput 003 Name req nil
+K ActivateKeySigningKeyInput 004 Name len 3 ptr
+K AlarmIdentifier 001 Name req nil
+K AlarmIdentifier 002 Name len 1 ptr
+K AlarmIdentifier 003 Region req empty
+K AlarmIdentifier 004 Region len 1 enum
+K AliasTarget 001 DNSName req nil
+K AliasTarget 002 EvaluateTargetHealth req none
+K AliasTarget 003 HostedZoneId req nil
+K AssociateVPCWithHostedZoneInput 001 HostedZoneId req nil
+K AssociateVPCWithHostedZoneInput 002 HostedZoneId len 1 ptr
+K AssociateVPCWithHostedZoneInput 003 VPC req nil
+K AssociateVPCWithHostedZoneInput 004 VPC nest VPC
+K Change 001 Action req empty
+K Change 002 ResourceRecordSet req nil
+K Change 003 ResourceRecordSet nest ResourceRecordSet
+K ChangeBatch 001 Changes req nil
+K ChangeBatch 002 Changes len 1 container
+K ChangeBatch 003 Changes each Change slice
+K ChangeCidrCollectionInput 001 Changes req nil
+K ChangeCidrCollectionInput 002 Changes len 1 container
+K ChangeCidrCollectionInput 003 CollectionVersion min 1 ptr
+K ChangeCidrCollectionInput 004 Id req nil
+K ChangeCidrCollectionInput 005 Id len 1 ptr
+K ChangeCidrCollectionInput 006 Changes each CidrCollectionChange slice
+K ChangeResourceRecordSetsInput 001 ChangeBatch req nil
+K ChangeResourceRecordSetsInput 002 HostedZoneId req nil
+K ChangeResourceRecordSetsInput 003 HostedZoneId len 1 ptr
+K ChangeResourceRecordSetsInput 004 ChangeBatch nest ChangeBatch
+K ChangeTagsForResourceInput 001 AddTags len 1 container
+K ChangeTagsForResourceInput 002 RemoveTagKeys len 1 container
+K ChangeTagsForResourceInput 003 ResourceId req nil
+K ChangeTagsForResourceInput 004 ResourceId len 1 ptr
+K ChangeTagsForResourceInput 005 ResourceType req empty
+K ChangeTagsForResourceInput 006 ResourceType len 1 enum
+K CidrCollectionChange 001 Action req empty
+K CidrCollectionChange 002 CidrList req nil
+K CidrCollectionChange 003 CidrList len 1 container
+K CidrCollectionChange 004 LocationName req nil
+K CidrCollectionChange 005 LocationName len 1 ptr
+K CidrRoutingConfig 001 CollectionId req nil
+K CidrRoutingConfig 002 LocationName req nil
+K CidrRoutingConfig 003 LocationName len 1 ptr
+K Coordinates 001 Latitude req nil
+K Coordinates 002 Latitude len 1 ptr
+K Coordinates 003 Longitude req nil
+K Coordinates 004 Longitude len 1 ptr
+K CreateCidrCollectionInput 001 CallerReference req nil
+K CreateCidrCollectionInput 002 CallerReference len 1 ptr
+K CreateCidrCollectionInput 003 Name req nil
+K CreateCidrCollectionInput 004 Name len 1 ptr
+K CreateHealthCheckInput 001 CallerReference req nil
+K CreateHealthCheckInput 002 CallerReference len 1 ptr
+K CreateHealthCheckInput 003 HealthCheckConfig req nil
+K CreateHealthCheckInput 004 HealthCheckConfig nest HealthCheckConfig
+K CreateHostedZoneInput 001 CallerReference req nil
+K CreateHostedZoneInput 002 CallerReference len 1 ptr
+K CreateHostedZoneInput 003 Name req nil
+K CreateHostedZoneInput 004 VPC nest VPC
+K CreateKeySigningKeyInput 001 CallerReference req nil
+K CreateKeySigningKeyInput 002 CallerReference len 1 ptr
+K CreateKeySigningKeyInput 003 HostedZoneId req nil
+K CreateKeySigningKeyInput 004 KeyManagementServiceArn req nil
+K CreateKeySigningKeyInput 005 Name req nil
+K CreateKeySigningKeyInput 006 Name len 3 ptr
+K CreateKeySigningKeyInput 007 Status req nil
+K CreateKeySigningKeyInput 008 Status len 5 ptr
+K CreateQueryLoggingConfigInput 001 CloudWatchLogsLogGroupArn req nil
+K CreateQueryLoggingConfigInput 002 HostedZoneId req nil
+K CreateReusableDelegationSetInput 001 CallerReference req nil
+K CreateReusableDelegationSetInput 002 CallerReference len 1 ptr
+K CreateTrafficPolicyInput 001 Document req nil
+K CreateTrafficPolicyInput 002 Name req nil
+K CreateTrafficPolicyInstanceInput 001 HostedZoneId req nil
+K CreateTrafficPolicyInstanceInput 002 Name req nil
+K CreateTrafficPolicyInstanceInput 003 TTL req nil
+K CreateTrafficPolicyInstanceInput 004 TrafficPolicyId req nil
+K CreateTrafficPolicyInstanceInput 005 TrafficPolicyId len 1 ptr
+K CreateTrafficPolicyInstanceInput 006 TrafficPolicyVersion req nil
+K CreateTrafficPolicyInstanceInput 007 TrafficPolicyVersion min 1 ptr
+K CreateTrafficPolicyVersionInput 001 Document req nil
+K CreateTrafficPolicyVersionInput 002 Id req nil
+K CreateTrafficPolicyVersionInput 003 Id len 1 ptr
+K CreateVPCAssociationAuthorizationInput 001 HostedZoneId req nil
+K CreateVPCAssociationAuthorizationInput 002 HostedZoneId len 1 ptr
+K CreateVPCAssociationAuthorizationInput 003 VPC req nil
+K CreateVPCAssociationAuthorizationInput 004 VPC nest VPC
+K DeactivateKeySigningKeyInput 001 HostedZoneId req nil
+K DeactivateKeySigningKeyInput 002 HostedZoneId len 1 ptr
+K DeactivateKeySigningKeyInput 003 Name req nil
+K DeactivateKeySigningKeyInput 004 Name len 3 ptr
+K DeleteCidrCollectionInput 001 Id req nil
+K DeleteCidrCollectionInput 002 Id len 1 ptr
+K DeleteHealthCheckInput 001 HealthCheckId req nil
+K DeleteHealthCheckInput 002 HealthCheckId len 1 ptr
+K DeleteHostedZoneInput 001 Id req nil
+K DeleteHostedZoneInput 002 Id len 1 ptr
+K DeleteKeySigningKeyInput 001 HostedZoneId req nil
+K DeleteKeySigningKeyInput 002 HostedZoneId len 1 ptr
+K DeleteKeySigningKeyInput 003 Name req nil
+K DeleteKeySigningKeyInput 004 Name len 3 ptr
+K DeleteQueryLoggingConfigInput 001 Id req nil
+K DeleteQueryLoggingConfigInput 002 Id len 1 ptr
+K DeleteReusableDelegationSetInput 001 Id req nil
+K DeleteReusableDelegationSetInput 002 Id len 1 ptr
+K DeleteTrafficPolicyInput 001 Id req nil
+K DeleteTrafficPolicyInput 002 Id len 1 ptr
+K DeleteTrafficPolicyInput 003 Version req nil
+K DeleteTrafficPolicyInput 004 Version min 1 ptr
+K DeleteTrafficPolicyInstanceInput 001 Id req nil
+K DeleteTrafficPolicyInstanceInput 002 Id len 1 ptr
+K DeleteVPCAssociationAuthorizationInput 001 HostedZoneId req nil
+K DeleteVPCAssociationAuthorizationInput 002 HostedZoneId len 1 ptr
+K DeleteVPCAssociationAuthorizationInput 003 VPC req nil
+K DeleteVPCAssociationAuthorizationInput 004 VPC nest VPC
+K DisableHostedZoneDNSSECInput 001 HostedZoneId req nil
+K DisableHostedZoneDNSSECInput 002 HostedZoneId len 1 ptr
+K DisassociateVPCFromHostedZoneInput 001 HostedZoneId req nil
+K DisassociateVPCFromHostedZoneInput 002 HostedZoneId len 1 ptr
+K DisassociateVPCFromHostedZoneInput 003 VPC req nil
+K DisassociateVPCFromHostedZoneInput 004 VPC nest VPC
+K EnableHostedZoneDNSSECInput 001 HostedZoneId req nil
+K EnableHostedZoneDNSSECInput 002 HostedZoneId len 1 ptr
+K GeoLocation 001 ContinentCode len 2 ptr
+K GeoLocation 002 CountryCode len 1 ptr
+K GeoLocation 003 SubdivisionCode len 1 ptr
+K GeoProximityLocation 001 AWSRegion len 1 ptr
+K GeoProximityLocation 002 Bias min -99 ptr
+K GeoProximityLocation 003 LocalZoneGroup len 1 ptr
+K GeoProximityLocation 004 Coordinates nest Coordinates
+K GetAccountLimitInput 001 Type req empty
+K GetAccountLimitInput 002 Type len 1 enum
+K GetChangeInput 001 Id req nil
+K GetChangeInput 002 Id len 1 ptr
+K GetDNSSECInput 001 HostedZoneId req nil
+K GetDNSSECInput 002 HostedZoneId len 1 ptr
+K GetGeoLocationInput 001 ContinentCode len 2 ptr
+K GetGeoLocationInput 002 CountryCode len 1 ptr
+K GetGeoLocationInput 003 SubdivisionCode len 1 ptr
+K GetHealthCheckInput 001 HealthCheckId req nil
+K GetHealthCheckInput 002 HealthCheckId len 1 ptr
+K GetHealthCheckLastFailureReasonInput 001 HealthCheckId req nil
+K GetHealthCheckLastFailureReasonInput 002 HealthCheckId len 1 ptr
+K GetHealthCheckStatusInput 001 HealthCheckId req nil
+K GetHealthCheckStatusInput 002 HealthCheckId len 1 ptr
+K GetHostedZoneInput 001 Id req nil
+K GetHostedZoneInput 002 Id len 1 ptr
+K GetHostedZoneLimitInput 001 HostedZoneId req nil
+K GetHostedZoneLimitInput 002 HostedZoneId len 1 ptr
+K GetHostedZoneLimitInput 003 Type req empty
+K GetHostedZoneLimitInput 004 Type len 1 enum
+K GetQueryLoggingConfigInput 001 Id req nil
+K GetQueryLoggingConfigInput 002 Id len 1 ptr
+K GetReusableDelegationSetInput 001 Id req nil
+K GetReusableDelegationSetInput 002 Id len 1 ptr
+K GetReusableDelegationSetLimitInput 001 DelegationSetId req nil
+K GetReusableDelegationSetLimitInput 002 DelegationSetId len 1 ptr
+K GetReusableDelegationSetLimitInput 003 Type req empty
+K GetReusableDelegationSetLimitInput 004 Type len 1 enum
+K GetTrafficPolicyInput 001 Id req nil
+K GetTrafficPolicyInput 002 Id len 1 ptr
+K GetTrafficPolicyInput 003 Version req nil
+K GetTrafficPolicyInput 004 Version min 1 ptr
+K GetTrafficPolicyInstanceInput 001 Id req nil
+K GetTrafficPolicyInstanceInput 002 Id len 1 ptr
+K HealthCheckConfig 001 FailureThreshold min 1 ptr
+K HealthCheckConfig 002 Port min 1 ptr
+K HealthCheckConfig 003 Regions len 3 container
+K HealthCheckConfig 004 RequestInterval min 10 ptr
+K HealthCheckConfig 005 RoutingControlArn len 1 ptr
+K HealthCheckConfig 006 Type req empty
+K HealthCheckConfig 007 AlarmIdentifier nest AlarmIdentifier
+K ListCidrBlocksInput 001 CollectionId req nil
+K ListCidrBlocksInput 002 CollectionId len 1 ptr
+K ListCidrBlocksInput 003 LocationName len 1 ptr
+K ListCidrLocationsInput 001 CollectionId req nil
+K ListCidrLocationsInput 002 CollectionId len 1 ptr
+K ListGeoLocationsInput 001 StartContinentCode len 2 ptr
+K ListGeoLocationsInput 002 StartCountryCode len 1 ptr
+K ListGeoLocationsInput 003 StartSubdivisionCode len 1 ptr
+K ListHostedZonesByVPCInput 001 VPCId req nil
+K ListHostedZonesByVPCInput 002 VPCRegion req empty
+K ListHostedZonesByVPCInput 003 VPCRegion len 1 enum
+K ListResourceRecordSetsInput 001 HostedZoneId req nil
+K ListResourceRecordSetsInput 002 HostedZoneId len 1 ptr
+K ListResourceRecordSetsInput 003 StartRecordIdentifier len 1 ptr
+K ListTagsForResourceInput 001 ResourceId req nil
+K ListTagsForResourceInput 002 ResourceId len 1 ptr
+K ListTagsForResourceInput 003 ResourceType req empty
+K ListTagsForResourceInput 004 ResourceType len 1 enum
+K ListTagsForResourcesInput 001 ResourceIds req nil
+K ListTagsForResourcesInput 002 ResourceIds len 1 container
+K ListTagsForResourcesInput 003 ResourceType req empty
+K ListTagsForResourcesInput 004 ResourceType len 1 enum
+K ListTrafficPoliciesInput 001 TrafficPolicyIdMarker len 1 ptr
+K ListTrafficPolicyInstancesByHostedZoneInput 001 HostedZoneId req nil
+K ListTrafficPolicyInstancesByPolicyInput 001 TrafficPolicyId req nil
+K ListTrafficPolicyInstancesByPolicyInput 002 TrafficPolicyId len 1 ptr
+K ListTrafficPolicyInstancesByPolicyInput 003 TrafficPolicyVersion req nil
+K ListTrafficPolicyInstancesByPolicyInput 004 TrafficPolicyVersion min 1 ptr
+K ListTrafficPolicyVersionsInput 001 Id req nil
+K ListTrafficPolicyVersionsInput 002 Id len 1 ptr
+K ListVPCAssociationAuthorizationsInput 001 HostedZoneId req nil
+K ListVPCAssociationAuthorizationsInput 002 HostedZoneId len 1 ptr
+K ResourceRecord 001 Value req nil
+K ResourceRecordSet 001 Name req nil
+K ResourceRecordSet 002 Region len 1 enum
+K ResourceRecordSet 003 ResourceRecords len 1 container
+K ResourceRecordSet 004 SetIdentifier len 1 ptr
+K ResourceRecordSet 005 TrafficPolicyInstanceId len 1 ptr
+K ResourceRecordSet 006 Type req empty
+K ResourceRecordSet 007 AliasTarget nest AliasTarget
+K ResourceRecordSet 008 CidrRoutingConfig nest CidrRoutingConfig
+K ResourceRecordSet 009 GeoLocation nest GeoLocation
+K ResourceRecordSet 010 GeoProximityLocation nest GeoProximityLocation
+K ResourceRecordSet 011 ResourceRecords each ResourceRecord slice
+K TestDNSAnswerInput 001 HostedZoneId req nil
+K TestDNSAnswerInput 002 RecordName req nil
+K TestDNSAnswerInput 003 RecordType req empty
+K UpdateHealthCheckInput 001 FailureThreshold min 1 ptr
+K UpdateHealthCheckInput 002 HealthCheckId req nil
+K UpdateHealthCheckInput 003 HealthCheckId len 1 ptr
+K UpdateHealthCheckInput 004 HealthCheckVersion min 1 ptr
+K UpdateHealthCheckInput 005 Port min 1 ptr
+K UpdateHealthCheckInput 006 Regions len 3 container
+K UpdateHealthCheckInput 007 AlarmIdentifier nest AlarmIdentifier
+K UpdateHostedZoneCommentInput 001 Id req nil
+K UpdateHostedZoneCommentInput 002 Id len 1 ptr
+K UpdateTrafficPolicyCommentInput 001 Comment req nil
+K UpdateTrafficPolicyCommentInput 002 Id req nil
+K UpdateTrafficPolicyCommentInput 003 Id len 1 ptr
+K UpdateTrafficPolicyCommentInput 004 Version req nil
+K UpdateTrafficPolicyCommentInput 005 Version min 1 ptr
+K UpdateTrafficPolicyInstanceInput 001 Id req nil
+K UpdateTrafficPolicyInstanceInput 002 Id len 1 ptr
+K UpdateTrafficPolicyInstanceInput 003 TTL req nil
+K UpdateTrafficPolicyInstanceInput 004 TrafficPolicyId req nil
+K UpdateTrafficPolicyInstanceInput 005 TrafficPolicyId len 1 ptr
+K UpdateTrafficPolicyInstanceInput 006 TrafficPolicyVersion req nil
+K UpdateTrafficPolicyInstanceInput 007 TrafficPolicyVersion min 1 ptr
+K VPC 001 VPCRegion len 1 enum
+G ListCidrBlocks NextToken NextToken
+G ListCidrCollections NextToken NextToken
+G ListCidrLocations NextToken NextToken
+G ListHealthChecks Marker NextMarker
+G ListHostedZones Marker NextMarker
+G ListQueryLoggingConfigs NextToken NextToken

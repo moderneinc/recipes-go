@@ -41,6 +41,7 @@ type findUsageVisitor struct {
 	awsPkg         string
 	sessionPkg     string
 	credentialsPkg string
+	rdsutilsPkg    string
 	services       map[string]string
 }
 
@@ -51,6 +52,7 @@ func (v *findUsageVisitor) VisitCompilationUnit(cu *golang.CompilationUnit, p an
 	v.awsPkg = pathswap.Qualifier(cu, v1Aws)
 	v.sessionPkg = pathswap.Qualifier(cu, v1Session)
 	v.credentialsPkg = pathswap.Qualifier(cu, v1Credentials)
+	v.rdsutilsPkg = pathswap.Qualifier(cu, v1Rdsutils)
 	v.services = serviceImports(cu)
 	return v.GoVisitor.VisitCompilationUnit(cu, p)
 }
@@ -60,6 +62,14 @@ func (v *findUsageVisitor) VisitImport(imp *java.Import, p any) java.J {
 	path := imp.Path()
 	if reason, blocked := v1OnlyPackages[path]; blocked {
 		return imp.WithMarkers(java.MarkupWarn(imp.Markers, reason))
+	}
+	if path == v1Request {
+		return imp.WithMarkers(java.MarkupInfo(imp.Markers,
+			"a session's Send and UnmarshalError handlers become smithy middleware on the config's APIOptions; the rest of the request plumbing has no v2 counterpart"))
+	}
+	if path == v1DynamodbAttribute {
+		return imp.WithMarkers(java.MarkupInfo(imp.Markers,
+			"migrates to a port of this package generated under "+attributePortDir+", which stores and reads items as v1 did; v2's attributevalue ignores json struct tags and stores empty values as themselves where v1 stored NULL. A type implementing its Marshaler or Unmarshaler holds the package on v1"))
 	}
 	if path == v1Awserr {
 		return imp.WithMarkers(java.MarkupInfo(imp.Markers,
@@ -95,6 +105,10 @@ func (v *findUsageVisitor) VisitMethodInvocation(mi *java.MethodInvocation, p an
 
 	if sessionCall, ok := qualifiedCall(mi, v.sessionPkg); ok {
 		return mi.WithMarkers(java.MarkupWarn(mi.Markers, sessionGuidance(sessionCall)))
+	}
+
+	if rdsCall, ok := qualifiedCall(mi, v.rdsutilsPkg); ok && rdsCall != buildAuthToken {
+		return mi.WithMarkers(java.MarkupWarn(mi.Markers, "rdsutils."+rdsCall+" "+rdsConnectionBuilderReason))
 	}
 
 	if credCall, ok := qualifiedCall(mi, v.credentialsPkg); ok && credCall == "NewStaticCredentials" {
@@ -138,7 +152,7 @@ func (v *findUsageVisitor) VisitFieldAccess(fa *java.FieldAccess, p any) java.J 
 			return fa
 		}
 		return fa.WithMarkers(java.MarkupWarn(fa.Markers,
-			service+"."+name+" moved to "+v2ServicePkg+service+"/types in v2"))
+			service+"."+name+" moved to "+v2ServicePath(service)+"/types in v2"))
 	}
 	return fa
 }

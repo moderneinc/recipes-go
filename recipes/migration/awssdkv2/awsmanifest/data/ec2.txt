@@ -148,6 +148,8 @@ S CreateCapacityReservationBySplittingInput
 S CreateCapacityReservationBySplittingOutput
 S CreateCapacityReservationCancellationQuoteInput
 S CreateCapacityReservationCancellationQuoteOutput
+S CreateCapacityReservationDateChangeQuoteInput
+S CreateCapacityReservationDateChangeQuoteOutput
 S CreateCapacityReservationFleetInput
 S CreateCapacityReservationFleetOutput
 S CreateCapacityReservationInput
@@ -366,6 +368,8 @@ S DeleteCapacityManagerDataExportInput
 S DeleteCapacityManagerDataExportOutput
 S DeleteCarrierGatewayInput
 S DeleteCarrierGatewayOutput
+S DeleteClientVpnEndpointAuthorizationPolicyInput
+S DeleteClientVpnEndpointAuthorizationPolicyOutput
 S DeleteClientVpnEndpointInput
 S DeleteClientVpnEndpointOutput
 S DeleteClientVpnRouteInput
@@ -646,6 +650,11 @@ S DescribeCapacityReservationBillingRequestsPaginator
 S DescribeCapacityReservationBillingRequestsPaginatorOptions
 S DescribeCapacityReservationCancellationQuotesInput
 S DescribeCapacityReservationCancellationQuotesOutput
+S DescribeCapacityReservationDateChangeQuotesAPIClient
+S DescribeCapacityReservationDateChangeQuotesInput
+S DescribeCapacityReservationDateChangeQuotesOutput
+S DescribeCapacityReservationDateChangeQuotesPaginator
+S DescribeCapacityReservationDateChangeQuotesPaginatorOptions
 S DescribeCapacityReservationFleetsAPIClient
 S DescribeCapacityReservationFleetsInput
 S DescribeCapacityReservationFleetsOutput
@@ -1569,6 +1578,8 @@ S GetCapacityManagerMonitoredTagKeysPaginator
 S GetCapacityManagerMonitoredTagKeysPaginatorOptions
 S GetCapacityReservationUsageInput
 S GetCapacityReservationUsageOutput
+S GetClientVpnEndpointAuthorizationPolicyInput
+S GetClientVpnEndpointAuthorizationPolicyOutput
 S GetCoipPoolUsageInput
 S GetCoipPoolUsageOutput
 S GetConsoleOutputInput
@@ -1838,6 +1849,8 @@ S ModifyCapacityReservationFleetInput
 S ModifyCapacityReservationFleetOutput
 S ModifyCapacityReservationInput
 S ModifyCapacityReservationOutput
+S ModifyClientVpnEndpointAuthorizationPolicyInput
+S ModifyClientVpnEndpointAuthorizationPolicyOutput
 S ModifyClientVpnEndpointInput
 S ModifyClientVpnEndpointOutput
 S ModifyDefaultCreditSpecificationInput
@@ -2027,6 +2040,7 @@ S NewDescribeCapacityBlockStatusPaginator
 S NewDescribeCapacityBlocksPaginator
 S NewDescribeCapacityManagerDataExportsPaginator
 S NewDescribeCapacityReservationBillingRequestsPaginator
+S NewDescribeCapacityReservationDateChangeQuotesPaginator
 S NewDescribeCapacityReservationFleetsPaginator
 S NewDescribeCapacityReservationsPaginator
 S NewDescribeCarrierGatewaysPaginator
@@ -2519,6 +2533,7 @@ O CreateCapacityManagerDataExport
 O CreateCapacityReservation
 O CreateCapacityReservationBySplitting
 O CreateCapacityReservationCancellationQuote
+O CreateCapacityReservationDateChangeQuote
 O CreateCapacityReservationFleet
 O CreateCarrierGateway
 O CreateClientVpnEndpoint
@@ -2627,6 +2642,7 @@ O DeleteApplicationStatusCheck
 O DeleteCapacityManagerDataExport
 O DeleteCarrierGateway
 O DeleteClientVpnEndpoint
+O DeleteClientVpnEndpointAuthorizationPolicy
 O DeleteClientVpnRoute
 O DeleteCoipCidr
 O DeleteCoipPool
@@ -2749,6 +2765,7 @@ O DescribeCapacityBlocks
 O DescribeCapacityManagerDataExports
 O DescribeCapacityReservationBillingRequests
 O DescribeCapacityReservationCancellationQuotes
+O DescribeCapacityReservationDateChangeQuotes
 O DescribeCapacityReservationFleets
 O DescribeCapacityReservationTopology
 O DescribeCapacityReservations
@@ -3008,6 +3025,7 @@ O GetCapacityManagerMetricData
 O GetCapacityManagerMetricDimensions
 O GetCapacityManagerMonitoredTagKeys
 O GetCapacityReservationUsage
+O GetClientVpnEndpointAuthorizationPolicy
 O GetCoipPoolUsage
 O GetConsoleOutput
 O GetConsoleScreenshot
@@ -3092,6 +3110,7 @@ O ModifyAvailabilityZoneGroup
 O ModifyCapacityReservation
 O ModifyCapacityReservationFleet
 O ModifyClientVpnEndpoint
+O ModifyClientVpnEndpointAuthorizationPolicy
 O ModifyDefaultCreditSpecification
 O ModifyEbsDefaultKmsKeyId
 O ModifyFleet
@@ -3882,11 +3901,14 @@ R BundleTask.Storage Storage
 R CancelBundleTaskOutput.BundleTask BundleTask
 R CancelSpotFleetRequestsErrorItem.Error CancelSpotFleetRequestsError
 R CapacityManagerCondition.DimensionCondition DimensionCondition
+R CapacityReservation.AdjustmentDetails CapacityReservationAdjustmentDetails
 R CapacityReservation.CommitmentInfo CapacityReservationCommitmentInfo
 R CapacityReservation.InterruptibleCapacityAllocation InterruptibleCapacityAllocation
 R CapacityReservation.InterruptionInfo InterruptionInfo
 R CapacityReservationBillingRequest.CapacityReservationInfo CapacityReservationInfo
 R CapacityReservationCancellationQuote.CurrentConfiguration CapacityReservationConfiguration
+R CapacityReservationModificationQuote.CurrentConfiguration ModificationQuoteCurrentConfiguration
+R CapacityReservationModificationQuote.ModificationTerms ModificationTerms
 R CapacityReservationSpecification.CapacityReservationTarget CapacityReservationTarget
 R CapacityReservationSpecificationResponse.CapacityReservationTarget CapacityReservationTargetResponse
 R ClientConnectResponseOptions.Status ClientVpnEndpointAttributeStatus
@@ -3901,6 +3923,7 @@ R ClientVpnEndpoint.ClientConnectOptions ClientConnectResponseOptions
 R ClientVpnEndpoint.ClientLoginBannerOptions ClientLoginBannerResponseOptions
 R ClientVpnEndpoint.ClientRouteEnforcementOptions ClientRouteEnforcementResponseOptions
 R ClientVpnEndpoint.ConnectionLogOptions ConnectionLogResponseOptions
+R ClientVpnEndpoint.DevicePostureOptions DevicePostureResponseOptions
 R ClientVpnEndpoint.Status ClientVpnEndpointStatus
 R ClientVpnEndpoint.TransitGatewayConfiguration TransitGatewayConfigurationDescribeEndpointStructure
 R ClientVpnRoute.Status ClientVpnRouteStatus
@@ -3910,12 +3933,14 @@ R CreateApplicationStatusCheckOutput.ApplicationStatusCheck ApplicationStatusChe
 R CreateCapacityReservationBySplittingOutput.DestinationCapacityReservation CapacityReservation
 R CreateCapacityReservationBySplittingOutput.SourceCapacityReservation CapacityReservation
 R CreateCapacityReservationCancellationQuoteOutput.CapacityReservationCancellationQuote CapacityReservationCancellationQuote
+R CreateCapacityReservationDateChangeQuoteOutput.CapacityReservationModificationQuote CapacityReservationModificationQuote
 R CreateCapacityReservationOutput.CapacityReservation CapacityReservation
 R CreateCarrierGatewayOutput.CarrierGateway CarrierGateway
 R CreateClientVpnEndpointInput.ClientConnectOptions ClientConnectOptions
 R CreateClientVpnEndpointInput.ClientLoginBannerOptions ClientLoginBannerOptions
 R CreateClientVpnEndpointInput.ClientRouteEnforcementOptions ClientRouteEnforcementOptions
 R CreateClientVpnEndpointInput.ConnectionLogOptions ConnectionLogOptions
+R CreateClientVpnEndpointInput.DevicePostureOptions DevicePostureOptions
 R CreateClientVpnEndpointInput.TransitGatewayConfiguration TransitGatewayConfigurationInputStructure
 R CreateClientVpnEndpointOutput.Status ClientVpnEndpointStatus
 R CreateClientVpnRouteOutput.Status ClientVpnRouteStatus
@@ -4416,13 +4441,16 @@ R LocalGatewayRouteTable.StateReason StateReason
 R MacModificationTask.MacSystemIntegrityProtectionConfig MacSystemIntegrityProtectionConfiguration
 R MediaDeviceInfo.MemoryInfo MediaDeviceMemoryInfo
 R MetricDataResult.Dimension CapacityManagerDimension
+R ModificationTerms.ReservationUpdate ModificationReservationUpdate
 R ModifyAccountVpcEncryptionControlOutput.AccountVpcEncryptionControl AccountVpcEncryptionControl
 R ModifyAddressAttributeOutput.Address AddressAttribute
 R ModifyApplicationStatusCheckOutput.ApplicationStatusCheck ApplicationStatusCheckResponseObject
+R ModifyCapacityReservationOutput.AdjustmentDetails CapacityReservationAdjustmentDetails
 R ModifyClientVpnEndpointInput.ClientConnectOptions ClientConnectOptions
 R ModifyClientVpnEndpointInput.ClientLoginBannerOptions ClientLoginBannerOptions
 R ModifyClientVpnEndpointInput.ClientRouteEnforcementOptions ClientRouteEnforcementOptions
 R ModifyClientVpnEndpointInput.ConnectionLogOptions ConnectionLogOptions
+R ModifyClientVpnEndpointInput.DevicePostureOptions DevicePostureOptions
 R ModifyClientVpnEndpointInput.DnsServers DnsServersOptionsModifyStructure
 R ModifyClientVpnEndpointInput.TransitGatewayConfiguration TransitGatewayConfigurationInputStructure
 R ModifyDefaultCreditSpecificationOutput.InstanceFamilyCreditSpecification InstanceFamilyCreditSpecification
@@ -4443,7 +4471,7 @@ R ModifyInstanceAttributeInput.Kernel AttributeValue
 R ModifyInstanceAttributeInput.Ramdisk AttributeValue
 R ModifyInstanceAttributeInput.SourceDestCheck AttributeBooleanValue
 R ModifyInstanceAttributeInput.SriovNetSupport AttributeValue
-R ModifyInstanceAttributeInput.UserData SecureBlobAttributeValue
+R ModifyInstanceAttributeInput.UserData BlobAttributeValue
 R ModifyInstanceCapacityReservationAttributesInput.CapacityReservationSpecification CapacityReservationSpecification
 R ModifyInstanceEventStartTimeOutput.Event InstanceStatusEvent
 R ModifyInstanceEventWindowOutput.InstanceEventWindow InstanceEventWindow
@@ -5293,12 +5321,15 @@ V CapacityReservation.OwnerId string
 V CapacityReservation.PlacementGroupArn string
 V CapacityReservation.TotalInstanceCount int32
 V CapacityReservation.UnusedReservationBillingOwnerId string
+V CapacityReservationAdjustmentDetails.CommitmentDuration int64
+V CapacityReservationAdjustmentDetails.EndDateType string
 V CapacityReservationBillingRequest.CapacityReservationId string
 V CapacityReservationBillingRequest.RequestedBy string
 V CapacityReservationBillingRequest.StatusMessage string
 V CapacityReservationBillingRequest.UnusedReservationBillingOwnerId string
 V CapacityReservationCancellationQuote.CapacityReservationCancellationQuoteId string
 V CapacityReservationCancellationQuote.CapacityReservationId string
+V CapacityReservationCommitmentInfo.CommitmentDuration int64
 V CapacityReservationCommitmentInfo.CommittedInstanceCount int32
 V CapacityReservationConfiguration.InstanceCount int32
 V CapacityReservationConfiguration.ReservationState string
@@ -5313,6 +5344,8 @@ V CapacityReservationGroup.OwnerId string
 V CapacityReservationInfo.AvailabilityZone string
 V CapacityReservationInfo.AvailabilityZoneId string
 V CapacityReservationInfo.InstanceType string
+V CapacityReservationModificationQuote.CapacityReservationId string
+V CapacityReservationModificationQuote.CapacityReservationModificationQuoteId string
 V CapacityReservationStatus.CapacityReservationId string
 V CapacityReservationStatus.TotalAvailableCapacity int32
 V CapacityReservationStatus.TotalCapacity int32
@@ -5355,6 +5388,7 @@ V ClientLoginBannerResponseOptions.Enabled bool
 V ClientRouteEnforcementOptions.Enforced bool
 V ClientRouteEnforcementResponseOptions.Enforced bool
 V ClientVpnAuthorizationRuleStatus.Message string
+V ClientVpnConnection.AuthorizationPolicyLastEvaluatedTime string
 V ClientVpnConnection.ClientIp string
 V ClientVpnConnection.ClientIpv6Address string
 V ClientVpnConnection.ClientVpnEndpointId string
@@ -5392,6 +5426,10 @@ V ClientVpnRoute.TargetSubnet string
 V ClientVpnRoute.TransitGatewayAttachmentId string
 V ClientVpnRoute.Type string
 V ClientVpnRouteStatus.Message string
+V ClientVpnTrustProvider.PublicSigningKeyUrl string
+V ClientVpnTrustProvider.TenantId string
+V ClientVpnTrustProviderRequest.PublicSigningKeyUrl string
+V ClientVpnTrustProviderRequest.TenantId string
 V CloudWatchLogOptions.BgpLogEnabled bool
 V CloudWatchLogOptions.BgpLogGroupArn string
 V CloudWatchLogOptions.BgpLogOutputFormat string
@@ -5422,9 +5460,11 @@ V ConfirmProductInstanceOutput.Return bool
 V ConnectionLogOptions.CloudwatchLogGroup string
 V ConnectionLogOptions.CloudwatchLogStream string
 V ConnectionLogOptions.Enabled bool
+V ConnectionLogOptions.IncludeAuthorizationPolicyContext bool
 V ConnectionLogResponseOptions.CloudwatchLogGroup string
 V ConnectionLogResponseOptions.CloudwatchLogStream string
 V ConnectionLogResponseOptions.Enabled bool
+V ConnectionLogResponseOptions.IncludeAuthorizationPolicyContext bool
 V ConnectionNotification.ConnectionNotificationArn string
 V ConnectionNotification.ConnectionNotificationId string
 V ConnectionNotification.ServiceId string
@@ -5514,6 +5554,9 @@ V CreateCapacityReservationBySplittingOutput.InstanceCount int32
 V CreateCapacityReservationCancellationQuoteInput.CapacityReservationId string
 V CreateCapacityReservationCancellationQuoteInput.ClientToken string
 V CreateCapacityReservationCancellationQuoteInput.DryRun bool
+V CreateCapacityReservationDateChangeQuoteInput.CapacityReservationId string
+V CreateCapacityReservationDateChangeQuoteInput.ClientToken string
+V CreateCapacityReservationDateChangeQuoteInput.DryRun bool
 V CreateCapacityReservationFleetInput.AllocationStrategy string
 V CreateCapacityReservationFleetInput.ClientToken string
 V CreateCapacityReservationFleetInput.DryRun bool
@@ -6155,6 +6198,8 @@ V DeleteCapacityManagerDataExportInput.DryRun bool
 V DeleteCapacityManagerDataExportOutput.CapacityManagerDataExportId string
 V DeleteCarrierGatewayInput.CarrierGatewayId string
 V DeleteCarrierGatewayInput.DryRun bool
+V DeleteClientVpnEndpointAuthorizationPolicyInput.ClientVpnEndpointId string
+V DeleteClientVpnEndpointAuthorizationPolicyInput.DryRun bool
 V DeleteClientVpnEndpointInput.ClientVpnEndpointId string
 V DeleteClientVpnEndpointInput.DryRun bool
 V DeleteClientVpnRouteInput.ClientVpnEndpointId string
@@ -6504,6 +6549,10 @@ V DescribeCapacityReservationCancellationQuotesInput.DryRun bool
 V DescribeCapacityReservationCancellationQuotesInput.MaxResults int32
 V DescribeCapacityReservationCancellationQuotesInput.NextToken string
 V DescribeCapacityReservationCancellationQuotesOutput.NextToken string
+V DescribeCapacityReservationDateChangeQuotesInput.DryRun bool
+V DescribeCapacityReservationDateChangeQuotesInput.MaxResults int32
+V DescribeCapacityReservationDateChangeQuotesInput.NextToken string
+V DescribeCapacityReservationDateChangeQuotesOutput.NextToken string
 V DescribeCapacityReservationFleetsInput.DryRun bool
 V DescribeCapacityReservationFleetsInput.MaxResults int32
 V DescribeCapacityReservationFleetsInput.NextToken string
@@ -7228,6 +7277,7 @@ V DetachVpnGatewayInput.VpcId string
 V DetachVpnGatewayInput.VpnGatewayId string
 V DeviceOptions.PublicSigningKeyUrl string
 V DeviceOptions.TenantId string
+V DevicePostureOptions.Enabled bool
 V DhcpConfiguration.Key string
 V DhcpOptions.DhcpOptionsId string
 V DhcpOptions.OwnerId string
@@ -7750,6 +7800,11 @@ V GetCapacityReservationUsageOutput.InstanceType string
 V GetCapacityReservationUsageOutput.Interruptible bool
 V GetCapacityReservationUsageOutput.NextToken string
 V GetCapacityReservationUsageOutput.TotalInstanceCount int32
+V GetClientVpnEndpointAuthorizationPolicyInput.ClientVpnEndpointId string
+V GetClientVpnEndpointAuthorizationPolicyInput.DryRun bool
+V GetClientVpnEndpointAuthorizationPolicyOutput.ClientVpnEndpointId string
+V GetClientVpnEndpointAuthorizationPolicyOutput.Description string
+V GetClientVpnEndpointAuthorizationPolicyOutput.PolicyDocument string
 V GetCoipPoolUsageInput.DryRun bool
 V GetCoipPoolUsageInput.MaxResults int32
 V GetCoipPoolUsageInput.NextToken string
@@ -8949,6 +9004,9 @@ V MemoryMiBRequest.Min int32
 V MetricPoint.Status string
 V MetricPoint.Value float32
 V MetricValue.Value float64
+V ModificationQuoteCurrentConfiguration.InstanceCount int32
+V ModificationQuoteCurrentConfiguration.ReservationState string
+V ModificationReservationUpdate.NewCommitmentDuration int32
 V ModifyAccountVpcEncryptionControlInput.DryRun bool
 V ModifyAddressAttributeInput.AllocationId string
 V ModifyAddressAttributeInput.DomainName string
@@ -8974,11 +9032,18 @@ V ModifyCapacityReservationFleetInput.RemoveEndDate bool
 V ModifyCapacityReservationFleetInput.TotalTargetCapacity int32
 V ModifyCapacityReservationFleetOutput.Return bool
 V ModifyCapacityReservationInput.Accept bool
+V ModifyCapacityReservationInput.AcceptModificationTerms bool
 V ModifyCapacityReservationInput.AdditionalInfo string
 V ModifyCapacityReservationInput.CapacityReservationId string
 V ModifyCapacityReservationInput.DryRun bool
 V ModifyCapacityReservationInput.InstanceCount int32
+V ModifyCapacityReservationInput.QuoteId string
 V ModifyCapacityReservationOutput.Return bool
+V ModifyClientVpnEndpointAuthorizationPolicyInput.ClientToken string
+V ModifyClientVpnEndpointAuthorizationPolicyInput.ClientVpnEndpointId string
+V ModifyClientVpnEndpointAuthorizationPolicyInput.Description string
+V ModifyClientVpnEndpointAuthorizationPolicyInput.DryRun bool
+V ModifyClientVpnEndpointAuthorizationPolicyInput.PolicyDocument string
 V ModifyClientVpnEndpointInput.ClientVpnEndpointId string
 V ModifyClientVpnEndpointInput.Description string
 V ModifyClientVpnEndpointInput.DisconnectOnSessionTimeout bool
@@ -12299,10 +12364,12 @@ F CapacityManagerDimension.ReservationState ReservationState
 F CapacityManagerDimension.ReservationType ReservationType
 F CapacityManagerDimension.Tenancy CapacityTenancy
 F CapacityManagerMonitoredTagKey.Status CapacityManagerMonitoredTagKeyStatus
+F CapacityReservation.AdjustmentStatus CapacityReservationAdjustmentStatus
 F CapacityReservation.DeliveryPreference CapacityReservationDeliveryPreference
 F CapacityReservation.EndDateType EndDateType
 F CapacityReservation.InstanceMatchCriteria InstanceMatchCriteria
 F CapacityReservation.InstancePlatform CapacityReservationInstancePlatform
+F CapacityReservation.LaunchStatus CapacityReservationLaunchStatus
 F CapacityReservation.ReservationType CapacityReservationType
 F CapacityReservation.State CapacityReservationState
 F CapacityReservation.Tenancy CapacityReservationTenancy
@@ -12315,6 +12382,7 @@ F CapacityReservationFleet.Tenancy FleetCapacityReservationTenancy
 F CapacityReservationFleetCancellationState.CurrentFleetState CapacityReservationFleetState
 F CapacityReservationFleetCancellationState.PreviousFleetState CapacityReservationFleetState
 F CapacityReservationInfo.Tenancy CapacityReservationTenancy
+F CapacityReservationModificationQuote.QuoteState CapacityReservationModificationQuoteState
 F CapacityReservationOptions.UsageStrategy FleetCapacityReservationUsageStrategy
 F CapacityReservationOptionsRequest.UsageStrategy FleetCapacityReservationUsageStrategy
 F CapacityReservationSpecification.CapacityReservationPreference CapacityReservationPreference
@@ -12332,6 +12400,8 @@ F ClientVpnEndpoint.VpnProtocol VpnProtocol
 F ClientVpnEndpointAttributeStatus.Code ClientVpnEndpointAttributeStatusCode
 F ClientVpnEndpointStatus.Code ClientVpnEndpointStatusCode
 F ClientVpnRouteStatus.Code ClientVpnRouteStatusCode
+F ClientVpnTrustProvider.TrustProviderType ClientVpnDeviceTrustProviderType
+F ClientVpnTrustProviderRequest.TrustProviderType ClientVpnDeviceTrustProviderType
 F ConnectionNotification.ConnectionNotificationState ConnectionNotificationState
 F ConnectionNotification.ConnectionNotificationType ConnectionNotificationType
 F ConversionTask.State ConversionTaskState
@@ -12447,6 +12517,7 @@ F DataResponse.Metric MetricType
 F DataResponse.Period PeriodType
 F DataResponse.Statistic StatisticType
 F DeclarativePoliciesReport.Status ReportState
+F DeleteClientVpnEndpointAuthorizationPolicyOutput.Status ClientVpnAuthorizationPolicyStatus
 F DeleteFleetError.Code DeleteFleetErrorCode
 F DeleteFleetSuccessItem.CurrentFleetState FleetStateCode
 F DeleteFleetSuccessItem.PreviousFleetState FleetStateCode
@@ -12561,6 +12632,8 @@ F GetCapacityManagerMetricDataInput.MetricNames Metric
 F GetCapacityManagerMetricDimensionsInput.GroupBy GroupBy
 F GetCapacityManagerMetricDimensionsInput.MetricNames Metric
 F GetCapacityReservationUsageOutput.State CapacityReservationState
+F GetClientVpnEndpointAuthorizationPolicyOutput.ShadowMode ClientVpnAuthorizationPolicyShadowMode
+F GetClientVpnEndpointAuthorizationPolicyOutput.Status ClientVpnAuthorizationPolicyStatus
 F GetDefaultCreditSpecificationInput.InstanceFamily UnlimitedSupportedInstanceFamily
 F GetEbsEncryptionByDefaultOutput.SseType SSEType
 F GetEnabledIpamPolicyOutput.ManagedBy IpamPolicyManagedBy
@@ -12846,6 +12919,9 @@ F ModifyApplicationStatusCheckInput.Protocol NetworkProtocolEnum
 F ModifyAvailabilityZoneGroupInput.OptInStatus ModifyAvailabilityZoneOptInStatus
 F ModifyCapacityReservationInput.EndDateType EndDateType
 F ModifyCapacityReservationInput.InstanceMatchCriteria InstanceMatchCriteria
+F ModifyCapacityReservationOutput.AdjustmentStatus CapacityReservationAdjustmentStatus
+F ModifyClientVpnEndpointAuthorizationPolicyInput.ShadowMode ClientVpnAuthorizationPolicyShadowMode
+F ModifyClientVpnEndpointAuthorizationPolicyOutput.Status ClientVpnAuthorizationPolicyStatus
 F ModifyClientVpnEndpointInput.SelfServicePortal SelfServicePortal
 F ModifyDefaultCreditSpecificationInput.InstanceFamily UnlimitedSupportedInstanceFamily
 F ModifyFleetInput.ExcessCapacityTerminationPolicy FleetExcessCapacityTerminationPolicy
@@ -13269,6 +13345,7 @@ N AcceleratorCount
 N AcceleratorTotalMemoryMiB
 N Accelerators
 N Accept
+N AcceptModificationTerms
 N AcceptanceRequired
 N AcceptedRouteCount
 N AccepterPeeringConnectionOptions
@@ -13325,6 +13402,7 @@ N AddressTransfer
 N AddressTransfers
 N Addresses
 N AddressingType
+N AdjustmentDetails
 N AdvertisementType
 N Affinity
 N AllAvailabilityZones
@@ -13424,6 +13502,7 @@ N AuthSchemeResolver
 N AuthSchemes
 N AuthenticationOptions
 N AuthorizationEndpoint
+N AuthorizationPolicyLastEvaluatedTime
 N AuthorizationRules
 N AuthorizeAllGroups
 N AutoEnableIO
@@ -13527,6 +13606,10 @@ N CapacityReservationGroups
 N CapacityReservationId
 N CapacityReservationIds
 N CapacityReservationInfo
+N CapacityReservationModificationQuote
+N CapacityReservationModificationQuoteId
+N CapacityReservationModificationQuoteIds
+N CapacityReservationModificationQuotes
 N CapacityReservationOptions
 N CapacityReservationResourceGroupArn
 N CapacityReservationResourceGroupArns
@@ -13770,6 +13853,7 @@ N DeviceId
 N DeviceIndex
 N DeviceName
 N DeviceOptions
+N DevicePostureOptions
 N DeviceValidationDomain
 N DhcpConfigurations
 N DhcpOptions
@@ -13880,6 +13964,7 @@ N EncryptionSupport
 N End
 N EndDate
 N EndDateRange
+N EndDateType
 N EndHour
 N EndTime
 N Endpoint
@@ -14070,6 +14155,7 @@ N IncludeAll
 N IncludeAllInstances
 N IncludeAllResourceTypes
 N IncludeAllTagsOfInstance
+N IncludeAuthorizationPolicyContext
 N IncludeDeprecated
 N IncludeDisabled
 N IncludeLocalZones
@@ -14508,6 +14594,7 @@ N MinTermDurationInDays
 N MinVersion
 N MissingComponent
 N ModificationResults
+N ModificationTerms
 N ModifyTime
 N Monitored
 N Monitoring
@@ -14580,6 +14667,9 @@ N NetworkPlatform
 N NeuronDevices
 N NeuronInfo
 N NewAssociationId
+N NewCommitmentDuration
+N NewCommitmentEndDate
+N NewStartDate
 N NextHopIp
 N NextSlotStartTime
 N NextToken
@@ -14633,6 +14723,7 @@ N Origin
 N OriginalIops
 N OriginalMultiAttachEnabled
 N OriginalSize
+N OriginalStartDate
 N OriginalThroughput
 N OutboundHeader
 N OutpostArn
@@ -14902,6 +14993,7 @@ N ReservationInstanceMatchCriteria
 N ReservationStartTimestamp
 N ReservationState
 N ReservationUnusedFinancialOwner
+N ReservationUpdate
 N ReservationValue
 N Reservations
 N ReservedCapacityFallbackOptions
@@ -15380,6 +15472,7 @@ N TransitGatewayVpcAttachments
 N TransitGateways
 N TransportTransitGatewayAttachmentId
 N TrunkInterfaceId
+N TrustProviders
 N TunnelInsideCidr
 N TunnelInsideIpv6Cidr
 N TunnelOptions
@@ -15701,6 +15794,8 @@ T CapacityManagerMonitoredTagKeyStatus
 T CapacityManagerStatus
 T CapacityManagerTagDimension
 T CapacityReservation
+T CapacityReservationAdjustmentDetails
+T CapacityReservationAdjustmentStatus
 T CapacityReservationBillingRequest
 T CapacityReservationBillingRequestStatus
 T CapacityReservationCancellationQuote
@@ -15714,6 +15809,9 @@ T CapacityReservationFleetState
 T CapacityReservationGroup
 T CapacityReservationInfo
 T CapacityReservationInstancePlatform
+T CapacityReservationLaunchStatus
+T CapacityReservationModificationQuote
+T CapacityReservationModificationQuoteState
 T CapacityReservationOptions
 T CapacityReservationOptionsRequest
 T CapacityReservationPreference
@@ -15750,11 +15848,14 @@ T ClientRouteEnforcementResponseOptions
 T ClientVpnAuthentication
 T ClientVpnAuthenticationRequest
 T ClientVpnAuthenticationType
+T ClientVpnAuthorizationPolicyShadowMode
+T ClientVpnAuthorizationPolicyStatus
 T ClientVpnAuthorizationRuleStatus
 T ClientVpnAuthorizationRuleStatusCode
 T ClientVpnConnection
 T ClientVpnConnectionStatus
 T ClientVpnConnectionStatusCode
+T ClientVpnDeviceTrustProviderType
 T ClientVpnEndpoint
 T ClientVpnEndpointAttributeStatus
 T ClientVpnEndpointAttributeStatusCode
@@ -15763,6 +15864,8 @@ T ClientVpnEndpointStatusCode
 T ClientVpnRoute
 T ClientVpnRouteStatus
 T ClientVpnRouteStatusCode
+T ClientVpnTrustProvider
+T ClientVpnTrustProviderRequest
 T CloudWatchLogOptions
 T CloudWatchLogOptionsSpecification
 T CoipAddressUsage
@@ -15843,6 +15946,8 @@ T DestinationFileFormat
 T DestinationOptionsRequest
 T DestinationOptionsResponse
 T DeviceOptions
+T DevicePostureOptions
+T DevicePostureResponseOptions
 T DeviceTrustProviderType
 T DeviceType
 T DhcpConfiguration
@@ -16388,6 +16493,9 @@ T MetricDataResult
 T MetricPoint
 T MetricType
 T MetricValue
+T ModificationQuoteCurrentConfiguration
+T ModificationReservationUpdate
+T ModificationTerms
 T ModifyAvailabilityZoneOptInStatus
 T ModifyTransitGatewayOptions
 T ModifyTransitGatewayVpcAttachmentRequestOptions
@@ -17223,6 +17331,9 @@ E CapacityManagerMonitoredTagKeyStatusDeactivating CapacityManagerMonitoredTagKe
 E CapacityManagerMonitoredTagKeyStatusSuspended CapacityManagerMonitoredTagKeyStatus
 E CapacityManagerStatusDisabled CapacityManagerStatus
 E CapacityManagerStatusEnabled CapacityManagerStatus
+E CapacityReservationAdjustmentStatusApplied CapacityReservationAdjustmentStatus
+E CapacityReservationAdjustmentStatusRejected CapacityReservationAdjustmentStatus
+E CapacityReservationAdjustmentStatusRequested CapacityReservationAdjustmentStatus
 E CapacityReservationBillingRequestStatusAccepted CapacityReservationBillingRequestStatus
 E CapacityReservationBillingRequestStatusCancelled CapacityReservationBillingRequestStatus
 E CapacityReservationBillingRequestStatusExpired CapacityReservationBillingRequestStatus
@@ -17261,6 +17372,10 @@ E CapacityReservationInstancePlatformWindowsWithSqlServer CapacityReservationIns
 E CapacityReservationInstancePlatformWindowsWithSqlServerEnterprise CapacityReservationInstancePlatform
 E CapacityReservationInstancePlatformWindowsWithSqlServerStandard CapacityReservationInstancePlatform
 E CapacityReservationInstancePlatformWindowsWithSqlServerWeb CapacityReservationInstancePlatform
+E CapacityReservationLaunchStatusLaunchable CapacityReservationLaunchStatus
+E CapacityReservationLaunchStatusUnlaunchable CapacityReservationLaunchStatus
+E CapacityReservationModificationQuoteStateActive CapacityReservationModificationQuoteState
+E CapacityReservationModificationQuoteStateExpired CapacityReservationModificationQuoteState
 E CapacityReservationPreferenceCapacityReservationsOnly CapacityReservationPreference
 E CapacityReservationPreferenceNone CapacityReservationPreference
 E CapacityReservationPreferenceOpen CapacityReservationPreference
@@ -17294,6 +17409,13 @@ E ClientCertificateRevocationListStatusCodePending ClientCertificateRevocationLi
 E ClientVpnAuthenticationTypeCertificateAuthentication ClientVpnAuthenticationType
 E ClientVpnAuthenticationTypeDirectoryServiceAuthentication ClientVpnAuthenticationType
 E ClientVpnAuthenticationTypeFederatedAuthentication ClientVpnAuthenticationType
+E ClientVpnAuthorizationPolicyShadowModeDisabled ClientVpnAuthorizationPolicyShadowMode
+E ClientVpnAuthorizationPolicyShadowModeEnabled ClientVpnAuthorizationPolicyShadowMode
+E ClientVpnAuthorizationPolicyStatusActive ClientVpnAuthorizationPolicyStatus
+E ClientVpnAuthorizationPolicyStatusCreating ClientVpnAuthorizationPolicyStatus
+E ClientVpnAuthorizationPolicyStatusDeleting ClientVpnAuthorizationPolicyStatus
+E ClientVpnAuthorizationPolicyStatusFailed ClientVpnAuthorizationPolicyStatus
+E ClientVpnAuthorizationPolicyStatusUpdating ClientVpnAuthorizationPolicyStatus
 E ClientVpnAuthorizationRuleStatusCodeActive ClientVpnAuthorizationRuleStatusCode
 E ClientVpnAuthorizationRuleStatusCodeAuthorizing ClientVpnAuthorizationRuleStatusCode
 E ClientVpnAuthorizationRuleStatusCodeFailed ClientVpnAuthorizationRuleStatusCode
@@ -17302,6 +17424,9 @@ E ClientVpnConnectionStatusCodeActive ClientVpnConnectionStatusCode
 E ClientVpnConnectionStatusCodeFailedToTerminate ClientVpnConnectionStatusCode
 E ClientVpnConnectionStatusCodeTerminated ClientVpnConnectionStatusCode
 E ClientVpnConnectionStatusCodeTerminating ClientVpnConnectionStatusCode
+E ClientVpnDeviceTrustProviderTypeCrowdstrike ClientVpnDeviceTrustProviderType
+E ClientVpnDeviceTrustProviderTypeJamf ClientVpnDeviceTrustProviderType
+E ClientVpnDeviceTrustProviderTypeJumpcloud ClientVpnDeviceTrustProviderType
 E ClientVpnEndpointAttributeStatusCodeApplied ClientVpnEndpointAttributeStatusCode
 E ClientVpnEndpointAttributeStatusCodeApplying ClientVpnEndpointAttributeStatusCode
 E ClientVpnEndpointStatusCodeAvailable ClientVpnEndpointStatusCode
@@ -18180,6 +18305,7 @@ E InstanceTypeI8g4xlarge InstanceType
 E InstanceTypeI8g8xlarge InstanceType
 E InstanceTypeI8gLarge InstanceType
 E InstanceTypeI8gMetal24xl InstanceType
+E InstanceTypeI8gMetal48xl InstanceType
 E InstanceTypeI8gXlarge InstanceType
 E InstanceTypeI8ge12xlarge InstanceType
 E InstanceTypeI8ge18xlarge InstanceType
@@ -18585,6 +18711,7 @@ E InstanceTypeM9gd48xlarge InstanceType
 E InstanceTypeM9gd4xlarge InstanceType
 E InstanceTypeM9gd8xlarge InstanceType
 E InstanceTypeM9gdLarge InstanceType
+E InstanceTypeM9gdMedium InstanceType
 E InstanceTypeM9gdMetal24xl InstanceType
 E InstanceTypeM9gdMetal48xl InstanceType
 E InstanceTypeM9gdXlarge InstanceType
@@ -18833,11 +18960,13 @@ E InstanceTypeR8gb12xlarge InstanceType
 E InstanceTypeR8gb16xlarge InstanceType
 E InstanceTypeR8gb24xlarge InstanceType
 E InstanceTypeR8gb2xlarge InstanceType
+E InstanceTypeR8gb48xlarge InstanceType
 E InstanceTypeR8gb4xlarge InstanceType
 E InstanceTypeR8gb8xlarge InstanceType
 E InstanceTypeR8gbLarge InstanceType
 E InstanceTypeR8gbMedium InstanceType
 E InstanceTypeR8gbMetal24xl InstanceType
+E InstanceTypeR8gbMetal48xl InstanceType
 E InstanceTypeR8gbXlarge InstanceType
 E InstanceTypeR8gd12xlarge InstanceType
 E InstanceTypeR8gd16xlarge InstanceType
@@ -18999,11 +19128,16 @@ E InstanceTypeT4gMicro InstanceType
 E InstanceTypeT4gNano InstanceType
 E InstanceTypeT4gSmall InstanceType
 E InstanceTypeT4gXlarge InstanceType
+E InstanceTypeT8iMedium InstanceType
+E InstanceTypeT8iMicro InstanceType
+E InstanceTypeT8iNano InstanceType
+E InstanceTypeT8iSmall InstanceType
 E InstanceTypeTrn12xlarge InstanceType
 E InstanceTypeTrn132xlarge InstanceType
 E InstanceTypeTrn1n32xlarge InstanceType
 E InstanceTypeTrn23xlarge InstanceType
 E InstanceTypeTrn248xlarge InstanceType
+E InstanceTypeTrn2u48xlarge InstanceType
 E InstanceTypeU12tb1112xlarge InstanceType
 E InstanceTypeU12tb1Metal InstanceType
 E InstanceTypeU18tb1112xlarge InstanceType
@@ -19165,6 +19299,9 @@ E IpamInternetRegistryAssociationStateCreateInProgress IpamInternetRegistryAssoc
 E IpamInternetRegistryAssociationStateDeleteComplete IpamInternetRegistryAssociationState
 E IpamInternetRegistryAssociationStateDeleteFailed IpamInternetRegistryAssociationState
 E IpamInternetRegistryAssociationStateDeleteInProgress IpamInternetRegistryAssociationState
+E IpamInternetRegistryAssociationStateDisableComplete IpamInternetRegistryAssociationState
+E IpamInternetRegistryAssociationStateDisableFailed IpamInternetRegistryAssociationState
+E IpamInternetRegistryAssociationStateDisableInProgress IpamInternetRegistryAssociationState
 E IpamInternetRegistryAssociationStateEnableComplete IpamInternetRegistryAssociationState
 E IpamInternetRegistryAssociationStateEnableFailed IpamInternetRegistryAssociationState
 E IpamInternetRegistryAssociationStateEnableInProgress IpamInternetRegistryAssociationState
@@ -19717,6 +19854,7 @@ E ResourceTypeCapacityManagerDataExport ResourceType
 E ResourceTypeCapacityReservation ResourceType
 E ResourceTypeCapacityReservationCancellationQuote ResourceType
 E ResourceTypeCapacityReservationFleet ResourceType
+E ResourceTypeCapacityReservationModificationQuote ResourceType
 E ResourceTypeCarrierGateway ResourceType
 E ResourceTypeClientVpnEndpoint ResourceType
 E ResourceTypeCoipPool ResourceType
@@ -19825,6 +19963,7 @@ E ResourceTypeVpnGateway ResourceType
 E RirApnic Rir
 E RirArin Rir
 E RirLacnic Rir
+E RirNicbr Rir
 E RirRipe Rir
 E RootDeviceTypeEbs RootDeviceType
 E RootDeviceTypeInstanceStore RootDeviceType
@@ -20323,3 +20462,1141 @@ E WeekDayTuesday WeekDay
 E WeekDayWednesday WeekDay
 E ZeroSizePreferenceDefault ZeroSizePreference
 E ZeroSizePreferenceRetain ZeroSizePreference
+M BlobAttributeValue SecureBlobAttributeValue
+H CopySnapshotInput.PresignedUrl
+H CreateKeyPairOutput.KeyMaterial
+H CreateVerifiedAccessTrustProviderOidcOptions.ClientSecret
+H DiskImageDescription.ImportManifestUrl
+H DiskImageDetail.ImportManifestUrl
+H GetInstanceTpmEkPubOutput.KeyValue
+H GetPasswordDataOutput.PasswordData
+H GetVpnConnectionDeviceSampleConfigurationOutput.VpnConnectionDeviceSampleConfiguration
+H ImageDiskContainer.Url
+H ImportInstanceLaunchSpecification.UserData
+H LaunchSpecification.UserData
+H ModifyVerifiedAccessTrustProviderOidcOptions.ClientSecret
+H ModifyVpnTunnelOptionsInput.TunnelOptions
+H ModifyVpnTunnelOptionsSpecification.PreSharedKey
+H OidcOptions.ClientSecret
+H RequestLaunchTemplateData.UserData
+H RequestSpotLaunchSpecification.UserData
+H ResponseLaunchTemplateData.UserData
+H RunInstancesInput.UserData
+H RunScheduledInstancesInput.LaunchSpecification
+H S3Storage.UploadPolicySignature
+H SnapshotDetail.Url
+H SnapshotDiskContainer.Url
+H SnapshotTaskDetail.Url
+H SpotFleetLaunchSpecification.UserData
+H TunnelOption.PreSharedKey
+H VpnConnection.CustomerGatewayConfiguration
+H VpnTunnelOptionsSpecification.PreSharedKey
+Y BundleTaskComplete 15 40
+Y ConversionTaskCancelled 15 40
+Y ConversionTaskCompleted 15 40
+Y ConversionTaskDeleted 15 40
+Y CustomerGatewayAvailable 15 40
+Y ExportTaskCancelled 15 40
+Y ExportTaskCompleted 15 40
+Y ImageAvailable 15 40
+Y ImageExists 15 40
+Y InstanceExists 5 40
+Y InstanceRunning 15 40
+Y InstanceStatusOk 15 40
+Y InstanceStopped 15 40
+Y InstanceTerminated 15 40
+Y InternetGatewayExists 5 6
+Y KeyPairExists 5 6
+Y NatGatewayAvailable 15 40
+Y NatGatewayDeleted 15 40
+Y NetworkInterfaceAvailable 20 10
+Y PasswordDataAvailable 15 40
+Y SecurityGroupExists 5 6
+Y SnapshotCompleted 15 40
+Y SnapshotImported 15 40
+Y SpotInstanceRequestFulfilled 15 40
+Y StoreImageTaskComplete 5 40
+Y SubnetAvailable 15 40
+Y SystemStatusOk 15 40
+Y VolumeAvailable 15 40
+Y VolumeDeleted 15 40
+Y VolumeInUse 15 40
+Y VpcAvailable 15 40
+Y VpcExists 1 5
+Y VpcPeeringConnectionDeleted 15 40
+Y VpcPeeringConnectionExists 15 40
+Y VpnConnectionAvailable 15 40
+Y VpnConnectionDeleted 15 40
+K AcceptAddressTransferInput 001 Address req nil
+K AcceptReservedInstancesExchangeQuoteInput 001 ReservedInstanceIds req nil
+K AcceptReservedInstancesExchangeQuoteInput 002 TargetConfigurations each TargetConfigurationRequest slice
+K AcceptTransitGatewayPeeringAttachmentInput 001 TransitGatewayAttachmentId req nil
+K AcceptTransitGatewayVpcAttachmentInput 001 TransitGatewayAttachmentId req nil
+K AcceptVpcEndpointConnectionsInput 001 ServiceId req nil
+K AcceptVpcEndpointConnectionsInput 002 VpcEndpointIds req nil
+K AcceptVpcPeeringConnectionInput 001 VpcPeeringConnectionId req nil
+K AddPrefixListEntry 001 Cidr req nil
+K AdvertiseByoipCidrInput 001 Cidr req nil
+K AllocateHostsInput 001 AvailabilityZone req nil
+K AllocateIpamPoolCidrInput 001 IpamPoolId req nil
+K ApplySecurityGroupsToClientVpnTargetNetworkInput 001 ClientVpnEndpointId req nil
+K ApplySecurityGroupsToClientVpnTargetNetworkInput 002 SecurityGroupIds req nil
+K ApplySecurityGroupsToClientVpnTargetNetworkInput 003 VpcId req nil
+K AsnAuthorizationContext 001 Message req nil
+K AsnAuthorizationContext 002 Signature req nil
+K AssignIpv6AddressesInput 001 NetworkInterfaceId req nil
+K AssignPrivateIpAddressesInput 001 NetworkInterfaceId req nil
+K AssignPrivateNatGatewayAddressInput 001 NatGatewayId req nil
+K AssignPrivateNatGatewayAddressInput 002 PrivateIpAddressCount min 1 ptr
+K AssociateClientVpnTargetNetworkInput 001 ClientVpnEndpointId req nil
+K AssociateClientVpnTargetNetworkInput 002 SubnetId req nil
+K AssociateDhcpOptionsInput 001 DhcpOptionsId req nil
+K AssociateDhcpOptionsInput 002 VpcId req nil
+K AssociateEnclaveCertificateIamRoleInput 001 CertificateArn req nil
+K AssociateEnclaveCertificateIamRoleInput 002 RoleArn req nil
+K AssociateIamInstanceProfileInput 001 IamInstanceProfile req nil
+K AssociateIamInstanceProfileInput 002 InstanceId req nil
+K AssociateInstanceEventWindowInput 001 AssociationTarget req nil
+K AssociateInstanceEventWindowInput 002 InstanceEventWindowId req nil
+K AssociateIpamByoasnInput 001 Asn req nil
+K AssociateIpamByoasnInput 002 Cidr req nil
+K AssociateIpamResourceDiscoveryInput 001 IpamId req nil
+K AssociateIpamResourceDiscoveryInput 002 IpamResourceDiscoveryId req nil
+K AssociateNatGatewayAddressInput 001 AllocationIds req nil
+K AssociateNatGatewayAddressInput 002 NatGatewayId req nil
+K AssociateRouteTableInput 001 RouteTableId req nil
+K AssociateSubnetCidrBlockInput 001 SubnetId req nil
+K AssociateTransitGatewayMulticastDomainInput 001 SubnetIds req nil
+K AssociateTransitGatewayMulticastDomainInput 002 TransitGatewayAttachmentId req nil
+K AssociateTransitGatewayMulticastDomainInput 003 TransitGatewayMulticastDomainId req nil
+K AssociateTransitGatewayPolicyTableInput 001 TransitGatewayAttachmentId req nil
+K AssociateTransitGatewayPolicyTableInput 002 TransitGatewayPolicyTableId req nil
+K AssociateTransitGatewayRouteTableInput 001 TransitGatewayAttachmentId req nil
+K AssociateTransitGatewayRouteTableInput 002 TransitGatewayRouteTableId req nil
+K AssociateTrunkInterfaceInput 001 BranchInterfaceId req nil
+K AssociateTrunkInterfaceInput 002 TrunkInterfaceId req nil
+K AssociateVpcCidrBlockInput 001 VpcId req nil
+K AthenaIntegration 001 IntegrationResultS3DestinationArn req nil
+K AthenaIntegration 002 PartitionLoadFrequency req empty
+K AttachClassicLinkVpcInput 001 Groups req nil
+K AttachClassicLinkVpcInput 002 InstanceId req nil
+K AttachClassicLinkVpcInput 003 VpcId req nil
+K AttachInternetGatewayInput 001 InternetGatewayId req nil
+K AttachInternetGatewayInput 002 VpcId req nil
+K AttachNetworkInterfaceInput 001 DeviceIndex req nil
+K AttachNetworkInterfaceInput 002 InstanceId req nil
+K AttachNetworkInterfaceInput 003 NetworkInterfaceId req nil
+K AttachVerifiedAccessTrustProviderInput 001 VerifiedAccessInstanceId req nil
+K AttachVerifiedAccessTrustProviderInput 002 VerifiedAccessTrustProviderId req nil
+K AttachVolumeInput 001 Device req nil
+K AttachVolumeInput 002 InstanceId req nil
+K AttachVolumeInput 003 VolumeId req nil
+K AttachVpnGatewayInput 001 VpcId req nil
+K AttachVpnGatewayInput 002 VpnGatewayId req nil
+K AuthorizeClientVpnIngressInput 001 ClientVpnEndpointId req nil
+K AuthorizeClientVpnIngressInput 002 TargetNetworkCidr req nil
+K AuthorizeSecurityGroupEgressInput 001 GroupId req nil
+K BundleInstanceInput 001 InstanceId req nil
+K BundleInstanceInput 002 Storage req nil
+K CancelBundleTaskInput 001 BundleId req nil
+K CancelCapacityReservationFleetsInput 001 CapacityReservationFleetIds req nil
+K CancelCapacityReservationInput 001 CapacityReservationId req nil
+K CancelConversionTaskInput 001 ConversionTaskId req nil
+K CancelExportTaskInput 001 ExportTaskId req nil
+K CancelImageLaunchPermissionInput 001 ImageId req nil
+K CancelReservedInstancesListingInput 001 ReservedInstancesListingId req nil
+K CancelSpotFleetRequestsInput 001 SpotFleetRequestIds req nil
+K CancelSpotFleetRequestsInput 002 TerminateInstances req nil
+K CancelSpotInstanceRequestsInput 001 SpotInstanceRequestIds req nil
+K CidrAuthorizationContext 001 Message req nil
+K CidrAuthorizationContext 002 Signature req nil
+K ClassicLoadBalancersConfig 001 ClassicLoadBalancers len 1 container
+K ConfirmProductInstanceInput 001 InstanceId req nil
+K ConfirmProductInstanceInput 002 ProductCode req nil
+K CopyFpgaImageInput 001 SourceFpgaImageId req nil
+K CopyFpgaImageInput 002 SourceRegion req nil
+K CopyImageInput 001 Name req nil
+K CopyImageInput 002 SourceImageId req nil
+K CopyImageInput 003 SourceRegion req nil
+K CopySnapshotInput 001 SourceRegion req nil
+K CopySnapshotInput 002 SourceSnapshotId req nil
+K CreateCapacityReservationFleetInput 001 InstanceTypeSpecifications req nil
+K CreateCapacityReservationFleetInput 002 TotalTargetCapacity req nil
+K CreateCapacityReservationFleetInput 003 InstanceTypeSpecifications each ReservationFleetInstanceSpecification slice
+K CreateCapacityReservationInput 001 InstanceCount req nil
+K CreateCapacityReservationInput 002 InstancePlatform req empty
+K CreateCapacityReservationInput 003 InstanceType req nil
+K CreateCarrierGatewayInput 001 VpcId req nil
+K CreateClientVpnEndpointInput 001 AuthenticationOptions req nil
+K CreateClientVpnEndpointInput 002 ClientCidrBlock req nil
+K CreateClientVpnEndpointInput 003 ConnectionLogOptions req nil
+K CreateClientVpnEndpointInput 004 ServerCertificateArn req nil
+K CreateClientVpnRouteInput 001 ClientVpnEndpointId req nil
+K CreateClientVpnRouteInput 002 DestinationCidrBlock req nil
+K CreateClientVpnRouteInput 003 TargetVpcSubnetId req nil
+K CreateCoipCidrInput 001 Cidr req nil
+K CreateCoipCidrInput 002 CoipPoolId req nil
+K CreateCoipPoolInput 001 LocalGatewayRouteTableId req nil
+K CreateCustomerGatewayInput 001 Type req empty
+K CreateDefaultSubnetInput 001 AvailabilityZone req nil
+K CreateDhcpOptionsInput 001 DhcpConfigurations req nil
+K CreateEgressOnlyInternetGatewayInput 001 VpcId req nil
+K CreateFleetInput 001 LaunchTemplateConfigs req nil
+K CreateFleetInput 002 TargetCapacitySpecification req nil
+K CreateFleetInput 003 LaunchTemplateConfigs each FleetLaunchTemplateConfigRequest slice
+K CreateFleetInput 004 TargetCapacitySpecification nest TargetCapacitySpecificationRequest
+K CreateFlowLogsInput 001 ResourceIds req nil
+K CreateFlowLogsInput 002 ResourceType req empty
+K CreateFpgaImageInput 001 InputStorageLocation req nil
+K CreateImageInput 001 InstanceId req nil
+K CreateImageInput 002 Name req nil
+K CreateInstanceConnectEndpointInput 001 SubnetId req nil
+K CreateInstanceExportTaskInput 001 ExportToS3Task req nil
+K CreateInstanceExportTaskInput 002 InstanceId req nil
+K CreateInstanceExportTaskInput 003 TargetEnvironment req empty
+K CreateIpamExternalResourceVerificationTokenInput 001 IpamId req nil
+K CreateIpamPoolInput 001 AddressFamily req empty
+K CreateIpamPoolInput 002 IpamScopeId req nil
+K CreateIpamScopeInput 001 IpamId req nil
+K CreateKeyPairInput 001 KeyName req nil
+K CreateLaunchTemplateInput 001 LaunchTemplateData req nil
+K CreateLaunchTemplateInput 002 LaunchTemplateName req nil
+K CreateLaunchTemplateInput 003 LaunchTemplateName len 3 ptr
+K CreateLaunchTemplateInput 004 LaunchTemplateData nest RequestLaunchTemplateData
+K CreateLaunchTemplateVersionInput 001 LaunchTemplateData req nil
+K CreateLaunchTemplateVersionInput 002 LaunchTemplateName len 3 ptr
+K CreateLaunchTemplateVersionInput 003 LaunchTemplateData nest RequestLaunchTemplateData
+K CreateLocalGatewayRouteInput 001 LocalGatewayRouteTableId req nil
+K CreateLocalGatewayRouteTableInput 001 LocalGatewayId req nil
+K CreateLocalGatewayRouteTableVirtualInterfaceGroupAssociationInput 001 LocalGatewayRouteTableId req nil
+K CreateLocalGatewayRouteTableVirtualInterfaceGroupAssociationInput 002 LocalGatewayVirtualInterfaceGroupId req nil
+K CreateLocalGatewayRouteTableVpcAssociationInput 001 LocalGatewayRouteTableId req nil
+K CreateLocalGatewayRouteTableVpcAssociationInput 002 VpcId req nil
+K CreateManagedPrefixListInput 001 AddressFamily req nil
+K CreateManagedPrefixListInput 002 MaxEntries req nil
+K CreateManagedPrefixListInput 003 PrefixListName req nil
+K CreateManagedPrefixListInput 004 Entries each AddPrefixListEntry slice
+K CreateNatGatewayInput 001 SecondaryPrivateIpAddressCount min 1 ptr
+K CreateNatGatewayInput 002 SubnetId req nil
+K CreateNetworkAclEntryInput 001 Egress req nil
+K CreateNetworkAclEntryInput 002 NetworkAclId req nil
+K CreateNetworkAclEntryInput 003 Protocol req nil
+K CreateNetworkAclEntryInput 004 RuleAction req empty
+K CreateNetworkAclEntryInput 005 RuleNumber req nil
+K CreateNetworkAclInput 001 VpcId req nil
+K CreateNetworkInsightsPathInput 001 Protocol req empty
+K CreateNetworkInsightsPathInput 002 Source req nil
+K CreateNetworkInterfaceInput 001 SubnetId req nil
+K CreateNetworkInterfacePermissionInput 001 NetworkInterfaceId req nil
+K CreateNetworkInterfacePermissionInput 002 Permission req empty
+K CreateReplaceRootVolumeTaskInput 001 InstanceId req nil
+K CreateReservedInstancesListingInput 001 ClientToken req nil
+K CreateReservedInstancesListingInput 002 InstanceCount req nil
+K CreateReservedInstancesListingInput 003 PriceSchedules req nil
+K CreateReservedInstancesListingInput 004 ReservedInstancesId req nil
+K CreateRestoreImageTaskInput 001 Bucket req nil
+K CreateRestoreImageTaskInput 002 ObjectKey req nil
+K CreateRouteInput 001 RouteTableId req nil
+K CreateRouteTableInput 001 VpcId req nil
+K CreateSecurityGroupInput 001 Description req nil
+K CreateSecurityGroupInput 002 GroupName req nil
+K CreateSnapshotInput 001 VolumeId req nil
+K CreateSnapshotsInput 001 InstanceSpecification req nil
+K CreateSnapshotsInput 002 InstanceSpecification nest InstanceSpecification
+K CreateSpotDatafeedSubscriptionInput 001 Bucket req nil
+K CreateStoreImageTaskInput 001 Bucket req nil
+K CreateStoreImageTaskInput 002 ImageId req nil
+K CreateSubnetCidrReservationInput 001 Cidr req nil
+K CreateSubnetCidrReservationInput 002 ReservationType req empty
+K CreateSubnetCidrReservationInput 003 SubnetId req nil
+K CreateSubnetInput 001 VpcId req nil
+K CreateTagsInput 001 Resources req nil
+K CreateTagsInput 002 Tags req nil
+K CreateTrafficMirrorFilterRuleInput 001 DestinationCidrBlock req nil
+K CreateTrafficMirrorFilterRuleInput 002 RuleAction req empty
+K CreateTrafficMirrorFilterRuleInput 003 RuleNumber req nil
+K CreateTrafficMirrorFilterRuleInput 004 SourceCidrBlock req nil
+K CreateTrafficMirrorFilterRuleInput 005 TrafficDirection req empty
+K CreateTrafficMirrorFilterRuleInput 006 TrafficMirrorFilterId req nil
+K CreateTrafficMirrorSessionInput 001 NetworkInterfaceId req nil
+K CreateTrafficMirrorSessionInput 002 SessionNumber req nil
+K CreateTrafficMirrorSessionInput 003 TrafficMirrorFilterId req nil
+K CreateTrafficMirrorSessionInput 004 TrafficMirrorTargetId req nil
+K CreateTransitGatewayConnectInput 001 Options req nil
+K CreateTransitGatewayConnectInput 002 TransportTransitGatewayAttachmentId req nil
+K CreateTransitGatewayConnectInput 003 Options nest CreateTransitGatewayConnectRequestOptions
+K CreateTransitGatewayConnectPeerInput 001 InsideCidrBlocks req nil
+K CreateTransitGatewayConnectPeerInput 002 PeerAddress req nil
+K CreateTransitGatewayConnectPeerInput 003 TransitGatewayAttachmentId req nil
+K CreateTransitGatewayConnectRequestOptions 001 Protocol req empty
+K CreateTransitGatewayMulticastDomainInput 001 TransitGatewayId req nil
+K CreateTransitGatewayPeeringAttachmentInput 001 PeerAccountId req nil
+K CreateTransitGatewayPeeringAttachmentInput 002 PeerRegion req nil
+K CreateTransitGatewayPeeringAttachmentInput 003 PeerTransitGatewayId req nil
+K CreateTransitGatewayPeeringAttachmentInput 004 TransitGatewayId req nil
+K CreateTransitGatewayPolicyTableInput 001 TransitGatewayId req nil
+K CreateTransitGatewayPrefixListReferenceInput 001 PrefixListId req nil
+K CreateTransitGatewayPrefixListReferenceInput 002 TransitGatewayRouteTableId req nil
+K CreateTransitGatewayRouteInput 001 DestinationCidrBlock req nil
+K CreateTransitGatewayRouteInput 002 TransitGatewayRouteTableId req nil
+K CreateTransitGatewayRouteTableAnnouncementInput 001 PeeringAttachmentId req nil
+K CreateTransitGatewayRouteTableAnnouncementInput 002 TransitGatewayRouteTableId req nil
+K CreateTransitGatewayRouteTableInput 001 TransitGatewayId req nil
+K CreateTransitGatewayVpcAttachmentInput 001 SubnetIds req nil
+K CreateTransitGatewayVpcAttachmentInput 002 TransitGatewayId req nil
+K CreateTransitGatewayVpcAttachmentInput 003 VpcId req nil
+K CreateVerifiedAccessEndpointEniOptions 001 Port min 1 ptr
+K CreateVerifiedAccessEndpointInput 001 ApplicationDomain req nil
+K CreateVerifiedAccessEndpointInput 002 AttachmentType req empty
+K CreateVerifiedAccessEndpointInput 003 DomainCertificateArn req nil
+K CreateVerifiedAccessEndpointInput 004 EndpointDomainPrefix req nil
+K CreateVerifiedAccessEndpointInput 005 EndpointType req empty
+K CreateVerifiedAccessEndpointInput 006 VerifiedAccessGroupId req nil
+K CreateVerifiedAccessEndpointInput 007 LoadBalancerOptions nest CreateVerifiedAccessEndpointLoadBalancerOptions
+K CreateVerifiedAccessEndpointInput 008 NetworkInterfaceOptions nest CreateVerifiedAccessEndpointEniOptions
+K CreateVerifiedAccessEndpointLoadBalancerOptions 001 Port min 1 ptr
+K CreateVerifiedAccessGroupInput 001 VerifiedAccessInstanceId req nil
+K CreateVerifiedAccessTrustProviderInput 001 PolicyReferenceName req nil
+K CreateVerifiedAccessTrustProviderInput 002 TrustProviderType req empty
+K CreateVolumeInput 001 AvailabilityZone req nil
+K CreateVpcEndpointConnectionNotificationInput 001 ConnectionEvents req nil
+K CreateVpcEndpointConnectionNotificationInput 002 ConnectionNotificationArn req nil
+K CreateVpcEndpointInput 001 ServiceName req nil
+K CreateVpcEndpointInput 002 VpcId req nil
+K CreateVpcPeeringConnectionInput 001 VpcId req nil
+K CreateVpnConnectionInput 001 CustomerGatewayId req nil
+K CreateVpnConnectionInput 002 Type req nil
+K CreateVpnConnectionRouteInput 001 DestinationCidrBlock req nil
+K CreateVpnConnectionRouteInput 002 VpnConnectionId req nil
+K CreateVpnGatewayInput 001 Type req empty
+K CreditSpecificationRequest 001 CpuCredits req nil
+K DeleteCarrierGatewayInput 001 CarrierGatewayId req nil
+K DeleteClientVpnEndpointInput 001 ClientVpnEndpointId req nil
+K DeleteClientVpnRouteInput 001 ClientVpnEndpointId req nil
+K DeleteClientVpnRouteInput 002 DestinationCidrBlock req nil
+K DeleteCoipCidrInput 001 Cidr req nil
+K DeleteCoipCidrInput 002 CoipPoolId req nil
+K DeleteCoipPoolInput 001 CoipPoolId req nil
+K DeleteCustomerGatewayInput 001 CustomerGatewayId req nil
+K DeleteDhcpOptionsInput 001 DhcpOptionsId req nil
+K DeleteEgressOnlyInternetGatewayInput 001 EgressOnlyInternetGatewayId req nil
+K DeleteFleetsInput 001 FleetIds req nil
+K DeleteFleetsInput 002 TerminateInstances req nil
+K DeleteFlowLogsInput 001 FlowLogIds req nil
+K DeleteFpgaImageInput 001 FpgaImageId req nil
+K DeleteInstanceConnectEndpointInput 001 InstanceConnectEndpointId req nil
+K DeleteInstanceEventWindowInput 001 InstanceEventWindowId req nil
+K DeleteInternetGatewayInput 001 InternetGatewayId req nil
+K DeleteIpamExternalResourceVerificationTokenInput 001 IpamExternalResourceVerificationTokenId req nil
+K DeleteIpamInput 001 IpamId req nil
+K DeleteIpamPoolInput 001 IpamPoolId req nil
+K DeleteIpamResourceDiscoveryInput 001 IpamResourceDiscoveryId req nil
+K DeleteIpamScopeInput 001 IpamScopeId req nil
+K DeleteLaunchTemplateInput 001 LaunchTemplateName len 3 ptr
+K DeleteLaunchTemplateVersionsInput 001 LaunchTemplateName len 3 ptr
+K DeleteLaunchTemplateVersionsInput 002 Versions req nil
+K DeleteLocalGatewayRouteInput 001 LocalGatewayRouteTableId req nil
+K DeleteLocalGatewayRouteTableInput 001 LocalGatewayRouteTableId req nil
+K DeleteLocalGatewayRouteTableVirtualInterfaceGroupAssociationInput 001 LocalGatewayRouteTableVirtualInterfaceGroupAssociationId req nil
+K DeleteLocalGatewayRouteTableVpcAssociationInput 001 LocalGatewayRouteTableVpcAssociationId req nil
+K DeleteManagedPrefixListInput 001 PrefixListId req nil
+K DeleteNatGatewayInput 001 NatGatewayId req nil
+K DeleteNetworkAclEntryInput 001 Egress req nil
+K DeleteNetworkAclEntryInput 002 NetworkAclId req nil
+K DeleteNetworkAclEntryInput 003 RuleNumber req nil
+K DeleteNetworkAclInput 001 NetworkAclId req nil
+K DeleteNetworkInsightsAccessScopeAnalysisInput 001 NetworkInsightsAccessScopeAnalysisId req nil
+K DeleteNetworkInsightsAccessScopeInput 001 NetworkInsightsAccessScopeId req nil
+K DeleteNetworkInsightsAnalysisInput 001 NetworkInsightsAnalysisId req nil
+K DeleteNetworkInsightsPathInput 001 NetworkInsightsPathId req nil
+K DeleteNetworkInterfaceInput 001 NetworkInterfaceId req nil
+K DeleteNetworkInterfacePermissionInput 001 NetworkInterfacePermissionId req nil
+K DeletePlacementGroupInput 001 GroupName req nil
+K DeletePublicIpv4PoolInput 001 PoolId req nil
+K DeleteQueuedReservedInstancesInput 001 ReservedInstancesIds req nil
+K DeleteQueuedReservedInstancesInput 002 ReservedInstancesIds len 1 container
+K DeleteRouteInput 001 RouteTableId req nil
+K DeleteRouteTableInput 001 RouteTableId req nil
+K DeleteSnapshotInput 001 SnapshotId req nil
+K DeleteSubnetCidrReservationInput 001 SubnetCidrReservationId req nil
+K DeleteSubnetInput 001 SubnetId req nil
+K DeleteTagsInput 001 Resources req nil
+K DeleteTrafficMirrorFilterInput 001 TrafficMirrorFilterId req nil
+K DeleteTrafficMirrorFilterRuleInput 001 TrafficMirrorFilterRuleId req nil
+K DeleteTrafficMirrorSessionInput 001 TrafficMirrorSessionId req nil
+K DeleteTrafficMirrorTargetInput 001 TrafficMirrorTargetId req nil
+K DeleteTransitGatewayConnectInput 001 TransitGatewayAttachmentId req nil
+K DeleteTransitGatewayConnectPeerInput 001 TransitGatewayConnectPeerId req nil
+K DeleteTransitGatewayInput 001 TransitGatewayId req nil
+K DeleteTransitGatewayMulticastDomainInput 001 TransitGatewayMulticastDomainId req nil
+K DeleteTransitGatewayPeeringAttachmentInput 001 TransitGatewayAttachmentId req nil
+K DeleteTransitGatewayPolicyTableInput 001 TransitGatewayPolicyTableId req nil
+K DeleteTransitGatewayPrefixListReferenceInput 001 PrefixListId req nil
+K DeleteTransitGatewayPrefixListReferenceInput 002 TransitGatewayRouteTableId req nil
+K DeleteTransitGatewayRouteInput 001 DestinationCidrBlock req nil
+K DeleteTransitGatewayRouteInput 002 TransitGatewayRouteTableId req nil
+K DeleteTransitGatewayRouteTableAnnouncementInput 001 TransitGatewayRouteTableAnnouncementId req nil
+K DeleteTransitGatewayRouteTableInput 001 TransitGatewayRouteTableId req nil
+K DeleteTransitGatewayVpcAttachmentInput 001 TransitGatewayAttachmentId req nil
+K DeleteVerifiedAccessEndpointInput 001 VerifiedAccessEndpointId req nil
+K DeleteVerifiedAccessGroupInput 001 VerifiedAccessGroupId req nil
+K DeleteVerifiedAccessInstanceInput 001 VerifiedAccessInstanceId req nil
+K DeleteVerifiedAccessTrustProviderInput 001 VerifiedAccessTrustProviderId req nil
+K DeleteVolumeInput 001 VolumeId req nil
+K DeleteVpcEndpointConnectionNotificationsInput 001 ConnectionNotificationIds req nil
+K DeleteVpcEndpointServiceConfigurationsInput 001 ServiceIds req nil
+K DeleteVpcEndpointsInput 001 VpcEndpointIds req nil
+K DeleteVpcInput 001 VpcId req nil
+K DeleteVpcPeeringConnectionInput 001 VpcPeeringConnectionId req nil
+K DeleteVpnConnectionInput 001 VpnConnectionId req nil
+K DeleteVpnConnectionRouteInput 001 DestinationCidrBlock req nil
+K DeleteVpnConnectionRouteInput 002 VpnConnectionId req nil
+K DeleteVpnGatewayInput 001 VpnGatewayId req nil
+K DeprovisionByoipCidrInput 001 Cidr req nil
+K DeprovisionIpamByoasnInput 001 Asn req nil
+K DeprovisionIpamByoasnInput 002 IpamId req nil
+K DeprovisionIpamPoolCidrInput 001 IpamPoolId req nil
+K DeprovisionPublicIpv4PoolCidrInput 001 Cidr req nil
+K DeprovisionPublicIpv4PoolCidrInput 002 PoolId req nil
+K DeregisterImageInput 001 ImageId req nil
+K DeregisterInstanceEventNotificationAttributesInput 001 InstanceTagAttribute req nil
+K DescribeAddressTransfersInput 001 MaxResults min 5 ptr
+K DescribeAddressesAttributeInput 001 MaxResults min 1 ptr
+K DescribeByoipCidrsInput 001 MaxResults req nil
+K DescribeByoipCidrsInput 002 MaxResults min 1 ptr
+K DescribeCapacityBlockOfferingsInput 001 CapacityDurationHours req nil
+K DescribeCapacityBlockOfferingsInput 002 InstanceCount req nil
+K DescribeCapacityBlockOfferingsInput 003 InstanceType req nil
+K DescribeCapacityBlockOfferingsInput 004 MaxResults min 1 ptr
+K DescribeCapacityReservationFleetsInput 001 MaxResults min 1 ptr
+K DescribeCapacityReservationsInput 001 MaxResults min 1 ptr
+K DescribeCarrierGatewaysInput 001 MaxResults min 5 ptr
+K DescribeClassicLinkInstancesInput 001 MaxResults min 5 ptr
+K DescribeClientVpnAuthorizationRulesInput 001 ClientVpnEndpointId req nil
+K DescribeClientVpnAuthorizationRulesInput 002 MaxResults min 5 ptr
+K DescribeClientVpnConnectionsInput 001 ClientVpnEndpointId req nil
+K DescribeClientVpnConnectionsInput 002 MaxResults min 5 ptr
+K DescribeClientVpnEndpointsInput 001 MaxResults min 5 ptr
+K DescribeClientVpnRoutesInput 001 ClientVpnEndpointId req nil
+K DescribeClientVpnRoutesInput 002 MaxResults min 5 ptr
+K DescribeClientVpnTargetNetworksInput 001 ClientVpnEndpointId req nil
+K DescribeClientVpnTargetNetworksInput 002 MaxResults min 5 ptr
+K DescribeCoipPoolsInput 001 MaxResults min 5 ptr
+K DescribeDhcpOptionsInput 001 MaxResults min 5 ptr
+K DescribeEgressOnlyInternetGatewaysInput 001 MaxResults min 5 ptr
+K DescribeElasticGpusInput 001 MaxResults min 10 ptr
+K DescribeExportImageTasksInput 001 MaxResults min 1 ptr
+K DescribeFleetHistoryInput 001 FleetId req nil
+K DescribeFleetHistoryInput 002 StartTime req nil
+K DescribeFleetInstancesInput 001 FleetId req nil
+K DescribeFpgaImageAttributeInput 001 Attribute req empty
+K DescribeFpgaImageAttributeInput 002 FpgaImageId req nil
+K DescribeFpgaImagesInput 001 MaxResults min 5 ptr
+K DescribeHostReservationOfferingsInput 001 MaxResults min 5 ptr
+K DescribeIamInstanceProfileAssociationsInput 001 MaxResults min 5 ptr
+K DescribeIdentityIdFormatInput 001 PrincipalArn req nil
+K DescribeImageAttributeInput 001 Attribute req empty
+K DescribeImageAttributeInput 002 ImageId req nil
+K DescribeInstanceAttributeInput 001 Attribute req empty
+K DescribeInstanceAttributeInput 002 InstanceId req nil
+K DescribeInstanceConnectEndpointsInput 001 MaxResults min 1 ptr
+K DescribeInstanceCreditSpecificationsInput 001 MaxResults min 5 ptr
+K DescribeInstanceEventWindowsInput 001 MaxResults min 20 ptr
+K DescribeInstanceTopologyInput 001 MaxResults min 1 ptr
+K DescribeInstanceTypeOfferingsInput 001 MaxResults min 5 ptr
+K DescribeInstanceTypesInput 001 MaxResults min 5 ptr
+K DescribeInternetGatewaysInput 001 MaxResults min 5 ptr
+K DescribeIpamByoasnInput 001 MaxResults min 1 ptr
+K DescribeIpamExternalResourceVerificationTokensInput 001 MaxResults min 5 ptr
+K DescribeIpamPoolsInput 001 MaxResults min 5 ptr
+K DescribeIpamResourceDiscoveriesInput 001 MaxResults min 5 ptr
+K DescribeIpamResourceDiscoveryAssociationsInput 001 MaxResults min 5 ptr
+K DescribeIpamScopesInput 001 MaxResults min 5 ptr
+K DescribeIpamsInput 001 MaxResults min 5 ptr
+K DescribeIpv6PoolsInput 001 MaxResults min 1 ptr
+K DescribeLaunchTemplateVersionsInput 001 LaunchTemplateName len 3 ptr
+K DescribeLaunchTemplatesInput 001 MaxResults min 1 ptr
+K DescribeLocalGatewayRouteTableVirtualInterfaceGroupAssociationsInput 001 MaxResults min 5 ptr
+K DescribeLocalGatewayRouteTableVpcAssociationsInput 001 MaxResults min 5 ptr
+K DescribeLocalGatewayRouteTablesInput 001 MaxResults min 5 ptr
+K DescribeLocalGatewayVirtualInterfaceGroupsInput 001 MaxResults min 5 ptr
+K DescribeLocalGatewayVirtualInterfacesInput 001 MaxResults min 5 ptr
+K DescribeLocalGatewaysInput 001 MaxResults min 5 ptr
+K DescribeLockedSnapshotsInput 001 MaxResults min 5 ptr
+K DescribeMacHostsInput 001 MaxResults min 5 ptr
+K DescribeManagedPrefixListsInput 001 MaxResults min 1 ptr
+K DescribeMovingAddressesInput 001 MaxResults min 5 ptr
+K DescribeNatGatewaysInput 001 MaxResults min 5 ptr
+K DescribeNetworkAclsInput 001 MaxResults min 5 ptr
+K DescribeNetworkInsightsAccessScopeAnalysesInput 001 MaxResults min 1 ptr
+K DescribeNetworkInsightsAccessScopesInput 001 MaxResults min 1 ptr
+K DescribeNetworkInsightsAnalysesInput 001 MaxResults min 1 ptr
+K DescribeNetworkInsightsPathsInput 001 MaxResults min 1 ptr
+K DescribeNetworkInterfaceAttributeInput 001 NetworkInterfaceId req nil
+K DescribeNetworkInterfacePermissionsInput 001 MaxResults min 5 ptr
+K DescribeNetworkInterfacesInput 001 MaxResults min 5 ptr
+K DescribePrincipalIdFormatInput 001 MaxResults min 1 ptr
+K DescribePublicIpv4PoolsInput 001 MaxResults min 1 ptr
+K DescribeReplaceRootVolumeTasksInput 001 MaxResults min 1 ptr
+K DescribeRouteTablesInput 001 MaxResults min 5 ptr
+K DescribeScheduledInstanceAvailabilityInput 001 FirstSlotStartTimeRange req nil
+K DescribeScheduledInstanceAvailabilityInput 002 MaxResults min 5 ptr
+K DescribeScheduledInstanceAvailabilityInput 003 Recurrence req nil
+K DescribeScheduledInstanceAvailabilityInput 004 FirstSlotStartTimeRange nest SlotDateTimeRangeRequest
+K DescribeSecurityGroupReferencesInput 001 GroupId req nil
+K DescribeSecurityGroupRulesInput 001 MaxResults min 5 ptr
+K DescribeSecurityGroupsInput 001 MaxResults min 5 ptr
+K DescribeSnapshotAttributeInput 001 Attribute req empty
+K DescribeSnapshotAttributeInput 002 SnapshotId req nil
+K DescribeSpotFleetInstancesInput 001 MaxResults min 1 ptr
+K DescribeSpotFleetInstancesInput 002 SpotFleetRequestId req nil
+K DescribeSpotFleetRequestHistoryInput 001 MaxResults min 1 ptr
+K DescribeSpotFleetRequestHistoryInput 002 SpotFleetRequestId req nil
+K DescribeSpotFleetRequestHistoryInput 003 StartTime req nil
+K DescribeStaleSecurityGroupsInput 001 MaxResults min 5 ptr
+K DescribeStaleSecurityGroupsInput 002 NextToken len 1 ptr
+K DescribeStaleSecurityGroupsInput 003 VpcId req nil
+K DescribeStoreImageTasksInput 001 MaxResults min 1 ptr
+K DescribeSubnetsInput 001 MaxResults min 5 ptr
+K DescribeTrafficMirrorFilterRulesInput 001 MaxResults min 5 ptr
+K DescribeTrafficMirrorFiltersInput 001 MaxResults min 5 ptr
+K DescribeTrafficMirrorSessionsInput 001 MaxResults min 5 ptr
+K DescribeTrafficMirrorTargetsInput 001 MaxResults min 5 ptr
+K DescribeTransitGatewayAttachmentsInput 001 MaxResults min 5 ptr
+K DescribeTransitGatewayConnectPeersInput 001 MaxResults min 5 ptr
+K DescribeTransitGatewayConnectsInput 001 MaxResults min 5 ptr
+K DescribeTransitGatewayMulticastDomainsInput 001 MaxResults min 5 ptr
+K DescribeTransitGatewayPeeringAttachmentsInput 001 MaxResults min 5 ptr
+K DescribeTransitGatewayPolicyTablesInput 001 MaxResults min 5 ptr
+K DescribeTransitGatewayRouteTableAnnouncementsInput 001 MaxResults min 5 ptr
+K DescribeTransitGatewayRouteTablesInput 001 MaxResults min 5 ptr
+K DescribeTransitGatewayVpcAttachmentsInput 001 MaxResults min 5 ptr
+K DescribeTransitGatewaysInput 001 MaxResults min 5 ptr
+K DescribeTrunkInterfaceAssociationsInput 001 MaxResults min 5 ptr
+K DescribeVerifiedAccessEndpointsInput 001 MaxResults min 5 ptr
+K DescribeVerifiedAccessGroupsInput 001 MaxResults min 5 ptr
+K DescribeVerifiedAccessInstanceLoggingConfigurationsInput 001 MaxResults min 1 ptr
+K DescribeVerifiedAccessInstancesInput 001 MaxResults min 5 ptr
+K DescribeVerifiedAccessTrustProvidersInput 001 MaxResults min 5 ptr
+K DescribeVolumeAttributeInput 001 Attribute req empty
+K DescribeVolumeAttributeInput 002 VolumeId req nil
+K DescribeVpcAttributeInput 001 Attribute req empty
+K DescribeVpcAttributeInput 002 VpcId req nil
+K DescribeVpcClassicLinkDnsSupportInput 001 MaxResults min 5 ptr
+K DescribeVpcClassicLinkDnsSupportInput 002 NextToken len 1 ptr
+K DescribeVpcEndpointServicePermissionsInput 001 ServiceId req nil
+K DescribeVpcPeeringConnectionsInput 001 MaxResults min 5 ptr
+K DescribeVpcsInput 001 MaxResults min 5 ptr
+K DetachClassicLinkVpcInput 001 InstanceId req nil
+K DetachClassicLinkVpcInput 002 VpcId req nil
+K DetachInternetGatewayInput 001 InternetGatewayId req nil
+K DetachInternetGatewayInput 002 VpcId req nil
+K DetachNetworkInterfaceInput 001 AttachmentId req nil
+K DetachVerifiedAccessTrustProviderInput 001 VerifiedAccessInstanceId req nil
+K DetachVerifiedAccessTrustProviderInput 002 VerifiedAccessTrustProviderId req nil
+K DetachVolumeInput 001 VolumeId req nil
+K DetachVpnGatewayInput 001 VpcId req nil
+K DetachVpnGatewayInput 002 VpnGatewayId req nil
+K DisableAddressTransferInput 001 AllocationId req nil
+K DisableFastLaunchInput 001 ImageId req nil
+K DisableFastSnapshotRestoresInput 001 AvailabilityZones req nil
+K DisableFastSnapshotRestoresInput 002 SourceSnapshotIds req nil
+K DisableImageDeprecationInput 001 ImageId req nil
+K DisableImageDeregistrationProtectionInput 001 ImageId req nil
+K DisableImageInput 001 ImageId req nil
+K DisableIpamOrganizationAdminAccountInput 001 DelegatedAdminAccountId req nil
+K DisableTransitGatewayRouteTablePropagationInput 001 TransitGatewayRouteTableId req nil
+K DisableVgwRoutePropagationInput 001 GatewayId req nil
+K DisableVgwRoutePropagationInput 002 RouteTableId req nil
+K DisableVpcClassicLinkInput 001 VpcId req nil
+K DisassociateClientVpnTargetNetworkInput 001 AssociationId req nil
+K DisassociateClientVpnTargetNetworkInput 002 ClientVpnEndpointId req nil
+K DisassociateEnclaveCertificateIamRoleInput 001 CertificateArn req nil
+K DisassociateEnclaveCertificateIamRoleInput 002 RoleArn req nil
+K DisassociateIamInstanceProfileInput 001 AssociationId req nil
+K DisassociateInstanceEventWindowInput 001 AssociationTarget req nil
+K DisassociateInstanceEventWindowInput 002 InstanceEventWindowId req nil
+K DisassociateIpamByoasnInput 001 Asn req nil
+K DisassociateIpamByoasnInput 002 Cidr req nil
+K DisassociateIpamResourceDiscoveryInput 001 IpamResourceDiscoveryAssociationId req nil
+K DisassociateNatGatewayAddressInput 001 AssociationIds req nil
+K DisassociateNatGatewayAddressInput 002 MaxDrainDurationSeconds min 1 ptr
+K DisassociateNatGatewayAddressInput 003 NatGatewayId req nil
+K DisassociateRouteTableInput 001 AssociationId req nil
+K DisassociateSubnetCidrBlockInput 001 AssociationId req nil
+K DisassociateTransitGatewayMulticastDomainInput 001 SubnetIds req nil
+K DisassociateTransitGatewayMulticastDomainInput 002 TransitGatewayAttachmentId req nil
+K DisassociateTransitGatewayMulticastDomainInput 003 TransitGatewayMulticastDomainId req nil
+K DisassociateTransitGatewayPolicyTableInput 001 TransitGatewayAttachmentId req nil
+K DisassociateTransitGatewayPolicyTableInput 002 TransitGatewayPolicyTableId req nil
+K DisassociateTransitGatewayRouteTableInput 001 TransitGatewayAttachmentId req nil
+K DisassociateTransitGatewayRouteTableInput 002 TransitGatewayRouteTableId req nil
+K DisassociateTrunkInterfaceInput 001 AssociationId req nil
+K DisassociateVpcCidrBlockInput 001 AssociationId req nil
+K DiskImage 001 Image nest DiskImageDetail
+K DiskImage 002 Volume nest VolumeDetail
+K DiskImageDetail 001 Bytes req nil
+K DiskImageDetail 002 Format req empty
+K DiskImageDetail 003 ImportManifestUrl req nil
+K ElasticGpuSpecification 001 Type req nil
+K ElasticInferenceAccelerator 001 Count min 1 ptr
+K ElasticInferenceAccelerator 002 Type req nil
+K EnableAddressTransferInput 001 AllocationId req nil
+K EnableAddressTransferInput 002 TransferAccountId req nil
+K EnableFastLaunchInput 001 ImageId req nil
+K EnableFastLaunchInput 002 LaunchTemplate nest FastLaunchLaunchTemplateSpecificationRequest
+K EnableFastSnapshotRestoresInput 001 AvailabilityZones req nil
+K EnableFastSnapshotRestoresInput 002 SourceSnapshotIds req nil
+K EnableImageBlockPublicAccessInput 001 ImageBlockPublicAccessState req empty
+K EnableImageDeprecationInput 001 DeprecateAt req nil
+K EnableImageDeprecationInput 002 ImageId req nil
+K EnableImageDeregistrationProtectionInput 001 ImageId req nil
+K EnableImageInput 001 ImageId req nil
+K EnableIpamOrganizationAdminAccountInput 001 DelegatedAdminAccountId req nil
+K EnableSnapshotBlockPublicAccessInput 001 State req empty
+K EnableTransitGatewayRouteTablePropagationInput 001 TransitGatewayRouteTableId req nil
+K EnableVgwRoutePropagationInput 001 GatewayId req nil
+K EnableVgwRoutePropagationInput 002 RouteTableId req nil
+K EnableVolumeIOInput 001 VolumeId req nil
+K EnableVpcClassicLinkInput 001 VpcId req nil
+K ExportClientVpnClientCertificateRevocationListInput 001 ClientVpnEndpointId req nil
+K ExportClientVpnClientConfigurationInput 001 ClientVpnEndpointId req nil
+K ExportImageInput 001 DiskImageFormat req empty
+K ExportImageInput 002 ImageId req nil
+K ExportImageInput 003 S3ExportLocation req nil
+K ExportImageInput 004 S3ExportLocation nest ExportTaskS3LocationRequest
+K ExportTaskS3LocationRequest 001 S3Bucket req nil
+K ExportTransitGatewayRoutesInput 001 S3Bucket req nil
+K ExportTransitGatewayRoutesInput 002 TransitGatewayRouteTableId req nil
+K FastLaunchLaunchTemplateSpecificationRequest 001 Version req nil
+K FleetLaunchTemplateConfigRequest 001 LaunchTemplateSpecification nest FleetLaunchTemplateSpecificationRequest
+K FleetLaunchTemplateConfigRequest 002 Overrides each FleetLaunchTemplateOverridesRequest slice
+K FleetLaunchTemplateOverridesRequest 001 InstanceRequirements nest InstanceRequirementsRequest
+K FleetLaunchTemplateSpecification 001 LaunchTemplateName len 3 ptr
+K FleetLaunchTemplateSpecificationRequest 001 LaunchTemplateName len 3 ptr
+K GetAssociatedEnclaveCertificateIamRolesInput 001 CertificateArn req nil
+K GetAssociatedIpv6PoolCidrsInput 001 MaxResults min 1 ptr
+K GetAssociatedIpv6PoolCidrsInput 002 PoolId req nil
+K GetCapacityReservationUsageInput 001 CapacityReservationId req nil
+K GetCapacityReservationUsageInput 002 MaxResults min 1 ptr
+K GetCoipPoolUsageInput 001 MaxResults min 5 ptr
+K GetCoipPoolUsageInput 002 PoolId req nil
+K GetConsoleOutputInput 001 InstanceId req nil
+K GetConsoleScreenshotInput 001 InstanceId req nil
+K GetDefaultCreditSpecificationInput 001 InstanceFamily req empty
+K GetFlowLogsIntegrationTemplateInput 001 ConfigDeliveryS3DestinationArn req nil
+K GetFlowLogsIntegrationTemplateInput 002 FlowLogId req nil
+K GetFlowLogsIntegrationTemplateInput 003 IntegrateServices req nil
+K GetFlowLogsIntegrationTemplateInput 004 IntegrateServices nest IntegrateServices
+K GetGroupsForCapacityReservationInput 001 CapacityReservationId req nil
+K GetGroupsForCapacityReservationInput 002 MaxResults min 1 ptr
+K GetHostReservationPurchasePreviewInput 001 HostIdSet req nil
+K GetHostReservationPurchasePreviewInput 002 OfferingId req nil
+K GetInstanceTpmEkPubInput 001 InstanceId req nil
+K GetInstanceTpmEkPubInput 002 KeyFormat req empty
+K GetInstanceTpmEkPubInput 003 KeyType req empty
+K GetInstanceTypesFromInstanceRequirementsInput 001 ArchitectureTypes req nil
+K GetInstanceTypesFromInstanceRequirementsInput 002 InstanceRequirements req nil
+K GetInstanceTypesFromInstanceRequirementsInput 003 VirtualizationTypes req nil
+K GetInstanceTypesFromInstanceRequirementsInput 004 InstanceRequirements nest InstanceRequirementsRequest
+K GetInstanceUefiDataInput 001 InstanceId req nil
+K GetIpamAddressHistoryInput 001 Cidr req nil
+K GetIpamAddressHistoryInput 002 IpamScopeId req nil
+K GetIpamAddressHistoryInput 003 MaxResults min 1 ptr
+K GetIpamDiscoveredAccountsInput 001 DiscoveryRegion req nil
+K GetIpamDiscoveredAccountsInput 002 IpamResourceDiscoveryId req nil
+K GetIpamDiscoveredAccountsInput 003 MaxResults min 5 ptr
+K GetIpamDiscoveredPublicAddressesInput 001 AddressRegion req nil
+K GetIpamDiscoveredPublicAddressesInput 002 IpamResourceDiscoveryId req nil
+K GetIpamDiscoveredPublicAddressesInput 003 MaxResults min 5 ptr
+K GetIpamDiscoveredResourceCidrsInput 001 IpamResourceDiscoveryId req nil
+K GetIpamDiscoveredResourceCidrsInput 002 MaxResults min 5 ptr
+K GetIpamDiscoveredResourceCidrsInput 003 ResourceRegion req nil
+K GetIpamPoolAllocationsInput 001 IpamPoolId req nil
+K GetIpamPoolAllocationsInput 002 MaxResults min 1000 ptr
+K GetIpamPoolCidrsInput 001 IpamPoolId req nil
+K GetIpamPoolCidrsInput 002 MaxResults min 5 ptr
+K GetIpamResourceCidrsInput 001 IpamScopeId req nil
+K GetIpamResourceCidrsInput 002 MaxResults min 5 ptr
+K GetLaunchTemplateDataInput 001 InstanceId req nil
+K GetManagedPrefixListAssociationsInput 001 MaxResults min 5 ptr
+K GetManagedPrefixListAssociationsInput 002 PrefixListId req nil
+K GetManagedPrefixListEntriesInput 001 MaxResults min 1 ptr
+K GetManagedPrefixListEntriesInput 002 PrefixListId req nil
+K GetNetworkInsightsAccessScopeAnalysisFindingsInput 001 MaxResults min 1 ptr
+K GetNetworkInsightsAccessScopeAnalysisFindingsInput 002 NetworkInsightsAccessScopeAnalysisId req nil
+K GetNetworkInsightsAccessScopeContentInput 001 NetworkInsightsAccessScopeId req nil
+K GetPasswordDataInput 001 InstanceId req nil
+K GetReservedInstancesExchangeQuoteInput 001 ReservedInstanceIds req nil
+K GetReservedInstancesExchangeQuoteInput 002 TargetConfigurations each TargetConfigurationRequest slice
+K GetSecurityGroupsForVpcInput 001 MaxResults min 5 ptr
+K GetSecurityGroupsForVpcInput 002 VpcId req nil
+K GetSpotPlacementScoresInput 001 MaxResults min 10 ptr
+K GetSpotPlacementScoresInput 002 TargetCapacity req nil
+K GetSpotPlacementScoresInput 003 TargetCapacity min 1 ptr
+K GetSpotPlacementScoresInput 004 InstanceRequirementsWithMetadata nest InstanceRequirementsWithMetadataRequest
+K GetSubnetCidrReservationsInput 001 MaxResults min 5 ptr
+K GetSubnetCidrReservationsInput 002 SubnetId req nil
+K GetTransitGatewayAttachmentPropagationsInput 001 MaxResults min 5 ptr
+K GetTransitGatewayAttachmentPropagationsInput 002 TransitGatewayAttachmentId req nil
+K GetTransitGatewayMulticastDomainAssociationsInput 001 MaxResults min 5 ptr
+K GetTransitGatewayMulticastDomainAssociationsInput 002 TransitGatewayMulticastDomainId req nil
+K GetTransitGatewayPolicyTableAssociationsInput 001 MaxResults min 5 ptr
+K GetTransitGatewayPolicyTableAssociationsInput 002 TransitGatewayPolicyTableId req nil
+K GetTransitGatewayPolicyTableEntriesInput 001 MaxResults min 5 ptr
+K GetTransitGatewayPolicyTableEntriesInput 002 TransitGatewayPolicyTableId req nil
+K GetTransitGatewayPrefixListReferencesInput 001 MaxResults min 5 ptr
+K GetTransitGatewayPrefixListReferencesInput 002 TransitGatewayRouteTableId req nil
+K GetTransitGatewayRouteTableAssociationsInput 001 MaxResults min 5 ptr
+K GetTransitGatewayRouteTableAssociationsInput 002 TransitGatewayRouteTableId req nil
+K GetTransitGatewayRouteTablePropagationsInput 001 MaxResults min 5 ptr
+K GetTransitGatewayRouteTablePropagationsInput 002 TransitGatewayRouteTableId req nil
+K GetVerifiedAccessEndpointPolicyInput 001 VerifiedAccessEndpointId req nil
+K GetVerifiedAccessGroupPolicyInput 001 VerifiedAccessGroupId req nil
+K GetVpnConnectionDeviceSampleConfigurationInput 001 VpnConnectionDeviceTypeId req nil
+K GetVpnConnectionDeviceSampleConfigurationInput 002 VpnConnectionId req nil
+K GetVpnConnectionDeviceTypesInput 001 MaxResults min 200 ptr
+K GetVpnTunnelReplacementStatusInput 001 VpnConnectionId req nil
+K GetVpnTunnelReplacementStatusInput 002 VpnTunnelOutsideIpAddress req nil
+K ImportClientVpnClientCertificateRevocationListInput 001 CertificateRevocationList req nil
+K ImportClientVpnClientCertificateRevocationListInput 002 ClientVpnEndpointId req nil
+K ImportInstanceInput 001 Platform req empty
+K ImportInstanceInput 002 DiskImages each DiskImage slice
+K ImportKeyPairInput 001 KeyName req nil
+K ImportKeyPairInput 002 PublicKeyMaterial req nil
+K ImportVolumeInput 001 AvailabilityZone req nil
+K ImportVolumeInput 002 Image req nil
+K ImportVolumeInput 003 Volume req nil
+K ImportVolumeInput 004 Image nest DiskImageDetail
+K ImportVolumeInput 005 Volume nest VolumeDetail
+K InstanceCreditSpecificationRequest 001 InstanceId req nil
+K InstanceRequirementsRequest 001 MemoryMiB req nil
+K InstanceRequirementsRequest 002 VCpuCount req nil
+K InstanceRequirementsRequest 003 MemoryMiB nest MemoryMiBRequest
+K InstanceRequirementsRequest 004 VCpuCount nest VCpuCountRangeRequest
+K InstanceRequirementsWithMetadataRequest 001 InstanceRequirements nest InstanceRequirementsRequest
+K InstanceSpecification 001 InstanceId req nil
+K IntegrateServices 001 AthenaIntegrations len 1 container
+K IntegrateServices 002 AthenaIntegrations each AthenaIntegration slice
+K LaunchTemplateConfig 001 LaunchTemplateSpecification nest FleetLaunchTemplateSpecification
+K LaunchTemplateElasticInferenceAccelerator 001 Count min 1 ptr
+K LaunchTemplateElasticInferenceAccelerator 002 Type req nil
+K ListImagesInRecycleBinInput 001 MaxResults min 1 ptr
+K ListSnapshotsInRecycleBinInput 001 MaxResults min 5 ptr
+K LoadBalancersConfig 001 ClassicLoadBalancersConfig nest ClassicLoadBalancersConfig
+K LoadBalancersConfig 002 TargetGroupsConfig nest TargetGroupsConfig
+K LockSnapshotInput 001 CoolOffPeriod min 1 ptr
+K LockSnapshotInput 002 LockDuration min 1 ptr
+K LockSnapshotInput 003 LockMode req empty
+K LockSnapshotInput 004 SnapshotId req nil
+K MemoryMiBRequest 001 Min req nil
+K ModifyAddressAttributeInput 001 AllocationId req nil
+K ModifyAvailabilityZoneGroupInput 001 GroupName req nil
+K ModifyAvailabilityZoneGroupInput 002 OptInStatus req empty
+K ModifyCapacityReservationFleetInput 001 CapacityReservationFleetId req nil
+K ModifyCapacityReservationInput 001 CapacityReservationId req nil
+K ModifyClientVpnEndpointInput 001 ClientVpnEndpointId req nil
+K ModifyDefaultCreditSpecificationInput 001 CpuCredits req nil
+K ModifyDefaultCreditSpecificationInput 002 InstanceFamily req empty
+K ModifyEbsDefaultKmsKeyIdInput 001 KmsKeyId req nil
+K ModifyFleetInput 001 FleetId req nil
+K ModifyFleetInput 002 LaunchTemplateConfigs each FleetLaunchTemplateConfigRequest slice
+K ModifyFleetInput 003 TargetCapacitySpecification nest TargetCapacitySpecificationRequest
+K ModifyFpgaImageAttributeInput 001 FpgaImageId req nil
+K ModifyHostsInput 001 HostIds req nil
+K ModifyIdFormatInput 001 Resource req nil
+K ModifyIdFormatInput 002 UseLongIds req nil
+K ModifyIdentityIdFormatInput 001 PrincipalArn req nil
+K ModifyIdentityIdFormatInput 002 Resource req nil
+K ModifyIdentityIdFormatInput 003 UseLongIds req nil
+K ModifyImageAttributeInput 001 ImageId req nil
+K ModifyInstanceAttributeInput 001 InstanceId req nil
+K ModifyInstanceCapacityReservationAttributesInput 001 CapacityReservationSpecification req nil
+K ModifyInstanceCapacityReservationAttributesInput 002 InstanceId req nil
+K ModifyInstanceCreditSpecificationInput 001 InstanceCreditSpecifications req nil
+K ModifyInstanceCreditSpecificationInput 002 InstanceCreditSpecifications each InstanceCreditSpecificationRequest slice
+K ModifyInstanceEventStartTimeInput 001 InstanceEventId req nil
+K ModifyInstanceEventStartTimeInput 002 InstanceId req nil
+K ModifyInstanceEventStartTimeInput 003 NotBefore req nil
+K ModifyInstanceEventWindowInput 001 InstanceEventWindowId req nil
+K ModifyInstanceMaintenanceOptionsInput 001 InstanceId req nil
+K ModifyInstanceMetadataOptionsInput 001 InstanceId req nil
+K ModifyInstancePlacementInput 001 InstanceId req nil
+K ModifyIpamInput 001 IpamId req nil
+K ModifyIpamPoolInput 001 IpamPoolId req nil
+K ModifyIpamResourceCidrInput 001 CurrentIpamScopeId req nil
+K ModifyIpamResourceCidrInput 002 Monitored req nil
+K ModifyIpamResourceCidrInput 003 ResourceCidr req nil
+K ModifyIpamResourceCidrInput 004 ResourceId req nil
+K ModifyIpamResourceCidrInput 005 ResourceRegion req nil
+K ModifyIpamResourceDiscoveryInput 001 IpamResourceDiscoveryId req nil
+K ModifyIpamScopeInput 001 IpamScopeId req nil
+K ModifyLaunchTemplateInput 001 LaunchTemplateName len 3 ptr
+K ModifyLocalGatewayRouteInput 001 LocalGatewayRouteTableId req nil
+K ModifyManagedPrefixListInput 001 PrefixListId req nil
+K ModifyManagedPrefixListInput 002 AddEntries each AddPrefixListEntry slice
+K ModifyManagedPrefixListInput 003 RemoveEntries each RemovePrefixListEntry slice
+K ModifyNetworkInterfaceAttributeInput 001 NetworkInterfaceId req nil
+K ModifyPrivateDnsNameOptionsInput 001 InstanceId req nil
+K ModifyReservedInstancesInput 001 ReservedInstancesIds req nil
+K ModifyReservedInstancesInput 002 TargetConfigurations req nil
+K ModifySecurityGroupRulesInput 001 GroupId req nil
+K ModifySecurityGroupRulesInput 002 SecurityGroupRules req nil
+K ModifySecurityGroupRulesInput 003 SecurityGroupRules each SecurityGroupRuleUpdate slice
+K ModifySnapshotAttributeInput 001 SnapshotId req nil
+K ModifySnapshotTierInput 001 SnapshotId req nil
+K ModifySpotFleetRequestInput 001 SpotFleetRequestId req nil
+K ModifySpotFleetRequestInput 002 LaunchTemplateConfigs each LaunchTemplateConfig slice
+K ModifySubnetAttributeInput 001 SubnetId req nil
+K ModifyTrafficMirrorFilterNetworkServicesInput 001 TrafficMirrorFilterId req nil
+K ModifyTrafficMirrorFilterRuleInput 001 TrafficMirrorFilterRuleId req nil
+K ModifyTrafficMirrorSessionInput 001 TrafficMirrorSessionId req nil
+K ModifyTransitGatewayInput 001 TransitGatewayId req nil
+K ModifyTransitGatewayPrefixListReferenceInput 001 PrefixListId req nil
+K ModifyTransitGatewayPrefixListReferenceInput 002 TransitGatewayRouteTableId req nil
+K ModifyTransitGatewayVpcAttachmentInput 001 TransitGatewayAttachmentId req nil
+K ModifyVerifiedAccessEndpointEniOptions 001 Port min 1 ptr
+K ModifyVerifiedAccessEndpointInput 001 VerifiedAccessEndpointId req nil
+K ModifyVerifiedAccessEndpointInput 002 LoadBalancerOptions nest ModifyVerifiedAccessEndpointLoadBalancerOptions
+K ModifyVerifiedAccessEndpointInput 003 NetworkInterfaceOptions nest ModifyVerifiedAccessEndpointEniOptions
+K ModifyVerifiedAccessEndpointLoadBalancerOptions 001 Port min 1 ptr
+K ModifyVerifiedAccessEndpointPolicyInput 001 VerifiedAccessEndpointId req nil
+K ModifyVerifiedAccessGroupInput 001 VerifiedAccessGroupId req nil
+K ModifyVerifiedAccessGroupPolicyInput 001 VerifiedAccessGroupId req nil
+K ModifyVerifiedAccessInstanceInput 001 VerifiedAccessInstanceId req nil
+K ModifyVerifiedAccessInstanceLoggingConfigurationInput 001 AccessLogs req nil
+K ModifyVerifiedAccessInstanceLoggingConfigurationInput 002 VerifiedAccessInstanceId req nil
+K ModifyVerifiedAccessInstanceLoggingConfigurationInput 003 AccessLogs nest VerifiedAccessLogOptions
+K ModifyVerifiedAccessTrustProviderInput 001 VerifiedAccessTrustProviderId req nil
+K ModifyVolumeAttributeInput 001 VolumeId req nil
+K ModifyVolumeInput 001 VolumeId req nil
+K ModifyVpcAttributeInput 001 VpcId req nil
+K ModifyVpcEndpointConnectionNotificationInput 001 ConnectionNotificationId req nil
+K ModifyVpcEndpointInput 001 VpcEndpointId req nil
+K ModifyVpcEndpointServiceConfigurationInput 001 ServiceId req nil
+K ModifyVpcEndpointServicePayerResponsibilityInput 001 PayerResponsibility req empty
+K ModifyVpcEndpointServicePayerResponsibilityInput 002 ServiceId req nil
+K ModifyVpcEndpointServicePermissionsInput 001 ServiceId req nil
+K ModifyVpcPeeringConnectionOptionsInput 001 VpcPeeringConnectionId req nil
+K ModifyVpcTenancyInput 001 InstanceTenancy req empty
+K ModifyVpcTenancyInput 002 VpcId req nil
+K ModifyVpnConnectionInput 001 VpnConnectionId req nil
+K ModifyVpnConnectionOptionsInput 001 VpnConnectionId req nil
+K ModifyVpnTunnelCertificateInput 001 VpnConnectionId req nil
+K ModifyVpnTunnelCertificateInput 002 VpnTunnelOutsideIpAddress req nil
+K ModifyVpnTunnelOptionsInput 001 TunnelOptions req nil
+K ModifyVpnTunnelOptionsInput 002 VpnConnectionId req nil
+K ModifyVpnTunnelOptionsInput 003 VpnTunnelOutsideIpAddress req nil
+K MonitorInstancesInput 001 InstanceIds req nil
+K MoveAddressToVpcInput 001 PublicIp req nil
+K MoveByoipCidrToIpamInput 001 Cidr req nil
+K MoveByoipCidrToIpamInput 002 IpamPoolId req nil
+K MoveByoipCidrToIpamInput 003 IpamPoolOwner req nil
+K ProvisionByoipCidrInput 001 Cidr req nil
+K ProvisionByoipCidrInput 002 CidrAuthorizationContext nest CidrAuthorizationContext
+K ProvisionIpamByoasnInput 001 Asn req nil
+K ProvisionIpamByoasnInput 002 AsnAuthorizationContext req nil
+K ProvisionIpamByoasnInput 003 IpamId req nil
+K ProvisionIpamByoasnInput 004 AsnAuthorizationContext nest AsnAuthorizationContext
+K ProvisionIpamPoolCidrInput 001 IpamPoolId req nil
+K ProvisionPublicIpv4PoolCidrInput 001 IpamPoolId req nil
+K ProvisionPublicIpv4PoolCidrInput 002 NetmaskLength req nil
+K ProvisionPublicIpv4PoolCidrInput 003 PoolId req nil
+K PurchaseCapacityBlockInput 001 CapacityBlockOfferingId req nil
+K PurchaseCapacityBlockInput 002 InstancePlatform req empty
+K PurchaseHostReservationInput 001 HostIdSet req nil
+K PurchaseHostReservationInput 002 OfferingId req nil
+K PurchaseRequest 001 InstanceCount req nil
+K PurchaseRequest 002 PurchaseToken req nil
+K PurchaseReservedInstancesOfferingInput 001 InstanceCount req nil
+K PurchaseReservedInstancesOfferingInput 002 ReservedInstancesOfferingId req nil
+K PurchaseScheduledInstancesInput 001 PurchaseRequests req nil
+K PurchaseScheduledInstancesInput 002 PurchaseRequests len 1 container
+K PurchaseScheduledInstancesInput 003 PurchaseRequests each PurchaseRequest slice
+K RebootInstancesInput 001 InstanceIds req nil
+K RegisterImageInput 001 Name req nil
+K RegisterInstanceEventNotificationAttributesInput 001 InstanceTagAttribute req nil
+K RegisterTransitGatewayMulticastGroupMembersInput 001 NetworkInterfaceIds req nil
+K RegisterTransitGatewayMulticastGroupMembersInput 002 TransitGatewayMulticastDomainId req nil
+K RegisterTransitGatewayMulticastGroupSourcesInput 001 NetworkInterfaceIds req nil
+K RegisterTransitGatewayMulticastGroupSourcesInput 002 TransitGatewayMulticastDomainId req nil
+K RejectTransitGatewayPeeringAttachmentInput 001 TransitGatewayAttachmentId req nil
+K RejectTransitGatewayVpcAttachmentInput 001 TransitGatewayAttachmentId req nil
+K RejectVpcEndpointConnectionsInput 001 ServiceId req nil
+K RejectVpcEndpointConnectionsInput 002 VpcEndpointIds req nil
+K RejectVpcPeeringConnectionInput 001 VpcPeeringConnectionId req nil
+K ReleaseHostsInput 001 HostIds req nil
+K ReleaseIpamPoolAllocationInput 001 Cidr req nil
+K ReleaseIpamPoolAllocationInput 002 IpamPoolAllocationId req nil
+K ReleaseIpamPoolAllocationInput 003 IpamPoolId req nil
+K RemovePrefixListEntry 001 Cidr req nil
+K ReplaceIamInstanceProfileAssociationInput 001 AssociationId req nil
+K ReplaceIamInstanceProfileAssociationInput 002 IamInstanceProfile req nil
+K ReplaceNetworkAclAssociationInput 001 AssociationId req nil
+K ReplaceNetworkAclAssociationInput 002 NetworkAclId req nil
+K ReplaceNetworkAclEntryInput 001 Egress req nil
+K ReplaceNetworkAclEntryInput 002 NetworkAclId req nil
+K ReplaceNetworkAclEntryInput 003 Protocol req nil
+K ReplaceNetworkAclEntryInput 004 RuleAction req empty
+K ReplaceNetworkAclEntryInput 005 RuleNumber req nil
+K ReplaceRouteInput 001 RouteTableId req nil
+K ReplaceRouteTableAssociationInput 001 AssociationId req nil
+K ReplaceRouteTableAssociationInput 002 RouteTableId req nil
+K ReplaceTransitGatewayRouteInput 001 DestinationCidrBlock req nil
+K ReplaceTransitGatewayRouteInput 002 TransitGatewayRouteTableId req nil
+K ReplaceVpnTunnelInput 001 VpnConnectionId req nil
+K ReplaceVpnTunnelInput 002 VpnTunnelOutsideIpAddress req nil
+K ReportInstanceStatusInput 001 Instances req nil
+K ReportInstanceStatusInput 002 ReasonCodes req nil
+K ReportInstanceStatusInput 003 Status req empty
+K RequestLaunchTemplateData 001 CreditSpecification nest CreditSpecificationRequest
+K RequestLaunchTemplateData 002 ElasticGpuSpecifications each ElasticGpuSpecification slice
+K RequestLaunchTemplateData 003 ElasticInferenceAccelerators each LaunchTemplateElasticInferenceAccelerator slice
+K RequestLaunchTemplateData 004 InstanceRequirements nest InstanceRequirementsRequest
+K RequestSpotFleetInput 001 SpotFleetRequestConfig req nil
+K RequestSpotFleetInput 002 SpotFleetRequestConfig nest SpotFleetRequestConfigData
+K RequestSpotInstancesInput 001 LaunchSpecification nest RequestSpotLaunchSpecification
+K RequestSpotLaunchSpecification 001 Monitoring nest RunInstancesMonitoringEnabled
+K ReservationFleetInstanceSpecification 001 Weight min 0.001 ptr
+K ResetAddressAttributeInput 001 AllocationId req nil
+K ResetAddressAttributeInput 002 Attribute req empty
+K ResetFpgaImageAttributeInput 001 FpgaImageId req nil
+K ResetImageAttributeInput 001 Attribute req empty
+K ResetImageAttributeInput 002 ImageId req nil
+K ResetInstanceAttributeInput 001 Attribute req empty
+K ResetInstanceAttributeInput 002 InstanceId req nil
+K ResetNetworkInterfaceAttributeInput 001 NetworkInterfaceId req nil
+K ResetSnapshotAttributeInput 001 Attribute req empty
+K ResetSnapshotAttributeInput 002 SnapshotId req nil
+K RestoreAddressToClassicInput 001 PublicIp req nil
+K RestoreImageFromRecycleBinInput 001 ImageId req nil
+K RestoreManagedPrefixListVersionInput 001 CurrentVersion req nil
+K RestoreManagedPrefixListVersionInput 002 PrefixListId req nil
+K RestoreManagedPrefixListVersionInput 003 PreviousVersion req nil
+K RestoreSnapshotFromRecycleBinInput 001 SnapshotId req nil
+K RestoreSnapshotTierInput 001 SnapshotId req nil
+K RevokeClientVpnIngressInput 001 ClientVpnEndpointId req nil
+K RevokeClientVpnIngressInput 002 TargetNetworkCidr req nil
+K RevokeSecurityGroupEgressInput 001 GroupId req nil
+K RunInstancesInput 001 MaxCount req nil
+K RunInstancesInput 002 MinCount req nil
+K RunInstancesInput 003 CreditSpecification nest CreditSpecificationRequest
+K RunInstancesInput 004 ElasticGpuSpecification each ElasticGpuSpecification slice
+K RunInstancesInput 005 ElasticInferenceAccelerators each ElasticInferenceAccelerator slice
+K RunInstancesInput 006 Monitoring nest RunInstancesMonitoringEnabled
+K RunInstancesMonitoringEnabled 001 Enabled req nil
+K RunScheduledInstancesInput 001 LaunchSpecification req nil
+K RunScheduledInstancesInput 002 ScheduledInstanceId req nil
+K RunScheduledInstancesInput 003 LaunchSpecification nest ScheduledInstancesLaunchSpecification
+K ScheduledInstancesLaunchSpecification 001 ImageId req nil
+K SearchLocalGatewayRoutesInput 001 LocalGatewayRouteTableId req nil
+K SearchTransitGatewayMulticastGroupsInput 001 MaxResults min 5 ptr
+K SearchTransitGatewayMulticastGroupsInput 002 TransitGatewayMulticastDomainId req nil
+K SearchTransitGatewayRoutesInput 001 Filters req nil
+K SearchTransitGatewayRoutesInput 002 MaxResults min 5 ptr
+K SearchTransitGatewayRoutesInput 003 TransitGatewayRouteTableId req nil
+K SecurityGroupRuleUpdate 001 SecurityGroupRuleId req nil
+K SendDiagnosticInterruptInput 001 InstanceId req nil
+K SlotDateTimeRangeRequest 001 EarliestTime req nil
+K SlotDateTimeRangeRequest 002 LatestTime req nil
+K SpotFleetRequestConfigData 001 IamFleetRole req nil
+K SpotFleetRequestConfigData 002 TargetCapacity req nil
+K SpotFleetRequestConfigData 003 LaunchTemplateConfigs each LaunchTemplateConfig slice
+K SpotFleetRequestConfigData 004 LoadBalancersConfig nest LoadBalancersConfig
+K StartInstancesInput 001 InstanceIds req nil
+K StartNetworkInsightsAccessScopeAnalysisInput 001 NetworkInsightsAccessScopeId req nil
+K StartNetworkInsightsAnalysisInput 001 NetworkInsightsPathId req nil
+K StartVpcEndpointServicePrivateDnsVerificationInput 001 ServiceId req nil
+K StopInstancesInput 001 InstanceIds req nil
+K TargetCapacitySpecificationRequest 001 TotalTargetCapacity req nil
+K TargetConfigurationRequest 001 OfferingId req nil
+K TargetGroupsConfig 001 TargetGroups len 1 container
+K TerminateClientVpnConnectionsInput 001 ClientVpnEndpointId req nil
+K TerminateInstancesInput 001 InstanceIds req nil
+K UnassignIpv6AddressesInput 001 NetworkInterfaceId req nil
+K UnassignPrivateIpAddressesInput 001 NetworkInterfaceId req nil
+K UnassignPrivateNatGatewayAddressInput 001 MaxDrainDurationSeconds min 1 ptr
+K UnassignPrivateNatGatewayAddressInput 002 NatGatewayId req nil
+K UnassignPrivateNatGatewayAddressInput 003 PrivateIpAddresses req nil
+K UnlockSnapshotInput 001 SnapshotId req nil
+K UnmonitorInstancesInput 001 InstanceIds req nil
+K VCpuCountRangeRequest 001 Min req nil
+K VerifiedAccessLogCloudWatchLogsDestinationOptions 001 Enabled req nil
+K VerifiedAccessLogKinesisDataFirehoseDestinationOptions 001 Enabled req nil
+K VerifiedAccessLogOptions 001 CloudWatchLogs nest VerifiedAccessLogCloudWatchLogsDestinationOptions
+K VerifiedAccessLogOptions 002 KinesisDataFirehose nest VerifiedAccessLogKinesisDataFirehoseDestinationOptions
+K VerifiedAccessLogOptions 003 S3 nest VerifiedAccessLogS3DestinationOptions
+K VerifiedAccessLogS3DestinationOptions 001 Enabled req nil
+K VolumeDetail 001 Size req nil
+K WithdrawByoipCidrInput 001 Cidr req nil
+G DescribeAddressTransfers NextToken NextToken
+G DescribeAddressesAttribute NextToken NextToken
+G DescribeAwsNetworkPerformanceMetricSubscriptions NextToken NextToken
+G DescribeByoipCidrs NextToken NextToken
+G DescribeCapacityBlockExtensionHistory NextToken NextToken
+G DescribeCapacityBlockExtensionOfferings NextToken NextToken
+G DescribeCapacityBlockOfferings NextToken NextToken
+G DescribeCapacityBlockStatus NextToken NextToken
+G DescribeCapacityBlocks NextToken NextToken
+G DescribeCapacityManagerDataExports NextToken NextToken
+G DescribeCapacityReservationBillingRequests NextToken NextToken
+G DescribeCapacityReservationDateChangeQuotes NextToken NextToken
+G DescribeCapacityReservationFleets NextToken NextToken
+G DescribeCapacityReservations NextToken NextToken
+G DescribeCarrierGateways NextToken NextToken
+G DescribeClassicLinkInstances NextToken NextToken
+G DescribeClientVpnAuthorizationRules NextToken NextToken
+G DescribeClientVpnConnections NextToken NextToken
+G DescribeClientVpnEndpoints NextToken NextToken
+G DescribeClientVpnRoutes NextToken NextToken
+G DescribeClientVpnTargetNetworks NextToken NextToken
+G DescribeCoipPools NextToken NextToken
+G DescribeDhcpOptions NextToken NextToken
+G DescribeEgressOnlyInternetGateways NextToken NextToken
+G DescribeExportImageTasks NextToken NextToken
+G DescribeFastLaunchImages NextToken NextToken
+G DescribeFastSnapshotRestores NextToken NextToken
+G DescribeFleets NextToken NextToken
+G DescribeFlowLogs NextToken NextToken
+G DescribeFpgaImages NextToken NextToken
+G DescribeHostReservationOfferings NextToken NextToken
+G DescribeHostReservations NextToken NextToken
+G DescribeHosts NextToken NextToken
+G DescribeIamInstanceProfileAssociations NextToken NextToken
+G DescribeImageReferences NextToken NextToken
+G DescribeImageUsageReportEntries NextToken NextToken
+G DescribeImageUsageReports NextToken NextToken
+G DescribeImages NextToken NextToken
+G DescribeImportImageTasks NextToken NextToken
+G DescribeImportSnapshotTasks NextToken NextToken
+G DescribeInstanceConnectEndpoints NextToken NextToken
+G DescribeInstanceCreditSpecifications NextToken NextToken
+G DescribeInstanceEventWindows NextToken NextToken
+G DescribeInstanceImageMetadata NextToken NextToken
+G DescribeInstanceStatus NextToken NextToken
+G DescribeInstanceTopology NextToken NextToken
+G DescribeInstanceTypeOfferings NextToken NextToken
+G DescribeInstanceTypes NextToken NextToken
+G DescribeInstances NextToken NextToken
+G DescribeInternetGateways NextToken NextToken
+G DescribeIpamPoolAllocations NextToken NextToken
+G DescribeIpamPools NextToken NextToken
+G DescribeIpamPrefixListResolverTargets NextToken NextToken
+G DescribeIpamPrefixListResolvers NextToken NextToken
+G DescribeIpamResourceDiscoveries NextToken NextToken
+G DescribeIpamResourceDiscoveryAssociations NextToken NextToken
+G DescribeIpamScopes NextToken NextToken
+G DescribeIpams NextToken NextToken
+G DescribeIpv6Pools NextToken NextToken
+G DescribeLaunchTemplateVersions NextToken NextToken
+G DescribeLaunchTemplates NextToken NextToken
+G DescribeLocalGatewayRouteTableVirtualInterfaceGroupAssociations NextToken NextToken
+G DescribeLocalGatewayRouteTableVpcAssociations NextToken NextToken
+G DescribeLocalGatewayRouteTables NextToken NextToken
+G DescribeLocalGatewayVirtualInterfaceGroups NextToken NextToken
+G DescribeLocalGatewayVirtualInterfaces NextToken NextToken
+G DescribeLocalGateways NextToken NextToken
+G DescribeMacHosts NextToken NextToken
+G DescribeMacModificationTasks NextToken NextToken
+G DescribeManagedPrefixLists NextToken NextToken
+G DescribeMovingAddresses NextToken NextToken
+G DescribeNatGateways NextToken NextToken
+G DescribeNetworkAcls NextToken NextToken
+G DescribeNetworkInsightsAccessScopeAnalyses NextToken NextToken
+G DescribeNetworkInsightsAccessScopes NextToken NextToken
+G DescribeNetworkInsightsAnalyses NextToken NextToken
+G DescribeNetworkInsightsPaths NextToken NextToken
+G DescribeNetworkInterfacePermissions NextToken NextToken
+G DescribeNetworkInterfaces NextToken NextToken
+G DescribePrefixLists NextToken NextToken
+G DescribePrincipalIdFormat NextToken NextToken
+G DescribePublicIpv4Pools NextToken NextToken
+G DescribeReplaceRootVolumeTasks NextToken NextToken
+G DescribeReservedInstancesModifications NextToken NextToken
+G DescribeReservedInstancesOfferings NextToken NextToken
+G DescribeRouteServerEndpoints NextToken NextToken
+G DescribeRouteServerPeers NextToken NextToken
+G DescribeRouteServers NextToken NextToken
+G DescribeRouteTables NextToken NextToken
+G DescribeScheduledInstanceAvailability NextToken NextToken
+G DescribeScheduledInstances NextToken NextToken
+G DescribeSecondaryInterfaces NextToken NextToken
+G DescribeSecondaryNetworks NextToken NextToken
+G DescribeSecondarySubnets NextToken NextToken
+G DescribeSecurityGroupRules NextToken NextToken
+G DescribeSecurityGroupVpcAssociations NextToken NextToken
+G DescribeSecurityGroups NextToken NextToken
+G DescribeSnapshotTierStatus NextToken NextToken
+G DescribeSnapshots NextToken NextToken
+G DescribeSpotFleetRequests NextToken NextToken
+G DescribeSpotInstanceRequests NextToken NextToken
+G DescribeSpotPriceHistory NextToken NextToken
+G DescribeStaleSecurityGroups NextToken NextToken
+G DescribeStoreImageTasks NextToken NextToken
+G DescribeSubnets NextToken NextToken
+G DescribeTags NextToken NextToken
+G DescribeTrafficMirrorFilters NextToken NextToken
+G DescribeTrafficMirrorSessions NextToken NextToken
+G DescribeTrafficMirrorTargets NextToken NextToken
+G DescribeTransitGatewayAttachments NextToken NextToken
+G DescribeTransitGatewayConnectPeers NextToken NextToken
+G DescribeTransitGatewayConnects NextToken NextToken
+G DescribeTransitGatewayMulticastDomains NextToken NextToken
+G DescribeTransitGatewayPeeringAttachments NextToken NextToken
+G DescribeTransitGatewayPolicyTables NextToken NextToken
+G DescribeTransitGatewayRouteTableAnnouncements NextToken NextToken
+G DescribeTransitGatewayRouteTables NextToken NextToken
+G DescribeTransitGatewayVpcAttachments NextToken NextToken
+G DescribeTransitGateways NextToken NextToken
+G DescribeTrunkInterfaceAssociations NextToken NextToken
+G DescribeVerifiedAccessEndpoints NextToken NextToken
+G DescribeVerifiedAccessGroups NextToken NextToken
+G DescribeVerifiedAccessInstanceLoggingConfigurations NextToken NextToken
+G DescribeVerifiedAccessInstances NextToken NextToken
+G DescribeVerifiedAccessTrustProviders NextToken NextToken
+G DescribeVolumeStatus NextToken NextToken
+G DescribeVolumes NextToken NextToken
+G DescribeVolumesModifications NextToken NextToken
+G DescribeVpcClassicLinkDnsSupport NextToken NextToken
+G DescribeVpcEndpointConnectionNotifications NextToken NextToken
+G DescribeVpcEndpointConnections NextToken NextToken
+G DescribeVpcEndpointServiceConfigurations NextToken NextToken
+G DescribeVpcEndpointServicePermissions NextToken NextToken
+G DescribeVpcEndpoints NextToken NextToken
+G DescribeVpcPeeringConnections NextToken NextToken
+G DescribeVpcs NextToken NextToken
+G DescribeVpnConcentrators NextToken NextToken
+G GetAssociatedIpv6PoolCidrs NextToken NextToken
+G GetAwsNetworkPerformanceData NextToken NextToken
+G GetCapacityManagerMetricData NextToken NextToken
+G GetCapacityManagerMetricDimensions NextToken NextToken
+G GetCapacityManagerMonitoredTagKeys NextToken NextToken
+G GetGroupsForCapacityReservation NextToken NextToken
+G GetInstanceTypesFromInstanceRequirements NextToken NextToken
+G GetIpamAddressHistory NextToken NextToken
+G GetIpamDiscoveredAccounts NextToken NextToken
+G GetIpamDiscoveredResourceCidrs NextToken NextToken
+G GetIpamPoolAllocations NextToken NextToken
+G GetIpamPoolCidrs NextToken NextToken
+G GetIpamPrefixListResolverRules NextToken NextToken
+G GetIpamPrefixListResolverVersionEntries NextToken NextToken
+G GetIpamPrefixListResolverVersions NextToken NextToken
+G GetIpamResourceCidrs NextToken NextToken
+G GetManagedPrefixListAssociations NextToken NextToken
+G GetManagedPrefixListEntries NextToken NextToken
+G GetNetworkInsightsAccessScopeAnalysisFindings NextToken NextToken
+G GetSecurityGroupsForVpc NextToken NextToken
+G GetSpotPlacementScores NextToken NextToken
+G GetTransitGatewayAttachmentPropagations NextToken NextToken
+G GetTransitGatewayMulticastDomainAssociations NextToken NextToken
+G GetTransitGatewayPolicyTableAssociations NextToken NextToken
+G GetTransitGatewayPolicyTableEntries NextToken NextToken
+G GetTransitGatewayPrefixListReferences NextToken NextToken
+G GetTransitGatewayRouteTableAssociations NextToken NextToken
+G GetTransitGatewayRouteTablePropagations NextToken NextToken
+G GetVpnConnectionDeviceTypes NextToken NextToken
+G ListImagesInRecycleBin NextToken NextToken
+G ListSnapshotsInRecycleBin NextToken NextToken
+G SearchLocalGatewayRoutes NextToken NextToken
+G SearchTransitGatewayMulticastGroups NextToken NextToken
+G SearchTransitGatewayRoutes NextToken NextToken

@@ -5,11 +5,13 @@
 package awssdkv2
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/moderneinc/recipes-go/recipes/migration/awssdkv2/awsmanifest"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
 // v1 gave a client a WaitUntilX method whose attempt count and delay were baked
@@ -45,13 +47,21 @@ func (s *fileScan) waiterType(mi *java.MethodInvocation) (service, waiter string
 	if !strings.HasPrefix(name, waiterPrefix) || name == waiterPrefix {
 		return "", "", false
 	}
-	if len(realArgs(mi)) != 1 {
+	args := realArgs(mi)
+	if trimmed, withContext := strings.CutSuffix(name, "WithContext"); withContext {
+		// The context and the attempt bound are what the v2 wait takes too.
+		if len(args) < 2 || !s.waiterOptions(args[2:]) {
+			return "", "", false
+		}
+		name, args = trimmed, args[1:2]
+	}
+	if len(args) != 1 {
 		return "", "", false
 	}
 	// The waiter is named for the shape the input is, not for an operation, so
 	// the input the call takes settles the service without resolving the
 	// receiver.
-	service, _, isShape := s.inputShape(realArgs(mi)[0])
+	service, _, isShape := s.inputShape(args[0])
 	if !isShape {
 		return "", "", false
 	}
@@ -68,19 +78,47 @@ func (v *migrateVisitor) waiterCall(mi *java.MethodInvocation) (java.J, bool) {
 	if !ok {
 		return nil, false
 	}
-	ctx := v.contextExpr()
+	args := realArgs(mi)
+	input := args[0]
+	var ctx java.Expression
+	var attempts java.Expression
+	if strings.HasSuffix(mi.Name.Name, "WithContext") {
+		ctx, input = args[0], args[1]
+		for _, opt := range args[2:] {
+			attempts = realArgs(opt.(*java.MethodInvocation))[0]
+		}
+	} else {
+		ctx = v.contextExpr()
+	}
 	if ctx == nil {
 		return nil, false
 	}
 	local := v.scan.qualifierFor(service)
 	v.serviceUsed[service] = true
-	v.needsWaitDuration = true
+	var bound java.Expression = &java.Identifier{Prefix: java.SingleSpace, Name: waitDuration, Type: lstutil.NamedType("time.Duration")}
+	if attempts != nil {
+		// v1 waited its constant delay between each of the attempts allowed.
+		delay, _, ok := awsmanifest.WaiterTiming(service, strings.TrimSuffix(strings.TrimPrefix(mi.Name.Name, waiterPrefix), "WithContext"))
+		if !ok {
+			return nil, false
+		}
+		parsed, ok := parsedExpression(fmt.Sprintf("time.Duration(awsWaitAttempts) * %d * time.Second", delay))
+		if !ok {
+			return nil, false
+		}
+		parsed = visitor.Init(&qualifiedCallTyping{paths: map[string]string{"time": "time"}}).Visit(parsed, nil).(java.Expression)
+		parsed = visitor.Init(&placeholderBind{name: "awsWaitAttempts", value: lstutil.SetExprPrefix(attempts, java.EmptySpace)}).Visit(parsed, nil).(java.Expression)
+		bound = lstutil.SetExprPrefix(parsed, java.SingleSpace)
+		v.needsTime = true
+	} else {
+		v.needsWaitDuration = true
+	}
 
 	construct := &java.MethodInvocation{
-		Select:     &java.RightPadded[java.Expression]{Element: &java.Identifier{Name: local, Type: lstutil.NamedType(v2ServicePkg + service)}},
+		Select:     &java.RightPadded[java.Expression]{Element: &java.Identifier{Name: local, Type: lstutil.NamedType(v2ServicePath(service))}},
 		Name:       &java.Identifier{Name: waiter},
 		Arguments:  java.Container[java.Expression]{Elements: []java.RightPadded[java.Expression]{{Element: lstutil.SetExprPrefix(mi.Select.Element, java.EmptySpace)}}},
-		MethodType: lstutil.FuncType(v2ServicePkg+service, waiter, nil),
+		MethodType: lstutil.FuncType(v2ServicePath(service), waiter, nil),
 	}
 	return &java.MethodInvocation{
 		Prefix: mi.Prefix,
@@ -88,9 +126,62 @@ func (v *migrateVisitor) waiterCall(mi *java.MethodInvocation) (java.J, bool) {
 		Name:   &java.Identifier{Name: "Wait"},
 		Arguments: java.Container[java.Expression]{Elements: []java.RightPadded[java.Expression]{
 			{Element: lstutil.SetExprPrefix(ctx, java.EmptySpace)},
-			{Element: lstutil.SetExprPrefix(realArgs(mi)[0], java.SingleSpace)},
-			{Element: &java.Identifier{Prefix: java.SingleSpace, Name: waitDuration, Type: lstutil.NamedType("time.Duration")}},
+			{Element: lstutil.SetExprPrefix(input, java.SingleSpace)},
+			{Element: bound},
 		}},
-		MethodType: lstutil.FuncType(v2ServicePkg+service+"."+waiter, "Wait", nil),
+		MethodType: lstutil.FuncType(v2ServicePath(service)+"."+waiter, "Wait", nil),
 	}, true
+}
+
+// waiterOptions reports whether opts are request options a v2 wait carries:
+// at most one attempt bound.
+func (s *fileScan) waiterOptions(opts []java.Expression) bool {
+	if len(opts) > 1 {
+		return false
+	}
+	for _, opt := range opts {
+		mi, isCall := opt.(*java.MethodInvocation)
+		if !isCall {
+			return false
+		}
+		call, isRequest := qualifiedCall(mi, s.requestPkg)
+		if !isRequest || call != "WithWaiterMaxAttempts" || len(realArgs(mi)) != 1 {
+			return false
+		}
+	}
+	return true
+}
+
+// waiterOptionScan records the request options waiter calls consume.
+type waiterOptionScan struct {
+	visitor.GoVisitor
+	scan *fileScan
+}
+
+func (v *waiterOptionScan) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	if _, _, ok := v.scan.waiterType(mi); ok && mi.Name != nil && strings.HasSuffix(mi.Name.Name, "WithContext") {
+		for _, opt := range realArgs(mi)[2:] {
+			v.scan.consumedRequestCalls[opt.(*java.MethodInvocation)] = true
+		}
+	}
+	return v.GoVisitor.VisitMethodInvocation(mi, p)
+}
+
+// sdkWaiterCall reports whether a WaitUntil call is on an SDK client or takes
+// a shape, as opposed to a method of the program's own spelled alike.
+func (s *fileScan) sdkWaiterCall(mi *java.MethodInvocation) bool {
+	if _, isClient := s.clientOperationService(mi); isClient {
+		return true
+	}
+	if mi.Select != nil {
+		if _, isClient := s.attributedClient(mi.Select.Element); isClient {
+			return true
+		}
+	}
+	for _, arg := range realArgs(mi) {
+		if _, _, isShape := s.inputShape(arg); isShape {
+			return true
+		}
+	}
+	return false
 }

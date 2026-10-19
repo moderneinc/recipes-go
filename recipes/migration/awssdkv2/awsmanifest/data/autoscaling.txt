@@ -327,6 +327,15 @@ I DescribeWarmPoolInput.MaxRecords int64 int32
 I Ebs.Iops int64 int32
 I Ebs.Throughput int64 int32
 I Ebs.VolumeSize int64 int32
+I Group.DefaultCooldown int64 int32
+I Group.DefaultInstanceWarmup int64 int32
+I Group.DesiredCapacity int64 int32
+I Group.HealthCheckGracePeriod int64 int32
+I Group.MaxInstanceLifetime int64 int32
+I Group.MaxSize int64 int32
+I Group.MinSize int64 int32
+I Group.PredictedCapacity int64 int32
+I Group.WarmPoolSize int64 int32
 I InstanceMaintenancePolicy.MaxHealthyPercentage int64 int32
 I InstanceMaintenancePolicy.MinHealthyPercentage int64 int32
 I InstanceMetadataOptions.HttpPutResponseHopLimit int64 int32
@@ -392,16 +401,6 @@ I VCpuCountRequest.Max int64 int32
 I VCpuCountRequest.Min int64 int32
 I WarmPoolConfiguration.MaxGroupPreparedCapacity int64 int32
 I WarmPoolConfiguration.MinSize int64 int32
-R AutoScalingGroup.AvailabilityZoneDistribution AvailabilityZoneDistribution
-R AutoScalingGroup.AvailabilityZoneImpairmentPolicy AvailabilityZoneImpairmentPolicy
-R AutoScalingGroup.CapacityReservationSpecification CapacityReservationSpecification
-R AutoScalingGroup.InstanceLifecyclePolicy InstanceLifecyclePolicy
-R AutoScalingGroup.InstanceMaintenancePolicy InstanceMaintenancePolicy
-R AutoScalingGroup.LaunchTemplate LaunchTemplateSpecification
-R AutoScalingGroup.MixedInstancesPolicy MixedInstancesPolicy
-R AutoScalingGroup.Operator Operator
-R AutoScalingGroup.WarmPoolConfiguration WarmPoolConfiguration
-R AutoScalingInstanceDetails.LaunchTemplate LaunchTemplateSpecification
 R BaselinePerformanceFactorsRequest.Cpu CpuPerformanceFactorRequest
 R BlockDeviceMapping.Ebs Ebs
 R CapacityReservationSpecification.CapacityReservationTarget CapacityReservationTarget
@@ -419,7 +418,17 @@ R DescribeWarmPoolOutput.WarmPoolConfiguration WarmPoolConfiguration
 R DesiredConfiguration.LaunchTemplate LaunchTemplateSpecification
 R DesiredConfiguration.MixedInstancesPolicy MixedInstancesPolicy
 R GetPredictiveScalingForecastOutput.CapacityForecast CapacityForecast
+R Group.AvailabilityZoneDistribution AvailabilityZoneDistribution
+R Group.AvailabilityZoneImpairmentPolicy AvailabilityZoneImpairmentPolicy
+R Group.CapacityReservationSpecification CapacityReservationSpecification
+R Group.InstanceLifecyclePolicy InstanceLifecyclePolicy
+R Group.InstanceMaintenancePolicy InstanceMaintenancePolicy
+R Group.LaunchTemplate LaunchTemplateSpecification
+R Group.MixedInstancesPolicy MixedInstancesPolicy
+R Group.Operator Operator
+R Group.WarmPoolConfiguration WarmPoolConfiguration
 R Instance.LaunchTemplate LaunchTemplateSpecification
+R InstanceDetails.LaunchTemplate LaunchTemplateSpecification
 R InstanceLifecyclePolicy.RetentionTriggers RetentionTriggers
 R InstanceRefresh.DesiredConfiguration DesiredConfiguration
 R InstanceRefresh.Preferences RefreshPreferences
@@ -500,38 +509,6 @@ V AttachLoadBalancerTargetGroupsInput.AutoScalingGroupName string
 V AttachLoadBalancersInput.AutoScalingGroupName string
 V AttachTrafficSourcesInput.AutoScalingGroupName string
 V AttachTrafficSourcesInput.SkipZonalShiftValidation bool
-V AutoScalingGroup.AutoScalingGroupARN string
-V AutoScalingGroup.AutoScalingGroupName string
-V AutoScalingGroup.CapacityRebalance bool
-V AutoScalingGroup.Context string
-V AutoScalingGroup.DefaultCooldown int32
-V AutoScalingGroup.DefaultInstanceWarmup int32
-V AutoScalingGroup.DesiredCapacity int32
-V AutoScalingGroup.DesiredCapacityType string
-V AutoScalingGroup.HealthCheckGracePeriod int32
-V AutoScalingGroup.HealthCheckType string
-V AutoScalingGroup.LaunchConfigurationName string
-V AutoScalingGroup.MaxInstanceLifetime int32
-V AutoScalingGroup.MaxSize int32
-V AutoScalingGroup.MinSize int32
-V AutoScalingGroup.NewInstancesProtectedFromScaleIn bool
-V AutoScalingGroup.PlacementGroup string
-V AutoScalingGroup.PredictedCapacity int32
-V AutoScalingGroup.ServiceLinkedRoleARN string
-V AutoScalingGroup.Status string
-V AutoScalingGroup.VPCZoneIdentifier string
-V AutoScalingGroup.WarmPoolSize int32
-V AutoScalingInstanceDetails.AutoScalingGroupName string
-V AutoScalingInstanceDetails.AvailabilityZone string
-V AutoScalingInstanceDetails.AvailabilityZoneId string
-V AutoScalingInstanceDetails.HealthStatus string
-V AutoScalingInstanceDetails.ImageId string
-V AutoScalingInstanceDetails.InstanceId string
-V AutoScalingInstanceDetails.InstanceType string
-V AutoScalingInstanceDetails.LaunchConfigurationName string
-V AutoScalingInstanceDetails.LifecycleState string
-V AutoScalingInstanceDetails.ProtectedFromScaleIn bool
-V AutoScalingInstanceDetails.WeightedCapacity string
 V AvailabilityZoneImpairmentPolicy.ZonalShiftEnabled bool
 V BaselineEbsBandwidthMbpsRequest.Max int32
 V BaselineEbsBandwidthMbpsRequest.Min int32
@@ -688,6 +665,27 @@ V FailedScheduledUpdateGroupActionRequest.ScheduledActionName string
 V Filter.Name string
 V GetPredictiveScalingForecastInput.AutoScalingGroupName string
 V GetPredictiveScalingForecastInput.PolicyName string
+V Group.AutoScalingGroupARN string
+V Group.AutoScalingGroupName string
+V Group.CapacityRebalance bool
+V Group.Context string
+V Group.DefaultCooldown int32
+V Group.DefaultInstanceWarmup int32
+V Group.DesiredCapacity int32
+V Group.DesiredCapacityType string
+V Group.HealthCheckGracePeriod int32
+V Group.HealthCheckType string
+V Group.LaunchConfigurationName string
+V Group.MaxInstanceLifetime int32
+V Group.MaxSize int32
+V Group.MinSize int32
+V Group.NewInstancesProtectedFromScaleIn bool
+V Group.PlacementGroup string
+V Group.PredictedCapacity int32
+V Group.ServiceLinkedRoleARN string
+V Group.Status string
+V Group.VPCZoneIdentifier string
+V Group.WarmPoolSize int32
 V IdempotentCallInProgressFault.ErrorCodeOverride string
 V IdempotentCallInProgressFault.Message string
 V IdempotentParameterMismatchError.ErrorCodeOverride string
@@ -706,6 +704,17 @@ V InstanceCollection.AvailabilityZoneId string
 V InstanceCollection.InstanceType string
 V InstanceCollection.MarketType string
 V InstanceCollection.SubnetId string
+V InstanceDetails.AutoScalingGroupName string
+V InstanceDetails.AvailabilityZone string
+V InstanceDetails.AvailabilityZoneId string
+V InstanceDetails.HealthStatus string
+V InstanceDetails.ImageId string
+V InstanceDetails.InstanceId string
+V InstanceDetails.InstanceType string
+V InstanceDetails.LaunchConfigurationName string
+V InstanceDetails.LifecycleState string
+V InstanceDetails.ProtectedFromScaleIn bool
+V InstanceDetails.WeightedCapacity string
 V InstanceMaintenancePolicy.MaxHealthyPercentage int32
 V InstanceMaintenancePolicy.MinHealthyPercentage int32
 V InstanceMetadataOptions.HttpPutResponseHopLimit int32
@@ -1004,9 +1013,9 @@ L DeleteTagsInput.Tags Tag
 L DescribeAdjustmentTypesOutput.AdjustmentTypes AdjustmentType
 L DescribeAutoScalingGroupsInput.AutoScalingGroupNames -
 L DescribeAutoScalingGroupsInput.Filters Filter
-L DescribeAutoScalingGroupsOutput.AutoScalingGroups AutoScalingGroup
+L DescribeAutoScalingGroupsOutput.AutoScalingGroups Group
 L DescribeAutoScalingInstancesInput.InstanceIds -
-L DescribeAutoScalingInstancesOutput.AutoScalingInstances AutoScalingInstanceDetails
+L DescribeAutoScalingInstancesOutput.AutoScalingInstances InstanceDetails
 L DescribeAutoScalingNotificationTypesOutput.AutoScalingNotificationTypes -
 L DescribeInstanceRefreshesInput.InstanceRefreshIds -
 L DescribeInstanceRefreshesOutput.InstanceRefreshes InstanceRefresh
@@ -1047,6 +1056,15 @@ L ExitStandbyInput.InstanceIds -
 L ExitStandbyOutput.Activities Activity
 L Filter.Values -
 L GetPredictiveScalingForecastOutput.LoadForecast LoadForecast
+L Group.AvailabilityZones -
+L Group.EnabledMetrics EnabledMetric
+L Group.Instances Instance
+L Group.LoadBalancerNames -
+L Group.SuspendedProcesses SuspendedProcess
+L Group.Tags TagDescription
+L Group.TargetGroupARNs -
+L Group.TerminationPolicies -
+L Group.TrafficSources TrafficSourceIdentifier
 L InstanceRequirements.AcceleratorManufacturers AcceleratorManufacturer
 L InstanceRequirements.AcceleratorNames AcceleratorName
 L InstanceRequirements.AcceleratorTypes AcceleratorType
@@ -1076,13 +1094,13 @@ L SetInstanceProtectionInput.InstanceIds -
 L UpdateAutoScalingGroupInput.AvailabilityZones -
 L UpdateAutoScalingGroupInput.TerminationPolicies -
 F Activity.StatusCode ScalingActivityStatusCode
-F AutoScalingGroup.DeletionProtection DeletionProtection
 F AvailabilityZoneDistribution.CapacityDistributionStrategy CapacityDistributionStrategy
 F AvailabilityZoneImpairmentPolicy.ImpairedZoneHealthCheckBehavior ImpairedZoneHealthCheckBehavior
 F CapacityReservationSpecification.CapacityReservationPreference CapacityReservationPreference
 F CreateAutoScalingGroupInput.DeletionProtection DeletionProtection
 F CustomizedMetricSpecification.Statistic MetricStatistic
 F DistributionSegment.TargetCapacityTypes TargetCapacityType
+F Group.DeletionProtection DeletionProtection
 F Instance.LifecycleState LifecycleState
 F InstanceMetadataOptions.HttpEndpoint InstanceMetadataEndpointState
 F InstanceMetadataOptions.HttpTokens InstanceMetadataHttpTokensState
@@ -1738,3 +1756,317 @@ E WarmPoolStateHibernated WarmPoolState
 E WarmPoolStateRunning WarmPoolState
 E WarmPoolStateStopped WarmPoolState
 E WarmPoolStatusPendingDelete WarmPoolStatus
+M Group AutoScalingGroup
+M InstanceDetails AutoScalingInstanceDetails
+Y GroupExists 5 10
+Y GroupInService 15 40
+Y GroupNotExists 15 40
+K AttachInstancesInput 001 AutoScalingGroupName req nil
+K AttachInstancesInput 002 AutoScalingGroupName len 1 ptr
+K AttachLoadBalancerTargetGroupsInput 001 AutoScalingGroupName req nil
+K AttachLoadBalancerTargetGroupsInput 002 AutoScalingGroupName len 1 ptr
+K AttachLoadBalancerTargetGroupsInput 003 TargetGroupARNs req nil
+K AttachLoadBalancersInput 001 AutoScalingGroupName req nil
+K AttachLoadBalancersInput 002 AutoScalingGroupName len 1 ptr
+K AttachLoadBalancersInput 003 LoadBalancerNames req nil
+K AttachTrafficSourcesInput 001 AutoScalingGroupName req nil
+K AttachTrafficSourcesInput 002 AutoScalingGroupName len 1 ptr
+K AttachTrafficSourcesInput 003 TrafficSources req nil
+K AttachTrafficSourcesInput 004 TrafficSources each TrafficSourceIdentifier slice
+K BatchDeleteScheduledActionInput 001 AutoScalingGroupName req nil
+K BatchDeleteScheduledActionInput 002 AutoScalingGroupName len 1 ptr
+K BatchDeleteScheduledActionInput 003 ScheduledActionNames req nil
+K BatchPutScheduledUpdateGroupActionInput 001 AutoScalingGroupName req nil
+K BatchPutScheduledUpdateGroupActionInput 002 AutoScalingGroupName len 1 ptr
+K BatchPutScheduledUpdateGroupActionInput 003 ScheduledUpdateGroupActions req nil
+K BatchPutScheduledUpdateGroupActionInput 004 ScheduledUpdateGroupActions each ScheduledUpdateGroupActionRequest slice
+K BlockDeviceMapping 001 DeviceName req nil
+K BlockDeviceMapping 002 DeviceName len 1 ptr
+K BlockDeviceMapping 003 VirtualName len 1 ptr
+K BlockDeviceMapping 004 Ebs nest Ebs
+K CancelInstanceRefreshInput 001 AutoScalingGroupName req nil
+K CancelInstanceRefreshInput 002 AutoScalingGroupName len 1 ptr
+K CompleteLifecycleActionInput 001 AutoScalingGroupName req nil
+K CompleteLifecycleActionInput 002 AutoScalingGroupName len 1 ptr
+K CompleteLifecycleActionInput 003 InstanceId len 1 ptr
+K CompleteLifecycleActionInput 004 LifecycleActionResult req nil
+K CompleteLifecycleActionInput 005 LifecycleActionToken len 36 ptr
+K CompleteLifecycleActionInput 006 LifecycleHookName req nil
+K CompleteLifecycleActionInput 007 LifecycleHookName len 1 ptr
+K CreateAutoScalingGroupInput 001 AutoScalingGroupName req nil
+K CreateAutoScalingGroupInput 002 AutoScalingGroupName len 1 ptr
+K CreateAutoScalingGroupInput 003 DesiredCapacityType len 1 ptr
+K CreateAutoScalingGroupInput 004 HealthCheckType len 1 ptr
+K CreateAutoScalingGroupInput 005 InstanceId len 1 ptr
+K CreateAutoScalingGroupInput 006 LaunchConfigurationName len 1 ptr
+K CreateAutoScalingGroupInput 007 MaxSize req nil
+K CreateAutoScalingGroupInput 008 MinSize req nil
+K CreateAutoScalingGroupInput 009 PlacementGroup len 1 ptr
+K CreateAutoScalingGroupInput 010 ServiceLinkedRoleARN len 1 ptr
+K CreateAutoScalingGroupInput 011 VPCZoneIdentifier len 1 ptr
+K CreateAutoScalingGroupInput 012 InstanceMaintenancePolicy nest InstanceMaintenancePolicy
+K CreateAutoScalingGroupInput 013 LaunchTemplate nest LaunchTemplateSpecification
+K CreateAutoScalingGroupInput 014 LifecycleHookSpecificationList each LifecycleHookSpecification slice
+K CreateAutoScalingGroupInput 015 MixedInstancesPolicy nest MixedInstancesPolicy
+K CreateAutoScalingGroupInput 016 Tags each Tag slice
+K CreateAutoScalingGroupInput 017 TrafficSources each TrafficSourceIdentifier slice
+K CreateLaunchConfigurationInput 001 ClassicLinkVPCId len 1 ptr
+K CreateLaunchConfigurationInput 002 IamInstanceProfile len 1 ptr
+K CreateLaunchConfigurationInput 003 ImageId len 1 ptr
+K CreateLaunchConfigurationInput 004 InstanceId len 1 ptr
+K CreateLaunchConfigurationInput 005 InstanceType len 1 ptr
+K CreateLaunchConfigurationInput 006 KernelId len 1 ptr
+K CreateLaunchConfigurationInput 007 KeyName len 1 ptr
+K CreateLaunchConfigurationInput 008 LaunchConfigurationName req nil
+K CreateLaunchConfigurationInput 009 LaunchConfigurationName len 1 ptr
+K CreateLaunchConfigurationInput 010 PlacementTenancy len 1 ptr
+K CreateLaunchConfigurationInput 011 RamdiskId len 1 ptr
+K CreateLaunchConfigurationInput 012 SpotPrice len 1 ptr
+K CreateLaunchConfigurationInput 013 BlockDeviceMappings each BlockDeviceMapping slice
+K CreateLaunchConfigurationInput 014 MetadataOptions nest InstanceMetadataOptions
+K CreateOrUpdateTagsInput 001 Tags req nil
+K CreateOrUpdateTagsInput 002 Tags each Tag slice
+K CustomizedMetricSpecification 001 Dimensions each MetricDimension slice
+K CustomizedMetricSpecification 002 Metrics each TargetTrackingMetricDataQuery slice
+K DeleteAutoScalingGroupInput 001 AutoScalingGroupName req nil
+K DeleteAutoScalingGroupInput 002 AutoScalingGroupName len 1 ptr
+K DeleteLaunchConfigurationInput 001 LaunchConfigurationName req nil
+K DeleteLaunchConfigurationInput 002 LaunchConfigurationName len 1 ptr
+K DeleteLifecycleHookInput 001 AutoScalingGroupName req nil
+K DeleteLifecycleHookInput 002 AutoScalingGroupName len 1 ptr
+K DeleteLifecycleHookInput 003 LifecycleHookName req nil
+K DeleteLifecycleHookInput 004 LifecycleHookName len 1 ptr
+K DeleteNotificationConfigurationInput 001 AutoScalingGroupName req nil
+K DeleteNotificationConfigurationInput 002 AutoScalingGroupName len 1 ptr
+K DeleteNotificationConfigurationInput 003 TopicARN req nil
+K DeleteNotificationConfigurationInput 004 TopicARN len 1 ptr
+K DeletePolicyInput 001 AutoScalingGroupName len 1 ptr
+K DeletePolicyInput 002 PolicyName req nil
+K DeletePolicyInput 003 PolicyName len 1 ptr
+K DeleteScheduledActionInput 001 AutoScalingGroupName req nil
+K DeleteScheduledActionInput 002 AutoScalingGroupName len 1 ptr
+K DeleteScheduledActionInput 003 ScheduledActionName req nil
+K DeleteScheduledActionInput 004 ScheduledActionName len 1 ptr
+K DeleteTagsInput 001 Tags req nil
+K DeleteTagsInput 002 Tags each Tag slice
+K DeleteWarmPoolInput 001 AutoScalingGroupName req nil
+K DeleteWarmPoolInput 002 AutoScalingGroupName len 1 ptr
+K DescribeInstanceRefreshesInput 001 AutoScalingGroupName req nil
+K DescribeInstanceRefreshesInput 002 AutoScalingGroupName len 1 ptr
+K DescribeLifecycleHooksInput 001 AutoScalingGroupName req nil
+K DescribeLifecycleHooksInput 002 AutoScalingGroupName len 1 ptr
+K DescribeLoadBalancerTargetGroupsInput 001 AutoScalingGroupName req nil
+K DescribeLoadBalancerTargetGroupsInput 002 AutoScalingGroupName len 1 ptr
+K DescribeLoadBalancersInput 001 AutoScalingGroupName req nil
+K DescribeLoadBalancersInput 002 AutoScalingGroupName len 1 ptr
+K DescribePoliciesInput 001 AutoScalingGroupName len 1 ptr
+K DescribeScalingActivitiesInput 001 AutoScalingGroupName len 1 ptr
+K DescribeScheduledActionsInput 001 AutoScalingGroupName len 1 ptr
+K DescribeTrafficSourcesInput 001 AutoScalingGroupName req nil
+K DescribeTrafficSourcesInput 002 AutoScalingGroupName len 1 ptr
+K DescribeTrafficSourcesInput 003 TrafficSourceType len 1 ptr
+K DescribeWarmPoolInput 001 AutoScalingGroupName req nil
+K DescribeWarmPoolInput 002 AutoScalingGroupName len 1 ptr
+K DesiredConfiguration 001 LaunchTemplate nest LaunchTemplateSpecification
+K DesiredConfiguration 002 MixedInstancesPolicy nest MixedInstancesPolicy
+K DetachInstancesInput 001 AutoScalingGroupName req nil
+K DetachInstancesInput 002 AutoScalingGroupName len 1 ptr
+K DetachInstancesInput 003 ShouldDecrementDesiredCapacity req nil
+K DetachLoadBalancerTargetGroupsInput 001 AutoScalingGroupName req nil
+K DetachLoadBalancerTargetGroupsInput 002 AutoScalingGroupName len 1 ptr
+K DetachLoadBalancerTargetGroupsInput 003 TargetGroupARNs req nil
+K DetachLoadBalancersInput 001 AutoScalingGroupName req nil
+K DetachLoadBalancersInput 002 AutoScalingGroupName len 1 ptr
+K DetachLoadBalancersInput 003 LoadBalancerNames req nil
+K DetachTrafficSourcesInput 001 AutoScalingGroupName req nil
+K DetachTrafficSourcesInput 002 AutoScalingGroupName len 1 ptr
+K DetachTrafficSourcesInput 003 TrafficSources req nil
+K DetachTrafficSourcesInput 004 TrafficSources each TrafficSourceIdentifier slice
+K DisableMetricsCollectionInput 001 AutoScalingGroupName req nil
+K DisableMetricsCollectionInput 002 AutoScalingGroupName len 1 ptr
+K Ebs 001 Iops min 100 ptr
+K Ebs 002 SnapshotId len 1 ptr
+K Ebs 003 Throughput min 125 ptr
+K Ebs 004 VolumeSize min 1 ptr
+K Ebs 005 VolumeType len 1 ptr
+K EnableMetricsCollectionInput 001 AutoScalingGroupName req nil
+K EnableMetricsCollectionInput 002 AutoScalingGroupName len 1 ptr
+K EnableMetricsCollectionInput 003 Granularity req nil
+K EnableMetricsCollectionInput 004 Granularity len 1 ptr
+K EnterStandbyInput 001 AutoScalingGroupName req nil
+K EnterStandbyInput 002 AutoScalingGroupName len 1 ptr
+K EnterStandbyInput 003 ShouldDecrementDesiredCapacity req nil
+K ExecutePolicyInput 001 AutoScalingGroupName len 1 ptr
+K ExecutePolicyInput 002 PolicyName req nil
+K ExecutePolicyInput 003 PolicyName len 1 ptr
+K ExitStandbyInput 001 AutoScalingGroupName req nil
+K ExitStandbyInput 002 AutoScalingGroupName len 1 ptr
+K GetPredictiveScalingForecastInput 001 AutoScalingGroupName req nil
+K GetPredictiveScalingForecastInput 002 AutoScalingGroupName len 1 ptr
+K GetPredictiveScalingForecastInput 003 EndTime req nil
+K GetPredictiveScalingForecastInput 004 PolicyName req nil
+K GetPredictiveScalingForecastInput 005 PolicyName len 1 ptr
+K GetPredictiveScalingForecastInput 006 StartTime req nil
+K InstanceMaintenancePolicy 001 MaxHealthyPercentage min -1 ptr
+K InstanceMaintenancePolicy 002 MinHealthyPercentage min -1 ptr
+K InstanceMetadataOptions 001 HttpPutResponseHopLimit min 1 ptr
+K InstanceRequirements 001 MemoryMiB req nil
+K InstanceRequirements 002 VCpuCount req nil
+K InstanceRequirements 003 MemoryMiB nest MemoryMiBRequest
+K InstanceRequirements 004 VCpuCount nest VCpuCountRequest
+K LaunchTemplate 001 LaunchTemplateSpecification nest LaunchTemplateSpecification
+K LaunchTemplate 002 Overrides each LaunchTemplateOverrides slice
+K LaunchTemplateOverrides 001 InstanceType len 1 ptr
+K LaunchTemplateOverrides 002 WeightedCapacity len 1 ptr
+K LaunchTemplateOverrides 003 InstanceRequirements nest InstanceRequirements
+K LaunchTemplateOverrides 004 LaunchTemplateSpecification nest LaunchTemplateSpecification
+K LaunchTemplateSpecification 001 LaunchTemplateId len 1 ptr
+K LaunchTemplateSpecification 002 LaunchTemplateName len 3 ptr
+K LaunchTemplateSpecification 003 Version len 1 ptr
+K LifecycleHookSpecification 001 LifecycleHookName req nil
+K LifecycleHookSpecification 002 LifecycleHookName len 1 ptr
+K LifecycleHookSpecification 003 LifecycleTransition req nil
+K LifecycleHookSpecification 004 NotificationMetadata len 1 ptr
+K LifecycleHookSpecification 005 RoleARN len 1 ptr
+K MemoryMiBRequest 001 Min req nil
+K Metric 001 MetricName req nil
+K Metric 002 Namespace req nil
+K Metric 003 Dimensions each MetricDimension slice
+K MetricDataQuery 001 Expression len 1 ptr
+K MetricDataQuery 002 Id req nil
+K MetricDataQuery 003 Id len 1 ptr
+K MetricDataQuery 004 MetricStat nest MetricStat
+K MetricDimension 001 Name req nil
+K MetricDimension 002 Value req nil
+K MetricStat 001 Metric req nil
+K MetricStat 002 Stat req nil
+K MetricStat 003 Stat len 1 ptr
+K MetricStat 004 Metric nest Metric
+K MixedInstancesPolicy 001 LaunchTemplate nest LaunchTemplate
+K PredefinedMetricSpecification 001 PredefinedMetricType req empty
+K PredefinedMetricSpecification 002 ResourceLabel len 1 ptr
+K PredictiveScalingConfiguration 001 MetricSpecifications req nil
+K PredictiveScalingConfiguration 002 MetricSpecifications each PredictiveScalingMetricSpecification slice
+K PredictiveScalingCustomizedCapacityMetric 001 MetricDataQueries req nil
+K PredictiveScalingCustomizedCapacityMetric 002 MetricDataQueries each MetricDataQuery slice
+K PredictiveScalingCustomizedLoadMetric 001 MetricDataQueries req nil
+K PredictiveScalingCustomizedLoadMetric 002 MetricDataQueries each MetricDataQuery slice
+K PredictiveScalingCustomizedScalingMetric 001 MetricDataQueries req nil
+K PredictiveScalingCustomizedScalingMetric 002 MetricDataQueries each MetricDataQuery slice
+K PredictiveScalingMetricSpecification 001 TargetValue req nil
+K PredictiveScalingMetricSpecification 002 CustomizedCapacityMetricSpecification nest PredictiveScalingCustomizedCapacityMetric
+K PredictiveScalingMetricSpecification 003 CustomizedLoadMetricSpecification nest PredictiveScalingCustomizedLoadMetric
+K PredictiveScalingMetricSpecification 004 CustomizedScalingMetricSpecification nest PredictiveScalingCustomizedScalingMetric
+K PredictiveScalingMetricSpecification 005 PredefinedLoadMetricSpecification nest PredictiveScalingPredefinedLoadMetric
+K PredictiveScalingMetricSpecification 006 PredefinedMetricPairSpecification nest PredictiveScalingPredefinedMetricPair
+K PredictiveScalingMetricSpecification 007 PredefinedScalingMetricSpecification nest PredictiveScalingPredefinedScalingMetric
+K PredictiveScalingPredefinedLoadMetric 001 PredefinedMetricType req empty
+K PredictiveScalingPredefinedLoadMetric 002 ResourceLabel len 1 ptr
+K PredictiveScalingPredefinedMetricPair 001 PredefinedMetricType req empty
+K PredictiveScalingPredefinedMetricPair 002 ResourceLabel len 1 ptr
+K PredictiveScalingPredefinedScalingMetric 001 PredefinedMetricType req empty
+K PredictiveScalingPredefinedScalingMetric 002 ResourceLabel len 1 ptr
+K PutLifecycleHookInput 001 AutoScalingGroupName req nil
+K PutLifecycleHookInput 002 AutoScalingGroupName len 1 ptr
+K PutLifecycleHookInput 003 LifecycleHookName req nil
+K PutLifecycleHookInput 004 LifecycleHookName len 1 ptr
+K PutLifecycleHookInput 005 NotificationMetadata len 1 ptr
+K PutLifecycleHookInput 006 RoleARN len 1 ptr
+K PutNotificationConfigurationInput 001 AutoScalingGroupName req nil
+K PutNotificationConfigurationInput 002 AutoScalingGroupName len 1 ptr
+K PutNotificationConfigurationInput 003 NotificationTypes req nil
+K PutNotificationConfigurationInput 004 TopicARN req nil
+K PutNotificationConfigurationInput 005 TopicARN len 1 ptr
+K PutScalingPolicyInput 001 AdjustmentType len 1 ptr
+K PutScalingPolicyInput 002 AutoScalingGroupName req nil
+K PutScalingPolicyInput 003 AutoScalingGroupName len 1 ptr
+K PutScalingPolicyInput 004 MetricAggregationType len 1 ptr
+K PutScalingPolicyInput 005 PolicyName req nil
+K PutScalingPolicyInput 006 PolicyName len 1 ptr
+K PutScalingPolicyInput 007 PolicyType len 1 ptr
+K PutScalingPolicyInput 008 PredictiveScalingConfiguration nest PredictiveScalingConfiguration
+K PutScalingPolicyInput 009 StepAdjustments each StepAdjustment slice
+K PutScalingPolicyInput 010 TargetTrackingConfiguration nest TargetTrackingConfiguration
+K PutScheduledUpdateGroupActionInput 001 AutoScalingGroupName req nil
+K PutScheduledUpdateGroupActionInput 002 AutoScalingGroupName len 1 ptr
+K PutScheduledUpdateGroupActionInput 003 Recurrence len 1 ptr
+K PutScheduledUpdateGroupActionInput 004 ScheduledActionName req nil
+K PutScheduledUpdateGroupActionInput 005 ScheduledActionName len 1 ptr
+K PutScheduledUpdateGroupActionInput 006 TimeZone len 1 ptr
+K PutWarmPoolInput 001 AutoScalingGroupName req nil
+K PutWarmPoolInput 002 AutoScalingGroupName len 1 ptr
+K PutWarmPoolInput 003 MaxGroupPreparedCapacity min -1 ptr
+K RecordLifecycleActionHeartbeatInput 001 AutoScalingGroupName req nil
+K RecordLifecycleActionHeartbeatInput 002 AutoScalingGroupName len 1 ptr
+K RecordLifecycleActionHeartbeatInput 003 InstanceId len 1 ptr
+K RecordLifecycleActionHeartbeatInput 004 LifecycleActionToken len 36 ptr
+K RecordLifecycleActionHeartbeatInput 005 LifecycleHookName req nil
+K RecordLifecycleActionHeartbeatInput 006 LifecycleHookName len 1 ptr
+K RefreshPreferences 001 MaxHealthyPercentage min 100 ptr
+K RollbackInstanceRefreshInput 001 AutoScalingGroupName req nil
+K RollbackInstanceRefreshInput 002 AutoScalingGroupName len 1 ptr
+K ScalingProcessQuery 000 - unsupported
+K ScheduledUpdateGroupActionRequest 001 Recurrence len 1 ptr
+K ScheduledUpdateGroupActionRequest 002 ScheduledActionName req nil
+K ScheduledUpdateGroupActionRequest 003 ScheduledActionName len 1 ptr
+K ScheduledUpdateGroupActionRequest 004 TimeZone len 1 ptr
+K SetDesiredCapacityInput 001 AutoScalingGroupName req nil
+K SetDesiredCapacityInput 002 AutoScalingGroupName len 1 ptr
+K SetDesiredCapacityInput 003 DesiredCapacity req nil
+K SetInstanceHealthInput 001 HealthStatus req nil
+K SetInstanceHealthInput 002 HealthStatus len 1 ptr
+K SetInstanceHealthInput 003 InstanceId req nil
+K SetInstanceHealthInput 004 InstanceId len 1 ptr
+K SetInstanceProtectionInput 001 AutoScalingGroupName req nil
+K SetInstanceProtectionInput 002 AutoScalingGroupName len 1 ptr
+K SetInstanceProtectionInput 003 InstanceIds req nil
+K SetInstanceProtectionInput 004 ProtectedFromScaleIn req nil
+K StartInstanceRefreshInput 001 AutoScalingGroupName req nil
+K StartInstanceRefreshInput 002 AutoScalingGroupName len 1 ptr
+K StartInstanceRefreshInput 003 DesiredConfiguration nest DesiredConfiguration
+K StartInstanceRefreshInput 004 Preferences nest RefreshPreferences
+K StepAdjustment 001 ScalingAdjustment req nil
+K Tag 001 Key req nil
+K Tag 002 Key len 1 ptr
+K TargetTrackingConfiguration 001 TargetValue req nil
+K TargetTrackingConfiguration 002 CustomizedMetricSpecification nest CustomizedMetricSpecification
+K TargetTrackingConfiguration 003 PredefinedMetricSpecification nest PredefinedMetricSpecification
+K TargetTrackingMetricDataQuery 001 Expression len 1 ptr
+K TargetTrackingMetricDataQuery 002 Id req nil
+K TargetTrackingMetricDataQuery 003 Id len 1 ptr
+K TargetTrackingMetricDataQuery 004 MetricStat nest TargetTrackingMetricStat
+K TargetTrackingMetricStat 001 Metric req nil
+K TargetTrackingMetricStat 002 Stat req nil
+K TargetTrackingMetricStat 003 Stat len 1 ptr
+K TargetTrackingMetricStat 004 Metric nest Metric
+K TerminateInstanceInAutoScalingGroupInput 001 InstanceId req nil
+K TerminateInstanceInAutoScalingGroupInput 002 InstanceId len 1 ptr
+K TerminateInstanceInAutoScalingGroupInput 003 ShouldDecrementDesiredCapacity req nil
+K TrafficSourceIdentifier 001 Identifier req nil
+K TrafficSourceIdentifier 002 Identifier len 1 ptr
+K TrafficSourceIdentifier 003 Type len 1 ptr
+K UpdateAutoScalingGroupInput 001 AutoScalingGroupName req nil
+K UpdateAutoScalingGroupInput 002 AutoScalingGroupName len 1 ptr
+K UpdateAutoScalingGroupInput 003 DesiredCapacityType len 1 ptr
+K UpdateAutoScalingGroupInput 004 HealthCheckType len 1 ptr
+K UpdateAutoScalingGroupInput 005 LaunchConfigurationName len 1 ptr
+K UpdateAutoScalingGroupInput 006 PlacementGroup len 1 ptr
+K UpdateAutoScalingGroupInput 007 ServiceLinkedRoleARN len 1 ptr
+K UpdateAutoScalingGroupInput 008 VPCZoneIdentifier len 1 ptr
+K UpdateAutoScalingGroupInput 009 InstanceMaintenancePolicy nest InstanceMaintenancePolicy
+K UpdateAutoScalingGroupInput 010 LaunchTemplate nest LaunchTemplateSpecification
+K UpdateAutoScalingGroupInput 011 MixedInstancesPolicy nest MixedInstancesPolicy
+K VCpuCountRequest 001 Min req nil
+G DescribeAutoScalingGroups NextToken NextToken
+G DescribeAutoScalingInstances NextToken NextToken
+G DescribeInstanceRefreshes NextToken NextToken
+G DescribeLaunchConfigurations NextToken NextToken
+G DescribeLoadBalancerTargetGroups NextToken NextToken
+G DescribeLoadBalancers NextToken NextToken
+G DescribeNotificationConfigurations NextToken NextToken
+G DescribePolicies NextToken NextToken
+G DescribeScalingActivities NextToken NextToken
+G DescribeScheduledActions NextToken NextToken
+G DescribeTags NextToken NextToken
+G DescribeTrafficSources NextToken NextToken
+G DescribeWarmPool NextToken NextToken

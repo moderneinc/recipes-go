@@ -21,6 +21,8 @@ S BatchGetCustomEntityTypesInput
 S BatchGetCustomEntityTypesOutput
 S BatchGetDataQualityResultInput
 S BatchGetDataQualityResultOutput
+S BatchGetDataQualityResultV2Input
+S BatchGetDataQualityResultV2Output
 S BatchGetDataQualityRulesetEvaluationRunInput
 S BatchGetDataQualityRulesetEvaluationRunOutput
 S BatchGetDevEndpointsInput
@@ -287,6 +289,8 @@ S GetDataQualityModelResultInput
 S GetDataQualityModelResultOutput
 S GetDataQualityResultInput
 S GetDataQualityResultOutput
+S GetDataQualityResultV2Input
+S GetDataQualityResultV2Output
 S GetDataQualityRuleRecommendationRunInput
 S GetDataQualityRuleRecommendationRunOutput
 S GetDataQualityRulesetEvaluationRunInput
@@ -401,6 +405,10 @@ S GetSessionInput
 S GetSessionOutput
 S GetStatementInput
 S GetStatementOutput
+S GetSystemLogsForJobRunInput
+S GetSystemLogsForJobRunOutput
+S GetSystemLogsForSessionInput
+S GetSystemLogsForSessionOutput
 S GetTableInput
 S GetTableOptimizerInput
 S GetTableOptimizerOutput
@@ -497,6 +505,11 @@ S ListDataQualityResultsInput
 S ListDataQualityResultsOutput
 S ListDataQualityResultsPaginator
 S ListDataQualityResultsPaginatorOptions
+S ListDataQualityResultsV2APIClient
+S ListDataQualityResultsV2Input
+S ListDataQualityResultsV2Output
+S ListDataQualityResultsV2Paginator
+S ListDataQualityResultsV2PaginatorOptions
 S ListDataQualityRuleRecommendationRunsAPIClient
 S ListDataQualityRuleRecommendationRunsInput
 S ListDataQualityRuleRecommendationRunsOutput
@@ -643,6 +656,7 @@ S NewListConnectionTypesPaginator
 S NewListCrawlersPaginator
 S NewListCustomEntityTypesPaginator
 S NewListDataQualityResultsPaginator
+S NewListDataQualityResultsV2Paginator
 S NewListDataQualityRuleRecommendationRunsPaginator
 S NewListDataQualityRulesetEvaluationRunsPaginator
 S NewListDataQualityRulesetsPaginator
@@ -666,6 +680,8 @@ S NewListWorkflowsPaginator
 S NewSearchAssetsPaginator
 S NewSearchTablesPaginator
 S Options
+S PublishDataQualityResultV2Input
+S PublishDataQualityResultV2Output
 S PutAssetInput
 S PutAssetOutput
 S PutAssetTypeInput
@@ -843,6 +859,7 @@ O BatchGetBlueprints
 O BatchGetCrawlers
 O BatchGetCustomEntityTypes
 O BatchGetDataQualityResult
+O BatchGetDataQualityResultV2
 O BatchGetDataQualityRulesetEvaluationRun
 O BatchGetDevEndpoints
 O BatchGetIterableForms
@@ -962,6 +979,7 @@ O GetDataCatalogExportConfiguration
 O GetDataQualityModel
 O GetDataQualityModelResult
 O GetDataQualityResult
+O GetDataQualityResultV2
 O GetDataQualityRuleRecommendationRun
 O GetDataQualityRuleset
 O GetDataQualityRulesetEvaluationRun
@@ -1004,6 +1022,8 @@ O GetSecurityConfigurations
 O GetSession
 O GetSessionEndpoint
 O GetStatement
+O GetSystemLogsForJobRun
+O GetSystemLogsForSession
 O GetTable
 O GetTableOptimizer
 O GetTableVersion
@@ -1031,6 +1051,7 @@ O ListCrawlers
 O ListCrawls
 O ListCustomEntityTypes
 O ListDataQualityResults
+O ListDataQualityResultsV2
 O ListDataQualityRuleRecommendationRuns
 O ListDataQualityRulesetEvaluationRuns
 O ListDataQualityRulesets
@@ -1057,6 +1078,7 @@ O ListTriggers
 O ListUsageProfiles
 O ListWorkflows
 O ModifyIntegration
+O PublishDataQualityResultV2
 O PutAsset
 O PutAssetType
 O PutAttachment
@@ -1502,6 +1524,10 @@ R DataQualityResult.AggregatedMetrics DataQualityAggregatedMetrics
 R DataQualityResult.DataSource DataSource
 R DataQualityResultDescription.DataSource DataSource
 R DataQualityResultFilterCriteria.DataSource DataSource
+R DataQualityResultV2Item.AggregatedMetrics DataQualityAggregatedMetrics
+R DataQualityResultV2Item.DataSource DataSource
+R DataQualityResultsV2Description.DataSource DataSource
+R DataQualityResultsV2FilterCriteria.DataSource DataSource
 R DataQualityRuleRecommendationRunDescription.DataSource DataSource
 R DataQualityRuleRecommendationRunFilter.DataSource DataSource
 R DataQualityRuleResultsOptions.CatalogTableConfig CatalogTableConfigOptions
@@ -1562,6 +1588,8 @@ R GetDataCatalogEncryptionSettingsOutput.DataCatalogEncryptionSettings DataCatal
 R GetDataCatalogExportConfigurationOutput.EncryptionConfiguration ExportEncryptionConfiguration
 R GetDataQualityResultOutput.AggregatedMetrics DataQualityAggregatedMetrics
 R GetDataQualityResultOutput.DataSource DataSource
+R GetDataQualityResultV2Output.AggregatedMetrics DataQualityAggregatedMetrics
+R GetDataQualityResultV2Output.DataSource DataSource
 R GetDataQualityRuleRecommendationRunOutput.AdditionalRunOptions DataQualityRuleRecommendationRunAdditionalRunOptions
 R GetDataQualityRuleRecommendationRunOutput.DataSource DataSource
 R GetDataQualityRulesetEvaluationRunOutput.AdditionalRunOptions DataQualityEvaluationRunAdditionalRunOptions
@@ -1655,6 +1683,7 @@ R JobUpdate.ExecutionProperty ExecutionProperty
 R JobUpdate.NotificationProperty NotificationProperty
 R JobUpdate.SourceControlDetails SourceControlDetails
 R ListDataQualityResultsInput.Filter DataQualityResultFilterCriteria
+R ListDataQualityResultsV2Input.Filter DataQualityResultsV2FilterCriteria
 R ListDataQualityRuleRecommendationRunsInput.Filter DataQualityRuleRecommendationRunFilter
 R ListDataQualityRulesetEvaluationRunsInput.Filter DataQualityRulesetEvaluationRunFilter
 R ListDataQualityRulesetsInput.Filter DataQualityRulesetFilterCriteria
@@ -1692,6 +1721,9 @@ R PartitionInput.StorageDescriptor StorageDescriptor
 R PrincipalPermissions.Principal DataLakePrincipal
 R ProfilingResultsOptions.CatalogTableConfig CatalogTableConfigOptions
 R ProfilingResultsOptions.DistributionResults DistributionResultsOptions
+R PublishDataQualityResultV2Input.AggregatedMetrics DataQualityAggregatedMetrics
+R PublishDataQualityResultV2Input.RunConfiguration DataQualityConfigurationV2
+R PublishDataQualityResultV2Input.Telemetry DataQualityTelemetry
 R PutDataCatalogEncryptionSettingsInput.DataCatalogEncryptionSettings DataCatalogEncryptionSettings
 R PutDataCatalogExportConfigurationInput.EncryptionConfiguration ExportEncryptionConfiguration
 R PutDataCatalogExportConfigurationOutput.EncryptionConfiguration ExportEncryptionConfiguration
@@ -1773,11 +1805,13 @@ R StorageDescriptor.SerdeInfo SerDeInfo
 R StorageDescriptor.SkewedInfo SkewedInfo
 R Table.FederatedTable FederatedTable
 R Table.IcebergTableMetadata IcebergTableMetadata
+R Table.RLSProperties RLSProperties
 R Table.Status TableStatus
 R Table.StorageDescriptor StorageDescriptor
 R Table.TargetTable TableIdentifier
 R Table.ViewDefinition ViewDefinition
 R TableError.ErrorDetail ErrorDetail
+R TableInput.FederatedTable FederatedTable
 R TableInput.StorageDescriptor StorageDescriptor
 R TableInput.TargetTable TableIdentifier
 R TableInput.ViewDefinition ViewDefinitionInput
@@ -2112,6 +2146,7 @@ V ConnectorProperty.Required bool
 V Crawl.ErrorMessage string
 V Crawl.LogGroup string
 V Crawl.LogStream string
+V Crawler.CatalogId string
 V Crawler.Configuration string
 V Crawler.CrawlerSecurityConfiguration string
 V Crawler.DatabaseName string
@@ -2145,6 +2180,7 @@ V CreateColumnStatisticsTaskSettingsInput.Schedule string
 V CreateColumnStatisticsTaskSettingsInput.SecurityConfiguration string
 V CreateColumnStatisticsTaskSettingsInput.TableName string
 V CreateConnectionInput.CatalogId string
+V CreateCrawlerInput.CatalogId string
 V CreateCrawlerInput.Configuration string
 V CreateCrawlerInput.CrawlerSecurityConfiguration string
 V CreateCrawlerInput.DatabaseName string
@@ -2385,6 +2421,13 @@ V DataQualityResultDescription.JobRunId string
 V DataQualityResultDescription.ResultId string
 V DataQualityResultFilterCriteria.JobName string
 V DataQualityResultFilterCriteria.JobRunId string
+V DataQualityResultV2Item.EvaluationContext string
+V DataQualityResultV2Item.ResultId string
+V DataQualityResultV2Item.RulesetName string
+V DataQualityResultV2Item.Score float64
+V DataQualityResultsV2Description.EvaluationContext string
+V DataQualityResultsV2Description.ResultId string
+V DataQualityResultsV2FilterCriteria.EvaluationContext string
 V DataQualityRuleRecommendationRunAdditionalRunOptions.CustomLogGroupPrefix string
 V DataQualityRuleRecommendationRunDescription.CreatedRulesetName string
 V DataQualityRuleRecommendationRunDescription.RunId string
@@ -2409,6 +2452,10 @@ V DataQualityRulesetListDetails.RuleCount int32
 V DataQualityTargetTable.CatalogId string
 V DataQualityTargetTable.DatabaseName string
 V DataQualityTargetTable.TableName string
+V DataQualityTelemetry.HostRuntimeVersion string
+V DataQualityTelemetry.LibraryVersion string
+V DataQualityTelemetry.SparkVersion string
+V DataQualityTelemetry.VcpuHours float64
 V Database.CatalogId string
 V Database.Description string
 V Database.LocationUri string
@@ -2444,6 +2491,7 @@ V DeleteColumnStatisticsForTableInput.CatalogId string
 V DeleteColumnStatisticsForTableInput.ColumnName string
 V DeleteColumnStatisticsForTableInput.DatabaseName string
 V DeleteColumnStatisticsForTableInput.TableName string
+V DeleteColumnStatisticsTaskSettingsInput.CatalogID string
 V DeleteColumnStatisticsTaskSettingsInput.DatabaseName string
 V DeleteColumnStatisticsTaskSettingsInput.TableName string
 V DeleteConnectionInput.CatalogId string
@@ -2721,11 +2769,13 @@ V GetColumnStatisticsForTableInput.CatalogId string
 V GetColumnStatisticsForTableInput.DatabaseName string
 V GetColumnStatisticsForTableInput.TableName string
 V GetColumnStatisticsTaskRunInput.ColumnStatisticsTaskRunId string
+V GetColumnStatisticsTaskRunsInput.CatalogID string
 V GetColumnStatisticsTaskRunsInput.DatabaseName string
 V GetColumnStatisticsTaskRunsInput.MaxResults int32
 V GetColumnStatisticsTaskRunsInput.NextToken string
 V GetColumnStatisticsTaskRunsInput.TableName string
 V GetColumnStatisticsTaskRunsOutput.NextToken string
+V GetColumnStatisticsTaskSettingsInput.CatalogID string
 V GetColumnStatisticsTaskSettingsInput.DatabaseName string
 V GetColumnStatisticsTaskSettingsInput.TableName string
 V GetConnectionInput.CatalogId string
@@ -2764,6 +2814,12 @@ V GetDataQualityResultOutput.ResultId string
 V GetDataQualityResultOutput.RulesetEvaluationRunId string
 V GetDataQualityResultOutput.RulesetName string
 V GetDataQualityResultOutput.Score float64
+V GetDataQualityResultV2Input.ResultId string
+V GetDataQualityResultV2Output.EvaluationContext string
+V GetDataQualityResultV2Output.ProfileId string
+V GetDataQualityResultV2Output.ResultId string
+V GetDataQualityResultV2Output.RulesetName string
+V GetDataQualityResultV2Output.Score float64
 V GetDataQualityRuleRecommendationRunInput.RunId string
 V GetDataQualityRuleRecommendationRunOutput.CreatedRulesetName string
 V GetDataQualityRuleRecommendationRunOutput.DataQualitySecurityConfiguration string
@@ -2926,6 +2982,11 @@ V GetSessionInput.Id string
 V GetSessionInput.RequestOrigin string
 V GetStatementInput.RequestOrigin string
 V GetStatementInput.SessionId string
+V GetSystemLogsForJobRunInput.JobName string
+V GetSystemLogsForJobRunInput.RunId string
+V GetSystemLogsForJobRunOutput.SystemLogsUrl string
+V GetSystemLogsForSessionInput.Id string
+V GetSystemLogsForSessionOutput.SystemLogsUrl string
 V GetTableInput.CatalogId string
 V GetTableInput.DatabaseName string
 V GetTableInput.IncludeStatusDetails bool
@@ -3086,6 +3147,7 @@ V Integration.SourceArn string
 V Integration.TargetArn string
 V IntegrationConfig.ContinuousSync bool
 V IntegrationConfig.RefreshInterval string
+V IntegrationConfig.TargetNamespace string
 V IntegrationConflictOperationFault.ErrorCodeOverride string
 V IntegrationConflictOperationFault.Message string
 V IntegrationError.ErrorCode string
@@ -3273,6 +3335,9 @@ V ListCustomEntityTypesOutput.NextToken string
 V ListDataQualityResultsInput.MaxResults int32
 V ListDataQualityResultsInput.NextToken string
 V ListDataQualityResultsOutput.NextToken string
+V ListDataQualityResultsV2Input.MaxResults int32
+V ListDataQualityResultsV2Input.NextToken string
+V ListDataQualityResultsV2Output.NextToken string
 V ListDataQualityRuleRecommendationRunsInput.MaxResults int32
 V ListDataQualityRuleRecommendationRunsInput.NextToken string
 V ListDataQualityRuleRecommendationRunsOutput.NextToken string
@@ -3511,6 +3576,12 @@ V Property.Name string
 V Property.Required bool
 V PropertyPredicate.Key string
 V PropertyPredicate.Value string
+V PublishDataQualityResultV2Input.ClientToken string
+V PublishDataQualityResultV2Input.DataQualitySecurityConfiguration string
+V PublishDataQualityResultV2Input.EvaluationContext string
+V PublishDataQualityResultV2Input.RulesetName string
+V PublishDataQualityResultV2Input.Score float64
+V PublishDataQualityResultV2Output.ResultId string
 V PutAssetInput.AssetTypeId string
 V PutAssetInput.ClientToken string
 V PutAssetInput.Description string
@@ -3566,6 +3637,7 @@ V QuerySchemaVersionMetadataOutput.SchemaVersionId string
 V QuerySessionContext.ClusterId string
 V QuerySessionContext.QueryAuthorizationId string
 V QuerySessionContext.QueryId string
+V RLSProperties.DefaultRLSPolicy string
 V Recipe.Name string
 V RecipeAction.Operation string
 V RecipeReference.RecipeArn string
@@ -3844,6 +3916,7 @@ V StartColumnStatisticsTaskRunInput.Role string
 V StartColumnStatisticsTaskRunInput.SecurityConfiguration string
 V StartColumnStatisticsTaskRunInput.TableName string
 V StartColumnStatisticsTaskRunOutput.ColumnStatisticsTaskRunId string
+V StartColumnStatisticsTaskRunScheduleInput.CatalogID string
 V StartColumnStatisticsTaskRunScheduleInput.DatabaseName string
 V StartColumnStatisticsTaskRunScheduleInput.TableName string
 V StartCrawlerInput.Name string
@@ -3904,8 +3977,10 @@ V StatisticModelResult.UpperBound float64
 V StatisticSummary.ProfileId string
 V StatisticSummary.StatisticId string
 V StatisticSummary.StatisticName string
+V StopColumnStatisticsTaskRunInput.CatalogID string
 V StopColumnStatisticsTaskRunInput.DatabaseName string
 V StopColumnStatisticsTaskRunInput.TableName string
+V StopColumnStatisticsTaskRunScheduleInput.CatalogID string
 V StopColumnStatisticsTaskRunScheduleInput.DatabaseName string
 V StopColumnStatisticsTaskRunScheduleInput.TableName string
 V StopCrawlerInput.Name string
@@ -3925,6 +4000,10 @@ V StorageDescriptor.Location string
 V StorageDescriptor.OutputFormat string
 V StreamingDataPreviewOptions.PollingTime int64
 V StreamingDataPreviewOptions.RecordPollingLimit int64
+V SubObjectStatistics.FileCount int64
+V SubObjectStatistics.GlueVersionId string
+V SubObjectStatistics.PartitionCount int64
+V SubObjectStatistics.TotalFileBytes int64
 V SupportedDialect.DialectVersion string
 V Table.CatalogId string
 V Table.CreatedBy string
@@ -4018,6 +4097,7 @@ V UpdateColumnStatisticsTaskSettingsInput.SecurityConfiguration string
 V UpdateColumnStatisticsTaskSettingsInput.TableName string
 V UpdateConnectionInput.CatalogId string
 V UpdateConnectionInput.Name string
+V UpdateCrawlerInput.CatalogId string
 V UpdateCrawlerInput.Configuration string
 V UpdateCrawlerInput.CrawlerSecurityConfiguration string
 V UpdateCrawlerInput.DatabaseName string
@@ -4151,10 +4231,12 @@ V ValidationException.Message string
 V VersionMismatchException.ErrorCodeOverride string
 V VersionMismatchException.Message string
 V ViewDefinition.Definer string
+V ViewDefinition.IsManaged bool
 V ViewDefinition.IsProtected bool
 V ViewDefinition.RefreshSeconds int64
 V ViewDefinition.ViewVersionToken string
 V ViewDefinitionInput.Definer string
+V ViewDefinitionInput.IsManaged bool
 V ViewDefinitionInput.IsProtected bool
 V ViewDefinitionInput.RefreshSeconds int64
 V ViewDefinitionInput.ViewVersionToken string
@@ -4792,6 +4874,8 @@ F CsvClassifier.ContainsHeader CsvHeaderOption
 F CsvClassifier.Serde CsvSerdeOption
 F DDBELTConnectionOptions.DynamodbExport DdbExportType
 F DQStopJobOnFailureOptions.StopJobOnFailureTiming DQStopJobOnFailureTiming
+F DataQualityConfigurationV2.ObservationMode ObservationMode
+F DataQualityConfigurationV2.ObservationsEnabled ObservationConfiguration
 F DataQualityEncryption.DataQualityEncryptionMode DataQualityEncryptionMode
 F DataQualityEvaluationRunAdditionalRunOptions.CompositeRuleEvaluationMethod DQCompositeRuleEvaluationMethod
 F DataQualityEvaluationRunAdditionalRunOptions.ObservationMode ObservationMode
@@ -4801,6 +4885,7 @@ F DataQualityRuleRecommendationRunDescription.Status TaskStatusType
 F DataQualityRuleResult.Result DataQualityRuleResultStatus
 F DataQualityRulesetEvaluationRun.Status TaskStatusType
 F DataQualityRulesetEvaluationRunDescription.Status TaskStatusType
+F DataQualityTelemetry.Engine DataQualityEngine
 F DatapointInclusionAnnotation.InclusionAnnotation InclusionAnnotationValue
 F DeleteIntegrationOutput.Status IntegrationStatus
 F DeleteRegistryOutput.Status RegistryStatus
@@ -4849,6 +4934,7 @@ F GetSchemaVersionsDiffInput.SchemaDiffType SchemaDiffType
 F GetTableInput.AttributesToGet TableAttributes
 F GetTableOptimizerInput.Type TableOptimizerType
 F GetTablesInput.AttributesToGet TableAttributes
+F GetTablesInput.ResourceShareType TableResourceShareType
 F GetUnfilteredPartitionMetadataInput.SupportedPermissionTypes PermissionType
 F GetUnfilteredPartitionsMetadataInput.SupportedPermissionTypes PermissionType
 F GetUnfilteredTableMetadataInput.Permissions Permission
@@ -4950,6 +5036,7 @@ F Statement.State StatementState
 F StatementOutput.Status StatementState
 F StatisticModelResult.InclusionAnnotation InclusionAnnotationValue
 F StatisticSummary.EvaluationLevel StatisticEvaluationLevel
+F SubObjectStatistics.SourceType SubObjectSourceType
 F SupportedDialect.Dialect ViewDialect
 F TableOptimizer.ConfigurationSource ConfigurationSource
 F TableOptimizer.Type TableOptimizerType
@@ -5274,6 +5361,7 @@ N DateColumnStatisticsData
 N DateTimeFormat
 N DecimalColumnStatisticsData
 N DefaultArguments
+N DefaultRLSPolicy
 N DefaultRunProperties
 N DefaultSortOrderId
 N DefaultSpecId
@@ -5289,6 +5377,7 @@ N DeltaTargets
 N DependentJobName
 N DescribeShardInterval
 N Description
+N Descriptors
 N DestinationId
 N Details
 N DetectSchema
@@ -5300,6 +5389,7 @@ N DevEndpoints
 N DevEndpointsNotFound
 N DialectVersion
 N Diff
+N Dimensions
 N DirectJDBCSource
 N DirectKafkaSource
 N DirectKinesisSource
@@ -5381,9 +5471,11 @@ N EventBusArn
 N EventQueueArn
 N ExcludeColumnSchema
 N Exclusions
+N ExecutionCompletedOn
 N ExecutionCount
 N ExecutionProperty
 N ExecutionRoleSessionPolicy
+N ExecutionStartedOn
 N ExecutionTime
 N ExecutionTimestamp
 N ExpectedValue
@@ -5404,6 +5496,7 @@ N FieldId
 N FieldName
 N FieldValue
 N Fields
+N FileCount
 N FillMissingValues
 N FilledPath
 N Filter
@@ -5417,6 +5510,7 @@ N FindMatchesMetrics
 N FindMatchesParameters
 N FindMatchesTaskRunProperties
 N FirstSchemaVersionNumber
+N FlagsEnabled
 N Folder
 N Force
 N FormTypeId
@@ -5441,6 +5535,7 @@ N GlossaryTerms
 N GlueStudioType
 N GlueTable
 N GlueVersion
+N GlueVersionId
 N GovernedCatalogSource
 N GovernedCatalogTarget
 N Graph
@@ -5458,6 +5553,7 @@ N Header
 N HeaderKey
 N HidePassword
 N HighBoundKey
+N HostRuntimeVersion
 N HudiTargets
 N IamRole
 N IcebergConfiguration
@@ -5510,6 +5606,7 @@ N IsDefaultOnCreate
 N IsEmpty
 N IsEnabled
 N IsFilterable
+N IsManaged
 N IsMaterializedView
 N IsMultiDialectView
 N IsNegOne
@@ -5597,6 +5694,7 @@ N LastUpdatedBy
 N LastUpdatedTime
 N LatestSchemaVersion
 N LatestVersion
+N LibraryVersion
 N Limit
 N LimitParameter
 N LineNumber
@@ -5755,6 +5853,7 @@ N ParentField
 N ParentResourceArn
 N Partition
 N PartitionColumn
+N PartitionCount
 N PartitionIndex
 N PartitionIndexDescriptorList
 N PartitionIndexes
@@ -5811,6 +5910,8 @@ N Protocol
 N PublicAddress
 N PublicKey
 N PublicKeys
+N PublishedAfter
+N PublishedBefore
 N PublishingOptions
 N PythonConnectionProperties
 N PythonProperties
@@ -5826,6 +5927,7 @@ N QueryStartTime
 N QuoteCharacter
 N QuoteStringValues
 N QuoteSymbol
+N RLSProperties
 N Recall
 N Recipe
 N RecipeArn
@@ -5889,6 +5991,7 @@ N ResultId
 N ResultIds
 N ResultMetadata
 N ResultPath
+N ResultPublishedOn
 N Results
 N ResultsNotFound
 N ResultsPublishingEnabled
@@ -5920,6 +6023,7 @@ N RulesetName
 N RulesetNames
 N Rulesets
 N Run
+N RunConfiguration
 N RunId
 N RunIdentifier
 N RunIds
@@ -6033,8 +6137,10 @@ N SparkConnect
 N SparkConnectionProperties
 N SparkConnectorSource
 N SparkConnectorTarget
+N SparkPipelineInfo
 N SparkProperties
 N SparkSQL
+N SparkVersion
 N SpecId
 N Spigot
 N SplitFields
@@ -6077,6 +6183,7 @@ N StringColumnStatisticsData
 N StripQuotes
 N SubObjectVersionIds
 N SubObjects
+N SubObjectsStatistics
 N SubnetId
 N SubscribePattern
 N Succeeded
@@ -6085,6 +6192,7 @@ N SuccessfulSubmissions
 N Summary
 N SupportedDialect
 N SupportedValues
+N SystemLogsUrl
 N Table
 N TableInput
 N TableList
@@ -6113,6 +6221,7 @@ N Target
 N TargetArn
 N TargetColumn
 N TargetDatabase
+N TargetNamespace
 N TargetParameter
 N TargetPath
 N TargetProcessingProperties
@@ -6125,6 +6234,7 @@ N Targets
 N TaskRunId
 N TaskRunSecurityConfigurationName
 N TaskRuns
+N Telemetry
 N TempDir
 N Template
 N TestConnectionInput
@@ -6143,6 +6253,7 @@ N TokenUrlParametersMap
 N TopicName
 N Topk
 N TotalActions
+N TotalFileBytes
 N TotalRowsFailed
 N TotalRowsPassed
 N TotalRowsProcessed
@@ -6207,6 +6318,7 @@ N ValidationMessage
 N ValidationRule
 N Value
 N Values
+N VcpuHours
 N Vendor
 N Version
 N VersionId
@@ -6404,8 +6516,10 @@ T DataLakePrincipal
 T DataOperation
 T DataQualityAggregatedMetrics
 T DataQualityAnalyzerResult
+T DataQualityConfigurationV2
 T DataQualityEncryption
 T DataQualityEncryptionMode
+T DataQualityEngine
 T DataQualityEvaluationRunAdditionalRunOptions
 T DataQualityGlueTable
 T DataQualityMetricValues
@@ -6414,6 +6528,9 @@ T DataQualityObservation
 T DataQualityResult
 T DataQualityResultDescription
 T DataQualityResultFilterCriteria
+T DataQualityResultV2Item
+T DataQualityResultsV2Description
+T DataQualityResultsV2FilterCriteria
 T DataQualityRuleRecommendationRunAdditionalRunOptions
 T DataQualityRuleRecommendationRunDescription
 T DataQualityRuleRecommendationRunFilter
@@ -6426,6 +6543,7 @@ T DataQualityRulesetEvaluationRunFilter
 T DataQualityRulesetFilterCriteria
 T DataQualityRulesetListDetails
 T DataQualityTargetTable
+T DataQualityTelemetry
 T DataSource
 T Database
 T DatabaseAttributes
@@ -6696,6 +6814,7 @@ T PropertyPredicate
 T PropertyType
 T QuerySessionContext
 T QuoteChar
+T RLSProperties
 T Recipe
 T RecipeAction
 T RecipeReference
@@ -6832,6 +6951,8 @@ T StatusDetails
 T StorageDescriptor
 T StreamingDataPreviewOptions
 T StringColumnStatisticsData
+T SubObjectSourceType
+T SubObjectStatistics
 T SupportedDialect
 T Table
 T TableAttributes
@@ -6845,6 +6966,7 @@ T TableOptimizerRun
 T TableOptimizerType
 T TableOptimizerVpcConfiguration
 T TableOptimizerVpcConfigurationMemberGlueConnectionName
+T TableResourceShareType
 T TableStatus
 T TableVersion
 T TableVersionError
@@ -7174,6 +7296,8 @@ E DataOperationRead DataOperation
 E DataOperationWrite DataOperation
 E DataQualityEncryptionModeDisabled DataQualityEncryptionMode
 E DataQualityEncryptionModeSsekms DataQualityEncryptionMode
+E DataQualityEnginePython DataQualityEngine
+E DataQualityEngineSpark DataQualityEngine
 E DataQualityModelStatusFailed DataQualityModelStatus
 E DataQualityModelStatusRunning DataQualityModelStatus
 E DataQualityModelStatusSucceeded DataQualityModelStatus
@@ -7411,6 +7535,7 @@ E NodeTypeTrigger NodeType
 E OAuth2GrantTypeAuthorizationCode OAuth2GrantType
 E OAuth2GrantTypeClientCredentials OAuth2GrantType
 E OAuth2GrantTypeJwtBearer OAuth2GrantType
+E OAuth2GrantTypeRefreshToken OAuth2GrantType
 E ObservationConfigurationAll ObservationConfiguration
 E ObservationConfigurationNone ObservationConfiguration
 E ObservationModeFixed ObservationMode
@@ -7556,6 +7681,12 @@ E StatementStateWaiting StatementState
 E StatisticEvaluationLevelColumn StatisticEvaluationLevel
 E StatisticEvaluationLevelDataset StatisticEvaluationLevel
 E StatisticEvaluationLevelMulticolumn StatisticEvaluationLevel
+E SubObjectSourceTypeHiveCsv SubObjectSourceType
+E SubObjectSourceTypeHiveJson SubObjectSourceType
+E SubObjectSourceTypeHiveOrc SubObjectSourceType
+E SubObjectSourceTypeHiveParquet SubObjectSourceType
+E SubObjectSourceTypeIceberg SubObjectSourceType
+E SubObjectSourceTypePlainParquet SubObjectSourceType
 E TableAttributesDefault TableAttributes
 E TableAttributesLatestIcebergMetadata TableAttributes
 E TableAttributesName TableAttributes
@@ -7567,6 +7698,8 @@ E TableOptimizerEventTypeStarting TableOptimizerEventType
 E TableOptimizerTypeCompaction TableOptimizerType
 E TableOptimizerTypeOrphanFileDeletion TableOptimizerType
 E TableOptimizerTypeRetention TableOptimizerType
+E TableResourceShareTypeAll TableResourceShareType
+E TableResourceShareTypeFederated TableResourceShareType
 E TargetFormatAvro TargetFormat
 E TargetFormatCsv TargetFormat
 E TargetFormatDelta TargetFormat
@@ -7641,3 +7774,1526 @@ E WorkflowRunStatusError WorkflowRunStatus
 E WorkflowRunStatusRunning WorkflowRunStatus
 E WorkflowRunStatusStopped WorkflowRunStatus
 E WorkflowRunStatusStopping WorkflowRunStatus
+H CreateJobInput.CodeGenConfigurationNodes
+H Job.CodeGenConfigurationNodes
+H JobUpdate.CodeGenConfigurationNodes
+U SearchFilterClause
+U SearchFilterValue
+U SearchMapFilterValue
+U TableOptimizerVpcConfiguration
+K Action 001 CrawlerName len 1 ptr
+K Action 002 JobName len 1 ptr
+K Action 003 SecurityConfiguration len 1 ptr
+K Action 004 Timeout min 1 ptr
+K Action 005 NotificationProperty nest NotificationProperty
+K Aggregate 001 Aggs req nil
+K Aggregate 002 Aggs len 1 container
+K Aggregate 003 Groups req nil
+K Aggregate 004 Inputs req nil
+K Aggregate 005 Inputs len 1 container
+K Aggregate 006 Name req nil
+K Aggregate 007 Aggs each AggregateOperation slice
+K AggregateOperation 001 AggFunc req empty
+K AggregateOperation 002 Column req nil
+K AmazonRedshiftTarget 001 Inputs len 1 container
+K ApplyMapping 001 Inputs req nil
+K ApplyMapping 002 Inputs len 1 container
+K ApplyMapping 003 Mapping req nil
+K ApplyMapping 004 Name req nil
+K AthenaConnectorSource 001 ConnectionName req nil
+K AthenaConnectorSource 002 ConnectionType req nil
+K AthenaConnectorSource 003 ConnectorName req nil
+K AthenaConnectorSource 004 Name req nil
+K AthenaConnectorSource 005 SchemaName req nil
+K AthenaConnectorSource 006 OutputSchemas each GlueSchema slice
+K AuthenticationConfigurationInput_ 000 - unsupported
+K AuthorizationCodeProperties 001 AuthorizationCode len 1 ptr
+K BasicCatalogTarget 001 Database req nil
+K BasicCatalogTarget 002 Inputs req nil
+K BasicCatalogTarget 003 Inputs len 1 container
+K BasicCatalogTarget 004 Name req nil
+K BasicCatalogTarget 005 Table req nil
+K BatchCreatePartitionInput 001 CatalogId len 1 ptr
+K BatchCreatePartitionInput 002 DatabaseName req nil
+K BatchCreatePartitionInput 003 DatabaseName len 1 ptr
+K BatchCreatePartitionInput 004 PartitionInputList req nil
+K BatchCreatePartitionInput 005 TableName req nil
+K BatchCreatePartitionInput 006 TableName len 1 ptr
+K BatchCreatePartitionInput 007 PartitionInputList each PartitionInput slice
+K BatchDeleteConnectionInput 001 CatalogId len 1 ptr
+K BatchDeleteConnectionInput 002 ConnectionNameList req nil
+K BatchDeletePartitionInput 001 CatalogId len 1 ptr
+K BatchDeletePartitionInput 002 DatabaseName req nil
+K BatchDeletePartitionInput 003 DatabaseName len 1 ptr
+K BatchDeletePartitionInput 004 PartitionsToDelete req nil
+K BatchDeletePartitionInput 005 TableName req nil
+K BatchDeletePartitionInput 006 TableName len 1 ptr
+K BatchDeletePartitionInput 007 PartitionsToDelete each PartitionValueList slice
+K BatchDeleteTableInput 001 CatalogId len 1 ptr
+K BatchDeleteTableInput 002 DatabaseName req nil
+K BatchDeleteTableInput 003 DatabaseName len 1 ptr
+K BatchDeleteTableInput 004 TablesToDelete req nil
+K BatchDeleteTableInput 005 TransactionId len 1 ptr
+K BatchDeleteTableVersionInput 001 CatalogId len 1 ptr
+K BatchDeleteTableVersionInput 002 DatabaseName req nil
+K BatchDeleteTableVersionInput 003 DatabaseName len 1 ptr
+K BatchDeleteTableVersionInput 004 TableName req nil
+K BatchDeleteTableVersionInput 005 TableName len 1 ptr
+K BatchDeleteTableVersionInput 006 VersionIds req nil
+K BatchGetBlueprintsInput 001 Names req nil
+K BatchGetBlueprintsInput 002 Names len 1 container
+K BatchGetCrawlersInput 001 CrawlerNames req nil
+K BatchGetCustomEntityTypesInput 001 Names req nil
+K BatchGetCustomEntityTypesInput 002 Names len 1 container
+K BatchGetDataQualityResultInput 001 ResultIds req nil
+K BatchGetDataQualityResultInput 002 ResultIds len 1 container
+K BatchGetDevEndpointsInput 001 DevEndpointNames req nil
+K BatchGetDevEndpointsInput 002 DevEndpointNames len 1 container
+K BatchGetJobsInput 001 JobNames req nil
+K BatchGetPartitionInput 001 CatalogId len 1 ptr
+K BatchGetPartitionInput 002 DatabaseName req nil
+K BatchGetPartitionInput 003 DatabaseName len 1 ptr
+K BatchGetPartitionInput 004 PartitionsToGet req nil
+K BatchGetPartitionInput 005 TableName req nil
+K BatchGetPartitionInput 006 TableName len 1 ptr
+K BatchGetPartitionInput 007 PartitionsToGet each PartitionValueList slice
+K BatchGetTableOptimizerEntry 001 CatalogId len 1 ptr
+K BatchGetTableOptimizerEntry 002 DatabaseName len 1 ptr
+K BatchGetTableOptimizerEntry 003 TableName len 1 ptr
+K BatchGetTableOptimizerInput 001 Entries req nil
+K BatchGetTableOptimizerInput 002 Entries each BatchGetTableOptimizerEntry slice
+K BatchGetTriggersInput 001 TriggerNames req nil
+K BatchGetWorkflowsInput 001 Names req nil
+K BatchGetWorkflowsInput 002 Names len 1 container
+K BatchStopJobRunInput 001 JobName req nil
+K BatchStopJobRunInput 002 JobName len 1 ptr
+K BatchStopJobRunInput 003 JobRunIds req nil
+K BatchStopJobRunInput 004 JobRunIds len 1 container
+K BatchUpdatePartitionInput 001 CatalogId len 1 ptr
+K BatchUpdatePartitionInput 002 DatabaseName req nil
+K BatchUpdatePartitionInput 003 DatabaseName len 1 ptr
+K BatchUpdatePartitionInput 004 Entries req nil
+K BatchUpdatePartitionInput 005 Entries len 1 container
+K BatchUpdatePartitionInput 006 TableName req nil
+K BatchUpdatePartitionInput 007 TableName len 1 ptr
+K BatchUpdatePartitionInput 008 Entries each BatchUpdatePartitionRequestEntry slice
+K BatchUpdatePartitionRequestEntry 001 PartitionInput req nil
+K BatchUpdatePartitionRequestEntry 002 PartitionValueList req nil
+K BatchUpdatePartitionRequestEntry 003 PartitionInput nest PartitionInput
+K BinaryColumnStatisticsData 001 AverageLength req none
+K BinaryColumnStatisticsData 002 MaximumLength req none
+K BinaryColumnStatisticsData 003 NumberOfNulls req none
+K BooleanColumnStatisticsData 001 NumberOfFalses req none
+K BooleanColumnStatisticsData 002 NumberOfNulls req none
+K BooleanColumnStatisticsData 003 NumberOfTrues req none
+K CancelDataQualityRuleRecommendationRunInput 001 RunId req nil
+K CancelDataQualityRuleRecommendationRunInput 002 RunId len 1 ptr
+K CancelDataQualityRulesetEvaluationRunInput 001 RunId req nil
+K CancelDataQualityRulesetEvaluationRunInput 002 RunId len 1 ptr
+K CancelMLTaskRunInput 001 TaskRunId req nil
+K CancelMLTaskRunInput 002 TaskRunId len 1 ptr
+K CancelMLTaskRunInput 003 TransformId req nil
+K CancelMLTaskRunInput 004 TransformId len 1 ptr
+K CancelStatementInput 001 Id req none
+K CancelStatementInput 002 RequestOrigin len 1 ptr
+K CancelStatementInput 003 SessionId req nil
+K CancelStatementInput 004 SessionId len 1 ptr
+K CatalogDeltaSource 001 Database req nil
+K CatalogDeltaSource 002 Name req nil
+K CatalogDeltaSource 003 Table req nil
+K CatalogDeltaSource 004 OutputSchemas each GlueSchema slice
+K CatalogEntry 001 DatabaseName req nil
+K CatalogEntry 002 DatabaseName len 1 ptr
+K CatalogEntry 003 TableName req nil
+K CatalogEntry 004 TableName len 1 ptr
+K CatalogHudiSource 001 Database req nil
+K CatalogHudiSource 002 Name req nil
+K CatalogHudiSource 003 Table req nil
+K CatalogHudiSource 004 OutputSchemas each GlueSchema slice
+K CatalogKafkaSource 001 Database req nil
+K CatalogKafkaSource 002 Name req nil
+K CatalogKafkaSource 003 Table req nil
+K CatalogKafkaSource 004 DataPreviewOptions nest StreamingDataPreviewOptions
+K CatalogKinesisSource 001 Database req nil
+K CatalogKinesisSource 002 Name req nil
+K CatalogKinesisSource 003 Table req nil
+K CatalogKinesisSource 004 DataPreviewOptions nest StreamingDataPreviewOptions
+K CatalogSource 001 Database req nil
+K CatalogSource 002 Name req nil
+K CatalogSource 003 Table req nil
+K CatalogTarget 001 DatabaseName req nil
+K CatalogTarget 002 DatabaseName len 1 ptr
+K CatalogTarget 003 Tables req nil
+K CatalogTarget 004 Tables len 1 container
+K CheckSchemaVersionValidityInput 001 DataFormat req empty
+K CheckSchemaVersionValidityInput 002 SchemaDefinition req nil
+K CheckSchemaVersionValidityInput 003 SchemaDefinition len 1 ptr
+K CodeGenConfigurationNode 001 Aggregate nest Aggregate
+K CodeGenConfigurationNode 002 AmazonRedshiftTarget nest AmazonRedshiftTarget
+K CodeGenConfigurationNode 003 ApplyMapping nest ApplyMapping
+K CodeGenConfigurationNode 004 AthenaConnectorSource nest AthenaConnectorSource
+K CodeGenConfigurationNode 005 CatalogDeltaSource nest CatalogDeltaSource
+K CodeGenConfigurationNode 006 CatalogHudiSource nest CatalogHudiSource
+K CodeGenConfigurationNode 007 CatalogKafkaSource nest CatalogKafkaSource
+K CodeGenConfigurationNode 008 CatalogKinesisSource nest CatalogKinesisSource
+K CodeGenConfigurationNode 009 CatalogSource nest CatalogSource
+K CodeGenConfigurationNode 010 CatalogTarget nest BasicCatalogTarget
+K CodeGenConfigurationNode 011 ConnectorDataSource nest ConnectorDataSource
+K CodeGenConfigurationNode 012 ConnectorDataTarget nest ConnectorDataTarget
+K CodeGenConfigurationNode 013 CustomCode nest CustomCode
+K CodeGenConfigurationNode 014 DirectJDBCSource nest DirectJDBCSource
+K CodeGenConfigurationNode 015 DirectKafkaSource nest DirectKafkaSource
+K CodeGenConfigurationNode 016 DirectKinesisSource nest DirectKinesisSource
+K CodeGenConfigurationNode 017 DropDuplicates nest DropDuplicates
+K CodeGenConfigurationNode 018 DropFields nest DropFields
+K CodeGenConfigurationNode 019 DropNullFields nest DropNullFields
+K CodeGenConfigurationNode 020 DynamicTransform nest DynamicTransform
+K CodeGenConfigurationNode 021 DynamoDBCatalogSource nest DynamoDBCatalogSource
+K CodeGenConfigurationNode 022 EvaluateDataQuality nest EvaluateDataQuality
+K CodeGenConfigurationNode 023 EvaluateDataQualityMultiFrame nest EvaluateDataQualityMultiFrame
+K CodeGenConfigurationNode 024 FillMissingValues nest FillMissingValues
+K CodeGenConfigurationNode 025 Filter nest Filter
+K CodeGenConfigurationNode 026 GovernedCatalogSource nest GovernedCatalogSource
+K CodeGenConfigurationNode 027 GovernedCatalogTarget nest GovernedCatalogTarget
+K CodeGenConfigurationNode 028 JDBCConnectorSource nest JDBCConnectorSource
+K CodeGenConfigurationNode 029 JDBCConnectorTarget nest JDBCConnectorTarget
+K CodeGenConfigurationNode 030 Join nest Join
+K CodeGenConfigurationNode 031 Merge nest Merge
+K CodeGenConfigurationNode 032 MicrosoftSQLServerCatalogSource nest MicrosoftSQLServerCatalogSource
+K CodeGenConfigurationNode 033 MicrosoftSQLServerCatalogTarget nest MicrosoftSQLServerCatalogTarget
+K CodeGenConfigurationNode 034 MySQLCatalogSource nest MySQLCatalogSource
+K CodeGenConfigurationNode 035 MySQLCatalogTarget nest MySQLCatalogTarget
+K CodeGenConfigurationNode 036 OracleSQLCatalogSource nest OracleSQLCatalogSource
+K CodeGenConfigurationNode 037 OracleSQLCatalogTarget nest OracleSQLCatalogTarget
+K CodeGenConfigurationNode 038 PIIDetection nest PIIDetection
+K CodeGenConfigurationNode 039 PostgreSQLCatalogSource nest PostgreSQLCatalogSource
+K CodeGenConfigurationNode 040 PostgreSQLCatalogTarget nest PostgreSQLCatalogTarget
+K CodeGenConfigurationNode 041 Recipe nest Recipe
+K CodeGenConfigurationNode 042 RedshiftSource nest RedshiftSource
+K CodeGenConfigurationNode 043 RedshiftTarget nest RedshiftTarget
+K CodeGenConfigurationNode 044 RelationalCatalogSource nest RelationalCatalogSource
+K CodeGenConfigurationNode 045 RenameField nest RenameField
+K CodeGenConfigurationNode 046 S3CatalogDeltaSource nest S3CatalogDeltaSource
+K CodeGenConfigurationNode 047 S3CatalogHudiSource nest S3CatalogHudiSource
+K CodeGenConfigurationNode 048 S3CatalogSource nest S3CatalogSource
+K CodeGenConfigurationNode 049 S3CatalogTarget nest S3CatalogTarget
+K CodeGenConfigurationNode 050 S3CsvSource nest S3CsvSource
+K CodeGenConfigurationNode 051 S3DeltaCatalogTarget nest S3DeltaCatalogTarget
+K CodeGenConfigurationNode 052 S3DeltaDirectTarget nest S3DeltaDirectTarget
+K CodeGenConfigurationNode 053 S3DeltaSource nest S3DeltaSource
+K CodeGenConfigurationNode 054 S3DirectTarget nest S3DirectTarget
+K CodeGenConfigurationNode 055 S3GlueParquetTarget nest S3GlueParquetTarget
+K CodeGenConfigurationNode 056 S3HudiCatalogTarget nest S3HudiCatalogTarget
+K CodeGenConfigurationNode 057 S3HudiDirectTarget nest S3HudiDirectTarget
+K CodeGenConfigurationNode 058 S3HudiSource nest S3HudiSource
+K CodeGenConfigurationNode 059 S3JsonSource nest S3JsonSource
+K CodeGenConfigurationNode 060 S3ParquetSource nest S3ParquetSource
+K CodeGenConfigurationNode 061 SelectFields nest SelectFields
+K CodeGenConfigurationNode 062 SelectFromCollection nest SelectFromCollection
+K CodeGenConfigurationNode 063 SnowflakeSource nest SnowflakeSource
+K CodeGenConfigurationNode 064 SnowflakeTarget nest SnowflakeTarget
+K CodeGenConfigurationNode 065 SparkConnectorSource nest SparkConnectorSource
+K CodeGenConfigurationNode 066 SparkConnectorTarget nest SparkConnectorTarget
+K CodeGenConfigurationNode 067 SparkSQL nest SparkSQL
+K CodeGenConfigurationNode 068 Spigot nest Spigot
+K CodeGenConfigurationNode 069 SplitFields nest SplitFields
+K CodeGenConfigurationNode 070 Union nest Union
+K CodeGenEdge 001 Source req nil
+K CodeGenEdge 002 Source len 1 ptr
+K CodeGenEdge 003 Target req nil
+K CodeGenEdge 004 Target len 1 ptr
+K CodeGenNode 001 Args req nil
+K CodeGenNode 002 Id req nil
+K CodeGenNode 003 Id len 1 ptr
+K CodeGenNode 004 NodeType req nil
+K CodeGenNode 005 Args each CodeGenNodeArg slice
+K CodeGenNodeArg 001 Name req nil
+K CodeGenNodeArg 002 Value req nil
+K Column 001 Name req nil
+K Column 002 Name len 1 ptr
+K ColumnStatistics 001 AnalyzedTime req nil
+K ColumnStatistics 002 ColumnName req nil
+K ColumnStatistics 003 ColumnName len 1 ptr
+K ColumnStatistics 004 ColumnType req nil
+K ColumnStatistics 005 StatisticsData req nil
+K ColumnStatistics 006 StatisticsData nest ColumnStatisticsData
+K ColumnStatisticsData 001 Type req empty
+K ColumnStatisticsData 002 BinaryColumnStatisticsData nest BinaryColumnStatisticsData
+K ColumnStatisticsData 003 BooleanColumnStatisticsData nest BooleanColumnStatisticsData
+K ColumnStatisticsData 004 DateColumnStatisticsData nest DateColumnStatisticsData
+K ColumnStatisticsData 005 DecimalColumnStatisticsData nest DecimalColumnStatisticsData
+K ColumnStatisticsData 006 DoubleColumnStatisticsData nest DoubleColumnStatisticsData
+K ColumnStatisticsData 007 LongColumnStatisticsData nest LongColumnStatisticsData
+K ColumnStatisticsData 008 StringColumnStatisticsData nest StringColumnStatisticsData
+K Condition 001 CrawlerName len 1 ptr
+K Condition 002 JobName len 1 ptr
+K ConditionExpression 001 Condition req nil
+K ConditionExpression 002 Condition len 1 ptr
+K ConditionExpression 003 TargetColumn req nil
+K ConditionExpression 004 TargetColumn len 1 ptr
+K ConfigurationObject 001 DefaultValue len 1 ptr
+K ConfigurationObject 002 MaxValue len 1 ptr
+K ConfigurationObject 003 MinValue len 1 ptr
+K ConnectionInput 001 ConnectionProperties req nil
+K ConnectionInput 002 ConnectionType req empty
+K ConnectionInput 003 Name req nil
+K ConnectionInput 004 Name len 1 ptr
+K ConnectionInput 005 AuthenticationConfiguration nest AuthenticationConfigurationInput
+K ConnectionInput 006 PhysicalConnectionRequirements nest PhysicalConnectionRequirements
+K ConnectionPasswordEncryption 001 AwsKmsKeyId len 1 ptr
+K ConnectionPasswordEncryption 002 ReturnConnectionPasswordEncrypted req none
+K ConnectorDataSource 001 ConnectionType req nil
+K ConnectorDataSource 002 Data req nil
+K ConnectorDataSource 003 Name req nil
+K ConnectorDataSource 004 OutputSchemas each GlueSchema slice
+K ConnectorDataTarget 001 ConnectionType req nil
+K ConnectorDataTarget 002 Data req nil
+K ConnectorDataTarget 003 Inputs len 1 container
+K ConnectorDataTarget 004 Name req nil
+K CrawlerTargets 001 CatalogTargets each CatalogTarget slice
+K CreateBlueprintInput 001 BlueprintLocation req nil
+K CreateBlueprintInput 002 BlueprintLocation len 1 ptr
+K CreateBlueprintInput 003 Description len 1 ptr
+K CreateBlueprintInput 004 Name req nil
+K CreateBlueprintInput 005 Name len 1 ptr
+K CreateClassifierInput 001 CsvClassifier nest CreateCsvClassifierRequest
+K CreateClassifierInput 002 GrokClassifier nest CreateGrokClassifierRequest
+K CreateClassifierInput 003 JsonClassifier nest CreateJsonClassifierRequest
+K CreateClassifierInput 004 XMLClassifier nest CreateXMLClassifierRequest
+K CreateConnectionInput 001 CatalogId len 1 ptr
+K CreateConnectionInput 002 ConnectionInput req nil
+K CreateConnectionInput 003 ConnectionInput nest ConnectionInput
+K CreateCrawlerInput 001 Name req nil
+K CreateCrawlerInput 002 Name len 1 ptr
+K CreateCrawlerInput 003 Role req nil
+K CreateCrawlerInput 004 Targets req nil
+K CreateCrawlerInput 005 Targets nest CrawlerTargets
+K CreateCsvClassifierRequest 001 Delimiter len 1 ptr
+K CreateCsvClassifierRequest 002 Name req nil
+K CreateCsvClassifierRequest 003 Name len 1 ptr
+K CreateCsvClassifierRequest 004 QuoteSymbol len 1 ptr
+K CreateCustomEntityTypeInput 001 ContextWords len 1 container
+K CreateCustomEntityTypeInput 002 Name req nil
+K CreateCustomEntityTypeInput 003 Name len 1 ptr
+K CreateCustomEntityTypeInput 004 RegexString req nil
+K CreateCustomEntityTypeInput 005 RegexString len 1 ptr
+K CreateDataQualityRulesetInput 001 ClientToken len 1 ptr
+K CreateDataQualityRulesetInput 002 Name req nil
+K CreateDataQualityRulesetInput 003 Name len 1 ptr
+K CreateDataQualityRulesetInput 004 Ruleset req nil
+K CreateDataQualityRulesetInput 005 Ruleset len 1 ptr
+K CreateDataQualityRulesetInput 006 TargetTable nest DataQualityTargetTable
+K CreateDatabaseInput 001 CatalogId len 1 ptr
+K CreateDatabaseInput 002 DatabaseInput req nil
+K CreateDatabaseInput 003 DatabaseInput nest DatabaseInput
+K CreateDevEndpointInput 001 EndpointName req nil
+K CreateDevEndpointInput 002 GlueVersion len 1 ptr
+K CreateDevEndpointInput 003 RoleArn req nil
+K CreateDevEndpointInput 004 SecurityConfiguration len 1 ptr
+K CreateGrokClassifierRequest 001 Classification req nil
+K CreateGrokClassifierRequest 002 GrokPattern req nil
+K CreateGrokClassifierRequest 003 GrokPattern len 1 ptr
+K CreateGrokClassifierRequest 004 Name req nil
+K CreateGrokClassifierRequest 005 Name len 1 ptr
+K CreateJobInput 001 Command req nil
+K CreateJobInput 002 GlueVersion len 1 ptr
+K CreateJobInput 003 Name req nil
+K CreateJobInput 004 Name len 1 ptr
+K CreateJobInput 005 Role req nil
+K CreateJobInput 006 SecurityConfiguration len 1 ptr
+K CreateJobInput 007 Timeout min 1 ptr
+K CreateJobInput 008 CodeGenConfigurationNodes each CodeGenConfigurationNode map
+K CreateJobInput 009 NotificationProperty nest NotificationProperty
+K CreateJobInput 010 SourceControlDetails nest SourceControlDetails
+K CreateJsonClassifierRequest 001 JsonPath req nil
+K CreateJsonClassifierRequest 002 Name req nil
+K CreateJsonClassifierRequest 003 Name len 1 ptr
+K CreateMLTransformInput 001 GlueVersion len 1 ptr
+K CreateMLTransformInput 002 InputRecordTables req nil
+K CreateMLTransformInput 003 Name req nil
+K CreateMLTransformInput 004 Name len 1 ptr
+K CreateMLTransformInput 005 Parameters req nil
+K CreateMLTransformInput 006 Role req nil
+K CreateMLTransformInput 007 Timeout min 1 ptr
+K CreateMLTransformInput 008 InputRecordTables each GlueTable slice
+K CreateMLTransformInput 009 Parameters nest TransformParameters
+K CreateMLTransformInput 010 TransformEncryption nest TransformEncryption
+K CreatePartitionIndexInput 001 CatalogId len 1 ptr
+K CreatePartitionIndexInput 002 DatabaseName req nil
+K CreatePartitionIndexInput 003 DatabaseName len 1 ptr
+K CreatePartitionIndexInput 004 PartitionIndex req nil
+K CreatePartitionIndexInput 005 TableName req nil
+K CreatePartitionIndexInput 006 TableName len 1 ptr
+K CreatePartitionIndexInput 007 PartitionIndex nest PartitionIndex
+K CreatePartitionInput 001 CatalogId len 1 ptr
+K CreatePartitionInput 002 DatabaseName req nil
+K CreatePartitionInput 003 DatabaseName len 1 ptr
+K CreatePartitionInput 004 PartitionInput req nil
+K CreatePartitionInput 005 TableName req nil
+K CreatePartitionInput 006 TableName len 1 ptr
+K CreatePartitionInput 007 PartitionInput nest PartitionInput
+K CreateRegistryInput 001 RegistryName req nil
+K CreateRegistryInput 002 RegistryName len 1 ptr
+K CreateSchemaInput 001 DataFormat req empty
+K CreateSchemaInput 002 SchemaDefinition len 1 ptr
+K CreateSchemaInput 003 SchemaName req nil
+K CreateSchemaInput 004 SchemaName len 1 ptr
+K CreateSchemaInput 005 RegistryId nest RegistryId
+K CreateScriptInput 001 DagEdges each CodeGenEdge slice
+K CreateScriptInput 002 DagNodes each CodeGenNode slice
+K CreateSecurityConfigurationInput 001 EncryptionConfiguration req nil
+K CreateSecurityConfigurationInput 002 Name req nil
+K CreateSecurityConfigurationInput 003 Name len 1 ptr
+K CreateSessionInput 001 Command req nil
+K CreateSessionInput 002 GlueVersion len 1 ptr
+K CreateSessionInput 003 Id req nil
+K CreateSessionInput 004 Id len 1 ptr
+K CreateSessionInput 005 IdleTimeout min 1 ptr
+K CreateSessionInput 006 RequestOrigin len 1 ptr
+K CreateSessionInput 007 Role req nil
+K CreateSessionInput 008 Role len 20 ptr
+K CreateSessionInput 009 SecurityConfiguration len 1 ptr
+K CreateSessionInput 010 Timeout min 1 ptr
+K CreateSessionInput 011 Command nest SessionCommand
+K CreateTableInput 001 CatalogId len 1 ptr
+K CreateTableInput 002 DatabaseName req nil
+K CreateTableInput 003 DatabaseName len 1 ptr
+K CreateTableInput 004 TableInput req nil
+K CreateTableInput 005 TransactionId len 1 ptr
+K CreateTableInput 006 OpenTableFormatInput nest OpenTableFormatInput
+K CreateTableInput 007 PartitionIndexes each PartitionIndex slice
+K CreateTableInput 008 TableInput nest TableInput
+K CreateTableOptimizerInput 001 CatalogId req nil
+K CreateTableOptimizerInput 002 CatalogId len 1 ptr
+K CreateTableOptimizerInput 003 DatabaseName req nil
+K CreateTableOptimizerInput 004 DatabaseName len 1 ptr
+K CreateTableOptimizerInput 005 TableName req nil
+K CreateTableOptimizerInput 006 TableName len 1 ptr
+K CreateTableOptimizerInput 007 TableOptimizerConfiguration req nil
+K CreateTableOptimizerInput 008 Type req empty
+K CreateTableOptimizerInput 009 TableOptimizerConfiguration nest TableOptimizerConfiguration
+K CreateTriggerInput 001 Actions req nil
+K CreateTriggerInput 002 Name req nil
+K CreateTriggerInput 003 Name len 1 ptr
+K CreateTriggerInput 004 Type req empty
+K CreateTriggerInput 005 WorkflowName len 1 ptr
+K CreateTriggerInput 006 Actions each Action slice
+K CreateTriggerInput 007 EventBatchingCondition nest EventBatchingCondition
+K CreateTriggerInput 008 Predicate nest Predicate
+K CreateUsageProfileInput 001 Configuration req nil
+K CreateUsageProfileInput 002 Name req nil
+K CreateUsageProfileInput 003 Name len 1 ptr
+K CreateUsageProfileInput 004 Configuration nest ProfileConfiguration
+K CreateUserDefinedFunctionInput 001 CatalogId len 1 ptr
+K CreateUserDefinedFunctionInput 002 DatabaseName req nil
+K CreateUserDefinedFunctionInput 003 DatabaseName len 1 ptr
+K CreateUserDefinedFunctionInput 004 FunctionInput req nil
+K CreateUserDefinedFunctionInput 005 FunctionInput nest UserDefinedFunctionInput
+K CreateWorkflowInput 001 Name req nil
+K CreateWorkflowInput 002 Name len 1 ptr
+K CreateXMLClassifierRequest 001 Classification req nil
+K CreateXMLClassifierRequest 002 Name req nil
+K CreateXMLClassifierRequest 003 Name len 1 ptr
+K CustomCode 001 ClassName req nil
+K CustomCode 002 Code req nil
+K CustomCode 003 Inputs req nil
+K CustomCode 004 Inputs len 1 container
+K CustomCode 005 Name req nil
+K CustomCode 006 OutputSchemas each GlueSchema slice
+K DataCatalogEncryptionSettings 001 ConnectionPasswordEncryption nest ConnectionPasswordEncryption
+K DataCatalogEncryptionSettings 002 EncryptionAtRest nest EncryptionAtRest
+K DataLakePrincipal 001 DataLakePrincipalIdentifier len 1 ptr
+K DataQualityResultFilterCriteria 001 JobName len 1 ptr
+K DataQualityResultFilterCriteria 002 JobRunId len 1 ptr
+K DataQualityResultFilterCriteria 003 DataSource nest DataSource
+K DataQualityRuleRecommendationRunFilter 001 DataSource req nil
+K DataQualityRuleRecommendationRunFilter 002 DataSource nest DataSource
+K DataQualityRulesetEvaluationRunFilter 001 DataSource req nil
+K DataQualityRulesetEvaluationRunFilter 002 DataSource nest DataSource
+K DataQualityRulesetFilterCriteria 001 Name len 1 ptr
+K DataQualityRulesetFilterCriteria 002 TargetTable nest DataQualityTargetTable
+K DataQualityTargetTable 001 CatalogId len 1 ptr
+K DataQualityTargetTable 002 DatabaseName req nil
+K DataQualityTargetTable 003 DatabaseName len 1 ptr
+K DataQualityTargetTable 004 TableName req nil
+K DataQualityTargetTable 005 TableName len 1 ptr
+K DataSource 001 GlueTable req nil
+K DataSource 002 GlueTable nest GlueTable
+K DatabaseIdentifier 001 CatalogId len 1 ptr
+K DatabaseIdentifier 002 DatabaseName len 1 ptr
+K DatabaseIdentifier 003 Region len 1 ptr
+K DatabaseInput 001 LocationUri len 1 ptr
+K DatabaseInput 002 Name req nil
+K DatabaseInput 003 Name len 1 ptr
+K DatabaseInput 004 CreateTableDefaultPermissions each PrincipalPermissions slice
+K DatabaseInput 005 FederatedDatabase nest FederatedDatabase
+K DatabaseInput 006 TargetDatabase nest DatabaseIdentifier
+K Datatype 001 Id req nil
+K Datatype 002 Label req nil
+K DateColumnStatisticsData 001 NumberOfDistinctValues req none
+K DateColumnStatisticsData 002 NumberOfNulls req none
+K DecimalColumnStatisticsData 001 NumberOfDistinctValues req none
+K DecimalColumnStatisticsData 002 NumberOfNulls req none
+K DecimalColumnStatisticsData 003 MaximumValue nest DecimalNumber
+K DecimalColumnStatisticsData 004 MinimumValue nest DecimalNumber
+K DecimalNumber 001 Scale req none
+K DecimalNumber 002 UnscaledValue req nil
+K DeleteBlueprintInput 001 Name req nil
+K DeleteBlueprintInput 002 Name len 1 ptr
+K DeleteClassifierInput 001 Name req nil
+K DeleteClassifierInput 002 Name len 1 ptr
+K DeleteColumnStatisticsForPartitionInput 001 CatalogId len 1 ptr
+K DeleteColumnStatisticsForPartitionInput 002 ColumnName req nil
+K DeleteColumnStatisticsForPartitionInput 003 ColumnName len 1 ptr
+K DeleteColumnStatisticsForPartitionInput 004 DatabaseName req nil
+K DeleteColumnStatisticsForPartitionInput 005 DatabaseName len 1 ptr
+K DeleteColumnStatisticsForPartitionInput 006 PartitionValues req nil
+K DeleteColumnStatisticsForPartitionInput 007 TableName req nil
+K DeleteColumnStatisticsForPartitionInput 008 TableName len 1 ptr
+K DeleteColumnStatisticsForTableInput 001 CatalogId len 1 ptr
+K DeleteColumnStatisticsForTableInput 002 ColumnName req nil
+K DeleteColumnStatisticsForTableInput 003 ColumnName len 1 ptr
+K DeleteColumnStatisticsForTableInput 004 DatabaseName req nil
+K DeleteColumnStatisticsForTableInput 005 DatabaseName len 1 ptr
+K DeleteColumnStatisticsForTableInput 006 TableName req nil
+K DeleteColumnStatisticsForTableInput 007 TableName len 1 ptr
+K DeleteConnectionInput 001 CatalogId len 1 ptr
+K DeleteConnectionInput 002 ConnectionName req nil
+K DeleteConnectionInput 003 ConnectionName len 1 ptr
+K DeleteCrawlerInput 001 Name req nil
+K DeleteCrawlerInput 002 Name len 1 ptr
+K DeleteCustomEntityTypeInput 001 Name req nil
+K DeleteCustomEntityTypeInput 002 Name len 1 ptr
+K DeleteDataQualityRulesetInput 001 Name req nil
+K DeleteDataQualityRulesetInput 002 Name len 1 ptr
+K DeleteDatabaseInput 001 CatalogId len 1 ptr
+K DeleteDatabaseInput 002 Name req nil
+K DeleteDatabaseInput 003 Name len 1 ptr
+K DeleteDevEndpointInput 001 EndpointName req nil
+K DeleteJobInput 001 JobName req nil
+K DeleteJobInput 002 JobName len 1 ptr
+K DeleteMLTransformInput 001 TransformId req nil
+K DeleteMLTransformInput 002 TransformId len 1 ptr
+K DeletePartitionIndexInput 001 CatalogId len 1 ptr
+K DeletePartitionIndexInput 002 DatabaseName req nil
+K DeletePartitionIndexInput 003 DatabaseName len 1 ptr
+K DeletePartitionIndexInput 004 IndexName req nil
+K DeletePartitionIndexInput 005 IndexName len 1 ptr
+K DeletePartitionIndexInput 006 TableName req nil
+K DeletePartitionIndexInput 007 TableName len 1 ptr
+K DeletePartitionInput 001 CatalogId len 1 ptr
+K DeletePartitionInput 002 DatabaseName req nil
+K DeletePartitionInput 003 DatabaseName len 1 ptr
+K DeletePartitionInput 004 PartitionValues req nil
+K DeletePartitionInput 005 TableName req nil
+K DeletePartitionInput 006 TableName len 1 ptr
+K DeleteRegistryInput 001 RegistryId req nil
+K DeleteRegistryInput 002 RegistryId nest RegistryId
+K DeleteResourcePolicyInput 001 PolicyHashCondition len 1 ptr
+K DeleteResourcePolicyInput 002 ResourceArn len 1 ptr
+K DeleteSchemaInput 001 SchemaId req nil
+K DeleteSchemaInput 002 SchemaId nest SchemaId
+K DeleteSchemaVersionsInput 001 SchemaId req nil
+K DeleteSchemaVersionsInput 002 Versions req nil
+K DeleteSchemaVersionsInput 003 Versions len 1 ptr
+K DeleteSchemaVersionsInput 004 SchemaId nest SchemaId
+K DeleteSecurityConfigurationInput 001 Name req nil
+K DeleteSecurityConfigurationInput 002 Name len 1 ptr
+K DeleteSessionInput 001 Id req nil
+K DeleteSessionInput 002 Id len 1 ptr
+K DeleteSessionInput 003 RequestOrigin len 1 ptr
+K DeleteTableInput 001 CatalogId len 1 ptr
+K DeleteTableInput 002 DatabaseName req nil
+K DeleteTableInput 003 DatabaseName len 1 ptr
+K DeleteTableInput 004 Name req nil
+K DeleteTableInput 005 Name len 1 ptr
+K DeleteTableInput 006 TransactionId len 1 ptr
+K DeleteTableOptimizerInput 001 CatalogId req nil
+K DeleteTableOptimizerInput 002 CatalogId len 1 ptr
+K DeleteTableOptimizerInput 003 DatabaseName req nil
+K DeleteTableOptimizerInput 004 DatabaseName len 1 ptr
+K DeleteTableOptimizerInput 005 TableName req nil
+K DeleteTableOptimizerInput 006 TableName len 1 ptr
+K DeleteTableOptimizerInput 007 Type req empty
+K DeleteTableVersionInput 001 CatalogId len 1 ptr
+K DeleteTableVersionInput 002 DatabaseName req nil
+K DeleteTableVersionInput 003 DatabaseName len 1 ptr
+K DeleteTableVersionInput 004 TableName req nil
+K DeleteTableVersionInput 005 TableName len 1 ptr
+K DeleteTableVersionInput 006 VersionId req nil
+K DeleteTableVersionInput 007 VersionId len 1 ptr
+K DeleteTriggerInput 001 Name req nil
+K DeleteTriggerInput 002 Name len 1 ptr
+K DeleteUsageProfileInput 001 Name req nil
+K DeleteUsageProfileInput 002 Name len 1 ptr
+K DeleteUserDefinedFunctionInput 001 CatalogId len 1 ptr
+K DeleteUserDefinedFunctionInput 002 DatabaseName req nil
+K DeleteUserDefinedFunctionInput 003 DatabaseName len 1 ptr
+K DeleteUserDefinedFunctionInput 004 FunctionName req nil
+K DeleteUserDefinedFunctionInput 005 FunctionName len 1 ptr
+K DeleteWorkflowInput 001 Name req nil
+K DeleteWorkflowInput 002 Name len 1 ptr
+K DirectJDBCSource 001 ConnectionName req nil
+K DirectJDBCSource 002 ConnectionType req empty
+K DirectJDBCSource 003 Database req nil
+K DirectJDBCSource 004 Name req nil
+K DirectJDBCSource 005 Table req nil
+K DirectKafkaSource 001 Name req nil
+K DirectKafkaSource 002 DataPreviewOptions nest StreamingDataPreviewOptions
+K DirectKinesisSource 001 Name req nil
+K DirectKinesisSource 002 DataPreviewOptions nest StreamingDataPreviewOptions
+K DoubleColumnStatisticsData 001 NumberOfDistinctValues req none
+K DoubleColumnStatisticsData 002 NumberOfNulls req none
+K DropDuplicates 001 Inputs req nil
+K DropDuplicates 002 Inputs len 1 container
+K DropDuplicates 003 Name req nil
+K DropFields 001 Inputs req nil
+K DropFields 002 Inputs len 1 container
+K DropFields 003 Name req nil
+K DropFields 004 Paths req nil
+K DropNullFields 001 Inputs req nil
+K DropNullFields 002 Inputs len 1 container
+K DropNullFields 003 Name req nil
+K DropNullFields 004 NullTextList each NullValueField slice
+K DynamicTransform 001 FunctionName req nil
+K DynamicTransform 002 Inputs req nil
+K DynamicTransform 003 Inputs len 1 container
+K DynamicTransform 004 Name req nil
+K DynamicTransform 005 Path req nil
+K DynamicTransform 006 TransformName req nil
+K DynamicTransform 007 OutputSchemas each GlueSchema slice
+K DynamicTransform 008 Parameters each TransformConfigParameter slice
+K DynamoDBCatalogSource 001 Database req nil
+K DynamoDBCatalogSource 002 Name req nil
+K DynamoDBCatalogSource 003 Table req nil
+K EncryptionAtRest 001 CatalogEncryptionMode req empty
+K EncryptionAtRest 002 SseAwsKmsKeyId len 1 ptr
+K EvaluateDataQuality 001 Inputs req nil
+K EvaluateDataQuality 002 Inputs len 1 container
+K EvaluateDataQuality 003 Name req nil
+K EvaluateDataQuality 004 Ruleset req nil
+K EvaluateDataQuality 005 Ruleset len 1 ptr
+K EvaluateDataQualityMultiFrame 001 Inputs req nil
+K EvaluateDataQualityMultiFrame 002 Inputs len 1 container
+K EvaluateDataQualityMultiFrame 003 Name req nil
+K EvaluateDataQualityMultiFrame 004 Ruleset req nil
+K EvaluateDataQualityMultiFrame 005 Ruleset len 1 ptr
+K EventBatchingCondition 001 BatchSize req nil
+K EventBatchingCondition 002 BatchSize min 1 ptr
+K EventBatchingCondition 003 BatchWindow min 1 ptr
+K FederatedDatabase 001 ConnectionName len 1 ptr
+K FederatedDatabase 002 Identifier len 1 ptr
+K FillMissingValues 001 ImputedPath req nil
+K FillMissingValues 002 Inputs req nil
+K FillMissingValues 003 Inputs len 1 container
+K FillMissingValues 004 Name req nil
+K Filter 001 Filters req nil
+K Filter 002 Inputs req nil
+K Filter 003 Inputs len 1 container
+K Filter 004 LogicalOperator req empty
+K Filter 005 Name req nil
+K Filter 006 Filters each FilterExpression slice
+K FilterExpression 001 Operation req empty
+K FilterExpression 002 Values req nil
+K FilterExpression 003 Values each FilterValue slice
+K FilterValue 001 Type req empty
+K FilterValue 002 Value req nil
+K FindMatchesParameters 001 PrimaryKeyColumnName len 1 ptr
+K GetBlueprintInput 001 Name req nil
+K GetBlueprintInput 002 Name len 1 ptr
+K GetBlueprintRunInput 001 BlueprintName req nil
+K GetBlueprintRunInput 002 BlueprintName len 1 ptr
+K GetBlueprintRunInput 003 RunId req nil
+K GetBlueprintRunInput 004 RunId len 1 ptr
+K GetBlueprintRunsInput 001 BlueprintName req nil
+K GetBlueprintRunsInput 002 BlueprintName len 1 ptr
+K GetBlueprintRunsInput 003 MaxResults min 1 ptr
+K GetCatalogImportStatusInput 001 CatalogId len 1 ptr
+K GetClassifierInput 001 Name req nil
+K GetClassifierInput 002 Name len 1 ptr
+K GetClassifiersInput 001 MaxResults min 1 ptr
+K GetColumnStatisticsForPartitionInput 001 CatalogId len 1 ptr
+K GetColumnStatisticsForPartitionInput 002 ColumnNames req nil
+K GetColumnStatisticsForPartitionInput 003 DatabaseName req nil
+K GetColumnStatisticsForPartitionInput 004 DatabaseName len 1 ptr
+K GetColumnStatisticsForPartitionInput 005 PartitionValues req nil
+K GetColumnStatisticsForPartitionInput 006 TableName req nil
+K GetColumnStatisticsForPartitionInput 007 TableName len 1 ptr
+K GetColumnStatisticsForTableInput 001 CatalogId len 1 ptr
+K GetColumnStatisticsForTableInput 002 ColumnNames req nil
+K GetColumnStatisticsForTableInput 003 DatabaseName req nil
+K GetColumnStatisticsForTableInput 004 DatabaseName len 1 ptr
+K GetColumnStatisticsForTableInput 005 TableName req nil
+K GetColumnStatisticsForTableInput 006 TableName len 1 ptr
+K GetColumnStatisticsTaskRunInput 001 ColumnStatisticsTaskRunId req nil
+K GetColumnStatisticsTaskRunInput 002 ColumnStatisticsTaskRunId len 1 ptr
+K GetColumnStatisticsTaskRunsInput 001 DatabaseName req nil
+K GetColumnStatisticsTaskRunsInput 002 MaxResults min 1 ptr
+K GetColumnStatisticsTaskRunsInput 003 TableName req nil
+K GetColumnStatisticsTaskRunsInput 004 TableName len 1 ptr
+K GetConnectionInput 001 CatalogId len 1 ptr
+K GetConnectionInput 002 Name req nil
+K GetConnectionInput 003 Name len 1 ptr
+K GetConnectionsInput 001 CatalogId len 1 ptr
+K GetConnectionsInput 002 MaxResults min 1 ptr
+K GetCrawlerInput 001 Name req nil
+K GetCrawlerInput 002 Name len 1 ptr
+K GetCrawlerMetricsInput 001 MaxResults min 1 ptr
+K GetCrawlersInput 001 MaxResults min 1 ptr
+K GetCustomEntityTypeInput 001 Name req nil
+K GetCustomEntityTypeInput 002 Name len 1 ptr
+K GetDataCatalogEncryptionSettingsInput 001 CatalogId len 1 ptr
+K GetDataQualityResultInput 001 ResultId req nil
+K GetDataQualityResultInput 002 ResultId len 1 ptr
+K GetDataQualityRuleRecommendationRunInput 001 RunId req nil
+K GetDataQualityRuleRecommendationRunInput 002 RunId len 1 ptr
+K GetDataQualityRulesetEvaluationRunInput 001 RunId req nil
+K GetDataQualityRulesetEvaluationRunInput 002 RunId len 1 ptr
+K GetDataQualityRulesetInput 001 Name req nil
+K GetDataQualityRulesetInput 002 Name len 1 ptr
+K GetDatabaseInput 001 CatalogId len 1 ptr
+K GetDatabaseInput 002 Name req nil
+K GetDatabaseInput 003 Name len 1 ptr
+K GetDatabasesInput 001 CatalogId len 1 ptr
+K GetDatabasesInput 002 MaxResults min 1 ptr
+K GetDevEndpointInput 001 EndpointName req nil
+K GetDevEndpointsInput 001 MaxResults min 1 ptr
+K GetJobBookmarkInput 001 JobName req nil
+K GetJobInput 001 JobName req nil
+K GetJobInput 002 JobName len 1 ptr
+K GetJobRunInput 001 JobName req nil
+K GetJobRunInput 002 JobName len 1 ptr
+K GetJobRunInput 003 RunId req nil
+K GetJobRunInput 004 RunId len 1 ptr
+K GetJobRunsInput 001 JobName req nil
+K GetJobRunsInput 002 JobName len 1 ptr
+K GetJobRunsInput 003 MaxResults min 1 ptr
+K GetJobsInput 001 MaxResults min 1 ptr
+K GetMLTaskRunInput 001 TaskRunId req nil
+K GetMLTaskRunInput 002 TaskRunId len 1 ptr
+K GetMLTaskRunInput 003 TransformId req nil
+K GetMLTaskRunInput 004 TransformId len 1 ptr
+K GetMLTaskRunsInput 001 MaxResults min 1 ptr
+K GetMLTaskRunsInput 002 TransformId req nil
+K GetMLTaskRunsInput 003 TransformId len 1 ptr
+K GetMLTaskRunsInput 004 Sort nest TaskRunSortCriteria
+K GetMLTransformInput 001 TransformId req nil
+K GetMLTransformInput 002 TransformId len 1 ptr
+K GetMLTransformsInput 001 MaxResults min 1 ptr
+K GetMLTransformsInput 002 Filter nest TransformFilterCriteria
+K GetMLTransformsInput 003 Sort nest TransformSortCriteria
+K GetMappingInput 001 Source req nil
+K GetMappingInput 002 Location nest Location
+K GetMappingInput 003 Sinks each CatalogEntry slice
+K GetMappingInput 004 Source nest CatalogEntry
+K GetPartitionIndexesInput 001 CatalogId len 1 ptr
+K GetPartitionIndexesInput 002 DatabaseName req nil
+K GetPartitionIndexesInput 003 DatabaseName len 1 ptr
+K GetPartitionIndexesInput 004 TableName req nil
+K GetPartitionIndexesInput 005 TableName len 1 ptr
+K GetPartitionInput 001 CatalogId len 1 ptr
+K GetPartitionInput 002 DatabaseName req nil
+K GetPartitionInput 003 DatabaseName len 1 ptr
+K GetPartitionInput 004 PartitionValues req nil
+K GetPartitionInput 005 TableName req nil
+K GetPartitionInput 006 TableName len 1 ptr
+K GetPartitionsInput 001 CatalogId len 1 ptr
+K GetPartitionsInput 002 DatabaseName req nil
+K GetPartitionsInput 003 DatabaseName len 1 ptr
+K GetPartitionsInput 004 MaxResults min 1 ptr
+K GetPartitionsInput 005 TableName req nil
+K GetPartitionsInput 006 TableName len 1 ptr
+K GetPartitionsInput 007 TransactionId len 1 ptr
+K GetPartitionsInput 008 Segment nest Segment
+K GetPlanInput 001 Mapping req nil
+K GetPlanInput 002 Source req nil
+K GetPlanInput 003 Location nest Location
+K GetPlanInput 004 Sinks each CatalogEntry slice
+K GetPlanInput 005 Source nest CatalogEntry
+K GetRegistryInput 001 RegistryId req nil
+K GetRegistryInput 002 RegistryId nest RegistryId
+K GetResourcePoliciesInput 001 MaxResults min 1 ptr
+K GetResourcePolicyInput 001 ResourceArn len 1 ptr
+K GetSchemaByDefinitionInput 001 SchemaDefinition req nil
+K GetSchemaByDefinitionInput 002 SchemaDefinition len 1 ptr
+K GetSchemaByDefinitionInput 003 SchemaId req nil
+K GetSchemaByDefinitionInput 004 SchemaId nest SchemaId
+K GetSchemaInput 001 SchemaId req nil
+K GetSchemaInput 002 SchemaId nest SchemaId
+K GetSchemaVersionInput 001 SchemaVersionId len 36 ptr
+K GetSchemaVersionInput 002 SchemaId nest SchemaId
+K GetSchemaVersionInput 003 SchemaVersionNumber nest SchemaVersionNumber
+K GetSchemaVersionsDiffInput 001 FirstSchemaVersionNumber req nil
+K GetSchemaVersionsDiffInput 002 SchemaDiffType req empty
+K GetSchemaVersionsDiffInput 003 SchemaId req nil
+K GetSchemaVersionsDiffInput 004 SecondSchemaVersionNumber req nil
+K GetSchemaVersionsDiffInput 005 FirstSchemaVersionNumber nest SchemaVersionNumber
+K GetSchemaVersionsDiffInput 006 SchemaId nest SchemaId
+K GetSchemaVersionsDiffInput 007 SecondSchemaVersionNumber nest SchemaVersionNumber
+K GetSecurityConfigurationInput 001 Name req nil
+K GetSecurityConfigurationInput 002 Name len 1 ptr
+K GetSecurityConfigurationsInput 001 MaxResults min 1 ptr
+K GetSessionInput 001 Id req nil
+K GetSessionInput 002 Id len 1 ptr
+K GetSessionInput 003 RequestOrigin len 1 ptr
+K GetStatementInput 001 Id req none
+K GetStatementInput 002 RequestOrigin len 1 ptr
+K GetStatementInput 003 SessionId req nil
+K GetStatementInput 004 SessionId len 1 ptr
+K GetTableInput 001 CatalogId len 1 ptr
+K GetTableInput 002 DatabaseName req nil
+K GetTableInput 003 DatabaseName len 1 ptr
+K GetTableInput 004 Name req nil
+K GetTableInput 005 Name len 1 ptr
+K GetTableInput 006 TransactionId len 1 ptr
+K GetTableOptimizerInput 001 CatalogId req nil
+K GetTableOptimizerInput 002 CatalogId len 1 ptr
+K GetTableOptimizerInput 003 DatabaseName req nil
+K GetTableOptimizerInput 004 DatabaseName len 1 ptr
+K GetTableOptimizerInput 005 TableName req nil
+K GetTableOptimizerInput 006 TableName len 1 ptr
+K GetTableOptimizerInput 007 Type req empty
+K GetTableVersionInput 001 CatalogId len 1 ptr
+K GetTableVersionInput 002 DatabaseName req nil
+K GetTableVersionInput 003 DatabaseName len 1 ptr
+K GetTableVersionInput 004 TableName req nil
+K GetTableVersionInput 005 TableName len 1 ptr
+K GetTableVersionInput 006 VersionId len 1 ptr
+K GetTableVersionsInput 001 CatalogId len 1 ptr
+K GetTableVersionsInput 002 DatabaseName req nil
+K GetTableVersionsInput 003 DatabaseName len 1 ptr
+K GetTableVersionsInput 004 MaxResults min 1 ptr
+K GetTableVersionsInput 005 TableName req nil
+K GetTableVersionsInput 006 TableName len 1 ptr
+K GetTablesInput 001 CatalogId len 1 ptr
+K GetTablesInput 002 DatabaseName req nil
+K GetTablesInput 003 DatabaseName len 1 ptr
+K GetTablesInput 004 MaxResults min 1 ptr
+K GetTablesInput 005 TransactionId len 1 ptr
+K GetTagsInput 001 ResourceArn req nil
+K GetTagsInput 002 ResourceArn len 1 ptr
+K GetTriggerInput 001 Name req nil
+K GetTriggerInput 002 Name len 1 ptr
+K GetTriggersInput 001 DependentJobName len 1 ptr
+K GetTriggersInput 002 MaxResults min 1 ptr
+K GetUnfilteredPartitionMetadataInput 001 CatalogId req nil
+K GetUnfilteredPartitionMetadataInput 002 CatalogId len 1 ptr
+K GetUnfilteredPartitionMetadataInput 003 DatabaseName req nil
+K GetUnfilteredPartitionMetadataInput 004 DatabaseName len 1 ptr
+K GetUnfilteredPartitionMetadataInput 005 PartitionValues req nil
+K GetUnfilteredPartitionMetadataInput 006 SupportedPermissionTypes req nil
+K GetUnfilteredPartitionMetadataInput 007 SupportedPermissionTypes len 1 container
+K GetUnfilteredPartitionMetadataInput 008 TableName req nil
+K GetUnfilteredPartitionMetadataInput 009 TableName len 1 ptr
+K GetUnfilteredPartitionMetadataInput 010 QuerySessionContext nest QuerySessionContext
+K GetUnfilteredPartitionsMetadataInput 001 CatalogId req nil
+K GetUnfilteredPartitionsMetadataInput 002 CatalogId len 1 ptr
+K GetUnfilteredPartitionsMetadataInput 003 DatabaseName req nil
+K GetUnfilteredPartitionsMetadataInput 004 DatabaseName len 1 ptr
+K GetUnfilteredPartitionsMetadataInput 005 MaxResults min 1 ptr
+K GetUnfilteredPartitionsMetadataInput 006 SupportedPermissionTypes req nil
+K GetUnfilteredPartitionsMetadataInput 007 SupportedPermissionTypes len 1 container
+K GetUnfilteredPartitionsMetadataInput 008 TableName req nil
+K GetUnfilteredPartitionsMetadataInput 009 TableName len 1 ptr
+K GetUnfilteredPartitionsMetadataInput 010 QuerySessionContext nest QuerySessionContext
+K GetUnfilteredPartitionsMetadataInput 011 Segment nest Segment
+K GetUnfilteredTableMetadataInput 001 CatalogId req nil
+K GetUnfilteredTableMetadataInput 002 CatalogId len 1 ptr
+K GetUnfilteredTableMetadataInput 003 DatabaseName req nil
+K GetUnfilteredTableMetadataInput 004 DatabaseName len 1 ptr
+K GetUnfilteredTableMetadataInput 005 Name req nil
+K GetUnfilteredTableMetadataInput 006 Name len 1 ptr
+K GetUnfilteredTableMetadataInput 007 ParentResourceArn len 20 ptr
+K GetUnfilteredTableMetadataInput 008 RootResourceArn len 20 ptr
+K GetUnfilteredTableMetadataInput 009 SupportedPermissionTypes req nil
+K GetUnfilteredTableMetadataInput 010 SupportedPermissionTypes len 1 container
+K GetUnfilteredTableMetadataInput 011 QuerySessionContext nest QuerySessionContext
+K GetUnfilteredTableMetadataInput 012 SupportedDialect nest SupportedDialect
+K GetUsageProfileInput 001 Name req nil
+K GetUsageProfileInput 002 Name len 1 ptr
+K GetUserDefinedFunctionInput 001 CatalogId len 1 ptr
+K GetUserDefinedFunctionInput 002 DatabaseName req nil
+K GetUserDefinedFunctionInput 003 DatabaseName len 1 ptr
+K GetUserDefinedFunctionInput 004 FunctionName req nil
+K GetUserDefinedFunctionInput 005 FunctionName len 1 ptr
+K GetUserDefinedFunctionsInput 001 CatalogId len 1 ptr
+K GetUserDefinedFunctionsInput 002 DatabaseName len 1 ptr
+K GetUserDefinedFunctionsInput 003 MaxResults min 1 ptr
+K GetUserDefinedFunctionsInput 004 Pattern req nil
+K GetUserDefinedFunctionsInput 005 Pattern len 1 ptr
+K GetWorkflowInput 001 Name req nil
+K GetWorkflowInput 002 Name len 1 ptr
+K GetWorkflowRunInput 001 Name req nil
+K GetWorkflowRunInput 002 Name len 1 ptr
+K GetWorkflowRunInput 003 RunId req nil
+K GetWorkflowRunInput 004 RunId len 1 ptr
+K GetWorkflowRunPropertiesInput 001 Name req nil
+K GetWorkflowRunPropertiesInput 002 Name len 1 ptr
+K GetWorkflowRunPropertiesInput 003 RunId req nil
+K GetWorkflowRunPropertiesInput 004 RunId len 1 ptr
+K GetWorkflowRunsInput 001 MaxResults min 1 ptr
+K GetWorkflowRunsInput 002 Name req nil
+K GetWorkflowRunsInput 003 Name len 1 ptr
+K GlueSchema 001 Columns each GlueStudioSchemaColumn slice
+K GlueStudioSchemaColumn 001 Name req nil
+K GovernedCatalogSource 001 Database req nil
+K GovernedCatalogSource 002 Name req nil
+K GovernedCatalogSource 003 Table req nil
+K GovernedCatalogTarget 001 Database req nil
+K GovernedCatalogTarget 002 Inputs req nil
+K GovernedCatalogTarget 003 Inputs len 1 container
+K GovernedCatalogTarget 004 Name req nil
+K GovernedCatalogTarget 005 Table req nil
+K IcebergInput_ 000 - unsupported
+K ImportCatalogToGlueInput 001 CatalogId len 1 ptr
+K JDBCConnectorSource 001 ConnectionName req nil
+K JDBCConnectorSource 002 ConnectionType req nil
+K JDBCConnectorSource 003 ConnectorName req nil
+K JDBCConnectorSource 004 Name req nil
+K JDBCConnectorSource 005 OutputSchemas each GlueSchema slice
+K JDBCConnectorTarget 001 ConnectionName req nil
+K JDBCConnectorTarget 002 ConnectionTable req nil
+K JDBCConnectorTarget 003 ConnectionType req nil
+K JDBCConnectorTarget 004 ConnectorName req nil
+K JDBCConnectorTarget 005 Inputs req nil
+K JDBCConnectorTarget 006 Inputs len 1 container
+K JDBCConnectorTarget 007 Name req nil
+K JDBCConnectorTarget 008 OutputSchemas each GlueSchema slice
+K JobUpdate 001 GlueVersion len 1 ptr
+K JobUpdate 002 SecurityConfiguration len 1 ptr
+K JobUpdate 003 Timeout min 1 ptr
+K JobUpdate 004 CodeGenConfigurationNodes each CodeGenConfigurationNode map
+K JobUpdate 005 NotificationProperty nest NotificationProperty
+K JobUpdate 006 SourceControlDetails nest SourceControlDetails
+K Join 001 Columns req nil
+K Join 002 Columns len 2 container
+K Join 003 Inputs req nil
+K Join 004 Inputs len 2 container
+K Join 005 JoinType req empty
+K Join 006 Name req nil
+K Join 007 Columns each JoinColumn slice
+K JoinColumn 001 From req nil
+K JoinColumn 002 Keys req nil
+K ListBlueprintsInput 001 MaxResults min 1 ptr
+K ListColumnStatisticsTaskRunsInput 001 MaxResults min 1 ptr
+K ListCrawlersInput 001 MaxResults min 1 ptr
+K ListCrawlsInput 001 CrawlerName req nil
+K ListCrawlsInput 002 CrawlerName len 1 ptr
+K ListCrawlsInput 003 MaxResults min 1 ptr
+K ListCustomEntityTypesInput 001 MaxResults min 1 ptr
+K ListDataQualityResultsInput 001 MaxResults min 1 ptr
+K ListDataQualityResultsInput 002 Filter nest DataQualityResultFilterCriteria
+K ListDataQualityRuleRecommendationRunsInput 001 MaxResults min 1 ptr
+K ListDataQualityRuleRecommendationRunsInput 002 Filter nest DataQualityRuleRecommendationRunFilter
+K ListDataQualityRulesetEvaluationRunsInput 001 MaxResults min 1 ptr
+K ListDataQualityRulesetEvaluationRunsInput 002 Filter nest DataQualityRulesetEvaluationRunFilter
+K ListDataQualityRulesetsInput 001 MaxResults min 1 ptr
+K ListDataQualityRulesetsInput 002 Filter nest DataQualityRulesetFilterCriteria
+K ListDevEndpointsInput 001 MaxResults min 1 ptr
+K ListJobsInput 001 MaxResults min 1 ptr
+K ListMLTransformsInput 001 MaxResults min 1 ptr
+K ListMLTransformsInput 002 Filter nest TransformFilterCriteria
+K ListMLTransformsInput 003 Sort nest TransformSortCriteria
+K ListRegistriesInput 001 MaxResults min 1 ptr
+K ListSchemaVersionsInput 001 MaxResults min 1 ptr
+K ListSchemaVersionsInput 002 SchemaId req nil
+K ListSchemaVersionsInput 003 SchemaId nest SchemaId
+K ListSchemasInput 001 MaxResults min 1 ptr
+K ListSchemasInput 002 RegistryId nest RegistryId
+K ListSessionsInput 001 MaxResults min 1 ptr
+K ListSessionsInput 002 RequestOrigin len 1 ptr
+K ListStatementsInput 001 RequestOrigin len 1 ptr
+K ListStatementsInput 002 SessionId req nil
+K ListStatementsInput 003 SessionId len 1 ptr
+K ListTableOptimizerRunsInput 001 CatalogId req nil
+K ListTableOptimizerRunsInput 002 CatalogId len 1 ptr
+K ListTableOptimizerRunsInput 003 DatabaseName req nil
+K ListTableOptimizerRunsInput 004 DatabaseName len 1 ptr
+K ListTableOptimizerRunsInput 005 TableName req nil
+K ListTableOptimizerRunsInput 006 TableName len 1 ptr
+K ListTableOptimizerRunsInput 007 Type req empty
+K ListTriggersInput 001 DependentJobName len 1 ptr
+K ListTriggersInput 002 MaxResults min 1 ptr
+K ListUsageProfilesInput 001 MaxResults min 1 ptr
+K ListWorkflowsInput 001 MaxResults min 1 ptr
+K Location 001 DynamoDB each CodeGenNodeArg slice
+K Location 002 Jdbc each CodeGenNodeArg slice
+K Location 003 S3 each CodeGenNodeArg slice
+K LongColumnStatisticsData 001 NumberOfDistinctValues req none
+K LongColumnStatisticsData 002 NumberOfNulls req none
+K MLUserDataEncryption 001 KmsKeyId len 1 ptr
+K MLUserDataEncryption 002 MlUserDataEncryptionMode req empty
+K Merge 001 Inputs req nil
+K Merge 002 Inputs len 2 container
+K Merge 003 Name req nil
+K Merge 004 PrimaryKeys req nil
+K Merge 005 Source req nil
+K MetadataKeyValuePair 001 MetadataKey len 1 ptr
+K MetadataKeyValuePair 002 MetadataValue len 1 ptr
+K MicrosoftSQLServerCatalogSource 001 Database req nil
+K MicrosoftSQLServerCatalogSource 002 Name req nil
+K MicrosoftSQLServerCatalogSource 003 Table req nil
+K MicrosoftSQLServerCatalogTarget 001 Database req nil
+K MicrosoftSQLServerCatalogTarget 002 Inputs req nil
+K MicrosoftSQLServerCatalogTarget 003 Inputs len 1 container
+K MicrosoftSQLServerCatalogTarget 004 Name req nil
+K MicrosoftSQLServerCatalogTarget 005 Table req nil
+K MySQLCatalogSource 001 Database req nil
+K MySQLCatalogSource 002 Name req nil
+K MySQLCatalogSource 003 Table req nil
+K MySQLCatalogTarget 001 Database req nil
+K MySQLCatalogTarget 002 Inputs req nil
+K MySQLCatalogTarget 003 Inputs len 1 container
+K MySQLCatalogTarget 004 Name req nil
+K MySQLCatalogTarget 005 Table req nil
+K NotificationProperty 001 NotifyDelayAfter min 1 ptr
+K NullValueField 001 Datatype req nil
+K NullValueField 002 Value req nil
+K NullValueField 003 Datatype nest Datatype
+K OAuth2PropertiesInput_ 000 - unsupported
+K OpenTableFormatInput_ 000 - unsupported
+K OracleSQLCatalogSource 001 Database req nil
+K OracleSQLCatalogSource 002 Name req nil
+K OracleSQLCatalogSource 003 Table req nil
+K OracleSQLCatalogTarget 001 Database req nil
+K OracleSQLCatalogTarget 002 Inputs req nil
+K OracleSQLCatalogTarget 003 Inputs len 1 container
+K OracleSQLCatalogTarget 004 Name req nil
+K OracleSQLCatalogTarget 005 Table req nil
+K Order 001 Column req nil
+K Order 002 Column len 1 ptr
+K Order 003 SortOrder req none
+K PIIDetection 001 EntityTypesToDetect req nil
+K PIIDetection 002 Inputs req nil
+K PIIDetection 003 Inputs len 1 container
+K PIIDetection 004 Name req nil
+K PIIDetection 005 PiiType req empty
+K PartitionIndex 001 IndexName req nil
+K PartitionIndex 002 IndexName len 1 ptr
+K PartitionIndex 003 Keys req nil
+K PartitionIndex 004 Keys len 1 container
+K PartitionInput 001 StorageDescriptor nest StorageDescriptor
+K PartitionValueList 001 Values req nil
+K PhysicalConnectionRequirements 001 AvailabilityZone len 1 ptr
+K PhysicalConnectionRequirements 002 SubnetId len 1 ptr
+K PostgreSQLCatalogSource 001 Database req nil
+K PostgreSQLCatalogSource 002 Name req nil
+K PostgreSQLCatalogSource 003 Table req nil
+K PostgreSQLCatalogTarget 001 Database req nil
+K PostgreSQLCatalogTarget 002 Inputs req nil
+K PostgreSQLCatalogTarget 003 Inputs len 1 container
+K PostgreSQLCatalogTarget 004 Name req nil
+K PostgreSQLCatalogTarget 005 Table req nil
+K Predicate 001 Conditions each Condition slice
+K PrincipalPermissions 001 Principal nest DataLakePrincipal
+K ProfileConfiguration 001 JobConfiguration each ConfigurationObject map
+K ProfileConfiguration 002 SessionConfiguration each ConfigurationObject map
+K PutDataCatalogEncryptionSettingsInput 001 CatalogId len 1 ptr
+K PutDataCatalogEncryptionSettingsInput 002 DataCatalogEncryptionSettings req nil
+K PutDataCatalogEncryptionSettingsInput 003 DataCatalogEncryptionSettings nest DataCatalogEncryptionSettings
+K PutResourcePolicyInput 001 PolicyHashCondition len 1 ptr
+K PutResourcePolicyInput 002 PolicyInJson req nil
+K PutResourcePolicyInput 003 PolicyInJson len 2 ptr
+K PutResourcePolicyInput 004 ResourceArn len 1 ptr
+K PutSchemaVersionMetadataInput 001 MetadataKeyValue req nil
+K PutSchemaVersionMetadataInput 002 SchemaVersionId len 36 ptr
+K PutSchemaVersionMetadataInput 003 MetadataKeyValue nest MetadataKeyValuePair
+K PutSchemaVersionMetadataInput 004 SchemaId nest SchemaId
+K PutSchemaVersionMetadataInput 005 SchemaVersionNumber nest SchemaVersionNumber
+K PutWorkflowRunPropertiesInput 001 Name req nil
+K PutWorkflowRunPropertiesInput 002 Name len 1 ptr
+K PutWorkflowRunPropertiesInput 003 RunId req nil
+K PutWorkflowRunPropertiesInput 004 RunId len 1 ptr
+K PutWorkflowRunPropertiesInput 005 RunProperties req nil
+K QuerySchemaVersionMetadataInput 001 MaxResults min 1 ptr
+K QuerySchemaVersionMetadataInput 002 SchemaVersionId len 36 ptr
+K QuerySchemaVersionMetadataInput 003 MetadataList each MetadataKeyValuePair slice
+K QuerySchemaVersionMetadataInput 004 SchemaId nest SchemaId
+K QuerySchemaVersionMetadataInput 005 SchemaVersionNumber nest SchemaVersionNumber
+K QuerySessionContext 001 QueryAuthorizationId len 1 ptr
+K QuerySessionContext 002 QueryId len 1 ptr
+K Recipe 001 Inputs req nil
+K Recipe 002 Inputs len 1 container
+K Recipe 003 Name req nil
+K Recipe 004 RecipeReference nest RecipeReference
+K Recipe 005 RecipeSteps each RecipeStep slice
+K RecipeAction 001 Operation req nil
+K RecipeAction 002 Operation len 1 ptr
+K RecipeReference 001 RecipeArn req nil
+K RecipeReference 002 RecipeVersion req nil
+K RecipeReference 003 RecipeVersion len 1 ptr
+K RecipeStep 001 Action req nil
+K RecipeStep 002 Action nest RecipeAction
+K RecipeStep 003 ConditionExpressions each ConditionExpression slice
+K RedshiftSource 001 Database req nil
+K RedshiftSource 002 Name req nil
+K RedshiftSource 003 Table req nil
+K RedshiftTarget 001 Database req nil
+K RedshiftTarget 002 Inputs req nil
+K RedshiftTarget 003 Inputs len 1 container
+K RedshiftTarget 004 Name req nil
+K RedshiftTarget 005 Table req nil
+K RegisterSchemaVersionInput 001 SchemaDefinition req nil
+K RegisterSchemaVersionInput 002 SchemaDefinition len 1 ptr
+K RegisterSchemaVersionInput 003 SchemaId req nil
+K RegisterSchemaVersionInput 004 SchemaId nest SchemaId
+K RegistryId 001 RegistryArn len 1 ptr
+K RegistryId 002 RegistryName len 1 ptr
+K RelationalCatalogSource 001 Database req nil
+K RelationalCatalogSource 002 Name req nil
+K RelationalCatalogSource 003 Table req nil
+K RemoveSchemaVersionMetadataInput 001 MetadataKeyValue req nil
+K RemoveSchemaVersionMetadataInput 002 SchemaVersionId len 36 ptr
+K RemoveSchemaVersionMetadataInput 003 MetadataKeyValue nest MetadataKeyValuePair
+K RemoveSchemaVersionMetadataInput 004 SchemaId nest SchemaId
+K RemoveSchemaVersionMetadataInput 005 SchemaVersionNumber nest SchemaVersionNumber
+K RenameField 001 Inputs req nil
+K RenameField 002 Inputs len 1 container
+K RenameField 003 Name req nil
+K RenameField 004 SourcePath req nil
+K RenameField 005 TargetPath req nil
+K ResetJobBookmarkInput 001 JobName req nil
+K ResourceUri 001 Uri len 1 ptr
+K ResumeWorkflowRunInput 001 Name req nil
+K ResumeWorkflowRunInput 002 Name len 1 ptr
+K ResumeWorkflowRunInput 003 NodeIds req nil
+K ResumeWorkflowRunInput 004 RunId req nil
+K ResumeWorkflowRunInput 005 RunId len 1 ptr
+K RunStatementInput 001 Code req nil
+K RunStatementInput 002 RequestOrigin len 1 ptr
+K RunStatementInput 003 SessionId req nil
+K RunStatementInput 004 SessionId len 1 ptr
+K S3CatalogDeltaSource 001 Database req nil
+K S3CatalogDeltaSource 002 Name req nil
+K S3CatalogDeltaSource 003 Table req nil
+K S3CatalogDeltaSource 004 OutputSchemas each GlueSchema slice
+K S3CatalogHudiSource 001 Database req nil
+K S3CatalogHudiSource 002 Name req nil
+K S3CatalogHudiSource 003 Table req nil
+K S3CatalogHudiSource 004 OutputSchemas each GlueSchema slice
+K S3CatalogSource 001 Database req nil
+K S3CatalogSource 002 Name req nil
+K S3CatalogSource 003 Table req nil
+K S3CatalogTarget 001 Database req nil
+K S3CatalogTarget 002 Inputs req nil
+K S3CatalogTarget 003 Inputs len 1 container
+K S3CatalogTarget 004 Name req nil
+K S3CatalogTarget 005 Table req nil
+K S3CsvSource 001 Name req nil
+K S3CsvSource 002 Paths req nil
+K S3CsvSource 003 QuoteChar req empty
+K S3CsvSource 004 Separator req empty
+K S3CsvSource 005 OutputSchemas each GlueSchema slice
+K S3DeltaCatalogTarget 001 Database req nil
+K S3DeltaCatalogTarget 002 Inputs req nil
+K S3DeltaCatalogTarget 003 Inputs len 1 container
+K S3DeltaCatalogTarget 004 Name req nil
+K S3DeltaCatalogTarget 005 Table req nil
+K S3DeltaDirectTarget 001 Compression req empty
+K S3DeltaDirectTarget 002 Format req empty
+K S3DeltaDirectTarget 003 Inputs req nil
+K S3DeltaDirectTarget 004 Inputs len 1 container
+K S3DeltaDirectTarget 005 Name req nil
+K S3DeltaDirectTarget 006 Path req nil
+K S3DeltaSource 001 Name req nil
+K S3DeltaSource 002 Paths req nil
+K S3DeltaSource 003 OutputSchemas each GlueSchema slice
+K S3DirectTarget 001 Format req empty
+K S3DirectTarget 002 Inputs req nil
+K S3DirectTarget 003 Inputs len 1 container
+K S3DirectTarget 004 Name req nil
+K S3DirectTarget 005 Path req nil
+K S3GlueParquetTarget 001 Inputs req nil
+K S3GlueParquetTarget 002 Inputs len 1 container
+K S3GlueParquetTarget 003 Name req nil
+K S3GlueParquetTarget 004 Path req nil
+K S3HudiCatalogTarget 001 AdditionalOptions req nil
+K S3HudiCatalogTarget 002 Database req nil
+K S3HudiCatalogTarget 003 Inputs req nil
+K S3HudiCatalogTarget 004 Inputs len 1 container
+K S3HudiCatalogTarget 005 Name req nil
+K S3HudiCatalogTarget 006 Table req nil
+K S3HudiDirectTarget 001 AdditionalOptions req nil
+K S3HudiDirectTarget 002 Compression req empty
+K S3HudiDirectTarget 003 Format req empty
+K S3HudiDirectTarget 004 Inputs req nil
+K S3HudiDirectTarget 005 Inputs len 1 container
+K S3HudiDirectTarget 006 Name req nil
+K S3HudiDirectTarget 007 Path req nil
+K S3HudiSource 001 Name req nil
+K S3HudiSource 002 Paths req nil
+K S3HudiSource 003 OutputSchemas each GlueSchema slice
+K S3JsonSource 001 Name req nil
+K S3JsonSource 002 Paths req nil
+K S3JsonSource 003 OutputSchemas each GlueSchema slice
+K S3ParquetSource 001 Name req nil
+K S3ParquetSource 002 Paths req nil
+K S3ParquetSource 003 OutputSchemas each GlueSchema slice
+K SchemaColumn 001 Name len 1 ptr
+K SchemaId 001 RegistryName len 1 ptr
+K SchemaId 002 SchemaArn len 1 ptr
+K SchemaId 003 SchemaName len 1 ptr
+K SchemaReference 001 SchemaVersionId len 36 ptr
+K SchemaReference 002 SchemaVersionNumber min 1 ptr
+K SchemaReference 003 SchemaId nest SchemaId
+K SchemaVersionNumber 001 VersionNumber min 1 ptr
+K SearchTablesInput 001 CatalogId len 1 ptr
+K SearchTablesInput 002 MaxResults min 1 ptr
+K Segment 001 SegmentNumber req none
+K Segment 002 TotalSegments req nil
+K Segment 003 TotalSegments min 1 ptr
+K SelectFields 001 Inputs req nil
+K SelectFields 002 Inputs len 1 container
+K SelectFields 003 Name req nil
+K SelectFields 004 Paths req nil
+K SelectFromCollection 001 Index req none
+K SelectFromCollection 002 Inputs req nil
+K SelectFromCollection 003 Inputs len 1 container
+K SelectFromCollection 004 Name req nil
+K SerDeInfo 001 Name len 1 ptr
+K SerDeInfo 002 SerializationLibrary len 1 ptr
+K SessionCommand 001 Name len 1 ptr
+K SnowflakeSource 001 Data req nil
+K SnowflakeSource 002 Name req nil
+K SnowflakeSource 003 OutputSchemas each GlueSchema slice
+K SnowflakeTarget 001 Data req nil
+K SnowflakeTarget 002 Inputs len 1 container
+K SnowflakeTarget 003 Name req nil
+K SourceControlDetails 001 AuthToken len 1 ptr
+K SourceControlDetails 002 Branch len 1 ptr
+K SourceControlDetails 003 Folder len 1 ptr
+K SourceControlDetails 004 LastCommitId len 1 ptr
+K SourceControlDetails 005 Owner len 1 ptr
+K SourceControlDetails 006 Repository len 1 ptr
+K SparkConnectorSource 001 ConnectionName req nil
+K SparkConnectorSource 002 ConnectionType req nil
+K SparkConnectorSource 003 ConnectorName req nil
+K SparkConnectorSource 004 Name req nil
+K SparkConnectorSource 005 OutputSchemas each GlueSchema slice
+K SparkConnectorTarget 001 ConnectionName req nil
+K SparkConnectorTarget 002 ConnectionType req nil
+K SparkConnectorTarget 003 ConnectorName req nil
+K SparkConnectorTarget 004 Inputs req nil
+K SparkConnectorTarget 005 Inputs len 1 container
+K SparkConnectorTarget 006 Name req nil
+K SparkConnectorTarget 007 OutputSchemas each GlueSchema slice
+K SparkSQL 001 Inputs req nil
+K SparkSQL 002 Inputs len 1 container
+K SparkSQL 003 Name req nil
+K SparkSQL 004 SqlAliases req nil
+K SparkSQL 005 SqlQuery req nil
+K SparkSQL 006 OutputSchemas each GlueSchema slice
+K SparkSQL 007 SqlAliases each SqlAlias slice
+K Spigot 001 Inputs req nil
+K Spigot 002 Inputs len 1 container
+K Spigot 003 Name req nil
+K Spigot 004 Path req nil
+K SplitFields 001 Inputs req nil
+K SplitFields 002 Inputs len 1 container
+K SplitFields 003 Name req nil
+K SplitFields 004 Paths req nil
+K SqlAlias 001 Alias req nil
+K SqlAlias 002 From req nil
+K StartBlueprintRunInput 001 BlueprintName req nil
+K StartBlueprintRunInput 002 BlueprintName len 1 ptr
+K StartBlueprintRunInput 003 Parameters len 1 ptr
+K StartBlueprintRunInput 004 RoleArn req nil
+K StartBlueprintRunInput 005 RoleArn len 1 ptr
+K StartColumnStatisticsTaskRunInput 001 CatalogID len 1 ptr
+K StartColumnStatisticsTaskRunInput 002 DatabaseName req nil
+K StartColumnStatisticsTaskRunInput 003 DatabaseName len 1 ptr
+K StartColumnStatisticsTaskRunInput 004 Role req nil
+K StartColumnStatisticsTaskRunInput 005 Role len 1 ptr
+K StartColumnStatisticsTaskRunInput 006 SecurityConfiguration len 1 ptr
+K StartColumnStatisticsTaskRunInput 007 TableName req nil
+K StartColumnStatisticsTaskRunInput 008 TableName len 1 ptr
+K StartCrawlerInput 001 Name req nil
+K StartCrawlerInput 002 Name len 1 ptr
+K StartCrawlerScheduleInput 001 CrawlerName req nil
+K StartCrawlerScheduleInput 002 CrawlerName len 1 ptr
+K StartDataQualityRuleRecommendationRunInput 001 ClientToken len 1 ptr
+K StartDataQualityRuleRecommendationRunInput 002 CreatedRulesetName len 1 ptr
+K StartDataQualityRuleRecommendationRunInput 003 DataSource req nil
+K StartDataQualityRuleRecommendationRunInput 004 Role req nil
+K StartDataQualityRuleRecommendationRunInput 005 Timeout min 1 ptr
+K StartDataQualityRuleRecommendationRunInput 006 DataSource nest DataSource
+K StartDataQualityRulesetEvaluationRunInput 001 ClientToken len 1 ptr
+K StartDataQualityRulesetEvaluationRunInput 002 DataSource req nil
+K StartDataQualityRulesetEvaluationRunInput 003 Role req nil
+K StartDataQualityRulesetEvaluationRunInput 004 RulesetNames req nil
+K StartDataQualityRulesetEvaluationRunInput 005 RulesetNames len 1 container
+K StartDataQualityRulesetEvaluationRunInput 006 Timeout min 1 ptr
+K StartDataQualityRulesetEvaluationRunInput 007 AdditionalDataSources each DataSource map
+K StartDataQualityRulesetEvaluationRunInput 008 DataSource nest DataSource
+K StartExportLabelsTaskRunInput 001 OutputS3Path req nil
+K StartExportLabelsTaskRunInput 002 TransformId req nil
+K StartExportLabelsTaskRunInput 003 TransformId len 1 ptr
+K StartImportLabelsTaskRunInput 001 InputS3Path req nil
+K StartImportLabelsTaskRunInput 002 TransformId req nil
+K StartImportLabelsTaskRunInput 003 TransformId len 1 ptr
+K StartJobRunInput 001 JobName req nil
+K StartJobRunInput 002 JobName len 1 ptr
+K StartJobRunInput 003 JobRunId len 1 ptr
+K StartJobRunInput 004 SecurityConfiguration len 1 ptr
+K StartJobRunInput 005 Timeout min 1 ptr
+K StartJobRunInput 006 NotificationProperty nest NotificationProperty
+K StartMLEvaluationTaskRunInput 001 TransformId req nil
+K StartMLEvaluationTaskRunInput 002 TransformId len 1 ptr
+K StartMLLabelingSetGenerationTaskRunInput 001 OutputS3Path req nil
+K StartMLLabelingSetGenerationTaskRunInput 002 TransformId req nil
+K StartMLLabelingSetGenerationTaskRunInput 003 TransformId len 1 ptr
+K StartTriggerInput 001 Name req nil
+K StartTriggerInput 002 Name len 1 ptr
+K StartWorkflowRunInput 001 Name req nil
+K StartWorkflowRunInput 002 Name len 1 ptr
+K StopColumnStatisticsTaskRunInput 001 DatabaseName req nil
+K StopColumnStatisticsTaskRunInput 002 TableName req nil
+K StopColumnStatisticsTaskRunInput 003 TableName len 1 ptr
+K StopCrawlerInput 001 Name req nil
+K StopCrawlerInput 002 Name len 1 ptr
+K StopCrawlerScheduleInput 001 CrawlerName req nil
+K StopCrawlerScheduleInput 002 CrawlerName len 1 ptr
+K StopSessionInput 001 Id req nil
+K StopSessionInput 002 Id len 1 ptr
+K StopSessionInput 003 RequestOrigin len 1 ptr
+K StopTriggerInput 001 Name req nil
+K StopTriggerInput 002 Name len 1 ptr
+K StopWorkflowRunInput 001 Name req nil
+K StopWorkflowRunInput 002 Name len 1 ptr
+K StopWorkflowRunInput 003 RunId req nil
+K StopWorkflowRunInput 004 RunId len 1 ptr
+K StorageDescriptor 001 Columns each Column slice
+K StorageDescriptor 002 SchemaReference nest SchemaReference
+K StorageDescriptor 003 SerdeInfo nest SerDeInfo
+K StorageDescriptor 004 SortColumns each Order slice
+K StreamingDataPreviewOptions 001 PollingTime min 10 ptr
+K StreamingDataPreviewOptions 002 RecordPollingLimit min 1 ptr
+K StringColumnStatisticsData 001 AverageLength req none
+K StringColumnStatisticsData 002 MaximumLength req none
+K StringColumnStatisticsData 003 NumberOfDistinctValues req none
+K StringColumnStatisticsData 004 NumberOfNulls req none
+K SupportedDialect 001 DialectVersion len 1 ptr
+K Table 000 - unsupported
+K TableIdentifier 001 CatalogId len 1 ptr
+K TableIdentifier 002 DatabaseName len 1 ptr
+K TableIdentifier 003 Name len 1 ptr
+K TableIdentifier 004 Region len 1 ptr
+K TableInput 001 Name req nil
+K TableInput 002 Name len 1 ptr
+K TableInput 003 Owner len 1 ptr
+K TableInput 004 PartitionKeys each Column slice
+K TableInput 005 StorageDescriptor nest StorageDescriptor
+K TableInput 006 TargetTable nest TableIdentifier
+K TableInput 007 ViewDefinition nest ViewDefinitionInput
+K TableOptimizerConfiguration 001 RoleArn len 20 ptr
+K TagResourceInput 001 ResourceArn req nil
+K TagResourceInput 002 ResourceArn len 1 ptr
+K TagResourceInput 003 TagsToAdd req nil
+K TaskRunSortCriteria 001 Column req empty
+K TaskRunSortCriteria 002 SortDirection req empty
+K TransformConfigParameter 001 Name req nil
+K TransformConfigParameter 002 Type req empty
+K TransformEncryption 001 TaskRunSecurityConfigurationName len 1 ptr
+K TransformEncryption 002 MlUserDataEncryption nest MLUserDataEncryption
+K TransformFilterCriteria 001 GlueVersion len 1 ptr
+K TransformFilterCriteria 002 Name len 1 ptr
+K TransformFilterCriteria 003 Schema each SchemaColumn slice
+K TransformParameters 001 TransformType req empty
+K TransformParameters 002 FindMatchesParameters nest FindMatchesParameters
+K TransformSortCriteria 001 Column req empty
+K TransformSortCriteria 002 SortDirection req empty
+K TriggerUpdate 001 Name len 1 ptr
+K TriggerUpdate 002 Actions each Action slice
+K TriggerUpdate 003 EventBatchingCondition nest EventBatchingCondition
+K TriggerUpdate 004 Predicate nest Predicate
+K Union 001 Inputs req nil
+K Union 002 Inputs len 2 container
+K Union 003 Name req nil
+K Union 004 UnionType req empty
+K UntagResourceInput 001 ResourceArn req nil
+K UntagResourceInput 002 ResourceArn len 1 ptr
+K UntagResourceInput 003 TagsToRemove req nil
+K UpdateBlueprintInput 001 BlueprintLocation req nil
+K UpdateBlueprintInput 002 BlueprintLocation len 1 ptr
+K UpdateBlueprintInput 003 Description len 1 ptr
+K UpdateBlueprintInput 004 Name req nil
+K UpdateBlueprintInput 005 Name len 1 ptr
+K UpdateClassifierInput 001 CsvClassifier nest UpdateCsvClassifierRequest
+K UpdateClassifierInput 002 GrokClassifier nest UpdateGrokClassifierRequest
+K UpdateClassifierInput 003 JsonClassifier nest UpdateJsonClassifierRequest
+K UpdateClassifierInput 004 XMLClassifier nest UpdateXMLClassifierRequest
+K UpdateColumnStatisticsForPartitionInput 001 CatalogId len 1 ptr
+K UpdateColumnStatisticsForPartitionInput 002 ColumnStatisticsList req nil
+K UpdateColumnStatisticsForPartitionInput 003 DatabaseName req nil
+K UpdateColumnStatisticsForPartitionInput 004 DatabaseName len 1 ptr
+K UpdateColumnStatisticsForPartitionInput 005 PartitionValues req nil
+K UpdateColumnStatisticsForPartitionInput 006 TableName req nil
+K UpdateColumnStatisticsForPartitionInput 007 TableName len 1 ptr
+K UpdateColumnStatisticsForPartitionInput 008 ColumnStatisticsList each ColumnStatistics slice
+K UpdateColumnStatisticsForTableInput 001 CatalogId len 1 ptr
+K UpdateColumnStatisticsForTableInput 002 ColumnStatisticsList req nil
+K UpdateColumnStatisticsForTableInput 003 DatabaseName req nil
+K UpdateColumnStatisticsForTableInput 004 DatabaseName len 1 ptr
+K UpdateColumnStatisticsForTableInput 005 TableName req nil
+K UpdateColumnStatisticsForTableInput 006 TableName len 1 ptr
+K UpdateColumnStatisticsForTableInput 007 ColumnStatisticsList each ColumnStatistics slice
+K UpdateConnectionInput 001 CatalogId len 1 ptr
+K UpdateConnectionInput 002 ConnectionInput req nil
+K UpdateConnectionInput 003 Name req nil
+K UpdateConnectionInput 004 Name len 1 ptr
+K UpdateConnectionInput 005 ConnectionInput nest ConnectionInput
+K UpdateCrawlerInput 001 Name req nil
+K UpdateCrawlerInput 002 Name len 1 ptr
+K UpdateCrawlerInput 003 Targets nest CrawlerTargets
+K UpdateCrawlerScheduleInput 001 CrawlerName req nil
+K UpdateCrawlerScheduleInput 002 CrawlerName len 1 ptr
+K UpdateCsvClassifierRequest 001 Delimiter len 1 ptr
+K UpdateCsvClassifierRequest 002 Name req nil
+K UpdateCsvClassifierRequest 003 Name len 1 ptr
+K UpdateCsvClassifierRequest 004 QuoteSymbol len 1 ptr
+K UpdateDataQualityRulesetInput 001 Name req nil
+K UpdateDataQualityRulesetInput 002 Name len 1 ptr
+K UpdateDataQualityRulesetInput 003 Ruleset len 1 ptr
+K UpdateDatabaseInput 001 CatalogId len 1 ptr
+K UpdateDatabaseInput 002 DatabaseInput req nil
+K UpdateDatabaseInput 003 Name req nil
+K UpdateDatabaseInput 004 Name len 1 ptr
+K UpdateDatabaseInput 005 DatabaseInput nest DatabaseInput
+K UpdateDevEndpointInput 001 EndpointName req nil
+K UpdateGrokClassifierRequest 001 GrokPattern len 1 ptr
+K UpdateGrokClassifierRequest 002 Name req nil
+K UpdateGrokClassifierRequest 003 Name len 1 ptr
+K UpdateJobFromSourceControlInput 001 AuthToken len 1 ptr
+K UpdateJobFromSourceControlInput 002 BranchName len 1 ptr
+K UpdateJobFromSourceControlInput 003 CommitId len 1 ptr
+K UpdateJobFromSourceControlInput 004 Folder len 1 ptr
+K UpdateJobFromSourceControlInput 005 JobName len 1 ptr
+K UpdateJobFromSourceControlInput 006 RepositoryName len 1 ptr
+K UpdateJobFromSourceControlInput 007 RepositoryOwner len 1 ptr
+K UpdateJobInput 001 JobName req nil
+K UpdateJobInput 002 JobName len 1 ptr
+K UpdateJobInput 003 JobUpdate req nil
+K UpdateJobInput 004 JobUpdate nest JobUpdate
+K UpdateJsonClassifierRequest 001 Name req nil
+K UpdateJsonClassifierRequest 002 Name len 1 ptr
+K UpdateMLTransformInput 001 GlueVersion len 1 ptr
+K UpdateMLTransformInput 002 Name len 1 ptr
+K UpdateMLTransformInput 003 Timeout min 1 ptr
+K UpdateMLTransformInput 004 TransformId req nil
+K UpdateMLTransformInput 005 TransformId len 1 ptr
+K UpdateMLTransformInput 006 Parameters nest TransformParameters
+K UpdatePartitionInput 001 CatalogId len 1 ptr
+K UpdatePartitionInput 002 DatabaseName req nil
+K UpdatePartitionInput 003 DatabaseName len 1 ptr
+K UpdatePartitionInput 004 PartitionInput req nil
+K UpdatePartitionInput 005 PartitionValueList req nil
+K UpdatePartitionInput 006 TableName req nil
+K UpdatePartitionInput 007 TableName len 1 ptr
+K UpdatePartitionInput 008 PartitionInput nest PartitionInput
+K UpdateRegistryInput 001 Description req nil
+K UpdateRegistryInput 002 RegistryId req nil
+K UpdateRegistryInput 003 RegistryId nest RegistryId
+K UpdateSchemaInput 001 SchemaId req nil
+K UpdateSchemaInput 002 SchemaId nest SchemaId
+K UpdateSchemaInput 003 SchemaVersionNumber nest SchemaVersionNumber
+K UpdateSourceControlFromJobInput 001 AuthToken len 1 ptr
+K UpdateSourceControlFromJobInput 002 BranchName len 1 ptr
+K UpdateSourceControlFromJobInput 003 CommitId len 1 ptr
+K UpdateSourceControlFromJobInput 004 Folder len 1 ptr
+K UpdateSourceControlFromJobInput 005 JobName len 1 ptr
+K UpdateSourceControlFromJobInput 006 RepositoryName len 1 ptr
+K UpdateSourceControlFromJobInput 007 RepositoryOwner len 1 ptr
+K UpdateTableInput 001 CatalogId len 1 ptr
+K UpdateTableInput 002 DatabaseName req nil
+K UpdateTableInput 003 DatabaseName len 1 ptr
+K UpdateTableInput 004 TableInput req nil
+K UpdateTableInput 005 TransactionId len 1 ptr
+K UpdateTableInput 006 VersionId len 1 ptr
+K UpdateTableInput 007 TableInput nest TableInput
+K UpdateTableOptimizerInput 001 CatalogId req nil
+K UpdateTableOptimizerInput 002 CatalogId len 1 ptr
+K UpdateTableOptimizerInput 003 DatabaseName req nil
+K UpdateTableOptimizerInput 004 DatabaseName len 1 ptr
+K UpdateTableOptimizerInput 005 TableName req nil
+K UpdateTableOptimizerInput 006 TableName len 1 ptr
+K UpdateTableOptimizerInput 007 TableOptimizerConfiguration req nil
+K UpdateTableOptimizerInput 008 Type req empty
+K UpdateTableOptimizerInput 009 TableOptimizerConfiguration nest TableOptimizerConfiguration
+K UpdateTriggerInput 001 Name req nil
+K UpdateTriggerInput 002 Name len 1 ptr
+K UpdateTriggerInput 003 TriggerUpdate req nil
+K UpdateTriggerInput 004 TriggerUpdate nest TriggerUpdate
+K UpdateUsageProfileInput 001 Configuration req nil
+K UpdateUsageProfileInput 002 Name req nil
+K UpdateUsageProfileInput 003 Name len 1 ptr
+K UpdateUsageProfileInput 004 Configuration nest ProfileConfiguration
+K UpdateUserDefinedFunctionInput 001 CatalogId len 1 ptr
+K UpdateUserDefinedFunctionInput 002 DatabaseName req nil
+K UpdateUserDefinedFunctionInput 003 DatabaseName len 1 ptr
+K UpdateUserDefinedFunctionInput 004 FunctionInput req nil
+K UpdateUserDefinedFunctionInput 005 FunctionName req nil
+K UpdateUserDefinedFunctionInput 006 FunctionName len 1 ptr
+K UpdateUserDefinedFunctionInput 007 FunctionInput nest UserDefinedFunctionInput
+K UpdateWorkflowInput 001 Name req nil
+K UpdateWorkflowInput 002 Name len 1 ptr
+K UpdateXMLClassifierRequest 001 Name req nil
+K UpdateXMLClassifierRequest 002 Name len 1 ptr
+K UserDefinedFunctionInput 001 ClassName len 1 ptr
+K UserDefinedFunctionInput 002 FunctionName len 1 ptr
+K UserDefinedFunctionInput 003 OwnerName len 1 ptr
+K UserDefinedFunctionInput 004 ResourceUris each ResourceUri slice
+K ViewDefinitionInput_ 000 - unsupported
+K ViewRepresentationInput_ 000 - unsupported
+G DescribeEntity NextToken NextToken
+G GetBlueprintRuns NextToken NextToken
+G GetClassifiers NextToken NextToken
+G GetColumnStatisticsTaskRuns NextToken NextToken
+G GetConnections NextToken NextToken
+G GetCrawlerMetrics NextToken NextToken
+G GetCrawlers NextToken NextToken
+G GetDatabases NextToken NextToken
+G GetDevEndpoints NextToken NextToken
+G GetJobRuns NextToken NextToken
+G GetJobs NextToken NextToken
+G GetMLTaskRuns NextToken NextToken
+G GetMLTransforms NextToken NextToken
+G GetPartitionIndexes NextToken NextToken
+G GetPartitions NextToken NextToken
+G GetResourcePolicies NextToken NextToken
+G GetSecurityConfigurations NextToken NextToken
+G GetTableVersions NextToken NextToken
+G GetTables NextToken NextToken
+G GetTriggers NextToken NextToken
+G GetUnfilteredPartitionsMetadata NextToken NextToken
+G GetUserDefinedFunctions NextToken NextToken
+G GetWorkflowRuns NextToken NextToken
+G ListAssetTypes NextToken NextToken
+G ListBlueprints NextToken NextToken
+G ListColumnStatisticsTaskRuns NextToken NextToken
+G ListConnectionTypes NextToken NextToken
+G ListCrawlers NextToken NextToken
+G ListCustomEntityTypes NextToken NextToken
+G ListDataQualityResults NextToken NextToken
+G ListDataQualityResultsV2 NextToken NextToken
+G ListDataQualityRuleRecommendationRuns NextToken NextToken
+G ListDataQualityRulesetEvaluationRuns NextToken NextToken
+G ListDataQualityRulesets NextToken NextToken
+G ListDevEndpoints NextToken NextToken
+G ListEntities NextToken NextToken
+G ListFormTypes NextToken NextToken
+G ListGlossaries NextToken NextToken
+G ListGlossaryTerms NextToken NextToken
+G ListIterableForms NextToken NextToken
+G ListJobs NextToken NextToken
+G ListMLTransforms NextToken NextToken
+G ListMaterializedViewRefreshTaskRuns NextToken NextToken
+G ListRegistries NextToken NextToken
+G ListSchemaVersions NextToken NextToken
+G ListSchemas NextToken NextToken
+G ListSessions NextToken NextToken
+G ListTableOptimizerRuns NextToken NextToken
+G ListTriggers NextToken NextToken
+G ListUsageProfiles NextToken NextToken
+G ListWorkflows NextToken NextToken
+G SearchAssets NextToken NextToken
+G SearchTables NextToken NextToken

@@ -38,6 +38,14 @@ type configLocal struct {
 	singleValue int
 	uses        int
 	reassigned  bool
+	// chain records that the local was declared from a NewConfig chain.
+	chain bool
+	// pointerLiteral records that it was declared as an &aws.Config literal,
+	// literalKeys the fields that literal set, and credentialsRead that its
+	// Credentials were read rather than written.
+	pointerLiteral  bool
+	literalKeys     []string
+	credentialsRead bool
 }
 
 func (v *configVarScan) VisitIdentifier(id *java.Identifier, p any) java.J {
@@ -56,6 +64,20 @@ func (v *configVarScan) VisitAssignment(a *java.Assignment, p any) java.J {
 				v.scan.configLocals[target.Name] = local
 			}
 			local.options = options
+			value := a.Value.Element
+			if unary, isUnary := value.(*golang.Unary); isUnary {
+				value = unary.Expression
+			}
+			_, local.chain = v.scan.configChainOptions(value)
+			local.pointerLiteral, local.literalKeys = false, nil
+			if unary, isUnary := a.Value.Element.(*golang.Unary); isUnary && unary.Operator.Element == golang.AddressOf {
+				if comp, isComposite := unary.Expression.(*golang.Composite); isComposite {
+					local.pointerLiteral = true
+					for key := range keyedElements(comp) {
+						local.literalKeys = append(local.literalKeys, key)
+					}
+				}
+			}
 			v.scan.configVars[target.Name] = options
 		} else if local := v.scan.configLocals[target.Name]; local != nil {
 			local.reassigned = true
@@ -69,6 +91,9 @@ func (v *configVarScan) VisitFieldAccess(fa *java.FieldAccess, p any) java.J {
 		if local := v.scan.configLocals[recv.Name]; local != nil {
 			local.fieldUses++
 			local.fields = append(local.fields, fa.Name.Element.Name)
+			if fa.Name.Element.Name == credentialsField && !assignedTo(v.Cursor()) {
+				local.credentialsRead = true
+			}
 		}
 	}
 	return v.GoVisitor.VisitFieldAccess(fa, p)
@@ -76,6 +101,22 @@ func (v *configVarScan) VisitFieldAccess(fa *java.FieldAccess, p any) java.J {
 
 func (v *configVarScan) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
 	mi = v.GoVisitor.VisitMethodInvocation(mi, p).(*java.MethodInvocation)
+	if v.scan.retryerStatement(mi) {
+		name := realArgs(mi)[0].(*java.Identifier).Name
+		local := v.scan.configLocals[name]
+		retryer, ok := v.scan.configFieldOption(retryerField, realArgs(mi)[1])
+		if local == nil || !local.chain || !ok {
+			delete(v.scan.retryerStatements, name)
+			v.scan.reason = "request.WithRetryer on a config variable not built by aws.NewConfig"
+			return mi
+		}
+		local.options = append(local.options, retryer...)
+		v.scan.configVars[name] = local.options
+		// The statement is folded away with the local, so its reference is not
+		// a use.
+		v.scan.configUses[name]--
+		return mi
+	}
 	call, isSession := qualifiedCall(mi, v.scan.sessionPkg)
 	if !isSession {
 		return mi
@@ -85,8 +126,8 @@ func (v *configVarScan) VisitMethodInvocation(mi *java.MethodInvocation, p any) 
 		return mi
 	}
 	switch call {
-	case "New", "NewSession":
-		if local := v.scan.localFor(args[0]); local != nil {
+	case "New", "NewSession", "NewSessionWithOptions":
+		if local := v.scan.sessionArgLocal(call, args[0]); local != nil {
 			local.sessionArgs++
 			if call == "New" {
 				local.singleValue++
@@ -95,14 +136,31 @@ func (v *configVarScan) VisitMethodInvocation(mi *java.MethodInvocation, p any) 
 	case "Must":
 		// Must consumes the error, leaving the config alone.
 		if inner, isCall := args[0].(*java.MethodInvocation); isCall {
+			innerCall, _ := qualifiedCall(inner, v.scan.sessionPkg)
 			if innerArgs := realArgs(inner); len(innerArgs) == 1 {
-				if local := v.scan.localFor(innerArgs[0]); local != nil {
+				if local := v.scan.sessionArgLocal(innerCall, innerArgs[0]); local != nil {
 					local.singleValue++
 				}
 			}
 		}
 	}
 	return mi
+}
+
+// sessionArgLocal returns the config local a session constructor's argument
+// names, which for NewSessionWithOptions is its options' Config.
+func (s *fileScan) sessionArgLocal(call string, arg java.Expression) *configLocal {
+	if call != "NewSessionWithOptions" {
+		return s.localFor(arg)
+	}
+	comp, isOptions := s.sessionOptionsLiteral(arg)
+	if !isOptions {
+		return nil
+	}
+	if config := keyedElements(comp)[sessionConfig]; config != nil {
+		return s.localFor(config)
+	}
+	return nil
 }
 
 // localFor returns the config local a session argument names.
@@ -124,16 +182,29 @@ func (s *fileScan) classifyConfigLocals() {
 		// beyond those and the session calls is something the rewrite does not
 		// follow.
 		if local.reassigned || local.uses != 1+local.fieldUses+local.sessionArgs {
+			// Something else reads it, so it stays v2's config; what it holds is
+			// read back as loader options wherever it reaches a session.
 			s.configMutated[name] = true
+			s.configKept[name] = allMapped(local.fields)
+			// A NewConfig chain is kept only where v2's config has a field for
+			// each of its settings.
+			if local.chain && !local.reassigned {
+				if _, ok := s.keptChainLiteral(local.options); !ok {
+					s.configKept[name] = false
+				}
+			}
 			continue
 		}
 		if len(local.fields) == 0 {
 			continue
 		}
-		// The load moves to the declaration, so every session call it feeds has
-		// to be one that wanted the config alone.
+		// The load moves to the declaration only where every session call it
+		// feeds wanted the config alone. Otherwise the local stays, holding the
+		// settings the generated loader options read back, as long as each is
+		// one v2's config holds.
 		if local.sessionArgs != local.singleValue {
-			s.configMutated[name] = true
+			s.configKept[name] = allMapped(local.fields)
+			s.configMutated[name] = !s.configKept[name]
 			continue
 		}
 		for _, field := range local.fields {
@@ -153,6 +224,17 @@ func (s *fileScan) classifyConfigLocals() {
 	}
 }
 
+// allMapped reports whether every setting a config local reaches has a v2
+// counterpart on the config itself.
+func allMapped(fields []string) bool {
+	for _, field := range fields {
+		if _, mapped := configTargets[field]; !mapped && field != s3ForcePathStyle {
+			return false
+		}
+	}
+	return true
+}
+
 // v1 held the S3 addressing style on the session's config; v2 holds it on the
 // S3 client's own options, which a different statement builds. A conditional
 // write to it therefore cannot follow the config, so it is hoisted into a local
@@ -165,7 +247,7 @@ const (
 // sessionConfigVar returns the config local a session argument names, when it
 // names one.
 func (s *fileScan) sessionConfigVar(expr java.Expression) (string, bool) {
-	if unary, isUnary := expr.(*golang.Unary); isUnary && unary.Operator.Element == golang.AddressOf {
+	if unary, isUnary := expr.(*golang.Unary); isUnary && (unary.Operator.Element == golang.AddressOf || unary.Operator.Element == golang.Indirection) {
 		expr = unary.Expression
 	}
 	id, isIdent := expr.(*java.Identifier)
@@ -191,6 +273,13 @@ func (s *fileScan) sessionArgOptions(expr java.Expression) ([]configOption, bool
 	return s.configVars[name], true
 }
 
+// keptConfigVar reports whether a session argument names a config local that
+// stays, its settings read back as loader options.
+func (s *fileScan) keptConfigVar(expr java.Expression) bool {
+	name, isLocal := s.sessionConfigVar(expr)
+	return isLocal && s.configKept[name]
+}
+
 // restructuredConfigVar returns the config local a session argument names, when
 // that local is one whose declaration takes over the load.
 func (s *fileScan) restructuredConfigVar(expr java.Expression) (string, bool) {
@@ -202,7 +291,24 @@ func (s *fileScan) restructuredConfigVar(expr java.Expression) (string, bool) {
 // Its two uses are the declaration and the session argument; a third means
 // something else reads a config this migration has nothing to put in its place.
 func (s *fileScan) droppableConfigVar(name string) bool {
-	return !s.configMutated[name] && s.configUses[name] == 2
+	if s.configMutated[name] {
+		return false
+	}
+	if s.configUses[name] == 2 {
+		return true
+	}
+	// A local making several sessions and nothing else is repeated at each,
+	// as long as repeating it evaluates nothing twice.
+	local := s.configLocals[name]
+	if local == nil || local.reassigned || local.fieldUses > 0 || local.sessionArgs < 2 || s.configUses[name] != 1+local.sessionArgs {
+		return false
+	}
+	for _, o := range local.options {
+		if o.with != "WithRetryer" && !sideEffectFree(o.value) {
+			return false
+		}
+	}
+	return true
 }
 
 // dropsConfigDecl reports whether a statement is the declaration of a config
@@ -317,12 +423,37 @@ func (v *qualifierRename) VisitMethodInvocation(mi *java.MethodInvocation, p any
 // hoistsPathStyle reports whether a function declares a config local whose S3
 // addressing style is carried in a local of its own.
 func hoistsPathStyle(md *java.MethodDeclaration, scan *fileScan) bool {
+	// Only an S3 client the function builds itself can read the local; a
+	// config that leaves the function carries the setting as a service option.
+	if !buildsS3Client(md, scan) {
+		return false
+	}
 	for name := range scan.configPathStyle {
 		if scan.configRestructured[name] && declaresName(md, name) {
 			return true
 		}
 	}
 	return false
+}
+
+// buildsS3Client reports whether md constructs an S3 client.
+func buildsS3Client(md *java.MethodDeclaration, scan *fileScan) bool {
+	check := visitor.Init(&s3ConstructorScan{scan: scan})
+	check.Visit(md, nil)
+	return check.found
+}
+
+type s3ConstructorScan struct {
+	visitor.GoVisitor
+	scan  *fileScan
+	found bool
+}
+
+func (v *s3ConstructorScan) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	if service, isConstructor := v.scan.clientConstructorService(mi); isConstructor && service == s3Service {
+		v.found = true
+	}
+	return v.GoVisitor.VisitMethodInvocation(mi, p)
 }
 
 func declaresName(md *java.MethodDeclaration, name string) bool {
@@ -354,7 +485,7 @@ func (v *migrateVisitor) pathStyleWrite(a *java.Assignment) (java.Expression, bo
 		return nil, false
 	}
 	recv, isIdent := fa.Target.(*java.Identifier)
-	if !isIdent || !v.scan.configPathStyle[recv.Name] {
+	if !isIdent || !v.scan.configPathStyle[recv.Name] || !v.pathStyleHoisted {
 		return nil, false
 	}
 	value, unwrapped := v.scan.pointerValueSource(a.Value.Element)
@@ -362,6 +493,47 @@ func (v *migrateVisitor) pathStyleWrite(a *java.Assignment) (java.Expression, bo
 		return nil, false
 	}
 	return value, true
+}
+
+// pathStyleServiceOption rewrites a path-style write to a config the file keeps
+// as the generated service option appended to the config's own.
+func (v *migrateVisitor) pathStyleServiceOption(a *java.Assignment) (java.J, bool) {
+	fa, isField := a.Variable.(*java.FieldAccess)
+	if !isField || fa.Name.Element == nil || fa.Name.Element.Name != s3ForcePathStyle {
+		return nil, false
+	}
+	holder, isIdent := fa.Target.(*java.Identifier)
+	// A local whose writes are hoisted is the hoisting's to rewrite, and a
+	// builder's holds the setting itself.
+	if isIdent && (v.scan.configPathStyle[holder.Name] && v.pathStyleHoisted || v.scan.literalBuilderVars[holder.Name]) {
+		return nil, false
+	}
+	kept := isIdent && v.scan.configLocals[holder.Name] != nil
+	if !kept && !v.scan.configValue(fa.Target) {
+		return nil, false
+	}
+	force, unwrapped := v.scan.pointerValueSource(a.Value.Element)
+	if !unwrapped {
+		return nil, false
+	}
+	options := func() java.Expression {
+		return &java.FieldAccess{
+			Target: lstutil.SetExprPrefix(fa.Target, java.EmptySpace),
+			Name:   java.LeftPadded[*java.Identifier]{Element: &java.Identifier{Name: "ServiceOptions"}},
+		}
+	}
+	v.needsPathStyle = true
+	c := *a
+	c.Variable = lstutil.SetExprPrefix(options(), a.Variable.GetPrefix())
+	c.Value = java.LeftPadded[java.Expression]{Before: a.Value.Before, Element: &java.MethodInvocation{
+		Prefix: java.SingleSpace,
+		Name:   &java.Identifier{Name: "append"},
+		Arguments: java.Container[java.Expression]{Elements: []java.RightPadded[java.Expression]{
+			{Element: options()},
+			{Element: lstutil.SetExprPrefix(pathStyleCall(force), java.SingleSpace)},
+		}},
+	}, Markers: a.Value.Markers}
+	return &c, true
 }
 
 // restructuredConfigDecl rewrites the declaration of a config local as the load
@@ -388,7 +560,7 @@ func (v *migrateVisitor) restructuredConfigDecl(stmt java.Statement, name string
 		Markers: assignment.Value.Markers,
 	}
 	out := []java.Statement{&declaration}
-	if !v.scan.configPathStyle[name] {
+	if !v.scan.configPathStyle[name] || !v.pathStyleHoisted {
 		return out, true
 	}
 	out = append(out, &java.Assignment{

@@ -1162,3 +1162,205 @@ E ValidationExceptionReasonApiDoesNotSupportLabeledArns ValidationExceptionReaso
 E ValidationExceptionReasonCannotUpdateCompletedMapRun ValidationExceptionReason
 E ValidationExceptionReasonInvalidRoutingConfiguration ValidationExceptionReason
 E ValidationExceptionReasonMissingRequiredParameter ValidationExceptionReason
+H ActivityFailedEventDetails.Cause
+H ActivityFailedEventDetails.Error
+H ActivityScheduleFailedEventDetails.Cause
+H ActivityScheduleFailedEventDetails.Error
+H ActivityScheduledEventDetails.Input
+H ActivitySucceededEventDetails.Output
+H ActivityTimedOutEventDetails.Cause
+H ActivityTimedOutEventDetails.Error
+H CreateStateMachineAliasInput.Description
+H CreateStateMachineInput.Definition
+H CreateStateMachineInput.VersionDescription
+H DescribeExecutionOutput.Cause
+H DescribeExecutionOutput.Error
+H DescribeExecutionOutput.Input
+H DescribeExecutionOutput.Output
+H DescribeExecutionOutput.RedriveStatusReason
+H DescribeStateMachineAliasOutput.Description
+H DescribeStateMachineForExecutionOutput.Definition
+H DescribeStateMachineOutput.Definition
+H DescribeStateMachineOutput.Description
+H ExecutionAbortedEventDetails.Cause
+H ExecutionAbortedEventDetails.Error
+H ExecutionFailedEventDetails.Cause
+H ExecutionFailedEventDetails.Error
+H ExecutionStartedEventDetails.Input
+H ExecutionSucceededEventDetails.Output
+H ExecutionTimedOutEventDetails.Cause
+H ExecutionTimedOutEventDetails.Error
+H GetActivityTaskOutput.Input
+H InspectionData.AfterInputPath
+H InspectionData.AfterParameters
+H InspectionData.AfterResultPath
+H InspectionData.AfterResultSelector
+H InspectionData.Input
+H InspectionData.Result
+H LambdaFunctionFailedEventDetails.Cause
+H LambdaFunctionFailedEventDetails.Error
+H LambdaFunctionScheduleFailedEventDetails.Cause
+H LambdaFunctionScheduleFailedEventDetails.Error
+H LambdaFunctionScheduledEventDetails.Input
+H LambdaFunctionStartFailedEventDetails.Cause
+H LambdaFunctionStartFailedEventDetails.Error
+H LambdaFunctionSucceededEventDetails.Output
+H LambdaFunctionTimedOutEventDetails.Cause
+H LambdaFunctionTimedOutEventDetails.Error
+H MapRunFailedEventDetails.Cause
+H MapRunFailedEventDetails.Error
+H PublishStateMachineVersionInput.Description
+H SendTaskFailureInput.Cause
+H SendTaskFailureInput.Error
+H SendTaskSuccessInput.Output
+H StartExecutionInput.Input
+H StartSyncExecutionInput.Input
+H StartSyncExecutionOutput.Cause
+H StartSyncExecutionOutput.Error
+H StartSyncExecutionOutput.Input
+H StartSyncExecutionOutput.Output
+H StateEnteredEventDetails.Input
+H StateExitedEventDetails.Output
+H StopExecutionInput.Cause
+H StopExecutionInput.Error
+H TaskFailedEventDetails.Cause
+H TaskFailedEventDetails.Error
+H TaskScheduledEventDetails.Parameters
+H TaskStartFailedEventDetails.Cause
+H TaskStartFailedEventDetails.Error
+H TaskSubmitFailedEventDetails.Cause
+H TaskSubmitFailedEventDetails.Error
+H TaskSubmittedEventDetails.Output
+H TaskSucceededEventDetails.Output
+H TaskTimedOutEventDetails.Cause
+H TaskTimedOutEventDetails.Error
+H TestStateInput.Definition
+H TestStateInput.Input
+H TestStateOutput.Cause
+H TestStateOutput.Error
+H TestStateOutput.InspectionData
+H TestStateOutput.Output
+H UpdateStateMachineAliasInput.Description
+H UpdateStateMachineInput.Definition
+H UpdateStateMachineInput.VersionDescription
+H ValidateStateMachineDefinitionInput.Definition
+K CloudWatchLogsLogGroup 001 LogGroupArn len 1 ptr
+K CreateActivityInput 001 Name req nil
+K CreateActivityInput 002 Name len 1 ptr
+K CreateActivityInput 003 EncryptionConfiguration nest EncryptionConfiguration
+K CreateActivityInput 004 Tags each Tag slice
+K CreateStateMachineAliasInput 001 Name req nil
+K CreateStateMachineAliasInput 002 Name len 1 ptr
+K CreateStateMachineAliasInput 003 RoutingConfiguration req nil
+K CreateStateMachineAliasInput 004 RoutingConfiguration len 1 container
+K CreateStateMachineAliasInput 005 RoutingConfiguration each RoutingConfigurationListItem slice
+K CreateStateMachineInput 001 Definition req nil
+K CreateStateMachineInput 002 Definition len 1 ptr
+K CreateStateMachineInput 003 Name req nil
+K CreateStateMachineInput 004 Name len 1 ptr
+K CreateStateMachineInput 005 RoleArn req nil
+K CreateStateMachineInput 006 RoleArn len 1 ptr
+K CreateStateMachineInput 007 EncryptionConfiguration nest EncryptionConfiguration
+K CreateStateMachineInput 008 LoggingConfiguration nest LoggingConfiguration
+K CreateStateMachineInput 009 Tags each Tag slice
+K DeleteActivityInput 001 ActivityArn req nil
+K DeleteActivityInput 002 ActivityArn len 1 ptr
+K DeleteStateMachineAliasInput 001 StateMachineAliasArn req nil
+K DeleteStateMachineAliasInput 002 StateMachineAliasArn len 1 ptr
+K DeleteStateMachineInput 001 StateMachineArn req nil
+K DeleteStateMachineInput 002 StateMachineArn len 1 ptr
+K DeleteStateMachineVersionInput 001 StateMachineVersionArn req nil
+K DeleteStateMachineVersionInput 002 StateMachineVersionArn len 1 ptr
+K DescribeActivityInput 001 ActivityArn req nil
+K DescribeActivityInput 002 ActivityArn len 1 ptr
+K DescribeExecutionInput 001 ExecutionArn req nil
+K DescribeExecutionInput 002 ExecutionArn len 1 ptr
+K DescribeMapRunInput 001 MapRunArn req nil
+K DescribeMapRunInput 002 MapRunArn len 1 ptr
+K DescribeStateMachineAliasInput 001 StateMachineAliasArn req nil
+K DescribeStateMachineAliasInput 002 StateMachineAliasArn len 1 ptr
+K DescribeStateMachineForExecutionInput 001 ExecutionArn req nil
+K DescribeStateMachineForExecutionInput 002 ExecutionArn len 1 ptr
+K DescribeStateMachineInput 001 StateMachineArn req nil
+K DescribeStateMachineInput 002 StateMachineArn len 1 ptr
+K EncryptionConfiguration 001 KmsDataKeyReusePeriodSeconds min 60 ptr
+K EncryptionConfiguration 002 KmsKeyId len 1 ptr
+K EncryptionConfiguration 003 Type req empty
+K GetActivityTaskInput 001 ActivityArn req nil
+K GetActivityTaskInput 002 ActivityArn len 1 ptr
+K GetActivityTaskInput 003 WorkerName len 1 ptr
+K GetExecutionHistoryInput 001 ExecutionArn req nil
+K GetExecutionHistoryInput 002 ExecutionArn len 1 ptr
+K GetExecutionHistoryInput 003 NextToken len 1 ptr
+K ListActivitiesInput 001 NextToken len 1 ptr
+K ListExecutionsInput 001 MapRunArn len 1 ptr
+K ListExecutionsInput 002 NextToken len 1 ptr
+K ListExecutionsInput 003 StateMachineArn len 1 ptr
+K ListMapRunsInput 001 ExecutionArn req nil
+K ListMapRunsInput 002 ExecutionArn len 1 ptr
+K ListMapRunsInput 003 NextToken len 1 ptr
+K ListStateMachineAliasesInput 001 NextToken len 1 ptr
+K ListStateMachineAliasesInput 002 StateMachineArn req nil
+K ListStateMachineAliasesInput 003 StateMachineArn len 1 ptr
+K ListStateMachineVersionsInput 001 NextToken len 1 ptr
+K ListStateMachineVersionsInput 002 StateMachineArn req nil
+K ListStateMachineVersionsInput 003 StateMachineArn len 1 ptr
+K ListStateMachinesInput 001 NextToken len 1 ptr
+K ListTagsForResourceInput 001 ResourceArn req nil
+K ListTagsForResourceInput 002 ResourceArn len 1 ptr
+K LogDestination 001 CloudWatchLogsLogGroup nest CloudWatchLogsLogGroup
+K LoggingConfiguration 001 Destinations each LogDestination slice
+K PublishStateMachineVersionInput 001 StateMachineArn req nil
+K PublishStateMachineVersionInput 002 StateMachineArn len 1 ptr
+K RedriveExecutionInput 001 ClientToken len 1 ptr
+K RedriveExecutionInput 002 ExecutionArn req nil
+K RedriveExecutionInput 003 ExecutionArn len 1 ptr
+K RoutingConfigurationListItem 001 StateMachineVersionArn req nil
+K RoutingConfigurationListItem 002 StateMachineVersionArn len 1 ptr
+K RoutingConfigurationListItem 003 Weight req none
+K SendTaskFailureInput 001 TaskToken req nil
+K SendTaskFailureInput 002 TaskToken len 1 ptr
+K SendTaskHeartbeatInput 001 TaskToken req nil
+K SendTaskHeartbeatInput 002 TaskToken len 1 ptr
+K SendTaskSuccessInput 001 Output req nil
+K SendTaskSuccessInput 002 TaskToken req nil
+K SendTaskSuccessInput 003 TaskToken len 1 ptr
+K StartExecutionInput 001 Name len 1 ptr
+K StartExecutionInput 002 StateMachineArn req nil
+K StartExecutionInput 003 StateMachineArn len 1 ptr
+K StartSyncExecutionInput 001 Name len 1 ptr
+K StartSyncExecutionInput 002 StateMachineArn req nil
+K StartSyncExecutionInput 003 StateMachineArn len 1 ptr
+K StopExecutionInput 001 ExecutionArn req nil
+K StopExecutionInput 002 ExecutionArn len 1 ptr
+K Tag 001 Key len 1 ptr
+K TagResourceInput 001 ResourceArn req nil
+K TagResourceInput 002 ResourceArn len 1 ptr
+K TagResourceInput 003 Tags req nil
+K TagResourceInput 004 Tags each Tag slice
+K TestStateInput 001 Definition req nil
+K TestStateInput 002 Definition len 1 ptr
+K TestStateInput 003 RoleArn req nil
+K TestStateInput 004 RoleArn len 1 ptr
+K UntagResourceInput 001 ResourceArn req nil
+K UntagResourceInput 002 ResourceArn len 1 ptr
+K UntagResourceInput 003 TagKeys req nil
+K UpdateMapRunInput 001 MapRunArn req nil
+K UpdateMapRunInput 002 MapRunArn len 1 ptr
+K UpdateStateMachineAliasInput 001 RoutingConfiguration len 1 container
+K UpdateStateMachineAliasInput 002 StateMachineAliasArn req nil
+K UpdateStateMachineAliasInput 003 StateMachineAliasArn len 1 ptr
+K UpdateStateMachineAliasInput 004 RoutingConfiguration each RoutingConfigurationListItem slice
+K UpdateStateMachineInput 001 Definition len 1 ptr
+K UpdateStateMachineInput 002 RoleArn len 1 ptr
+K UpdateStateMachineInput 003 StateMachineArn req nil
+K UpdateStateMachineInput 004 StateMachineArn len 1 ptr
+K UpdateStateMachineInput 005 EncryptionConfiguration nest EncryptionConfiguration
+K UpdateStateMachineInput 006 LoggingConfiguration nest LoggingConfiguration
+K ValidateStateMachineDefinitionInput 001 Definition req nil
+K ValidateStateMachineDefinitionInput 002 Definition len 1 ptr
+G GetExecutionHistory NextToken NextToken
+G ListActivities NextToken NextToken
+G ListExecutions NextToken NextToken
+G ListMapRuns NextToken NextToken
+G ListStateMachines NextToken NextToken

@@ -498,3 +498,56 @@ E QueueAttributeNameRedriveAllowPolicy QueueAttributeName
 E QueueAttributeNameRedrivePolicy QueueAttributeName
 E QueueAttributeNameSqsManagedSseEnabled QueueAttributeName
 E QueueAttributeNameVisibilityTimeout QueueAttributeName
+K AddPermissionInput 001 AWSAccountIds req nil
+K AddPermissionInput 002 Actions req nil
+K AddPermissionInput 003 Label req nil
+K AddPermissionInput 004 QueueUrl req nil
+K CancelMessageMoveTaskInput 001 TaskHandle req nil
+K ChangeMessageVisibilityBatchInput 001 Entries req nil
+K ChangeMessageVisibilityBatchInput 002 QueueUrl req nil
+K ChangeMessageVisibilityBatchInput 003 Entries each ChangeMessageVisibilityBatchRequestEntry slice
+K ChangeMessageVisibilityBatchRequestEntry 001 Id req nil
+K ChangeMessageVisibilityBatchRequestEntry 002 ReceiptHandle req nil
+K ChangeMessageVisibilityInput 001 QueueUrl req nil
+K ChangeMessageVisibilityInput 002 ReceiptHandle req nil
+K ChangeMessageVisibilityInput 003 VisibilityTimeout req none
+K CreateQueueInput 001 QueueName req nil
+K DeleteMessageBatchInput 001 Entries req nil
+K DeleteMessageBatchInput 002 QueueUrl req nil
+K DeleteMessageBatchInput 003 Entries each DeleteMessageBatchRequestEntry slice
+K DeleteMessageBatchRequestEntry 001 Id req nil
+K DeleteMessageBatchRequestEntry 002 ReceiptHandle req nil
+K DeleteMessageInput 001 QueueUrl req nil
+K DeleteMessageInput 002 ReceiptHandle req nil
+K DeleteQueueInput 001 QueueUrl req nil
+K GetQueueAttributesInput 001 QueueUrl req nil
+K GetQueueUrlInput 001 QueueName req nil
+K ListDeadLetterSourceQueuesInput 001 QueueUrl req nil
+K ListMessageMoveTasksInput 001 SourceArn req nil
+K ListQueueTagsInput 001 QueueUrl req nil
+K MessageAttributeValue 001 DataType req nil
+K MessageSystemAttributeValue 001 DataType req nil
+K PurgeQueueInput 001 QueueUrl req nil
+K ReceiveMessageInput 001 QueueUrl req nil
+K RemovePermissionInput 001 Label req nil
+K RemovePermissionInput 002 QueueUrl req nil
+K SendMessageBatchInput 001 Entries req nil
+K SendMessageBatchInput 002 QueueUrl req nil
+K SendMessageBatchInput 003 Entries each SendMessageBatchRequestEntry slice
+K SendMessageBatchRequestEntry 001 Id req nil
+K SendMessageBatchRequestEntry 002 MessageBody req nil
+K SendMessageBatchRequestEntry 003 MessageAttributes each MessageAttributeValue map
+K SendMessageBatchRequestEntry 004 MessageSystemAttributes each MessageSystemAttributeValue map
+K SendMessageInput 001 MessageBody req nil
+K SendMessageInput 002 QueueUrl req nil
+K SendMessageInput 003 MessageAttributes each MessageAttributeValue map
+K SendMessageInput 004 MessageSystemAttributes each MessageSystemAttributeValue map
+K SetQueueAttributesInput 001 Attributes req nil
+K SetQueueAttributesInput 002 QueueUrl req nil
+K StartMessageMoveTaskInput 001 SourceArn req nil
+K TagQueueInput 001 QueueUrl req nil
+K TagQueueInput 002 Tags req nil
+K UntagQueueInput 001 QueueUrl req nil
+K UntagQueueInput 002 TagKeys req nil
+G ListDeadLetterSourceQueues NextToken NextToken
+G ListQueues NextToken NextToken

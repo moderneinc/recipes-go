@@ -23,6 +23,9 @@ import (
 //	AWS_SWEEP_ROOT=/path/to/checkouts go test ./recipes/migration/awssdkv2/ \
 //	    -run TestMigratableSweep -count=1 -v
 //
+// AWS_SWEEP_ALL=1 lists every construct holding a file back, not just the
+// first, which is what ranks the next one to cover.
+//
 // The files are parsed one at a time, without the cross-file attribution a real
 // LST carries, so the answer is a lower bound on what the CLI migrates.
 func TestMigratableSweep(t *testing.T) {
@@ -59,17 +62,26 @@ func TestMigratableSweep(t *testing.T) {
 				return nil
 			}
 			v1++
-			s := scanFile(cu)
+			s := scanFileReasons(cu, os.Getenv("AWS_SWEEP_ALL") != "")
 			if s.migratable {
 				ok++
 			} else {
-				reason := s.reason
-				if reason == "" {
-					reason = "(unset)"
+				all := []string{s.reason}
+				if len(s.allReasons) > 0 {
+					all = all[:0]
+					for r := range s.allReasons {
+						all = append(all, r)
+					}
+					sort.Strings(all)
 				}
-				reasons[reason]++
 				rel, _ := filepath.Rel(root, path)
-				t.Logf("    BLOCK %-60s %s", rel, reason)
+				for _, reason := range all {
+					if reason == "" {
+						reason = "(unset)"
+					}
+					reasons[reason]++
+					t.Logf("    BLOCK %-60s %s", rel, reason)
+				}
 			}
 			return nil
 		})

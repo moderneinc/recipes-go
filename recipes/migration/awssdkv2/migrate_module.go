@@ -21,7 +21,7 @@ func (r *MigrateAwsSdkGoModuleToV2) DisplayName() string {
 	return "Migrate a module from `aws-sdk-go` to `aws-sdk-go-v2`"
 }
 func (r *MigrateAwsSdkGoModuleToV2) Description() string {
-	return "Migrate the files whose `github.com/aws/aws-sdk-go` usage has a faithful `aws-sdk-go-v2` form, and bring go.mod along with them. This is a partial migration by design: v2 replaced the session, the error types, the page iterators and the waiters outright, so a file holding one of those is left as it is. Run `FindAwsSdkGoV1Usage` to enumerate what remains, and `go mod tidy` to resolve the per-service modules."
+	return "Migrate the files whose `github.com/aws/aws-sdk-go` usage has a faithful `aws-sdk-go-v2` form, and bring go.mod and go.sum along with them. This is a partial migration by design: v2 replaced the session, the error types, the page iterators and the waiters outright, so a file holding one of those is left as it is. go.mod and go.sum gain every module the migrated imports need, so the result builds as it stands under `-mod=readonly`. Then run `go mod tidy`: the build does not need it, but it drops what the migration leaves behind — the requirements only v1 needed, the go.sum lines nothing reads any more, and an `// indirect` marker on a module the source now imports directly. Run `FindAwsSdkGoV1Usage` to enumerate what remains."
 }
 func (r *MigrateAwsSdkGoModuleToV2) Tags() []string {
 	return []string{"migration", "aws"}

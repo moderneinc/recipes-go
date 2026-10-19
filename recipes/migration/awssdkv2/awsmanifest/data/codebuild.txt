@@ -1,0 +1,1942 @@
+C CodeBuild
+S AuthResolverParameters
+S AuthSchemeResolver
+S BatchDeleteBuildsInput
+S BatchDeleteBuildsOutput
+S BatchGetBuildBatchesInput
+S BatchGetBuildBatchesOutput
+S BatchGetBuildsInput
+S BatchGetBuildsOutput
+S BatchGetCommandExecutionsInput
+S BatchGetCommandExecutionsOutput
+S BatchGetFleetsInput
+S BatchGetFleetsOutput
+S BatchGetProjectsInput
+S BatchGetProjectsOutput
+S BatchGetReportGroupsInput
+S BatchGetReportGroupsOutput
+S BatchGetReportsInput
+S BatchGetReportsOutput
+S BatchGetSandboxesInput
+S BatchGetSandboxesOutput
+S Client
+S CreateFleetInput
+S CreateFleetOutput
+S CreateProjectInput
+S CreateProjectOutput
+S CreateReportGroupInput
+S CreateReportGroupOutput
+S CreateWebhookInput
+S CreateWebhookOutput
+S DeleteBuildBatchInput
+S DeleteBuildBatchOutput
+S DeleteFleetInput
+S DeleteFleetOutput
+S DeleteProjectInput
+S DeleteProjectOutput
+S DeleteReportGroupInput
+S DeleteReportGroupOutput
+S DeleteReportInput
+S DeleteReportOutput
+S DeleteResourcePolicyInput
+S DeleteResourcePolicyOutput
+S DeleteSourceCredentialsInput
+S DeleteSourceCredentialsOutput
+S DeleteWebhookInput
+S DeleteWebhookOutput
+S DescribeCodeCoveragesAPIClient
+S DescribeCodeCoveragesInput
+S DescribeCodeCoveragesOutput
+S DescribeCodeCoveragesPaginator
+S DescribeCodeCoveragesPaginatorOptions
+S DescribeTestCasesAPIClient
+S DescribeTestCasesInput
+S DescribeTestCasesOutput
+S DescribeTestCasesPaginator
+S DescribeTestCasesPaginatorOptions
+S EndpointParameters
+S EndpointResolver
+S EndpointResolverFromURL
+S EndpointResolverFunc
+S EndpointResolverOptions
+S EndpointResolverV2
+S GetReportGroupTrendInput
+S GetReportGroupTrendOutput
+S GetResourcePolicyInput
+S GetResourcePolicyOutput
+S HTTPClient
+S HTTPSignerV4
+S ImportSourceCredentialsInput
+S ImportSourceCredentialsOutput
+S InvalidateProjectCacheInput
+S InvalidateProjectCacheOutput
+S ListBuildBatchesAPIClient
+S ListBuildBatchesForProjectAPIClient
+S ListBuildBatchesForProjectInput
+S ListBuildBatchesForProjectOutput
+S ListBuildBatchesForProjectPaginator
+S ListBuildBatchesForProjectPaginatorOptions
+S ListBuildBatchesInput
+S ListBuildBatchesOutput
+S ListBuildBatchesPaginator
+S ListBuildBatchesPaginatorOptions
+S ListBuildsAPIClient
+S ListBuildsForProjectAPIClient
+S ListBuildsForProjectInput
+S ListBuildsForProjectOutput
+S ListBuildsForProjectPaginator
+S ListBuildsForProjectPaginatorOptions
+S ListBuildsInput
+S ListBuildsOutput
+S ListBuildsPaginator
+S ListBuildsPaginatorOptions
+S ListCommandExecutionsForSandboxAPIClient
+S ListCommandExecutionsForSandboxInput
+S ListCommandExecutionsForSandboxOutput
+S ListCommandExecutionsForSandboxPaginator
+S ListCommandExecutionsForSandboxPaginatorOptions
+S ListCuratedEnvironmentImagesInput
+S ListCuratedEnvironmentImagesOutput
+S ListFleetsAPIClient
+S ListFleetsInput
+S ListFleetsOutput
+S ListFleetsPaginator
+S ListFleetsPaginatorOptions
+S ListProjectsAPIClient
+S ListProjectsInput
+S ListProjectsOutput
+S ListProjectsPaginator
+S ListProjectsPaginatorOptions
+S ListReportGroupsAPIClient
+S ListReportGroupsInput
+S ListReportGroupsOutput
+S ListReportGroupsPaginator
+S ListReportGroupsPaginatorOptions
+S ListReportsAPIClient
+S ListReportsForReportGroupAPIClient
+S ListReportsForReportGroupInput
+S ListReportsForReportGroupOutput
+S ListReportsForReportGroupPaginator
+S ListReportsForReportGroupPaginatorOptions
+S ListReportsInput
+S ListReportsOutput
+S ListReportsPaginator
+S ListReportsPaginatorOptions
+S ListSandboxesAPIClient
+S ListSandboxesForProjectAPIClient
+S ListSandboxesForProjectInput
+S ListSandboxesForProjectOutput
+S ListSandboxesForProjectPaginator
+S ListSandboxesForProjectPaginatorOptions
+S ListSandboxesInput
+S ListSandboxesOutput
+S ListSandboxesPaginator
+S ListSandboxesPaginatorOptions
+S ListSharedProjectsAPIClient
+S ListSharedProjectsInput
+S ListSharedProjectsOutput
+S ListSharedProjectsPaginator
+S ListSharedProjectsPaginatorOptions
+S ListSharedReportGroupsAPIClient
+S ListSharedReportGroupsInput
+S ListSharedReportGroupsOutput
+S ListSharedReportGroupsPaginator
+S ListSharedReportGroupsPaginatorOptions
+S ListSourceCredentialsInput
+S ListSourceCredentialsOutput
+S New
+S NewDefaultEndpointResolver
+S NewDefaultEndpointResolverV2
+S NewDescribeCodeCoveragesPaginator
+S NewDescribeTestCasesPaginator
+S NewFromConfig
+S NewListBuildBatchesForProjectPaginator
+S NewListBuildBatchesPaginator
+S NewListBuildsForProjectPaginator
+S NewListBuildsPaginator
+S NewListCommandExecutionsForSandboxPaginator
+S NewListFleetsPaginator
+S NewListProjectsPaginator
+S NewListReportGroupsPaginator
+S NewListReportsForReportGroupPaginator
+S NewListReportsPaginator
+S NewListSandboxesForProjectPaginator
+S NewListSandboxesPaginator
+S NewListSharedProjectsPaginator
+S NewListSharedReportGroupsPaginator
+S Options
+S PutResourcePolicyInput
+S PutResourcePolicyOutput
+S ResolveEndpoint
+S RetryBuildBatchInput
+S RetryBuildBatchOutput
+S RetryBuildInput
+S RetryBuildOutput
+S ServiceAPIVersion
+S ServiceID
+S StartBuildBatchInput
+S StartBuildBatchOutput
+S StartBuildInput
+S StartBuildOutput
+S StartCommandExecutionInput
+S StartCommandExecutionOutput
+S StartSandboxConnectionInput
+S StartSandboxConnectionOutput
+S StartSandboxInput
+S StartSandboxOutput
+S StopBuildBatchInput
+S StopBuildBatchOutput
+S StopBuildInput
+S StopBuildOutput
+S StopSandboxInput
+S StopSandboxOutput
+S TypeRegistry
+S UpdateFleetInput
+S UpdateFleetOutput
+S UpdateProjectInput
+S UpdateProjectOutput
+S UpdateProjectVisibilityInput
+S UpdateProjectVisibilityOutput
+S UpdateReportGroupInput
+S UpdateReportGroupOutput
+S UpdateWebhookInput
+S UpdateWebhookOutput
+S WithAPIOptions
+S WithEndpointResolver
+S WithEndpointResolverV2
+S WithSigV4SigningName
+S WithSigV4SigningRegion
+O BatchDeleteBuilds
+O BatchGetBuildBatches
+O BatchGetBuilds
+O BatchGetCommandExecutions
+O BatchGetFleets
+O BatchGetProjects
+O BatchGetReportGroups
+O BatchGetReports
+O BatchGetSandboxes
+O CreateFleet
+O CreateProject
+O CreateReportGroup
+O CreateWebhook
+O DeleteBuildBatch
+O DeleteFleet
+O DeleteProject
+O DeleteReport
+O DeleteReportGroup
+O DeleteResourcePolicy
+O DeleteSourceCredentials
+O DeleteWebhook
+O DescribeCodeCoverages
+O DescribeTestCases
+O GetReportGroupTrend
+O GetResourcePolicy
+O ImportSourceCredentials
+O InvalidateProjectCache
+O ListBuildBatches
+O ListBuildBatchesForProject
+O ListBuilds
+O ListBuildsForProject
+O ListCommandExecutionsForSandbox
+O ListCuratedEnvironmentImages
+O ListFleets
+O ListProjects
+O ListReportGroups
+O ListReports
+O ListReportsForReportGroup
+O ListSandboxes
+O ListSandboxesForProject
+O ListSharedProjects
+O ListSharedReportGroups
+O ListSourceCredentials
+O PutResourcePolicy
+O RetryBuild
+O RetryBuildBatch
+O StartBuild
+O StartBuildBatch
+O StartCommandExecution
+O StartSandbox
+O StartSandboxConnection
+O StopBuild
+O StopBuildBatch
+O StopSandbox
+O UpdateFleet
+O UpdateProject
+O UpdateProjectVisibility
+O UpdateReportGroup
+O UpdateWebhook
+X ErrCodeAccountLimitExceededException AccountLimitExceededException
+X ErrCodeInvalidInputException InvalidInputException
+X ErrCodeOAuthProviderException OAuthProviderException
+X ErrCodeResourceAlreadyExistsException ResourceAlreadyExistsException
+X ErrCodeResourceNotFoundException ResourceNotFoundException
+I BatchRestrictions.MaximumBuildsAllowed int64 int32
+I Build.QueuedTimeoutInMinutes int64 int32
+I Build.TimeoutInMinutes int64 int32
+I BuildBatch.BuildTimeoutInMinutes int64 int32
+I BuildBatch.QueuedTimeoutInMinutes int64 int32
+I CodeCoverage.BranchesCovered int64 int32
+I CodeCoverage.BranchesMissed int64 int32
+I CodeCoverage.LinesCovered int64 int32
+I CodeCoverage.LinesMissed int64 int32
+I CodeCoverageReportSummary.BranchesCovered int64 int32
+I CodeCoverageReportSummary.BranchesMissed int64 int32
+I CodeCoverageReportSummary.LinesCovered int64 int32
+I CodeCoverageReportSummary.LinesMissed int64 int32
+I CreateFleetInput.BaseCapacity int64 int32
+I CreateProjectInput.ConcurrentBuildLimit int64 int32
+I CreateProjectInput.QueuedTimeoutInMinutes int64 int32
+I CreateProjectInput.TimeoutInMinutes int64 int32
+I DescribeCodeCoveragesInput.MaxResults int64 int32
+I DescribeTestCasesInput.MaxResults int64 int32
+I Fleet.BaseCapacity int64 int32
+I GetReportGroupTrendInput.NumOfReports int64 int32
+I ListBuildBatchesForProjectInput.MaxResults int64 int32
+I ListBuildBatchesInput.MaxResults int64 int32
+I ListFleetsInput.MaxResults int64 int32
+I ListReportGroupsInput.MaxResults int64 int32
+I ListReportsForReportGroupInput.MaxResults int64 int32
+I ListReportsInput.MaxResults int64 int32
+I ListSharedProjectsInput.MaxResults int64 int32
+I ListSharedReportGroupsInput.MaxResults int64 int32
+I Project.ConcurrentBuildLimit int64 int32
+I Project.QueuedTimeoutInMinutes int64 int32
+I Project.TimeoutInMinutes int64 int32
+I ProjectBuildBatchConfig.TimeoutInMins int64 int32
+I ProjectSource.GitCloneDepth int64 int32
+I StartBuildBatchInput.BuildTimeoutInMinutesOverride int64 int32
+I StartBuildBatchInput.GitCloneDepthOverride int64 int32
+I StartBuildBatchInput.QueuedTimeoutInMinutesOverride int64 int32
+I StartBuildInput.GitCloneDepthOverride int64 int32
+I StartBuildInput.QueuedTimeoutInMinutesOverride int64 int32
+I StartBuildInput.TimeoutInMinutesOverride int64 int32
+I TestReportSummary.Total int64 int32
+I UpdateFleetInput.BaseCapacity int64 int32
+I UpdateProjectInput.ConcurrentBuildLimit int64 int32
+I UpdateProjectInput.QueuedTimeoutInMinutes int64 int32
+I UpdateProjectInput.TimeoutInMinutes int64 int32
+R Build.Artifacts BuildArtifacts
+R Build.AutoRetryConfig AutoRetryConfig
+R Build.Cache ProjectCache
+R Build.DebugSession DebugSession
+R Build.Environment ProjectEnvironment
+R Build.Logs LogsLocation
+R Build.NetworkInterface NetworkInterface
+R Build.Source ProjectSource
+R Build.VpcConfig VpcConfig
+R BuildBatch.Artifacts BuildArtifacts
+R BuildBatch.BuildBatchConfig ProjectBuildBatchConfig
+R BuildBatch.Cache ProjectCache
+R BuildBatch.Environment ProjectEnvironment
+R BuildBatch.LogConfig LogsConfig
+R BuildBatch.Source ProjectSource
+R BuildBatch.VpcConfig VpcConfig
+R BuildGroup.CurrentBuildSummary BuildSummary
+R BuildSummary.PrimaryArtifact ResolvedArtifact
+R CommandExecution.Logs LogsLocation
+R CreateFleetInput.ComputeConfiguration ComputeConfiguration
+R CreateFleetInput.ProxyConfiguration ProxyConfiguration
+R CreateFleetInput.ScalingConfiguration ScalingConfigurationInput
+R CreateFleetInput.VpcConfig VpcConfig
+R CreateFleetOutput.Fleet Fleet
+R CreateProjectInput.Artifacts ProjectArtifacts
+R CreateProjectInput.BuildBatchConfig ProjectBuildBatchConfig
+R CreateProjectInput.Cache ProjectCache
+R CreateProjectInput.Environment ProjectEnvironment
+R CreateProjectInput.LogsConfig LogsConfig
+R CreateProjectInput.Source ProjectSource
+R CreateProjectInput.VpcConfig VpcConfig
+R CreateProjectOutput.Project Project
+R CreateReportGroupInput.ExportConfig ReportExportConfig
+R CreateReportGroupOutput.ReportGroup ReportGroup
+R CreateWebhookInput.PullRequestBuildPolicy PullRequestBuildPolicy
+R CreateWebhookInput.ScopeConfiguration ScopeConfiguration
+R CreateWebhookOutput.Webhook Webhook
+R DescribeTestCasesInput.Filter TestCaseFilter
+R DockerServer.Status DockerServerStatus
+R Fleet.ComputeConfiguration ComputeConfiguration
+R Fleet.ProxyConfiguration ProxyConfiguration
+R Fleet.ScalingConfiguration ScalingConfigurationOutput
+R Fleet.Status FleetStatus
+R Fleet.VpcConfig VpcConfig
+R GetReportGroupTrendOutput.Stats ReportGroupTrendStats
+R ListBuildBatchesForProjectInput.Filter BuildBatchFilter
+R ListBuildBatchesInput.Filter BuildBatchFilter
+R ListReportsForReportGroupInput.Filter ReportFilter
+R ListReportsInput.Filter ReportFilter
+R LogsConfig.CloudWatchLogs CloudWatchLogsConfig
+R LogsConfig.S3Logs S3LogsConfig
+R LogsLocation.CloudWatchLogs CloudWatchLogsConfig
+R LogsLocation.S3Logs S3LogsConfig
+R Project.Artifacts ProjectArtifacts
+R Project.Badge ProjectBadge
+R Project.BuildBatchConfig ProjectBuildBatchConfig
+R Project.Cache ProjectCache
+R Project.Environment ProjectEnvironment
+R Project.LogsConfig LogsConfig
+R Project.Source ProjectSource
+R Project.VpcConfig VpcConfig
+R Project.Webhook Webhook
+R ProjectBuildBatchConfig.Restrictions BatchRestrictions
+R ProjectEnvironment.ComputeConfiguration ComputeConfiguration
+R ProjectEnvironment.DockerServer DockerServer
+R ProjectEnvironment.Fleet ProjectFleet
+R ProjectEnvironment.RegistryCredential RegistryCredential
+R ProjectSource.Auth SourceAuth
+R ProjectSource.BuildStatusConfig BuildStatusConfig
+R ProjectSource.GitSubmodulesConfig GitSubmodulesConfig
+R Report.CodeCoverageSummary CodeCoverageReportSummary
+R Report.ExportConfig ReportExportConfig
+R Report.TestSummary TestReportSummary
+R ReportExportConfig.S3Destination S3ReportExportConfig
+R ReportGroup.ExportConfig ReportExportConfig
+R RetryBuildBatchOutput.BuildBatch BuildBatch
+R RetryBuildOutput.Build Build
+R Sandbox.CurrentSession SandboxSession
+R Sandbox.Environment ProjectEnvironment
+R Sandbox.LogConfig LogsConfig
+R Sandbox.Source ProjectSource
+R Sandbox.VpcConfig VpcConfig
+R SandboxSession.Logs LogsLocation
+R SandboxSession.NetworkInterface NetworkInterface
+R StartBuildBatchInput.ArtifactsOverride ProjectArtifacts
+R StartBuildBatchInput.BuildBatchConfigOverride ProjectBuildBatchConfig
+R StartBuildBatchInput.CacheOverride ProjectCache
+R StartBuildBatchInput.GitSubmodulesConfigOverride GitSubmodulesConfig
+R StartBuildBatchInput.LogsConfigOverride LogsConfig
+R StartBuildBatchInput.RegistryCredentialOverride RegistryCredential
+R StartBuildBatchInput.SourceAuthOverride SourceAuth
+R StartBuildBatchOutput.BuildBatch BuildBatch
+R StartBuildInput.ArtifactsOverride ProjectArtifacts
+R StartBuildInput.BuildStatusConfigOverride BuildStatusConfig
+R StartBuildInput.CacheOverride ProjectCache
+R StartBuildInput.FleetOverride ProjectFleet
+R StartBuildInput.GitSubmodulesConfigOverride GitSubmodulesConfig
+R StartBuildInput.LogsConfigOverride LogsConfig
+R StartBuildInput.RegistryCredentialOverride RegistryCredential
+R StartBuildInput.SourceAuthOverride SourceAuth
+R StartBuildOutput.Build Build
+R StartCommandExecutionOutput.CommandExecution CommandExecution
+R StartSandboxConnectionOutput.SsmSession SSMSession
+R StartSandboxOutput.Sandbox Sandbox
+R StopBuildBatchOutput.BuildBatch BuildBatch
+R StopBuildOutput.Build Build
+R StopSandboxOutput.Sandbox Sandbox
+R UpdateFleetInput.ComputeConfiguration ComputeConfiguration
+R UpdateFleetInput.ProxyConfiguration ProxyConfiguration
+R UpdateFleetInput.ScalingConfiguration ScalingConfigurationInput
+R UpdateFleetInput.VpcConfig VpcConfig
+R UpdateFleetOutput.Fleet Fleet
+R UpdateProjectInput.Artifacts ProjectArtifacts
+R UpdateProjectInput.BuildBatchConfig ProjectBuildBatchConfig
+R UpdateProjectInput.Cache ProjectCache
+R UpdateProjectInput.Environment ProjectEnvironment
+R UpdateProjectInput.LogsConfig LogsConfig
+R UpdateProjectInput.Source ProjectSource
+R UpdateProjectInput.VpcConfig VpcConfig
+R UpdateProjectOutput.Project Project
+R UpdateReportGroupInput.ExportConfig ReportExportConfig
+R UpdateReportGroupOutput.ReportGroup ReportGroup
+R UpdateWebhookInput.PullRequestBuildPolicy PullRequestBuildPolicy
+R UpdateWebhookOutput.Webhook Webhook
+R Webhook.PullRequestBuildPolicy PullRequestBuildPolicy
+R Webhook.ScopeConfiguration ScopeConfiguration
+V AccountLimitExceededException.ErrorCodeOverride string
+V AccountLimitExceededException.Message string
+V AccountSuspendedException.ErrorCodeOverride string
+V AccountSuspendedException.Message string
+V AutoRetryConfig.AutoRetryLimit int32
+V AutoRetryConfig.AutoRetryNumber int32
+V AutoRetryConfig.NextAutoRetry string
+V AutoRetryConfig.PreviousAutoRetry string
+V BatchGetCommandExecutionsInput.SandboxId string
+V BatchRestrictions.MaximumBuildsAllowed int32
+V Build.Arn string
+V Build.BuildBatchArn string
+V Build.BuildNumber int64
+V Build.CurrentPhase string
+V Build.EncryptionKey string
+V Build.Id string
+V Build.Initiator string
+V Build.ProjectName string
+V Build.QueuedTimeoutInMinutes int32
+V Build.ResolvedSourceVersion string
+V Build.ServiceRole string
+V Build.SourceVersion string
+V Build.TimeoutInMinutes int32
+V BuildArtifacts.ArtifactIdentifier string
+V BuildArtifacts.EncryptionDisabled bool
+V BuildArtifacts.Location string
+V BuildArtifacts.Md5sum string
+V BuildArtifacts.OverrideArtifactName bool
+V BuildArtifacts.Sha256sum string
+V BuildBatch.Arn string
+V BuildBatch.BuildBatchNumber int64
+V BuildBatch.BuildTimeoutInMinutes int32
+V BuildBatch.CurrentPhase string
+V BuildBatch.DebugSessionEnabled bool
+V BuildBatch.EncryptionKey string
+V BuildBatch.Id string
+V BuildBatch.Initiator string
+V BuildBatch.ProjectName string
+V BuildBatch.QueuedTimeoutInMinutes int32
+V BuildBatch.ResolvedSourceVersion string
+V BuildBatch.ServiceRole string
+V BuildBatch.SourceVersion string
+V BuildBatchPhase.DurationInSeconds int64
+V BuildGroup.Identifier string
+V BuildNotDeleted.Id string
+V BuildNotDeleted.StatusCode string
+V BuildPhase.DurationInSeconds int64
+V BuildStatusConfig.Context string
+V BuildStatusConfig.TargetUrl string
+V BuildSummary.Arn string
+V CloudWatchLogsConfig.GroupName string
+V CloudWatchLogsConfig.StreamName string
+V CodeCoverage.BranchCoveragePercentage float64
+V CodeCoverage.BranchesCovered int32
+V CodeCoverage.BranchesMissed int32
+V CodeCoverage.FilePath string
+V CodeCoverage.Id string
+V CodeCoverage.LineCoveragePercentage float64
+V CodeCoverage.LinesCovered int32
+V CodeCoverage.LinesMissed int32
+V CodeCoverage.ReportARN string
+V CodeCoverageReportSummary.BranchCoveragePercentage float64
+V CodeCoverageReportSummary.BranchesCovered int32
+V CodeCoverageReportSummary.BranchesMissed int32
+V CodeCoverageReportSummary.LineCoveragePercentage float64
+V CodeCoverageReportSummary.LinesCovered int32
+V CodeCoverageReportSummary.LinesMissed int32
+V CommandExecution.Command string
+V CommandExecution.ExitCode string
+V CommandExecution.Id string
+V CommandExecution.SandboxArn string
+V CommandExecution.SandboxId string
+V CommandExecution.StandardErrContent string
+V CommandExecution.StandardOutputContent string
+V CommandExecution.Status string
+V ComputeConfiguration.Disk int64
+V ComputeConfiguration.InstanceType string
+V ComputeConfiguration.Memory int64
+V ComputeConfiguration.VCpu int64
+V CreateFleetInput.BaseCapacity int32
+V CreateFleetInput.FleetServiceRole string
+V CreateFleetInput.ImageId string
+V CreateFleetInput.Name string
+V CreateProjectInput.AutoRetryLimit int32
+V CreateProjectInput.BadgeEnabled bool
+V CreateProjectInput.ConcurrentBuildLimit int32
+V CreateProjectInput.Description string
+V CreateProjectInput.EncryptionKey string
+V CreateProjectInput.Name string
+V CreateProjectInput.QueuedTimeoutInMinutes int32
+V CreateProjectInput.ServiceRole string
+V CreateProjectInput.SourceVersion string
+V CreateProjectInput.TimeoutInMinutes int32
+V CreateReportGroupInput.Name string
+V CreateWebhookInput.BranchFilter string
+V CreateWebhookInput.ManualCreation bool
+V CreateWebhookInput.ProjectName string
+V DebugSession.SessionEnabled bool
+V DebugSession.SessionTarget string
+V DeleteBuildBatchInput.Id string
+V DeleteBuildBatchOutput.StatusCode string
+V DeleteFleetInput.Arn string
+V DeleteProjectInput.Name string
+V DeleteReportGroupInput.Arn string
+V DeleteReportInput.Arn string
+V DeleteResourcePolicyInput.ResourceArn string
+V DeleteSourceCredentialsInput.Arn string
+V DeleteSourceCredentialsOutput.Arn string
+V DeleteWebhookInput.ProjectName string
+V DescribeCodeCoveragesInput.MaxLineCoveragePercentage float64
+V DescribeCodeCoveragesInput.MaxResults int32
+V DescribeCodeCoveragesInput.MinLineCoveragePercentage float64
+V DescribeCodeCoveragesInput.NextToken string
+V DescribeCodeCoveragesInput.ReportArn string
+V DescribeCodeCoveragesOutput.NextToken string
+V DescribeTestCasesInput.MaxResults int32
+V DescribeTestCasesInput.NextToken string
+V DescribeTestCasesInput.ReportArn string
+V DescribeTestCasesOutput.NextToken string
+V DockerServerStatus.Message string
+V DockerServerStatus.Status string
+V EndpointParameters.Endpoint string
+V EndpointParameters.Region string
+V EndpointParameters.UseDualStack bool
+V EndpointParameters.UseFIPS bool
+V EnvironmentImage.Description string
+V EnvironmentImage.Name string
+V EnvironmentVariable.Name string
+V EnvironmentVariable.Value string
+V ExportedEnvironmentVariable.Name string
+V ExportedEnvironmentVariable.Value string
+V Fleet.Arn string
+V Fleet.BaseCapacity int32
+V Fleet.FleetServiceRole string
+V Fleet.Id string
+V Fleet.ImageId string
+V Fleet.Name string
+V FleetStatus.Message string
+V GetReportGroupTrendInput.NumOfReports int32
+V GetReportGroupTrendInput.ReportGroupArn string
+V GetResourcePolicyInput.ResourceArn string
+V GetResourcePolicyOutput.Policy string
+V GitSubmodulesConfig.FetchSubmodules bool
+V ImportSourceCredentialsInput.ShouldOverwrite bool
+V ImportSourceCredentialsInput.Token string
+V ImportSourceCredentialsInput.Username string
+V ImportSourceCredentialsOutput.Arn string
+V InvalidInputException.ErrorCodeOverride string
+V InvalidInputException.Message string
+V InvalidateProjectCacheInput.ProjectName string
+V ListBuildBatchesForProjectInput.MaxResults int32
+V ListBuildBatchesForProjectInput.NextToken string
+V ListBuildBatchesForProjectInput.ProjectName string
+V ListBuildBatchesForProjectOutput.NextToken string
+V ListBuildBatchesInput.MaxResults int32
+V ListBuildBatchesInput.NextToken string
+V ListBuildBatchesOutput.NextToken string
+V ListBuildsForProjectInput.NextToken string
+V ListBuildsForProjectInput.ProjectName string
+V ListBuildsForProjectOutput.NextToken string
+V ListBuildsInput.NextToken string
+V ListBuildsOutput.NextToken string
+V ListCommandExecutionsForSandboxInput.MaxResults int32
+V ListCommandExecutionsForSandboxInput.NextToken string
+V ListCommandExecutionsForSandboxInput.SandboxId string
+V ListCommandExecutionsForSandboxOutput.NextToken string
+V ListFleetsInput.MaxResults int32
+V ListFleetsInput.NextToken string
+V ListFleetsOutput.NextToken string
+V ListProjectsInput.NextToken string
+V ListProjectsOutput.NextToken string
+V ListReportGroupsInput.MaxResults int32
+V ListReportGroupsInput.NextToken string
+V ListReportGroupsOutput.NextToken string
+V ListReportsForReportGroupInput.MaxResults int32
+V ListReportsForReportGroupInput.NextToken string
+V ListReportsForReportGroupInput.ReportGroupArn string
+V ListReportsForReportGroupOutput.NextToken string
+V ListReportsInput.MaxResults int32
+V ListReportsInput.NextToken string
+V ListReportsOutput.NextToken string
+V ListSandboxesForProjectInput.MaxResults int32
+V ListSandboxesForProjectInput.NextToken string
+V ListSandboxesForProjectInput.ProjectName string
+V ListSandboxesForProjectOutput.NextToken string
+V ListSandboxesInput.MaxResults int32
+V ListSandboxesInput.NextToken string
+V ListSandboxesOutput.NextToken string
+V ListSharedProjectsInput.MaxResults int32
+V ListSharedProjectsInput.NextToken string
+V ListSharedProjectsOutput.NextToken string
+V ListSharedReportGroupsInput.MaxResults int32
+V ListSharedReportGroupsInput.NextToken string
+V ListSharedReportGroupsOutput.NextToken string
+V LogsLocation.CloudWatchLogsArn string
+V LogsLocation.DeepLink string
+V LogsLocation.GroupName string
+V LogsLocation.S3DeepLink string
+V LogsLocation.S3LogsArn string
+V LogsLocation.StreamName string
+V NetworkInterface.NetworkInterfaceId string
+V NetworkInterface.SubnetId string
+V OAuthProviderException.ErrorCodeOverride string
+V OAuthProviderException.Message string
+V Options.BaseEndpoint string
+V PhaseContext.Message string
+V PhaseContext.StatusCode string
+V Project.Arn string
+V Project.AutoRetryLimit int32
+V Project.ConcurrentBuildLimit int32
+V Project.Description string
+V Project.EncryptionKey string
+V Project.Name string
+V Project.PublicProjectAlias string
+V Project.QueuedTimeoutInMinutes int32
+V Project.ResourceAccessRole string
+V Project.ServiceRole string
+V Project.SourceVersion string
+V Project.TimeoutInMinutes int32
+V ProjectArtifacts.ArtifactIdentifier string
+V ProjectArtifacts.EncryptionDisabled bool
+V ProjectArtifacts.Location string
+V ProjectArtifacts.Name string
+V ProjectArtifacts.OverrideArtifactName bool
+V ProjectArtifacts.Path string
+V ProjectBadge.BadgeRequestUrl string
+V ProjectBuildBatchConfig.CombineArtifacts bool
+V ProjectBuildBatchConfig.ServiceRole string
+V ProjectBuildBatchConfig.TimeoutInMins int32
+V ProjectCache.CacheNamespace string
+V ProjectCache.Location string
+V ProjectEnvironment.Certificate string
+V ProjectEnvironment.Image string
+V ProjectEnvironment.PrivilegedMode bool
+V ProjectFileSystemLocation.Identifier string
+V ProjectFileSystemLocation.Location string
+V ProjectFileSystemLocation.MountOptions string
+V ProjectFileSystemLocation.MountPoint string
+V ProjectFleet.FleetArn string
+V ProjectSource.Buildspec string
+V ProjectSource.GitCloneDepth int32
+V ProjectSource.InsecureSsl bool
+V ProjectSource.Location string
+V ProjectSource.ReportBuildStatus bool
+V ProjectSource.SourceIdentifier string
+V ProjectSourceVersion.SourceIdentifier string
+V ProjectSourceVersion.SourceVersion string
+V PutResourcePolicyInput.Policy string
+V PutResourcePolicyInput.ResourceArn string
+V PutResourcePolicyOutput.ResourceArn string
+V RegistryCredential.Credential string
+V Report.Arn string
+V Report.ExecutionId string
+V Report.Name string
+V Report.ReportGroupArn string
+V Report.Truncated bool
+V ReportGroup.Arn string
+V ReportGroup.Name string
+V ReportGroupTrendStats.Average string
+V ReportGroupTrendStats.Max string
+V ReportGroupTrendStats.Min string
+V ReportWithRawData.Data string
+V ReportWithRawData.ReportArn string
+V ResolvedArtifact.Identifier string
+V ResolvedArtifact.Location string
+V ResourceAlreadyExistsException.ErrorCodeOverride string
+V ResourceAlreadyExistsException.Message string
+V ResourceNotFoundException.ErrorCodeOverride string
+V ResourceNotFoundException.Message string
+V RetryBuildBatchInput.Id string
+V RetryBuildBatchInput.IdempotencyToken string
+V RetryBuildInput.Id string
+V RetryBuildInput.IdempotencyToken string
+V S3LogsConfig.EncryptionDisabled bool
+V S3LogsConfig.Location string
+V S3ReportExportConfig.Bucket string
+V S3ReportExportConfig.BucketOwner string
+V S3ReportExportConfig.EncryptionDisabled bool
+V S3ReportExportConfig.EncryptionKey string
+V S3ReportExportConfig.Path string
+V SSMSession.SessionId string
+V SSMSession.StreamUrl string
+V SSMSession.TokenValue string
+V Sandbox.Arn string
+V Sandbox.EncryptionKey string
+V Sandbox.Id string
+V Sandbox.ProjectName string
+V Sandbox.QueuedTimeoutInMinutes int32
+V Sandbox.ServiceRole string
+V Sandbox.SourceVersion string
+V Sandbox.Status string
+V Sandbox.TimeoutInMinutes int32
+V SandboxSession.CurrentPhase string
+V SandboxSession.Id string
+V SandboxSession.ResolvedSourceVersion string
+V SandboxSession.Status string
+V SandboxSessionPhase.DurationInSeconds int64
+V SandboxSessionPhase.PhaseType string
+V ScalingConfigurationInput.MaxCapacity int32
+V ScalingConfigurationOutput.DesiredCapacity int32
+V ScalingConfigurationOutput.MaxCapacity int32
+V ScopeConfiguration.Domain string
+V ScopeConfiguration.Name string
+V SourceAuth.Resource string
+V SourceCredentialsInfo.Arn string
+V SourceCredentialsInfo.Resource string
+V StartBuildBatchInput.BuildTimeoutInMinutesOverride int32
+V StartBuildBatchInput.BuildspecOverride string
+V StartBuildBatchInput.CertificateOverride string
+V StartBuildBatchInput.DebugSessionEnabled bool
+V StartBuildBatchInput.EncryptionKeyOverride string
+V StartBuildBatchInput.GitCloneDepthOverride int32
+V StartBuildBatchInput.IdempotencyToken string
+V StartBuildBatchInput.ImageOverride string
+V StartBuildBatchInput.InsecureSslOverride bool
+V StartBuildBatchInput.PrivilegedModeOverride bool
+V StartBuildBatchInput.ProjectName string
+V StartBuildBatchInput.QueuedTimeoutInMinutesOverride int32
+V StartBuildBatchInput.ReportBuildBatchStatusOverride bool
+V StartBuildBatchInput.ServiceRoleOverride string
+V StartBuildBatchInput.SourceLocationOverride string
+V StartBuildBatchInput.SourceVersion string
+V StartBuildInput.AutoRetryLimitOverride int32
+V StartBuildInput.BuildspecOverride string
+V StartBuildInput.CertificateOverride string
+V StartBuildInput.DebugSessionEnabled bool
+V StartBuildInput.EncryptionKeyOverride string
+V StartBuildInput.GitCloneDepthOverride int32
+V StartBuildInput.IdempotencyToken string
+V StartBuildInput.ImageOverride string
+V StartBuildInput.InsecureSslOverride bool
+V StartBuildInput.PrivilegedModeOverride bool
+V StartBuildInput.ProjectName string
+V StartBuildInput.QueuedTimeoutInMinutesOverride int32
+V StartBuildInput.ReportBuildStatusOverride bool
+V StartBuildInput.ServiceRoleOverride string
+V StartBuildInput.SourceLocationOverride string
+V StartBuildInput.SourceVersion string
+V StartBuildInput.TimeoutInMinutesOverride int32
+V StartCommandExecutionInput.Command string
+V StartCommandExecutionInput.SandboxId string
+V StartSandboxConnectionInput.SandboxId string
+V StartSandboxInput.IdempotencyToken string
+V StartSandboxInput.ProjectName string
+V StopBuildBatchInput.Id string
+V StopBuildInput.Id string
+V StopSandboxInput.Id string
+V Tag.Key string
+V Tag.Value string
+V TargetTrackingScalingConfiguration.TargetValue float64
+V TestCase.DurationInNanoSeconds int64
+V TestCase.Message string
+V TestCase.Name string
+V TestCase.Prefix string
+V TestCase.ReportArn string
+V TestCase.Status string
+V TestCase.TestRawDataPath string
+V TestCase.TestSuiteName string
+V TestCaseFilter.Keyword string
+V TestCaseFilter.Status string
+V TestReportSummary.DurationInNanoSeconds int64
+V TestReportSummary.Total int32
+V UpdateFleetInput.Arn string
+V UpdateFleetInput.BaseCapacity int32
+V UpdateFleetInput.FleetServiceRole string
+V UpdateFleetInput.ImageId string
+V UpdateProjectInput.AutoRetryLimit int32
+V UpdateProjectInput.BadgeEnabled bool
+V UpdateProjectInput.ConcurrentBuildLimit int32
+V UpdateProjectInput.Description string
+V UpdateProjectInput.EncryptionKey string
+V UpdateProjectInput.Name string
+V UpdateProjectInput.QueuedTimeoutInMinutes int32
+V UpdateProjectInput.ServiceRole string
+V UpdateProjectInput.SourceVersion string
+V UpdateProjectInput.TimeoutInMinutes int32
+V UpdateProjectVisibilityInput.ProjectArn string
+V UpdateProjectVisibilityInput.ResourceAccessRole string
+V UpdateProjectVisibilityOutput.ProjectArn string
+V UpdateProjectVisibilityOutput.PublicProjectAlias string
+V UpdateReportGroupInput.Arn string
+V UpdateWebhookInput.BranchFilter string
+V UpdateWebhookInput.ProjectName string
+V VpcConfig.VpcId string
+V Webhook.BranchFilter string
+V Webhook.ManualCreation bool
+V Webhook.PayloadUrl string
+V Webhook.Secret string
+V Webhook.StatusMessage string
+V Webhook.Url string
+V WebhookFilter.ExcludeMatchedPattern bool
+V WebhookFilter.Pattern string
+Q TestReportSummary.StatusCounts
+D Build.BuildComplete bool
+D BuildBatch.Complete bool
+D BuildGroup.IgnoreFailure bool
+D DeleteReportGroupInput.DeleteReports bool
+D ProjectBadge.BadgeEnabled bool
+D UpdateWebhookInput.RotateSecret bool
+L BatchDeleteBuildsInput.Ids -
+L BatchDeleteBuildsOutput.BuildsDeleted -
+L BatchDeleteBuildsOutput.BuildsNotDeleted BuildNotDeleted
+L BatchGetBuildBatchesInput.Ids -
+L BatchGetBuildBatchesOutput.BuildBatches BuildBatch
+L BatchGetBuildBatchesOutput.BuildBatchesNotFound -
+L BatchGetBuildsInput.Ids -
+L BatchGetBuildsOutput.Builds Build
+L BatchGetBuildsOutput.BuildsNotFound -
+L BatchGetFleetsInput.Names -
+L BatchGetFleetsOutput.Fleets Fleet
+L BatchGetFleetsOutput.FleetsNotFound -
+L BatchGetProjectsInput.Names -
+L BatchGetProjectsOutput.Projects Project
+L BatchGetProjectsOutput.ProjectsNotFound -
+L BatchGetReportGroupsInput.ReportGroupArns -
+L BatchGetReportGroupsOutput.ReportGroups ReportGroup
+L BatchGetReportGroupsOutput.ReportGroupsNotFound -
+L BatchGetReportsInput.ReportArns -
+L BatchGetReportsOutput.Reports Report
+L BatchGetReportsOutput.ReportsNotFound -
+L BatchRestrictions.ComputeTypesAllowed -
+L Build.ExportedEnvironmentVariables ExportedEnvironmentVariable
+L Build.FileSystemLocations ProjectFileSystemLocation
+L Build.Phases BuildPhase
+L Build.ReportArns -
+L Build.SecondaryArtifacts BuildArtifacts
+L Build.SecondarySourceVersions ProjectSourceVersion
+L Build.SecondarySources ProjectSource
+L BuildBatch.BuildGroups BuildGroup
+L BuildBatch.FileSystemLocations ProjectFileSystemLocation
+L BuildBatch.Phases BuildBatchPhase
+L BuildBatch.SecondaryArtifacts BuildArtifacts
+L BuildBatch.SecondarySourceVersions ProjectSourceVersion
+L BuildBatch.SecondarySources ProjectSource
+L BuildBatchPhase.Contexts PhaseContext
+L BuildGroup.DependsOn -
+L BuildGroup.PriorBuildSummaryList BuildSummary
+L BuildPhase.Contexts PhaseContext
+L BuildSummary.SecondaryArtifacts ResolvedArtifact
+L CreateFleetInput.Tags Tag
+L CreateProjectInput.FileSystemLocations ProjectFileSystemLocation
+L CreateProjectInput.SecondaryArtifacts ProjectArtifacts
+L CreateProjectInput.SecondarySourceVersions ProjectSourceVersion
+L CreateProjectInput.SecondarySources ProjectSource
+L CreateProjectInput.Tags Tag
+L CreateReportGroupInput.Tags Tag
+L DeleteBuildBatchOutput.BuildsDeleted -
+L DeleteBuildBatchOutput.BuildsNotDeleted BuildNotDeleted
+L DescribeCodeCoveragesOutput.CodeCoverages CodeCoverage
+L DescribeTestCasesOutput.TestCases TestCase
+L EnvironmentImage.Versions -
+L EnvironmentLanguage.Images EnvironmentImage
+L EnvironmentPlatform.Languages EnvironmentLanguage
+L Fleet.Tags Tag
+L GetReportGroupTrendOutput.RawData ReportWithRawData
+L ListBuildBatchesForProjectOutput.Ids -
+L ListBuildBatchesOutput.Ids -
+L ListBuildsForProjectOutput.Ids -
+L ListBuildsOutput.Ids -
+L ListCuratedEnvironmentImagesOutput.Platforms EnvironmentPlatform
+L ListFleetsOutput.Fleets -
+L ListProjectsOutput.Projects -
+L ListReportGroupsOutput.ReportGroups -
+L ListReportsForReportGroupOutput.Reports -
+L ListReportsOutput.Reports -
+L ListSharedProjectsOutput.Projects -
+L ListSharedReportGroupsOutput.ReportGroups -
+L ListSourceCredentialsOutput.SourceCredentialsInfos SourceCredentialsInfo
+L Project.FileSystemLocations ProjectFileSystemLocation
+L Project.SecondaryArtifacts ProjectArtifacts
+L Project.SecondarySourceVersions ProjectSourceVersion
+L Project.SecondarySources ProjectSource
+L Project.Tags Tag
+L ProjectCache.Modes CacheMode
+L ProjectEnvironment.EnvironmentVariables EnvironmentVariable
+L ReportGroup.Tags Tag
+L StartBuildBatchInput.EnvironmentVariablesOverride EnvironmentVariable
+L StartBuildBatchInput.SecondaryArtifactsOverride ProjectArtifacts
+L StartBuildBatchInput.SecondarySourcesOverride ProjectSource
+L StartBuildBatchInput.SecondarySourcesVersionOverride ProjectSourceVersion
+L StartBuildInput.EnvironmentVariablesOverride EnvironmentVariable
+L StartBuildInput.SecondaryArtifactsOverride ProjectArtifacts
+L StartBuildInput.SecondarySourcesOverride ProjectSource
+L StartBuildInput.SecondarySourcesVersionOverride ProjectSourceVersion
+L UpdateFleetInput.Tags Tag
+L UpdateProjectInput.FileSystemLocations ProjectFileSystemLocation
+L UpdateProjectInput.SecondaryArtifacts ProjectArtifacts
+L UpdateProjectInput.SecondarySourceVersions ProjectSourceVersion
+L UpdateProjectInput.SecondarySources ProjectSource
+L UpdateProjectInput.Tags Tag
+L UpdateReportGroupInput.Tags Tag
+L VpcConfig.SecurityGroupIds -
+L VpcConfig.Subnets -
+F Build.BuildStatus StatusType
+F BuildArtifacts.BucketOwnerAccess BucketOwnerAccess
+F BuildBatch.BuildBatchStatus StatusType
+F BuildBatchFilter.Status StatusType
+F BuildBatchPhase.PhaseStatus StatusType
+F BuildBatchPhase.PhaseType BuildBatchPhaseType
+F BuildPhase.PhaseStatus StatusType
+F BuildPhase.PhaseType BuildPhaseType
+F BuildSummary.BuildStatus StatusType
+F CloudWatchLogsConfig.Status LogsConfigStatusType
+F CommandExecution.Type CommandType
+F ComputeConfiguration.MachineType MachineType
+F CreateFleetInput.ComputeType ComputeType
+F CreateFleetInput.EnvironmentType EnvironmentType
+F CreateFleetInput.OverflowBehavior FleetOverflowBehavior
+F CreateReportGroupInput.Type ReportType
+F CreateWebhookInput.BuildType WebhookBuildType
+F DescribeCodeCoveragesInput.SortBy ReportCodeCoverageSortByType
+F DescribeCodeCoveragesInput.SortOrder SortOrderType
+F DockerServer.ComputeType ComputeType
+F EnvironmentLanguage.Language LanguageType
+F EnvironmentPlatform.Platform PlatformType
+F EnvironmentVariable.Type EnvironmentVariableType
+F Fleet.ComputeType ComputeType
+F Fleet.EnvironmentType EnvironmentType
+F Fleet.OverflowBehavior FleetOverflowBehavior
+F FleetProxyRule.Effect FleetProxyRuleEffectType
+F FleetProxyRule.Type FleetProxyRuleType
+F FleetStatus.Context FleetContextCode
+F FleetStatus.StatusCode FleetStatusCode
+F GetReportGroupTrendInput.TrendField ReportGroupTrendFieldType
+F ImportSourceCredentialsInput.AuthType AuthType
+F ImportSourceCredentialsInput.ServerType ServerType
+F ListBuildBatchesForProjectInput.SortOrder SortOrderType
+F ListBuildBatchesInput.SortOrder SortOrderType
+F ListBuildsForProjectInput.SortOrder SortOrderType
+F ListBuildsInput.SortOrder SortOrderType
+F ListCommandExecutionsForSandboxInput.SortOrder SortOrderType
+F ListFleetsInput.SortBy FleetSortByType
+F ListFleetsInput.SortOrder SortOrderType
+F ListProjectsInput.SortBy ProjectSortByType
+F ListProjectsInput.SortOrder SortOrderType
+F ListReportGroupsInput.SortBy ReportGroupSortByType
+F ListReportGroupsInput.SortOrder SortOrderType
+F ListReportsForReportGroupInput.SortOrder SortOrderType
+F ListReportsInput.SortOrder SortOrderType
+F ListSandboxesForProjectInput.SortOrder SortOrderType
+F ListSandboxesInput.SortOrder SortOrderType
+F ListSharedProjectsInput.SortBy SharedResourceSortByType
+F ListSharedProjectsInput.SortOrder SortOrderType
+F ListSharedReportGroupsInput.SortBy SharedResourceSortByType
+F ListSharedReportGroupsInput.SortOrder SortOrderType
+F Project.ProjectVisibility ProjectVisibilityType
+F ProjectArtifacts.BucketOwnerAccess BucketOwnerAccess
+F ProjectArtifacts.NamespaceType ArtifactNamespace
+F ProjectArtifacts.Packaging ArtifactPackaging
+F ProjectArtifacts.Type ArtifactsType
+F ProjectBuildBatchConfig.BatchReportMode BatchReportModeType
+F ProjectCache.Modes CacheMode
+F ProjectCache.Type CacheType
+F ProjectEnvironment.ComputeType ComputeType
+F ProjectEnvironment.HostKernel HostKernel
+F ProjectEnvironment.ImagePullCredentialsType ImagePullCredentialsType
+F ProjectEnvironment.Type EnvironmentType
+F ProjectFileSystemLocation.Type FileSystemType
+F ProjectSource.Type SourceType
+F ProxyConfiguration.DefaultBehavior FleetProxyRuleBehavior
+F PullRequestBuildPolicy.ApproverRoles PullRequestBuildApproverRole
+F PullRequestBuildPolicy.RequiresCommentApproval PullRequestBuildCommentApproval
+F RegistryCredential.CredentialProvider CredentialProviderType
+F Report.Status ReportStatusType
+F Report.Type ReportType
+F ReportExportConfig.ExportConfigType ReportExportConfigType
+F ReportFilter.Status ReportStatusType
+F ReportGroup.Status ReportGroupStatusType
+F ReportGroup.Type ReportType
+F ResolvedArtifact.Type ArtifactsType
+F RetryBuildBatchInput.RetryType RetryBuildBatchType
+F S3LogsConfig.BucketOwnerAccess BucketOwnerAccess
+F S3LogsConfig.Status LogsConfigStatusType
+F S3ReportExportConfig.Packaging ReportPackagingType
+F SandboxSessionPhase.PhaseStatus StatusType
+F ScalingConfigurationInput.ScalingType FleetScalingType
+F ScalingConfigurationOutput.ScalingType FleetScalingType
+F ScopeConfiguration.Scope WebhookScopeType
+F SourceAuth.Type SourceAuthType
+F SourceCredentialsInfo.AuthType AuthType
+F SourceCredentialsInfo.ServerType ServerType
+F StartBuildBatchInput.ComputeTypeOverride ComputeType
+F StartBuildBatchInput.EnvironmentTypeOverride EnvironmentType
+F StartBuildBatchInput.ImagePullCredentialsTypeOverride ImagePullCredentialsType
+F StartBuildBatchInput.SourceTypeOverride SourceType
+F StartBuildInput.ComputeTypeOverride ComputeType
+F StartBuildInput.EnvironmentTypeOverride EnvironmentType
+F StartBuildInput.HostKernelOverride HostKernel
+F StartBuildInput.ImagePullCredentialsTypeOverride ImagePullCredentialsType
+F StartBuildInput.SourceTypeOverride SourceType
+F StartCommandExecutionInput.Type CommandType
+F TargetTrackingScalingConfiguration.MetricType FleetScalingMetricType
+F UpdateFleetInput.ComputeType ComputeType
+F UpdateFleetInput.EnvironmentType EnvironmentType
+F UpdateFleetInput.OverflowBehavior FleetOverflowBehavior
+F UpdateProjectVisibilityInput.ProjectVisibility ProjectVisibilityType
+F UpdateProjectVisibilityOutput.ProjectVisibility ProjectVisibilityType
+F UpdateWebhookInput.BuildType WebhookBuildType
+F Webhook.BuildType WebhookBuildType
+F Webhook.Status WebhookStatus
+F WebhookFilter.Type WebhookFilterType
+N APIOptions
+N AppID
+N Arn
+N ArtifactIdentifier
+N Artifacts
+N ArtifactsOverride
+N Auth
+N AuthSchemePreference
+N AuthSchemeResolver
+N AuthSchemes
+N AutoRetryConfig
+N AutoRetryLimit
+N AutoRetryLimitOverride
+N AutoRetryNumber
+N Average
+N Badge
+N BadgeEnabled
+N BadgeRequestUrl
+N BaseCapacity
+N BaseEndpoint
+N BranchCoveragePercentage
+N BranchFilter
+N BranchesCovered
+N BranchesMissed
+N Bucket
+N BucketOwner
+N Build
+N BuildBatch
+N BuildBatchArn
+N BuildBatchConfig
+N BuildBatchConfigOverride
+N BuildBatchNumber
+N BuildBatches
+N BuildBatchesNotFound
+N BuildComplete
+N BuildGroups
+N BuildNumber
+N BuildStatusConfig
+N BuildStatusConfigOverride
+N BuildTimeoutInMinutes
+N BuildTimeoutInMinutesOverride
+N Builds
+N BuildsDeleted
+N BuildsNotDeleted
+N BuildsNotFound
+N Buildspec
+N BuildspecOverride
+N Cache
+N CacheNamespace
+N CacheOverride
+N Certificate
+N CertificateOverride
+N ClientLogMode
+N CloudWatchLogs
+N CloudWatchLogsArn
+N CodeCoverageSummary
+N CodeCoverages
+N CombineArtifacts
+N Command
+N CommandExecution
+N CommandExecutionIds
+N CommandExecutions
+N CommandExecutionsNotFound
+N Complete
+N ComputeConfiguration
+N ComputeTypesAllowed
+N ConcurrentBuildLimit
+N Context
+N Contexts
+N Created
+N Credential
+N Credentials
+N CurrentBuildSummary
+N CurrentPhase
+N CurrentSession
+N Data
+N DebugSession
+N DebugSessionEnabled
+N DeepLink
+N DefaultsMode
+N DeleteReports
+N DependsOn
+N Description
+N DesiredCapacity
+N DisableClockSkewCorrection
+N DisableHTTPS
+N Disk
+N DockerServer
+N Domain
+N DurationInNanoSeconds
+N DurationInSeconds
+N EncryptionDisabled
+N EncryptionKey
+N EncryptionKeyOverride
+N EndTime
+N Endpoint
+N EndpointOptions
+N EndpointResolver
+N EndpointResolverV2
+N Entities
+N Environment
+N EnvironmentVariables
+N EnvironmentVariablesOverride
+N ErrorCodeOverride
+N ExcludeMatchedPattern
+N ExecutionId
+N ExitCode
+N Expired
+N ExportConfig
+N ExportedEnvironmentVariables
+N FetchSubmodules
+N FilePath
+N FileSystemLocations
+N Filter
+N FilterGroups
+N Fleet
+N FleetArn
+N FleetOverride
+N FleetServiceRole
+N Fleets
+N FleetsAllowed
+N FleetsNotFound
+N GitCloneDepth
+N GitCloneDepthOverride
+N GitSubmodulesConfig
+N GitSubmodulesConfigOverride
+N GroupName
+N HTTPClient
+N HTTPSignerV4
+N Id
+N IdempotencyToken
+N Identifier
+N Ids
+N IgnoreFailure
+N Image
+N ImageId
+N ImageOverride
+N Images
+N Initiator
+N InsecureSsl
+N InsecureSslOverride
+N InstanceType
+N Interceptors
+N Key
+N Keyword
+N Languages
+N LastModified
+N LastModifiedSecret
+N Limit
+N LineCoveragePercentage
+N LinesCovered
+N LinesMissed
+N Location
+N LogConfig
+N LogDeprecated
+N Logger
+N Logs
+N LogsConfig
+N LogsConfigOverride
+N ManualCreation
+N Max
+N MaxCapacity
+N MaxLineCoveragePercentage
+N MaxResults
+N MaximumBuildsAllowed
+N Md5sum
+N Memory
+N Message
+N MeterProvider
+N Min
+N MinLineCoveragePercentage
+N MountOptions
+N MountPoint
+N Name
+N Names
+N NetworkInterface
+N NetworkInterfaceId
+N NextAutoRetry
+N NextToken
+N NumOfReports
+N Operation
+N Options
+N OrderedProxyRules
+N OverrideArtifactName
+N Path
+N Pattern
+N PayloadUrl
+N PhaseType
+N Phases
+N Platforms
+N Policy
+N Prefix
+N PreviousAutoRetry
+N PrimaryArtifact
+N PriorBuildSummaryList
+N PrivilegedMode
+N PrivilegedModeOverride
+N Project
+N ProjectArn
+N ProjectName
+N Projects
+N ProjectsNotFound
+N Protocol
+N ProxyConfiguration
+N PublicProjectAlias
+N PullRequestBuildPolicy
+N QueuedTimeoutInMinutes
+N QueuedTimeoutInMinutesOverride
+N RawData
+N Region
+N RegistryCredential
+N RegistryCredentialOverride
+N ReportARN
+N ReportArn
+N ReportArns
+N ReportBuildBatchStatusOverride
+N ReportBuildStatus
+N ReportBuildStatusOverride
+N ReportGroup
+N ReportGroupArn
+N ReportGroupArns
+N ReportGroups
+N ReportGroupsNotFound
+N Reports
+N ReportsNotFound
+N RequestTime
+N RequestedOn
+N ResolvedRegion
+N ResolvedSourceVersion
+N Resolver
+N Resource
+N ResourceAccessRole
+N ResourceArn
+N Restrictions
+N ResultMetadata
+N RetryMaxAttempts
+N RetryMode
+N Retryer
+N RotateSecret
+N RuntimeEnvironment
+N S3DeepLink
+N S3Destination
+N S3Logs
+N S3LogsArn
+N Sandbox
+N SandboxArn
+N SandboxId
+N Sandboxes
+N SandboxesNotFound
+N ScalingConfiguration
+N ScopeConfiguration
+N SecondaryArtifacts
+N SecondaryArtifactsOverride
+N SecondarySourceVersions
+N SecondarySources
+N SecondarySourcesOverride
+N SecondarySourcesVersionOverride
+N Secret
+N SecurityGroupIds
+N ServiceRole
+N ServiceRoleOverride
+N SessionEnabled
+N SessionId
+N SessionTarget
+N Sha256sum
+N ShouldOverwrite
+N Source
+N SourceAuthOverride
+N SourceCredentialsInfos
+N SourceIdentifier
+N SourceLocationOverride
+N SourceVersion
+N SsmSession
+N StandardErrContent
+N StandardOutputContent
+N StartTime
+N Stats
+N Status
+N StatusCode
+N StatusCounts
+N StatusMessage
+N StopOnDuplicateToken
+N StreamName
+N StreamUrl
+N SubmitTime
+N SubnetId
+N Subnets
+N Tags
+N TargetTrackingScalingConfigs
+N TargetUrl
+N TargetValue
+N TestCases
+N TestRawDataPath
+N TestSuiteName
+N TestSummary
+N TimeoutInMins
+N TimeoutInMinutes
+N TimeoutInMinutesOverride
+N Token
+N TokenValue
+N Total
+N TracerProvider
+N Truncated
+N Url
+N UseDualStack
+N UseDualStackEndpoint
+N UseFIPS
+N UseFIPSEndpoint
+N Username
+N VCpu
+N Value
+N Versions
+N VpcConfig
+N VpcId
+N Webhook
+T AccountLimitExceededException
+T AccountSuspendedException
+T ArtifactNamespace
+T ArtifactPackaging
+T ArtifactsType
+T AuthType
+T AutoRetryConfig
+T BatchReportModeType
+T BatchRestrictions
+T BucketOwnerAccess
+T Build
+T BuildArtifacts
+T BuildBatch
+T BuildBatchFilter
+T BuildBatchPhase
+T BuildBatchPhaseType
+T BuildGroup
+T BuildNotDeleted
+T BuildPhase
+T BuildPhaseType
+T BuildStatusConfig
+T BuildSummary
+T CacheMode
+T CacheType
+T CloudWatchLogsConfig
+T CodeCoverage
+T CodeCoverageReportSummary
+T CommandExecution
+T CommandType
+T ComputeConfiguration
+T ComputeType
+T CredentialProviderType
+T DebugSession
+T DockerServer
+T DockerServerStatus
+T EnvironmentImage
+T EnvironmentLanguage
+T EnvironmentPlatform
+T EnvironmentType
+T EnvironmentVariable
+T EnvironmentVariableType
+T ExportedEnvironmentVariable
+T FileSystemType
+T Fleet
+T FleetContextCode
+T FleetOverflowBehavior
+T FleetProxyRule
+T FleetProxyRuleBehavior
+T FleetProxyRuleEffectType
+T FleetProxyRuleType
+T FleetScalingMetricType
+T FleetScalingType
+T FleetSortByType
+T FleetStatus
+T FleetStatusCode
+T GitSubmodulesConfig
+T HostKernel
+T ImagePullCredentialsType
+T InvalidInputException
+T LanguageType
+T LogsConfig
+T LogsConfigStatusType
+T LogsLocation
+T MachineType
+T NetworkInterface
+T OAuthProviderException
+T PhaseContext
+T PlatformType
+T Project
+T ProjectArtifacts
+T ProjectBadge
+T ProjectBuildBatchConfig
+T ProjectCache
+T ProjectEnvironment
+T ProjectFileSystemLocation
+T ProjectFleet
+T ProjectSortByType
+T ProjectSource
+T ProjectSourceVersion
+T ProjectVisibilityType
+T ProxyConfiguration
+T PullRequestBuildApproverRole
+T PullRequestBuildCommentApproval
+T PullRequestBuildPolicy
+T RegistryCredential
+T Report
+T ReportCodeCoverageSortByType
+T ReportExportConfig
+T ReportExportConfigType
+T ReportFilter
+T ReportGroup
+T ReportGroupSortByType
+T ReportGroupStatusType
+T ReportGroupTrendFieldType
+T ReportGroupTrendStats
+T ReportPackagingType
+T ReportStatusType
+T ReportType
+T ReportWithRawData
+T ResolvedArtifact
+T ResourceAlreadyExistsException
+T ResourceNotFoundException
+T RetryBuildBatchType
+T S3LogsConfig
+T S3ReportExportConfig
+T SSMSession
+T Sandbox
+T SandboxSession
+T SandboxSessionPhase
+T ScalingConfigurationInput
+T ScalingConfigurationOutput
+T ScopeConfiguration
+T ServerType
+T SharedResourceSortByType
+T SortOrderType
+T SourceAuth
+T SourceAuthType
+T SourceCredentialsInfo
+T SourceType
+T StatusType
+T Tag
+T TargetTrackingScalingConfiguration
+T TestCase
+T TestCaseFilter
+T TestReportSummary
+T VpcConfig
+T Webhook
+T WebhookBuildType
+T WebhookFilter
+T WebhookFilterType
+T WebhookScopeType
+T WebhookStatus
+E ArtifactNamespaceBuildId ArtifactNamespace
+E ArtifactNamespaceNone ArtifactNamespace
+E ArtifactPackagingNone ArtifactPackaging
+E ArtifactPackagingZip ArtifactPackaging
+E ArtifactsTypeCodepipeline ArtifactsType
+E ArtifactsTypeNoArtifacts ArtifactsType
+E ArtifactsTypeS3 ArtifactsType
+E AuthTypeBasicAuth AuthType
+E AuthTypeCodeconnections AuthType
+E AuthTypeOauth AuthType
+E AuthTypePersonalAccessToken AuthType
+E AuthTypeSecretsManager AuthType
+E BatchReportModeTypeReportAggregatedBatch BatchReportModeType
+E BatchReportModeTypeReportIndividualBuilds BatchReportModeType
+E BucketOwnerAccessFull BucketOwnerAccess
+E BucketOwnerAccessNone BucketOwnerAccess
+E BucketOwnerAccessReadOnly BucketOwnerAccess
+E BuildBatchPhaseTypeCombineArtifacts BuildBatchPhaseType
+E BuildBatchPhaseTypeDownloadBatchspec BuildBatchPhaseType
+E BuildBatchPhaseTypeFailed BuildBatchPhaseType
+E BuildBatchPhaseTypeInProgress BuildBatchPhaseType
+E BuildBatchPhaseTypeStopped BuildBatchPhaseType
+E BuildBatchPhaseTypeSubmitted BuildBatchPhaseType
+E BuildBatchPhaseTypeSucceeded BuildBatchPhaseType
+E BuildPhaseTypeBuild BuildPhaseType
+E BuildPhaseTypeCompleted BuildPhaseType
+E BuildPhaseTypeDownloadSource BuildPhaseType
+E BuildPhaseTypeFinalizing BuildPhaseType
+E BuildPhaseTypeInstall BuildPhaseType
+E BuildPhaseTypePostBuild BuildPhaseType
+E BuildPhaseTypePreBuild BuildPhaseType
+E BuildPhaseTypeProvisioning BuildPhaseType
+E BuildPhaseTypeQueued BuildPhaseType
+E BuildPhaseTypeSubmitted BuildPhaseType
+E BuildPhaseTypeUploadArtifacts BuildPhaseType
+E CacheModeLocalCustomCache CacheMode
+E CacheModeLocalDockerLayerCache CacheMode
+E CacheModeLocalSourceCache CacheMode
+E CacheTypeLocal CacheType
+E CacheTypeNoCache CacheType
+E CacheTypeS3 CacheType
+E CommandTypeShell CommandType
+E ComputeTypeAttributeBasedCompute ComputeType
+E ComputeTypeBuildGeneral12xlarge ComputeType
+E ComputeTypeBuildGeneral1Large ComputeType
+E ComputeTypeBuildGeneral1Medium ComputeType
+E ComputeTypeBuildGeneral1Small ComputeType
+E ComputeTypeBuildGeneral1Xlarge ComputeType
+E ComputeTypeBuildLambda10gb ComputeType
+E ComputeTypeBuildLambda1gb ComputeType
+E ComputeTypeBuildLambda2gb ComputeType
+E ComputeTypeBuildLambda4gb ComputeType
+E ComputeTypeBuildLambda8gb ComputeType
+E ComputeTypeCustomInstanceType ComputeType
+E CredentialProviderTypeSecretsManager CredentialProviderType
+E EnvironmentTypeArmContainer EnvironmentType
+E EnvironmentTypeArmEc2 EnvironmentType
+E EnvironmentTypeArmLambdaContainer EnvironmentType
+E EnvironmentTypeLinuxContainer EnvironmentType
+E EnvironmentTypeLinuxEc2 EnvironmentType
+E EnvironmentTypeLinuxGpuContainer EnvironmentType
+E EnvironmentTypeLinuxLambdaContainer EnvironmentType
+E EnvironmentTypeMacArm EnvironmentType
+E EnvironmentTypeWindowsContainer EnvironmentType
+E EnvironmentTypeWindowsEc2 EnvironmentType
+E EnvironmentTypeWindowsServer2019Container EnvironmentType
+E EnvironmentTypeWindowsServer2022Container EnvironmentType
+E EnvironmentVariableTypeParameterStore EnvironmentVariableType
+E EnvironmentVariableTypePlaintext EnvironmentVariableType
+E EnvironmentVariableTypeSecretsManager EnvironmentVariableType
+E FileSystemTypeEfs FileSystemType
+E FleetContextCodeActionRequired FleetContextCode
+E FleetContextCodeCreateFailed FleetContextCode
+E FleetContextCodeInsufficientCapacity FleetContextCode
+E FleetContextCodePendingDeletion FleetContextCode
+E FleetContextCodeUpdateFailed FleetContextCode
+E FleetOverflowBehaviorOnDemand FleetOverflowBehavior
+E FleetOverflowBehaviorQueue FleetOverflowBehavior
+E FleetProxyRuleBehaviorAllowAll FleetProxyRuleBehavior
+E FleetProxyRuleBehaviorDenyAll FleetProxyRuleBehavior
+E FleetProxyRuleEffectTypeAllow FleetProxyRuleEffectType
+E FleetProxyRuleEffectTypeDeny FleetProxyRuleEffectType
+E FleetProxyRuleTypeDomain FleetProxyRuleType
+E FleetProxyRuleTypeIp FleetProxyRuleType
+E FleetScalingMetricTypeFleetUtilizationRate FleetScalingMetricType
+E FleetScalingTypeTargetTrackingScaling FleetScalingType
+E FleetSortByTypeCreatedTime FleetSortByType
+E FleetSortByTypeLastModifiedTime FleetSortByType
+E FleetSortByTypeName FleetSortByType
+E FleetStatusCodeActive FleetStatusCode
+E FleetStatusCodeCreateFailed FleetStatusCode
+E FleetStatusCodeCreating FleetStatusCode
+E FleetStatusCodeDeleting FleetStatusCode
+E FleetStatusCodePendingDeletion FleetStatusCode
+E FleetStatusCodeRotating FleetStatusCode
+E FleetStatusCodeUpdateRollbackFailed FleetStatusCode
+E FleetStatusCodeUpdating FleetStatusCode
+E HostKernelLinuxKernel4 HostKernel
+E HostKernelLinuxKernel6 HostKernel
+E HostKernelLinuxKernelLatest HostKernel
+E ImagePullCredentialsTypeCodebuild ImagePullCredentialsType
+E ImagePullCredentialsTypeServiceRole ImagePullCredentialsType
+E LanguageTypeAndroid LanguageType
+E LanguageTypeBase LanguageType
+E LanguageTypeDocker LanguageType
+E LanguageTypeDotnet LanguageType
+E LanguageTypeGolang LanguageType
+E LanguageTypeJava LanguageType
+E LanguageTypeNodeJs LanguageType
+E LanguageTypePhp LanguageType
+E LanguageTypePython LanguageType
+E LanguageTypeRuby LanguageType
+E LogsConfigStatusTypeDisabled LogsConfigStatusType
+E LogsConfigStatusTypeEnabled LogsConfigStatusType
+E MachineTypeGeneral MachineType
+E MachineTypeNvme MachineType
+E PlatformTypeAmazonLinux PlatformType
+E PlatformTypeDebian PlatformType
+E PlatformTypeUbuntu PlatformType
+E PlatformTypeWindowsServer PlatformType
+E ProjectSortByTypeCreatedTime ProjectSortByType
+E ProjectSortByTypeLastModifiedTime ProjectSortByType
+E ProjectSortByTypeName ProjectSortByType
+E ProjectVisibilityTypePrivate ProjectVisibilityType
+E ProjectVisibilityTypePublicRead ProjectVisibilityType
+E PullRequestBuildApproverRoleBitbucketAdmin PullRequestBuildApproverRole
+E PullRequestBuildApproverRoleBitbucketRead PullRequestBuildApproverRole
+E PullRequestBuildApproverRoleBitbucketWrite PullRequestBuildApproverRole
+E PullRequestBuildApproverRoleGithubAdmin PullRequestBuildApproverRole
+E PullRequestBuildApproverRoleGithubMaintain PullRequestBuildApproverRole
+E PullRequestBuildApproverRoleGithubRead PullRequestBuildApproverRole
+E PullRequestBuildApproverRoleGithubTriage PullRequestBuildApproverRole
+E PullRequestBuildApproverRoleGithubWrite PullRequestBuildApproverRole
+E PullRequestBuildApproverRoleGitlabDeveloper PullRequestBuildApproverRole
+E PullRequestBuildApproverRoleGitlabGuest PullRequestBuildApproverRole
+E PullRequestBuildApproverRoleGitlabMaintainer PullRequestBuildApproverRole
+E PullRequestBuildApproverRoleGitlabOwner PullRequestBuildApproverRole
+E PullRequestBuildApproverRoleGitlabPlanner PullRequestBuildApproverRole
+E PullRequestBuildApproverRoleGitlabReporter PullRequestBuildApproverRole
+E PullRequestBuildCommentApprovalAllPullRequests PullRequestBuildCommentApproval
+E PullRequestBuildCommentApprovalDisabled PullRequestBuildCommentApproval
+E PullRequestBuildCommentApprovalForkPullRequests PullRequestBuildCommentApproval
+E ReportCodeCoverageSortByTypeFilePath ReportCodeCoverageSortByType
+E ReportCodeCoverageSortByTypeLineCoveragePercentage ReportCodeCoverageSortByType
+E ReportExportConfigTypeNoExport ReportExportConfigType
+E ReportExportConfigTypeS3 ReportExportConfigType
+E ReportGroupSortByTypeCreatedTime ReportGroupSortByType
+E ReportGroupSortByTypeLastModifiedTime ReportGroupSortByType
+E ReportGroupSortByTypeName ReportGroupSortByType
+E ReportGroupStatusTypeActive ReportGroupStatusType
+E ReportGroupStatusTypeDeleting ReportGroupStatusType
+E ReportGroupTrendFieldTypeBranchCoverage ReportGroupTrendFieldType
+E ReportGroupTrendFieldTypeBranchesCovered ReportGroupTrendFieldType
+E ReportGroupTrendFieldTypeBranchesMissed ReportGroupTrendFieldType
+E ReportGroupTrendFieldTypeDuration ReportGroupTrendFieldType
+E ReportGroupTrendFieldTypeLineCoverage ReportGroupTrendFieldType
+E ReportGroupTrendFieldTypeLinesCovered ReportGroupTrendFieldType
+E ReportGroupTrendFieldTypeLinesMissed ReportGroupTrendFieldType
+E ReportGroupTrendFieldTypePassRate ReportGroupTrendFieldType
+E ReportGroupTrendFieldTypeTotal ReportGroupTrendFieldType
+E ReportPackagingTypeNone ReportPackagingType
+E ReportPackagingTypeZip ReportPackagingType
+E ReportStatusTypeDeleting ReportStatusType
+E ReportStatusTypeFailed ReportStatusType
+E ReportStatusTypeGenerating ReportStatusType
+E ReportStatusTypeIncomplete ReportStatusType
+E ReportStatusTypeSucceeded ReportStatusType
+E ReportTypeCodeCoverage ReportType
+E ReportTypeTest ReportType
+E RetryBuildBatchTypeRetryAllBuilds RetryBuildBatchType
+E RetryBuildBatchTypeRetryFailedBuilds RetryBuildBatchType
+E ServerTypeBitbucket ServerType
+E ServerTypeGithub ServerType
+E ServerTypeGithubEnterprise ServerType
+E ServerTypeGitlab ServerType
+E ServerTypeGitlabSelfManaged ServerType
+E SharedResourceSortByTypeArn SharedResourceSortByType
+E SharedResourceSortByTypeModifiedTime SharedResourceSortByType
+E SortOrderTypeAscending SortOrderType
+E SortOrderTypeDescending SortOrderType
+E SourceAuthTypeCodeconnections SourceAuthType
+E SourceAuthTypeOauth SourceAuthType
+E SourceAuthTypeSecretsManager SourceAuthType
+E SourceTypeBitbucket SourceType
+E SourceTypeCodecommit SourceType
+E SourceTypeCodepipeline SourceType
+E SourceTypeGithub SourceType
+E SourceTypeGithubEnterprise SourceType
+E SourceTypeGitlab SourceType
+E SourceTypeGitlabSelfManaged SourceType
+E SourceTypeNoSource SourceType
+E SourceTypeS3 SourceType
+E StatusTypeFailed StatusType
+E StatusTypeFault StatusType
+E StatusTypeInProgress StatusType
+E StatusTypeStopped StatusType
+E StatusTypeSucceeded StatusType
+E StatusTypeTimedOut StatusType
+E WebhookBuildTypeBuild WebhookBuildType
+E WebhookBuildTypeBuildBatch WebhookBuildType
+E WebhookBuildTypeRunnerBuildkiteBuild WebhookBuildType
+E WebhookFilterTypeActorAccountId WebhookFilterType
+E WebhookFilterTypeBaseRef WebhookFilterType
+E WebhookFilterTypeCommitMessage WebhookFilterType
+E WebhookFilterTypeEvent WebhookFilterType
+E WebhookFilterTypeFilePath WebhookFilterType
+E WebhookFilterTypeHeadRef WebhookFilterType
+E WebhookFilterTypeOrganizationName WebhookFilterType
+E WebhookFilterTypeReleaseName WebhookFilterType
+E WebhookFilterTypeRepositoryName WebhookFilterType
+E WebhookFilterTypeTagName WebhookFilterType
+E WebhookFilterTypeWorkflowName WebhookFilterType
+E WebhookScopeTypeGithubGlobal WebhookScopeType
+E WebhookScopeTypeGithubOrganization WebhookScopeType
+E WebhookScopeTypeGitlabGroup WebhookScopeType
+E WebhookStatusActive WebhookStatus
+E WebhookStatusCreateFailed WebhookStatus
+E WebhookStatusCreating WebhookStatus
+E WebhookStatusDeleting WebhookStatus
+H ImportSourceCredentialsInput.Token
+H ListFleetsInput.NextToken
+K BatchDeleteBuildsInput 001 Ids req nil
+K BatchDeleteBuildsInput 002 Ids len 1 container
+K BatchGetBuildBatchesInput 001 Ids req nil
+K BatchGetBuildsInput 001 Ids req nil
+K BatchGetBuildsInput 002 Ids len 1 container
+K BatchGetFleetsInput 001 Names req nil
+K BatchGetFleetsInput 002 Names len 1 container
+K BatchGetProjectsInput 001 Names req nil
+K BatchGetProjectsInput 002 Names len 1 container
+K BatchGetReportGroupsInput 001 ReportGroupArns req nil
+K BatchGetReportGroupsInput 002 ReportGroupArns len 1 container
+K BatchGetReportsInput 001 ReportArns req nil
+K BatchGetReportsInput 002 ReportArns len 1 container
+K CloudWatchLogsConfig 001 Status req empty
+K CreateFleetInput 001 BaseCapacity req nil
+K CreateFleetInput 002 BaseCapacity min 1 ptr
+K CreateFleetInput 003 ComputeType req empty
+K CreateFleetInput 004 EnvironmentType req empty
+K CreateFleetInput 005 FleetServiceRole len 1 ptr
+K CreateFleetInput 006 Name req nil
+K CreateFleetInput 007 Name len 2 ptr
+K CreateFleetInput 008 ScalingConfiguration nest ScalingConfigurationInput
+K CreateFleetInput 009 Tags each Tag slice
+K CreateFleetInput 010 VpcConfig nest VpcConfig
+K CreateProjectInput 001 Artifacts req nil
+K CreateProjectInput 002 EncryptionKey len 1 ptr
+K CreateProjectInput 003 Environment req nil
+K CreateProjectInput 004 Name req nil
+K CreateProjectInput 005 Name len 2 ptr
+K CreateProjectInput 006 QueuedTimeoutInMinutes min 5 ptr
+K CreateProjectInput 007 ServiceRole req nil
+K CreateProjectInput 008 ServiceRole len 1 ptr
+K CreateProjectInput 009 Source req nil
+K CreateProjectInput 010 TimeoutInMinutes min 5 ptr
+K CreateProjectInput 011 Artifacts nest ProjectArtifacts
+K CreateProjectInput 012 BuildBatchConfig nest ProjectBuildBatchConfig
+K CreateProjectInput 013 Cache nest ProjectCache
+K CreateProjectInput 014 Environment nest ProjectEnvironment
+K CreateProjectInput 015 LogsConfig nest LogsConfig
+K CreateProjectInput 016 SecondaryArtifacts each ProjectArtifacts slice
+K CreateProjectInput 017 SecondarySourceVersions each ProjectSourceVersion slice
+K CreateProjectInput 018 SecondarySources each ProjectSource slice
+K CreateProjectInput 019 Source nest ProjectSource
+K CreateProjectInput 020 Tags each Tag slice
+K CreateProjectInput 021 VpcConfig nest VpcConfig
+K CreateReportGroupInput 001 ExportConfig req nil
+K CreateReportGroupInput 002 Name req nil
+K CreateReportGroupInput 003 Name len 2 ptr
+K CreateReportGroupInput 004 Type req empty
+K CreateReportGroupInput 005 ExportConfig nest ReportExportConfig
+K CreateReportGroupInput 006 Tags each Tag slice
+K CreateWebhookInput 001 ProjectName req nil
+K CreateWebhookInput 002 ProjectName len 2 ptr
+K CreateWebhookInput 003 ScopeConfiguration nest ScopeConfiguration
+K DeleteBuildBatchInput 001 Id req nil
+K DeleteBuildBatchInput 002 Id len 1 ptr
+K DeleteFleetInput 001 Arn req nil
+K DeleteFleetInput 002 Arn len 1 ptr
+K DeleteProjectInput 001 Name req nil
+K DeleteProjectInput 002 Name len 1 ptr
+K DeleteReportGroupInput 001 Arn req nil
+K DeleteReportGroupInput 002 Arn len 1 ptr
+K DeleteReportInput 001 Arn req nil
+K DeleteReportInput 002 Arn len 1 ptr
+K DeleteResourcePolicyInput 001 ResourceArn req nil
+K DeleteResourcePolicyInput 002 ResourceArn len 1 ptr
+K DeleteSourceCredentialsInput 001 Arn req nil
+K DeleteSourceCredentialsInput 002 Arn len 1 ptr
+K DeleteWebhookInput 001 ProjectName req nil
+K DeleteWebhookInput 002 ProjectName len 2 ptr
+K DescribeCodeCoveragesInput 001 MaxResults min 1 ptr
+K DescribeCodeCoveragesInput 002 ReportArn req nil
+K DescribeCodeCoveragesInput 003 ReportArn len 1 ptr
+K DescribeTestCasesInput 001 MaxResults min 1 ptr
+K DescribeTestCasesInput 002 ReportArn req nil
+K EnvironmentVariable 001 Name req nil
+K EnvironmentVariable 002 Name len 1 ptr
+K EnvironmentVariable 003 Value req nil
+K GetReportGroupTrendInput 001 NumOfReports min 1 ptr
+K GetReportGroupTrendInput 002 ReportGroupArn req nil
+K GetReportGroupTrendInput 003 ReportGroupArn len 1 ptr
+K GetReportGroupTrendInput 004 TrendField req empty
+K GetResourcePolicyInput 001 ResourceArn req nil
+K GetResourcePolicyInput 002 ResourceArn len 1 ptr
+K GitSubmodulesConfig 001 FetchSubmodules req nil
+K ImportSourceCredentialsInput 001 AuthType req empty
+K ImportSourceCredentialsInput 002 ServerType req empty
+K ImportSourceCredentialsInput 003 Token req nil
+K ImportSourceCredentialsInput 004 Token len 1 ptr
+K ImportSourceCredentialsInput 005 Username len 1 ptr
+K InvalidateProjectCacheInput 001 ProjectName req nil
+K InvalidateProjectCacheInput 002 ProjectName len 1 ptr
+K ListBuildBatchesForProjectInput 001 MaxResults min 1 ptr
+K ListBuildBatchesForProjectInput 002 ProjectName len 1 ptr
+K ListBuildBatchesInput 001 MaxResults min 1 ptr
+K ListBuildsForProjectInput 001 ProjectName req nil
+K ListBuildsForProjectInput 002 ProjectName len 1 ptr
+K ListFleetsInput 001 MaxResults min 1 ptr
+K ListProjectsInput 001 NextToken len 1 ptr
+K ListReportGroupsInput 001 MaxResults min 1 ptr
+K ListReportsForReportGroupInput 001 MaxResults min 1 ptr
+K ListReportsForReportGroupInput 002 ReportGroupArn req nil
+K ListReportsInput 001 MaxResults min 1 ptr
+K ListSharedProjectsInput 001 MaxResults min 1 ptr
+K ListSharedProjectsInput 002 NextToken len 1 ptr
+K ListSharedReportGroupsInput 001 MaxResults min 1 ptr
+K LogsConfig 001 CloudWatchLogs nest CloudWatchLogsConfig
+K LogsConfig 002 S3Logs nest S3LogsConfig
+K ProjectArtifacts 001 Type req empty
+K ProjectBuildBatchConfig 001 ServiceRole len 1 ptr
+K ProjectCache 001 Type req empty
+K ProjectEnvironment 001 ComputeType req empty
+K ProjectEnvironment 002 Image req nil
+K ProjectEnvironment 003 Image len 1 ptr
+K ProjectEnvironment 004 Type req empty
+K ProjectEnvironment 005 EnvironmentVariables each EnvironmentVariable slice
+K ProjectEnvironment 006 RegistryCredential nest RegistryCredential
+K ProjectSource 001 Type req empty
+K ProjectSource 002 Auth nest SourceAuth
+K ProjectSource 003 GitSubmodulesConfig nest GitSubmodulesConfig
+K ProjectSourceVersion 001 SourceIdentifier req nil
+K ProjectSourceVersion 002 SourceVersion req nil
+K PutResourcePolicyInput 001 Policy req nil
+K PutResourcePolicyInput 002 Policy len 1 ptr
+K PutResourcePolicyInput 003 ResourceArn req nil
+K PutResourcePolicyInput 004 ResourceArn len 1 ptr
+K RegistryCredential 001 Credential req nil
+K RegistryCredential 002 Credential len 1 ptr
+K RegistryCredential 003 CredentialProvider req empty
+K ReportExportConfig 001 S3Destination nest S3ReportExportConfig
+K RetryBuildBatchInput 001 Id len 1 ptr
+K RetryBuildInput 001 Id len 1 ptr
+K S3LogsConfig 001 Status req empty
+K S3ReportExportConfig 001 Bucket len 1 ptr
+K S3ReportExportConfig 002 EncryptionKey len 1 ptr
+K ScalingConfigurationInput_ 000 - unsupported
+K ScopeConfiguration 001 Name req nil
+K ScopeConfiguration 002 Scope req empty
+K SourceAuth 001 Type req empty
+K StartBuildBatchInput 001 BuildTimeoutInMinutesOverride min 5 ptr
+K StartBuildBatchInput 002 EncryptionKeyOverride len 1 ptr
+K StartBuildBatchInput 003 ImageOverride len 1 ptr
+K StartBuildBatchInput 004 ProjectName req nil
+K StartBuildBatchInput 005 ProjectName len 1 ptr
+K StartBuildBatchInput 006 QueuedTimeoutInMinutesOverride min 5 ptr
+K StartBuildBatchInput 007 ServiceRoleOverride len 1 ptr
+K StartBuildBatchInput 008 ArtifactsOverride nest ProjectArtifacts
+K StartBuildBatchInput 009 BuildBatchConfigOverride nest ProjectBuildBatchConfig
+K StartBuildBatchInput 010 CacheOverride nest ProjectCache
+K StartBuildBatchInput 011 EnvironmentVariablesOverride each EnvironmentVariable slice
+K StartBuildBatchInput 012 GitSubmodulesConfigOverride nest GitSubmodulesConfig
+K StartBuildBatchInput 013 LogsConfigOverride nest LogsConfig
+K StartBuildBatchInput 014 RegistryCredentialOverride nest RegistryCredential
+K StartBuildBatchInput 015 SecondaryArtifactsOverride each ProjectArtifacts slice
+K StartBuildBatchInput 016 SecondarySourcesOverride each ProjectSource slice
+K StartBuildBatchInput 017 SecondarySourcesVersionOverride each ProjectSourceVersion slice
+K StartBuildBatchInput 018 SourceAuthOverride nest SourceAuth
+K StartBuildInput 001 EncryptionKeyOverride len 1 ptr
+K StartBuildInput 002 ImageOverride len 1 ptr
+K StartBuildInput 003 ProjectName req nil
+K StartBuildInput 004 ProjectName len 1 ptr
+K StartBuildInput 005 QueuedTimeoutInMinutesOverride min 5 ptr
+K StartBuildInput 006 ServiceRoleOverride len 1 ptr
+K StartBuildInput 007 TimeoutInMinutesOverride min 5 ptr
+K StartBuildInput 008 ArtifactsOverride nest ProjectArtifacts
+K StartBuildInput 009 CacheOverride nest ProjectCache
+K StartBuildInput 010 EnvironmentVariablesOverride each EnvironmentVariable slice
+K StartBuildInput 011 GitSubmodulesConfigOverride nest GitSubmodulesConfig
+K StartBuildInput 012 LogsConfigOverride nest LogsConfig
+K StartBuildInput 013 RegistryCredentialOverride nest RegistryCredential
+K StartBuildInput 014 SecondaryArtifactsOverride each ProjectArtifacts slice
+K StartBuildInput 015 SecondarySourcesOverride each ProjectSource slice
+K StartBuildInput 016 SecondarySourcesVersionOverride each ProjectSourceVersion slice
+K StartBuildInput 017 SourceAuthOverride nest SourceAuth
+K StopBuildBatchInput 001 Id req nil
+K StopBuildBatchInput 002 Id len 1 ptr
+K StopBuildInput 001 Id req nil
+K StopBuildInput 002 Id len 1 ptr
+K Tag 001 Key len 1 ptr
+K UpdateFleetInput 001 Arn req nil
+K UpdateFleetInput 002 Arn len 1 ptr
+K UpdateFleetInput 003 BaseCapacity min 1 ptr
+K UpdateFleetInput 004 FleetServiceRole len 1 ptr
+K UpdateFleetInput 005 ScalingConfiguration nest ScalingConfigurationInput
+K UpdateFleetInput 006 Tags each Tag slice
+K UpdateFleetInput 007 VpcConfig nest VpcConfig
+K UpdateProjectInput 001 EncryptionKey len 1 ptr
+K UpdateProjectInput 002 Name req nil
+K UpdateProjectInput 003 Name len 1 ptr
+K UpdateProjectInput 004 QueuedTimeoutInMinutes min 5 ptr
+K UpdateProjectInput 005 ServiceRole len 1 ptr
+K UpdateProjectInput 006 TimeoutInMinutes min 5 ptr
+K UpdateProjectInput 007 Artifacts nest ProjectArtifacts
+K UpdateProjectInput 008 BuildBatchConfig nest ProjectBuildBatchConfig
+K UpdateProjectInput 009 Cache nest ProjectCache
+K UpdateProjectInput 010 Environment nest ProjectEnvironment
+K UpdateProjectInput 011 LogsConfig nest LogsConfig
+K UpdateProjectInput 012 SecondaryArtifacts each ProjectArtifacts slice
+K UpdateProjectInput 013 SecondarySourceVersions each ProjectSourceVersion slice
+K UpdateProjectInput 014 SecondarySources each ProjectSource slice
+K UpdateProjectInput 015 Source nest ProjectSource
+K UpdateProjectInput 016 Tags each Tag slice
+K UpdateProjectInput 017 VpcConfig nest VpcConfig
+K UpdateProjectVisibilityInput 001 ProjectArn req nil
+K UpdateProjectVisibilityInput 002 ProjectArn len 1 ptr
+K UpdateProjectVisibilityInput 003 ProjectVisibility req empty
+K UpdateProjectVisibilityInput 004 ResourceAccessRole len 1 ptr
+K UpdateReportGroupInput 001 Arn req nil
+K UpdateReportGroupInput 002 Arn len 1 ptr
+K UpdateReportGroupInput 003 ExportConfig nest ReportExportConfig
+K UpdateReportGroupInput 004 Tags each Tag slice
+K UpdateWebhookInput 001 ProjectName req nil
+K UpdateWebhookInput 002 ProjectName len 2 ptr
+K VpcConfig 001 VpcId len 1 ptr
+G DescribeCodeCoverages NextToken NextToken
+G DescribeTestCases NextToken NextToken
+G ListBuildBatches NextToken NextToken
+G ListBuildBatchesForProject NextToken NextToken
+G ListBuilds NextToken NextToken
+G ListBuildsForProject NextToken NextToken
+G ListCommandExecutionsForSandbox NextToken NextToken
+G ListFleets NextToken NextToken
+G ListProjects NextToken NextToken
+G ListReportGroups NextToken NextToken
+G ListReports NextToken NextToken
+G ListReportsForReportGroup NextToken NextToken
+G ListSandboxes NextToken NextToken
+G ListSandboxesForProject NextToken NextToken
+G ListSharedProjects NextToken NextToken
+G ListSharedReportGroups NextToken NextToken

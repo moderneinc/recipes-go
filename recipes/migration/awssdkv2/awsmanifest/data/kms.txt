@@ -1172,3 +1172,240 @@ E WrappingKeySpecRsa4096 WrappingKeySpec
 E WrappingKeySpecSm2 WrappingKeySpec
 E XksProxyConnectivityTypePublicEndpoint XksProxyConnectivityType
 E XksProxyConnectivityTypeVpcEndpointService XksProxyConnectivityType
+H CreateCustomKeyStoreInput.KeyStorePassword
+H DecryptOutput.Plaintext
+H DeriveSharedSecretOutput.SharedSecret
+H EncryptInput.Plaintext
+H GenerateDataKeyOutput.Plaintext
+H GenerateDataKeyPairOutput.PrivateKeyPlaintext
+H GenerateMacInput.Message
+H GenerateRandomOutput.Plaintext
+H GetParametersForImportOutput.PublicKey
+H SignInput.Message
+H UpdateCustomKeyStoreInput.KeyStorePassword
+H VerifyInput.Message
+H VerifyMacInput.Message
+H XksProxyAuthenticationCredentialType.AccessKeyId
+H XksProxyAuthenticationCredentialType.RawSecretAccessKey
+H XksProxyConfigurationType.AccessKeyId
+K CancelKeyDeletionInput 001 KeyId req nil
+K CancelKeyDeletionInput 002 KeyId len 1 ptr
+K ConnectCustomKeyStoreInput 001 CustomKeyStoreId req nil
+K ConnectCustomKeyStoreInput 002 CustomKeyStoreId len 1 ptr
+K CreateAliasInput 001 AliasName req nil
+K CreateAliasInput 002 AliasName len 1 ptr
+K CreateAliasInput 003 TargetKeyId req nil
+K CreateAliasInput 004 TargetKeyId len 1 ptr
+K CreateCustomKeyStoreInput 001 CloudHsmClusterId len 19 ptr
+K CreateCustomKeyStoreInput 002 CustomKeyStoreName req nil
+K CreateCustomKeyStoreInput 003 CustomKeyStoreName len 1 ptr
+K CreateCustomKeyStoreInput 004 KeyStorePassword len 7 ptr
+K CreateCustomKeyStoreInput 005 TrustAnchorCertificate len 1 ptr
+K CreateCustomKeyStoreInput 006 XksProxyUriEndpoint len 10 ptr
+K CreateCustomKeyStoreInput 007 XksProxyUriPath len 10 ptr
+K CreateCustomKeyStoreInput 008 XksProxyVpcEndpointServiceName len 20 ptr
+K CreateCustomKeyStoreInput 009 XksProxyAuthenticationCredential nest XksProxyAuthenticationCredentialType
+K CreateGrantInput 001 GranteePrincipal req nil
+K CreateGrantInput 002 GranteePrincipal len 1 ptr
+K CreateGrantInput 003 KeyId req nil
+K CreateGrantInput 004 KeyId len 1 ptr
+K CreateGrantInput 005 Name len 1 ptr
+K CreateGrantInput 006 Operations req nil
+K CreateGrantInput 007 RetiringPrincipal len 1 ptr
+K CreateKeyInput 001 CustomKeyStoreId len 1 ptr
+K CreateKeyInput 002 Policy len 1 ptr
+K CreateKeyInput 003 XksKeyId len 1 ptr
+K CreateKeyInput 004 Tags each Tag slice
+K DecryptInput 001 CiphertextBlob req nil
+K DecryptInput 002 CiphertextBlob len 1 container
+K DecryptInput 003 KeyId len 1 ptr
+K DecryptInput 004 Recipient nest RecipientInfo
+K DeleteAliasInput 001 AliasName req nil
+K DeleteAliasInput 002 AliasName len 1 ptr
+K DeleteCustomKeyStoreInput 001 CustomKeyStoreId req nil
+K DeleteCustomKeyStoreInput 002 CustomKeyStoreId len 1 ptr
+K DeleteImportedKeyMaterialInput 001 KeyId req nil
+K DeleteImportedKeyMaterialInput 002 KeyId len 1 ptr
+K DeriveSharedSecretInput 001 KeyAgreementAlgorithm req empty
+K DeriveSharedSecretInput 002 KeyId req nil
+K DeriveSharedSecretInput 003 KeyId len 1 ptr
+K DeriveSharedSecretInput 004 PublicKey req nil
+K DeriveSharedSecretInput 005 PublicKey len 1 container
+K DeriveSharedSecretInput 006 Recipient nest RecipientInfo
+K DescribeCustomKeyStoresInput 001 CustomKeyStoreId len 1 ptr
+K DescribeCustomKeyStoresInput 002 CustomKeyStoreName len 1 ptr
+K DescribeCustomKeyStoresInput 003 Limit min 1 ptr
+K DescribeCustomKeyStoresInput 004 Marker len 1 ptr
+K DescribeKeyInput 001 KeyId req nil
+K DescribeKeyInput 002 KeyId len 1 ptr
+K DisableKeyInput 001 KeyId req nil
+K DisableKeyInput 002 KeyId len 1 ptr
+K DisableKeyRotationInput 001 KeyId req nil
+K DisableKeyRotationInput 002 KeyId len 1 ptr
+K DisconnectCustomKeyStoreInput 001 CustomKeyStoreId req nil
+K DisconnectCustomKeyStoreInput 002 CustomKeyStoreId len 1 ptr
+K EnableKeyInput 001 KeyId req nil
+K EnableKeyInput 002 KeyId len 1 ptr
+K EnableKeyRotationInput 001 KeyId req nil
+K EnableKeyRotationInput 002 KeyId len 1 ptr
+K EnableKeyRotationInput 003 RotationPeriodInDays min 90 ptr
+K EncryptInput 001 KeyId req nil
+K EncryptInput 002 KeyId len 1 ptr
+K EncryptInput 003 Plaintext req nil
+K EncryptInput 004 Plaintext len 1 container
+K GenerateDataKeyInput 001 KeyId req nil
+K GenerateDataKeyInput 002 KeyId len 1 ptr
+K GenerateDataKeyInput 003 NumberOfBytes min 1 ptr
+K GenerateDataKeyInput 004 Recipient nest RecipientInfo
+K GenerateDataKeyPairInput 001 KeyId req nil
+K GenerateDataKeyPairInput 002 KeyId len 1 ptr
+K GenerateDataKeyPairInput 003 KeyPairSpec req empty
+K GenerateDataKeyPairInput 004 Recipient nest RecipientInfo
+K GenerateDataKeyPairWithoutPlaintextInput 001 KeyId req nil
+K GenerateDataKeyPairWithoutPlaintextInput 002 KeyId len 1 ptr
+K GenerateDataKeyPairWithoutPlaintextInput 003 KeyPairSpec req empty
+K GenerateDataKeyWithoutPlaintextInput 001 KeyId req nil
+K GenerateDataKeyWithoutPlaintextInput 002 KeyId len 1 ptr
+K GenerateDataKeyWithoutPlaintextInput 003 NumberOfBytes min 1 ptr
+K GenerateMacInput 001 KeyId req nil
+K GenerateMacInput 002 KeyId len 1 ptr
+K GenerateMacInput 003 MacAlgorithm req empty
+K GenerateMacInput 004 Message req nil
+K GenerateMacInput 005 Message len 1 container
+K GenerateRandomInput 001 CustomKeyStoreId len 1 ptr
+K GenerateRandomInput 002 NumberOfBytes min 1 ptr
+K GenerateRandomInput 003 Recipient nest RecipientInfo
+K GetKeyPolicyInput 001 KeyId req nil
+K GetKeyPolicyInput 002 KeyId len 1 ptr
+K GetKeyPolicyInput 003 PolicyName len 1 ptr
+K GetKeyRotationStatusInput 001 KeyId req nil
+K GetKeyRotationStatusInput 002 KeyId len 1 ptr
+K GetParametersForImportInput 001 KeyId req nil
+K GetParametersForImportInput 002 KeyId len 1 ptr
+K GetParametersForImportInput 003 WrappingAlgorithm req empty
+K GetParametersForImportInput 004 WrappingKeySpec req empty
+K GetPublicKeyInput 001 KeyId req nil
+K GetPublicKeyInput 002 KeyId len 1 ptr
+K ImportKeyMaterialInput 001 EncryptedKeyMaterial req nil
+K ImportKeyMaterialInput 002 EncryptedKeyMaterial len 1 container
+K ImportKeyMaterialInput 003 ImportToken req nil
+K ImportKeyMaterialInput 004 ImportToken len 1 container
+K ImportKeyMaterialInput 005 KeyId req nil
+K ImportKeyMaterialInput 006 KeyId len 1 ptr
+K ListAliasesInput 001 KeyId len 1 ptr
+K ListAliasesInput 002 Limit min 1 ptr
+K ListAliasesInput 003 Marker len 1 ptr
+K ListGrantsInput 001 GrantId len 1 ptr
+K ListGrantsInput 002 GranteePrincipal len 1 ptr
+K ListGrantsInput 003 KeyId req nil
+K ListGrantsInput 004 KeyId len 1 ptr
+K ListGrantsInput 005 Limit min 1 ptr
+K ListGrantsInput 006 Marker len 1 ptr
+K ListKeyPoliciesInput 001 KeyId req nil
+K ListKeyPoliciesInput 002 KeyId len 1 ptr
+K ListKeyPoliciesInput 003 Limit min 1 ptr
+K ListKeyPoliciesInput 004 Marker len 1 ptr
+K ListKeyRotationsInput 001 KeyId req nil
+K ListKeyRotationsInput 002 KeyId len 1 ptr
+K ListKeyRotationsInput 003 Limit min 1 ptr
+K ListKeyRotationsInput 004 Marker len 1 ptr
+K ListKeysInput 001 Limit min 1 ptr
+K ListKeysInput 002 Marker len 1 ptr
+K ListResourceTagsInput 001 KeyId req nil
+K ListResourceTagsInput 002 KeyId len 1 ptr
+K ListResourceTagsInput 003 Limit min 1 ptr
+K ListResourceTagsInput 004 Marker len 1 ptr
+K ListRetirableGrantsInput 001 Limit min 1 ptr
+K ListRetirableGrantsInput 002 Marker len 1 ptr
+K ListRetirableGrantsInput 003 RetiringPrincipal req nil
+K ListRetirableGrantsInput 004 RetiringPrincipal len 1 ptr
+K PutKeyPolicyInput 001 KeyId req nil
+K PutKeyPolicyInput 002 KeyId len 1 ptr
+K PutKeyPolicyInput 003 Policy req nil
+K PutKeyPolicyInput 004 Policy len 1 ptr
+K PutKeyPolicyInput 005 PolicyName len 1 ptr
+K ReEncryptInput 001 CiphertextBlob req nil
+K ReEncryptInput 002 CiphertextBlob len 1 container
+K ReEncryptInput 003 DestinationKeyId req nil
+K ReEncryptInput 004 DestinationKeyId len 1 ptr
+K ReEncryptInput 005 SourceKeyId len 1 ptr
+K RecipientInfo 001 AttestationDocument len 1 container
+K ReplicateKeyInput 001 KeyId req nil
+K ReplicateKeyInput 002 KeyId len 1 ptr
+K ReplicateKeyInput 003 Policy len 1 ptr
+K ReplicateKeyInput 004 ReplicaRegion req nil
+K ReplicateKeyInput 005 ReplicaRegion len 1 ptr
+K ReplicateKeyInput 006 Tags each Tag slice
+K RetireGrantInput 001 GrantId len 1 ptr
+K RetireGrantInput 002 GrantToken len 1 ptr
+K RetireGrantInput 003 KeyId len 1 ptr
+K RevokeGrantInput 001 GrantId req nil
+K RevokeGrantInput 002 GrantId len 1 ptr
+K RevokeGrantInput 003 KeyId req nil
+K RevokeGrantInput 004 KeyId len 1 ptr
+K RotateKeyOnDemandInput 001 KeyId req nil
+K RotateKeyOnDemandInput 002 KeyId len 1 ptr
+K ScheduleKeyDeletionInput 001 KeyId req nil
+K ScheduleKeyDeletionInput 002 KeyId len 1 ptr
+K ScheduleKeyDeletionInput 003 PendingWindowInDays min 1 ptr
+K SignInput 001 KeyId req nil
+K SignInput 002 KeyId len 1 ptr
+K SignInput 003 Message req nil
+K SignInput 004 Message len 1 container
+K SignInput 005 SigningAlgorithm req empty
+K Tag 001 TagKey req nil
+K Tag 002 TagKey len 1 ptr
+K Tag 003 TagValue req nil
+K TagResourceInput 001 KeyId req nil
+K TagResourceInput 002 KeyId len 1 ptr
+K TagResourceInput 003 Tags req nil
+K TagResourceInput 004 Tags each Tag slice
+K UntagResourceInput 001 KeyId req nil
+K UntagResourceInput 002 KeyId len 1 ptr
+K UntagResourceInput 003 TagKeys req nil
+K UpdateAliasInput 001 AliasName req nil
+K UpdateAliasInput 002 AliasName len 1 ptr
+K UpdateAliasInput 003 TargetKeyId req nil
+K UpdateAliasInput 004 TargetKeyId len 1 ptr
+K UpdateCustomKeyStoreInput 001 CloudHsmClusterId len 19 ptr
+K UpdateCustomKeyStoreInput 002 CustomKeyStoreId req nil
+K UpdateCustomKeyStoreInput 003 CustomKeyStoreId len 1 ptr
+K UpdateCustomKeyStoreInput 004 KeyStorePassword len 7 ptr
+K UpdateCustomKeyStoreInput 005 NewCustomKeyStoreName len 1 ptr
+K UpdateCustomKeyStoreInput 006 XksProxyUriEndpoint len 10 ptr
+K UpdateCustomKeyStoreInput 007 XksProxyUriPath len 10 ptr
+K UpdateCustomKeyStoreInput 008 XksProxyVpcEndpointServiceName len 20 ptr
+K UpdateCustomKeyStoreInput 009 XksProxyAuthenticationCredential nest XksProxyAuthenticationCredentialType
+K UpdateKeyDescriptionInput 001 Description req nil
+K UpdateKeyDescriptionInput 002 KeyId req nil
+K UpdateKeyDescriptionInput 003 KeyId len 1 ptr
+K UpdatePrimaryRegionInput 001 KeyId req nil
+K UpdatePrimaryRegionInput 002 KeyId len 1 ptr
+K UpdatePrimaryRegionInput 003 PrimaryRegion req nil
+K UpdatePrimaryRegionInput 004 PrimaryRegion len 1 ptr
+K VerifyInput 001 KeyId req nil
+K VerifyInput 002 KeyId len 1 ptr
+K VerifyInput 003 Message req nil
+K VerifyInput 004 Message len 1 container
+K VerifyInput 005 Signature req nil
+K VerifyInput 006 Signature len 1 container
+K VerifyInput 007 SigningAlgorithm req empty
+K VerifyMacInput 001 KeyId req nil
+K VerifyMacInput 002 KeyId len 1 ptr
+K VerifyMacInput 003 Mac req nil
+K VerifyMacInput 004 Mac len 1 container
+K VerifyMacInput 005 MacAlgorithm req empty
+K VerifyMacInput 006 Message req nil
+K VerifyMacInput 007 Message len 1 container
+K XksProxyAuthenticationCredentialType 001 AccessKeyId req nil
+K XksProxyAuthenticationCredentialType 002 AccessKeyId len 20 ptr
+K XksProxyAuthenticationCredentialType 003 RawSecretAccessKey req nil
+K XksProxyAuthenticationCredentialType 004 RawSecretAccessKey len 43 ptr
+G DescribeCustomKeyStores Marker NextMarker
+G ListAliases Marker NextMarker
+G ListGrants Marker NextMarker
+G ListKeyPolicies Marker NextMarker
+G ListKeyRotations Marker NextMarker
+G ListKeys Marker NextMarker
+G ListResourceTags Marker NextMarker
+G ListRetirableGrants Marker NextMarker

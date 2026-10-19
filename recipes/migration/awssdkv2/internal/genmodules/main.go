@@ -1,0 +1,394 @@
+/*
+ * Moderne Proprietary. Only for use by Moderne customers under the terms of a commercial contract.
+ */
+
+// Command genmodules resolves every aws-sdk-go-v2 module the migration can
+// introduce and records, for each, the requirements and go.sum lines a module
+// importing it needs. The migration writes those itself so its output builds
+// under -mod=readonly without a `go mod tidy`.
+//
+// Each module is tidied on its own in a scratch module, at the version all of
+// them select together, so a migration importing a subset gets exactly the
+// subset's requirements: the union of their closures, highest version winning,
+// is what minimal version selection over the subset picks.
+package main
+
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"go/format"
+	"log"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"regexp"
+	"sort"
+	"strings"
+
+	"github.com/moderneinc/recipes-go/recipes/migration/awssdkv2/awsmanifest"
+	"golang.org/x/mod/modfile"
+)
+
+const (
+	v2     = "github.com/aws/aws-sdk-go-v2"
+	smithy = "github.com/aws/smithy-go"
+	// The Go release aws-sdk-go-v2 requires, which the migration raises to.
+	goVersion = "1.24"
+	output    = "zz_modules_gen.go"
+	// v1 is frozen; its last release is the one every migrated module comes from.
+	v1        = "github.com/aws/aws-sdk-go"
+	v1Version = "v1.55.8"
+	namesOut  = "zz_service_names_gen.go"
+	// The partition data v1 resolved endpoints from, for a migrated region
+	// lookup.
+	partitionsOut = "zz_partitions_gen.go"
+)
+
+// root is a module the migrated source may import, and a package of it a
+// scratch module can import to pull it into the build.
+type root struct{ module, pkg string }
+
+func roots() []root {
+	rs := []root{
+		{v2, v2 + "/aws"},
+		{v2 + "/config", v2 + "/config"},
+		{v2 + "/credentials", v2 + "/credentials"},
+		{v2 + "/feature/dynamodb/expression", v2 + "/feature/dynamodb/expression"},
+		{v2 + "/feature/ec2/imds", v2 + "/feature/ec2/imds"},
+		{v2 + "/feature/rds/auth", v2 + "/feature/rds/auth"},
+		{v2 + "/feature/s3/manager", v2 + "/feature/s3/manager"},
+		{smithy, smithy},
+		// A library built on v1 whose v2 the migration moves its callers to.
+		{"github.com/guregu/dynamo/v2", "github.com/guregu/dynamo/v2"},
+	}
+	for _, s := range awsmanifest.Services() {
+		rs = append(rs, root{v2 + "/service/" + awsmanifest.V2Name(s), v2 + "/service/" + awsmanifest.V2Name(s)})
+	}
+	return rs
+}
+
+func main() {
+	rs := roots()
+	selected := tidy(rs, nil)
+	versions := map[string]string{}
+	for _, r := range selected.requires {
+		versions[r.Mod.Path] = r.Mod.Version
+	}
+
+	requires := map[string][][2]string{}
+	goVersions := map[string]string{}
+	sumKeys := map[string][]string{}
+	sums := map[string]string{}
+	for _, r := range rs {
+		res := tidy([]root{r}, map[string]string{r.module: versions[r.module]})
+		goVersions[r.module] = res.goVersion
+		for _, req := range res.requires {
+			requires[r.module] = append(requires[r.module], [2]string{req.Mod.Path, req.Mod.Version})
+		}
+		for _, line := range res.sum {
+			key, hash := splitSumLine(line)
+			sums[key] = hash
+			sumKeys[r.module] = append(sumKeys[r.module], key)
+		}
+	}
+
+	src, err := format.Source(render(rs, requires, goVersions, sumKeys, sums))
+	if err != nil {
+		log.Fatal(err)
+	}
+	if err := os.WriteFile(output, src, 0o644); err != nil {
+		log.Fatal(err)
+	}
+
+	names, err := format.Source(renderNames(serviceNames(versions)))
+	if err != nil {
+		log.Fatal(err)
+	}
+	if err := os.WriteFile(namesOut, names, 0o644); err != nil {
+		log.Fatal(err)
+	}
+
+	partitions, err := format.Source(renderPartitions(v1Partitions()))
+	if err != nil {
+		log.Fatal(err)
+	}
+	if err := os.WriteFile(partitionsOut, partitions, 0o644); err != nil {
+		log.Fatal(err)
+	}
+}
+
+type partition struct {
+	ID, DNSSuffix string
+	Regions       [][2]string
+}
+
+// v1Partitions asks v1's final release for the partitions and regions its
+// endpoints package held, which a migrated region lookup still answers from.
+func v1Partitions() []partition {
+	dir, err := os.MkdirTemp("", "genpartitions")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer os.RemoveAll(dir)
+	write(filepath.Join(dir, "go.mod"), []byte("module scratch\n\ngo "+goVersion+"\n\nrequire "+v1+" "+v1Version+"\n"))
+	write(filepath.Join(dir, "main.go"), []byte(`package main
+
+import (
+	"encoding/json"
+	"os"
+	"sort"
+
+	"github.com/aws/aws-sdk-go/aws/endpoints"
+)
+
+type partition struct {
+	ID, DNSSuffix string
+	Regions       [][2]string
+}
+
+func main() {
+	var out []partition
+	for _, p := range endpoints.DefaultPartitions() {
+		var regions [][2]string
+		for id, r := range p.Regions() {
+			regions = append(regions, [2]string{id, r.Description()})
+		}
+		sort.Slice(regions, func(i, j int) bool { return regions[i][0] < regions[j][0] })
+		out = append(out, partition{p.ID(), p.DNSSuffix(), regions})
+	}
+	json.NewEncoder(os.Stdout).Encode(out)
+}
+`))
+	run(dir, "mod", "tidy")
+	cmd := exec.Command("go", "run", ".")
+	cmd.Dir = dir
+	cmd.Env = append(os.Environ(), "GOFLAGS=-mod=mod", "GOWORK=off")
+	out, err := cmd.Output()
+	if err != nil {
+		log.Fatalf("listing v1 partitions: %v", err)
+	}
+	var partitions []partition
+	if err := json.Unmarshal(out, &partitions); err != nil {
+		log.Fatal(err)
+	}
+	return partitions
+}
+
+func renderPartitions(partitions []partition) []byte {
+	var b bytes.Buffer
+	b.WriteString("// Code generated by genmodules. DO NOT EDIT.\n\npackage awssdkv2\n\n")
+	b.WriteString("// v1Partitions are the partitions and regions aws-sdk-go's final release\n// knew of, in the order DefaultPartitions listed them.\n")
+	b.WriteString("var v1Partitions = []v1Partition{\n")
+	for _, p := range partitions {
+		fmt.Fprintf(&b, "{id: %q, dnsSuffix: %q, regions: [][2]string{\n", p.ID, p.DNSSuffix)
+		for _, r := range p.Regions {
+			fmt.Fprintf(&b, "{%q, %q},\n", r[0], r[1])
+		}
+		b.WriteString("}},\n")
+	}
+	b.WriteString("}\n")
+	return b.Bytes()
+}
+
+var (
+	v2ServiceID   = regexp.MustCompile(`(?m)^const ServiceID = "([^"]+)"`)
+	v1ServiceName = regexp.MustCompile(`(?m)^\s*ServiceName = "([^"]+)"`)
+)
+
+// serviceNames maps each manifest service's v2 service ID, which is what a v2
+// middleware can read, to the name v1 reported as ClientInfo.ServiceName.
+func serviceNames(versions map[string]string) map[string]string {
+	v1Dir := download(v1 + "@" + v1Version)
+	names := map[string]string{}
+	for _, s := range awsmanifest.Services() {
+		module := v2 + "/service/" + awsmanifest.V2Name(s)
+		id := v2ServiceID.FindSubmatch(read(filepath.Join(download(module+"@"+versions[module]), "api_client.go")))
+		name := v1ServiceName.FindSubmatch(read(filepath.Join(v1Dir, "service", s, "service.go")))
+		if id == nil || name == nil {
+			log.Fatalf("no service ID or name for %s", s)
+		}
+		names[string(id[1])] = string(name[1])
+	}
+	return names
+}
+
+// download fetches a module into the cache and returns where it landed.
+func download(modVersion string) string {
+	cmd := exec.Command("go", "mod", "download", "-json", modVersion)
+	cmd.Env = append(os.Environ(), "GOWORK=off")
+	out, err := cmd.Output()
+	if err != nil {
+		log.Fatalf("go mod download %s: %v", modVersion, err)
+	}
+	var info struct{ Dir string }
+	if err := json.Unmarshal(out, &info); err != nil || info.Dir == "" {
+		log.Fatalf("go mod download %s: no directory in %s", modVersion, out)
+	}
+	return info.Dir
+}
+
+func read(path string) []byte {
+	b, err := os.ReadFile(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return b
+}
+
+func renderNames(names map[string]string) []byte {
+	ids := make([]string, 0, len(names))
+	for id := range names {
+		ids = append(ids, id)
+	}
+	sort.Strings(ids)
+	var b bytes.Buffer
+	b.WriteString("// Code generated by genmodules. DO NOT EDIT.\n\npackage awssdkv2\n\n")
+	b.WriteString("// v1ServiceNames maps a v2 service ID to the name v1 reported as\n// ClientInfo.ServiceName, which a migrated request handler still reads.\n")
+	b.WriteString("var v1ServiceNames = map[string]string{\n")
+	for _, id := range ids {
+		fmt.Fprintf(&b, "%q: %q,\n", id, names[id])
+	}
+	b.WriteString("}\n")
+	return b.Bytes()
+}
+
+type tidied struct {
+	requires []*modfile.Require
+	sum      []string
+	// goVersion is the go directive tidy raised the scratch module to, which
+	// is what a module importing the roots has to declare.
+	goVersion string
+}
+
+// tidy builds a scratch module importing the roots, pinned where a version is
+// given, and returns the go.mod requirements and go.sum lines tidy settles on.
+func tidy(rs []root, pins map[string]string) tidied {
+	dir, err := os.MkdirTemp("", "genmodules")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer os.RemoveAll(dir)
+
+	var mod, main bytes.Buffer
+	fmt.Fprintf(&mod, "module scratch\n\ngo %s\n", goVersion)
+	main.WriteString("package main\n\nimport (\n")
+	for _, r := range rs {
+		if v := pins[r.module]; v != "" {
+			fmt.Fprintf(&mod, "\nrequire %s %s\n", r.module, v)
+		}
+		fmt.Fprintf(&main, "\t_ %q\n", r.pkg)
+	}
+	main.WriteString(")\n\nfunc main() {}\n")
+	write(filepath.Join(dir, "go.mod"), mod.Bytes())
+	write(filepath.Join(dir, "main.go"), main.Bytes())
+
+	run(dir, "mod", "tidy")
+	modBytes, err := os.ReadFile(filepath.Join(dir, "go.mod"))
+	if err != nil {
+		log.Fatal(err)
+	}
+	f, err := modfile.Parse("go.mod", modBytes, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	// A library root brings requirements of its own, which its table entry
+	// carries.
+	library := false
+	for _, r := range rs {
+		if !strings.HasPrefix(r.module, v2) && r.module != smithy {
+			library = true
+		}
+	}
+	for _, r := range f.Require {
+		if !library && !strings.HasPrefix(r.Mod.Path, v2) && r.Mod.Path != smithy {
+			log.Fatalf("%s pulls in %s, which the migration has no table entry for", rs[0].module, r.Mod.Path)
+		}
+	}
+	sumBytes, err := os.ReadFile(filepath.Join(dir, "go.sum"))
+	if err != nil {
+		log.Fatal(err)
+	}
+	var sum []string
+	for _, line := range strings.Split(string(sumBytes), "\n") {
+		if line != "" {
+			sum = append(sum, line)
+		}
+	}
+	goVersion := ""
+	if f.Go != nil {
+		goVersion = f.Go.Version
+	}
+	return tidied{requires: f.Require, sum: sum, goVersion: goVersion}
+}
+
+func write(path string, content []byte) {
+	if err := os.WriteFile(path, content, 0o644); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func run(dir string, args ...string) {
+	cmd := exec.Command("go", args...)
+	cmd.Dir = dir
+	cmd.Env = append(os.Environ(), "GOFLAGS=-mod=mod", "GOWORK=off")
+	if out, err := cmd.CombinedOutput(); err != nil {
+		log.Fatalf("go %s: %v\n%s", strings.Join(args, " "), err, out)
+	}
+}
+
+// splitSumLine separates a go.sum line into its `module version[/go.mod]` key
+// and its hash.
+func splitSumLine(line string) (key, hash string) {
+	fields := strings.Fields(line)
+	if len(fields) != 3 {
+		log.Fatalf("malformed go.sum line %q", line)
+	}
+	return fields[0] + " " + fields[1], fields[2]
+}
+
+func render(rs []root, requires map[string][][2]string, goVersions map[string]string, sumKeys map[string][]string, sums map[string]string) []byte {
+	var b bytes.Buffer
+	b.WriteString("// Code generated by genmodules. DO NOT EDIT.\n\npackage awssdkv2\n\n")
+	b.WriteString("// v2Requirements maps each v2 module the migration can introduce to the\n// requirements a module importing it needs, itself included.\n")
+	b.WriteString("var v2Requirements = map[string][]moduleVersion{\n")
+	for _, r := range rs {
+		fmt.Fprintf(&b, "%q: {\n", r.module)
+		for _, req := range requires[r.module] {
+			fmt.Fprintf(&b, "{%q, %q},\n", req[0], req[1])
+		}
+		b.WriteString("},\n")
+	}
+	b.WriteString("}\n\n")
+
+	b.WriteString("// v2GoVersions maps each of those modules to the go directive a module\n// importing it has to declare.\n")
+	b.WriteString("var v2GoVersions = map[string]string{\n")
+	for _, r := range rs {
+		fmt.Fprintf(&b, "%q: %q,\n", r.module, goVersions[r.module])
+	}
+	b.WriteString("}\n\n")
+
+	b.WriteString("// v2SumKeys maps each of those modules to the go.sum lines its requirements\n// need, keyed into v2Sums.\n")
+	b.WriteString("var v2SumKeys = map[string][]string{\n")
+	for _, r := range rs {
+		fmt.Fprintf(&b, "%q: {\n", r.module)
+		for _, k := range sumKeys[r.module] {
+			fmt.Fprintf(&b, "%q,\n", k)
+		}
+		b.WriteString("},\n")
+	}
+	b.WriteString("}\n\n")
+
+	keys := make([]string, 0, len(sums))
+	for k := range sums {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	b.WriteString("// v2Sums holds the hash for each `module version` and `module version/go.mod`.\n")
+	b.WriteString("var v2Sums = map[string]string{\n")
+	for _, k := range keys {
+		fmt.Fprintf(&b, "%q: %q,\n", k, sums[k])
+	}
+	b.WriteString("}\n")
+	return b.Bytes()
+}

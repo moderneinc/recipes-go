@@ -1,0 +1,259 @@
+package dynamodbattribute
+
+import (
+	"fmt"
+
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+)
+
+// attributeValue is aws-sdk-go v1's dynamodb.AttributeValue, which the encoder
+// and decoder of this package were written against. v2 made it a union, so
+// each exported function converts at the boundary and the rest keeps v1's
+// logic as it was.
+type attributeValue struct {
+	B    []byte
+	BOOL *bool
+	BS   [][]byte
+	L    []*attributeValue
+	M    map[string]*attributeValue
+	N    *string
+	NS   []*string
+	NULL *bool
+	S    *string
+	SS   []*string
+}
+
+func stringPtr(s string) *string { return &s }
+
+func stringValue(s *string) string {
+	if s == nil {
+		return ""
+	}
+	return *s
+}
+
+// serializationError is the awserr.Error v1's converters returned.
+type serializationError struct {
+	msg string
+	err error
+}
+
+func newSerializationError(code, msg string, err error) error {
+	return &serializationError{msg: msg, err: err}
+}
+
+func (e *serializationError) Code() string    { return "SerializationError" }
+func (e *serializationError) Message() string { return e.msg }
+func (e *serializationError) OrigErr() error  { return e.err }
+func (e *serializationError) Error() string {
+	s := fmt.Sprintf("%s: %s", e.Code(), e.msg)
+	if e.err != nil {
+		s += "\ncaused by: " + e.err.Error()
+	}
+	return s
+}
+
+func toV2(av *attributeValue) types.AttributeValue {
+	switch {
+	case av == nil:
+		return nil
+	case av.NULL != nil:
+		return &types.AttributeValueMemberNULL{Value: *av.NULL}
+	case av.S != nil:
+		return &types.AttributeValueMemberS{Value: *av.S}
+	case av.N != nil:
+		return &types.AttributeValueMemberN{Value: *av.N}
+	case av.B != nil:
+		return &types.AttributeValueMemberB{Value: av.B}
+	case av.BOOL != nil:
+		return &types.AttributeValueMemberBOOL{Value: *av.BOOL}
+	case av.SS != nil:
+		return &types.AttributeValueMemberSS{Value: derefAll(av.SS)}
+	case av.NS != nil:
+		return &types.AttributeValueMemberNS{Value: derefAll(av.NS)}
+	case av.BS != nil:
+		return &types.AttributeValueMemberBS{Value: av.BS}
+	case av.L != nil:
+		return &types.AttributeValueMemberL{Value: toV2List(av.L)}
+	case av.M != nil:
+		return &types.AttributeValueMemberM{Value: toV2Map(av.M)}
+	}
+	return nil
+}
+
+func toV2List(l []*attributeValue) []types.AttributeValue {
+	if l == nil {
+		return nil
+	}
+	out := make([]types.AttributeValue, len(l))
+	for i, av := range l {
+		out[i] = toV2(av)
+	}
+	return out
+}
+
+func toV2Map(m map[string]*attributeValue) map[string]types.AttributeValue {
+	if m == nil {
+		return nil
+	}
+	out := make(map[string]types.AttributeValue, len(m))
+	for k, av := range m {
+		out[k] = toV2(av)
+	}
+	return out
+}
+
+func fromV2(av types.AttributeValue) *attributeValue {
+	switch v := av.(type) {
+	case *types.AttributeValueMemberNULL:
+		return &attributeValue{NULL: &v.Value}
+	case *types.AttributeValueMemberS:
+		return &attributeValue{S: &v.Value}
+	case *types.AttributeValueMemberN:
+		return &attributeValue{N: &v.Value}
+	case *types.AttributeValueMemberB:
+		return &attributeValue{B: v.Value}
+	case *types.AttributeValueMemberBOOL:
+		return &attributeValue{BOOL: &v.Value}
+	case *types.AttributeValueMemberSS:
+		return &attributeValue{SS: refAll(v.Value)}
+	case *types.AttributeValueMemberNS:
+		return &attributeValue{NS: refAll(v.Value)}
+	case *types.AttributeValueMemberBS:
+		return &attributeValue{BS: v.Value}
+	case *types.AttributeValueMemberL:
+		return &attributeValue{L: fromV2List(v.Value)}
+	case *types.AttributeValueMemberM:
+		return &attributeValue{M: fromV2Map(v.Value)}
+	case nil:
+		return nil
+	}
+	return &attributeValue{}
+}
+
+func fromV2List(l []types.AttributeValue) []*attributeValue {
+	if l == nil {
+		return nil
+	}
+	out := make([]*attributeValue, len(l))
+	for i, av := range l {
+		out[i] = fromV2(av)
+	}
+	return out
+}
+
+func fromV2Map(m map[string]types.AttributeValue) map[string]*attributeValue {
+	if m == nil {
+		return nil
+	}
+	out := make(map[string]*attributeValue, len(m))
+	for k, av := range m {
+		out[k] = fromV2(av)
+	}
+	return out
+}
+
+func derefAll(ss []*string) []string {
+	out := make([]string, len(ss))
+	for i, s := range ss {
+		out[i] = stringValue(s)
+	}
+	return out
+}
+
+func refAll(ss []string) []*string {
+	if ss == nil {
+		return nil
+	}
+	out := make([]*string, len(ss))
+	for i := range ss {
+		out[i] = &ss[i]
+	}
+	return out
+}
+
+// Marshal is v1's Marshal, returning v2's union.
+func Marshal(in interface{}) (types.AttributeValue, error) {
+	av, err := marshalV1(in)
+	return toV2(av), err
+}
+
+// MarshalMap is v1's MarshalMap, returning v2's union.
+func MarshalMap(in interface{}) (map[string]types.AttributeValue, error) {
+	m, err := marshalMapV1(in)
+	return toV2Map(m), err
+}
+
+// MarshalList is v1's MarshalList, returning v2's union.
+func MarshalList(in interface{}) ([]types.AttributeValue, error) {
+	l, err := marshalListV1(in)
+	return toV2List(l), err
+}
+
+// Encode is v1's Encoder.Encode, returning v2's union.
+func (e *Encoder) Encode(in interface{}) (types.AttributeValue, error) {
+	av, err := e.encodeV1(in)
+	return toV2(av), err
+}
+
+// Unmarshal is v1's Unmarshal, reading v2's union.
+func Unmarshal(av types.AttributeValue, out interface{}) error {
+	return unmarshalV1(fromV2(av), out)
+}
+
+// UnmarshalMap is v1's UnmarshalMap, reading v2's union.
+func UnmarshalMap(m map[string]types.AttributeValue, out interface{}) error {
+	return unmarshalMapV1(fromV2Map(m), out)
+}
+
+// UnmarshalList is v1's UnmarshalList, reading v2's union.
+func UnmarshalList(l []types.AttributeValue, out interface{}) error {
+	return unmarshalListV1(fromV2List(l), out)
+}
+
+// UnmarshalListOfMaps is v1's UnmarshalListOfMaps, reading v2's union.
+func UnmarshalListOfMaps(l []map[string]types.AttributeValue, out interface{}) error {
+	items := make([]map[string]*attributeValue, len(l))
+	for i, m := range l {
+		items[i] = fromV2Map(m)
+	}
+	return unmarshalListOfMapsV1(items, out)
+}
+
+// Decode is v1's Decoder.Decode, reading v2's union.
+func (d *Decoder) Decode(av types.AttributeValue, out interface{}, opts ...func(*Decoder)) error {
+	return d.decodeV1(fromV2(av), out, opts...)
+}
+
+// ConvertToMap is v1's ConvertToMap, returning v2's union.
+func ConvertToMap(in interface{}) (map[string]types.AttributeValue, error) {
+	m, err := convertToMapV1(in)
+	return toV2Map(m), err
+}
+
+// ConvertFromMap is v1's ConvertFromMap, reading v2's union.
+func ConvertFromMap(item map[string]types.AttributeValue, v interface{}) error {
+	return convertFromMapV1(fromV2Map(item), v)
+}
+
+// ConvertToList is v1's ConvertToList, returning v2's union.
+func ConvertToList(in interface{}) ([]types.AttributeValue, error) {
+	l, err := convertToListV1(in)
+	return toV2List(l), err
+}
+
+// ConvertFromList is v1's ConvertFromList, reading v2's union.
+func ConvertFromList(item []types.AttributeValue, v interface{}) error {
+	return convertFromListV1(fromV2List(item), v)
+}
+
+// ConvertTo is v1's ConvertTo, returning v2's union.
+func ConvertTo(in interface{}) (types.AttributeValue, error) {
+	av, err := convertToV1(in)
+	return toV2(av), err
+}
+
+// ConvertFrom is v1's ConvertFrom, reading v2's union.
+func ConvertFrom(item types.AttributeValue, v interface{}) error {
+	return convertFromV1(fromV2(item), v)
+}

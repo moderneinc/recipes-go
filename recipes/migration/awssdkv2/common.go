@@ -21,7 +21,9 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/moderneinc/recipes-go/recipes/migration/awssdkv2/awsmanifest"
 	"github.com/moderneinc/recipes-go/recipes/migration/internal/pathswap"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
 )
@@ -40,17 +42,13 @@ const (
 	v2Credentials = v2Module + "/credentials"
 	// v2 moved the assume-role credential helpers up alongside the rest of the
 	// credentials packages.
-	v1Stscreds   = v1Credentials + "/stscreds"
-	v2Stscreds   = v2Credentials + "/stscreds"
-	v2ServicePkg = v2Module + "/service/"
-
-	// Versions the go.mod rewrite pins. Every service is its own module,
-	// versioned independently, so those requires are left for `go mod tidy` to
-	// add from the imports rather than guessed at here.
-	v2CoreVersion        = "v1.47.0"
-	v2ConfigVersion      = "v1.33.5"
-	v2CredentialsVersion = "v1.20.5"
-	smithyVersion        = "v1.28.1"
+	v1Stscreds = v1Credentials + "/stscreds"
+	v2Stscreds = v2Credentials + "/stscreds"
+	// v1Rest is v1's REST protocol package, and smithyHTTPBinding the home of
+	// the one helper of it callers reach for.
+	v1Rest            = v1Module + "/private/protocol/rest"
+	smithyHTTPBinding = smithyGo + "/encoding/httpbinding"
+	v2ServicePkg      = v2Module + "/service/"
 
 	contextPkg = "context"
 	// The name v2's config package binds by default.
@@ -62,43 +60,88 @@ const (
 )
 
 // valueHelperRenames map v1's pointer-dereferencing helpers to the names v2
-// settled on. v2 dropped the `Value` spelling outright, so a call that kept it
-// does not compile after the swap.
-var valueHelperRenames = map[string]string{
-	"BoolValue":             "ToBool",
-	"IntValue":              "ToInt",
-	"Int64Value":            "ToInt64",
-	"StringValue":           "ToString",
-	"TimeValue":             "ToTime",
-	"UintValue":             "ToUint",
-	"Float64Value":          "ToFloat64",
-	"SecondsTimeValue":      "ToTime",
-	"MillisecondsTimeValue": "ToTime",
+// settled on: <T>Value, <T>ValueSlice and <T>ValueMap became To<T>, To<T>Slice
+// and To<T>Map. v1's SecondsTimeValue and MillisecondsTimeValue read an epoch
+// count v2 has no helper for, so they are absent.
+var valueHelperRenames = func() map[string]string {
+	renames := map[string]string{}
+	for _, t := range pointerTypes {
+		renames[t+"Value"] = "To" + t
+		renames[t+"ValueSlice"] = "To" + t + "Slice"
+		renames[t+"ValueMap"] = "To" + t + "Map"
+	}
+	return renames
+}()
+
+// v1's aws.ReadSeekCloser passed seeks through to a reader that could. v2's
+// request bodies take any io.Reader and seek one that can, so around the
+// standard library's seekable readers the wrapper simply goes.
+
+// readSeekCloserOperand returns the reader aws.ReadSeekCloser wrapped, when it
+// is one that seeks.
+func (s *fileScan) readSeekCloserOperand(mi *java.MethodInvocation) (java.Expression, bool) {
+	helper, isAws := qualifiedCall(mi, s.awsPkg)
+	args := realArgs(mi)
+	if !isAws || helper != "ReadSeekCloser" || len(args) != 1 {
+		return nil, false
+	}
+	inner, isCall := args[0].(*java.MethodInvocation)
+	if !isCall || inner.Name == nil {
+		return nil, false
+	}
+	recv, isIdent := selectIdentifier(inner)
+	seekable := recv != nil && recv.Name != "" && (recv.Name == s.bytesPkg || recv.Name == s.stringsPkg)
+	if !isIdent || !seekable || inner.Name.Name != "NewReader" {
+		return nil, false
+	}
+	return inner, true
+}
+
+// pointerTypes are the types both SDKs have pointer helpers for.
+var pointerTypes = []string{
+	"Bool", "String", "Time", "Float32", "Float64",
+	"Int", "Int8", "Int16", "Int32", "Int64",
+	"Uint", "Uint8", "Uint16", "Uint32", "Uint64",
 }
 
 // awsPackageSurvivors are the `aws` package names v2 kept unchanged, so a
 // reference to one needs nothing but the import swap. Anything else in that
 // package — Config with its now-unpointered Region, the request plumbing, the
 // endpoint resolvers — blocks its file.
-var awsPackageSurvivors = map[string]bool{
-	"Bool": true, "Bool_": true, "BoolMap": true, "BoolSlice": true,
-	"Float64": true, "Float64Map": true, "Float64Slice": true,
-	"Int": true, "Int32": true, "Int64": true, "Int64Map": true, "Int64Slice": true,
-	"String": true, "StringMap": true, "StringSlice": true,
-	"Time": true, "TimeSlice": true, "TimeUnixMilli": true,
-	"Uint": true, "Uint64": true,
-	"Duration": true, "JSONValue": true,
-}
+var awsPackageSurvivors = func() map[string]bool {
+	survivors := map[string]bool{"Duration": true}
+	for _, t := range pointerTypes {
+		survivors[t] = true
+		survivors[t+"Slice"] = true
+		survivors[t+"Map"] = true
+	}
+	return survivors
+}()
+
+// v1Endpoints held v1's endpoint resolution and partition data, and v1Client
+// the plumbing clients were built on. Of the latter only ConfigProvider, the
+// interface a session satisfied, has a counterpart: the config replacing it.
+const (
+	v1Client       = v1Aws + "/client"
+	clientReason   = "the v1 client plumbing has no v2 counterpart beyond ConfigProvider"
+	configProvider = "ConfigProvider"
+
+	v1Endpoints     = v1Aws + "/endpoints"
+	endpointsReason = "endpoint resolution moved onto the client's Options in v2, and its partition data has no public counterpart"
+)
 
 // v1OnlyPackages are the v1 sub-packages with no drop-in v2 counterpart. A file
 // importing one cannot be migrated mechanically.
 var v1OnlyPackages = map[string]string{
-	v1Aws + "/request":      "the v1 request plumbing has no v2 counterpart; per-operation behaviour is configured through functional options on the client",
-	v1Aws + "/endpoints":    "endpoint resolution moved onto the client's Options in v2",
 	v1Aws + "/defaults":     "v2 builds defaults through config.LoadDefaultConfig",
-	v1Aws + "/client":       "the v1 client plumbing has no v2 counterpart",
 	v1Aws + "/awsutil":      "awsutil has no v2 counterpart",
 	v1Aws + "/corehandlers": "the v1 handler stack was replaced by smithy middleware",
+	// v2 moved or dropped these service sub-packages, so the generic service
+	// mapping would point them at paths that do not exist. Each reason is the
+	// migration path, since the blockers table is where a user reads it.
+	v1ServicePkg + "s3/s3crypto": "s3crypto has no v2 package: move to github.com/aws/amazon-s3-encryption-client-go/v3, whose default " +
+		"policy reads and writes the format v1's V2 client did, and set EnableLegacyUnauthenticatedModes to read objects v1's original client wrote; " +
+		"move on to v4's key-committing format only once every reader of the bucket is on v3",
 }
 
 // blockedCallSuffixes are v1 operation shapes with no single-call v2 form: the
@@ -117,19 +160,38 @@ func MapPath(path string) (string, bool) {
 		return v2Config, true
 	case path == v1Stscreds:
 		return v2Stscreds, true
+	case path == v1Ec2RoleCreds:
+		return v2Ec2RoleCreds, true
 	case path == v1Credentials:
 		return v2Credentials, true
 	case path == v1Ec2Metadata:
 		return v2Imds, true
 	case path == v1S3Manager:
 		return v2S3Manager, true
+	case path == v1DynamoExpression:
+		return v2DynamoExpression, true
+	case path == gureguV1:
+		return gureguV2, true
+	case path == v1Rest:
+		// Of the REST protocol helpers only EscapePath has a public v2 home,
+		// unchanged in smithy's HTTP binding.
+		return smithyHTTPBinding, true
+	case path == v1Rdsutils:
+		return v2RdsAuth, true
+	case path == v1Aws+"/arn":
+		// The ARN parser moved unchanged.
+		return v2Aws + "/arn", true
 	case strings.HasPrefix(path, v1ServicePkg):
 		// An iface package has no v2 counterpart to point at; the migration
 		// generates a replacement and repoints the import at that instead.
 		if _, _, isIface := ifacePackageName(path); isIface {
 			return "", false
 		}
-		return v2ServicePkg + strings.TrimPrefix(path, v1ServicePkg), true
+		service, rest, _ := strings.Cut(strings.TrimPrefix(path, v1ServicePkg), "/")
+		if rest != "" {
+			rest = "/" + rest
+		}
+		return v2ServicePath(service) + rest, true
 	}
 	return "", false
 }
@@ -151,7 +213,7 @@ func importsV1(cu *golang.CompilationUnit) bool {
 		return false
 	}
 	for _, rp := range cu.Imports.Elements {
-		if underV1(rp.Element.Path()) {
+		if path := rp.Element.Path(); underV1(path) || path == gureguV1 {
 			return true
 		}
 	}
@@ -179,7 +241,7 @@ func serviceImports(cu *golang.CompilationUnit) map[string]string {
 		if _, _, isIface := ifacePackageName(path); isIface {
 			continue
 		}
-		if path == v1S3Manager {
+		if path == v1S3Manager || path == v1DynamoExpression || path == v1Rdsutils || path == v1DynamodbAttribute {
 			continue
 		}
 		if name := pathswap.LocalName(rp.Element); name != "" && name != "_" && name != "." {
@@ -269,4 +331,47 @@ func sortedKeys[V any](m map[string]V) []string {
 	}
 	sort.Strings(out)
 	return out
+}
+
+// v2ServicePath is the import path of a v1 service's v2 package.
+func v2ServicePath(service string) string {
+	return v2ServicePkg + awsmanifest.V2Name(service)
+}
+
+// renamedService reports whether path is a v1 service package v2 spells
+// differently, whose files keep spelling it as v1 did.
+func renamedService(path string) bool {
+	service, isService := strings.CutPrefix(path, v1ServicePkg)
+	return isService && !strings.Contains(service, "/") && awsmanifest.V2Name(service) != service
+}
+
+// v1Libraries are third-party packages built on aws-sdk-go v1, whose values a
+// migrated file would hand v2's.
+var v1Libraries = map[string]string{}
+
+// shadowsPackage reports whether id, spelled as an imported package, is a
+// local of some other type: in4it/ecs-deploy declares ec2 := EC2{} in a file
+// importing the ec2 service. The parse-time type tells them apart where it is
+// known; a package qualifier carries the package's path.
+func shadowsPackage(id *java.Identifier) bool {
+	class := matcher.AsClass(id.Type)
+	if class == nil {
+		return false
+	}
+	fqn := class.FullyQualifiedName
+	// A type is named after its package's path; a package is the path alone.
+	return strings.Contains(fqn[strings.LastIndex(fqn, "/")+1:], ".")
+}
+
+// importsAs reports whether cu imports path under the name local.
+func importsAs(cu *golang.CompilationUnit, path, local string) bool {
+	if cu == nil || cu.Imports == nil {
+		return false
+	}
+	for _, rp := range cu.Imports.Elements {
+		if rp.Element.Path() == path && pathswap.LocalName(rp.Element) == local {
+			return true
+		}
+	}
+	return false
 }

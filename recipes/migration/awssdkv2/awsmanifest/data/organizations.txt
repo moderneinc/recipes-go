@@ -1065,6 +1065,7 @@ E EffectivePolicyTypeBackupPolicy EffectivePolicyType
 E EffectivePolicyTypeBedrockPolicy EffectivePolicyType
 E EffectivePolicyTypeChatbotPolicy EffectivePolicyType
 E EffectivePolicyTypeDeclarativePolicyEc2 EffectivePolicyType
+E EffectivePolicyTypeGuarddutyPolicy EffectivePolicyType
 E EffectivePolicyTypeInspectorPolicy EffectivePolicyType
 E EffectivePolicyTypeNetworkSecurityDirectorPolicy EffectivePolicyType
 E EffectivePolicyTypeS3Policy EffectivePolicyType
@@ -1162,6 +1163,7 @@ E PolicyTypeBackupPolicy PolicyType
 E PolicyTypeBedrockPolicy PolicyType
 E PolicyTypeChatbotPolicy PolicyType
 E PolicyTypeDeclarativePolicyEc2 PolicyType
+E PolicyTypeGuarddutyPolicy PolicyType
 E PolicyTypeInspectorPolicy PolicyType
 E PolicyTypeNetworkSecurityDirectorPolicy PolicyType
 E PolicyTypeResourceControlPolicy PolicyType
@@ -1183,3 +1185,138 @@ E ResponsibilityTransferTypeBilling ResponsibilityTransferType
 E TargetTypeAccount TargetType
 E TargetTypeOrganizationalUnit TargetType
 E TargetTypeRoot TargetType
+H Account.Email
+H Account.Name
+H CreateAccountInput.AccountName
+H CreateAccountInput.Email
+H CreateAccountStatus.AccountName
+H CreateGovCloudAccountInput.AccountName
+H CreateGovCloudAccountInput.Email
+H DelegatedAdministrator.Email
+H DelegatedAdministrator.Name
+H HandshakeParty.Id
+H HandshakeResource.Value
+H InviteAccountToOrganizationInput.Notes
+H Organization.MasterAccountEmail
+K AcceptHandshakeInput 001 HandshakeId req nil
+K AttachPolicyInput 001 PolicyId req nil
+K AttachPolicyInput 002 TargetId req nil
+K CancelHandshakeInput 001 HandshakeId req nil
+K CloseAccountInput 001 AccountId req nil
+K CreateAccountInput 001 AccountName req nil
+K CreateAccountInput 002 AccountName len 1 ptr
+K CreateAccountInput 003 Email req nil
+K CreateAccountInput 004 Email len 6 ptr
+K CreateAccountInput 005 Tags each Tag slice
+K CreateGovCloudAccountInput 001 AccountName req nil
+K CreateGovCloudAccountInput 002 AccountName len 1 ptr
+K CreateGovCloudAccountInput 003 Email req nil
+K CreateGovCloudAccountInput 004 Email len 6 ptr
+K CreateGovCloudAccountInput 005 Tags each Tag slice
+K CreateOrganizationalUnitInput 001 Name req nil
+K CreateOrganizationalUnitInput 002 Name len 1 ptr
+K CreateOrganizationalUnitInput 003 ParentId req nil
+K CreateOrganizationalUnitInput 004 Tags each Tag slice
+K CreatePolicyInput 001 Content req nil
+K CreatePolicyInput 002 Content len 1 ptr
+K CreatePolicyInput 003 Description req nil
+K CreatePolicyInput 004 Name req nil
+K CreatePolicyInput 005 Name len 1 ptr
+K CreatePolicyInput 006 Type req empty
+K CreatePolicyInput 007 Tags each Tag slice
+K DeclineHandshakeInput 001 HandshakeId req nil
+K DeleteOrganizationalUnitInput 001 OrganizationalUnitId req nil
+K DeletePolicyInput 001 PolicyId req nil
+K DeregisterDelegatedAdministratorInput 001 AccountId req nil
+K DeregisterDelegatedAdministratorInput 002 ServicePrincipal req nil
+K DeregisterDelegatedAdministratorInput 003 ServicePrincipal len 1 ptr
+K DescribeAccountInput 001 AccountId req nil
+K DescribeCreateAccountStatusInput 001 CreateAccountRequestId req nil
+K DescribeEffectivePolicyInput 001 PolicyType req empty
+K DescribeHandshakeInput 001 HandshakeId req nil
+K DescribeOrganizationalUnitInput 001 OrganizationalUnitId req nil
+K DescribePolicyInput 001 PolicyId req nil
+K DetachPolicyInput 001 PolicyId req nil
+K DetachPolicyInput 002 TargetId req nil
+K DisableAWSServiceAccessInput 001 ServicePrincipal req nil
+K DisableAWSServiceAccessInput 002 ServicePrincipal len 1 ptr
+K DisablePolicyTypeInput 001 PolicyType req empty
+K DisablePolicyTypeInput 002 RootId req nil
+K EnableAWSServiceAccessInput 001 ServicePrincipal req nil
+K EnableAWSServiceAccessInput 002 ServicePrincipal len 1 ptr
+K EnablePolicyTypeInput 001 PolicyType req empty
+K EnablePolicyTypeInput 002 RootId req nil
+K HandshakeParty 001 Id req nil
+K HandshakeParty 002 Id len 1 ptr
+K HandshakeParty 003 Type req empty
+K InviteAccountToOrganizationInput 001 Target req nil
+K InviteAccountToOrganizationInput 002 Tags each Tag slice
+K InviteAccountToOrganizationInput 003 Target nest HandshakeParty
+K ListAWSServiceAccessForOrganizationInput 001 MaxResults min 1 ptr
+K ListAccountsForParentInput 001 MaxResults min 1 ptr
+K ListAccountsForParentInput 002 ParentId req nil
+K ListAccountsInput 001 MaxResults min 1 ptr
+K ListChildrenInput 001 ChildType req empty
+K ListChildrenInput 002 MaxResults min 1 ptr
+K ListChildrenInput 003 ParentId req nil
+K ListCreateAccountStatusInput 001 MaxResults min 1 ptr
+K ListDelegatedAdministratorsInput 001 MaxResults min 1 ptr
+K ListDelegatedAdministratorsInput 002 ServicePrincipal len 1 ptr
+K ListDelegatedServicesForAccountInput 001 AccountId req nil
+K ListDelegatedServicesForAccountInput 002 MaxResults min 1 ptr
+K ListHandshakesForAccountInput 001 MaxResults min 1 ptr
+K ListHandshakesForOrganizationInput 001 MaxResults min 1 ptr
+K ListOrganizationalUnitsForParentInput 001 MaxResults min 1 ptr
+K ListOrganizationalUnitsForParentInput 002 ParentId req nil
+K ListParentsInput 001 ChildId req nil
+K ListParentsInput 002 MaxResults min 1 ptr
+K ListPoliciesForTargetInput 001 Filter req empty
+K ListPoliciesForTargetInput 002 MaxResults min 1 ptr
+K ListPoliciesForTargetInput 003 TargetId req nil
+K ListPoliciesInput 001 Filter req empty
+K ListPoliciesInput 002 MaxResults min 1 ptr
+K ListRootsInput 001 MaxResults min 1 ptr
+K ListTagsForResourceInput 001 ResourceId req nil
+K ListTargetsForPolicyInput 001 MaxResults min 1 ptr
+K ListTargetsForPolicyInput 002 PolicyId req nil
+K MoveAccountInput 001 AccountId req nil
+K MoveAccountInput 002 DestinationParentId req nil
+K MoveAccountInput 003 SourceParentId req nil
+K PutResourcePolicyInput 001 Content req nil
+K PutResourcePolicyInput 002 Content len 1 ptr
+K PutResourcePolicyInput 003 Tags each Tag slice
+K RegisterDelegatedAdministratorInput 001 AccountId req nil
+K RegisterDelegatedAdministratorInput 002 ServicePrincipal req nil
+K RegisterDelegatedAdministratorInput 003 ServicePrincipal len 1 ptr
+K RemoveAccountFromOrganizationInput 001 AccountId req nil
+K Tag 001 Key req nil
+K Tag 002 Key len 1 ptr
+K Tag 003 Value req nil
+K TagResourceInput 001 ResourceId req nil
+K TagResourceInput 002 Tags req nil
+K TagResourceInput 003 Tags each Tag slice
+K UntagResourceInput 001 ResourceId req nil
+K UntagResourceInput 002 TagKeys req nil
+K UpdateOrganizationalUnitInput 001 Name len 1 ptr
+K UpdateOrganizationalUnitInput 002 OrganizationalUnitId req nil
+K UpdatePolicyInput 001 Content len 1 ptr
+K UpdatePolicyInput 002 Name len 1 ptr
+K UpdatePolicyInput 003 PolicyId req nil
+G ListAWSServiceAccessForOrganization NextToken NextToken
+G ListAccounts NextToken NextToken
+G ListAccountsForParent NextToken NextToken
+G ListAccountsWithInvalidEffectivePolicy NextToken NextToken
+G ListChildren NextToken NextToken
+G ListCreateAccountStatus NextToken NextToken
+G ListDelegatedAdministrators NextToken NextToken
+G ListDelegatedServicesForAccount NextToken NextToken
+G ListEffectivePolicyValidationErrors NextToken NextToken
+G ListHandshakesForAccount NextToken NextToken
+G ListHandshakesForOrganization NextToken NextToken
+G ListOrganizationalUnitsForParent NextToken NextToken
+G ListParents NextToken NextToken
+G ListPolicies NextToken NextToken
+G ListPoliciesForTarget NextToken NextToken
+G ListRoots NextToken NextToken
+G ListTagsForResource NextToken NextToken
+G ListTargetsForPolicy NextToken NextToken

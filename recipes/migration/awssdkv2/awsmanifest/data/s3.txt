@@ -563,6 +563,8 @@ R LifecycleRuleFilter.Tag Tag
 R ListBucketsOutput.Owner Owner
 R ListPartsOutput.Initiator Initiator
 R ListPartsOutput.Owner Owner
+R Location.Encryption Encryption
+R Location.Tagging Tagging
 R LoggingEnabled.TargetObjectKeyFormat TargetObjectKeyFormat
 R MetadataConfiguration.AnnotationTableConfiguration AnnotationTableConfiguration
 R MetadataConfiguration.InventoryTableConfiguration InventoryTableConfiguration
@@ -577,7 +579,7 @@ R Metrics.EventThreshold ReplicationTimeValue
 R MultipartUpload.Initiator Initiator
 R MultipartUpload.Owner Owner
 R NotificationConfiguration.EventBridgeConfiguration EventBridgeConfiguration
-R NotificationConfigurationFilter.Key S3KeyFilter
+R NotificationConfigurationFilter.Key KeyFilter
 R Object.Owner Owner
 R Object.RestoreStatus RestoreStatus
 R ObjectLockConfiguration.Rule ObjectLockRule
@@ -585,7 +587,7 @@ R ObjectLockRetention.EventHoldDuration EventHoldDuration
 R ObjectLockRule.DefaultRetention DefaultRetention
 R ObjectVersion.Owner Owner
 R ObjectVersion.RestoreStatus RestoreStatus
-R OutputLocation.S3 S3Location
+R OutputLocation.S3 Location
 R OutputSerialization.CSV CSVOutput
 R OutputSerialization.JSON JSONOutput
 R ProgressEvent.Details Progress
@@ -628,8 +630,6 @@ R RestoreRequest.OutputLocation OutputLocation
 R RestoreRequest.SelectParameters SelectParameters
 R RoutingRule.Condition Condition
 R RoutingRule.Redirect Redirect
-R S3Location.Encryption Encryption
-R S3Location.Tagging Tagging
 R SelectObjectContentInput.InputSerialization InputSerialization
 R SelectObjectContentInput.OutputSerialization OutputSerialization
 R SelectObjectContentInput.RequestProgress RequestProgress
@@ -1375,6 +1375,8 @@ V ListPartsOutput.MaxParts int32
 V ListPartsOutput.NextPartNumberMarker string
 V ListPartsOutput.PartNumberMarker string
 V ListPartsOutput.UploadId string
+V Location.BucketName string
+V Location.Prefix string
 V LocationInfo.Name string
 V LoggingEnabled.TargetBucket string
 V LoggingEnabled.TargetPrefix string
@@ -1670,8 +1672,6 @@ V RestoreObjectOutput.RestoreOutputPath string
 V RestoreRequest.Days int32
 V RestoreRequest.Description string
 V RestoreStatus.IsRestoreInProgress bool
-V S3Location.BucketName string
-V S3Location.Prefix string
 V S3TablesDestination.TableBucketArn string
 V S3TablesDestination.TableName string
 V S3TablesDestinationResult.TableArn string
@@ -1844,6 +1844,7 @@ L GetObjectTaggingOutput.TagSet Tag
 L IntelligentTieringAndOperator.Tags Tag
 L IntelligentTieringConfiguration.Tierings Tiering
 L InventoryConfiguration.OptionalFields InventoryOptionalField
+L KeyFilter.FilterRules FilterRule
 L LambdaFunctionConfiguration.Events Event
 L LifecycleRule.NoncurrentVersionTransitions NoncurrentVersionTransition
 L LifecycleRule.Transitions Transition
@@ -1867,6 +1868,8 @@ L ListObjectsV2Input.OptionalObjectAttributes OptionalObjectAttributes
 L ListObjectsV2Output.CommonPrefixes CommonPrefix
 L ListObjectsV2Output.Contents Object
 L ListPartsOutput.Parts Part
+L Location.AccessControlList Grant
+L Location.UserMetadata MetadataEntry
 L LoggingEnabled.TargetGrants TargetGrant
 L MetricsAndOperator.Tags Tag
 L NotificationConfiguration.LambdaFunctionConfigurations LambdaFunctionConfiguration
@@ -2044,6 +2047,8 @@ F ListPartsOutput.ChecksumAlgorithm ChecksumAlgorithm
 F ListPartsOutput.ChecksumType ChecksumType
 F ListPartsOutput.RequestCharged RequestCharged
 F ListPartsOutput.StorageClass StorageClass
+F Location.CannedACL ObjectCannedACL
+F Location.StorageClass StorageClass
 F LocationInfo.Type LocationType
 F MetadataTableEncryptionConfiguration.SseAlgorithm TableSseAlgorithm
 F Metrics.Status MetricsStatus
@@ -2125,8 +2130,6 @@ F RestoreObjectInput.RequestPayer RequestPayer
 F RestoreObjectOutput.RequestCharged RequestCharged
 F RestoreRequest.Tier Tier
 F RestoreRequest.Type RestoreRequestType
-F S3Location.CannedACL ObjectCannedACL
-F S3Location.StorageClass StorageClass
 F SelectObjectContentInput.ExpressionType ExpressionType
 F SelectParameters.ExpressionType ExpressionType
 F ServerSideEncryptionByDefault.SSEAlgorithm ServerSideEncryption
@@ -3017,6 +3020,7 @@ E InventoryOptionalFieldChecksumAlgorithm InventoryOptionalField
 E InventoryOptionalFieldETag InventoryOptionalField
 E InventoryOptionalFieldEncryptionStatus InventoryOptionalField
 E InventoryOptionalFieldIntelligentTieringAccessTier InventoryOptionalField
+E InventoryOptionalFieldIntelligentTieringReferenceDate InventoryOptionalField
 E InventoryOptionalFieldIsMultipartUploaded InventoryOptionalField
 E InventoryOptionalFieldLastModifiedDate InventoryOptionalField
 E InventoryOptionalFieldLifecycleExpirationDate InventoryOptionalField
@@ -3156,3 +3160,492 @@ E TransitionStorageClassStandardIa TransitionStorageClass
 E TypeAmazonCustomerByEmail Type
 E TypeCanonicalUser Type
 E TypeGroup Type
+M KeyFilter S3KeyFilter
+M Location S3Location
+H CompleteMultipartUploadInput.SSECustomerKey
+H CompleteMultipartUploadOutput.SSEKMSKeyId
+H CopyObjectInput.CopySourceSSECustomerKey
+H CopyObjectInput.SSECustomerKey
+H CopyObjectInput.SSEKMSEncryptionContext
+H CopyObjectInput.SSEKMSKeyId
+H CopyObjectOutput.SSEKMSEncryptionContext
+H CopyObjectOutput.SSEKMSKeyId
+H CreateMultipartUploadInput.SSECustomerKey
+H CreateMultipartUploadInput.SSEKMSEncryptionContext
+H CreateMultipartUploadInput.SSEKMSKeyId
+H CreateMultipartUploadOutput.SSEKMSEncryptionContext
+H CreateMultipartUploadOutput.SSEKMSKeyId
+H Encryption.KMSKeyId
+H GetObjectAttributesInput.SSECustomerKey
+H GetObjectInput.SSECustomerKey
+H GetObjectOutput.SSEKMSKeyId
+H HeadObjectInput.SSECustomerKey
+H HeadObjectOutput.SSEKMSKeyId
+H ListPartsInput.SSECustomerKey
+H PutObjectInput.SSECustomerKey
+H PutObjectInput.SSEKMSEncryptionContext
+H PutObjectInput.SSEKMSKeyId
+H PutObjectOutput.SSEKMSEncryptionContext
+H PutObjectOutput.SSEKMSKeyId
+H SSEKMS.KeyId
+H SelectObjectContentInput.SSECustomerKey
+H ServerSideEncryptionByDefault.KMSMasterKeyID
+H SessionCredentials.SecretAccessKey
+H SessionCredentials.SessionToken
+H UploadPartCopyInput.CopySourceSSECustomerKey
+H UploadPartCopyInput.SSECustomerKey
+H UploadPartCopyOutput.SSEKMSKeyId
+H UploadPartInput.SSECustomerKey
+H UploadPartOutput.SSEKMSKeyId
+H WriteGetObjectResponseInput.SSEKMSKeyId
+Y BucketExists 5 20
+Y BucketNotExists 5 20
+Y ObjectExists 5 20
+Y ObjectNotExists 5 20
+U AnalyticsFilter
+U MetricsFilter
+U ObjectEncryption
+U SelectObjectContentEventStream
+K AbortMultipartUploadInput 001 Bucket req nil
+K AbortMultipartUploadInput 002 Bucket len 1 ptr
+K AbortMultipartUploadInput 003 Key req nil
+K AbortMultipartUploadInput 004 Key len 1 ptr
+K AbortMultipartUploadInput 005 UploadId req nil
+K AccessControlPolicy 001 Grants each Grant slice
+K AccessControlTranslation 001 Owner req empty
+K AnalyticsAndOperator 001 Tags each Tag slice
+K AnalyticsConfiguration 000 - unsupported
+K AnalyticsExportDestination 001 S3BucketDestination req nil
+K AnalyticsExportDestination 002 S3BucketDestination nest AnalyticsS3BucketDestination
+K AnalyticsFilter 000 - unsupported
+K AnalyticsS3BucketDestination 001 Bucket req nil
+K AnalyticsS3BucketDestination 002 Format req empty
+K BucketLifecycleConfiguration 001 Rules req nil
+K BucketLifecycleConfiguration 002 Rules each LifecycleRule slice
+K BucketLoggingStatus 001 LoggingEnabled nest LoggingEnabled
+K CORSConfiguration 001 CORSRules req nil
+K CORSConfiguration 002 CORSRules each CORSRule slice
+K CORSRule 001 AllowedMethods req nil
+K CORSRule 002 AllowedOrigins req nil
+K CompleteMultipartUploadInput 001 Bucket req nil
+K CompleteMultipartUploadInput 002 Bucket len 1 ptr
+K CompleteMultipartUploadInput 003 Key req nil
+K CompleteMultipartUploadInput 004 Key len 1 ptr
+K CompleteMultipartUploadInput 005 UploadId req nil
+K CopyObjectInput 001 Bucket req nil
+K CopyObjectInput 002 Bucket len 1 ptr
+K CopyObjectInput 003 CopySource req nil
+K CopyObjectInput 004 Key req nil
+K CopyObjectInput 005 Key len 1 ptr
+K CreateBucketInput 001 Bucket req nil
+K CreateBucketInput 002 Bucket len 1 ptr
+K CreateMultipartUploadInput 001 Bucket req nil
+K CreateMultipartUploadInput 002 Bucket len 1 ptr
+K CreateMultipartUploadInput 003 Key req nil
+K CreateMultipartUploadInput 004 Key len 1 ptr
+K CreateSessionInput 001 Bucket req nil
+K CreateSessionInput 002 Bucket len 1 ptr
+K Delete 001 Objects req nil
+K Delete 002 Objects each ObjectIdentifier slice
+K DeleteBucketAnalyticsConfigurationInput 001 Bucket req nil
+K DeleteBucketAnalyticsConfigurationInput 002 Bucket len 1 ptr
+K DeleteBucketAnalyticsConfigurationInput 003 Id req nil
+K DeleteBucketCorsInput 001 Bucket req nil
+K DeleteBucketCorsInput 002 Bucket len 1 ptr
+K DeleteBucketEncryptionInput 001 Bucket req nil
+K DeleteBucketEncryptionInput 002 Bucket len 1 ptr
+K DeleteBucketInput 001 Bucket req nil
+K DeleteBucketInput 002 Bucket len 1 ptr
+K DeleteBucketIntelligentTieringConfigurationInput 001 Bucket req nil
+K DeleteBucketIntelligentTieringConfigurationInput 002 Bucket len 1 ptr
+K DeleteBucketIntelligentTieringConfigurationInput 003 Id req nil
+K DeleteBucketInventoryConfigurationInput 001 Bucket req nil
+K DeleteBucketInventoryConfigurationInput 002 Bucket len 1 ptr
+K DeleteBucketInventoryConfigurationInput 003 Id req nil
+K DeleteBucketLifecycleInput 001 Bucket req nil
+K DeleteBucketLifecycleInput 002 Bucket len 1 ptr
+K DeleteBucketMetricsConfigurationInput 001 Bucket req nil
+K DeleteBucketMetricsConfigurationInput 002 Bucket len 1 ptr
+K DeleteBucketMetricsConfigurationInput 003 Id req nil
+K DeleteBucketOwnershipControlsInput 001 Bucket req nil
+K DeleteBucketOwnershipControlsInput 002 Bucket len 1 ptr
+K DeleteBucketPolicyInput 001 Bucket req nil
+K DeleteBucketPolicyInput 002 Bucket len 1 ptr
+K DeleteBucketReplicationInput 001 Bucket req nil
+K DeleteBucketReplicationInput 002 Bucket len 1 ptr
+K DeleteBucketTaggingInput 001 Bucket req nil
+K DeleteBucketTaggingInput 002 Bucket len 1 ptr
+K DeleteBucketWebsiteInput 001 Bucket req nil
+K DeleteBucketWebsiteInput 002 Bucket len 1 ptr
+K DeleteObjectInput 001 Bucket req nil
+K DeleteObjectInput 002 Bucket len 1 ptr
+K DeleteObjectInput 003 Key req nil
+K DeleteObjectInput 004 Key len 1 ptr
+K DeleteObjectTaggingInput 001 Bucket req nil
+K DeleteObjectTaggingInput 002 Bucket len 1 ptr
+K DeleteObjectTaggingInput 003 Key req nil
+K DeleteObjectTaggingInput 004 Key len 1 ptr
+K DeleteObjectsInput 001 Bucket req nil
+K DeleteObjectsInput 002 Bucket len 1 ptr
+K DeleteObjectsInput 003 Delete req nil
+K DeleteObjectsInput 004 Delete nest Delete
+K DeletePublicAccessBlockInput 001 Bucket req nil
+K DeletePublicAccessBlockInput 002 Bucket len 1 ptr
+K Destination 001 Bucket req nil
+K Destination 002 AccessControlTranslation nest AccessControlTranslation
+K Destination 003 Metrics nest Metrics
+K Destination 004 ReplicationTime nest ReplicationTime
+K Encryption 001 EncryptionType req empty
+K ErrorDocument 001 Key req nil
+K ErrorDocument 002 Key len 1 ptr
+K ExistingObjectReplication 001 Status req empty
+K GetBucketAccelerateConfigurationInput 001 Bucket req nil
+K GetBucketAccelerateConfigurationInput 002 Bucket len 1 ptr
+K GetBucketAclInput 001 Bucket req nil
+K GetBucketAclInput 002 Bucket len 1 ptr
+K GetBucketAnalyticsConfigurationInput 001 Bucket req nil
+K GetBucketAnalyticsConfigurationInput 002 Bucket len 1 ptr
+K GetBucketAnalyticsConfigurationInput 003 Id req nil
+K GetBucketCorsInput 001 Bucket req nil
+K GetBucketCorsInput 002 Bucket len 1 ptr
+K GetBucketEncryptionInput 001 Bucket req nil
+K GetBucketEncryptionInput 002 Bucket len 1 ptr
+K GetBucketIntelligentTieringConfigurationInput 001 Bucket req nil
+K GetBucketIntelligentTieringConfigurationInput 002 Bucket len 1 ptr
+K GetBucketIntelligentTieringConfigurationInput 003 Id req nil
+K GetBucketInventoryConfigurationInput 001 Bucket req nil
+K GetBucketInventoryConfigurationInput 002 Bucket len 1 ptr
+K GetBucketInventoryConfigurationInput 003 Id req nil
+K GetBucketLifecycleConfigurationInput 001 Bucket req nil
+K GetBucketLifecycleConfigurationInput 002 Bucket len 1 ptr
+K GetBucketLifecycleInput 000 - unsupported
+K GetBucketLocationInput 001 Bucket req nil
+K GetBucketLocationInput 002 Bucket len 1 ptr
+K GetBucketLoggingInput 001 Bucket req nil
+K GetBucketLoggingInput 002 Bucket len 1 ptr
+K GetBucketMetricsConfigurationInput 001 Bucket req nil
+K GetBucketMetricsConfigurationInput 002 Bucket len 1 ptr
+K GetBucketMetricsConfigurationInput 003 Id req nil
+K GetBucketNotificationConfigurationRequest 000 - unsupported
+K GetBucketOwnershipControlsInput 001 Bucket req nil
+K GetBucketOwnershipControlsInput 002 Bucket len 1 ptr
+K GetBucketPolicyInput 001 Bucket req nil
+K GetBucketPolicyInput 002 Bucket len 1 ptr
+K GetBucketPolicyStatusInput 001 Bucket req nil
+K GetBucketPolicyStatusInput 002 Bucket len 1 ptr
+K GetBucketReplicationInput 001 Bucket req nil
+K GetBucketReplicationInput 002 Bucket len 1 ptr
+K GetBucketRequestPaymentInput 001 Bucket req nil
+K GetBucketRequestPaymentInput 002 Bucket len 1 ptr
+K GetBucketTaggingInput 001 Bucket req nil
+K GetBucketTaggingInput 002 Bucket len 1 ptr
+K GetBucketVersioningInput 001 Bucket req nil
+K GetBucketVersioningInput 002 Bucket len 1 ptr
+K GetBucketWebsiteInput 001 Bucket req nil
+K GetBucketWebsiteInput 002 Bucket len 1 ptr
+K GetObjectAclInput 001 Bucket req nil
+K GetObjectAclInput 002 Bucket len 1 ptr
+K GetObjectAclInput 003 Key req nil
+K GetObjectAclInput 004 Key len 1 ptr
+K GetObjectAttributesInput 001 Bucket req nil
+K GetObjectAttributesInput 002 Bucket len 1 ptr
+K GetObjectAttributesInput 003 Key req nil
+K GetObjectAttributesInput 004 Key len 1 ptr
+K GetObjectAttributesInput 005 ObjectAttributes req nil
+K GetObjectInput 001 Bucket req nil
+K GetObjectInput 002 Bucket len 1 ptr
+K GetObjectInput 003 Key req nil
+K GetObjectInput 004 Key len 1 ptr
+K GetObjectLegalHoldInput 001 Bucket req nil
+K GetObjectLegalHoldInput 002 Bucket len 1 ptr
+K GetObjectLegalHoldInput 003 Key req nil
+K GetObjectLegalHoldInput 004 Key len 1 ptr
+K GetObjectLockConfigurationInput 001 Bucket req nil
+K GetObjectLockConfigurationInput 002 Bucket len 1 ptr
+K GetObjectRetentionInput 001 Bucket req nil
+K GetObjectRetentionInput 002 Bucket len 1 ptr
+K GetObjectRetentionInput 003 Key req nil
+K GetObjectRetentionInput 004 Key len 1 ptr
+K GetObjectTaggingInput 001 Bucket req nil
+K GetObjectTaggingInput 002 Bucket len 1 ptr
+K GetObjectTaggingInput 003 Key req nil
+K GetObjectTaggingInput 004 Key len 1 ptr
+K GetObjectTorrentInput 001 Bucket req nil
+K GetObjectTorrentInput 002 Bucket len 1 ptr
+K GetObjectTorrentInput 003 Key req nil
+K GetObjectTorrentInput 004 Key len 1 ptr
+K GetPublicAccessBlockInput 001 Bucket req nil
+K GetPublicAccessBlockInput 002 Bucket len 1 ptr
+K GlacierJobParameters 001 Tier req empty
+K Grant 001 Grantee nest Grantee
+K Grantee 001 Type req empty
+K HeadBucketInput 001 Bucket req nil
+K HeadBucketInput 002 Bucket len 1 ptr
+K HeadObjectInput 001 Bucket req nil
+K HeadObjectInput 002 Bucket len 1 ptr
+K HeadObjectInput 003 Key req nil
+K HeadObjectInput 004 Key len 1 ptr
+K IndexDocument 001 Suffix req nil
+K IntelligentTieringAndOperator 001 Tags each Tag slice
+K IntelligentTieringConfiguration 001 Id req nil
+K IntelligentTieringConfiguration 002 Status req empty
+K IntelligentTieringConfiguration 003 Tierings req nil
+K IntelligentTieringConfiguration 004 Filter nest IntelligentTieringFilter
+K IntelligentTieringConfiguration 005 Tierings each Tiering slice
+K IntelligentTieringFilter 001 And nest IntelligentTieringAndOperator
+K IntelligentTieringFilter 002 Tag nest Tag
+K InventoryConfiguration 001 Destination req nil
+K InventoryConfiguration 002 Id req nil
+K InventoryConfiguration 003 IncludedObjectVersions req empty
+K InventoryConfiguration 004 IsEnabled req nil
+K InventoryConfiguration 005 Schedule req nil
+K InventoryConfiguration 006 Destination nest InventoryDestination
+K InventoryConfiguration 007 Filter nest InventoryFilter
+K InventoryConfiguration 008 Schedule nest InventorySchedule
+K InventoryDestination 001 S3BucketDestination req nil
+K InventoryDestination 002 S3BucketDestination nest InventoryS3BucketDestination
+K InventoryEncryption 001 SSEKMS nest SSEKMS
+K InventoryFilter 001 Prefix req nil
+K InventoryS3BucketDestination 001 Bucket req nil
+K InventoryS3BucketDestination 002 Format req empty
+K InventoryS3BucketDestination 003 Encryption nest InventoryEncryption
+K InventorySchedule 001 Frequency req empty
+K LambdaFunctionConfiguration 001 Events req nil
+K LambdaFunctionConfiguration 002 LambdaFunctionArn req nil
+K LifecycleConfiguration 000 - unsupported
+K LifecycleRule 001 Status req empty
+K LifecycleRule 002 Filter nest LifecycleRuleFilter
+K LifecycleRuleAndOperator 001 Tags each Tag slice
+K LifecycleRuleFilter 001 And nest LifecycleRuleAndOperator
+K LifecycleRuleFilter 002 Tag nest Tag
+K ListBucketAnalyticsConfigurationsInput 001 Bucket req nil
+K ListBucketAnalyticsConfigurationsInput 002 Bucket len 1 ptr
+K ListBucketIntelligentTieringConfigurationsInput 001 Bucket req nil
+K ListBucketIntelligentTieringConfigurationsInput 002 Bucket len 1 ptr
+K ListBucketInventoryConfigurationsInput 001 Bucket req nil
+K ListBucketInventoryConfigurationsInput 002 Bucket len 1 ptr
+K ListBucketMetricsConfigurationsInput 001 Bucket req nil
+K ListBucketMetricsConfigurationsInput 002 Bucket len 1 ptr
+K ListMultipartUploadsInput 001 Bucket req nil
+K ListMultipartUploadsInput 002 Bucket len 1 ptr
+K ListObjectVersionsInput 001 Bucket req nil
+K ListObjectVersionsInput 002 Bucket len 1 ptr
+K ListObjectsInput 001 Bucket req nil
+K ListObjectsInput 002 Bucket len 1 ptr
+K ListObjectsV2Input 001 Bucket req nil
+K ListObjectsV2Input 002 Bucket len 1 ptr
+K ListPartsInput 001 Bucket req nil
+K ListPartsInput 002 Bucket len 1 ptr
+K ListPartsInput 003 Key req nil
+K ListPartsInput 004 Key len 1 ptr
+K ListPartsInput 005 UploadId req nil
+K Location 001 BucketName req nil
+K Location 002 Prefix req nil
+K Location 003 AccessControlList each Grant slice
+K Location 004 Encryption nest Encryption
+K Location 005 Tagging nest Tagging
+K LoggingEnabled 001 TargetBucket req nil
+K LoggingEnabled 002 TargetPrefix req nil
+K LoggingEnabled 003 TargetGrants each TargetGrant slice
+K Metrics 001 Status req empty
+K MetricsAndOperator 001 Tags each Tag slice
+K MetricsConfiguration 000 - unsupported
+K MetricsFilter 000 - unsupported
+K NotificationConfiguration 001 LambdaFunctionConfigurations each LambdaFunctionConfiguration slice
+K NotificationConfiguration 002 QueueConfigurations each QueueConfiguration slice
+K NotificationConfiguration 003 TopicConfigurations each TopicConfiguration slice
+K ObjectIdentifier 001 Key req nil
+K ObjectIdentifier 002 Key len 1 ptr
+K OutputLocation 001 S3 nest Location
+K OwnershipControls 001 Rules req nil
+K OwnershipControls 002 Rules each OwnershipControlsRule slice
+K OwnershipControlsRule 001 ObjectOwnership req empty
+K PutBucketAccelerateConfigurationInput 001 AccelerateConfiguration req nil
+K PutBucketAccelerateConfigurationInput 002 Bucket req nil
+K PutBucketAccelerateConfigurationInput 003 Bucket len 1 ptr
+K PutBucketAclInput 001 Bucket req nil
+K PutBucketAclInput 002 Bucket len 1 ptr
+K PutBucketAclInput 003 AccessControlPolicy nest AccessControlPolicy
+K PutBucketAnalyticsConfigurationInput 001 AnalyticsConfiguration req nil
+K PutBucketAnalyticsConfigurationInput 002 Bucket req nil
+K PutBucketAnalyticsConfigurationInput 003 Bucket len 1 ptr
+K PutBucketAnalyticsConfigurationInput 004 Id req nil
+K PutBucketAnalyticsConfigurationInput 005 AnalyticsConfiguration nest AnalyticsConfiguration
+K PutBucketCorsInput 001 Bucket req nil
+K PutBucketCorsInput 002 Bucket len 1 ptr
+K PutBucketCorsInput 003 CORSConfiguration req nil
+K PutBucketCorsInput 004 CORSConfiguration nest CORSConfiguration
+K PutBucketEncryptionInput 001 Bucket req nil
+K PutBucketEncryptionInput 002 Bucket len 1 ptr
+K PutBucketEncryptionInput 003 ServerSideEncryptionConfiguration req nil
+K PutBucketEncryptionInput 004 ServerSideEncryptionConfiguration nest ServerSideEncryptionConfiguration
+K PutBucketIntelligentTieringConfigurationInput 001 Bucket req nil
+K PutBucketIntelligentTieringConfigurationInput 002 Bucket len 1 ptr
+K PutBucketIntelligentTieringConfigurationInput 003 Id req nil
+K PutBucketIntelligentTieringConfigurationInput 004 IntelligentTieringConfiguration req nil
+K PutBucketIntelligentTieringConfigurationInput 005 IntelligentTieringConfiguration nest IntelligentTieringConfiguration
+K PutBucketInventoryConfigurationInput 001 Bucket req nil
+K PutBucketInventoryConfigurationInput 002 Bucket len 1 ptr
+K PutBucketInventoryConfigurationInput 003 Id req nil
+K PutBucketInventoryConfigurationInput 004 InventoryConfiguration req nil
+K PutBucketInventoryConfigurationInput 005 InventoryConfiguration nest InventoryConfiguration
+K PutBucketLifecycleConfigurationInput 001 Bucket req nil
+K PutBucketLifecycleConfigurationInput 002 Bucket len 1 ptr
+K PutBucketLifecycleConfigurationInput 003 LifecycleConfiguration nest BucketLifecycleConfiguration
+K PutBucketLifecycleInput 000 - unsupported
+K PutBucketLoggingInput 001 Bucket req nil
+K PutBucketLoggingInput 002 Bucket len 1 ptr
+K PutBucketLoggingInput 003 BucketLoggingStatus req nil
+K PutBucketLoggingInput 004 BucketLoggingStatus nest BucketLoggingStatus
+K PutBucketMetricsConfigurationInput 001 Bucket req nil
+K PutBucketMetricsConfigurationInput 002 Bucket len 1 ptr
+K PutBucketMetricsConfigurationInput 003 Id req nil
+K PutBucketMetricsConfigurationInput 004 MetricsConfiguration req nil
+K PutBucketMetricsConfigurationInput 005 MetricsConfiguration nest MetricsConfiguration
+K PutBucketNotificationConfigurationInput 001 Bucket req nil
+K PutBucketNotificationConfigurationInput 002 Bucket len 1 ptr
+K PutBucketNotificationConfigurationInput 003 NotificationConfiguration req nil
+K PutBucketNotificationConfigurationInput 004 NotificationConfiguration nest NotificationConfiguration
+K PutBucketNotificationInput 000 - unsupported
+K PutBucketOwnershipControlsInput 001 Bucket req nil
+K PutBucketOwnershipControlsInput 002 Bucket len 1 ptr
+K PutBucketOwnershipControlsInput 003 OwnershipControls req nil
+K PutBucketOwnershipControlsInput 004 OwnershipControls nest OwnershipControls
+K PutBucketPolicyInput 001 Bucket req nil
+K PutBucketPolicyInput 002 Bucket len 1 ptr
+K PutBucketPolicyInput 003 Policy req nil
+K PutBucketReplicationInput 001 Bucket req nil
+K PutBucketReplicationInput 002 Bucket len 1 ptr
+K PutBucketReplicationInput 003 ReplicationConfiguration req nil
+K PutBucketReplicationInput 004 ReplicationConfiguration nest ReplicationConfiguration
+K PutBucketRequestPaymentInput 001 Bucket req nil
+K PutBucketRequestPaymentInput 002 Bucket len 1 ptr
+K PutBucketRequestPaymentInput 003 RequestPaymentConfiguration req nil
+K PutBucketRequestPaymentInput 004 RequestPaymentConfiguration nest RequestPaymentConfiguration
+K PutBucketTaggingInput 001 Bucket req nil
+K PutBucketTaggingInput 002 Bucket len 1 ptr
+K PutBucketTaggingInput 003 Tagging req nil
+K PutBucketTaggingInput 004 Tagging nest Tagging
+K PutBucketVersioningInput 001 Bucket req nil
+K PutBucketVersioningInput 002 Bucket len 1 ptr
+K PutBucketVersioningInput 003 VersioningConfiguration req nil
+K PutBucketWebsiteInput 001 Bucket req nil
+K PutBucketWebsiteInput 002 Bucket len 1 ptr
+K PutBucketWebsiteInput 003 WebsiteConfiguration req nil
+K PutBucketWebsiteInput 004 WebsiteConfiguration nest WebsiteConfiguration
+K PutObjectAclInput 001 Bucket req nil
+K PutObjectAclInput 002 Bucket len 1 ptr
+K PutObjectAclInput 003 Key req nil
+K PutObjectAclInput 004 Key len 1 ptr
+K PutObjectAclInput 005 AccessControlPolicy nest AccessControlPolicy
+K PutObjectInput 001 Bucket req nil
+K PutObjectInput 002 Bucket len 1 ptr
+K PutObjectInput 003 Key req nil
+K PutObjectInput 004 Key len 1 ptr
+K PutObjectLegalHoldInput 001 Bucket req nil
+K PutObjectLegalHoldInput 002 Bucket len 1 ptr
+K PutObjectLegalHoldInput 003 Key req nil
+K PutObjectLegalHoldInput 004 Key len 1 ptr
+K PutObjectLockConfigurationInput 001 Bucket req nil
+K PutObjectLockConfigurationInput 002 Bucket len 1 ptr
+K PutObjectRetentionInput 001 Bucket req nil
+K PutObjectRetentionInput 002 Bucket len 1 ptr
+K PutObjectRetentionInput 003 Key req nil
+K PutObjectRetentionInput 004 Key len 1 ptr
+K PutObjectTaggingInput 001 Bucket req nil
+K PutObjectTaggingInput 002 Bucket len 1 ptr
+K PutObjectTaggingInput 003 Key req nil
+K PutObjectTaggingInput 004 Key len 1 ptr
+K PutObjectTaggingInput 005 Tagging req nil
+K PutObjectTaggingInput 006 Tagging nest Tagging
+K PutPublicAccessBlockInput 001 Bucket req nil
+K PutPublicAccessBlockInput 002 Bucket len 1 ptr
+K PutPublicAccessBlockInput 003 PublicAccessBlockConfiguration req nil
+K QueueConfiguration 001 Events req nil
+K QueueConfiguration 002 QueueArn req nil
+K RedirectAllRequestsTo 001 HostName req nil
+K ReplicaModifications 001 Status req empty
+K ReplicationConfiguration 001 Role req nil
+K ReplicationConfiguration 002 Rules req nil
+K ReplicationConfiguration 003 Rules each ReplicationRule slice
+K ReplicationRule 001 Destination req nil
+K ReplicationRule 002 Status req empty
+K ReplicationRule 003 Destination nest Destination
+K ReplicationRule 004 ExistingObjectReplication nest ExistingObjectReplication
+K ReplicationRule 005 Filter nest ReplicationRuleFilter
+K ReplicationRule 006 SourceSelectionCriteria nest SourceSelectionCriteria
+K ReplicationRuleAndOperator 001 Tags each Tag slice
+K ReplicationRuleFilter 001 And nest ReplicationRuleAndOperator
+K ReplicationRuleFilter 002 Tag nest Tag
+K ReplicationTime 001 Status req empty
+K ReplicationTime 002 Time req nil
+K RequestPaymentConfiguration 001 Payer req empty
+K RestoreObjectInput 001 Bucket req nil
+K RestoreObjectInput 002 Bucket len 1 ptr
+K RestoreObjectInput 003 Key req nil
+K RestoreObjectInput 004 Key len 1 ptr
+K RestoreObjectInput 005 RestoreRequest nest RestoreRequest
+K RestoreRequest 001 GlacierJobParameters nest GlacierJobParameters
+K RestoreRequest 002 OutputLocation nest OutputLocation
+K RestoreRequest 003 SelectParameters nest SelectParameters
+K RoutingRule 001 Redirect req nil
+K Rule 000 - unsupported
+K SSEKMS 001 KeyId req nil
+K SelectObjectContentInput 001 Bucket req nil
+K SelectObjectContentInput 002 Bucket len 1 ptr
+K SelectObjectContentInput 003 Expression req nil
+K SelectObjectContentInput 004 ExpressionType req empty
+K SelectObjectContentInput 005 InputSerialization req nil
+K SelectObjectContentInput 006 Key req nil
+K SelectObjectContentInput 007 Key len 1 ptr
+K SelectObjectContentInput 008 OutputSerialization req nil
+K SelectParameters 001 Expression req nil
+K SelectParameters 002 ExpressionType req empty
+K SelectParameters 003 InputSerialization req nil
+K SelectParameters 004 OutputSerialization req nil
+K ServerSideEncryptionByDefault 001 SSEAlgorithm req empty
+K ServerSideEncryptionConfiguration 001 Rules req nil
+K ServerSideEncryptionConfiguration 002 Rules each ServerSideEncryptionRule slice
+K ServerSideEncryptionRule 001 ApplyServerSideEncryptionByDefault nest ServerSideEncryptionByDefault
+K SourceSelectionCriteria 001 ReplicaModifications nest ReplicaModifications
+K SourceSelectionCriteria 002 SseKmsEncryptedObjects nest SseKmsEncryptedObjects
+K SseKmsEncryptedObjects 001 Status req empty
+K StorageClassAnalysis 001 DataExport nest StorageClassAnalysisDataExport
+K StorageClassAnalysisDataExport 001 Destination req nil
+K StorageClassAnalysisDataExport 002 OutputSchemaVersion req empty
+K StorageClassAnalysisDataExport 003 Destination nest AnalyticsExportDestination
+K Tag 001 Key req nil
+K Tag 002 Key len 1 ptr
+K Tag 003 Value req nil
+K Tagging 001 TagSet req nil
+K Tagging 002 TagSet each Tag slice
+K TargetGrant 001 Grantee nest Grantee
+K Tiering 001 AccessTier req empty
+K Tiering 002 Days req nil
+K TopicConfiguration 001 Events req nil
+K TopicConfiguration 002 TopicArn req nil
+K UploadPartCopyInput 001 Bucket req nil
+K UploadPartCopyInput 002 Bucket len 1 ptr
+K UploadPartCopyInput 003 CopySource req nil
+K UploadPartCopyInput 004 Key req nil
+K UploadPartCopyInput 005 Key len 1 ptr
+K UploadPartCopyInput 006 PartNumber req nil
+K UploadPartCopyInput 007 UploadId req nil
+K UploadPartInput 001 Bucket req nil
+K UploadPartInput 002 Bucket len 1 ptr
+K UploadPartInput 003 Key req nil
+K UploadPartInput 004 Key len 1 ptr
+K UploadPartInput 005 PartNumber req nil
+K UploadPartInput 006 UploadId req nil
+K WebsiteConfiguration 001 ErrorDocument nest ErrorDocument
+K WebsiteConfiguration 002 IndexDocument nest IndexDocument
+K WebsiteConfiguration 003 RedirectAllRequestsTo nest RedirectAllRequestsTo
+K WebsiteConfiguration 004 RoutingRules each RoutingRule slice
+K WriteGetObjectResponseInput 001 RequestRoute req nil
+K WriteGetObjectResponseInput 002 RequestRoute len 1 ptr
+K WriteGetObjectResponseInput 003 RequestToken req nil
+G ListBuckets ContinuationToken ContinuationToken
+G ListDirectoryBuckets ContinuationToken ContinuationToken
+G ListObjectAnnotations ContinuationToken NextContinuationToken
+G ListObjectsV2 ContinuationToken NextContinuationToken
+G ListParts PartNumberMarker NextPartNumberMarker

@@ -3435,6 +3435,8 @@ V Tag.Key string
 V Tag.Value string
 V TagSpecification.ResourceType string
 V TargetHealth.Description string
+V TargetResourceConfiguration.SourceArn string
+V TargetResourceConfiguration.TargetKmsKeyId string
 V TenantDatabase.CharacterSetName string
 V TenantDatabase.DBInstanceIdentifier string
 V TenantDatabase.DbiResourceId string
@@ -4610,9 +4612,11 @@ N TargetGroupName
 N TargetGroups
 N TargetHealth
 N TargetIops
+N TargetKmsKeyId
 N TargetMember
 N TargetOptionGroupDescription
 N TargetOptionGroupIdentifier
+N TargetResourceConfigurations
 N TargetStorageThroughput
 N TargetStorageType
 N Targets
@@ -4974,6 +4978,7 @@ T TagSpecification
 T TargetConnectionNetworkType
 T TargetHealth
 T TargetHealthReason
+T TargetResourceConfiguration
 T TargetRole
 T TargetState
 T TargetType
@@ -5125,3 +5130,374 @@ E WriteForwardingStatusDisabling WriteForwardingStatus
 E WriteForwardingStatusEnabled WriteForwardingStatus
 E WriteForwardingStatusEnabling WriteForwardingStatus
 E WriteForwardingStatusUnknown WriteForwardingStatus
+H CreateTenantDatabaseInput.MasterUserPassword
+H ModifyTenantDatabaseInput.MasterUserPassword
+H TenantDatabasePendingModifiedValues.MasterUserPassword
+Y DBClusterAvailable 30 60
+Y DBClusterDeleted 30 60
+Y DBClusterSnapshotAvailable 30 60
+Y DBClusterSnapshotDeleted 30 60
+Y DBInstanceAvailable 30 60
+Y DBInstanceDeleted 30 60
+Y DBSnapshotAvailable 30 60
+Y DBSnapshotDeleted 30 60
+Y TenantDatabaseAvailable 30 60
+Y TenantDatabaseDeleted 30 60
+K AddRoleToDBClusterInput 001 DBClusterIdentifier req nil
+K AddRoleToDBClusterInput 002 RoleArn req nil
+K AddRoleToDBInstanceInput 001 DBInstanceIdentifier req nil
+K AddRoleToDBInstanceInput 002 FeatureName req nil
+K AddRoleToDBInstanceInput 003 RoleArn req nil
+K AddSourceIdentifierToSubscriptionInput 001 SourceIdentifier req nil
+K AddSourceIdentifierToSubscriptionInput 002 SubscriptionName req nil
+K AddTagsToResourceInput 001 ResourceName req nil
+K AddTagsToResourceInput 002 Tags req nil
+K ApplyPendingMaintenanceActionInput 001 ApplyAction req nil
+K ApplyPendingMaintenanceActionInput 002 OptInType req nil
+K ApplyPendingMaintenanceActionInput 003 ResourceIdentifier req nil
+K AuthorizeDBSecurityGroupIngressInput 001 DBSecurityGroupName req nil
+K BacktrackDBClusterInput 001 BacktrackTo req nil
+K BacktrackDBClusterInput 002 DBClusterIdentifier req nil
+K CancelExportTaskInput 001 ExportTaskIdentifier req nil
+K CopyDBClusterParameterGroupInput 001 SourceDBClusterParameterGroupIdentifier req nil
+K CopyDBClusterParameterGroupInput 002 TargetDBClusterParameterGroupDescription req nil
+K CopyDBClusterParameterGroupInput 003 TargetDBClusterParameterGroupIdentifier req nil
+K CopyDBClusterSnapshotInput 001 SourceDBClusterSnapshotIdentifier req nil
+K CopyDBClusterSnapshotInput 002 TargetDBClusterSnapshotIdentifier req nil
+K CopyDBParameterGroupInput 001 SourceDBParameterGroupIdentifier req nil
+K CopyDBParameterGroupInput 002 TargetDBParameterGroupDescription req nil
+K CopyDBParameterGroupInput 003 TargetDBParameterGroupIdentifier req nil
+K CopyDBSnapshotInput 001 SourceDBSnapshotIdentifier req nil
+K CopyDBSnapshotInput 002 TargetDBSnapshotIdentifier req nil
+K CopyOptionGroupInput 001 SourceOptionGroupIdentifier req nil
+K CopyOptionGroupInput 002 TargetOptionGroupDescription req nil
+K CopyOptionGroupInput 003 TargetOptionGroupIdentifier req nil
+K CreateBlueGreenDeploymentInput 001 BlueGreenDeploymentName req nil
+K CreateBlueGreenDeploymentInput 002 BlueGreenDeploymentName len 1 ptr
+K CreateBlueGreenDeploymentInput 003 Source req nil
+K CreateBlueGreenDeploymentInput 004 Source len 1 ptr
+K CreateBlueGreenDeploymentInput 005 TargetDBClusterParameterGroupName len 1 ptr
+K CreateBlueGreenDeploymentInput 006 TargetDBInstanceClass len 5 ptr
+K CreateBlueGreenDeploymentInput 007 TargetDBParameterGroupName len 1 ptr
+K CreateBlueGreenDeploymentInput 008 TargetEngineVersion len 1 ptr
+K CreateCustomDBEngineVersionInput 001 DatabaseInstallationFilesS3BucketName len 3 ptr
+K CreateCustomDBEngineVersionInput 002 DatabaseInstallationFilesS3Prefix len 1 ptr
+K CreateCustomDBEngineVersionInput 003 Description len 1 ptr
+K CreateCustomDBEngineVersionInput 004 Engine req nil
+K CreateCustomDBEngineVersionInput 005 Engine len 1 ptr
+K CreateCustomDBEngineVersionInput 006 EngineVersion req nil
+K CreateCustomDBEngineVersionInput 007 EngineVersion len 1 ptr
+K CreateCustomDBEngineVersionInput 008 ImageId len 1 ptr
+K CreateCustomDBEngineVersionInput 009 KMSKeyId len 1 ptr
+K CreateCustomDBEngineVersionInput 010 Manifest len 1 ptr
+K CreateCustomDBEngineVersionInput 011 SourceCustomDbEngineVersionIdentifier len 1 ptr
+K CreateDBClusterEndpointInput 001 DBClusterEndpointIdentifier req nil
+K CreateDBClusterEndpointInput 002 DBClusterIdentifier req nil
+K CreateDBClusterEndpointInput 003 EndpointType req nil
+K CreateDBClusterInput 001 DBClusterIdentifier req nil
+K CreateDBClusterInput 002 Engine req nil
+K CreateDBClusterParameterGroupInput 001 DBClusterParameterGroupName req nil
+K CreateDBClusterParameterGroupInput 002 DBParameterGroupFamily req nil
+K CreateDBClusterParameterGroupInput 003 Description req nil
+K CreateDBClusterSnapshotInput 001 DBClusterIdentifier req nil
+K CreateDBClusterSnapshotInput 002 DBClusterSnapshotIdentifier req nil
+K CreateDBInstanceInput 001 DBInstanceClass req nil
+K CreateDBInstanceInput 002 DBInstanceIdentifier req nil
+K CreateDBInstanceInput 003 Engine req nil
+K CreateDBInstanceReadReplicaInput 001 DBInstanceIdentifier req nil
+K CreateDBParameterGroupInput 001 DBParameterGroupFamily req nil
+K CreateDBParameterGroupInput 002 DBParameterGroupName req nil
+K CreateDBParameterGroupInput 003 Description req nil
+K CreateDBProxyEndpointInput 001 DBProxyEndpointName req nil
+K CreateDBProxyEndpointInput 002 DBProxyEndpointName len 1 ptr
+K CreateDBProxyEndpointInput 003 DBProxyName req nil
+K CreateDBProxyEndpointInput 004 DBProxyName len 1 ptr
+K CreateDBProxyEndpointInput 005 VpcSubnetIds req nil
+K CreateDBProxyInput 001 Auth req nil
+K CreateDBProxyInput 002 DBProxyName req nil
+K CreateDBProxyInput 003 EngineFamily req empty
+K CreateDBProxyInput 004 RoleArn req nil
+K CreateDBProxyInput 005 VpcSubnetIds req nil
+K CreateDBSecurityGroupInput 001 DBSecurityGroupDescription req nil
+K CreateDBSecurityGroupInput 002 DBSecurityGroupName req nil
+K CreateDBShardGroupInput 001 DBClusterIdentifier req nil
+K CreateDBShardGroupInput 002 DBShardGroupIdentifier req nil
+K CreateDBShardGroupInput 003 MaxACU req nil
+K CreateDBSnapshotInput 001 DBInstanceIdentifier req nil
+K CreateDBSnapshotInput 002 DBSnapshotIdentifier req nil
+K CreateDBSubnetGroupInput 001 DBSubnetGroupDescription req nil
+K CreateDBSubnetGroupInput 002 DBSubnetGroupName req nil
+K CreateDBSubnetGroupInput 003 SubnetIds req nil
+K CreateEventSubscriptionInput 001 SnsTopicArn req nil
+K CreateEventSubscriptionInput 002 SubscriptionName req nil
+K CreateIntegrationInput 001 DataFilter len 1 ptr
+K CreateIntegrationInput 002 IntegrationName req nil
+K CreateIntegrationInput 003 IntegrationName len 1 ptr
+K CreateIntegrationInput 004 SourceArn req nil
+K CreateIntegrationInput 005 SourceArn len 1 ptr
+K CreateIntegrationInput 006 TargetArn req nil
+K CreateIntegrationInput 007 TargetArn len 20 ptr
+K CreateOptionGroupInput 001 EngineName req nil
+K CreateOptionGroupInput 002 MajorEngineVersion req nil
+K CreateOptionGroupInput 003 OptionGroupDescription req nil
+K CreateOptionGroupInput 004 OptionGroupName req nil
+K CreateTenantDatabaseInput 001 DBInstanceIdentifier req nil
+K CreateTenantDatabaseInput 002 MasterUserPassword req nil
+K CreateTenantDatabaseInput 003 MasterUsername req nil
+K CreateTenantDatabaseInput 004 TenantDBName req nil
+K DeleteBlueGreenDeploymentInput 001 BlueGreenDeploymentIdentifier req nil
+K DeleteBlueGreenDeploymentInput 002 BlueGreenDeploymentIdentifier len 1 ptr
+K DeleteCustomDBEngineVersionInput 001 Engine req nil
+K DeleteCustomDBEngineVersionInput 002 Engine len 1 ptr
+K DeleteCustomDBEngineVersionInput 003 EngineVersion req nil
+K DeleteCustomDBEngineVersionInput 004 EngineVersion len 1 ptr
+K DeleteDBClusterAutomatedBackupInput 001 DbClusterResourceId req nil
+K DeleteDBClusterEndpointInput 001 DBClusterEndpointIdentifier req nil
+K DeleteDBClusterInput 001 DBClusterIdentifier req nil
+K DeleteDBClusterParameterGroupInput 001 DBClusterParameterGroupName req nil
+K DeleteDBClusterSnapshotInput 001 DBClusterSnapshotIdentifier req nil
+K DeleteDBInstanceInput 001 DBInstanceIdentifier req nil
+K DeleteDBParameterGroupInput 001 DBParameterGroupName req nil
+K DeleteDBProxyEndpointInput 001 DBProxyEndpointName req nil
+K DeleteDBProxyEndpointInput 002 DBProxyEndpointName len 1 ptr
+K DeleteDBProxyInput 001 DBProxyName req nil
+K DeleteDBSecurityGroupInput 001 DBSecurityGroupName req nil
+K DeleteDBShardGroupInput 001 DBShardGroupIdentifier req nil
+K DeleteDBShardGroupInput 002 DBShardGroupIdentifier len 1 ptr
+K DeleteDBSnapshotInput 001 DBSnapshotIdentifier req nil
+K DeleteDBSubnetGroupInput 001 DBSubnetGroupName req nil
+K DeleteEventSubscriptionInput 001 SubscriptionName req nil
+K DeleteGlobalClusterInput 001 GlobalClusterIdentifier req nil
+K DeleteIntegrationInput 001 IntegrationIdentifier req nil
+K DeleteIntegrationInput 002 IntegrationIdentifier len 1 ptr
+K DeleteOptionGroupInput 001 OptionGroupName req nil
+K DeleteTenantDatabaseInput 001 DBInstanceIdentifier req nil
+K DeleteTenantDatabaseInput 002 TenantDBName req nil
+K DeregisterDBProxyTargetsInput 001 DBProxyName req nil
+K DescribeBlueGreenDeploymentsInput 001 BlueGreenDeploymentIdentifier len 1 ptr
+K DescribeBlueGreenDeploymentsInput 002 MaxRecords min 20 ptr
+K DescribeBlueGreenDeploymentsInput 003 Filters each Filter slice
+K DescribeCertificatesInput 001 Filters each Filter slice
+K DescribeDBClusterAutomatedBackupsInput 001 Filters each Filter slice
+K DescribeDBClusterBacktracksInput 001 DBClusterIdentifier req nil
+K DescribeDBClusterBacktracksInput 002 Filters each Filter slice
+K DescribeDBClusterEndpointsInput 001 Filters each Filter slice
+K DescribeDBClusterParameterGroupsInput 001 Filters each Filter slice
+K DescribeDBClusterParametersInput 001 DBClusterParameterGroupName req nil
+K DescribeDBClusterParametersInput 002 Filters each Filter slice
+K DescribeDBClusterSnapshotAttributesInput 001 DBClusterSnapshotIdentifier req nil
+K DescribeDBClusterSnapshotsInput 001 Filters each Filter slice
+K DescribeDBClustersInput 001 Filters each Filter slice
+K DescribeDBEngineVersionsInput 001 Filters each Filter slice
+K DescribeDBInstanceAutomatedBackupsInput 001 Filters each Filter slice
+K DescribeDBInstancesInput 001 Filters each Filter slice
+K DescribeDBLogFilesInput 001 DBInstanceIdentifier req nil
+K DescribeDBLogFilesInput 002 Filters each Filter slice
+K DescribeDBParameterGroupsInput 001 Filters each Filter slice
+K DescribeDBParametersInput 001 DBParameterGroupName req nil
+K DescribeDBParametersInput 002 Filters each Filter slice
+K DescribeDBProxiesInput 001 MaxRecords min 20 ptr
+K DescribeDBProxiesInput 002 Filters each Filter slice
+K DescribeDBProxyEndpointsInput 001 DBProxyEndpointName len 1 ptr
+K DescribeDBProxyEndpointsInput 002 DBProxyName len 1 ptr
+K DescribeDBProxyEndpointsInput 003 MaxRecords min 20 ptr
+K DescribeDBProxyEndpointsInput 004 Filters each Filter slice
+K DescribeDBProxyTargetGroupsInput 001 DBProxyName req nil
+K DescribeDBProxyTargetGroupsInput 002 MaxRecords min 20 ptr
+K DescribeDBProxyTargetGroupsInput 003 Filters each Filter slice
+K DescribeDBProxyTargetsInput 001 DBProxyName req nil
+K DescribeDBProxyTargetsInput 002 MaxRecords min 20 ptr
+K DescribeDBProxyTargetsInput 003 Filters each Filter slice
+K DescribeDBRecommendationsInput 001 Filters each Filter slice
+K DescribeDBSecurityGroupsInput 001 Filters each Filter slice
+K DescribeDBShardGroupsInput 001 DBShardGroupIdentifier len 1 ptr
+K DescribeDBShardGroupsInput 002 MaxRecords min 20 ptr
+K DescribeDBShardGroupsInput 003 Filters each Filter slice
+K DescribeDBSnapshotAttributesInput 001 DBSnapshotIdentifier req nil
+K DescribeDBSnapshotTenantDatabasesInput 001 Filters each Filter slice
+K DescribeDBSnapshotsInput 001 Filters each Filter slice
+K DescribeDBSubnetGroupsInput 001 Filters each Filter slice
+K DescribeEngineDefaultClusterParametersInput 001 DBParameterGroupFamily req nil
+K DescribeEngineDefaultClusterParametersInput 002 Filters each Filter slice
+K DescribeEngineDefaultParametersInput 001 DBParameterGroupFamily req nil
+K DescribeEngineDefaultParametersInput 002 Filters each Filter slice
+K DescribeEventCategoriesInput 001 Filters each Filter slice
+K DescribeEventSubscriptionsInput 001 Filters each Filter slice
+K DescribeEventsInput 001 Filters each Filter slice
+K DescribeExportTasksInput 001 MaxRecords min 20 ptr
+K DescribeExportTasksInput 002 Filters each Filter slice
+K DescribeGlobalClustersInput 001 Filters each Filter slice
+K DescribeIntegrationsInput 001 IntegrationIdentifier len 1 ptr
+K DescribeIntegrationsInput 002 Marker len 1 ptr
+K DescribeIntegrationsInput 003 Filters each Filter slice
+K DescribeOptionGroupOptionsInput 001 EngineName req nil
+K DescribeOptionGroupOptionsInput 002 Filters each Filter slice
+K DescribeOptionGroupsInput 001 Filters each Filter slice
+K DescribeOrderableDBInstanceOptionsInput 001 Engine req nil
+K DescribeOrderableDBInstanceOptionsInput 002 Filters each Filter slice
+K DescribePendingMaintenanceActionsInput 001 Filters each Filter slice
+K DescribeReservedDBInstancesInput 001 Filters each Filter slice
+K DescribeReservedDBInstancesOfferingsInput 001 Filters each Filter slice
+K DescribeSourceRegionsInput 001 Filters each Filter slice
+K DescribeTenantDatabasesInput 001 Filters each Filter slice
+K DescribeValidDBInstanceModificationsInput 001 DBInstanceIdentifier req nil
+K DisableHttpEndpointInput 001 ResourceArn req nil
+K DownloadDBLogFilePortionInput 001 DBInstanceIdentifier req nil
+K DownloadDBLogFilePortionInput 002 LogFileName req nil
+K EnableHttpEndpointInput 001 ResourceArn req nil
+K FailoverDBClusterInput 001 DBClusterIdentifier req nil
+K FailoverGlobalClusterInput 001 GlobalClusterIdentifier req nil
+K FailoverGlobalClusterInput 002 GlobalClusterIdentifier len 1 ptr
+K FailoverGlobalClusterInput 003 TargetDbClusterIdentifier req nil
+K FailoverGlobalClusterInput 004 TargetDbClusterIdentifier len 1 ptr
+K Filter 001 Name req nil
+K Filter 002 Values req nil
+K ListTagsForResourceInput 001 ResourceName req nil
+K ListTagsForResourceInput 002 Filters each Filter slice
+K ModifyCurrentDBClusterCapacityInput 001 DBClusterIdentifier req nil
+K ModifyCustomDBEngineVersionInput 001 Description len 1 ptr
+K ModifyCustomDBEngineVersionInput 002 Engine req nil
+K ModifyCustomDBEngineVersionInput 003 Engine len 1 ptr
+K ModifyCustomDBEngineVersionInput 004 EngineVersion req nil
+K ModifyCustomDBEngineVersionInput 005 EngineVersion len 1 ptr
+K ModifyDBClusterEndpointInput 001 DBClusterEndpointIdentifier req nil
+K ModifyDBClusterInput 001 AwsBackupRecoveryPointArn len 43 ptr
+K ModifyDBClusterInput 002 DBClusterIdentifier req nil
+K ModifyDBClusterParameterGroupInput 001 DBClusterParameterGroupName req nil
+K ModifyDBClusterParameterGroupInput 002 Parameters req nil
+K ModifyDBClusterSnapshotAttributeInput 001 AttributeName req nil
+K ModifyDBClusterSnapshotAttributeInput 002 DBClusterSnapshotIdentifier req nil
+K ModifyDBInstanceInput 001 AwsBackupRecoveryPointArn len 43 ptr
+K ModifyDBInstanceInput 002 DBInstanceIdentifier req nil
+K ModifyDBParameterGroupInput 001 DBParameterGroupName req nil
+K ModifyDBParameterGroupInput 002 Parameters req nil
+K ModifyDBProxyEndpointInput 001 DBProxyEndpointName req nil
+K ModifyDBProxyEndpointInput 002 DBProxyEndpointName len 1 ptr
+K ModifyDBProxyEndpointInput 003 NewDBProxyEndpointName len 1 ptr
+K ModifyDBProxyInput 001 DBProxyName req nil
+K ModifyDBProxyTargetGroupInput 001 DBProxyName req nil
+K ModifyDBProxyTargetGroupInput 002 TargetGroupName req nil
+K ModifyDBRecommendationInput 001 RecommendationId req nil
+K ModifyDBRecommendationInput 002 RecommendedActionUpdates each RecommendedActionUpdate slice
+K ModifyDBShardGroupInput 001 DBShardGroupIdentifier req nil
+K ModifyDBShardGroupInput 002 DBShardGroupIdentifier len 1 ptr
+K ModifyDBSnapshotAttributeInput 001 AttributeName req nil
+K ModifyDBSnapshotAttributeInput 002 DBSnapshotIdentifier req nil
+K ModifyDBSnapshotInput 001 DBSnapshotIdentifier req nil
+K ModifyDBSubnetGroupInput 001 DBSubnetGroupName req nil
+K ModifyDBSubnetGroupInput 002 SubnetIds req nil
+K ModifyEventSubscriptionInput 001 SubscriptionName req nil
+K ModifyIntegrationInput 001 DataFilter len 1 ptr
+K ModifyIntegrationInput 002 IntegrationIdentifier req nil
+K ModifyIntegrationInput 003 IntegrationIdentifier len 1 ptr
+K ModifyIntegrationInput 004 IntegrationName len 1 ptr
+K ModifyOptionGroupInput 001 OptionGroupName req nil
+K ModifyOptionGroupInput 002 OptionsToInclude each OptionConfiguration slice
+K ModifyTenantDatabaseInput 001 DBInstanceIdentifier req nil
+K ModifyTenantDatabaseInput 002 TenantDBName req nil
+K OptionConfiguration 001 OptionName req nil
+K PromoteReadReplicaDBClusterInput 001 DBClusterIdentifier req nil
+K PromoteReadReplicaInput 001 DBInstanceIdentifier req nil
+K PurchaseReservedDBInstancesOfferingInput 001 ReservedDBInstancesOfferingId req nil
+K RebootDBClusterInput 001 DBClusterIdentifier req nil
+K RebootDBInstanceInput 001 DBInstanceIdentifier req nil
+K RebootDBShardGroupInput 001 DBShardGroupIdentifier req nil
+K RebootDBShardGroupInput 002 DBShardGroupIdentifier len 1 ptr
+K RecommendedActionUpdate 001 ActionId req nil
+K RecommendedActionUpdate 002 Status req nil
+K RegisterDBProxyTargetsInput 001 DBProxyName req nil
+K RemoveRoleFromDBClusterInput 001 DBClusterIdentifier req nil
+K RemoveRoleFromDBClusterInput 002 RoleArn req nil
+K RemoveRoleFromDBInstanceInput 001 DBInstanceIdentifier req nil
+K RemoveRoleFromDBInstanceInput 002 FeatureName req nil
+K RemoveRoleFromDBInstanceInput 003 RoleArn req nil
+K RemoveSourceIdentifierFromSubscriptionInput 001 SourceIdentifier req nil
+K RemoveSourceIdentifierFromSubscriptionInput 002 SubscriptionName req nil
+K RemoveTagsFromResourceInput 001 ResourceName req nil
+K RemoveTagsFromResourceInput 002 TagKeys req nil
+K ResetDBClusterParameterGroupInput 001 DBClusterParameterGroupName req nil
+K ResetDBParameterGroupInput 001 DBParameterGroupName req nil
+K RestoreDBClusterFromS3Input 001 DBClusterIdentifier req nil
+K RestoreDBClusterFromS3Input 002 Engine req nil
+K RestoreDBClusterFromS3Input 003 MasterUsername req nil
+K RestoreDBClusterFromS3Input 004 S3BucketName req nil
+K RestoreDBClusterFromS3Input 005 S3IngestionRoleArn req nil
+K RestoreDBClusterFromS3Input 006 SourceEngine req nil
+K RestoreDBClusterFromS3Input 007 SourceEngineVersion req nil
+K RestoreDBClusterFromSnapshotInput 001 DBClusterIdentifier req nil
+K RestoreDBClusterFromSnapshotInput 002 Engine req nil
+K RestoreDBClusterFromSnapshotInput 003 SnapshotIdentifier req nil
+K RestoreDBClusterToPointInTimeInput 001 DBClusterIdentifier req nil
+K RestoreDBInstanceFromDBSnapshotInput 001 DBInstanceIdentifier req nil
+K RestoreDBInstanceFromS3Input 001 DBInstanceClass req nil
+K RestoreDBInstanceFromS3Input 002 DBInstanceIdentifier req nil
+K RestoreDBInstanceFromS3Input 003 Engine req nil
+K RestoreDBInstanceFromS3Input 004 S3BucketName req nil
+K RestoreDBInstanceFromS3Input 005 S3IngestionRoleArn req nil
+K RestoreDBInstanceFromS3Input 006 SourceEngine req nil
+K RestoreDBInstanceFromS3Input 007 SourceEngineVersion req nil
+K RestoreDBInstanceToPointInTimeInput 001 TargetDBInstanceIdentifier req nil
+K RevokeDBSecurityGroupIngressInput 001 DBSecurityGroupName req nil
+K StartActivityStreamInput 001 KmsKeyId req nil
+K StartActivityStreamInput 002 Mode req empty
+K StartActivityStreamInput 003 ResourceArn req nil
+K StartDBClusterInput 001 DBClusterIdentifier req nil
+K StartDBInstanceAutomatedBackupsReplicationInput 001 SourceDBInstanceArn req nil
+K StartDBInstanceInput 001 DBInstanceIdentifier req nil
+K StartExportTaskInput 001 ExportTaskIdentifier req nil
+K StartExportTaskInput 002 IamRoleArn req nil
+K StartExportTaskInput 003 KmsKeyId req nil
+K StartExportTaskInput 004 S3BucketName req nil
+K StartExportTaskInput 005 SourceArn req nil
+K StopActivityStreamInput 001 ResourceArn req nil
+K StopDBClusterInput 001 DBClusterIdentifier req nil
+K StopDBInstanceAutomatedBackupsReplicationInput 001 SourceDBInstanceArn req nil
+K StopDBInstanceInput 001 DBInstanceIdentifier req nil
+K SwitchoverBlueGreenDeploymentInput 001 BlueGreenDeploymentIdentifier req nil
+K SwitchoverBlueGreenDeploymentInput 002 BlueGreenDeploymentIdentifier len 1 ptr
+K SwitchoverBlueGreenDeploymentInput 003 SwitchoverTimeout min 30 ptr
+K SwitchoverGlobalClusterInput 001 GlobalClusterIdentifier req nil
+K SwitchoverGlobalClusterInput 002 GlobalClusterIdentifier len 1 ptr
+K SwitchoverGlobalClusterInput 003 TargetDbClusterIdentifier req nil
+K SwitchoverGlobalClusterInput 004 TargetDbClusterIdentifier len 1 ptr
+K SwitchoverReadReplicaInput 001 DBInstanceIdentifier req nil
+G DescribeBlueGreenDeployments Marker Marker
+G DescribeCertificates Marker Marker
+G DescribeDBClusterAutomatedBackups Marker Marker
+G DescribeDBClusterBacktracks Marker Marker
+G DescribeDBClusterEndpoints Marker Marker
+G DescribeDBClusterParameterGroups Marker Marker
+G DescribeDBClusterParameters Marker Marker
+G DescribeDBClusterSnapshots Marker Marker
+G DescribeDBClusters Marker Marker
+G DescribeDBEngineVersions Marker Marker
+G DescribeDBInstanceAutomatedBackups Marker Marker
+G DescribeDBInstances Marker Marker
+G DescribeDBLogFiles Marker Marker
+G DescribeDBMajorEngineVersions Marker Marker
+G DescribeDBParameterGroups Marker Marker
+G DescribeDBParameters Marker Marker
+G DescribeDBProxies Marker Marker
+G DescribeDBProxyEndpoints Marker Marker
+G DescribeDBProxyTargetGroups Marker Marker
+G DescribeDBProxyTargets Marker Marker
+G DescribeDBRecommendations Marker Marker
+G DescribeDBSecurityGroups Marker Marker
+G DescribeDBSnapshotTenantDatabases Marker Marker
+G DescribeDBSnapshots Marker Marker
+G DescribeDBSubnetGroups Marker Marker
+G DescribeEventSubscriptions Marker Marker
+G DescribeEvents Marker Marker
+G DescribeExportTasks Marker Marker
+G DescribeGlobalClusters Marker Marker
+G DescribeIntegrations Marker Marker
+G DescribeOptionGroupOptions Marker Marker
+G DescribeOptionGroups Marker Marker
+G DescribeOrderableDBInstanceOptions Marker Marker
+G DescribePendingMaintenanceActions Marker Marker
+G DescribeReservedDBInstances Marker Marker
+G DescribeReservedDBInstancesOfferings Marker Marker
+G DescribeServerlessV2PlatformVersions Marker Marker
+G DescribeSourceRegions Marker Marker
+G DescribeTenantDatabases Marker Marker
+G DownloadDBLogFilePortion Marker Marker

@@ -1,0 +1,1109 @@
+C ACM
+S AcmeDomainValidationDeletedWaiter
+S AcmeDomainValidationDeletedWaiterOptions
+S AcmeDomainValidationValidatedWaiter
+S AcmeDomainValidationValidatedWaiterOptions
+S AcmeEndpointActiveWaiter
+S AcmeEndpointActiveWaiterOptions
+S AcmeEndpointDeletedWaiter
+S AcmeEndpointDeletedWaiterOptions
+S AddTagsToCertificateInput
+S AddTagsToCertificateOutput
+S AuthResolverParameters
+S AuthSchemeResolver
+S CertificateValidatedWaiter
+S CertificateValidatedWaiterOptions
+S Client
+S CreateAcmeDomainValidationInput
+S CreateAcmeDomainValidationOutput
+S CreateAcmeEndpointInput
+S CreateAcmeEndpointOutput
+S CreateAcmeExternalAccountBindingInput
+S CreateAcmeExternalAccountBindingOutput
+S DeleteAcmeDomainValidationInput
+S DeleteAcmeDomainValidationOutput
+S DeleteAcmeEndpointInput
+S DeleteAcmeEndpointOutput
+S DeleteAcmeExternalAccountBindingInput
+S DeleteAcmeExternalAccountBindingOutput
+S DeleteCertificateInput
+S DeleteCertificateOutput
+S DescribeAcmeAccountInput
+S DescribeAcmeAccountOutput
+S DescribeAcmeDomainValidationAPIClient
+S DescribeAcmeDomainValidationInput
+S DescribeAcmeDomainValidationOutput
+S DescribeAcmeEndpointAPIClient
+S DescribeAcmeEndpointInput
+S DescribeAcmeEndpointOutput
+S DescribeAcmeExternalAccountBindingInput
+S DescribeAcmeExternalAccountBindingOutput
+S DescribeCertificateAPIClient
+S DescribeCertificateInput
+S DescribeCertificateOutput
+S EndpointParameters
+S EndpointResolver
+S EndpointResolverFromURL
+S EndpointResolverFunc
+S EndpointResolverOptions
+S EndpointResolverV2
+S ExportCertificateInput
+S ExportCertificateOutput
+S GetAccountConfigurationInput
+S GetAccountConfigurationOutput
+S GetAcmeExternalAccountBindingCredentialsInput
+S GetAcmeExternalAccountBindingCredentialsOutput
+S GetCertificateInput
+S GetCertificateOutput
+S HTTPClient
+S HTTPSignerV4
+S IdempotencyTokenProvider
+S ImportCertificateInput
+S ImportCertificateOutput
+S ListAcmeAccountsAPIClient
+S ListAcmeAccountsInput
+S ListAcmeAccountsOutput
+S ListAcmeAccountsPaginator
+S ListAcmeAccountsPaginatorOptions
+S ListAcmeDomainValidationsAPIClient
+S ListAcmeDomainValidationsInput
+S ListAcmeDomainValidationsOutput
+S ListAcmeDomainValidationsPaginator
+S ListAcmeDomainValidationsPaginatorOptions
+S ListAcmeEndpointsAPIClient
+S ListAcmeEndpointsInput
+S ListAcmeEndpointsOutput
+S ListAcmeEndpointsPaginator
+S ListAcmeEndpointsPaginatorOptions
+S ListAcmeExternalAccountBindingsAPIClient
+S ListAcmeExternalAccountBindingsInput
+S ListAcmeExternalAccountBindingsOutput
+S ListAcmeExternalAccountBindingsPaginator
+S ListAcmeExternalAccountBindingsPaginatorOptions
+S ListCertificateDomainValidationsAPIClient
+S ListCertificateDomainValidationsInput
+S ListCertificateDomainValidationsOutput
+S ListCertificateDomainValidationsPaginator
+S ListCertificateDomainValidationsPaginatorOptions
+S ListCertificatesAPIClient
+S ListCertificatesInput
+S ListCertificatesOutput
+S ListCertificatesPaginator
+S ListCertificatesPaginatorOptions
+S ListTagsForCertificateInput
+S ListTagsForCertificateOutput
+S ListTagsForResourceInput
+S ListTagsForResourceOutput
+S New
+S NewAcmeDomainValidationDeletedWaiter
+S NewAcmeDomainValidationValidatedWaiter
+S NewAcmeEndpointActiveWaiter
+S NewAcmeEndpointDeletedWaiter
+S NewCertificateValidatedWaiter
+S NewDefaultEndpointResolver
+S NewDefaultEndpointResolverV2
+S NewFromConfig
+S NewListAcmeAccountsPaginator
+S NewListAcmeDomainValidationsPaginator
+S NewListAcmeEndpointsPaginator
+S NewListAcmeExternalAccountBindingsPaginator
+S NewListCertificateDomainValidationsPaginator
+S NewListCertificatesPaginator
+S NewSearchCertificatesPaginator
+S Options
+S PutAccountConfigurationInput
+S PutAccountConfigurationOutput
+S RemoveTagsFromCertificateInput
+S RemoveTagsFromCertificateOutput
+S RenewCertificateInput
+S RenewCertificateOutput
+S RequestCertificateInput
+S RequestCertificateOutput
+S ResendValidationEmailInput
+S ResendValidationEmailOutput
+S ResolveEndpoint
+S RevokeAcmeAccountInput
+S RevokeAcmeAccountOutput
+S RevokeAcmeExternalAccountBindingInput
+S RevokeAcmeExternalAccountBindingOutput
+S RevokeCertificateInput
+S RevokeCertificateOutput
+S SearchCertificatesAPIClient
+S SearchCertificatesInput
+S SearchCertificatesOutput
+S SearchCertificatesPaginator
+S SearchCertificatesPaginatorOptions
+S ServiceAPIVersion
+S ServiceID
+S TagResourceInput
+S TagResourceOutput
+S TypeRegistry
+S UntagResourceInput
+S UntagResourceOutput
+S UpdateAcmeDomainValidationInput
+S UpdateAcmeDomainValidationOutput
+S UpdateAcmeEndpointInput
+S UpdateAcmeEndpointOutput
+S UpdateCertificateOptionsInput
+S UpdateCertificateOptionsOutput
+S WithAPIOptions
+S WithEndpointResolver
+S WithEndpointResolverV2
+S WithSigV4SigningName
+S WithSigV4SigningRegion
+O AddTagsToCertificate
+O CreateAcmeDomainValidation
+O CreateAcmeEndpoint
+O CreateAcmeExternalAccountBinding
+O DeleteAcmeDomainValidation
+O DeleteAcmeEndpoint
+O DeleteAcmeExternalAccountBinding
+O DeleteCertificate
+O DescribeAcmeAccount
+O DescribeAcmeDomainValidation
+O DescribeAcmeEndpoint
+O DescribeAcmeExternalAccountBinding
+O DescribeCertificate
+O ExportCertificate
+O GetAccountConfiguration
+O GetAcmeExternalAccountBindingCredentials
+O GetCertificate
+O ImportCertificate
+O ListAcmeAccounts
+O ListAcmeDomainValidations
+O ListAcmeEndpoints
+O ListAcmeExternalAccountBindings
+O ListCertificateDomainValidations
+O ListCertificates
+O ListTagsForCertificate
+O ListTagsForResource
+O PutAccountConfiguration
+O RemoveTagsFromCertificate
+O RenewCertificate
+O RequestCertificate
+O ResendValidationEmail
+O RevokeAcmeAccount
+O RevokeAcmeExternalAccountBinding
+O RevokeCertificate
+O SearchCertificates
+O TagResource
+O UntagResource
+O UpdateAcmeDomainValidation
+O UpdateAcmeEndpoint
+O UpdateCertificateOptions
+X ErrCodeAccessDeniedException AccessDeniedException
+X ErrCodeConflictException ConflictException
+X ErrCodeInvalidArgsException InvalidArgsException
+X ErrCodeInvalidArnException InvalidArnException
+X ErrCodeInvalidDomainValidationOptionsException InvalidDomainValidationOptionsException
+X ErrCodeInvalidParameterException InvalidParameterException
+X ErrCodeInvalidStateException InvalidStateException
+X ErrCodeInvalidTagException InvalidTagException
+X ErrCodeLimitExceededException LimitExceededException
+X ErrCodeRequestInProgressException RequestInProgressException
+X ErrCodeResourceInUseException ResourceInUseException
+X ErrCodeResourceNotFoundException ResourceNotFoundException
+X ErrCodeTagPolicyException TagPolicyException
+X ErrCodeThrottlingException ThrottlingException
+X ErrCodeTooManyTagsException TooManyTagsException
+X ErrCodeValidationException ValidationException
+I ExpiryEventsConfiguration.DaysBeforeExpiry int64 int32
+I ListCertificatesInput.MaxItems int64 int32
+R AcmeDomainValidation.FailureDetails FailureDetails
+R AcmeDomainValidationSummary.FailureDetails FailureDetails
+R CertificateDetail.Options CertificateOptions
+R CertificateDetail.RenewalSummary RenewalSummary
+R CertificateDetail.UpdateSummary UpdateSummary
+R CertificateSearchResult.X509Attributes X509Attributes
+R CreateAcmeExternalAccountBindingInput.Expiration Expiration
+R CreateAcmeExternalAccountBindingOutput.ExternalAccountBinding AcmeExternalAccountBinding
+R DescribeAcmeAccountOutput.AcmeAccount AcmeAccount
+R DescribeAcmeDomainValidationOutput.AcmeDomainValidation AcmeDomainValidation
+R DescribeAcmeEndpointOutput.AcmeEndpoint AcmeEndpoint
+R DescribeAcmeExternalAccountBindingOutput.ExternalAccountBinding AcmeExternalAccountBinding
+R DescribeCertificateOutput.Certificate CertificateDetail
+R DnsPrevalidationDetails.DomainScope DomainScope
+R DnsPrevalidationDetails.ResourceRecord ResourceRecord
+R DnsPrevalidationOptions.DomainScope DomainScope
+R DnsValidationChallenge.ResourceRecord ResourceRecord
+R DomainValidation.HttpRedirect HttpRedirect
+R DomainValidation.ResourceRecord ResourceRecord
+R DomainValidationSummary.ActiveValidationConfiguration ValidationConfiguration
+R DomainValidationSummary.RequestedValidationConfiguration ValidationConfiguration
+R GetAccountConfigurationOutput.ExpiryEvents ExpiryEventsConfiguration
+R ListCertificatesInput.Includes Filters
+R PutAccountConfigurationInput.ExpiryEvents ExpiryEventsConfiguration
+R RequestCertificateInput.Options CertificateOptions
+R UpdateCertificateOptionsInput.Options CertificateOptions
+R UpdateSummary.DomainValidationMethodUpdateSummary DomainValidationMethodUpdateSummary
+R X509Attributes.Issuer DistinguishedName
+R X509Attributes.Subject DistinguishedName
+V AccessDeniedException.ErrorCodeOverride string
+V AccessDeniedException.Message string
+V AcmCertificateMetadata.AcmeAccountId string
+V AcmCertificateMetadata.AcmeEndpointArn string
+V AcmCertificateMetadata.Exported bool
+V AcmCertificateMetadata.InUse bool
+V AcmeAccount.AccountUrl string
+V AcmeAccount.AcmeExternalAccountBindingArn string
+V AcmeAccount.PublicKeyThumbprint string
+V AcmeAccountSummary.AccountUrl string
+V AcmeAccountSummary.AcmeExternalAccountBindingArn string
+V AcmeAccountSummary.PublicKeyThumbprint string
+V AcmeDomainValidation.AcmeDomainValidationArn string
+V AcmeDomainValidation.AcmeEndpointArn string
+V AcmeDomainValidation.DomainName string
+V AcmeDomainValidationSummary.AcmeDomainValidationArn string
+V AcmeDomainValidationSummary.AcmeEndpointArn string
+V AcmeDomainValidationSummary.DomainName string
+V AcmeEndpoint.AcmeEndpointArn string
+V AcmeEndpoint.EndpointUrl string
+V AcmeEndpoint.FailureReason string
+V AcmeEndpointSummary.AcmeEndpointArn string
+V AcmeEndpointSummary.EndpointUrl string
+V AcmeEndpointSummary.FailureReason string
+V AcmeExternalAccountBinding.AcmeEndpointArn string
+V AcmeExternalAccountBinding.AcmeExternalAccountBindingArn string
+V AcmeExternalAccountBinding.RoleArn string
+V AcmeExternalAccountBindingSummary.AcmeEndpointArn string
+V AcmeExternalAccountBindingSummary.AcmeExternalAccountBindingArn string
+V AcmeExternalAccountBindingSummary.RoleArn string
+V AddTagsToCertificateInput.CertificateArn string
+V CertificateDetail.AcmeAccountId string
+V CertificateDetail.AcmeEndpointArn string
+V CertificateDetail.CertificateArn string
+V CertificateDetail.CertificateAuthorityArn string
+V CertificateDetail.DomainName string
+V CertificateDetail.Issuer string
+V CertificateDetail.Serial string
+V CertificateDetail.SignatureAlgorithm string
+V CertificateDetail.Subject string
+V CertificateSearchResult.CertificateArn string
+V CertificateSummary.CertificateArn string
+V CertificateSummary.DomainName string
+V CertificateSummary.Exported bool
+V CertificateSummary.HasAdditionalSubjectAlternativeNames bool
+V CertificateSummary.InUse bool
+V CommonNameFilter.Value string
+V ConflictException.ErrorCodeOverride string
+V ConflictException.Message string
+V CreateAcmeDomainValidationInput.AcmeEndpointArn string
+V CreateAcmeDomainValidationInput.DomainName string
+V CreateAcmeDomainValidationInput.IdempotencyToken string
+V CreateAcmeDomainValidationOutput.AcmeDomainValidationArn string
+V CreateAcmeEndpointInput.IdempotencyToken string
+V CreateAcmeEndpointOutput.AcmeEndpointArn string
+V CreateAcmeExternalAccountBindingInput.AcmeEndpointArn string
+V CreateAcmeExternalAccountBindingInput.IdempotencyToken string
+V CreateAcmeExternalAccountBindingInput.RoleArn string
+V CustomAttribute.ObjectIdentifier string
+V CustomAttribute.Value string
+V DeleteAcmeDomainValidationInput.AcmeDomainValidationArn string
+V DeleteAcmeEndpointInput.AcmeEndpointArn string
+V DeleteAcmeExternalAccountBindingInput.AcmeExternalAccountBindingArn string
+V DeleteCertificateInput.CertificateArn string
+V DescribeAcmeAccountInput.AccountUrl string
+V DescribeAcmeAccountInput.AcmeEndpointArn string
+V DescribeAcmeDomainValidationInput.AcmeDomainValidationArn string
+V DescribeAcmeEndpointInput.AcmeEndpointArn string
+V DescribeAcmeExternalAccountBindingInput.AcmeExternalAccountBindingArn string
+V DescribeCertificateInput.CertificateArn string
+V DistinguishedName.CommonName string
+V DistinguishedName.Country string
+V DistinguishedName.DistinguishedNameQualifier string
+V DistinguishedName.GenerationQualifier string
+V DistinguishedName.GivenName string
+V DistinguishedName.Initials string
+V DistinguishedName.Locality string
+V DistinguishedName.Organization string
+V DistinguishedName.OrganizationalUnit string
+V DistinguishedName.Pseudonym string
+V DistinguishedName.SerialNumber string
+V DistinguishedName.State string
+V DistinguishedName.Surname string
+V DistinguishedName.Title string
+V DnsNameFilter.Value string
+V DnsPrevalidationDetails.HostedZoneId string
+V DnsPrevalidationOptions.HostedZoneId string
+V DomainValidation.DomainName string
+V DomainValidation.ValidationDomain string
+V DomainValidationOption.DomainName string
+V DomainValidationOption.ValidationDomain string
+V DomainValidationSummary.DomainName string
+V EmailValidationChallenge.ValidationDomain string
+V EndpointParameters.Endpoint string
+V EndpointParameters.Region string
+V EndpointParameters.ServiceType string
+V EndpointParameters.UseDualStack bool
+V EndpointParameters.UseFIPS bool
+V Expiration.Value int64
+V ExpiryEventsConfiguration.DaysBeforeExpiry int32
+V ExportCertificateInput.CertificateArn string
+V ExportCertificateOutput.Certificate string
+V ExportCertificateOutput.CertificateChain string
+V ExportCertificateOutput.PrivateKey string
+V ExtendedKeyUsage.OID string
+V FailureDetails.Message string
+V GetAcmeExternalAccountBindingCredentialsInput.AcmeExternalAccountBindingArn string
+V GetAcmeExternalAccountBindingCredentialsOutput.KeyId string
+V GetAcmeExternalAccountBindingCredentialsOutput.MacKey string
+V GetCertificateInput.CertificateArn string
+V GetCertificateOutput.Certificate string
+V GetCertificateOutput.CertificateChain string
+V HttpRedirect.RedirectFrom string
+V HttpRedirect.RedirectTo string
+V ImportCertificateInput.CertificateArn string
+V ImportCertificateOutput.CertificateArn string
+V InternalServerException.ErrorCodeOverride string
+V InternalServerException.Message string
+V InvalidArgsException.ErrorCodeOverride string
+V InvalidArgsException.Message string
+V InvalidArnException.ErrorCodeOverride string
+V InvalidArnException.Message string
+V InvalidDomainValidationOptionsException.ErrorCodeOverride string
+V InvalidDomainValidationOptionsException.Message string
+V InvalidParameterException.ErrorCodeOverride string
+V InvalidParameterException.Message string
+V InvalidStateException.ErrorCodeOverride string
+V InvalidStateException.Message string
+V InvalidTagException.ErrorCodeOverride string
+V InvalidTagException.Message string
+V LimitExceededException.ErrorCodeOverride string
+V LimitExceededException.Message string
+V ListAcmeAccountsInput.AcmeEndpointArn string
+V ListAcmeAccountsInput.MaxResults int32
+V ListAcmeAccountsInput.NextToken string
+V ListAcmeAccountsOutput.NextToken string
+V ListAcmeDomainValidationsInput.AcmeEndpointArn string
+V ListAcmeDomainValidationsInput.MaxResults int32
+V ListAcmeDomainValidationsInput.NextToken string
+V ListAcmeDomainValidationsOutput.NextToken string
+V ListAcmeEndpointsInput.MaxResults int32
+V ListAcmeEndpointsInput.NextToken string
+V ListAcmeEndpointsOutput.NextToken string
+V ListAcmeExternalAccountBindingsInput.AcmeEndpointArn string
+V ListAcmeExternalAccountBindingsInput.MaxResults int32
+V ListAcmeExternalAccountBindingsInput.NextToken string
+V ListAcmeExternalAccountBindingsOutput.NextToken string
+V ListCertificateDomainValidationsInput.CertificateArn string
+V ListCertificateDomainValidationsInput.MaxItems int32
+V ListCertificateDomainValidationsInput.NextToken string
+V ListCertificateDomainValidationsOutput.NextToken string
+V ListCertificatesInput.MaxItems int32
+V ListCertificatesInput.NextToken string
+V ListCertificatesOutput.NextToken string
+V ListTagsForCertificateInput.CertificateArn string
+V ListTagsForResourceInput.ResourceArn string
+V Options.BaseEndpoint string
+V Options.ServiceType string
+V OtherName.ObjectIdentifier string
+V OtherName.Value string
+V PutAccountConfigurationInput.IdempotencyToken string
+V RemoveTagsFromCertificateInput.CertificateArn string
+V RenewCertificateInput.CertificateArn string
+V RequestCertificateInput.CertificateAuthorityArn string
+V RequestCertificateInput.DomainName string
+V RequestCertificateInput.IdempotencyToken string
+V RequestCertificateOutput.CertificateArn string
+V RequestInProgressException.ErrorCodeOverride string
+V RequestInProgressException.Message string
+V ResendValidationEmailInput.CertificateArn string
+V ResendValidationEmailInput.Domain string
+V ResendValidationEmailInput.ValidationDomain string
+V ResourceInUseException.ErrorCodeOverride string
+V ResourceInUseException.Message string
+V ResourceNotFoundException.ErrorCodeOverride string
+V ResourceNotFoundException.Message string
+V ResourceRecord.Name string
+V ResourceRecord.Value string
+V RevokeAcmeAccountInput.AccountUrl string
+V RevokeAcmeAccountInput.AcmeEndpointArn string
+V RevokeAcmeExternalAccountBindingInput.AcmeExternalAccountBindingArn string
+V RevokeCertificateInput.CertificateArn string
+V RevokeCertificateOutput.CertificateArn string
+V SearchCertificatesInput.MaxResults int32
+V SearchCertificatesInput.NextToken string
+V SearchCertificatesOutput.NextToken string
+V ServiceQuotaExceededException.ErrorCodeOverride string
+V ServiceQuotaExceededException.Message string
+V Tag.Key string
+V Tag.Value string
+V TagPolicyException.ErrorCodeOverride string
+V TagPolicyException.Message string
+V TagResourceInput.ResourceArn string
+V ThrottlingException.ErrorCodeOverride string
+V ThrottlingException.Message string
+V ThrottlingReason.Reason string
+V ThrottlingReason.Resource string
+V TooManyTagsException.ErrorCodeOverride string
+V TooManyTagsException.Message string
+V UntagResourceInput.ResourceArn string
+V UpdateAcmeDomainValidationInput.AcmeDomainValidationArn string
+V UpdateAcmeEndpointInput.AcmeEndpointArn string
+V UpdateCertificateOptionsInput.CertificateArn string
+V ValidationException.ErrorCodeOverride string
+V ValidationException.Message string
+V X509Attributes.SerialNumber string
+L AddTagsToCertificateInput.Tags Tag
+L CertificateDetail.DomainValidationOptions DomainValidation
+L CertificateDetail.ExtendedKeyUsages ExtendedKeyUsage
+L CertificateDetail.InUseBy -
+L CertificateDetail.KeyUsages KeyUsage
+L CertificateDetail.SubjectAlternativeNames -
+L CertificateSummary.ExtendedKeyUsages ExtendedKeyUsageName
+L CertificateSummary.KeyUsages KeyUsageName
+L CertificateSummary.SubjectAlternativeNameSummaries -
+L DomainValidation.ValidationEmails -
+L Filters.ExtendedKeyUsage ExtendedKeyUsageName
+L Filters.KeyTypes KeyAlgorithm
+L Filters.KeyUsage KeyUsageName
+L ImportCertificateInput.Tags Tag
+L ListCertificatesInput.CertificateStatuses CertificateStatus
+L ListCertificatesOutput.CertificateSummaryList CertificateSummary
+L ListTagsForCertificateOutput.Tags Tag
+L RemoveTagsFromCertificateInput.Tags Tag
+L RenewalSummary.DomainValidationOptions DomainValidation
+L RequestCertificateInput.DomainValidationOptions DomainValidationOption
+L RequestCertificateInput.SubjectAlternativeNames -
+L RequestCertificateInput.Tags Tag
+F AcmCertificateMetadata.CertificateKeyPairOrigin CertificateKeyPairOrigin
+F AcmCertificateMetadata.ExportOption CertificateExport
+F AcmCertificateMetadata.ManagedBy CertificateManagedBy
+F AcmCertificateMetadata.RenewalEligibility RenewalEligibility
+F AcmCertificateMetadata.RenewalStatus RenewalStatus
+F AcmCertificateMetadata.Status CertificateStatus
+F AcmCertificateMetadata.Type CertificateType
+F AcmCertificateMetadata.ValidationMethod ValidationMethod
+F AcmCertificateMetadataFilterMemberCertificateKeyPairOrigin.Value CertificateKeyPairOrigin
+F AcmCertificateMetadataFilterMemberExportOption.Value CertificateExport
+F AcmCertificateMetadataFilterMemberManagedBy.Value CertificateManagedBy
+F AcmCertificateMetadataFilterMemberRenewalStatus.Value RenewalStatus
+F AcmCertificateMetadataFilterMemberStatus.Value CertificateStatus
+F AcmCertificateMetadataFilterMemberType.Value CertificateType
+F AcmCertificateMetadataFilterMemberValidationMethod.Value ValidationMethod
+F AcmeAccount.Status AcmeAccountStatus
+F AcmeAccountSummary.Status AcmeAccountStatus
+F AcmeDomainValidation.PrevalidationType PrevalidationType
+F AcmeDomainValidation.Status AcmeDomainValidationStatus
+F AcmeDomainValidationSummary.PrevalidationType PrevalidationType
+F AcmeDomainValidationSummary.Status AcmeDomainValidationStatus
+F AcmeEndpoint.AuthorizationBehavior AcmeAuthorizationBehavior
+F AcmeEndpoint.Contact AcmeContact
+F AcmeEndpoint.Status AcmeEndpointStatus
+F AcmeEndpointSummary.AuthorizationBehavior AcmeAuthorizationBehavior
+F AcmeEndpointSummary.Contact AcmeContact
+F AcmeEndpointSummary.Status AcmeEndpointStatus
+F CertificateDetail.CertificateKeyPairOrigin CertificateKeyPairOrigin
+F CertificateDetail.FailureReason FailureReason
+F CertificateDetail.KeyAlgorithm KeyAlgorithm
+F CertificateDetail.ManagedBy CertificateManagedBy
+F CertificateDetail.RenewalEligibility RenewalEligibility
+F CertificateDetail.RevocationReason RevocationReason
+F CertificateDetail.Status CertificateStatus
+F CertificateDetail.Type CertificateType
+F CertificateOptions.CertificateTransparencyLoggingPreference CertificateTransparencyLoggingPreference
+F CertificateOptions.Export CertificateExport
+F CertificateOptions.ValidationMethod ValidationMethod
+F CertificateSummary.CertificateKeyPairOrigin CertificateKeyPairOrigin
+F CertificateSummary.ExportOption CertificateExport
+F CertificateSummary.ExtendedKeyUsages ExtendedKeyUsageName
+F CertificateSummary.KeyAlgorithm KeyAlgorithm
+F CertificateSummary.KeyUsages KeyUsageName
+F CertificateSummary.ManagedBy CertificateManagedBy
+F CertificateSummary.RenewalEligibility RenewalEligibility
+F CertificateSummary.Status CertificateStatus
+F CertificateSummary.Type CertificateType
+F CommonNameFilter.ComparisonOperator ComparisonOperator
+F CreateAcmeEndpointInput.AuthorizationBehavior AcmeAuthorizationBehavior
+F CreateAcmeEndpointInput.Contact AcmeContact
+F DnsNameFilter.ComparisonOperator ComparisonOperator
+F DomainScope.ExactDomain DomainScopeOption
+F DomainScope.Subdomains DomainScopeOption
+F DomainScope.Wildcards DomainScopeOption
+F DomainValidation.ValidationMethod ValidationMethod
+F DomainValidation.ValidationStatus DomainStatus
+F DomainValidationMethodUpdateSummary.From ValidationMethod
+F DomainValidationMethodUpdateSummary.To ValidationMethod
+F Expiration.Type TimeType
+F ExtendedKeyUsage.Name ExtendedKeyUsageName
+F FailureDetails.Reason AcmeDomainValidationFailureReason
+F Filters.ExportOption CertificateExport
+F Filters.ExtendedKeyUsage ExtendedKeyUsageName
+F Filters.KeyTypes KeyAlgorithm
+F Filters.KeyUsage KeyUsageName
+F Filters.ManagedBy CertificateManagedBy
+F KeyUsage.Name KeyUsageName
+F ListCertificatesInput.CertificateKeyPairOrigins CertificateKeyPairOrigin
+F ListCertificatesInput.CertificateStatuses CertificateStatus
+F ListCertificatesInput.SortBy SortBy
+F ListCertificatesInput.SortOrder SortOrder
+F PublicCertificateAuthority.AllowedKeyAlgorithms PublicKeyAlgorithm
+F RenewalSummary.RenewalStatus RenewalStatus
+F RenewalSummary.RenewalStatusReason FailureReason
+F RequestCertificateInput.KeyAlgorithm KeyAlgorithm
+F RequestCertificateInput.ManagedBy CertificateManagedBy
+F RequestCertificateInput.ValidationMethod ValidationMethod
+F ResourceRecord.Type RecordType
+F RevokeCertificateInput.RevocationReason RevocationReason
+F SearchCertificatesInput.SortBy SearchCertificatesSortBy
+F SearchCertificatesInput.SortOrder SearchCertificatesSortOrder
+F UpdateAcmeEndpointInput.AuthorizationBehavior AcmeAuthorizationBehavior
+F UpdateAcmeEndpointInput.Contact AcmeContact
+F UpdateSummary.Status UpdateStatus
+F UpdateSummary.Type UpdateType
+F ValidationConfiguration.ValidationMethod ValidationMethod
+F ValidationConfiguration.ValidationStatus DomainStatus
+F X509AttributeFilterMemberExtendedKeyUsage.Value ExtendedKeyUsageName
+F X509AttributeFilterMemberKeyAlgorithm.Value KeyAlgorithm
+F X509AttributeFilterMemberKeyUsage.Value KeyUsageName
+F X509Attributes.ExtendedKeyUsages ExtendedKeyUsageName
+F X509Attributes.KeyAlgorithm KeyAlgorithm
+F X509Attributes.KeyUsages KeyUsageName
+N APIOptions
+N AccountUrl
+N AcmeAccount
+N AcmeAccountId
+N AcmeAccounts
+N AcmeDomainValidation
+N AcmeDomainValidationArn
+N AcmeDomainValidations
+N AcmeEndpoint
+N AcmeEndpointArn
+N AcmeEndpoints
+N AcmeExternalAccountBindingArn
+N ActiveValidationConfiguration
+N AppID
+N AuthSchemePreference
+N AuthSchemeResolver
+N AuthSchemes
+N BaseEndpoint
+N Certificate
+N CertificateArn
+N CertificateAuthority
+N CertificateAuthorityArn
+N CertificateChain
+N CertificateMetadata
+N CertificateSummaryList
+N CertificateTags
+N ClientLogMode
+N ClientOptions
+N CommonName
+N Contacts
+N Country
+N CreatedAt
+N Credentials
+N CustomAttributes
+N DaysBeforeExpiry
+N DefaultsMode
+N DisableClockSkewCorrection
+N DisableHTTPS
+N DistinguishedNameQualifier
+N Domain
+N DomainComponents
+N DomainName
+N DomainScope
+N DomainValidationMethodUpdateSummary
+N DomainValidationOptions
+N DomainValidationSummaryList
+N End
+N Endpoint
+N EndpointOptions
+N EndpointResolver
+N EndpointResolverV2
+N EndpointUrl
+N ErrorCodeOverride
+N Expiration
+N ExpiresAt
+N ExpiryEvents
+N Exported
+N ExtendedKeyUsages
+N ExternalAccountBinding
+N ExternalAccountBindings
+N FailureDetails
+N FailureReason
+N FilterStatement
+N GenerationQualifier
+N GivenName
+N HTTPClient
+N HTTPSignerV4
+N HasAdditionalSubjectAlternativeNames
+N HostedZoneId
+N HttpRedirect
+N IdempotencyToken
+N IdempotencyTokenProvider
+N ImportedAt
+N InUse
+N InUseBy
+N Includes
+N Initials
+N Interceptors
+N IssuedAt
+N Issuer
+N Key
+N KeyId
+N KeyUsages
+N LastUsedAt
+N Limit
+N Locality
+N LogDeprecated
+N LogWaitAttempts
+N Logger
+N MacKey
+N MaxDelay
+N MaxItems
+N MaxResults
+N Message
+N MeterProvider
+N MinDelay
+N Name
+N NextToken
+N NotAfter
+N NotBefore
+N OID
+N ObjectIdentifier
+N Operation
+N Options
+N Organization
+N OrganizationalUnit
+N Passphrase
+N PrevalidationDetails
+N PrevalidationOptions
+N PrivateKey
+N Protocol
+N Pseudonym
+N PublicKeyThumbprint
+N Reason
+N RedirectFrom
+N RedirectTo
+N Region
+N RenewalSummary
+N RequestedAt
+N RequestedValidationConfiguration
+N ResolvedRegion
+N Resolver
+N Resource
+N ResourceArn
+N ResourceRecord
+N ResultMetadata
+N Results
+N RetryMaxAttempts
+N RetryMode
+N Retryable
+N Retryer
+N RevokedAt
+N RoleArn
+N RuntimeEnvironment
+N Serial
+N SerialNumber
+N ServiceType
+N SignatureAlgorithm
+N Start
+N State
+N StopOnDuplicateToken
+N Subject
+N SubjectAlternativeNameSummaries
+N SubjectAlternativeNames
+N Surname
+N Tag
+N TagKeys
+N Tags
+N ThrottlingReasons
+N Title
+N TracerProvider
+N UpdateSummary
+N UpdatedAt
+N UseDualStack
+N UseDualStackEndpoint
+N UseFIPS
+N UseFIPSEndpoint
+N ValidationChallenge
+N ValidationDomain
+N ValidationEmails
+N Value
+N X509Attributes
+T AccessDeniedException
+T AcmCertificateMetadata
+T AcmCertificateMetadataFilter
+T AcmCertificateMetadataFilterMemberAcmeAccountId
+T AcmCertificateMetadataFilterMemberAcmeEndpointArn
+T AcmCertificateMetadataFilterMemberCertificateKeyPairOrigin
+T AcmCertificateMetadataFilterMemberExportOption
+T AcmCertificateMetadataFilterMemberExported
+T AcmCertificateMetadataFilterMemberInUse
+T AcmCertificateMetadataFilterMemberManagedBy
+T AcmCertificateMetadataFilterMemberRenewalStatus
+T AcmCertificateMetadataFilterMemberStatus
+T AcmCertificateMetadataFilterMemberType
+T AcmCertificateMetadataFilterMemberValidationMethod
+T AcmeAccount
+T AcmeAccountStatus
+T AcmeAccountSummary
+T AcmeAuthorizationBehavior
+T AcmeContact
+T AcmeDomainValidation
+T AcmeDomainValidationFailureReason
+T AcmeDomainValidationStatus
+T AcmeDomainValidationSummary
+T AcmeEndpoint
+T AcmeEndpointStatus
+T AcmeEndpointSummary
+T AcmeExternalAccountBinding
+T AcmeExternalAccountBindingSummary
+T CertificateAuthority
+T CertificateAuthorityMemberPublicCertificateAuthority
+T CertificateDetail
+T CertificateExport
+T CertificateFilter
+T CertificateFilterMemberAcmCertificateMetadataFilter
+T CertificateFilterMemberCertificateArn
+T CertificateFilterMemberX509AttributeFilter
+T CertificateFilterStatement
+T CertificateFilterStatementMemberAnd
+T CertificateFilterStatementMemberFilter
+T CertificateFilterStatementMemberNot
+T CertificateFilterStatementMemberOr
+T CertificateKeyPairOrigin
+T CertificateManagedBy
+T CertificateMetadata
+T CertificateMetadataMemberAcmCertificateMetadata
+T CertificateOptions
+T CertificateSearchResult
+T CertificateStatus
+T CertificateSummary
+T CertificateTransparencyLoggingPreference
+T CertificateType
+T CommonNameFilter
+T ComparisonOperator
+T ConflictException
+T CustomAttribute
+T DistinguishedName
+T DnsNameFilter
+T DnsPrevalidationDetails
+T DnsPrevalidationOptions
+T DnsValidationChallenge
+T DomainScope
+T DomainScopeOption
+T DomainStatus
+T DomainValidation
+T DomainValidationMethodUpdateSummary
+T DomainValidationOption
+T DomainValidationSummary
+T EmailValidationChallenge
+T Expiration
+T ExpiryEventsConfiguration
+T ExtendedKeyUsage
+T ExtendedKeyUsageName
+T FailureDetails
+T FailureReason
+T Filters
+T GeneralName
+T GeneralNameMemberDirectoryName
+T GeneralNameMemberDnsName
+T GeneralNameMemberIpAddress
+T GeneralNameMemberOtherName
+T GeneralNameMemberRegisteredId
+T GeneralNameMemberRfc822Name
+T GeneralNameMemberUniformResourceIdentifier
+T HttpRedirect
+T InternalServerException
+T InvalidArgsException
+T InvalidArnException
+T InvalidDomainValidationOptionsException
+T InvalidParameterException
+T InvalidStateException
+T InvalidTagException
+T KeyAlgorithm
+T KeyUsage
+T KeyUsageName
+T LimitExceededException
+T OtherName
+T PrevalidationDetails
+T PrevalidationDetailsMemberDnsPrevalidation
+T PrevalidationOptions
+T PrevalidationOptionsMemberDnsPrevalidation
+T PrevalidationType
+T PublicCertificateAuthority
+T PublicKeyAlgorithm
+T RecordType
+T RenewalEligibility
+T RenewalStatus
+T RenewalSummary
+T RequestInProgressException
+T ResourceInUseException
+T ResourceNotFoundException
+T ResourceRecord
+T RevocationReason
+T SearchCertificatesSortBy
+T SearchCertificatesSortOrder
+T ServiceQuotaExceededException
+T SortBy
+T SortOrder
+T SubjectAlternativeNameFilter
+T SubjectAlternativeNameFilterMemberDnsName
+T SubjectFilter
+T SubjectFilterMemberCommonName
+T Tag
+T TagPolicyException
+T ThrottlingException
+T ThrottlingReason
+T TimeType
+T TimestampRange
+T TooManyTagsException
+T UnknownUnionMember
+T UpdateStatus
+T UpdateSummary
+T UpdateType
+T ValidationChallenge
+T ValidationChallengeMemberDnsValidationChallenge
+T ValidationChallengeMemberEmailValidationChallenge
+T ValidationConfiguration
+T ValidationException
+T ValidationMethod
+T X509AttributeFilter
+T X509AttributeFilterMemberExtendedKeyUsage
+T X509AttributeFilterMemberKeyAlgorithm
+T X509AttributeFilterMemberKeyUsage
+T X509AttributeFilterMemberNotAfter
+T X509AttributeFilterMemberNotBefore
+T X509AttributeFilterMemberSerialNumber
+T X509AttributeFilterMemberSubject
+T X509AttributeFilterMemberSubjectAlternativeName
+T X509Attributes
+E AcmeAccountStatusDeactivated AcmeAccountStatus
+E AcmeAccountStatusRevoked AcmeAccountStatus
+E AcmeAccountStatusValid AcmeAccountStatus
+E AcmeAuthorizationBehaviorPreApproved AcmeAuthorizationBehavior
+E AcmeContactNotRequired AcmeContact
+E AcmeContactRequired AcmeContact
+E AcmeDomainValidationFailureReasonAccessDenied AcmeDomainValidationFailureReason
+E AcmeDomainValidationFailureReasonDomainMismatch AcmeDomainValidationFailureReason
+E AcmeDomainValidationFailureReasonDomainNotAllowed AcmeDomainValidationFailureReason
+E AcmeDomainValidationFailureReasonEndpointNotActive AcmeDomainValidationFailureReason
+E AcmeDomainValidationFailureReasonHostedZoneNotFound AcmeDomainValidationFailureReason
+E AcmeDomainValidationFailureReasonInternalFailure AcmeDomainValidationFailureReason
+E AcmeDomainValidationFailureReasonInvalidChangeBatch AcmeDomainValidationFailureReason
+E AcmeDomainValidationFailureReasonInvalidPublicDomain AcmeDomainValidationFailureReason
+E AcmeDomainValidationFailureReasonTimedOut AcmeDomainValidationFailureReason
+E AcmeDomainValidationStatusDeleting AcmeDomainValidationStatus
+E AcmeDomainValidationStatusInvalid AcmeDomainValidationStatus
+E AcmeDomainValidationStatusValid AcmeDomainValidationStatus
+E AcmeDomainValidationStatusValidating AcmeDomainValidationStatus
+E AcmeEndpointStatusActive AcmeEndpointStatus
+E AcmeEndpointStatusCreating AcmeEndpointStatus
+E AcmeEndpointStatusDeleting AcmeEndpointStatus
+E AcmeEndpointStatusFailed AcmeEndpointStatus
+E CertificateExportDisabled CertificateExport
+E CertificateExportEnabled CertificateExport
+E CertificateKeyPairOriginAcme CertificateKeyPairOrigin
+E CertificateKeyPairOriginAwsManaged CertificateKeyPairOrigin
+E CertificateKeyPairOriginCustomerProvided CertificateKeyPairOrigin
+E CertificateManagedByCloudfront CertificateManagedBy
+E CertificateStatusExpired CertificateStatus
+E CertificateStatusFailed CertificateStatus
+E CertificateStatusInactive CertificateStatus
+E CertificateStatusIssued CertificateStatus
+E CertificateStatusPendingValidation CertificateStatus
+E CertificateStatusRevoked CertificateStatus
+E CertificateStatusValidationTimedOut CertificateStatus
+E CertificateTransparencyLoggingPreferenceDisabled CertificateTransparencyLoggingPreference
+E CertificateTransparencyLoggingPreferenceEnabled CertificateTransparencyLoggingPreference
+E CertificateTypeAmazonIssued CertificateType
+E CertificateTypeImported CertificateType
+E CertificateTypePrivate CertificateType
+E ComparisonOperatorContains ComparisonOperator
+E ComparisonOperatorEquals ComparisonOperator
+E DomainScopeOptionDisabled DomainScopeOption
+E DomainScopeOptionEnabled DomainScopeOption
+E DomainStatusFailed DomainStatus
+E DomainStatusPendingValidation DomainStatus
+E DomainStatusSuccess DomainStatus
+E ExtendedKeyUsageNameAny ExtendedKeyUsageName
+E ExtendedKeyUsageNameCodeSigning ExtendedKeyUsageName
+E ExtendedKeyUsageNameCustom ExtendedKeyUsageName
+E ExtendedKeyUsageNameEmailProtection ExtendedKeyUsageName
+E ExtendedKeyUsageNameIpsecEndSystem ExtendedKeyUsageName
+E ExtendedKeyUsageNameIpsecTunnel ExtendedKeyUsageName
+E ExtendedKeyUsageNameIpsecUser ExtendedKeyUsageName
+E ExtendedKeyUsageNameNone ExtendedKeyUsageName
+E ExtendedKeyUsageNameOcspSigning ExtendedKeyUsageName
+E ExtendedKeyUsageNameTimeStamping ExtendedKeyUsageName
+E ExtendedKeyUsageNameTlsWebClientAuthentication ExtendedKeyUsageName
+E ExtendedKeyUsageNameTlsWebServerAuthentication ExtendedKeyUsageName
+E FailureReasonAdditionalVerificationRequired FailureReason
+E FailureReasonCaaError FailureReason
+E FailureReasonDomainNotAllowed FailureReason
+E FailureReasonDomainValidationDenied FailureReason
+E FailureReasonInvalidPublicDomain FailureReason
+E FailureReasonNoAvailableContacts FailureReason
+E FailureReasonOther FailureReason
+E FailureReasonPcaAccessDenied FailureReason
+E FailureReasonPcaInvalidArgs FailureReason
+E FailureReasonPcaInvalidArn FailureReason
+E FailureReasonPcaInvalidDuration FailureReason
+E FailureReasonPcaInvalidState FailureReason
+E FailureReasonPcaLimitExceeded FailureReason
+E FailureReasonPcaNameConstraintsValidation FailureReason
+E FailureReasonPcaRequestFailed FailureReason
+E FailureReasonPcaResourceNotFound FailureReason
+E FailureReasonSlrNotFound FailureReason
+E KeyAlgorithmEcPrime256v1 KeyAlgorithm
+E KeyAlgorithmEcSecp384r1 KeyAlgorithm
+E KeyAlgorithmEcSecp521r1 KeyAlgorithm
+E KeyAlgorithmRsa1024 KeyAlgorithm
+E KeyAlgorithmRsa2048 KeyAlgorithm
+E KeyAlgorithmRsa3072 KeyAlgorithm
+E KeyAlgorithmRsa4096 KeyAlgorithm
+E KeyUsageNameAny KeyUsageName
+E KeyUsageNameCertificateSigning KeyUsageName
+E KeyUsageNameCrlSigning KeyUsageName
+E KeyUsageNameCustom KeyUsageName
+E KeyUsageNameDataEncipherment KeyUsageName
+E KeyUsageNameDecipherOnly KeyUsageName
+E KeyUsageNameDigitalSignature KeyUsageName
+E KeyUsageNameEnchiperOnly KeyUsageName
+E KeyUsageNameKeyAgreement KeyUsageName
+E KeyUsageNameKeyEncipherment KeyUsageName
+E KeyUsageNameNonRepudation KeyUsageName
+E PrevalidationTypeDnsPrevalidation PrevalidationType
+E PublicKeyAlgorithmEcPrime256V1 PublicKeyAlgorithm
+E PublicKeyAlgorithmEcSecp384R1 PublicKeyAlgorithm
+E PublicKeyAlgorithmRsa2048 PublicKeyAlgorithm
+E RecordTypeCname RecordType
+E RenewalEligibilityEligible RenewalEligibility
+E RenewalEligibilityIneligible RenewalEligibility
+E RenewalStatusFailed RenewalStatus
+E RenewalStatusPendingAutoRenewal RenewalStatus
+E RenewalStatusPendingValidation RenewalStatus
+E RenewalStatusSuccess RenewalStatus
+E RevocationReasonAACompromise RevocationReason
+E RevocationReasonAffiliationChanged RevocationReason
+E RevocationReasonCaCompromise RevocationReason
+E RevocationReasonCertificateHold RevocationReason
+E RevocationReasonCessationOfOperation RevocationReason
+E RevocationReasonKeyCompromise RevocationReason
+E RevocationReasonPrivilegeWithdrawn RevocationReason
+E RevocationReasonRemoveFromCrl RevocationReason
+E RevocationReasonSuperceded RevocationReason
+E RevocationReasonSuperseded RevocationReason
+E RevocationReasonUnspecified RevocationReason
+E SearchCertificatesSortByAcmeAccountId SearchCertificatesSortBy
+E SearchCertificatesSortByAcmeEndpointArn SearchCertificatesSortBy
+E SearchCertificatesSortByCertificateArn SearchCertificatesSortBy
+E SearchCertificatesSortByCertificateKeyPairOrigin SearchCertificatesSortBy
+E SearchCertificatesSortByCommonName SearchCertificatesSortBy
+E SearchCertificatesSortByCreatedAt SearchCertificatesSortBy
+E SearchCertificatesSortByExportOption SearchCertificatesSortBy
+E SearchCertificatesSortByExported SearchCertificatesSortBy
+E SearchCertificatesSortByImportedAt SearchCertificatesSortBy
+E SearchCertificatesSortByInUse SearchCertificatesSortBy
+E SearchCertificatesSortByIssuedAt SearchCertificatesSortBy
+E SearchCertificatesSortByKeyAlgorithm SearchCertificatesSortBy
+E SearchCertificatesSortByManagedBy SearchCertificatesSortBy
+E SearchCertificatesSortByNotAfter SearchCertificatesSortBy
+E SearchCertificatesSortByNotBefore SearchCertificatesSortBy
+E SearchCertificatesSortByRenewalEligibility SearchCertificatesSortBy
+E SearchCertificatesSortByRenewalStatus SearchCertificatesSortBy
+E SearchCertificatesSortByRevokedAt SearchCertificatesSortBy
+E SearchCertificatesSortByStatus SearchCertificatesSortBy
+E SearchCertificatesSortByType SearchCertificatesSortBy
+E SearchCertificatesSortByValidationMethod SearchCertificatesSortBy
+E SearchCertificatesSortOrderAscending SearchCertificatesSortOrder
+E SearchCertificatesSortOrderDescending SearchCertificatesSortOrder
+E SortByCreatedAt SortBy
+E SortOrderAscending SortOrder
+E SortOrderDescending SortOrder
+E TimeTypeDays TimeType
+E TimeTypeHours TimeType
+E TimeTypeMinutes TimeType
+E UpdateStatusFailed UpdateStatus
+E UpdateStatusPendingDomainValidation UpdateStatus
+E UpdateStatusSuccess UpdateStatus
+E UpdateTypeDomainValidationMethod UpdateType
+E ValidationMethodDns ValidationMethod
+E ValidationMethodEmail ValidationMethod
+E ValidationMethodHttp ValidationMethod
+H ExportCertificateInput.Passphrase
+H ExportCertificateOutput.PrivateKey
+H ImportCertificateInput.PrivateKey
+Y CertificateValidated 60 40
+U AcmCertificateMetadataFilter
+U CertificateAuthority
+U CertificateFilter
+U CertificateFilterStatement
+U CertificateMetadata
+U GeneralName
+U PrevalidationDetails
+U PrevalidationOptions
+U SubjectAlternativeNameFilter
+U SubjectFilter
+U ValidationChallenge
+U X509AttributeFilter
+K AddTagsToCertificateInput 001 CertificateArn req nil
+K AddTagsToCertificateInput 002 CertificateArn len 20 ptr
+K AddTagsToCertificateInput 003 Tags req nil
+K AddTagsToCertificateInput 004 Tags len 1 container
+K AddTagsToCertificateInput 005 Tags each Tag slice
+K DeleteCertificateInput 001 CertificateArn req nil
+K DeleteCertificateInput 002 CertificateArn len 20 ptr
+K DescribeCertificateInput 001 CertificateArn req nil
+K DescribeCertificateInput 002 CertificateArn len 20 ptr
+K DomainValidationOption 001 DomainName req nil
+K DomainValidationOption 002 DomainName len 1 ptr
+K DomainValidationOption 003 ValidationDomain req nil
+K DomainValidationOption 004 ValidationDomain len 1 ptr
+K ExpiryEventsConfiguration 001 DaysBeforeExpiry min 1 ptr
+K ExportCertificateInput 001 CertificateArn req nil
+K ExportCertificateInput 002 CertificateArn len 20 ptr
+K ExportCertificateInput 003 Passphrase req nil
+K ExportCertificateInput 004 Passphrase len 4 container
+K GetCertificateInput 001 CertificateArn req nil
+K GetCertificateInput 002 CertificateArn len 20 ptr
+K ImportCertificateInput 001 Certificate req nil
+K ImportCertificateInput 002 Certificate len 1 container
+K ImportCertificateInput 003 CertificateArn len 20 ptr
+K ImportCertificateInput 004 CertificateChain len 1 container
+K ImportCertificateInput 005 PrivateKey req nil
+K ImportCertificateInput 006 PrivateKey len 1 container
+K ImportCertificateInput 007 Tags len 1 container
+K ImportCertificateInput 008 Tags each Tag slice
+K ListCertificatesInput 001 MaxItems min 1 ptr
+K ListCertificatesInput 002 NextToken len 1 ptr
+K ListTagsForCertificateInput 001 CertificateArn req nil
+K ListTagsForCertificateInput 002 CertificateArn len 20 ptr
+K PutAccountConfigurationInput 001 IdempotencyToken req nil
+K PutAccountConfigurationInput 002 IdempotencyToken len 1 ptr
+K PutAccountConfigurationInput 003 ExpiryEvents nest ExpiryEventsConfiguration
+K RemoveTagsFromCertificateInput 001 CertificateArn req nil
+K RemoveTagsFromCertificateInput 002 CertificateArn len 20 ptr
+K RemoveTagsFromCertificateInput 003 Tags req nil
+K RemoveTagsFromCertificateInput 004 Tags len 1 container
+K RemoveTagsFromCertificateInput 005 Tags each Tag slice
+K RenewCertificateInput 001 CertificateArn req nil
+K RenewCertificateInput 002 CertificateArn len 20 ptr
+K RequestCertificateInput 001 CertificateAuthorityArn len 20 ptr
+K RequestCertificateInput 002 DomainName req nil
+K RequestCertificateInput 003 DomainName len 1 ptr
+K RequestCertificateInput 004 DomainValidationOptions len 1 container
+K RequestCertificateInput 005 IdempotencyToken len 1 ptr
+K RequestCertificateInput 006 SubjectAlternativeNames len 1 container
+K RequestCertificateInput 007 Tags len 1 container
+K RequestCertificateInput 008 DomainValidationOptions each DomainValidationOption slice
+K RequestCertificateInput 009 Tags each Tag slice
+K ResendValidationEmailInput 001 CertificateArn req nil
+K ResendValidationEmailInput 002 CertificateArn len 20 ptr
+K ResendValidationEmailInput 003 Domain req nil
+K ResendValidationEmailInput 004 Domain len 1 ptr
+K ResendValidationEmailInput 005 ValidationDomain req nil
+K ResendValidationEmailInput 006 ValidationDomain len 1 ptr
+K Tag 001 Key req nil
+K Tag 002 Key len 1 ptr
+K UpdateCertificateOptionsInput 001 CertificateArn req nil
+K UpdateCertificateOptionsInput 002 CertificateArn len 20 ptr
+K UpdateCertificateOptionsInput 003 Options req nil
+G ListAcmeAccounts NextToken NextToken
+G ListAcmeDomainValidations NextToken NextToken
+G ListAcmeEndpoints NextToken NextToken
+G ListAcmeExternalAccountBindings NextToken NextToken
+G ListCertificateDomainValidations NextToken NextToken
+G ListCertificates NextToken NextToken
+G SearchCertificates NextToken NextToken

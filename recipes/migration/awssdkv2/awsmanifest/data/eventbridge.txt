@@ -434,6 +434,7 @@ V DescribeEventBusInput.Name string
 V DescribeEventBusOutput.Arn string
 V DescribeEventBusOutput.Description string
 V DescribeEventBusOutput.KmsKeyIdentifier string
+V DescribeEventBusOutput.ManagedBy string
 V DescribeEventBusOutput.Name string
 V DescribeEventBusOutput.Policy string
 V DescribeEventSourceInput.Name string
@@ -484,6 +485,7 @@ V EndpointParameters.UseDualStack bool
 V EndpointParameters.UseFIPS bool
 V EventBus.Arn string
 V EventBus.Description string
+V EventBus.ManagedBy string
 V EventBus.Name string
 V EventBus.Policy string
 V EventSource.Arn string
@@ -1204,3 +1206,317 @@ E ReplicationStateEnabled ReplicationState
 E RuleStateDisabled RuleState
 E RuleStateEnabled RuleState
 E RuleStateEnabledWithAllCloudtrailManagementEvents RuleState
+H AppSyncParameters.GraphQLOperation
+H ConnectionBodyParameter.Value
+H ConnectionHeaderParameter.Value
+H ConnectionQueryStringParameter.Value
+H CreateConnectionApiKeyAuthRequestParameters.ApiKeyValue
+H CreateConnectionBasicAuthRequestParameters.Password
+H CreateConnectionOAuthClientRequestParameters.ClientSecret
+H RedshiftDataParameters.Sql
+H RedshiftDataParameters.Sqls
+H UpdateConnectionApiKeyAuthRequestParameters.ApiKeyValue
+H UpdateConnectionBasicAuthRequestParameters.Password
+H UpdateConnectionOAuthClientRequestParameters.ClientSecret
+K ActivateEventSourceInput 001 Name req nil
+K ActivateEventSourceInput 002 Name len 1 ptr
+K AppSyncParameters 001 GraphQLOperation len 1 ptr
+K AwsVpcConfiguration 001 Subnets req nil
+K BatchParameters 001 JobDefinition req nil
+K BatchParameters 002 JobName req nil
+K CancelReplayInput 001 ReplayName req nil
+K CancelReplayInput 002 ReplayName len 1 ptr
+K CapacityProviderStrategyItem 001 CapacityProvider req nil
+K CapacityProviderStrategyItem 002 CapacityProvider len 1 ptr
+K Condition 001 Key req nil
+K Condition 002 Type req nil
+K Condition 003 Value req nil
+K CreateApiDestinationInput 001 ConnectionArn req nil
+K CreateApiDestinationInput 002 ConnectionArn len 1 ptr
+K CreateApiDestinationInput 003 HttpMethod req empty
+K CreateApiDestinationInput 004 InvocationEndpoint req nil
+K CreateApiDestinationInput 005 InvocationEndpoint len 1 ptr
+K CreateApiDestinationInput 006 InvocationRateLimitPerSecond min 1 ptr
+K CreateApiDestinationInput 007 Name req nil
+K CreateApiDestinationInput 008 Name len 1 ptr
+K CreateArchiveInput 001 ArchiveName req nil
+K CreateArchiveInput 002 ArchiveName len 1 ptr
+K CreateArchiveInput 003 EventSourceArn req nil
+K CreateArchiveInput 004 EventSourceArn len 1 ptr
+K CreateConnectionApiKeyAuthRequestParameters 001 ApiKeyName req nil
+K CreateConnectionApiKeyAuthRequestParameters 002 ApiKeyName len 1 ptr
+K CreateConnectionApiKeyAuthRequestParameters 003 ApiKeyValue req nil
+K CreateConnectionApiKeyAuthRequestParameters 004 ApiKeyValue len 1 ptr
+K CreateConnectionAuthRequestParameters 001 ApiKeyAuthParameters nest CreateConnectionApiKeyAuthRequestParameters
+K CreateConnectionAuthRequestParameters 002 BasicAuthParameters nest CreateConnectionBasicAuthRequestParameters
+K CreateConnectionAuthRequestParameters 003 OAuthParameters nest CreateConnectionOAuthRequestParameters
+K CreateConnectionBasicAuthRequestParameters 001 Password req nil
+K CreateConnectionBasicAuthRequestParameters 002 Password len 1 ptr
+K CreateConnectionBasicAuthRequestParameters 003 Username req nil
+K CreateConnectionBasicAuthRequestParameters 004 Username len 1 ptr
+K CreateConnectionInput 001 AuthParameters req nil
+K CreateConnectionInput 002 AuthorizationType req empty
+K CreateConnectionInput 003 Name req nil
+K CreateConnectionInput 004 Name len 1 ptr
+K CreateConnectionInput 005 AuthParameters nest CreateConnectionAuthRequestParameters
+K CreateConnectionOAuthClientRequestParameters 001 ClientID req nil
+K CreateConnectionOAuthClientRequestParameters 002 ClientID len 1 ptr
+K CreateConnectionOAuthClientRequestParameters 003 ClientSecret req nil
+K CreateConnectionOAuthClientRequestParameters 004 ClientSecret len 1 ptr
+K CreateConnectionOAuthRequestParameters 001 AuthorizationEndpoint req nil
+K CreateConnectionOAuthRequestParameters 002 AuthorizationEndpoint len 1 ptr
+K CreateConnectionOAuthRequestParameters 003 ClientParameters req nil
+K CreateConnectionOAuthRequestParameters 004 HttpMethod req empty
+K CreateConnectionOAuthRequestParameters 005 ClientParameters nest CreateConnectionOAuthClientRequestParameters
+K CreateEndpointInput 001 EventBuses req nil
+K CreateEndpointInput 002 EventBuses len 2 container
+K CreateEndpointInput 003 Name req nil
+K CreateEndpointInput 004 Name len 1 ptr
+K CreateEndpointInput 005 RoleArn len 1 ptr
+K CreateEndpointInput 006 RoutingConfig req nil
+K CreateEndpointInput 007 EventBuses each EndpointEventBus slice
+K CreateEndpointInput 008 RoutingConfig nest RoutingConfig
+K CreateEventBusInput 001 EventSourceName len 1 ptr
+K CreateEventBusInput 002 Name req nil
+K CreateEventBusInput 003 Name len 1 ptr
+K CreateEventBusInput 004 DeadLetterConfig nest DeadLetterConfig
+K CreateEventBusInput 005 Tags each Tag slice
+K CreatePartnerEventSourceInput 001 Account req nil
+K CreatePartnerEventSourceInput 002 Account len 12 ptr
+K CreatePartnerEventSourceInput 003 Name req nil
+K CreatePartnerEventSourceInput 004 Name len 1 ptr
+K DeactivateEventSourceInput 001 Name req nil
+K DeactivateEventSourceInput 002 Name len 1 ptr
+K DeadLetterConfig 001 Arn len 1 ptr
+K DeauthorizeConnectionInput 001 Name req nil
+K DeauthorizeConnectionInput 002 Name len 1 ptr
+K DeleteApiDestinationInput 001 Name req nil
+K DeleteApiDestinationInput 002 Name len 1 ptr
+K DeleteArchiveInput 001 ArchiveName req nil
+K DeleteArchiveInput 002 ArchiveName len 1 ptr
+K DeleteConnectionInput 001 Name req nil
+K DeleteConnectionInput 002 Name len 1 ptr
+K DeleteEndpointInput 001 Name req nil
+K DeleteEndpointInput 002 Name len 1 ptr
+K DeleteEventBusInput 001 Name req nil
+K DeleteEventBusInput 002 Name len 1 ptr
+K DeletePartnerEventSourceInput 001 Account req nil
+K DeletePartnerEventSourceInput 002 Account len 12 ptr
+K DeletePartnerEventSourceInput 003 Name req nil
+K DeletePartnerEventSourceInput 004 Name len 1 ptr
+K DeleteRuleInput 001 EventBusName len 1 ptr
+K DeleteRuleInput 002 Name req nil
+K DeleteRuleInput 003 Name len 1 ptr
+K DescribeApiDestinationInput 001 Name req nil
+K DescribeApiDestinationInput 002 Name len 1 ptr
+K DescribeArchiveInput 001 ArchiveName req nil
+K DescribeArchiveInput 002 ArchiveName len 1 ptr
+K DescribeConnectionInput 001 Name req nil
+K DescribeConnectionInput 002 Name len 1 ptr
+K DescribeEndpointInput 001 HomeRegion len 9 ptr
+K DescribeEndpointInput 002 Name req nil
+K DescribeEndpointInput 003 Name len 1 ptr
+K DescribeEventBusInput 001 Name len 1 ptr
+K DescribeEventSourceInput 001 Name req nil
+K DescribeEventSourceInput 002 Name len 1 ptr
+K DescribePartnerEventSourceInput 001 Name req nil
+K DescribePartnerEventSourceInput 002 Name len 1 ptr
+K DescribeReplayInput 001 ReplayName req nil
+K DescribeReplayInput 002 ReplayName len 1 ptr
+K DescribeRuleInput 001 EventBusName len 1 ptr
+K DescribeRuleInput 002 Name req nil
+K DescribeRuleInput 003 Name len 1 ptr
+K DisableRuleInput 001 EventBusName len 1 ptr
+K DisableRuleInput 002 Name req nil
+K DisableRuleInput 003 Name len 1 ptr
+K EcsParameters 001 TaskCount min 1 ptr
+K EcsParameters 002 TaskDefinitionArn req nil
+K EcsParameters 003 TaskDefinitionArn len 1 ptr
+K EcsParameters 004 CapacityProviderStrategy each CapacityProviderStrategyItem slice
+K EcsParameters 005 NetworkConfiguration nest NetworkConfiguration
+K EcsParameters 006 Tags each Tag slice
+K EnableRuleInput 001 EventBusName len 1 ptr
+K EnableRuleInput 002 Name req nil
+K EnableRuleInput 003 Name len 1 ptr
+K EndpointEventBus 001 EventBusArn req nil
+K EndpointEventBus 002 EventBusArn len 1 ptr
+K FailoverConfig 001 Primary req nil
+K FailoverConfig 002 Secondary req nil
+K FailoverConfig 003 Primary nest Primary
+K FailoverConfig 004 Secondary nest Secondary
+K InputTransformer 001 InputTemplate req nil
+K InputTransformer 002 InputTemplate len 1 ptr
+K KinesisParameters 001 PartitionKeyPath req nil
+K ListApiDestinationsInput 001 ConnectionArn len 1 ptr
+K ListApiDestinationsInput 002 Limit min 1 ptr
+K ListApiDestinationsInput 003 NamePrefix len 1 ptr
+K ListApiDestinationsInput 004 NextToken len 1 ptr
+K ListArchivesInput 001 EventSourceArn len 1 ptr
+K ListArchivesInput 002 Limit min 1 ptr
+K ListArchivesInput 003 NamePrefix len 1 ptr
+K ListArchivesInput 004 NextToken len 1 ptr
+K ListConnectionsInput 001 Limit min 1 ptr
+K ListConnectionsInput 002 NamePrefix len 1 ptr
+K ListConnectionsInput 003 NextToken len 1 ptr
+K ListEndpointsInput 001 HomeRegion len 9 ptr
+K ListEndpointsInput 002 MaxResults min 1 ptr
+K ListEndpointsInput 003 NamePrefix len 1 ptr
+K ListEndpointsInput 004 NextToken len 1 ptr
+K ListEventBusesInput 001 Limit min 1 ptr
+K ListEventBusesInput 002 NamePrefix len 1 ptr
+K ListEventBusesInput 003 NextToken len 1 ptr
+K ListEventSourcesInput 001 Limit min 1 ptr
+K ListEventSourcesInput 002 NamePrefix len 1 ptr
+K ListEventSourcesInput 003 NextToken len 1 ptr
+K ListPartnerEventSourceAccountsInput 001 EventSourceName req nil
+K ListPartnerEventSourceAccountsInput 002 EventSourceName len 1 ptr
+K ListPartnerEventSourceAccountsInput 003 Limit min 1 ptr
+K ListPartnerEventSourceAccountsInput 004 NextToken len 1 ptr
+K ListPartnerEventSourcesInput 001 Limit min 1 ptr
+K ListPartnerEventSourcesInput 002 NamePrefix req nil
+K ListPartnerEventSourcesInput 003 NamePrefix len 1 ptr
+K ListPartnerEventSourcesInput 004 NextToken len 1 ptr
+K ListReplaysInput 001 EventSourceArn len 1 ptr
+K ListReplaysInput 002 Limit min 1 ptr
+K ListReplaysInput 003 NamePrefix len 1 ptr
+K ListReplaysInput 004 NextToken len 1 ptr
+K ListRuleNamesByTargetInput 001 EventBusName len 1 ptr
+K ListRuleNamesByTargetInput 002 Limit min 1 ptr
+K ListRuleNamesByTargetInput 003 NextToken len 1 ptr
+K ListRuleNamesByTargetInput 004 TargetArn req nil
+K ListRuleNamesByTargetInput 005 TargetArn len 1 ptr
+K ListRulesInput 001 EventBusName len 1 ptr
+K ListRulesInput 002 Limit min 1 ptr
+K ListRulesInput 003 NamePrefix len 1 ptr
+K ListRulesInput 004 NextToken len 1 ptr
+K ListTagsForResourceInput 001 ResourceARN req nil
+K ListTagsForResourceInput 002 ResourceARN len 1 ptr
+K ListTargetsByRuleInput 001 EventBusName len 1 ptr
+K ListTargetsByRuleInput 002 Limit min 1 ptr
+K ListTargetsByRuleInput 003 NextToken len 1 ptr
+K ListTargetsByRuleInput 004 Rule req nil
+K ListTargetsByRuleInput 005 Rule len 1 ptr
+K NetworkConfiguration 001 AwsvpcConfiguration nest AwsVpcConfiguration
+K Primary 001 HealthCheck req nil
+K Primary 002 HealthCheck len 1 ptr
+K PutEventsInput 001 EndpointId len 1 ptr
+K PutEventsInput 002 Entries req nil
+K PutEventsInput 003 Entries len 1 container
+K PutEventsInput 004 Entries each PutEventsRequestEntry slice
+K PutEventsRequestEntry 001 EventBusName len 1 ptr
+K PutEventsRequestEntry 002 TraceHeader len 1 ptr
+K PutPartnerEventsInput 001 Entries req nil
+K PutPartnerEventsInput 002 Entries len 1 container
+K PutPartnerEventsInput 003 Entries each PutPartnerEventsRequestEntry slice
+K PutPartnerEventsRequestEntry 001 Source len 1 ptr
+K PutPermissionInput 001 Action len 1 ptr
+K PutPermissionInput 002 EventBusName len 1 ptr
+K PutPermissionInput 003 Principal len 1 ptr
+K PutPermissionInput 004 StatementId len 1 ptr
+K PutPermissionInput 005 Condition nest Condition
+K PutRuleInput 001 EventBusName len 1 ptr
+K PutRuleInput 002 Name req nil
+K PutRuleInput 003 Name len 1 ptr
+K PutRuleInput 004 RoleArn len 1 ptr
+K PutRuleInput 005 Tags each Tag slice
+K PutTargetsInput 001 EventBusName len 1 ptr
+K PutTargetsInput 002 Rule req nil
+K PutTargetsInput 003 Rule len 1 ptr
+K PutTargetsInput 004 Targets req nil
+K PutTargetsInput 005 Targets len 1 container
+K PutTargetsInput 006 Targets each Target slice
+K RedshiftDataParameters 001 Database req nil
+K RedshiftDataParameters 002 Database len 1 ptr
+K RedshiftDataParameters 003 DbUser len 1 ptr
+K RedshiftDataParameters 004 SecretManagerArn len 1 ptr
+K RedshiftDataParameters 005 Sql len 1 ptr
+K RedshiftDataParameters 006 StatementName len 1 ptr
+K RemovePermissionInput 001 EventBusName len 1 ptr
+K RemovePermissionInput 002 StatementId len 1 ptr
+K RemoveTargetsInput 001 EventBusName len 1 ptr
+K RemoveTargetsInput 002 Ids req nil
+K RemoveTargetsInput 003 Ids len 1 container
+K RemoveTargetsInput 004 Rule req nil
+K RemoveTargetsInput 005 Rule len 1 ptr
+K ReplayDestination 001 Arn req nil
+K ReplayDestination 002 Arn len 1 ptr
+K RetryPolicy 001 MaximumEventAgeInSeconds min 60 ptr
+K RoutingConfig 001 FailoverConfig req nil
+K RoutingConfig 002 FailoverConfig nest FailoverConfig
+K RunCommandParameters 001 RunCommandTargets req nil
+K RunCommandParameters 002 RunCommandTargets len 1 container
+K RunCommandParameters 003 RunCommandTargets each RunCommandTarget slice
+K RunCommandTarget 001 Key req nil
+K RunCommandTarget 002 Key len 1 ptr
+K RunCommandTarget 003 Values req nil
+K RunCommandTarget 004 Values len 1 container
+K SageMakerPipelineParameter 001 Name req nil
+K SageMakerPipelineParameter 002 Name len 1 ptr
+K SageMakerPipelineParameter 003 Value req nil
+K SageMakerPipelineParameters 001 PipelineParameterList each SageMakerPipelineParameter slice
+K Secondary 001 Route req nil
+K Secondary 002 Route len 9 ptr
+K StartReplayInput 001 Destination req nil
+K StartReplayInput 002 EventEndTime req nil
+K StartReplayInput 003 EventSourceArn req nil
+K StartReplayInput 004 EventSourceArn len 1 ptr
+K StartReplayInput 005 EventStartTime req nil
+K StartReplayInput 006 ReplayName req nil
+K StartReplayInput 007 ReplayName len 1 ptr
+K StartReplayInput 008 Destination nest ReplayDestination
+K Tag 001 Key req nil
+K Tag 002 Key len 1 ptr
+K Tag 003 Value req nil
+K TagResourceInput 001 ResourceARN req nil
+K TagResourceInput 002 ResourceARN len 1 ptr
+K TagResourceInput 003 Tags req nil
+K TagResourceInput 004 Tags each Tag slice
+K Target 001 Arn req nil
+K Target 002 Arn len 1 ptr
+K Target 003 Id req nil
+K Target 004 Id len 1 ptr
+K Target 005 RoleArn len 1 ptr
+K Target 006 AppSyncParameters nest AppSyncParameters
+K Target 007 BatchParameters nest BatchParameters
+K Target 008 DeadLetterConfig nest DeadLetterConfig
+K Target 009 EcsParameters nest EcsParameters
+K Target 010 InputTransformer nest InputTransformer
+K Target 011 KinesisParameters nest KinesisParameters
+K Target 012 RedshiftDataParameters nest RedshiftDataParameters
+K Target 013 RetryPolicy nest RetryPolicy
+K Target 014 RunCommandParameters nest RunCommandParameters
+K Target 015 SageMakerPipelineParameters nest SageMakerPipelineParameters
+K TestEventPatternInput 001 Event req nil
+K TestEventPatternInput 002 EventPattern req nil
+K UntagResourceInput 001 ResourceARN req nil
+K UntagResourceInput 002 ResourceARN len 1 ptr
+K UntagResourceInput 003 TagKeys req nil
+K UpdateApiDestinationInput 001 ConnectionArn len 1 ptr
+K UpdateApiDestinationInput 002 InvocationEndpoint len 1 ptr
+K UpdateApiDestinationInput 003 InvocationRateLimitPerSecond min 1 ptr
+K UpdateApiDestinationInput 004 Name req nil
+K UpdateApiDestinationInput 005 Name len 1 ptr
+K UpdateArchiveInput 001 ArchiveName req nil
+K UpdateArchiveInput 002 ArchiveName len 1 ptr
+K UpdateConnectionApiKeyAuthRequestParameters 001 ApiKeyName len 1 ptr
+K UpdateConnectionApiKeyAuthRequestParameters 002 ApiKeyValue len 1 ptr
+K UpdateConnectionAuthRequestParameters 001 ApiKeyAuthParameters nest UpdateConnectionApiKeyAuthRequestParameters
+K UpdateConnectionAuthRequestParameters 002 BasicAuthParameters nest UpdateConnectionBasicAuthRequestParameters
+K UpdateConnectionAuthRequestParameters 003 OAuthParameters nest UpdateConnectionOAuthRequestParameters
+K UpdateConnectionBasicAuthRequestParameters 001 Password len 1 ptr
+K UpdateConnectionBasicAuthRequestParameters 002 Username len 1 ptr
+K UpdateConnectionInput 001 Name req nil
+K UpdateConnectionInput 002 Name len 1 ptr
+K UpdateConnectionInput 003 AuthParameters nest UpdateConnectionAuthRequestParameters
+K UpdateConnectionOAuthClientRequestParameters 001 ClientID len 1 ptr
+K UpdateConnectionOAuthClientRequestParameters 002 ClientSecret len 1 ptr
+K UpdateConnectionOAuthRequestParameters 001 AuthorizationEndpoint len 1 ptr
+K UpdateConnectionOAuthRequestParameters 002 ClientParameters nest UpdateConnectionOAuthClientRequestParameters
+K UpdateEndpointInput 001 EventBuses len 2 container
+K UpdateEndpointInput 002 Name req nil
+K UpdateEndpointInput 003 Name len 1 ptr
+K UpdateEndpointInput 004 RoleArn len 1 ptr
+K UpdateEndpointInput 005 EventBuses each EndpointEventBus slice
+K UpdateEndpointInput 006 RoutingConfig nest RoutingConfig
+K UpdateEventBusInput 001 Name len 1 ptr
+K UpdateEventBusInput 002 DeadLetterConfig nest DeadLetterConfig

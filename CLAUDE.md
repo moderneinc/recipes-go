@@ -45,6 +45,31 @@ MODULE_CACHE_TESTS=1 go test ./tests/migration/awssdkv2/ -count=1
 Prime the cache first if it is cold: `go mod download github.com/aws/aws-sdk-go@v1.55.8`
 from a scratch module.
 
+### Building migrated modules
+
+`RewriteRun` compares printed text, so it cannot tell whether migrated output
+compiles or whether go.mod and go.sum suffice. `tests/migration/awssdkv2/compile_test.go`
+migrates small modules on disk and runs `go build` on the result: as migrated,
+after `go mod download all`, and after `go mod tidy`. They fetch modules, so they are gated:
+
+```bash
+COMPILE_TESTS=1 go test ./tests/migration/awssdkv2/ -run TestMigrated -count=1 -v
+```
+
+`TestMigrateRealWorldAwsRepos` does the same for the corpus repositories on
+aws-sdk-go v1, reporting what migrated, what was held back and whether it
+builds. It reads the checkouts `TestParseRealRepos` fetches, so run that first.
+
+The v2 module versions, indirect requirements and go.sum hashes the migration
+writes come from `zz_modules_gen.go`, and the v1 service names a migrated request
+handler still reports from `zz_service_names_gen.go`. The per-service manifests in
+`awsmanifest/data/` are generated from the v1 and v2 sources at those pinned
+versions. `go generate ./recipes/migration/awssdkv2/` refreshes all three; to add
+a service, write its manifest first with
+`go run ./internal/genmanifest <service>` from `recipes/migration/awssdkv2`, then
+run `go generate` and the gated tests. `go run ./internal/genmanifest -check`
+reports any manifest that differs from what the generator derives.
+
 ## Releasing
 
 Tag-triggered. Push a `vX.Y.Z` (or `vX.Y.Z-rc.N`) tag from `main` and `.github/workflows/publish.yml` runs the shared `openrewrite/gh-automation` `publish-gradle.yml` workflow, which builds and tests the tagged commit. Nothing is published from there: the Go module is served from `proxy.golang.org` as soon as the tag exists. No Maven artifact is published either, as it would hold no recipes; the workflows don't forward the Code Genome Project AWS keys that the Maven publish needs.

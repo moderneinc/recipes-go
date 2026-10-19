@@ -651,3 +651,115 @@ E ServiceTypeDns ServiceType
 E ServiceTypeDnsHttp ServiceType
 E ServiceTypeHttp ServiceType
 E ServiceTypeOptionHttp ServiceTypeOption
+K CreateHttpNamespaceInput 001 Name req nil
+K CreateHttpNamespaceInput 002 Tags each Tag slice
+K CreatePrivateDnsNamespaceInput 001 Name req nil
+K CreatePrivateDnsNamespaceInput 002 Vpc req nil
+K CreatePrivateDnsNamespaceInput 003 Properties nest PrivateDnsNamespaceProperties
+K CreatePrivateDnsNamespaceInput 004 Tags each Tag slice
+K CreatePublicDnsNamespaceInput 001 Name req nil
+K CreatePublicDnsNamespaceInput 002 Properties nest PublicDnsNamespaceProperties
+K CreatePublicDnsNamespaceInput 003 Tags each Tag slice
+K CreateServiceInput 001 Name req nil
+K CreateServiceInput 002 DnsConfig nest DnsConfig
+K CreateServiceInput 003 HealthCheckConfig nest HealthCheckConfig
+K CreateServiceInput 004 HealthCheckCustomConfig nest HealthCheckCustomConfig
+K CreateServiceInput 005 Tags each Tag slice
+K DeleteNamespaceInput 001 Id req nil
+K DeleteServiceInput 001 Id req nil
+K DeregisterInstanceInput 001 InstanceId req nil
+K DeregisterInstanceInput 002 ServiceId req nil
+K DiscoverInstancesInput 001 MaxResults min 1 ptr
+K DiscoverInstancesInput 002 NamespaceName req nil
+K DiscoverInstancesInput 003 ServiceName req nil
+K DiscoverInstancesRevisionInput 001 NamespaceName req nil
+K DiscoverInstancesRevisionInput 002 ServiceName req nil
+K DnsConfig 001 DnsRecords req nil
+K DnsConfig 002 DnsRecords each DnsRecord slice
+K DnsConfigChange 001 DnsRecords req nil
+K DnsConfigChange 002 DnsRecords each DnsRecord slice
+K DnsRecord 001 TTL req nil
+K DnsRecord 002 Type req empty
+K GetInstanceInput 001 InstanceId req nil
+K GetInstanceInput 002 ServiceId req nil
+K GetInstancesHealthStatusInput 001 Instances len 1 container
+K GetInstancesHealthStatusInput 002 MaxResults min 1 ptr
+K GetInstancesHealthStatusInput 003 ServiceId req nil
+K GetNamespaceInput 001 Id req nil
+K GetOperationInput 001 OperationId req nil
+K GetServiceInput 001 Id req nil
+K HealthCheckConfig 001 FailureThreshold min 1 ptr
+K HealthCheckConfig 002 Type req empty
+K HealthCheckCustomConfig 001 FailureThreshold min 1 ptr
+K HttpNamespaceChange 001 Description req nil
+K ListInstancesInput 001 MaxResults min 1 ptr
+K ListInstancesInput 002 ServiceId req nil
+K ListNamespacesInput 001 MaxResults min 1 ptr
+K ListNamespacesInput 002 Filters each NamespaceFilter slice
+K ListOperationsInput 001 MaxResults min 1 ptr
+K ListOperationsInput 002 Filters each OperationFilter slice
+K ListServicesInput 001 MaxResults min 1 ptr
+K ListServicesInput 002 Filters each ServiceFilter slice
+K ListTagsForResourceInput 001 ResourceARN req nil
+K ListTagsForResourceInput 002 ResourceARN len 1 ptr
+K NamespaceFilter 001 Name req empty
+K NamespaceFilter 002 Values req nil
+K OperationFilter 001 Name req empty
+K OperationFilter 002 Values req nil
+K PrivateDnsNamespaceChange 001 Properties nest PrivateDnsNamespacePropertiesChange
+K PrivateDnsNamespaceProperties 001 DnsProperties req nil
+K PrivateDnsNamespaceProperties 002 DnsProperties nest PrivateDnsPropertiesMutable
+K PrivateDnsNamespacePropertiesChange 001 DnsProperties req nil
+K PrivateDnsNamespacePropertiesChange 002 DnsProperties nest PrivateDnsPropertiesMutableChange
+K PrivateDnsPropertiesMutable 001 SOA req nil
+K PrivateDnsPropertiesMutable 002 SOA nest SOA
+K PrivateDnsPropertiesMutableChange 001 SOA req nil
+K PrivateDnsPropertiesMutableChange 002 SOA nest SOAChange
+K PublicDnsNamespaceChange 001 Properties nest PublicDnsNamespacePropertiesChange
+K PublicDnsNamespaceProperties 001 DnsProperties req nil
+K PublicDnsNamespaceProperties 002 DnsProperties nest PublicDnsPropertiesMutable
+K PublicDnsNamespacePropertiesChange 001 DnsProperties req nil
+K PublicDnsNamespacePropertiesChange 002 DnsProperties nest PublicDnsPropertiesMutableChange
+K PublicDnsPropertiesMutable 001 SOA req nil
+K PublicDnsPropertiesMutable 002 SOA nest SOA
+K PublicDnsPropertiesMutableChange 001 SOA req nil
+K PublicDnsPropertiesMutableChange 002 SOA nest SOAChange
+K RegisterInstanceInput 001 Attributes req nil
+K RegisterInstanceInput 002 InstanceId req nil
+K RegisterInstanceInput 003 ServiceId req nil
+K SOA 001 TTL req nil
+K SOAChange 001 TTL req nil
+K ServiceChange 001 DnsConfig nest DnsConfigChange
+K ServiceChange 002 HealthCheckConfig nest HealthCheckConfig
+K ServiceFilter 001 Name req empty
+K ServiceFilter 002 Values req nil
+K Tag 001 Key req nil
+K Tag 002 Key len 1 ptr
+K Tag 003 Value req nil
+K TagResourceInput 001 ResourceARN req nil
+K TagResourceInput 002 ResourceARN len 1 ptr
+K TagResourceInput 003 Tags req nil
+K TagResourceInput 004 Tags each Tag slice
+K UntagResourceInput 001 ResourceARN req nil
+K UntagResourceInput 002 ResourceARN len 1 ptr
+K UntagResourceInput 003 TagKeys req nil
+K UpdateHttpNamespaceInput 001 Id req nil
+K UpdateHttpNamespaceInput 002 Namespace req nil
+K UpdateHttpNamespaceInput 003 Namespace nest HttpNamespaceChange
+K UpdateInstanceCustomHealthStatusInput 001 InstanceId req nil
+K UpdateInstanceCustomHealthStatusInput 002 ServiceId req nil
+K UpdateInstanceCustomHealthStatusInput 003 Status req empty
+K UpdatePrivateDnsNamespaceInput 001 Id req nil
+K UpdatePrivateDnsNamespaceInput 002 Namespace req nil
+K UpdatePrivateDnsNamespaceInput 003 Namespace nest PrivateDnsNamespaceChange
+K UpdatePublicDnsNamespaceInput 001 Id req nil
+K UpdatePublicDnsNamespaceInput 002 Namespace req nil
+K UpdatePublicDnsNamespaceInput 003 Namespace nest PublicDnsNamespaceChange
+K UpdateServiceInput 001 Id req nil
+K UpdateServiceInput 002 Service req nil
+K UpdateServiceInput 003 Service nest ServiceChange
+G GetInstancesHealthStatus NextToken NextToken
+G ListInstances NextToken NextToken
+G ListNamespaces NextToken NextToken
+G ListOperations NextToken NextToken
+G ListServices NextToken NextToken

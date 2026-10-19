@@ -108,3 +108,88 @@ func (s *fileScan) awsQualifier() string {
 	}
 	return "aws"
 }
+
+// narrowedValueRead reports whether mi is aws.XValue of a field v2 narrowed,
+// returning v1's pointee type, v2's, and whether v2 holds it by value.
+func (s *fileScan) narrowedValueRead(mi *java.MethodInvocation) (from, to string, byValue, ok bool) {
+	helper, isAws := qualifiedCall(mi, s.awsPkg)
+	if !isAws || valueHelperRenames[helper] == "" || len(realArgs(mi)) != 1 {
+		return "", "", false, false
+	}
+	fa, isField := realArgs(mi)[0].(*java.FieldAccess)
+	if !isField {
+		return "", "", false, false
+	}
+	return s.narrowedField(fa)
+}
+
+// narrowedDeref reports whether unary dereferences a field v2 narrowed but
+// still holds by pointer, returning v1's pointee type.
+func (s *fileScan) narrowedDeref(unary *golang.Unary) (string, bool) {
+	if unary.Operator.Element != golang.Indirection {
+		return "", false
+	}
+	fa, isField := unary.Expression.(*java.FieldAccess)
+	if !isField {
+		return "", false
+	}
+	from, _, byValue, ok := s.narrowedField(fa)
+	return from, ok && !byValue
+}
+
+// narrowedField reports whether fa reads a field v2 narrowed, returning v1's
+// pointee type, v2's, and whether v2 holds it by value.
+func (s *fileScan) narrowedField(fa *java.FieldAccess) (from, to string, byValue, ok bool) {
+	if fa.Name.Element == nil {
+		return "", "", false, false
+	}
+	owner, known := s.receiverShape(fa.Target)
+	if !known {
+		return "", "", false, false
+	}
+	// A shape v2 renamed may be known by its v2 name; the manifest keeps v1's.
+	shape := awsmanifest.V1ShapeName(owner.service, owner.shape)
+	field := fa.Name.Element.Name
+	if narrowedFrom := awsmanifest.NarrowedFrom(owner.service, shape, field); narrowedFrom != "" {
+		return narrowedFrom, awsmanifest.Depointered(owner.service, shape, field), true, true
+	}
+	from, to, ok = awsmanifest.ScalarChange(owner.service, shape, field)
+	if !ok || awsHelperFor(to) == "" {
+		return "", "", false, false
+	}
+	return from, to, false, true
+}
+
+// enumValueRead reports whether mi is aws.StringValue of an enum field.
+func (s *fileScan) enumValueRead(mi *java.MethodInvocation) bool {
+	helper, isAws := qualifiedCall(mi, s.awsPkg)
+	if !isAws || helper != "StringValue" || len(realArgs(mi)) != 1 {
+		return false
+	}
+	fa, isField := realArgs(mi)[0].(*java.FieldAccess)
+	if !isField {
+		return false
+	}
+	_, isEnum := s.enumFieldOf(fa)
+	return isEnum || s.unresolvedEnumField(fa)
+}
+
+// narrowableScalar reports whether a narrowed pointer field's value is one the
+// rewrite converts: an aws helper around a value, the address of one, or nil.
+func (s *fileScan) narrowableScalar(expr java.Expression) bool {
+	if id, isIdent := expr.(*java.Identifier); isIdent && id.Name == "nil" {
+		return true
+	}
+	if unary, isUnary := expr.(*golang.Unary); isUnary && unary.Operator.Element == golang.AddressOf {
+		return true
+	}
+	mi, isCall := expr.(*java.MethodInvocation)
+	if !isCall {
+		return false
+	}
+	if _, isNew := newOfValue(mi); isNew {
+		return true
+	}
+	helper, isAws := qualifiedCall(mi, s.awsPkg)
+	return isAws && pointerHelpers[helper]
+}
