@@ -62,7 +62,7 @@ func (v *avoidGlobalVariableVisitor) VisitCompilationUnit(cu *golang.Compilation
 				marked = decl.WithMarkers(java.MarkupInfo(decl.Markers, "avoid global variable"))
 			}
 		}
-		if marked != nil {
+		if marked != nil && marked != stmt.Element {
 			stmts[i] = java.RightPadded[java.Statement]{
 				Element: marked,
 				After:   stmt.After,

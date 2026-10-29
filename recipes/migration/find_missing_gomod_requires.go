@@ -85,10 +85,12 @@ func (v *findMissingGoModRequiresVisitor) VisitCompilationUnit(cu *golang.Compil
 	changed := false
 	for i, rp := range elements {
 		if isMissingRequire(rp.Element.Path(), &mrr) {
-			rp.Element = rp.Element.WithMarkers(
+			if marked := rp.Element.WithMarkers(
 				java.FoundSearchResult(rp.Element.Markers, "missing go.mod requirement"),
-			)
-			changed = true
+			); marked != rp.Element {
+				rp.Element = marked
+				changed = true
+			}
 		}
 		newElements[i] = rp
 	}
