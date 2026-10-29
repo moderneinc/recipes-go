@@ -118,7 +118,11 @@ func markModuleDirective(gm *golang.GoMod, text string) *golang.GoMod {
 		if !ok || d.Keyword != "module" {
 			continue
 		}
-		rp.Element = d.WithMarkers(java.FoundSearchResult(d.Markers, text))
+		marked := d.WithMarkers(java.FoundSearchResult(d.Markers, text))
+		if marked == d {
+			return gm
+		}
+		rp.Element = marked
 		statements := append([]java.RightPadded[golang.GoModStatement]{}, gm.Statements...)
 		statements[i] = rp
 		return gm.WithStatements(statements)

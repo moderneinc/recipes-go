@@ -67,8 +67,10 @@ func (v *findUnusedRequiresEditor) VisitGoMod(gm *golang.GoMod, p any) java.Tree
 		switch el := rp.Element.(type) {
 		case *golang.GoModDirective:
 			if el.Keyword == "require" && !hasIndirectComment(rp.After) && !imported[firstValueText(el)] {
-				rp.Element = markUnused(el)
-				changed = true
+				if marked := markUnused(el); marked != el {
+					rp.Element = marked
+					changed = true
+				}
 			}
 		case *golang.GoModBlock:
 			if el.Keyword == "require" {
@@ -91,8 +93,10 @@ func markUnusedBlockEntries(b *golang.GoModBlock, imported map[string]bool) *gol
 	entries := make([]java.RightPadded[golang.GoModStatement], len(b.Entries))
 	for i, e := range b.Entries {
 		if d, ok := e.Element.(*golang.GoModDirective); ok && !hasIndirectComment(e.After) && !imported[firstValueText(d)] {
-			e.Element = markUnused(d)
-			changed = true
+			if marked := markUnused(d); marked != d {
+				e.Element = marked
+				changed = true
+			}
 		}
 		entries[i] = e
 	}
