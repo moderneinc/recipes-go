@@ -9,8 +9,6 @@ import (
 	"testing"
 
 	"github.com/moderneinc/recipes-go/recipes/migration/jsonv2"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/parser"
-	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/test"
 )
 
@@ -36,7 +34,7 @@ func TestFindEncodingJsonUsageReportsOnly(t *testing.T) {
 
 func TestFindEncodingJsonUsageDataTable(t *testing.T) {
 	// `@` stands in for a backtick so struct tags read cleanly in a raw string.
-	source := strings.ReplaceAll(`package demo
+	rows := runInventory(t, "demo/config.go", strings.ReplaceAll(`package demo
 
 import (
 	"encoding/json"
@@ -69,22 +67,10 @@ func run(c Config) {
 	var s *json.SyntaxError
 	_ = s
 }
-`, "@", "`")
+`, "@", "`"))
 
-	cu, err := parser.NewGoParser().Parse("demo/config.go", source)
-	if err != nil {
-		t.Fatalf("parse: %v", err)
-	}
-
-	store := recipe.NewInMemoryDataTableStore()
-	ctx := recipe.NewExecutionContext()
-	ctx.PutMessage(recipe.DataTableStoreKey, store)
-	(&jsonv2.FindEncodingJsonUsage{}).Editor().Visit(cu, ctx)
-
-	raw := store.GetRows("org.openrewrite.golang.migration.table.EncodingJsonUsage", "")
 	got := map[string]int{}
-	for _, r := range raw {
-		row := r.(jsonv2.EncodingJsonUsageRow)
+	for _, row := range rows {
 		got[row.Category+"|"+row.API]++
 	}
 
@@ -116,15 +102,15 @@ func run(c Config) {
 	for _, n := range want {
 		total += n
 	}
-	if len(raw) != total {
-		t.Errorf("row count = %d, want %d; all rows: %v", len(raw), total, got)
+	if len(rows) != total {
+		t.Errorf("row count = %d, want %d; all rows: %v", len(rows), total, got)
 	}
 }
 
 // An aliased import binds detection to the local package name, and findings are
 // still reported under the canonical json.* labels.
 func TestFindEncodingJsonUsageAliasedImport(t *testing.T) {
-	source := `package demo
+	rows := runInventory(t, "demo/aliased.go", `package demo
 
 import j "encoding/json"
 
@@ -133,21 +119,9 @@ func run(v any) {
 	enc := j.NewEncoder(nil)
 	_ = enc.Encode(v)
 }
-`
-	cu, err := parser.NewGoParser().Parse("demo/aliased.go", source)
-	if err != nil {
-		t.Fatalf("parse: %v", err)
-	}
-
-	store := recipe.NewInMemoryDataTableStore()
-	ctx := recipe.NewExecutionContext()
-	ctx.PutMessage(recipe.DataTableStoreKey, store)
-	(&jsonv2.FindEncodingJsonUsage{}).Editor().Visit(cu, ctx)
-
-	raw := store.GetRows("org.openrewrite.golang.migration.table.EncodingJsonUsage", "")
+`)
 	got := map[string]int{}
-	for _, r := range raw {
-		row := r.(jsonv2.EncodingJsonUsageRow)
+	for _, row := range rows {
 		got[row.Category+"|"+row.API]++
 	}
 
@@ -162,26 +136,19 @@ func run(v any) {
 			t.Errorf("category|api %q: got %d, want %d (all: %v)", k, got[k], n, got)
 		}
 	}
-	if len(raw) != 4 {
-		t.Errorf("row count = %d, want 4; all rows: %v", len(raw), got)
+	if len(rows) != 4 {
+		t.Errorf("row count = %d, want 4; all rows: %v", len(rows), got)
 	}
 }
 
 func runInventory(t *testing.T, path, source string) []jsonv2.EncodingJsonUsageRow {
 	t.Helper()
-	cu, err := parser.NewGoParser().Parse(path, source)
-	if err != nil {
-		t.Fatalf("parse: %v", err)
-	}
-	store := recipe.NewInMemoryDataTableStore()
-	ctx := recipe.NewExecutionContext()
-	ctx.PutMessage(recipe.DataTableStoreKey, store)
-	(&jsonv2.FindEncodingJsonUsage{}).Editor().Visit(cu, ctx)
-	raw := store.GetRows("org.openrewrite.golang.migration.table.EncodingJsonUsage", "")
-	rows := make([]jsonv2.EncodingJsonUsageRow, len(raw))
-	for i, r := range raw {
-		rows[i] = r.(jsonv2.EncodingJsonUsageRow)
-	}
+	var rows []jsonv2.EncodingJsonUsageRow
+	spec := test.NewRecipeSpec().WithRecipe(&jsonv2.FindEncodingJsonUsage{})
+	test.ExpectDataTable(spec, jsonv2.EncodingJsonUsageTable, func(_ *testing.T, written []jsonv2.EncodingJsonUsageRow) {
+		rows = written
+	})
+	spec.RewriteRun(t, test.GolangRaw(source).WithPath(path))
 	return rows
 }
 

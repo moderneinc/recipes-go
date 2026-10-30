@@ -22,7 +22,7 @@ type BindAllInterfacesRow struct {
 	Address    string
 }
 
-var bindAllInterfacesTable = recipe.NewDataTable[BindAllInterfacesRow](
+var BindAllInterfacesTable = recipe.NewDataTable[BindAllInterfacesRow](
 	"org.openrewrite.golang.codequality.AuditBindAllInterfaces$Findings",
 	"Listeners bound to all interfaces",
 	"Network listeners bound to all interfaces.",
@@ -58,7 +58,7 @@ func (r *AuditBindAllInterfaces) DiagnosticMappings() []diagnostic.Mapping {
 }
 
 func (r *AuditBindAllInterfaces) DataTables() []recipe.DataTableDescriptor {
-	return []recipe.DataTableDescriptor{bindAllInterfacesTable.Descriptor()}
+	return []recipe.DataTableDescriptor{BindAllInterfacesTable.Descriptor()}
 }
 
 func (r *AuditBindAllInterfaces) Editor() recipe.TreeVisitor {
@@ -97,7 +97,7 @@ func (v *auditBindAllInterfacesVisitor) VisitMethodInvocation(mi *java.MethodInv
 		}
 		if bindsAllInterfaces(addr) {
 			if ctx, ok := p.(*recipe.ExecutionContext); ok {
-				bindAllInterfacesTable.InsertRow(ctx, BindAllInterfacesRow{
+				BindAllInterfacesTable.InsertRow(ctx, BindAllInterfacesRow{
 					SourcePath: v.sourcePath,
 					Call:       ident.Name + "." + mi.Name.Name,
 					Address:    addr,

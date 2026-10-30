@@ -268,7 +268,7 @@ func (r *MyRecipe) EditorWithData(a any) recipe.TreeVisitor   { return visitor.I
 
 Resolve the plan once when `EditorWithData` is called, not per file, so the editor only reads it. Files arrive in no guaranteed order, so anything decided while editing is decided by that order.
 
-A scanning recipe inside a `RecipeList` must not decide anything from what an earlier sub-recipe wrote. `pkg/test` walks the list in order over one progressively-edited set of trees, so its scan sees those edits; the Moderne CLI scans before the list's edits are applied and sees none of them. A composite that rewrites source and then syncs go.mod from the rewritten imports therefore passes its own test and does nothing through `mod run`. Key the scan on something invariant instead — `recipes/migration/internal/depswap` asks "which side of the migration will this file end up on", probing the source recipe's own editor to answer it for a file that has not been rewritten yet.
+A scanning recipe inside a `RecipeList` cannot see what an earlier sub-recipe writes in the same cycle. Both `pkg/test` and the Moderne CLI run every scanner over every source before any recipe edits, so a composite that rewrites source and then syncs go.mod from the rewritten imports does nothing until a later cycle, and a test of it needs `WithExpectedCyclesThatMakeChanges(2)`. Key the scan on something invariant instead — `recipes/migration/internal/depswap` asks "which imports will this file end up with", running the source recipe's own editor over a file that has not been rewritten yet and reading the imports of what it produces.
 
 ## When not to rewrite
 

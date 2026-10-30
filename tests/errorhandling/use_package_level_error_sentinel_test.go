@@ -270,6 +270,7 @@ func TestUsePackageLevelErrorSentinelDeclaresOutsideTheTestBuild(t *testing.T) {
 // useErrorsNewThenSentinel is the catalog ordering that reaches a `fmt`-only
 // file: `fmt.Errorf` with no verb becomes `errors.New`, which the sentinel
 // recipe then hoists into a declaration the file has to import `errors` for.
+// The sentinel's scan runs before any edit, so the hoist lands in cycle 2.
 type useErrorsNewThenSentinel struct{ recipe.Base }
 
 func (r *useErrorsNewThenSentinel) Name() string        { return "test.UseErrorsNewThenSentinel" }
@@ -283,7 +284,7 @@ func (r *useErrorsNewThenSentinel) RecipeList() []recipe.Recipe {
 }
 
 func TestUsePackageLevelErrorSentinelImportsErrors(t *testing.T) {
-	spec := test.NewRecipeSpec().WithRecipe(&useErrorsNewThenSentinel{})
+	spec := test.NewRecipeSpec().WithRecipe(&useErrorsNewThenSentinel{}).WithExpectedCyclesThatMakeChanges(2)
 	spec.RewriteRun(t,
 		test.Golang(`
 			package sentinel

@@ -31,7 +31,6 @@ func (r *MigrateNewRelicTelemetryToOpenTelemetry) Tags() []string {
 func (r *MigrateNewRelicTelemetryToOpenTelemetry) RecipeList() []recipe.Recipe {
 	return []recipe.Recipe{
 		&MigrateNewRelicMetricRecording{},
-		// Runs after the rewrite, so it sees the imports it introduced.
 		&UpdateNewRelicTelemetryDependency{},
 		&migration.FormatGoMod{},
 	}
