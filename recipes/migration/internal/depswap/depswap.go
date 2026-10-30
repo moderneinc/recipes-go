@@ -137,10 +137,17 @@ func (e *editor) VisitGoMod(gm *golang.GoMod, p any) java.Tree {
 
 // EditorProbe runs an editor over a file, for use as a Migrate probe. The
 // editor is rebuilt per call, since a recipe's visitor may carry state across
-// the files it visits.
+// the files it visits, and its queued after-visits are drained as the recipe
+// runner would, since that is where an editor typically adds its imports.
 func EditorProbe(newEditor func() recipe.TreeVisitor) Migrate {
 	return func(cu *golang.CompilationUnit) *golang.CompilationUnit {
-		if edited, ok := newEditor().Visit(cu, recipe.NewExecutionContext()).(*golang.CompilationUnit); ok {
+		editor := newEditor()
+		ctx := recipe.NewExecutionContext()
+		visited := editor.Visit(cu, ctx)
+		if visited == nil {
+			return cu
+		}
+		if edited, ok := visitor.DrainAfterVisits(editor, visited, ctx).(*golang.CompilationUnit); ok && edited != nil {
 			return edited
 		}
 		return cu
