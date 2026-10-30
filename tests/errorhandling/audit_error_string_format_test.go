@@ -9,10 +9,16 @@ import (
 
 	"github.com/moderneinc/recipes-go/recipes/errorhandling"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/test"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestAuditErrorStringFormatCapitalized(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.AuditErrorStringFormat{})
+	test.ExpectDataTable(spec, errorhandling.ErrorStringFormatTable, func(t *testing.T, rows []errorhandling.ErrorStringFormatRow) {
+		assert.Equal(t, []errorhandling.ErrorStringFormatRow{
+			{SourcePath: "test.go", Constructor: "errors.New", Issue: "be capitalized", Message: "Failed to connect"},
+		}, rows)
+	})
 	spec.RewriteRun(t,
 		test.Golang(`
 			package main
@@ -36,6 +42,11 @@ func TestAuditErrorStringFormatCapitalized(t *testing.T) {
 
 func TestAuditErrorStringFormatTrailingPunctuation(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&errorhandling.AuditErrorStringFormat{})
+	test.ExpectDataTable(spec, errorhandling.ErrorStringFormatTable, func(t *testing.T, rows []errorhandling.ErrorStringFormatRow) {
+		assert.Equal(t, []errorhandling.ErrorStringFormatRow{
+			{SourcePath: "test.go", Constructor: "fmt.Errorf", Issue: "end with punctuation", Message: "connection failed."},
+		}, rows)
+	})
 	spec.RewriteRun(t,
 		test.Golang(`
 			package main

@@ -9,10 +9,16 @@ import (
 
 	"github.com/moderneinc/recipes-go/recipes/style"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/test"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestAuditBindAllInterfacesEmptyHost(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&style.AuditBindAllInterfaces{})
+	test.ExpectDataTable(spec, style.BindAllInterfacesTable, func(t *testing.T, rows []style.BindAllInterfacesRow) {
+		assert.Equal(t, []style.BindAllInterfacesRow{
+			{SourcePath: "test.go", Call: "http.ListenAndServe", Address: ":8080"},
+		}, rows)
+	})
 	spec.RewriteRun(t,
 		test.Golang(`
 			package main

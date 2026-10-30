@@ -10,6 +10,7 @@ import (
 	"github.com/moderneinc/recipes-go/recipes/migration/awssdkv2"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/test"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/stretchr/testify/assert"
 )
 
 const cloudwatchV1Sum = `
@@ -123,7 +124,14 @@ func TestUpdateAwsSdkDependencyKeepsHigherAndRaisesLowerVersions(t *testing.T) {
 // package included. Nothing migrates, so neither go.mod nor a regenerated iface
 // package may appear.
 func TestMigrateLeavesGoModAloneWhenEveryPackageIsHeldBack(t *testing.T) {
-	test.NewRecipeSpec().WithRecipe(&awssdkv2.MigrateAwsSdkGoToV2{}).RewriteRun(t,
+	spec := test.NewRecipeSpec().WithRecipe(&awssdkv2.MigrateAwsSdkGoToV2{})
+	test.ExpectDataTable(spec, awssdkv2.AwsSdkGoV1BlockersTable, func(t *testing.T, rows []awssdkv2.AwsSdkGoV1BlockerRow) {
+		assert.Equal(t, []awssdkv2.AwsSdkGoV1BlockerRow{
+			{SourcePath: "app/session.go", Reason: "a session compared to nil, which the config replacing it cannot be"},
+			{SourcePath: "app/sts.go", Reason: "in the same package as app/session.go, which stays on v1"},
+		}, rows)
+	})
+	spec.RewriteRun(t,
 		test.GoProject("app",
 			test.GoMod(`
 				module example.com/app

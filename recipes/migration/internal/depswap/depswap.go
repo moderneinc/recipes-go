@@ -10,13 +10,11 @@
 // the old requirement, while every file it did rewrite needs the new one.
 //
 // It is also decided from state that does not depend on whether the source
-// rewrite has run yet. The recipe runner in rewrite-go's test harness walks a
-// recipe list in order over one shared set of trees, so a later scanning recipe
-// sees the edits; the Moderne CLI scans before the list's edits are applied and
-// would see none of them. Asking "which side of the migration will this file end
-// up on" answers the same either way: a file already on the new module counts as
-// migrated, and so does one on the old module that the source rewrite would
-// take.
+// rewrite has run yet. Every scanner runs before any recipe edits, so in the
+// cycle that migrates a file the scan sees it unedited; in a later cycle it sees
+// it migrated. Asking "which imports will this file end up with" answers the
+// same either way, so the scan runs the source rewrite over the file and reads
+// the imports of what it produces.
 package depswap
 
 import (
@@ -50,29 +48,44 @@ type Acc struct {
 
 func NewAcc() *Acc { return &Acc{} }
 
-// Migrates reports whether the source rewrite would take a file, which is how
-// the scan predicts where an as-yet-unedited file will land. Recipes supply it
-// as a probe over their own editor.
-type Migrates func(cu *golang.CompilationUnit) bool
+// Migrate returns what the source rewrite makes of a file, which is how the
+// scan predicts where an as-yet-unedited file will land. Recipes supply it as a
+// probe over their own editor.
+type Migrate func(cu *golang.CompilationUnit) *golang.CompilationUnit
 
 // Scanner records, across every source file, which requirements the module's
 // source will need once the migration has run.
-func Scanner(acc *Acc, mods Modules, migrates Migrates) recipe.TreeVisitor {
-	return visitor.Init(&scanner{acc: acc, mods: mods, migrates: migrates})
+func Scanner(acc *Acc, mods Modules, migrate Migrate) recipe.TreeVisitor {
+	return visitor.Init(&scanner{acc: acc, mods: mods, migrate: migrate})
 }
 
 type scanner struct {
 	visitor.GoVisitor
-	acc      *Acc
-	mods     Modules
-	migrates Migrates
+	acc     *Acc
+	mods    Modules
+	migrate Migrate
 }
 
 func (s *scanner) VisitCompilationUnit(cu *golang.CompilationUnit, p any) java.J {
-	if cu.Imports == nil {
-		return cu
+	onOld, onNew := s.imports(cu)
+	// A rewrite can leave the old import behind, for a symbol the replacement
+	// dropped, so only the rewritten file's imports tell where it lands.
+	if onOld && s.migrate != nil {
+		onOld, onNew = s.imports(s.migrate(cu))
 	}
-	onOld, onNew := false, false
+	if onOld {
+		s.acc.NeedsOld = true
+	}
+	if onNew {
+		s.acc.NeedsNew = true
+	}
+	return cu
+}
+
+func (s *scanner) imports(cu *golang.CompilationUnit) (onOld, onNew bool) {
+	if cu.Imports == nil {
+		return false, false
+	}
 	for _, rp := range cu.Imports.Elements {
 		path := rp.Element.Path()
 		if underModule(path, s.mods.Old) {
@@ -84,20 +97,7 @@ func (s *scanner) VisitCompilationUnit(cu *golang.CompilationUnit, p any) java.J
 			}
 		}
 	}
-
-	if onNew {
-		s.acc.NeedsNew = true
-	}
-	if onOld {
-		// A file the rewrite takes will import the new module; one it refuses
-		// keeps the old requirement alive.
-		if s.migrates != nil && s.migrates(cu) {
-			s.acc.NeedsNew = true
-		} else {
-			s.acc.NeedsOld = true
-		}
-	}
-	return cu
+	return onOld, onNew
 }
 
 func underModule(path, module string) bool {
@@ -135,11 +135,14 @@ func (e *editor) VisitGoMod(gm *golang.GoMod, p any) java.Tree {
 	return gm
 }
 
-// EditorProbe reports whether an editor changes a file, for use as a Migrates
-// predicate. The editor is rebuilt per call, since a recipe's visitor may carry
-// state across the files it visits.
-func EditorProbe(newEditor func() recipe.TreeVisitor) Migrates {
-	return func(cu *golang.CompilationUnit) bool {
-		return newEditor().Visit(cu, recipe.NewExecutionContext()) != java.Tree(cu)
+// EditorProbe runs an editor over a file, for use as a Migrate probe. The
+// editor is rebuilt per call, since a recipe's visitor may carry state across
+// the files it visits.
+func EditorProbe(newEditor func() recipe.TreeVisitor) Migrate {
+	return func(cu *golang.CompilationUnit) *golang.CompilationUnit {
+		if edited, ok := newEditor().Visit(cu, recipe.NewExecutionContext()).(*golang.CompilationUnit); ok {
+			return edited
+		}
+		return cu
 	}
 }

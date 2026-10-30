@@ -24,7 +24,7 @@ type PartiallyResolvedGoModRow struct {
 	ResolutionError   string
 }
 
-var partiallyResolvedGoModTable = recipe.NewDataTable[PartiallyResolvedGoModRow](
+var PartiallyResolvedGoModTable = recipe.NewDataTable[PartiallyResolvedGoModRow](
 	"org.openrewrite.golang.migration.table.PartiallyResolvedGoMod",
 	"go.mod files not fully resolved offline",
 	"Every go.mod whose module graph did not fully resolve at parse time, so GoModTidy skipped adding and removing requirements. The offline no-op is safe but silent; this table names the affected modules and why resolution stopped short so a run can be triaged and re-run once the modules resolve.",
@@ -67,7 +67,7 @@ func (r *FindPartiallyResolvedGoMod) Description() string {
 func (r *FindPartiallyResolvedGoMod) Tags() []string { return []string{"gomod", "tidy", "search"} }
 
 func (r *FindPartiallyResolvedGoMod) DataTables() []recipe.DataTableDescriptor {
-	return []recipe.DataTableDescriptor{partiallyResolvedGoModTable.Descriptor()}
+	return []recipe.DataTableDescriptor{PartiallyResolvedGoModTable.Descriptor()}
 }
 
 func (r *FindPartiallyResolvedGoMod) Editor() recipe.TreeVisitor {
@@ -88,7 +88,7 @@ func (v *findPartiallyResolvedGoModVisitor) VisitGoMod(gm *golang.GoMod, p any) 
 	}
 
 	if ctx, ok := p.(*recipe.ExecutionContext); ok {
-		partiallyResolvedGoModTable.InsertRow(ctx, PartiallyResolvedGoModRow{
+		PartiallyResolvedGoModTable.InsertRow(ctx, PartiallyResolvedGoModRow{
 			SourcePath:        gm.SourcePath,
 			ModulePath:        mrr.ModulePath,
 			ResolutionStatus:  string(mrr.ResolutionStatus),

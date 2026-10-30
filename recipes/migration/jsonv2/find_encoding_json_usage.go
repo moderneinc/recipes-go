@@ -23,7 +23,7 @@ type EncodingJsonUsageRow struct {
 	Suggestion string
 }
 
-var encodingJsonUsageTable = recipe.NewDataTable[EncodingJsonUsageRow](
+var EncodingJsonUsageTable = recipe.NewDataTable[EncodingJsonUsageRow](
 	"org.openrewrite.golang.migration.table.EncodingJsonUsage",
 	"encoding/json usage for the v2 migration",
 	"Every encoding/json touchpoint that an encoding/json/v2 migration must address.",
@@ -58,7 +58,7 @@ func (r *FindEncodingJsonUsage) Description() string {
 func (r *FindEncodingJsonUsage) Tags() []string { return []string{"migration", "json"} }
 
 func (r *FindEncodingJsonUsage) DataTables() []recipe.DataTableDescriptor {
-	return []recipe.DataTableDescriptor{encodingJsonUsageTable.Descriptor()}
+	return []recipe.DataTableDescriptor{EncodingJsonUsageTable.Descriptor()}
 }
 
 func (r *FindEncodingJsonUsage) Editor() recipe.TreeVisitor {
@@ -312,7 +312,7 @@ func (v *findEncodingJsonUsageVisitor) insertRow(p any, category, api, detail, s
 	if !ok {
 		return
 	}
-	encodingJsonUsageTable.InsertRow(ctx, EncodingJsonUsageRow{
+	EncodingJsonUsageTable.InsertRow(ctx, EncodingJsonUsageRow{
 		SourcePath: v.sourcePath,
 		Category:   category,
 		API:        api,

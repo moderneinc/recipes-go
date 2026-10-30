@@ -10,6 +10,7 @@ import (
 	"github.com/moderneinc/recipes-go/recipes/migration"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/test"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/stretchr/testify/assert"
 )
 
 // TestGoModTidyNoEditButSignalWhenGoSumOnly is the I6 companion to
@@ -25,7 +26,15 @@ func TestGoModTidyNoEditButSignalWhenGoSumOnly(t *testing.T) {
 		{ModulePath: "github.com/foo/bar", Version: "v1.0.0"},
 	}
 
-	// when / then the module directive is flagged, naming why the tidy stopped short.
+	// when / then the module directive is flagged, and a row names why the tidy stopped short.
+	test.ExpectDataTable(spec, migration.PartiallyResolvedGoModTable, func(t *testing.T, rows []migration.PartiallyResolvedGoModRow) {
+		assert.Equal(t, []migration.PartiallyResolvedGoModRow{{
+			SourcePath:       "go.mod",
+			ModulePath:       "example.com/app",
+			ResolutionStatus: "GO_SUM_ONLY",
+			ResolutionError:  "reading go.sum: missing go.sum entry for github.com/baz/qux",
+		}}, rows)
+	})
 	spec.RewriteRun(t,
 		test.GoProject("app",
 			graphWithUnresolved(
@@ -64,7 +73,16 @@ func TestFindPartiallyResolvedGoModFlagsIncomplete(t *testing.T) {
 		{ModulePath: "example.com/app", Main: true},
 	}
 
-	// when / then the module directive is flagged for INCOMPLETE resolution.
+	// when / then the module directive is flagged for INCOMPLETE resolution, and a
+	// row names the import the toolchain could not map.
+	test.ExpectDataTable(spec, migration.PartiallyResolvedGoModTable, func(t *testing.T, rows []migration.PartiallyResolvedGoModRow) {
+		assert.Equal(t, []migration.PartiallyResolvedGoModRow{{
+			SourcePath:        "go.mod",
+			ModulePath:        "example.com/app",
+			ResolutionStatus:  "INCOMPLETE",
+			UnresolvedImports: "github.com/redis/go-redis/v9",
+		}}, rows)
+	})
 	spec.RewriteRun(t,
 		test.GoProject("app",
 			graphWithUnresolved(

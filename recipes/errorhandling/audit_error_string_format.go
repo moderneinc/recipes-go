@@ -24,7 +24,7 @@ type ErrorStringFormatRow struct {
 	Message     string
 }
 
-var errorStringFormatTable = recipe.NewDataTable[ErrorStringFormatRow](
+var ErrorStringFormatTable = recipe.NewDataTable[ErrorStringFormatRow](
 	"org.openrewrite.golang.codequality.AuditErrorStringFormat$Findings",
 	"Error strings that violate ST1005",
 	"Error messages that are capitalized or end with punctuation.",
@@ -60,7 +60,7 @@ func (r *AuditErrorStringFormat) DiagnosticMappings() []diagnostic.Mapping {
 }
 
 func (r *AuditErrorStringFormat) DataTables() []recipe.DataTableDescriptor {
-	return []recipe.DataTableDescriptor{errorStringFormatTable.Descriptor()}
+	return []recipe.DataTableDescriptor{ErrorStringFormatTable.Descriptor()}
 }
 
 func (r *AuditErrorStringFormat) Editor() recipe.TreeVisitor {
@@ -103,7 +103,7 @@ func (v *auditErrorStringFormatVisitor) VisitMethodInvocation(mi *java.MethodInv
 		return mi
 	}
 	if ctx, ok := p.(*recipe.ExecutionContext); ok {
-		errorStringFormatTable.InsertRow(ctx, ErrorStringFormatRow{
+		ErrorStringFormatTable.InsertRow(ctx, ErrorStringFormatRow{
 			SourcePath:  v.sourcePath,
 			Constructor: constructor,
 			Issue:       reason,
