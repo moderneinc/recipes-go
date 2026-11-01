@@ -144,9 +144,17 @@ func TestMigrateDynamodbAttributeToPort(t *testing.T) {
 			}
 		`).WithPath("leases.go"),
 	}
-	test.NewRecipeSpec().WithRecipe(&awssdkv2.MigrateAwsSdkGoToV2{}).RewriteRun(t,
-		test.GoProject("leases", append(specs, attributePortGenerated()...)...),
-	)
+	// A file scanned before the go.mod migrates once the go.mod names the path.
+	for name, sources := range map[string][]test.Sources{
+		"go.mod first": specs,
+		"go.mod last":  {specs[1], specs[0]},
+	} {
+		t.Run(name, func(t *testing.T) {
+			test.NewRecipeSpec().WithRecipe(&awssdkv2.MigrateAwsSdkGoToV2{}).RewriteRun(t,
+				test.GoProject("leases", append(sources, attributePortGenerated()...)...),
+			)
+		})
+	}
 }
 
 // v1's Marshaler and Unmarshaler take v1's AttributeValue, which the port

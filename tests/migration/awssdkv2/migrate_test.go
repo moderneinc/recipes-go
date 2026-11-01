@@ -1336,8 +1336,8 @@ const stsIface = `
 				}
 			`
 
-// Files arrive in no fixed order, and one importing an iface package can only be
-// probed for the helpers it needs once the go.mod has named the module path.
+// Files arrive in no fixed order, and one importing an iface package needs the
+// module path of a go.mod the scan may reach after it.
 func TestMigrateHelpersWhenGoModVisitedLast(t *testing.T) {
 	test.NewRecipeSpec().WithRecipe(&awssdkv2.MigrateAwsSdkGoToV2{}).RewriteRun(t,
 		test.GoProject("who",
