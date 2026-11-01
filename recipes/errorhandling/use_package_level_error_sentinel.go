@@ -71,22 +71,29 @@ type packageInfo struct {
 }
 
 type fileInfo struct {
-	inline   []string // literal sources of inline errors.New calls, in source order
-	literals map[string]*java.Literal
-	taken    []string         // names the sentinels must not collide with
-	declared []messageBinding // package-level `var X = errors.New("...")`, in source order
+	inline   []string           // literal sources of inline errors.New calls, in source order
+	messages map[string]message // what each of those literals holds, by its source
+	taken    []string           // names the sentinels must not collide with
+	declared []messageBinding   // package-level `var X = errors.New("...")`, in source order
 	buildTag string
 }
 
 type messageBinding struct{ source, varName string }
 
+// message is what a message literal holds besides its source, which the
+// declaration rebuilds the literal from, so that the scan keeps no tree.
+type message struct {
+	value any
+	typ   java.JavaType
+}
+
 // sentinel is what a message resolves to: the name every call site in the
-// package refers to, and the file that declares it. declareIn is empty and decl
-// nil when the declaration already exists.
+// package refers to, and the file that declares it. declareIn is empty when the
+// declaration already exists.
 type sentinel struct {
 	varName   string
 	declareIn string
-	decl      java.Statement
+	message   message
 }
 
 func (a *sentinelAcc) packageOf(cu *golang.CompilationUnit) *packageInfo {
@@ -105,7 +112,7 @@ func (a *sentinelAcc) packageOf(cu *golang.CompilationUnit) *packageInfo {
 func (p *packageInfo) fileOf(sourcePath string) *fileInfo {
 	f := p.files[sourcePath]
 	if f == nil {
-		f = &fileInfo{literals: map[string]*java.Literal{}}
+		f = &fileInfo{messages: map[string]message{}}
 		p.files[sourcePath] = f
 	}
 	return f
@@ -163,8 +170,8 @@ func (s *sentinelScanner) VisitVariableDeclarator(vd *java.VariableDeclarator, p
 func (s *sentinelScanner) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
 	if s.file != nil && s.inFunc > 0 {
 		if lit, ok := errorsNewLiteral(mi); ok {
-			if _, seen := s.file.literals[lit.Source]; !seen {
-				s.file.literals[lit.Source] = lit
+			if _, seen := s.file.messages[lit.Source]; !seen {
+				s.file.messages[lit.Source] = message{value: lit.Value, typ: lit.Type}
 				s.file.inline = append(s.file.inline, lit.Source)
 			}
 		}
@@ -232,12 +239,12 @@ func (p *packageInfo) resolve() {
 		if home == "" {
 			continue
 		}
-		decl := sentinelDecl(name, p.files[home].literals[source])
-		if decl == nil {
+		msg := p.files[home].messages[source]
+		if sentinelDecl(name, source, msg) == nil {
 			continue
 		}
 		taken[name] = true
-		p.plan[source] = &sentinel{varName: name, declareIn: home, decl: decl}
+		p.plan[source] = &sentinel{varName: name, declareIn: home, message: msg}
 	}
 }
 
@@ -346,7 +353,9 @@ func (e *sentinelEditor) declarations() []java.RightPadded[java.Statement] {
 	var out []java.RightPadded[java.Statement]
 	for _, source := range f.inline {
 		if s := e.pkg.plan[source]; s != nil && s.declareIn == e.path {
-			out = append(out, java.RightPadded[java.Statement]{Element: s.decl})
+			if decl := sentinelDecl(s.varName, source, s.message); decl != nil {
+				out = append(out, java.RightPadded[java.Statement]{Element: decl})
+			}
 		}
 	}
 	return out
@@ -363,12 +372,13 @@ var (
 )
 
 // sentinelDecl builds `var ErrFoo = errors.New("msg")`. The template types the
-// call from go/types; the message splices in as its own literal, so a raw string
-// literal stays raw.
-func sentinelDecl(varName string, message *java.Literal) java.Statement {
+// call from go/types; the message splices in as a literal with the source of
+// the call site's, so a raw string literal stays raw.
+func sentinelDecl(varName, source string, msg message) java.Statement {
+	literal := &java.Literal{ID: uuid.New(), Source: source, Value: msg.value, Type: msg.typ}
 	decl, ok := sentinelTmpl.Instantiate(template.NewMatchResult().
 		Bind(sentinelVarCap, &java.Identifier{Name: varName}).
-		Bind(sentinelMsgCap, message)).(*java.VariableDeclarations)
+		Bind(sentinelMsgCap, literal)).(*java.VariableDeclarations)
 	if !ok {
 		return nil
 	}
