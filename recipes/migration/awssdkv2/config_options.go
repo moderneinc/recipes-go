@@ -255,8 +255,7 @@ func (s *fileScan) configFieldOption(field string, value java.Expression) ([]con
 		if !ok {
 			return nil, false
 		}
-		source := strings.ReplaceAll(s.retryerSource(fields, typeName), "aws.", s.awsQualifier()+".")
-		parsed, ok := parsedExpression(source)
+		parsed, ok := s.parsedRetryer(fields, typeName)
 		if !ok {
 			return nil, false
 		}
