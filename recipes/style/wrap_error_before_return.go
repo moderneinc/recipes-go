@@ -75,8 +75,9 @@ func (v *wrapErrorBeforeReturnVisitor) VisitGoReturn(ret *golang.Return, p any) 
 	}
 
 	// Reuse the wrapped identifier so the argument keeps its error type.
+	format := v.funcName + ": %w"
 	instantiated := wrapBeforeReturnTmpl.Instantiate(template.NewMatchResult().
-		Bind(wrapBeforeReturnFormat, &java.Literal{Source: `"` + v.funcName + `: %w"`}).
+		Bind(wrapBeforeReturnFormat, &java.Literal{Source: `"` + format + `"`, Value: format}).
 		Bind(wrapBeforeReturnErr, lastIdent))
 	if instantiated == nil {
 		return ret

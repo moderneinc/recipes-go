@@ -352,9 +352,13 @@ func (v *migrateVisitor) retypedConfigLiteral(comp *golang.Composite) (java.J, b
 			if !unwrapped {
 				continue
 			}
+			options, built := serviceOptionsLiteral(pathStyleCall(force))
+			if !built {
+				continue
+			}
 			replaced := *kv
 			replaced.Key = &java.Identifier{Prefix: key.Prefix, Name: "ServiceOptions"}
-			replaced.Value = java.LeftPadded[java.Expression]{Before: kv.Value.Before, Element: lstutil.SetExprPrefix(serviceOptionsLiteral(pathStyleCall(force)), kv.Value.Element.GetPrefix()), Markers: kv.Value.Markers}
+			replaced.Value = java.LeftPadded[java.Expression]{Before: kv.Value.Before, Element: lstutil.SetExprPrefix(options, kv.Value.Element.GetPrefix()), Markers: kv.Value.Markers}
 			elements[i].Element = &replaced
 			changed = true
 			v.needsPathStyle = true

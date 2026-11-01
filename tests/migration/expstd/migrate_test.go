@@ -186,6 +186,91 @@ func TestMigrateDropsDependencyAheadOfSourceMigration(t *testing.T) {
 	)
 }
 
+// Before Go 1.21 nothing moves, so the requirement stays.
+func TestMigrateKeepsDependencyBeforeGo121(t *testing.T) {
+	test.NewRecipeSpec().WithRecipe(&expstd.RemoveXExpDependency{}).RewriteRun(t,
+		test.GoProject("app",
+			test.GoMod(`
+				module example.com/app
+
+				go 1.20
+
+				require golang.org/x/exp v0.0.0-20240103183307-be819d1f06fc
+			`),
+			test.Golang(`
+				package app
+
+				import "golang.org/x/exp/slices"
+
+				func has(s []string, v string) bool {
+					return slices.Contains(s, v)
+				}
+			`),
+		),
+	)
+}
+
+// On Go 1.22 a file using the iterator forms of maps stays on x/exp, so the
+// requirement stays.
+func TestMigrateKeepsDependencyForMapsKeysBeforeGo123(t *testing.T) {
+	test.NewRecipeSpec().WithRecipe(&expstd.RemoveXExpDependency{}).RewriteRun(t,
+		test.GoProject("app",
+			test.GoMod(`
+				module example.com/app
+
+				go 1.22
+
+				require golang.org/x/exp v0.0.0-20240103183307-be819d1f06fc
+			`),
+			test.Golang(`
+				package app
+
+				import "golang.org/x/exp/maps"
+
+				func keys(m map[string]int) []string {
+					return maps.Keys(m)
+				}
+			`),
+		),
+	)
+}
+
+// On Go 1.22 a file using only the functions maps kept unchanged moves, so the
+// requirement goes.
+func TestMigrateDropsDependencyOnGo122(t *testing.T) {
+	test.NewRecipeSpec().WithRecipe(&expstd.RemoveXExpDependency{}).RewriteRun(t,
+		test.GoProject("app",
+			test.GoMod(`
+				module example.com/app
+
+				go 1.22
+
+				require (
+					github.com/redis/go-redis/v9 v9.7.0
+					golang.org/x/exp v0.0.0-20240103183307-be819d1f06fc
+				)
+			`, `
+				module example.com/app
+
+				go 1.22
+
+				require (
+					github.com/redis/go-redis/v9 v9.7.0
+				)
+			`),
+			test.Golang(`
+				package app
+
+				import "golang.org/x/exp/maps"
+
+				func clone(m map[string]int) map[string]int {
+					return maps.Clone(m)
+				}
+			`),
+		),
+	)
+}
+
 // An x/exp package no recipe covers keeps the requirement, however much of the
 // rest moves.
 func TestMigrateKeepsDependencyForUncoveredPackage(t *testing.T) {

@@ -42,6 +42,11 @@ const (
 	go123 = "1.23"
 )
 
+// gateVersions are the go versions the migrations compare the module's against,
+// oldest first, which the scan decides the go.mod cleanup for. A migration gated
+// on another version adds it here.
+var gateVersions = []string{go121, go123}
+
 // lessFuncTakers are the x/exp/slices functions whose comparator changed shape.
 // Before February 2023 each took `less func(a, b E) bool`; they now take
 // `cmp func(a, b E) int`, matching the standard library. A call still passing a

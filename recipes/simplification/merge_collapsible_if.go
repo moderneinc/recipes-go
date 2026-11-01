@@ -84,11 +84,7 @@ func (v *mergeCollapsibleIfVisitor) VisitIf(ifStmt *java.If, p any) java.J {
 	outerCond := maybeWrapOr(outerExpr)
 	innerCond := maybeWrapOr(innerIf.Condition.Tree.Element)
 
-	combined := &java.Binary{
-		Left:     setExprPrefix(outerCond, exprPrefix(outerExpr)),
-		Operator: java.LeftPadded[java.BinaryOperator]{Before: java.SingleSpace, Element: java.LogicalAnd},
-		Right:    setExprPrefix(innerCond, java.SingleSpace),
-	}
+	combined := joinAnd(setExprPrefix(outerCond, exprPrefix(outerExpr)), innerCond)
 
 	innerThen, ok := innerIf.ThenPart.Element.(*java.Block)
 	if !ok {
@@ -104,6 +100,23 @@ func (v *mergeCollapsibleIfVisitor) VisitIf(ifStmt *java.If, p any) java.J {
 	newThenPart := ifStmt.ThenPart
 	newThenPart.Element = newBody
 	return ifStmt.WithCondition(&newCond).WithThenPart(newThenPart)
+}
+
+// joinAnd joins left && right. An && chain on the right joins one operand at a
+// time, so that the condition nests to the left as the parser reads
+// `a && b && c && d`, rather than as `(a && b) && (c && d)`.
+func joinAnd(left, right java.Expression) java.Expression {
+	if chain, ok := right.(*java.Binary); ok && chain.Operator.Element == java.LogicalAnd {
+		joined := *chain
+		joined.Prefix = java.EmptySpace
+		joined.Left = joinAnd(left, chain.Left)
+		return &joined
+	}
+	return &java.Binary{
+		Left:     left,
+		Operator: java.LeftPadded[java.BinaryOperator]{Before: java.SingleSpace, Element: java.LogicalAnd},
+		Right:    setExprPrefix(right, java.SingleSpace),
+	}
 }
 
 // dedentCollapsedVisitor removes one tab from every whitespace in a subtree,

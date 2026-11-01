@@ -5,6 +5,7 @@
 package errorhandling
 
 import (
+	"strconv"
 	"strings"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
@@ -75,6 +76,10 @@ func (v *auditMultipleErrorWrapsVisitor) VisitMethodInvocation(mi *java.MethodIn
 	newSource := replaceExtraW(fmtLit.Source)
 
 	newFmtLit := fmtLit.WithSource(newSource)
+	// The value is the string the new source spells, as the parser reads it.
+	if value, err := strconv.Unquote(newSource); err == nil {
+		newFmtLit = newFmtLit.WithValue(value)
+	}
 
 	// Rebuild the arguments with the modified format literal.
 	newArgs := make([]java.RightPadded[java.Expression], len(args))

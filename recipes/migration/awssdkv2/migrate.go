@@ -140,9 +140,10 @@ type migrateAcc struct {
 	// than by a second scanning recipe — the Moderne CLI hangs on a recipe list
 	// holding more than one.
 	usage awsUsageAcc
-	// deferred are the files whose probe waits for the go.mod, since one
-	// importing an iface package migrates only once the module path is known.
-	deferred []*golang.CompilationUnit
+	// pending is what the probe found of each file the scan reached before the
+	// go.mod named the module path, which one importing an iface package
+	// migrates only with. Generate settles it once every file is seen.
+	pending []probedFile
 	// blockers names the files the migration left alone, and what held each
 	// back. A client, a shape and an interface over them cross file boundaries,
 	// so the callers that did migrate may no longer agree with them — which is a
@@ -193,10 +194,15 @@ func (a *migrateAcc) holdBack(file, reason string) {
 	}
 }
 
-// heldBackBy names the file keeping cu's package on v1, when it is another one.
-func (a *migrateAcc) heldBackBy(cu *golang.CompilationUnit) (string, bool) {
-	by, held := a.heldBack[path.Dir(cu.SourcePath)]
-	return by, held && by != cu.SourcePath
+// heldBackBy names the file keeping file's package on v1, when it is another one.
+func (a *migrateAcc) heldBackBy(file string) (string, bool) {
+	by, held := a.heldBack[path.Dir(file)]
+	return by, held && by != file
+}
+
+// heldWithReason is why a file stays on v1 with the package by keeps there.
+func heldWithReason(by string) string {
+	return "in the same package as " + by + ", which stays on v1"
 }
 
 // blockerReason records why a file was left alone, keeping the first answer.
@@ -278,10 +284,7 @@ func (r *MigrateAwsSdkGoToV2) EditorWithData(acc any) recipe.TreeVisitor {
 // Generate writes the slice helpers once into each package that needs them.
 func (r *MigrateAwsSdkGoToV2) Generate(acc any, ctx *recipe.ExecutionContext) []java.Tree {
 	a := acc.(*migrateAcc)
-	for _, cu := range a.deferred {
-		a.probe(cu)
-	}
-	a.deferred = nil
+	a.settlePending()
 	if a.ifaceUnreachable() {
 		for _, file := range a.ifaceFiles {
 			a.holdBack(file, ifaceUnreachableReason)
@@ -602,11 +605,12 @@ func (v *compatScanner) VisitCompilationUnit(cu *golang.CompilationUnit, p any) 
 	}
 	// Files arrive in no fixed order, so a go.mod not yet seen would make the
 	// probe skip a file the edit later migrates, and its helpers go unwritten.
+	// Such a file is probed as though the go.mod will name a module path.
 	if v.acc.modulePath == "" && scan.needsModulePath() {
-		v.acc.deferred = append(v.acc.deferred, cu)
+		v.acc.pending = append(v.acc.pending, v.acc.probe(cu, true))
 		return cu
 	}
-	v.acc.probe(cu)
+	v.acc.record(v.acc.probe(cu, false))
 	return cu
 }
 
@@ -632,13 +636,52 @@ func helperPath(unit, file string) string {
 	return path.Join(unit, file)
 }
 
-// probe runs the edit over cu and records the generated files it would need.
-func (a *migrateAcc) probe(cu *golang.CompilationUnit) {
-	probe := visitor.Init(&migrateVisitor{acc: a})
+// probedFile is what the probe of one file found its migration needs, kept
+// by the file's path and the unit and package its helpers are declared in.
+type probedFile struct {
+	path, unit, pkg string
+	// adjunct marks an adjunct file the edit changes, and imports what it
+	// imports.
+	adjunct bool
+	imports []string
+	fileNeeds
+}
+
+// probe runs the edit over cu and returns the generated files it would need.
+// A probe aheadOfGoMod runs as though the go.mod will name a module path.
+func (a *migrateAcc) probe(cu *golang.CompilationUnit, aheadOfGoMod bool) probedFile {
+	probe := visitor.Init(&migrateVisitor{acc: a, aheadOfGoMod: aheadOfGoMod})
+	found := probedFile{path: cu.SourcePath, unit: helperUnit(cu), pkg: cu.PackageDecl.Element.Name}
 	if probed := probe.Visit(cu, recipe.NewExecutionContext()); probed != java.Tree(cu) && probe.scan != nil && probe.scan.adjunct {
-		a.recordAdjunct(cu)
+		found.adjunct, found.imports = true, importPaths(cu)
 	}
-	dir, pkg := helperUnit(cu), cu.PackageDecl.Element.Name
+	found.fileNeeds = probe.fileNeeds
+	return found
+}
+
+// settlePending records what the files probed ahead of the go.mod need, as a
+// probe seeing every file would: nothing without a module path, as those
+// files stay on v1, and nothing where another file keeps the package there.
+func (a *migrateAcc) settlePending() {
+	for _, probe := range a.pending {
+		if a.ifaceUnreachable() {
+			break
+		}
+		if by, held := a.heldBackBy(probe.path); held {
+			a.blockerReason(probe.path, heldWithReason(by))
+			continue
+		}
+		a.record(probe)
+	}
+	a.pending = nil
+}
+
+// record adds what a probe found to the generated files and requires.
+func (a *migrateAcc) record(probe probedFile) {
+	if probe.adjunct {
+		a.adjuncts[probe.path] = probe.imports
+	}
+	dir, pkg := probe.unit, probe.pkg
 	if probe.needsServiceHelpers {
 		a.helperPackages[dir] = pkg
 	}
@@ -671,7 +714,7 @@ func (a *migrateAcc) probe(cu *golang.CompilationUnit) {
 		if a.serviceDirs[service] == nil {
 			a.serviceDirs[service] = map[string]bool{}
 		}
-		a.serviceDirs[service][path.Dir(cu.SourcePath)] = true
+		a.serviceDirs[service][path.Dir(probe.path)] = true
 	}
 	if probe.needsPageReplay {
 		a.pagePackages[dir] = pkg
@@ -804,6 +847,9 @@ type migrateVisitor struct {
 	acc     *migrateAcc
 	scan    *fileScan
 	ctxName string
+	// fileNeeds is what the file needs beyond its own edit, which a probe
+	// records.
+	fileNeeds
 	// needsContext records that context.TODO() was emitted, so the file gains
 	// the import it reads.
 	needsContext bool
@@ -823,16 +869,11 @@ type migrateVisitor struct {
 	// with the errors.As matching it, and needsSmithyType a smithy type alone.
 	needsSmithy     bool
 	needsSmithyType bool
-	// needsErrorHelper records that awserr.New became the generated error.
-	needsErrorHelper bool
 	// awsUsed records that an aws package reference survived the rewrite.
 	awsUsed bool
 	// pathStyleHoisted records that this function carries the S3 addressing
 	// style in a local of its own, which the S3 clients it builds read.
 	pathStyleHoisted bool
-	// needsConfigHelper records that session.New was rewritten as the generated
-	// loader, which the package then needs a definition of.
-	needsConfigHelper bool
 	// carriedConfigs counts the pass-throughs a carried config became, less the
 	// ones a Must unwrapped again, which need no helper.
 	carriedConfigs int
@@ -842,6 +883,49 @@ type migrateVisitor struct {
 	// needsErrors records that errors.As was emitted outside the awserr
 	// expansion, which brings its own imports.
 	needsErrors bool
+	// sessionResults are the positions of the enclosing function's results
+	// declared as a session.
+	sessionResults map[int]bool
+	// needsS3 records that the s3 package was named by a rewrite of the
+	// transfer manager, whose input moved there.
+	needsS3 bool
+	// needsUserAgent records that a user-agent handler became v2's option.
+	needsUserAgent bool
+	// reformat records that a value parsed apart was placed in a literal.
+	reformat bool
+	// dir is the directory of the file being visited.
+	dir string
+	// needsAwsHTTP records that a RequestFailure became awshttp's ResponseError.
+	needsAwsHTTP bool
+	// needsStscreds records that assume-role options were written in a file
+	// not importing stscreds.
+	needsStscreds bool
+	// editing is unset in the probe the scan runs, which must not settle what
+	// the module migrates before every file is seen.
+	editing bool
+	// aheadOfGoMod is set in a probe of a file needing the module path that
+	// the scan reached before the go.mod, which leaves to Generate the gates
+	// that turn on the module path and on the files still to come.
+	aheadOfGoMod bool
+	// needsRetry records that a v1 retryer became v2's standard one, and
+	// needsTime that what it wrote names the time package.
+	needsRetry bool
+	needsTime  bool
+	// gomockLocal is the name the file binds gomock to, and gomockImport the
+	// path to import where an expectation needs a matcher and it binds none.
+	gomockLocal  string
+	gomockImport string
+}
+
+// fileNeeds is what migrating a file needs beyond the file itself: the helpers
+// generated into its package, the v2 modules they import, and the services
+// and shapes it still names.
+type fileNeeds struct {
+	// needsErrorHelper records that awserr.New became the generated error.
+	needsErrorHelper bool
+	// needsConfigHelper records that session.New was rewritten as the generated
+	// loader, which the package then needs a definition of.
+	needsConfigHelper bool
 	// needsServiceHelpers records that a v1 service function was rewritten as the
 	// generated stand-in for it.
 	needsServiceHelpers bool
@@ -850,12 +934,6 @@ type migrateVisitor struct {
 	// needsWaitDuration records that a waiter was rewritten, which needs the
 	// generated bound.
 	needsWaitDuration bool
-	// sessionResults are the positions of the enclosing function's results
-	// declared as a session.
-	sessionResults map[int]bool
-	// needsS3 records that the s3 package was named by a rewrite of the
-	// transfer manager, whose input moved there.
-	needsS3 bool
 	// needsManager records that the transfer manager was named by a relocated
 	// aws reference in a file that did not import it.
 	needsManager bool
@@ -871,23 +949,17 @@ type migrateVisitor struct {
 	// needsHandlers records that a request handler was rewritten onto the
 	// generated adapter.
 	needsHandlers bool
-	// needsUserAgent records that a user-agent handler became v2's option.
-	needsUserAgent bool
 	// needsPathStyle records that S3's path-style setting became the generated
 	// service option.
 	needsPathStyle bool
 	// needsCredentialsChain records that a v1 credentials chain or provider
 	// became a generated stand-in.
 	needsCredentialsChain bool
-	// reformat records that a value parsed apart was placed in a literal.
-	reformat bool
 	// needsPartitions records that v1's partition data was reached for.
 	needsPartitions bool
 	// needsDisableSSL records that a DisableSSL setting became the generated
 	// service option.
 	needsDisableSSL bool
-	// dir is the directory of the file being visited.
-	dir string
 	// needsPageReplay records that a page iterator override gained the
 	// operation, which calls the replay helper.
 	needsPageReplay bool
@@ -908,11 +980,6 @@ type migrateVisitor struct {
 	needsLoadOptions bool
 	// needsExpiresAt records that a credentials ExpiresAt became the stand-in.
 	needsExpiresAt bool
-	// needsAwsHTTP records that a RequestFailure became awshttp's ResponseError.
-	needsAwsHTTP bool
-	// needsStscreds records that assume-role options were written in a file
-	// not importing stscreds.
-	needsStscreds bool
 	// needsConfigBuilder records that a config local built up through setters
 	// became the generated builder.
 	needsConfigBuilder bool
@@ -922,22 +989,11 @@ type migrateVisitor struct {
 	// printedServices are the services whose shapes a printing call was
 	// handed, which the generated printer masks the sensitive fields of.
 	printedServices map[string]bool
-	// editing is unset in the probe the scan runs, which must not settle what
-	// the module migrates before every file is seen.
-	editing bool
 	// validatedShapes are the `service.Shape` whose Validate the file calls.
 	validatedShapes map[string]bool
-	// needsRetry records that a v1 retryer became v2's standard one, and
-	// needsTime that what it wrote names the time package.
-	needsRetry bool
-	needsTime  bool
 	// needsAttributeHelpers records that an AttributeValue member read became
 	// the generated getter.
 	needsAttributeHelpers bool
-	// gomockLocal is the name the file binds gomock to, and gomockImport the
-	// path to import where an expectation needs a matcher and it binds none.
-	gomockLocal  string
-	gomockImport string
 }
 
 func (v *migrateVisitor) VisitCompilationUnit(cu *golang.CompilationUnit, p any) java.J {
@@ -955,7 +1011,7 @@ func (v *migrateVisitor) migrateCompilationUnit(cu *golang.CompilationUnit, p an
 	v.dir = path.Dir(cu.SourcePath)
 	// The iface replacements are imported through the module's own path, so a
 	// file needing one stays on v1 when there is no go.mod to name it.
-	if v.acc != nil && v.acc.ifaceUnreachable() && scanFile(cu).needsModulePath() {
+	if v.acc != nil && !v.aheadOfGoMod && v.acc.ifaceUnreachable() && scanFile(cu).needsModulePath() {
 		v.acc.blockerReason(cu.SourcePath, ifaceUnreachableReason)
 		return cu
 	}
@@ -971,11 +1027,11 @@ func (v *migrateVisitor) migrateCompilationUnit(cu *golang.CompilationUnit, p an
 		if _, listed := v.acc.blockers[cu.SourcePath]; listed {
 			return cu
 		}
-		if by, held := v.acc.heldBackBy(cu); held {
+		if by, held := v.acc.heldBackBy(cu.SourcePath); held && !v.aheadOfGoMod {
 			// A file that never names the SDK still reads its values, typed as the
 			// v1 shapes the rest of the package keeps.
 			if importsV1(cu) {
-				v.acc.blockerReason(cu.SourcePath, "in the same package as "+by+", which stays on v1")
+				v.acc.blockerReason(cu.SourcePath, heldWithReason(by))
 			}
 			return cu
 		}

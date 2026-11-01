@@ -255,8 +255,7 @@ func (s *fileScan) configFieldOption(field string, value java.Expression) ([]con
 		if !ok {
 			return nil, false
 		}
-		source := strings.ReplaceAll(s.retryerSource(fields, typeName), "aws.", s.awsQualifier()+".")
-		parsed, ok := parsedExpression(source)
+		parsed, ok := s.parsedRetryer(fields, typeName)
 		if !ok {
 			return nil, false
 		}
@@ -541,10 +540,12 @@ func pathStyleCall(force java.Expression) java.Expression {
 	}
 }
 
-// serviceOptionsLiteral builds `[]func(string, any){option}`.
-func serviceOptionsLiteral(option java.Expression) java.Expression {
-	return &golang.Composite{
-		TypeExpr: &java.ArrayType{ElementType: &java.Identifier{Name: "func(string, any)"}},
-		Elements: java.Container[java.Expression]{Elements: []java.RightPadded[java.Expression]{{Element: lstutil.SetExprPrefix(option, java.EmptySpace)}}},
+// serviceOptionsLiteral builds `[]func(string, any){option}`, parsed so that
+// the element type is the golang.FuncType the parser makes of it.
+func serviceOptionsLiteral(option java.Expression) (java.Expression, bool) {
+	literal, ok := parsedExpression("[]func(string, any){awsServiceOption}")
+	if !ok {
+		return nil, false
 	}
+	return visitor.Init(&placeholderBind{name: "awsServiceOption", value: lstutil.SetExprPrefix(option, java.EmptySpace)}).Visit(literal, nil).(java.Expression), true
 }

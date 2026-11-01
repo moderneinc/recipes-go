@@ -181,3 +181,66 @@ func TestMigrateRequestWithRetryerLocalInCall(t *testing.T) {
 		test.Generated("zz_awssdkv2_config.go", configHelpersIn("main")),
 	)
 }
+
+// A delay converted from a count of milliseconds, in a retryer folded into
+// the loader's options, stays the conversion the parser reads it as.
+func TestMigrateRequestWithRetryerConvertedDelay(t *testing.T) {
+	migrateSpec().RewriteRun(t,
+		test.Golang(`
+			package main
+
+			import (
+				"time"
+
+				"github.com/aws/aws-sdk-go/aws"
+				"github.com/aws/aws-sdk-go/aws/client"
+				"github.com/aws/aws-sdk-go/aws/request"
+				"github.com/aws/aws-sdk-go/aws/session"
+				"github.com/aws/aws-sdk-go/service/iam"
+			)
+
+			func newClient(region string, delayMs int) *iam.IAM {
+				config := aws.NewConfig().WithRegion(region)
+
+				request.WithRetryer(config, client.DefaultRetryer{
+					NumMaxRetries:    12,
+					MaxRetryDelay:    time.Duration(delayMs) * time.Millisecond,
+					MaxThrottleDelay: time.Duration(delayMs) * time.Millisecond,
+				})
+
+				sess, err := session.NewSession(config)
+				if err != nil {
+					panic(err)
+				}
+				return iam.New(sess)
+			}
+		`, `
+			package main
+
+			import (
+				"context"
+				"time"
+
+				"github.com/aws/aws-sdk-go-v2/aws"
+				"github.com/aws/aws-sdk-go-v2/aws/ratelimit"
+				"github.com/aws/aws-sdk-go-v2/aws/retry"
+				configaws "github.com/aws/aws-sdk-go-v2/config"
+				"github.com/aws/aws-sdk-go-v2/service/iam"
+			)
+
+			func newClient(region string, delayMs int) *iam.Client {
+				sess, err := configaws.LoadDefaultConfig(context.TODO(), configaws.WithRegion(region), configaws.WithRetryer(func() aws.Retryer {
+					return retry.NewStandard(func(o *retry.StandardOptions) {
+						o.MaxAttempts = 13
+						o.MaxBackoff = time.Duration(delayMs) * time.Millisecond
+						o.RateLimiter = ratelimit.None
+					})
+				}))
+				if err != nil {
+					panic(err)
+				}
+				return iam.NewFromConfig(sess)
+			}
+		`),
+	)
+}

@@ -569,7 +569,7 @@ func (v *migrateVisitor) restructuredConfigDecl(stmt java.Statement, name string
 		Variable: &java.Identifier{Name: pathStyleVar, Type: lstutil.NamedType("bool")},
 		Value: java.LeftPadded[java.Expression]{
 			Before:  java.SingleSpace,
-			Element: &java.Literal{Prefix: java.SingleSpace, Value: false, Source: "false", Type: lstutil.NamedType("bool")},
+			Element: &java.Identifier{Prefix: java.SingleSpace, Name: "false", Type: lstutil.NamedType("bool")},
 		},
 	})
 	return out, true

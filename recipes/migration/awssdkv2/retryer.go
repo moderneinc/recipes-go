@@ -303,9 +303,25 @@ func (s *fileScan) usesTime(fields map[string]java.Expression) bool {
 	return strings.Contains(s.v1ConstantsAsSource(fields["MaxRetryDelay"])+s.v1ConstantsAsSource(fields["MaxThrottleDelay"]), "time.")
 }
 
-// parsedExpression parses source standing as an expression.
-func parsedExpression(source string) (java.Expression, bool) {
-	cu, err := parser.NewGoParser().Parse("expr.go", "package p\n\nvar _ = "+source+"\n")
+// parsedRetryer parses v2's form of a retryer literal, importing time where it
+// names the package, so that a delay such as time.Duration(n) is a conversion.
+func (s *fileScan) parsedRetryer(fields map[string]java.Expression, typeName string) (java.Expression, bool) {
+	source := strings.ReplaceAll(s.retryerSource(fields, typeName), "aws.", s.awsQualifier()+".")
+	if s.usesTime(fields) {
+		return parsedExpression(source, "time")
+	}
+	return parsedExpression(source)
+}
+
+// parsedExpression parses source standing as an expression, in a file that
+// imports the packages at imports, so that a conversion to one of their types
+// parses as a conversion rather than as a call.
+func parsedExpression(source string, imports ...string) (java.Expression, bool) {
+	var header strings.Builder
+	for _, path := range imports {
+		fmt.Fprintf(&header, "import %q\n\n", path)
+	}
+	cu, err := parser.NewGoParser().Parse("expr.go", "package p\n\n"+header.String()+"var _ = "+source+"\n")
 	if err != nil {
 		return nil, false
 	}
@@ -334,9 +350,7 @@ func (v *migrateVisitor) retryerValue(expr java.Expression) (java.Expression, bo
 	if !ok {
 		return nil, false
 	}
-	source := v.scan.retryerSource(fields, typeName)
-	source = strings.ReplaceAll(source, "aws.", v.scan.awsQualifier()+".")
-	value, ok := parsedExpression(source)
+	value, ok := v.scan.parsedRetryer(fields, typeName)
 	if !ok {
 		return nil, false
 	}

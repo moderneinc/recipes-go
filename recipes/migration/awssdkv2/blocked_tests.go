@@ -129,17 +129,17 @@ func commentedOutTest(cu *golang.CompilationUnit, reason string) *golang.Compila
 	return &c
 }
 
-// recordAdjunct notes the packages a changed adjunct file imports, among
-// which are the module's own that hand it SDK values. The module path may not
-// be known yet, so they are resolved once every file has been seen.
-func (a *migrateAcc) recordAdjunct(cu *golang.CompilationUnit) {
+// importPaths lists the packages cu imports. Those of a changed adjunct file
+// include the module's own that hand it SDK values, which are resolved once
+// every file has been seen, as the module path may not be known yet.
+func importPaths(cu *golang.CompilationUnit) []string {
 	var imports []string
 	if cu.Imports != nil {
 		for _, rp := range cu.Imports.Elements {
 			imports = append(imports, rp.Element.Path())
 		}
 	}
-	a.adjuncts[cu.SourcePath] = imports
+	return imports
 }
 
 // holdBackStrandedAdjuncts holds back an adjunct file reading values from a

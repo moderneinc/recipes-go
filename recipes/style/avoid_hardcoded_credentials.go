@@ -98,7 +98,8 @@ func (v *avoidHardcodedCredentialsVisitor) VisitVariableDeclarator(vd *java.Vari
 	recipegolang.MaybeAddImport(v, "os", nil, false)
 
 	// Build os.Getenv("VAR_NAME") to replace the string literal.
-	envLit := &java.Literal{Source: `"` + envVarName(vd.Name.Name) + `"`}
+	envName := envVarName(vd.Name.Name)
+	envLit := &java.Literal{Source: `"` + envName + `"`, Value: envName}
 	instantiated := getenvTmpl.Instantiate(template.NewMatchResult().Bind(getenvName, envLit))
 	if instantiated == nil {
 		return vd

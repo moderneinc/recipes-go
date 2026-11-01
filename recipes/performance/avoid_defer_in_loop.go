@@ -127,29 +127,33 @@ func buildIIFEBlock(originalBody *java.Block) *java.Block {
 	innerEnd := java.MakeSpace(nil, stmtIndent)
 
 	// Build: func() { ...indented body... }
-	// The leading whitespace goes on the MethodDeclaration prefix since
-	// the printer emits md.Prefix then "func".
-	funcLit := &java.MethodDeclaration{
-		ID:     uuid.New(),
-		Prefix: java.MakeSpace(nil, stmtIndent),
-		Name: &java.Identifier{
+	// The function literal goes in the StatementExpression the parser puts
+	// one in where an expression stands.
+	funcLit := &golang.StatementExpression{
+		ID: uuid.New(),
+		Statement: &java.MethodDeclaration{
 			ID: uuid.New(),
-		},
-		Parameters: java.Container[java.Statement]{
-			Before: java.EmptySpace,
-		},
-		Body: &java.Block{
-			ID:         uuid.New(),
-			Prefix:     java.SingleSpace,
-			Statements: innerStmts,
-			End:        innerEnd,
+			Name: &java.Identifier{
+				ID: uuid.New(),
+			},
+			Parameters: java.Container[java.Statement]{
+				Before: java.EmptySpace,
+			},
+			Body: &java.Block{
+				ID:         uuid.New(),
+				Prefix:     java.SingleSpace,
+				Statements: innerStmts,
+				End:        innerEnd,
+			},
 		},
 	}
 
 	// Build: func() { ... }()
-	// mi.Prefix is empty; the leading whitespace lives on funcLit.Prefix.
+	// The leading whitespace goes on the call, the outermost element, as the
+	// parser attaches it.
 	iifeCall := &java.MethodInvocation{
-		ID: uuid.New(),
+		ID:     uuid.New(),
+		Prefix: java.MakeSpace(nil, stmtIndent),
 		Select: &java.RightPadded[java.Expression]{
 			Element: funcLit,
 		},

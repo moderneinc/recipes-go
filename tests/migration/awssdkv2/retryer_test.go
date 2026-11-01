@@ -92,3 +92,56 @@ func TestMigrateCustomRetryer(t *testing.T) {
 		test.Generated("zz_awssdkv2_config.go", configHelpersIn("sqsevent")),
 	)
 }
+
+// A delay converted from a count of milliseconds carries over as written, and
+// stays the conversion the parser reads it as rather than a call.
+func TestMigrateRetryerWithConvertedDelay(t *testing.T) {
+	migrateSpec().RewriteRun(t,
+		test.Golang(`
+			package sqsevent
+
+			import (
+				"time"
+
+				"github.com/aws/aws-sdk-go/aws"
+				"github.com/aws/aws-sdk-go/aws/client"
+				"github.com/aws/aws-sdk-go/aws/session"
+				"github.com/aws/aws-sdk-go/service/sqs"
+			)
+
+			func GetSqsClient(sess *session.Session, delayMs int) *sqs.SQS {
+				return sqs.New(sess, &aws.Config{
+					Retryer: client.DefaultRetryer{
+						NumMaxRetries:    3,
+						MaxRetryDelay:    time.Duration(delayMs) * time.Millisecond,
+						MaxThrottleDelay: time.Duration(delayMs) * time.Millisecond,
+					},
+				})
+			}
+		`, `
+			package sqsevent
+
+			import (
+				"time"
+
+				"github.com/aws/aws-sdk-go-v2/aws"
+				"github.com/aws/aws-sdk-go-v2/aws/ratelimit"
+				"github.com/aws/aws-sdk-go-v2/aws/retry"
+				"github.com/aws/aws-sdk-go-v2/service/sqs"
+			)
+
+			func GetSqsClient(sess aws.Config, delayMs int) *sqs.Client {
+				return sqs.NewFromConfig(awsCompatMergeConfig(sess, &aws.Config{
+					Retryer: func() aws.Retryer {
+						return retry.NewStandard(func(o *retry.StandardOptions) {
+							o.MaxAttempts = 4
+							o.MaxBackoff = time.Duration(delayMs) * time.Millisecond
+							o.RateLimiter = ratelimit.None
+						})
+					},
+				}))
+			}
+		`),
+		test.Generated("zz_awssdkv2_config.go", configHelpersIn("sqsevent")),
+	)
+}

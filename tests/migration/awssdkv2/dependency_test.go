@@ -169,6 +169,95 @@ func TestMigrateLeavesGoModAloneWhenEveryPackageIsHeldBack(t *testing.T) {
 	)
 }
 
+// The same package with its files in the other order: the iface importer comes
+// before the go.mod and before the file holding the package on v1, and stays
+// on v1 with the package all the same.
+func TestMigrateLeavesGoModAloneWhenPackageIsHeldBackAfterIfaceImporter(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&awssdkv2.MigrateAwsSdkGoToV2{})
+	test.ExpectDataTable(spec, awssdkv2.AwsSdkGoV1BlockersTable, func(t *testing.T, rows []awssdkv2.AwsSdkGoV1BlockerRow) {
+		assert.Equal(t, []awssdkv2.AwsSdkGoV1BlockerRow{
+			{SourcePath: "app/session.go", Reason: "a session compared to nil, which the config replacing it cannot be"},
+			{SourcePath: "app/sts.go", Reason: "in the same package as app/session.go, which stays on v1"},
+		}, rows)
+	})
+	spec.RewriteRun(t,
+		test.GoProject("app",
+			test.Golang(`
+				package app
+
+				import (
+					"github.com/aws/aws-sdk-go/service/sts"
+					"github.com/aws/aws-sdk-go/service/sts/stsiface"
+				)
+
+				func account(svc stsiface.STSAPI) (string, error) {
+					out, err := svc.GetCallerIdentity(&sts.GetCallerIdentityInput{})
+					if err != nil {
+						return "", err
+					}
+					return *out.Account, nil
+				}
+			`).WithPath("app/sts.go"),
+			test.Golang(`
+				package app
+
+				import "github.com/aws/aws-sdk-go/aws/session"
+
+				var sess *session.Session
+
+				func ready() bool { return sess != nil }
+			`).WithPath("app/session.go"),
+			test.GoMod(`
+				module example.com/app
+
+				go 1.14
+
+				require github.com/aws/aws-sdk-go v1.55.8
+			`),
+		),
+	)
+}
+
+// Without a go.mod the iface importer has no module path to import the
+// regenerated package through, which is the reason it is listed under even
+// where another file of its package was held back first.
+func TestMigrateListsIfaceImporterWithoutModulePathBesideHeldFile(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&awssdkv2.MigrateAwsSdkGoToV2{})
+	test.ExpectDataTable(spec, awssdkv2.AwsSdkGoV1BlockersTable, func(t *testing.T, rows []awssdkv2.AwsSdkGoV1BlockerRow) {
+		assert.Equal(t, []awssdkv2.AwsSdkGoV1BlockerRow{
+			{SourcePath: "app/session.go", Reason: "a session compared to nil, which the config replacing it cannot be"},
+			{SourcePath: "app/sts.go", Reason: "an iface package with no module path to regenerate it under"},
+		}, rows)
+	})
+	spec.RewriteRun(t,
+		test.Golang(`
+			package app
+
+			import "github.com/aws/aws-sdk-go/aws/session"
+
+			var sess *session.Session
+
+			func ready() bool { return sess != nil }
+		`).WithPath("app/session.go"),
+		test.Golang(`
+			package app
+
+			import (
+				"github.com/aws/aws-sdk-go/service/sts"
+				"github.com/aws/aws-sdk-go/service/sts/stsiface"
+			)
+
+			func account(svc stsiface.STSAPI) (string, error) {
+				out, err := svc.GetCallerIdentity(&sts.GetCallerIdentityInput{})
+				if err != nil {
+					return "", err
+				}
+				return *out.Account, nil
+			}
+		`).WithPath("app/sts.go"),
+	)
+}
+
 // resolvedGoMod marks a go.mod's module graph as resolved at parse time, with
 // the build list and package map given, as the RPC server's ParseProject does.
 func resolvedGoMod(mod test.SourceSpec, deps []golang.GoResolvedDependency, pkgs []golang.GoPackageModule) test.SourceSpec {
