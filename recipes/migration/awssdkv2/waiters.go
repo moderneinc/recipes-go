@@ -102,11 +102,14 @@ func (v *migrateVisitor) waiterCall(mi *java.MethodInvocation) (java.J, bool) {
 		if !ok {
 			return nil, false
 		}
-		parsed, ok := parsedExpression(fmt.Sprintf("time.Duration(awsWaitAttempts) * %d * time.Second", delay), "time")
+		// The bound names time by the name the file imports it under.
+		timeName := v.scan.timeQualifier()
+		parsed, ok := parsedExpressionAfter(fmt.Sprintf("import %s %q\n\n", timeName, "time"),
+			fmt.Sprintf("%[1]s.Duration(awsWaitAttempts) * %[2]d * %[1]s.Second", timeName, delay))
 		if !ok {
 			return nil, false
 		}
-		parsed = visitor.Init(&qualifiedCallTyping{paths: map[string]string{"time": "time"}}).Visit(parsed, nil).(java.Expression)
+		parsed = visitor.Init(&qualifiedCallTyping{paths: map[string]string{timeName: "time"}}).Visit(parsed, nil).(java.Expression)
 		parsed = visitor.Init(&placeholderBind{name: "awsWaitAttempts", value: lstutil.SetExprPrefix(attempts, java.EmptySpace)}).Visit(parsed, nil).(java.Expression)
 		bound = lstutil.SetExprPrefix(parsed, java.SingleSpace)
 		v.needsTime = true

@@ -4446,6 +4446,54 @@ func TestMigrateWaiterWithAttemptBound(t *testing.T) {
 	)
 }
 
+// The duration bound is written with the name the file imports time under, as
+// the file has no import of time by its own name.
+func TestMigrateWaiterWithAttemptBoundThroughARenamedTimeImport(t *testing.T) {
+	migrateSpec().RewriteRun(t,
+		test.Golang(`
+			package ecs
+
+			import (
+				"context"
+				gotime "time"
+
+				"github.com/aws/aws-sdk-go/aws"
+				"github.com/aws/aws-sdk-go/aws/request"
+				"github.com/aws/aws-sdk-go/service/ecs"
+			)
+
+			func stable(svc *ecs.ECS, cluster, service string, maxWait gotime.Duration) error {
+				maxAttempts := int(maxWait / (15 * gotime.Second))
+				input := &ecs.DescribeServicesInput{
+					Cluster:  aws.String(cluster),
+					Services: []*string{aws.String(service)},
+				}
+				return svc.WaitUntilServicesStableWithContext(context.Background(), input, request.WithWaiterMaxAttempts(maxAttempts))
+			}
+		`, `
+			package ecs
+
+			import (
+				"context"
+				gotime "time"
+
+				"github.com/aws/aws-sdk-go-v2/aws"
+				"github.com/aws/aws-sdk-go-v2/service/ecs"
+			)
+
+			func stable(svc *ecs.Client, cluster, service string, maxWait gotime.Duration) error {
+				maxAttempts := int(maxWait / (15 * gotime.Second))
+				input := &ecs.DescribeServicesInput{
+					Cluster:  aws.String(cluster),
+					Services: awsCompatVals([]*string{aws.String(service)}),
+				}
+				return ecs.NewServicesStableWaiter(svc).Wait(context.Background(), input, gotime.Duration(maxAttempts) * 15 * gotime.Second)
+			}
+		`),
+		test.Generated("zz_awssdkv2_compat.go", compatHelpersIn("ecs")),
+	)
+}
+
 // in4it/ecs-deploy's shape: a fluent setter for a count v2 narrowed from int64
 // to int32, given the program's int64.
 func TestMigrateFluentSetterNarrowed(t *testing.T) {
