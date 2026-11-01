@@ -278,8 +278,8 @@ func (s *fileScan) retryerSource(fields map[string]java.Expression, typeName str
 	} else {
 		attempts += " + 1"
 	}
-	retryText, maxRetry := value("MaxRetryDelay", v1DefaultRetryerConstants["DefaultRetryerMaxRetryDelay"])
-	throttleText, maxThrottle := value("MaxThrottleDelay", v1DefaultRetryerConstants["DefaultRetryerMaxThrottleDelay"])
+	retryText, maxRetry := value("MaxRetryDelay", s.inFileTime(v1DefaultRetryerConstants["DefaultRetryerMaxRetryDelay"]))
+	throttleText, maxThrottle := value("MaxThrottleDelay", s.inFileTime(v1DefaultRetryerConstants["DefaultRetryerMaxThrottleDelay"]))
 	backoff := maxRetry
 	if throttleText != retryText {
 		backoff = fmt.Sprintf("max(%s, %s)", maxRetry, maxThrottle)
@@ -299,9 +299,24 @@ func (s *fileScan) retryerSource(fields map[string]java.Expression, typeName str
 func (s *fileScan) v1ConstantsAsSource(expr java.Expression) string {
 	text := printer.Print(lstutil.SetExprPrefix(expr, java.EmptySpace))
 	for name, value := range v1DefaultRetryerConstants {
-		text = strings.ReplaceAll(text, s.clientPkg+"."+name, value)
+		text = strings.ReplaceAll(text, s.clientPkg+"."+name, s.inFileTime(value))
 	}
 	return text
+}
+
+// inFileTime spells the value of a v1 constant with the name the file calls the
+// time package by.
+func (s *fileScan) inFileTime(value string) string {
+	return strings.ReplaceAll(value, "time.", s.timeQualifier()+".")
+}
+
+// timeQualifier is the name the file imports time under, or time where it does
+// not import it.
+func (s *fileScan) timeQualifier() string {
+	if s.timePkg != "" {
+		return s.timePkg
+	}
+	return "time"
 }
 
 // retryerPlaceholder begins the name a value of a retryer literal stands under
@@ -313,7 +328,7 @@ const retryerPlaceholder = "awsRetryer"
 // keeps the qualifiers its file wrote it with.
 func (s *fileScan) usesTime(fields map[string]java.Expression) bool {
 	source, _ := s.retryerSource(fields, "")
-	return strings.Contains(source, "time.")
+	return strings.Contains(source, s.timeQualifier()+".")
 }
 
 // parsedRetryer parses v2's form of a retryer literal, importing time where it
@@ -322,22 +337,23 @@ func (s *fileScan) usesTime(fields map[string]java.Expression) bool {
 func (s *fileScan) parsedRetryer(fields map[string]java.Expression, typeName string) (java.Expression, bool) {
 	source, values := s.retryerSource(fields, typeName)
 	source = strings.ReplaceAll(source, "aws.", s.awsQualifier()+".")
+	timeName := s.timeQualifier()
 	// Each placeholder is declared with the type of the field it stands for.
 	var decls strings.Builder
 	for _, field := range []string{"NumMaxRetries", "MaxRetryDelay", "MaxThrottleDelay"} {
 		if values[retryerPlaceholder+field] != nil {
-			typ := "time.Duration"
+			typ := timeName + ".Duration"
 			if field == "NumMaxRetries" {
 				typ = "int"
 			}
 			fmt.Fprintf(&decls, "var %s%s %s\n\n", retryerPlaceholder, field, typ)
 		}
 	}
-	var imports []string
-	if strings.Contains(decls.String()+source, "time.") {
-		imports = append(imports, "time")
+	header := decls.String()
+	if strings.Contains(header+source, timeName+".") {
+		header = fmt.Sprintf("import %s %q\n\n", timeName, "time") + header
 	}
-	parsed, ok := parsedExpressionAmong(decls.String(), source, imports...)
+	parsed, ok := parsedExpressionAfter(header, source)
 	if !ok {
 		return nil, false
 	}
@@ -351,17 +367,17 @@ func (s *fileScan) parsedRetryer(fields map[string]java.Expression, typeName str
 // imports the packages at imports, so that a conversion to one of their types
 // parses as a conversion rather than as a call.
 func parsedExpression(source string, imports ...string) (java.Expression, bool) {
-	return parsedExpressionAmong("", source, imports...)
-}
-
-// parsedExpressionAmong parses source as parsedExpression does, in a file that
-// also declares decls.
-func parsedExpressionAmong(decls, source string, imports ...string) (java.Expression, bool) {
 	var header strings.Builder
 	for _, path := range imports {
 		fmt.Fprintf(&header, "import %q\n\n", path)
 	}
-	cu, err := parser.NewGoParser().Parse("expr.go", "package p\n\n"+header.String()+decls+"var _ = "+source+"\n")
+	return parsedExpressionAfter(header.String(), source)
+}
+
+// parsedExpressionAfter parses source standing as an expression, in a file that
+// opens with the imports and declarations of header.
+func parsedExpressionAfter(header, source string) (java.Expression, bool) {
+	cu, err := parser.NewGoParser().Parse("expr.go", "package p\n\n"+header+"var _ = "+source+"\n")
 	if err != nil {
 		return nil, false
 	}

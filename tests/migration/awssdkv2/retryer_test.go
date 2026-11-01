@@ -263,6 +263,58 @@ func TestMigrateRetryerWithDelayThroughARenamedTimeImport(t *testing.T) {
 	)
 }
 
+// A delay v1 left at its default is written out with the name the file imports
+// time under, as the file has no import of time by its own name.
+func TestMigrateRetryerDefaultThroughARenamedTimeImport(t *testing.T) {
+	migrateSpec().RewriteRun(t,
+		test.Golang(`
+			package sqsevent
+
+			import (
+				gotime "time"
+
+				"github.com/aws/aws-sdk-go/aws"
+				"github.com/aws/aws-sdk-go/aws/client"
+				"github.com/aws/aws-sdk-go/aws/session"
+				"github.com/aws/aws-sdk-go/service/sqs"
+			)
+
+			func GetSqsClient(sess *session.Session) *sqs.SQS {
+				return sqs.New(sess, &aws.Config{
+					Retryer: client.DefaultRetryer{
+						NumMaxRetries: 3,
+						MaxRetryDelay: 5 * gotime.Second,
+					},
+				})
+			}
+		`, `
+			package sqsevent
+
+			import (
+				gotime "time"
+
+				"github.com/aws/aws-sdk-go-v2/aws"
+				"github.com/aws/aws-sdk-go-v2/aws/ratelimit"
+				"github.com/aws/aws-sdk-go-v2/aws/retry"
+				"github.com/aws/aws-sdk-go-v2/service/sqs"
+			)
+
+			func GetSqsClient(sess aws.Config) *sqs.Client {
+				return sqs.NewFromConfig(awsCompatMergeConfig(sess, &aws.Config{
+					Retryer: func() aws.Retryer {
+						return retry.NewStandard(func(o *retry.StandardOptions) {
+							o.MaxAttempts = 4
+							o.MaxBackoff = max(5*gotime.Second, 300*gotime.Second)
+							o.RateLimiter = ratelimit.None
+						})
+					},
+				}))
+			}
+		`),
+		test.Generated("zz_awssdkv2_config.go", configHelpersIn("sqsevent")),
+	)
+}
+
 // conversionsStay fails when a conversion written as one of want is held as a
 // call rather than the java.TypeCast the parser makes of it.
 func conversionsStay(want ...string) func(t *testing.T, cu *golang.CompilationUnit) {

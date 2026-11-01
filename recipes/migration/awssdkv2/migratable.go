@@ -69,6 +69,8 @@ type fileScan struct {
 	// of its client plumbing.
 	endpointsPkg string
 	clientPkg    string
+	// timePkg is the name the file imports time under, if it does.
+	timePkg string
 	// retryers are the retryer types the file declares, consumedClientRefs the
 	// client references they and their literals take, and retryerValues the
 	// Retryer values the rewrite carries over.
@@ -223,6 +225,7 @@ func scanFileReasons(cu *golang.CompilationUnit, all bool) *fileScan {
 		requestPkg:             pathswap.Qualifier(cu, v1Request),
 		endpointsPkg:           pathswap.Qualifier(cu, v1Endpoints),
 		clientPkg:              pathswap.Qualifier(cu, v1Client),
+		timePkg:                pathswap.Qualifier(cu, "time"),
 		configVariadics:        map[string]bool{},
 		consumedClientRefs:     map[*java.FieldAccess]bool{},
 		retryerValues:          map[java.Expression]bool{},
