@@ -6,6 +6,7 @@ package errorhandling
 
 import (
 	"github.com/moderneinc/recipes-go/diagnostic"
+	"strconv"
 	"strings"
 
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
@@ -87,6 +88,10 @@ func (v *preferErrorfWrapVerbVisitor) VisitMethodInvocation(mi *java.MethodInvoc
 	lastIdx := strings.LastIndex(content, "%s")
 	newSource := content[:lastIdx] + "%w" + content[lastIdx+2:]
 	newFmtLit := fmtLit.WithSource(newSource)
+	// The value is the string the new source spells, as the parser reads it.
+	if value, err := strconv.Unquote(newSource); err == nil {
+		newFmtLit = newFmtLit.WithValue(value)
+	}
 
 	// Rebuild the arguments with the modified format literal.
 	newArgs := make([]java.RightPadded[java.Expression], len(args))
