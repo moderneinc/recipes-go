@@ -1107,6 +1107,7 @@ func (v *migrateVisitor) migrateCompilationUnit(cu *golang.CompilationUnit, p an
 	v.needsAttributeHelpers = false
 	v.gomockLocal = gomockLocal(cu)
 	v.gomockImport = ""
+	original := cu
 	cu = v.GoVisitor.VisitCompilationUnit(cu, p).(*golang.CompilationUnit)
 	cu = v.rewriteRetryerDeclarations(cu)
 	cu = v.addPageReplays(cu)
@@ -1165,10 +1166,85 @@ func (v *migrateVisitor) migrateCompilationUnit(cu *golang.CompilationUnit, p an
 	}
 	if v.scan.adjunct {
 		// Nothing to swap: the file never named the SDK, and what it reads off
-		// an SDK value has already been seen to.
+		// an SDK value has already been seen to. The values it holds are v2's
+		// now, and a file the rewrite changed is typed so, as a swapped one is.
+		if cu != original {
+			return retypeV1Values(cu, p)
+		}
 		return cu
 	}
 	return v.swapImports(cu, p)
+}
+
+// retypeV1Values re-attributes the v1 values a file holds without importing
+// their packages as the v2 values they become, by the rules swapImports would
+// apply had the file imported them.
+func retypeV1Values(cu *golang.CompilationUnit, p any) *golang.CompilationUnit {
+	var rules []pathswap.Rule
+	for _, pkg := range v1TypePackages(cu) {
+		if moved, ok := MapPath(pkg); ok {
+			rules = append(rules, pathswap.Rule{Old: pkg, New: moved})
+		}
+	}
+	if len(rules) == 0 {
+		return cu
+	}
+	sort.SliceStable(rules, func(i, j int) bool { return len(rules[i].Old) > len(rules[j].Old) })
+	if retyped, ok := pathswap.Retype(rules).Visit(cu, p).(*golang.CompilationUnit); ok {
+		return retyped
+	}
+	return cu
+}
+
+// v1TypePackages lists the v1 packages whose types the references in tree carry.
+func v1TypePackages(tree java.Tree) []string {
+	c := visitor.Init(&v1TypeCollector{packages: map[string]bool{}})
+	c.Visit(tree, nil)
+	return sortedKeys(c.packages)
+}
+
+type v1TypeCollector struct {
+	visitor.GoVisitor
+	packages map[string]bool
+}
+
+func (c *v1TypeCollector) VisitIdentifier(id *java.Identifier, p any) java.J {
+	c.note(id.Type)
+	return c.GoVisitor.VisitIdentifier(id, p)
+}
+
+func (c *v1TypeCollector) VisitFieldAccess(fa *java.FieldAccess, p any) java.J {
+	c.note(fa.Type)
+	return c.GoVisitor.VisitFieldAccess(fa, p)
+}
+
+func (c *v1TypeCollector) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	if mi.MethodType != nil {
+		c.note(mi.MethodType.DeclaringType)
+	}
+	return c.GoVisitor.VisitMethodInvocation(mi, p)
+}
+
+// note records the package of a type under v1, looking through the slices,
+// pointers and instantiations a reference's type can be.
+func (c *v1TypeCollector) note(t java.JavaType) {
+	switch typ := t.(type) {
+	case *java.JavaTypeArray:
+		c.note(typ.ElemType)
+		return
+	case *java.JavaTypeParameterized:
+		c.note(typ.Type)
+		return
+	}
+	fqn := matcher.GetFullyQualifiedName(t)
+	if !strings.HasPrefix(fqn, v1Module+"/") {
+		return
+	}
+	pkg := fqn
+	if dot := strings.LastIndex(fqn, "."); dot > strings.LastIndex(fqn, "/") {
+		pkg = fqn[:dot]
+	}
+	c.packages[pkg] = true
 }
 
 // dropEmptiedServiceImports removes the service imports nothing references any

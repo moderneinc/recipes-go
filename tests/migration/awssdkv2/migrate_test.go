@@ -3647,6 +3647,44 @@ func TestMigrateCarriedConfig(t *testing.T) {
 // require against the module cache, which is where the type comes from.
 func TestMigrateAdjunctFileFollowsShapes(t *testing.T) {
 	requireModuleCache(t, "github.com/aws/aws-sdk-go@v1.55.8")
+	migrateAdjunctFollowingShapes(t)
+}
+
+// The run's second cycle and its run on a fresh parse read the values the first
+// migrated as v2's, in the file the swap retyped and in the adjunct, and convert
+// neither again. A stub of the v1 module in a module cache of the test's own
+// types the fixture as the real module does, with nothing fetched.
+func TestMigrateAdjunctFileFollowsShapesOnce(t *testing.T) {
+	cache := t.TempDir()
+	module := filepath.Join(cache, "github.com", "aws", "aws-sdk-go@v1.55.8")
+	require.NoError(t, os.MkdirAll(filepath.Join(module, "service", "s3"), 0o755))
+	require.NoError(t, os.WriteFile(filepath.Join(module, "go.mod"), []byte("module github.com/aws/aws-sdk-go\n"), 0o644))
+	require.NoError(t, os.WriteFile(filepath.Join(module, "service", "s3", "api.go"), []byte(`package s3
+
+type S3 struct{}
+
+type ListObjectsInput struct {
+	Bucket *string
+}
+
+type ListObjectsOutput struct {
+	Contents []*Object
+}
+
+type Object struct {
+	Key          *string
+	StorageClass *string
+}
+
+func (c *S3) ListObjects(input *ListObjectsInput) (*ListObjectsOutput, error) {
+	return nil, nil
+}
+`), 0o644))
+	t.Setenv("GOMODCACHE", cache)
+	migrateAdjunctFollowingShapes(t)
+}
+
+func migrateAdjunctFollowingShapes(t *testing.T) {
 	test.NewRecipeSpec().WithRecipe(&awssdkv2.MigrateAwsSdkGoToV2{}).RewriteRun(t,
 		test.GoProject("app",
 			test.GoMod(`
