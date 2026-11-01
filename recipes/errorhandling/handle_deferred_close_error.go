@@ -73,23 +73,26 @@ func (v *handleDeferredCloseErrorVisitor) VisitDefer(d *golang.Defer, p any) jav
 		Value:    java.LeftPadded[java.Expression]{Before: java.SingleSpace, Element: closeCall},
 	}
 
-	// Step 3: func() { _ = f.Close() }  — a MethodDeclaration with empty name
-	funcLiteral := &java.MethodDeclaration{
-		Prefix:     java.SingleSpace,
-		Name:       &java.Identifier{Name: ""},
-		Parameters: java.Container[java.Statement]{},
-		Body: &java.Block{
-			Prefix: java.SingleSpace,
-			Statements: []java.RightPadded[java.Statement]{
-				{Element: assignment},
+	// Step 3: func() { _ = f.Close() }  — a MethodDeclaration with empty name,
+	// in the StatementExpression the parser puts a function literal in
+	funcLiteral := &golang.StatementExpression{
+		Statement: &java.MethodDeclaration{
+			Name:       &java.Identifier{Name: ""},
+			Parameters: java.Container[java.Statement]{},
+			Body: &java.Block{
+				Prefix: java.SingleSpace,
+				Statements: []java.RightPadded[java.Statement]{
+					{Element: assignment},
+				},
+				End: java.SingleSpace,
 			},
-			End: java.SingleSpace,
 		},
 	}
 
-	// Step 4: func() { _ = f.Close() }()  — call the literal
+	// Step 4: func() { _ = f.Close() }()  — call the literal, which carries
+	// the space after `defer` as its outermost element
 	outerCall := &java.MethodInvocation{
-		Prefix:    java.EmptySpace,
+		Prefix:    java.SingleSpace,
 		Select:    &java.RightPadded[java.Expression]{Element: funcLiteral},
 		Name:      &java.Identifier{Name: ""},
 		Arguments: java.Container[java.Expression]{},
