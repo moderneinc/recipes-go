@@ -102,7 +102,7 @@ func (v *migrateVisitor) waiterCall(mi *java.MethodInvocation) (java.J, bool) {
 		if !ok {
 			return nil, false
 		}
-		parsed, ok := parsedExpression(fmt.Sprintf("time.Duration(awsWaitAttempts) * %d * time.Second", delay))
+		parsed, ok := parsedExpression(fmt.Sprintf("time.Duration(awsWaitAttempts) * %d * time.Second", delay), "time")
 		if !ok {
 			return nil, false
 		}

@@ -303,9 +303,15 @@ func (s *fileScan) usesTime(fields map[string]java.Expression) bool {
 	return strings.Contains(s.v1ConstantsAsSource(fields["MaxRetryDelay"])+s.v1ConstantsAsSource(fields["MaxThrottleDelay"]), "time.")
 }
 
-// parsedExpression parses source standing as an expression.
-func parsedExpression(source string) (java.Expression, bool) {
-	cu, err := parser.NewGoParser().Parse("expr.go", "package p\n\nvar _ = "+source+"\n")
+// parsedExpression parses source standing as an expression, in a file that
+// imports the packages at imports, so that a conversion to one of their types
+// parses as a conversion rather than as a call.
+func parsedExpression(source string, imports ...string) (java.Expression, bool) {
+	var header strings.Builder
+	for _, path := range imports {
+		fmt.Fprintf(&header, "import %q\n\n", path)
+	}
+	cu, err := parser.NewGoParser().Parse("expr.go", "package p\n\n"+header.String()+"var _ = "+source+"\n")
 	if err != nil {
 		return nil, false
 	}
