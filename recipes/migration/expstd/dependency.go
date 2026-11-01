@@ -42,13 +42,17 @@ func (r *RemoveXExpDependency) EditorWithData(acc any) recipe.TreeVisitor {
 	return visitor.Init(&removeExpRequireEditor{acc: acc.(*expUsageAcc)})
 }
 
-// expUsageAcc holds the files that import x/exp rather than a verdict on them.
-// Whether the migration takes a file depends on the module's `go` directive,
-// which another file carries, and the scan sees files in no guaranteed order —
-// so the question is asked in the edit phase, once both are known.
+// expUsageAcc holds a verdict on each file that imports x/exp for every go
+// version the migrations are gated on. Whether the migration takes a file
+// depends on the module's `go` directive, which another file carries, and the
+// scan sees files in no guaranteed order — so the edit phase reads the verdict
+// for the version the go.mod names, once both are known.
 type expUsageAcc struct {
 	moduleAcc
-	importers []*golang.CompilationUnit
+	// emptiedFrom holds, for each file importing x/exp, the oldest of
+	// gateVersions from which the migrations leave it no x/exp import, or ""
+	// when none does.
+	emptiedFrom []string
 }
 
 type expUsageScanner struct {
@@ -65,9 +69,22 @@ func (v *expUsageScanner) VisitGoModDirective(d *golang.GoModDirective, p any) j
 
 func (v *expUsageScanner) VisitCompilationUnit(cu *golang.CompilationUnit, p any) java.J {
 	if importsXExp(cu) {
-		v.acc.importers = append(v.acc.importers, cu)
+		v.acc.emptiedFrom = append(v.acc.emptiedFrom, emptiedFrom(cu))
 	}
 	return cu
+}
+
+// emptiedFrom is the oldest of gateVersions from which the package migrations
+// take every x/exp import out of cu, or "" when none does. A newer version only
+// opens more of the migrations, so a file emptied at one version stays emptied
+// at every later one.
+func emptiedFrom(cu *golang.CompilationUnit) string {
+	for _, version := range gateVersions {
+		if !importsXExp(applyXExpMigrations(cu, &moduleAcc{goVersion: version})) {
+			return version
+		}
+	}
+	return ""
 }
 
 type removeExpRequireEditor struct {
@@ -87,8 +104,8 @@ func (v *removeExpRequireEditor) VisitGoMod(gm *golang.GoMod, p any) java.Tree {
 // answers the same, so the verdict does not depend on whether the source rewrite
 // has run yet.
 func (a *expUsageAcc) migrationEmptiesEveryFile() bool {
-	for _, cu := range a.importers {
-		if importsXExp(applyXExpMigrations(cu, &a.moduleAcc)) {
+	for _, from := range a.emptiedFrom {
+		if from == "" || !a.atLeast(from) {
 			return false
 		}
 	}
