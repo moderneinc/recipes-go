@@ -77,8 +77,9 @@ func (v *wrapErrorWithContextVisitor) VisitReturn(ret *java.Return, p any) java.
 	recipegolang.MaybeAddImport(v, "fmt", nil, false)
 
 	// Reuse the wrapped identifier so the argument keeps its error type.
+	format := v.funcName + ": %w"
 	errorfCall := wrapErrorTmpl.Instantiate(template.NewMatchResult().
-		Bind(wrapErrorFormat, &java.Literal{Source: `"` + v.funcName + `: %w"`}).
+		Bind(wrapErrorFormat, &java.Literal{Source: `"` + format + `"`, Value: format}).
 		Bind(wrapErrorErr, ident))
 	if errorfCall == nil {
 		return ret
