@@ -35,7 +35,7 @@ func (r *FindMissingGoModRequires) Description() string {
 func (r *FindMissingGoModRequires) Tags() []string { return []string{"gomod", "tidy", "search"} }
 
 func (r *FindMissingGoModRequires) InitialValue(*recipe.ExecutionContext) any {
-	return &goModResolutionAcc{byModulePath: make(map[string]golang.GoResolutionResult)}
+	return &goModResolutionAcc{byModulePath: make(map[string]moduleCoverage)}
 }
 
 func (r *FindMissingGoModRequires) Scanner(acc any) recipe.TreeVisitor {
@@ -47,7 +47,27 @@ func (r *FindMissingGoModRequires) EditorWithData(acc any) recipe.TreeVisitor {
 }
 
 type goModResolutionAcc struct {
-	byModulePath map[string]golang.GoResolutionResult
+	byModulePath map[string]moduleCoverage
+}
+
+// moduleCoverage is what a go.mod says about the import paths its module
+// covers: its own path and those of its requires and replaces. Keeping these
+// rather than the GoResolutionResult leaves out the module graph it can hold.
+type moduleCoverage struct {
+	modulePath string
+	requires   []string
+	replaces   []string
+}
+
+func coverageOf(mrr *golang.GoResolutionResult) moduleCoverage {
+	c := moduleCoverage{modulePath: mrr.ModulePath}
+	for i := range mrr.Requires {
+		c.requires = append(c.requires, mrr.Requires[i].ModulePath)
+	}
+	for i := range mrr.Replaces {
+		c.replaces = append(c.replaces, mrr.Replaces[i].OldPath)
+	}
+	return c
 }
 
 type goModResolutionCollector struct {
@@ -58,7 +78,7 @@ type goModResolutionCollector struct {
 func (v *goModResolutionCollector) VisitGoMod(gm *golang.GoMod, p any) java.Tree {
 	gm = v.GoVisitor.VisitGoMod(gm, p).(*golang.GoMod)
 	if mrr := java.FindMarker[golang.GoResolutionResult](gm.Markers); mrr != nil && mrr.ModulePath != "" {
-		v.acc.byModulePath[mrr.ModulePath] = *mrr
+		v.acc.byModulePath[mrr.ModulePath] = coverageOf(mrr)
 	}
 	return gm
 }
@@ -75,7 +95,7 @@ func (v *findMissingGoModRequiresVisitor) VisitCompilationUnit(cu *golang.Compil
 	if project == nil || project.ModulePath == "" || cu.Imports == nil {
 		return cu
 	}
-	mrr, ok := v.acc.byModulePath[project.ModulePath]
+	coverage, ok := v.acc.byModulePath[project.ModulePath]
 	if !ok {
 		return cu
 	}
@@ -84,7 +104,7 @@ func (v *findMissingGoModRequiresVisitor) VisitCompilationUnit(cu *golang.Compil
 	newElements := make([]java.RightPadded[*java.Import], len(elements))
 	changed := false
 	for i, rp := range elements {
-		if isMissingRequire(rp.Element.Path(), &mrr) {
+		if isMissingRequire(rp.Element.Path(), &coverage) {
 			if marked := rp.Element.WithMarkers(
 				java.FoundSearchResult(rp.Element.Markers, "missing go.mod requirement"),
 			); marked != rp.Element {
@@ -102,20 +122,20 @@ func (v *findMissingGoModRequiresVisitor) VisitCompilationUnit(cu *golang.Compil
 	return cu.WithImports(&imports)
 }
 
-func isMissingRequire(importPath string, mrr *golang.GoResolutionResult) bool {
+func isMissingRequire(importPath string, coverage *moduleCoverage) bool {
 	if importPath == "" || isStdlibImport(importPath) {
 		return false
 	}
-	if mrr.ModulePath != "" && moduleProvides(mrr.ModulePath, importPath) {
+	if coverage.modulePath != "" && moduleProvides(coverage.modulePath, importPath) {
 		return false
 	}
-	for i := range mrr.Requires {
-		if moduleProvides(mrr.Requires[i].ModulePath, importPath) {
+	for _, modulePath := range coverage.requires {
+		if moduleProvides(modulePath, importPath) {
 			return false
 		}
 	}
-	for i := range mrr.Replaces {
-		if moduleProvides(mrr.Replaces[i].OldPath, importPath) {
+	for _, oldPath := range coverage.replaces {
+		if moduleProvides(oldPath, importPath) {
 			return false
 		}
 	}
