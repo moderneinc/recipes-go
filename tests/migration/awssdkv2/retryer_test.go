@@ -5,10 +5,17 @@
 package awssdkv2_test
 
 import (
+	"strings"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/moderneinc/recipes-go/recipes/migration/awssdkv2"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/printer"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/test"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
 // aws/aws-node-termination-handler's shape: v1's DefaultRetryer tuned through
@@ -144,4 +151,143 @@ func TestMigrateRetryerWithConvertedDelay(t *testing.T) {
 		`),
 		test.Generated("zz_awssdkv2_config.go", configHelpersIn("sqsevent")),
 	)
+}
+
+// A delay converted to a type the file declares stays the conversion the parser
+// reads it as, which a file declaring nothing would read as a call.
+func TestMigrateRetryerWithDelayOfTheFilesOwnType(t *testing.T) {
+	migrateSpec().RewriteRun(t,
+		test.Golang(`
+			package sqsevent
+
+			import (
+				"time"
+
+				"github.com/aws/aws-sdk-go/aws"
+				"github.com/aws/aws-sdk-go/aws/client"
+				"github.com/aws/aws-sdk-go/aws/session"
+				"github.com/aws/aws-sdk-go/service/sqs"
+			)
+
+			type delay = time.Duration
+
+			func GetSqsClient(sess *session.Session, delayMs int) *sqs.SQS {
+				return sqs.New(sess, &aws.Config{
+					Retryer: client.DefaultRetryer{
+						NumMaxRetries:    3,
+						MaxRetryDelay:    delay(delayMs) * time.Millisecond,
+						MaxThrottleDelay: delay(delayMs) * time.Millisecond,
+					},
+				})
+			}
+		`, `
+			package sqsevent
+
+			import (
+				"time"
+
+				"github.com/aws/aws-sdk-go-v2/aws"
+				"github.com/aws/aws-sdk-go-v2/aws/ratelimit"
+				"github.com/aws/aws-sdk-go-v2/aws/retry"
+				"github.com/aws/aws-sdk-go-v2/service/sqs"
+			)
+
+			type delay = time.Duration
+
+			func GetSqsClient(sess aws.Config, delayMs int) *sqs.Client {
+				return sqs.NewFromConfig(awsCompatMergeConfig(sess, &aws.Config{
+					Retryer: func() aws.Retryer {
+						return retry.NewStandard(func(o *retry.StandardOptions) {
+							o.MaxAttempts = 4
+							o.MaxBackoff = delay(delayMs) * time.Millisecond
+							o.RateLimiter = ratelimit.None
+						})
+					},
+				}))
+			}
+		`).WithAfterRecipe(conversionsStay("delay(delayMs)")),
+		test.Generated("zz_awssdkv2_config.go", configHelpersIn("sqsevent")),
+	)
+}
+
+// A delay written through a renamed import of time stays a conversion too, and
+// the file gains no second import of time.
+func TestMigrateRetryerWithDelayThroughARenamedTimeImport(t *testing.T) {
+	migrateSpec().RewriteRun(t,
+		test.Golang(`
+			package sqsevent
+
+			import (
+				gotime "time"
+
+				"github.com/aws/aws-sdk-go/aws"
+				"github.com/aws/aws-sdk-go/aws/client"
+				"github.com/aws/aws-sdk-go/aws/session"
+				"github.com/aws/aws-sdk-go/service/sqs"
+			)
+
+			func GetSqsClient(sess *session.Session, delayMs int) *sqs.SQS {
+				return sqs.New(sess, &aws.Config{
+					Retryer: client.DefaultRetryer{
+						NumMaxRetries:    3,
+						MaxRetryDelay:    gotime.Duration(delayMs) * gotime.Millisecond,
+						MaxThrottleDelay: gotime.Duration(delayMs) * gotime.Millisecond,
+					},
+				})
+			}
+		`, `
+			package sqsevent
+
+			import (
+				gotime "time"
+
+				"github.com/aws/aws-sdk-go-v2/aws"
+				"github.com/aws/aws-sdk-go-v2/aws/ratelimit"
+				"github.com/aws/aws-sdk-go-v2/aws/retry"
+				"github.com/aws/aws-sdk-go-v2/service/sqs"
+			)
+
+			func GetSqsClient(sess aws.Config, delayMs int) *sqs.Client {
+				return sqs.NewFromConfig(awsCompatMergeConfig(sess, &aws.Config{
+					Retryer: func() aws.Retryer {
+						return retry.NewStandard(func(o *retry.StandardOptions) {
+							o.MaxAttempts = 4
+							o.MaxBackoff = gotime.Duration(delayMs) * gotime.Millisecond
+							o.RateLimiter = ratelimit.None
+						})
+					},
+				}))
+			}
+		`).WithAfterRecipe(conversionsStay("gotime.Duration(delayMs)")),
+		test.Generated("zz_awssdkv2_config.go", configHelpersIn("sqsevent")),
+	)
+}
+
+// conversionsStay fails when a conversion written as one of want is held as a
+// call rather than the java.TypeCast the parser makes of it.
+func conversionsStay(want ...string) func(t *testing.T, cu *golang.CompilationUnit) {
+	return func(t *testing.T, cu *golang.CompilationUnit) {
+		shapes := visitor.Init(&callShapes{})
+		shapes.Visit(cu, nil)
+		for _, w := range want {
+			assert.Contains(t, shapes.casts, w)
+			assert.NotContains(t, shapes.calls, w)
+		}
+	}
+}
+
+// callShapes records the printed form of each conversion and call it visits.
+type callShapes struct {
+	visitor.GoVisitor
+	casts, calls []string
+}
+
+func (v *callShapes) VisitTypeCast(tc *java.TypeCast, p any) java.J {
+	v.casts = append(v.casts, strings.TrimSpace(printer.Print(tc)))
+	return v.GoVisitor.VisitTypeCast(tc, p)
+}
+
+func (v *callShapes) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	v.calls = append(v.calls, strings.TrimSpace(printer.Print(mi)))
+	return v.GoVisitor.VisitMethodInvocation(mi, p)
 }

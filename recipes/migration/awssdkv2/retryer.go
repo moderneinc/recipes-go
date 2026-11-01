@@ -254,25 +254,34 @@ func keyedElements(comp *golang.Composite) map[string]java.Expression {
 	return out
 }
 
-// retryerSource writes v2's form of a retryer literal.
-func (s *fileScan) retryerSource(fields map[string]java.Expression, typeName string) string {
-	value := func(field, fallback string) string {
+// retryerSource writes v2's form of a retryer literal. A value the literal sets
+// is written as a placeholder that values maps to the value's own tree, so that
+// it keeps the shape its file gave it, unless it names a v1 constant, which is
+// written out as v2 has none of them.
+func (s *fileScan) retryerSource(fields map[string]java.Expression, typeName string) (string, map[string]java.Expression) {
+	values := map[string]java.Expression{}
+	value := func(field, fallback string) (text, source string) {
 		expr, set := fields[field]
 		if !set {
-			return fallback
+			return fallback, fallback
 		}
-		return s.v1ConstantsAsSource(expr)
+		text = s.v1ConstantsAsSource(expr)
+		if text != printer.Print(lstutil.SetExprPrefix(expr, java.EmptySpace)) {
+			return text, text
+		}
+		values[retryerPlaceholder+field] = expr
+		return text, retryerPlaceholder + field
 	}
-	attempts := value("NumMaxRetries", "")
-	if n, err := strconv.Atoi(attempts); err == nil {
+	count, attempts := value("NumMaxRetries", "")
+	if n, err := strconv.Atoi(count); err == nil {
 		attempts = strconv.Itoa(n + 1)
 	} else {
 		attempts += " + 1"
 	}
-	maxRetry := value("MaxRetryDelay", v1DefaultRetryerConstants["DefaultRetryerMaxRetryDelay"])
-	maxThrottle := value("MaxThrottleDelay", v1DefaultRetryerConstants["DefaultRetryerMaxThrottleDelay"])
+	retryText, maxRetry := value("MaxRetryDelay", v1DefaultRetryerConstants["DefaultRetryerMaxRetryDelay"])
+	throttleText, maxThrottle := value("MaxThrottleDelay", v1DefaultRetryerConstants["DefaultRetryerMaxThrottleDelay"])
 	backoff := maxRetry
-	if maxThrottle != maxRetry {
+	if throttleText != retryText {
 		backoff = fmt.Sprintf("max(%s, %s)", maxRetry, maxThrottle)
 	}
 	var b strings.Builder
@@ -282,7 +291,7 @@ func (s *fileScan) retryerSource(fields map[string]java.Expression, typeName str
 		fmt.Fprintf(&b, "\t\to.Retryables = append([]retry.IsErrorRetryable{%s{}}, o.Retryables...)\n", typeName)
 	}
 	b.WriteString("\t})\n}")
-	return b.String()
+	return b.String(), values
 }
 
 // v1ConstantsAsSource prints expr with client's DefaultRetryer constants
@@ -295,33 +304,64 @@ func (s *fileScan) v1ConstantsAsSource(expr java.Expression) string {
 	return text
 }
 
-// usesTime reports whether a retryer literal's v2 form names the time package.
+// retryerPlaceholder begins the name a value of a retryer literal stands under
+// in the source of v2's form.
+const retryerPlaceholder = "awsRetryer"
+
+// usesTime reports whether a retryer literal's v2 form names the time package
+// itself, as it does where it writes out a v1 default. A value the literal sets
+// keeps the qualifiers its file wrote it with.
 func (s *fileScan) usesTime(fields map[string]java.Expression) bool {
-	if fields["MaxRetryDelay"] == nil || fields["MaxThrottleDelay"] == nil {
-		return true
-	}
-	return strings.Contains(s.v1ConstantsAsSource(fields["MaxRetryDelay"])+s.v1ConstantsAsSource(fields["MaxThrottleDelay"]), "time.")
+	source, _ := s.retryerSource(fields, "")
+	return strings.Contains(source, "time.")
 }
 
 // parsedRetryer parses v2's form of a retryer literal, importing time where it
-// names the package, so that a delay such as time.Duration(n) is a conversion.
+// names the package, so that a delay such as time.Duration(n) is a conversion,
+// and puts back the trees of the values the literal sets.
 func (s *fileScan) parsedRetryer(fields map[string]java.Expression, typeName string) (java.Expression, bool) {
-	source := strings.ReplaceAll(s.retryerSource(fields, typeName), "aws.", s.awsQualifier()+".")
-	if s.usesTime(fields) {
-		return parsedExpression(source, "time")
+	source, values := s.retryerSource(fields, typeName)
+	source = strings.ReplaceAll(source, "aws.", s.awsQualifier()+".")
+	// Each placeholder is declared with the type of the field it stands for.
+	var decls strings.Builder
+	for _, field := range []string{"NumMaxRetries", "MaxRetryDelay", "MaxThrottleDelay"} {
+		if values[retryerPlaceholder+field] != nil {
+			typ := "time.Duration"
+			if field == "NumMaxRetries" {
+				typ = "int"
+			}
+			fmt.Fprintf(&decls, "var %s%s %s\n\n", retryerPlaceholder, field, typ)
+		}
 	}
-	return parsedExpression(source)
+	var imports []string
+	if strings.Contains(decls.String()+source, "time.") {
+		imports = append(imports, "time")
+	}
+	parsed, ok := parsedExpressionAmong(decls.String(), source, imports...)
+	if !ok {
+		return nil, false
+	}
+	for _, name := range sortedKeys(values) {
+		parsed = visitor.Init(&placeholderBind{name: name, value: values[name]}).Visit(parsed, nil).(java.Expression)
+	}
+	return parsed, true
 }
 
 // parsedExpression parses source standing as an expression, in a file that
 // imports the packages at imports, so that a conversion to one of their types
 // parses as a conversion rather than as a call.
 func parsedExpression(source string, imports ...string) (java.Expression, bool) {
+	return parsedExpressionAmong("", source, imports...)
+}
+
+// parsedExpressionAmong parses source as parsedExpression does, in a file that
+// also declares decls.
+func parsedExpressionAmong(decls, source string, imports ...string) (java.Expression, bool) {
 	var header strings.Builder
 	for _, path := range imports {
 		fmt.Fprintf(&header, "import %q\n\n", path)
 	}
-	cu, err := parser.NewGoParser().Parse("expr.go", "package p\n\n"+header.String()+"var _ = "+source+"\n")
+	cu, err := parser.NewGoParser().Parse("expr.go", "package p\n\n"+header.String()+decls+"var _ = "+source+"\n")
 	if err != nil {
 		return nil, false
 	}
