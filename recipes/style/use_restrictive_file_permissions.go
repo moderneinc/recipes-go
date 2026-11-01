@@ -5,6 +5,8 @@
 package style
 
 import (
+	"strconv"
+
 	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -74,17 +76,23 @@ func (v *useRestrictiveFilePermissionsVisitor) VisitMethodInvocation(mi *java.Me
 		return mi
 	}
 
+	// The literal's value is the mode the source spells, as the parser reads it.
+	value, err := strconv.ParseInt(mode, 8, 64)
+	if err != nil {
+		return mi
+	}
+
 	newArgs := make([]java.RightPadded[java.Expression], len(mi.Arguments.Elements))
 	changed := false
 	for i, arg := range mi.Arguments.Elements {
 		if lit, ok := arg.Element.(*java.Literal); ok {
 			if lit.Source == "0777" {
-				newArgs[i] = java.RightPadded[java.Expression]{Element: lit.WithSource("0" + mode), After: arg.After, Markers: arg.Markers}
+				newArgs[i] = java.RightPadded[java.Expression]{Element: lit.WithSource("0" + mode).WithValue(value), After: arg.After, Markers: arg.Markers}
 				changed = true
 				continue
 			}
 			if lit.Source == "0o777" {
-				newArgs[i] = java.RightPadded[java.Expression]{Element: lit.WithSource("0o" + mode), After: arg.After, Markers: arg.Markers}
+				newArgs[i] = java.RightPadded[java.Expression]{Element: lit.WithSource("0o" + mode).WithValue(value), After: arg.After, Markers: arg.Markers}
 				changed = true
 				continue
 			}
