@@ -5,6 +5,7 @@
 package errorhandling
 
 import (
+	"github.com/google/uuid"
 	"github.com/moderneinc/recipes-go/diagnostic"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
@@ -68,18 +69,22 @@ func (v *handleDeferredCloseErrorVisitor) VisitDefer(d *golang.Defer, p any) jav
 
 	// Step 2: _ = f.Close()
 	assignment := &java.Assignment{
+		ID:       uuid.New(),
 		Prefix:   java.SingleSpace,
-		Variable: &java.Identifier{Name: "_"},
+		Variable: &java.Identifier{ID: uuid.New(), Name: "_"},
 		Value:    java.LeftPadded[java.Expression]{Before: java.SingleSpace, Element: closeCall},
 	}
 
 	// Step 3: func() { _ = f.Close() }  — a MethodDeclaration with empty name,
 	// in the StatementExpression the parser puts a function literal in
 	funcLiteral := &golang.StatementExpression{
+		ID: uuid.New(),
 		Statement: &java.MethodDeclaration{
-			Name:       &java.Identifier{Name: ""},
+			ID:         uuid.New(),
+			Name:       &java.Identifier{ID: uuid.New(), Name: ""},
 			Parameters: java.Container[java.Statement]{},
 			Body: &java.Block{
+				ID:     uuid.New(),
 				Prefix: java.SingleSpace,
 				Statements: []java.RightPadded[java.Statement]{
 					{Element: assignment},
@@ -92,9 +97,10 @@ func (v *handleDeferredCloseErrorVisitor) VisitDefer(d *golang.Defer, p any) jav
 	// Step 4: func() { _ = f.Close() }()  — call the literal, which carries
 	// the space after `defer` as its outermost element
 	outerCall := &java.MethodInvocation{
+		ID:        uuid.New(),
 		Prefix:    java.SingleSpace,
 		Select:    &java.RightPadded[java.Expression]{Element: funcLiteral},
-		Name:      &java.Identifier{Name: ""},
+		Name:      &java.Identifier{ID: uuid.New(), Name: ""},
 		Arguments: java.Container[java.Expression]{},
 	}
 
