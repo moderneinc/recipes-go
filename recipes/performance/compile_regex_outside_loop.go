@@ -292,18 +292,20 @@ func replaceInBody(body *java.Block, rc regexCallInfo, varName string) *java.Blo
 		// -> re := compiledRegex0
 		// The hoisted MustCompile returns a single value, so we collapse the
 		// assignment to the regexp variable alone and drop the discarded error.
+		// One variable makes it the java.Assignment the parser reads, whose
+		// markers carry the ShortVarDecl of `:=` as the MultiAssignment's do.
 		ma := rp.Element.(*golang.MultiAssignment)
-		firstVar := ma.Variables[0]
-		firstVar.After = java.EmptySpace
-		newMA := &golang.MultiAssignment{
-			ID:        ma.ID,
-			Prefix:    ma.Prefix,
-			Markers:   ma.Markers,
-			Variables: []java.RightPadded[java.Expression]{firstVar},
-			Operator:  ma.Operator,
-			Values:    []java.RightPadded[java.Expression]{{Element: varRef}},
+		newAssign := &java.Assignment{
+			ID:       ma.ID,
+			Prefix:   ma.Prefix,
+			Markers:  ma.Markers,
+			Variable: ma.Variables[0].Element,
+			Value: java.LeftPadded[java.Expression]{
+				Before:  ma.Operator.Before,
+				Element: varRef,
+			},
 		}
-		newStmts[rc.stmtIdx] = java.RightPadded[java.Statement]{Element: newMA, After: rp.After}
+		newStmts[rc.stmtIdx] = java.RightPadded[java.Statement]{Element: newAssign, After: rp.After}
 	}
 
 	return body.WithStatements(newStmts)
