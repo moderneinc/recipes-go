@@ -11,6 +11,7 @@ import (
 
 	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/moderneinc/recipes-go/recipes/migration/internal/pathswap"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/parenthesize"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/parser"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/printer"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
@@ -254,12 +255,13 @@ func keyedElements(comp *golang.Composite) map[string]java.Expression {
 	return out
 }
 
-// retryerSource writes v2's form of a retryer literal. A value the literal sets
-// is written as a placeholder that values maps to the value's own tree, so that
-// it keeps the shape its file gave it, unless it names a v1 constant, which is
-// written out as v2 has none of them.
-func (s *fileScan) retryerSource(fields map[string]java.Expression, typeName string) (string, map[string]java.Expression) {
+// retryerSource writes v2's form of a retryer literal, and reports whether it
+// names time where the literal did not. A value the literal sets is written as a
+// placeholder that values maps to the value's own tree, with any v1 constant in
+// it spelled out, as v2 has none of them.
+func (s *fileScan) retryerSource(fields map[string]java.Expression, typeName string) (string, map[string]java.Expression, bool) {
 	values := map[string]java.Expression{}
+	spelledTime := false
 	value := func(field, fallback string) (text, source string) {
 		expr, set := fields[field]
 		if !set {
@@ -267,7 +269,12 @@ func (s *fileScan) retryerSource(fields map[string]java.Expression, typeName str
 		}
 		text = s.v1ConstantsAsSource(expr)
 		if text != printer.Print(lstutil.SetExprPrefix(expr, java.EmptySpace)) {
-			return text, text
+			spelling := visitor.Init(&v1ConstantSpelling{scan: s})
+			spelled, isExpr := spelling.Visit(expr, nil).(java.Expression)
+			if !isExpr || spelling.failed {
+				return text, text
+			}
+			expr, spelledTime = spelled, spelledTime || spelling.namesTime
 		}
 		values[retryerPlaceholder+field] = expr
 		return text, retryerPlaceholder + field
@@ -291,7 +298,7 @@ func (s *fileScan) retryerSource(fields map[string]java.Expression, typeName str
 		fmt.Fprintf(&b, "\t\to.Retryables = append([]retry.IsErrorRetryable{%s{}}, o.Retryables...)\n", typeName)
 	}
 	b.WriteString("\t})\n}")
-	return b.String(), values
+	return b.String(), values, spelledTime || strings.Contains(b.String(), s.timeQualifier()+".")
 }
 
 // v1ConstantsAsSource prints expr with client's DefaultRetryer constants
@@ -302,6 +309,34 @@ func (s *fileScan) v1ConstantsAsSource(expr java.Expression) string {
 		text = strings.ReplaceAll(text, s.clientPkg+"."+name, s.inFileTime(value))
 	}
 	return text
+}
+
+// v1ConstantSpelling spells out client's DefaultRetryer constants in a value's
+// tree, parenthesized where the value binds tighter than the spelling.
+type v1ConstantSpelling struct {
+	visitor.GoVisitor
+	scan *fileScan
+	// namesTime records that a spelling names time, and failed that one did not parse.
+	namesTime, failed bool
+}
+
+func (v *v1ConstantSpelling) VisitFieldAccess(fa *java.FieldAccess, p any) java.J {
+	name, isClient := qualifiedRef(fa, v.scan.clientPkg)
+	value, isConstant := v1DefaultRetryerConstants[name]
+	if !isClient || !isConstant {
+		return v.GoVisitor.VisitFieldAccess(fa, p)
+	}
+	var header string
+	if strings.Contains(value, "time.") {
+		header = fmt.Sprintf("import %s %q\n\n", v.scan.timeQualifier(), "time")
+		v.namesTime = true
+	}
+	spelled, ok := parsedExpressionAfter(header, v.scan.inFileTime(value))
+	if !ok {
+		v.failed = true
+		return fa
+	}
+	return parenthesize.Maybe(lstutil.SetExprPrefix(spelled, fa.Prefix), v.Cursor())
 }
 
 // inFileTime spells the value of a v1 constant with the name the file calls the
@@ -324,18 +359,18 @@ func (s *fileScan) timeQualifier() string {
 const retryerPlaceholder = "awsRetryer"
 
 // usesTime reports whether a retryer literal's v2 form names the time package
-// itself, as it does where it writes out a v1 default. A value the literal sets
-// keeps the qualifiers its file wrote it with.
+// itself, as it does where it spells out a v1 default or constant. A value the
+// literal sets keeps the qualifiers its file wrote it with.
 func (s *fileScan) usesTime(fields map[string]java.Expression) bool {
-	source, _ := s.retryerSource(fields, "")
-	return strings.Contains(source, s.timeQualifier()+".")
+	_, _, namesTime := s.retryerSource(fields, "")
+	return namesTime
 }
 
 // parsedRetryer parses v2's form of a retryer literal, importing time where it
 // names the package, so that a delay such as time.Duration(n) is a conversion,
 // and puts back the trees of the values the literal sets.
 func (s *fileScan) parsedRetryer(fields map[string]java.Expression, typeName string) (java.Expression, bool) {
-	source, values := s.retryerSource(fields, typeName)
+	source, values, _ := s.retryerSource(fields, typeName)
 	source = strings.ReplaceAll(source, "aws.", s.awsQualifier()+".")
 	timeName := s.timeQualifier()
 	// Each placeholder is declared with the type of the field it stands for.
