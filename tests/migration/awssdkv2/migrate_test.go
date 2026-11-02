@@ -3647,6 +3647,44 @@ func TestMigrateCarriedConfig(t *testing.T) {
 // require against the module cache, which is where the type comes from.
 func TestMigrateAdjunctFileFollowsShapes(t *testing.T) {
 	requireModuleCache(t, "github.com/aws/aws-sdk-go@v1.55.8")
+	migrateAdjunctFollowingShapes(t)
+}
+
+// The run's second cycle and its run on a fresh parse read the values the first
+// migrated as v2's, in the file the swap retyped and in the adjunct, and convert
+// neither again. A stub of the v1 module in a module cache of the test's own
+// types the fixture as the real module does, with nothing fetched.
+func TestMigrateAdjunctFileFollowsShapesOnce(t *testing.T) {
+	cache := t.TempDir()
+	module := filepath.Join(cache, "github.com", "aws", "aws-sdk-go@v1.55.8")
+	require.NoError(t, os.MkdirAll(filepath.Join(module, "service", "s3"), 0o755))
+	require.NoError(t, os.WriteFile(filepath.Join(module, "go.mod"), []byte("module github.com/aws/aws-sdk-go\n"), 0o644))
+	require.NoError(t, os.WriteFile(filepath.Join(module, "service", "s3", "api.go"), []byte(`package s3
+
+type S3 struct{}
+
+type ListObjectsInput struct {
+	Bucket *string
+}
+
+type ListObjectsOutput struct {
+	Contents []*Object
+}
+
+type Object struct {
+	Key          *string
+	StorageClass *string
+}
+
+func (c *S3) ListObjects(input *ListObjectsInput) (*ListObjectsOutput, error) {
+	return nil, nil
+}
+`), 0o644))
+	t.Setenv("GOMODCACHE", cache)
+	migrateAdjunctFollowingShapes(t)
+}
+
+func migrateAdjunctFollowingShapes(t *testing.T) {
 	test.NewRecipeSpec().WithRecipe(&awssdkv2.MigrateAwsSdkGoToV2{}).RewriteRun(t,
 		test.GoProject("app",
 			test.GoMod(`
@@ -4402,6 +4440,54 @@ func TestMigrateWaiterWithAttemptBound(t *testing.T) {
 					Services: awsCompatVals([]*string{aws.String(service)}),
 				}
 				return ecs.NewServicesStableWaiter(svc).Wait(context.Background(), input, time.Duration(maxAttempts) * 15 * time.Second)
+			}
+		`),
+		test.Generated("zz_awssdkv2_compat.go", compatHelpersIn("ecs")),
+	)
+}
+
+// The duration bound is written with the name the file imports time under, as
+// the file has no import of time by its own name.
+func TestMigrateWaiterWithAttemptBoundThroughARenamedTimeImport(t *testing.T) {
+	migrateSpec().RewriteRun(t,
+		test.Golang(`
+			package ecs
+
+			import (
+				"context"
+				gotime "time"
+
+				"github.com/aws/aws-sdk-go/aws"
+				"github.com/aws/aws-sdk-go/aws/request"
+				"github.com/aws/aws-sdk-go/service/ecs"
+			)
+
+			func stable(svc *ecs.ECS, cluster, service string, maxWait gotime.Duration) error {
+				maxAttempts := int(maxWait / (15 * gotime.Second))
+				input := &ecs.DescribeServicesInput{
+					Cluster:  aws.String(cluster),
+					Services: []*string{aws.String(service)},
+				}
+				return svc.WaitUntilServicesStableWithContext(context.Background(), input, request.WithWaiterMaxAttempts(maxAttempts))
+			}
+		`, `
+			package ecs
+
+			import (
+				"context"
+				gotime "time"
+
+				"github.com/aws/aws-sdk-go-v2/aws"
+				"github.com/aws/aws-sdk-go-v2/service/ecs"
+			)
+
+			func stable(svc *ecs.Client, cluster, service string, maxWait gotime.Duration) error {
+				maxAttempts := int(maxWait / (15 * gotime.Second))
+				input := &ecs.DescribeServicesInput{
+					Cluster:  aws.String(cluster),
+					Services: awsCompatVals([]*string{aws.String(service)}),
+				}
+				return ecs.NewServicesStableWaiter(svc).Wait(context.Background(), input, gotime.Duration(maxAttempts) * 15 * gotime.Second)
 			}
 		`),
 		test.Generated("zz_awssdkv2_compat.go", compatHelpersIn("ecs")),

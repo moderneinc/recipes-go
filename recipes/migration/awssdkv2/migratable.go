@@ -69,6 +69,8 @@ type fileScan struct {
 	// of its client plumbing.
 	endpointsPkg string
 	clientPkg    string
+	// timePkg is the name the file imports time under, if it does.
+	timePkg string
 	// retryers are the retryer types the file declares, consumedClientRefs the
 	// client references they and their literals take, and retryerValues the
 	// Retryer values the rewrite carries over.
@@ -223,6 +225,7 @@ func scanFileReasons(cu *golang.CompilationUnit, all bool) *fileScan {
 		requestPkg:             pathswap.Qualifier(cu, v1Request),
 		endpointsPkg:           pathswap.Qualifier(cu, v1Endpoints),
 		clientPkg:              pathswap.Qualifier(cu, v1Client),
+		timePkg:                pathswap.Qualifier(cu, "time"),
 		configVariadics:        map[string]bool{},
 		consumedClientRefs:     map[*java.FieldAccess]bool{},
 		retryerValues:          map[java.Expression]bool{},
@@ -1773,33 +1776,23 @@ func (s *fileScan) receiverShape(expr java.Expression) (shapeRef, bool) {
 // attributedShape reads a shape off an expression's parse-time type, for a value
 // the scan's own seeds do not reach. There is no attribution for a package the
 // parser could not resolve, so this adds to the inference rather than replacing
-// it.
+// it. Only a v1 type names a shape to migrate: code holding a value of v2's
+// was written against v2, or is the migration's own output.
 func (s *fileScan) attributedShape(expr java.Expression) (shapeRef, bool) {
 	fqn := matcher.GetFullyQualifiedName(matcher.TypeOfExpression(expr))
-	if fqn == "" {
+	rest, under := strings.CutPrefix(fqn, v1ServicePkg)
+	if !under {
 		return shapeRef{}, false
 	}
-	for _, prefix := range []string{v1ServicePkg, v2ServicePkg} {
-		rest, under := strings.CutPrefix(fqn, prefix)
-		if !under {
-			continue
-		}
-		pkg, name, named := strings.Cut(rest, ".")
-		if !named {
-			continue
-		}
-
-		// The path itself is the guard: a name the manifest knows cannot be read
-		// off something unrelated once the type says which SDK package it came
-		// from. The file need not import that package — the value as often
-		// arrives from one that does.
-		service := strings.TrimSuffix(pkg, "/types")
-		if prefix == v2ServicePkg {
-			service = awsmanifest.V1Name(service)
-		}
-		return shapeRef{service: service, shape: name}, true
+	pkg, name, named := strings.Cut(rest, ".")
+	if !named {
+		return shapeRef{}, false
 	}
-	return shapeRef{}, false
+	// The path itself is the guard: a name the manifest knows cannot be read
+	// off something unrelated once the type says which SDK package it came
+	// from. The file need not import that package — the value as often
+	// arrives from one that does.
+	return shapeRef{service: pkg, shape: name}, true
 }
 
 // enumFieldOf names the enum a dereferenced field carries, when the receiver's

@@ -433,19 +433,22 @@ func basicOmitempty(base, name string) string {
 }
 
 // The v1 encoding/json types whose jsonv2 definitions are aliases into other
-// packages, which the type system leaves unresolved, so a v1 dot import detects
-// them by name rather than through type attribution.
-var jsonV2AliasTypeNames = map[string]bool{
-	"RawMessage":  true,
-	"Marshaler":   true,
-	"Unmarshaler": true,
+// packages, by the type each aliases. A toolchain that builds encoding/json on
+// v2, as Go 1.27 does and GOEXPERIMENT=jsonv2 did before it, resolves them to
+// that type; one that leaves them unresolved has a v1 dot import detect them by
+// name.
+var jsonV2AliasTypeNames = map[string]string{
+	"RawMessage":  "encoding/json/jsontext.Value",
+	"Marshaler":   "encoding/json/v2.Marshaler",
+	"Unmarshaler": "encoding/json/v2.Unmarshaler",
 }
 
 // Returns the encoding/json type named by a bare (unqualified) type identifier,
 // unwrapping a single pointer. Bare json identifiers only occur under a dot
 // import; qualified references are FieldAccess nodes. Concrete types resolve
 // through the type system, while the RawMessage/Marshaler/Unmarshaler aliases
-// come back unresolved and are matched by name under a v1 dot import.
+// resolve to the v2 types they alias or come back unresolved, and are matched
+// by name under a v1 dot import.
 func bareJsonTypeName(expr java.Expression, dotImportsV1 bool) (string, bool) {
 	if pt, ok := expr.(*golang.PointerType); ok {
 		expr = pt.Elem
@@ -456,12 +459,16 @@ func bareJsonTypeName(expr java.Expression, dotImportsV1 bool) (string, bool) {
 	}
 	if fq, ok := id.Type.(java.FullyQualified); ok {
 		const prefix = "encoding/json."
-		if name := fq.GetFullyQualifiedName(); strings.HasPrefix(name, prefix) {
+		name := fq.GetFullyQualifiedName()
+		if strings.HasPrefix(name, prefix) {
 			return strings.TrimPrefix(name, prefix), true
+		}
+		if dotImportsV1 && jsonV2AliasTypeNames[id.Name] == name {
+			return id.Name, true
 		}
 		return "", false
 	}
-	if dotImportsV1 && jsonV2AliasTypeNames[id.Name] {
+	if dotImportsV1 && jsonV2AliasTypeNames[id.Name] != "" {
 		return id.Name, true
 	}
 	return "", false

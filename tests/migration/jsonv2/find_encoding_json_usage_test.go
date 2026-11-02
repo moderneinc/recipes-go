@@ -9,7 +9,10 @@ import (
 	"testing"
 
 	"github.com/moderneinc/recipes-go/recipes/migration/jsonv2"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/test"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/visitor"
 )
 
 // The inventory recipe reports only and must not modify code.
@@ -450,6 +453,79 @@ func use(m Marshaler, enc *Encoder) {
 			t.Errorf("expected %q once, got %d (all: %v)", k, got[k], got)
 		}
 	}
+}
+
+// A toolchain that builds encoding/json on v2, as Go 1.27 does, types a dot
+// import's RawMessage, Marshaler and Unmarshaler as the v2 types they alias,
+// which this test has every toolchain do.
+func TestFindEncodingJsonUsageDotImportedAliasesTypedAsV2(t *testing.T) {
+	var rows []jsonv2.EncodingJsonUsageRow
+	spec := test.NewRecipeSpec().WithRecipe(&v2AliasesThenInventory{})
+	test.ExpectDataTable(spec, jsonv2.EncodingJsonUsageTable, func(_ *testing.T, written []jsonv2.EncodingJsonUsageRow) {
+		rows = written
+	})
+	// Typing the aliases rebuilds identifiers that print as they did.
+	spec.CheckUnchangedTreeIdentity = false
+	spec.RewriteRun(t, test.GolangRaw(`package demo
+
+import . "encoding/json"
+
+type Holder struct {
+	Raw RawMessage
+}
+
+func use(m Marshaler, u Unmarshaler) {
+	_, _ = m, u
+}
+`).WithPath("demo/aliases.go"))
+	got := map[string]int{}
+	for _, row := range rows {
+		got[row.Category+"|"+row.API]++
+	}
+	for _, k := range []string{"rewrite|json.RawMessage", "modernize|json.Marshaler", "modernize|json.Unmarshaler"} {
+		if got[k] != 1 {
+			t.Errorf("expected %q once, got %d (all: %v)", k, got[k], got)
+		}
+	}
+}
+
+// v2AliasesThenInventory types the json aliases as v2 does, then inventories.
+type v2AliasesThenInventory struct{ recipe.Base }
+
+func (r *v2AliasesThenInventory) Name() string { return "test.V2AliasesThenInventory" }
+func (r *v2AliasesThenInventory) DisplayName() string {
+	return "Type json aliases as v2, then inventory"
+}
+func (r *v2AliasesThenInventory) Description() string {
+	return "Types the aliases, then finds json usage."
+}
+func (r *v2AliasesThenInventory) RecipeList() []recipe.Recipe {
+	return []recipe.Recipe{&v2AliasTyping{}, &jsonv2.FindEncodingJsonUsage{}}
+}
+
+type v2AliasTyping struct{ recipe.Base }
+
+func (r *v2AliasTyping) Name() string        { return "test.V2AliasTyping" }
+func (r *v2AliasTyping) DisplayName() string { return "Type json aliases as v2" }
+func (r *v2AliasTyping) Description() string {
+	return "Types RawMessage, Marshaler and Unmarshaler as v2's types."
+}
+func (r *v2AliasTyping) Editor() recipe.TreeVisitor { return visitor.Init(&v2AliasRetyper{}) }
+
+type v2AliasRetyper struct{ visitor.GoVisitor }
+
+func (v *v2AliasRetyper) VisitIdentifier(id *java.Identifier, p any) java.J {
+	target, isAlias := map[string]string{
+		"RawMessage":  "encoding/json/jsontext.Value",
+		"Marshaler":   "encoding/json/v2.Marshaler",
+		"Unmarshaler": "encoding/json/v2.Unmarshaler",
+	}[id.Name]
+	if fq, typed := id.Type.(java.FullyQualified); !isAlias || typed && fq.GetFullyQualifiedName() == target {
+		return id
+	}
+	retyped := *id
+	retyped.Type = &java.JavaTypeClass{Kind: "Class", FullyQualifiedName: target}
+	return &retyped
 }
 
 // omitempty rows are classified by the field type resolved through the type system.
