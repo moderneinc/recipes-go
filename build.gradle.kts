@@ -43,13 +43,13 @@ val goLicenseSources = fileTree(projectDir) {
     exclude("**/build/**", "**/vendor/**", "**/*exportdata/exportdata.go", "**/awssdkv2/zz_*_gen.go")
 }
 
-val licenseGo by tasks.registering(LicenseCheck::class) {
+val licenseGo = tasks.register<LicenseCheck>("licenseGo") {
     source = goLicenseSources
     header = rootProject.file("gradle/licenseHeader.txt")
     mapping("go", "SLASHSTAR_STYLE")
 }
 
-val licenseFormatGo by tasks.registering(LicenseFormat::class) {
+val licenseFormatGo = tasks.register<LicenseFormat>("licenseFormatGo") {
     source = goLicenseSources
     header = rootProject.file("gradle/licenseHeader.txt")
     mapping("go", "SLASHSTAR_STYLE")
@@ -62,7 +62,7 @@ tasks.named("licenseFormat") { dependsOn(licenseFormatGo) }
 // Java RPC Test Server (shadow JAR for Go tests that need Java delegation)
 // ============================================
 
-val rpcTestServer by tasks.registering(ShadowJar::class) {
+val rpcTestServer = tasks.register<ShadowJar>("rpcTestServer") {
     group = "go"
     description = "Build the Java RPC test server fat JAR for Go integration tests"
 
