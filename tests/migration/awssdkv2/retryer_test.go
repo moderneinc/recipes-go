@@ -11,6 +11,7 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/moderneinc/recipes-go/recipes/migration/awssdkv2"
+	"github.com/openrewrite/rewrite/rewrite-go/pkg/matcher"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/printer"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/test"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
@@ -420,6 +421,92 @@ func TestMigrateRetryerWithAV1ConstantInAFileWithoutTime(t *testing.T) {
 		`),
 		test.Generated("zz_awssdkv2_config.go", configHelpersIn("sqsevent")),
 	)
+}
+
+// A package-qualified call in a value the literal sets keeps the signature the
+// parser typed it with.
+func TestMigrateRetryerWithACallInADelay(t *testing.T) {
+	migrateSpec().RewriteRun(t,
+		test.Golang(`
+			package sqsevent
+
+			import (
+				"time"
+
+				"github.com/aws/aws-sdk-go/aws"
+				"github.com/aws/aws-sdk-go/aws/client"
+				"github.com/aws/aws-sdk-go/aws/session"
+				"github.com/aws/aws-sdk-go/service/sqs"
+			)
+
+			func GetSqsClient(sess *session.Session, deadline time.Time) *sqs.SQS {
+				return sqs.New(sess, &aws.Config{
+					Retryer: client.DefaultRetryer{
+						NumMaxRetries:    3,
+						MaxRetryDelay:    time.Until(deadline),
+						MaxThrottleDelay: time.Until(deadline),
+					},
+				})
+			}
+		`, `
+			package sqsevent
+
+			import (
+				"time"
+
+				"github.com/aws/aws-sdk-go-v2/aws"
+				"github.com/aws/aws-sdk-go-v2/aws/ratelimit"
+				"github.com/aws/aws-sdk-go-v2/aws/retry"
+				"github.com/aws/aws-sdk-go-v2/service/sqs"
+			)
+
+			func GetSqsClient(sess aws.Config, deadline time.Time) *sqs.Client {
+				return sqs.NewFromConfig(awsCompatMergeConfig(sess, &aws.Config{
+					Retryer: func() aws.Retryer {
+						return retry.NewStandard(func(o *retry.StandardOptions) {
+							o.MaxAttempts = 4
+							o.MaxBackoff = time.Until(deadline)
+							o.RateLimiter = ratelimit.None
+						})
+					},
+				}))
+			}
+		`).WithAfterRecipe(callsReturn("time.Until(deadline)", "time.Duration")),
+		test.Generated("zz_awssdkv2_config.go", configHelpersIn("sqsevent")),
+	)
+}
+
+// callsReturn fails unless each call printed as call is typed with a method
+// returning the type named by returnType.
+func callsReturn(call, returnType string) func(t *testing.T, cu *golang.CompilationUnit) {
+	return func(t *testing.T, cu *golang.CompilationUnit) {
+		calls := visitor.Init(&callTypes{})
+		calls.Visit(cu, nil)
+		assert.NotEmpty(t, calls.returns[call], "no call printed as %s", call)
+		for _, got := range calls.returns[call] {
+			assert.Equal(t, returnType, got, "the return type of %s", call)
+		}
+	}
+}
+
+// callTypes records the return type each call it visits is typed with, by the
+// call's printed form.
+type callTypes struct {
+	visitor.GoVisitor
+	returns map[string][]string
+}
+
+func (v *callTypes) VisitMethodInvocation(mi *java.MethodInvocation, p any) java.J {
+	if v.returns == nil {
+		v.returns = map[string][]string{}
+	}
+	got := ""
+	if mi.MethodType != nil && mi.MethodType.ReturnType != nil {
+		got = matcher.GetFullyQualifiedName(mi.MethodType.ReturnType)
+	}
+	call := strings.TrimSpace(printer.Print(mi))
+	v.returns[call] = append(v.returns[call], got)
+	return v.GoVisitor.VisitMethodInvocation(mi, p)
 }
 
 // conversionsStay fails when a conversion written as one of want is held as a

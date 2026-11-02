@@ -640,8 +640,10 @@ func (v *qualifiedCallTyping) VisitMethodInvocation(mi *java.MethodInvocation, p
 	if !isIdent || mi.Name == nil {
 		return mi
 	}
+	// A call parsed in its own file, as a value carried over from it is, is
+	// already typed with the signature of the package's function.
 	path, known := v.paths[recv.Name]
-	if !known {
+	if !known || declaredIn(mi, path) {
 		return mi
 	}
 	c := *mi
@@ -652,6 +654,12 @@ func (v *qualifiedCallTyping) VisitMethodInvocation(mi *java.MethodInvocation, p
 	c.Select = &sel
 	c.MethodType = lstutil.FuncType(path, mi.Name.Name, nil)
 	return &c
+}
+
+// declaredIn reports whether mi is typed as a function of the package at path.
+func declaredIn(mi *java.MethodInvocation, path string) bool {
+	return mi.MethodType != nil && mi.MethodType.DeclaringType != nil &&
+		mi.MethodType.DeclaringType.GetFullyQualifiedName() == path
 }
 
 // typedByImports attributes tree's qualified calls against the file's imports
