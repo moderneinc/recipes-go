@@ -44,19 +44,14 @@ func (v *auditGoroutineClosureVisitor) VisitGoStmt(g *golang.GoStmt, p any) java
 		return g
 	}
 
-	// The call's Select must be a function literal (MethodDeclaration),
-	// possibly wrapped in StatementExpression.
 	if mi.Select == nil {
 		return g
 	}
-	isFuncLit := false
-	switch sel := mi.Select.Element.(type) {
-	case *java.MethodDeclaration:
-		isFuncLit = true
-	case *golang.StatementExpression:
-		_, isFuncLit = sel.Statement.(*java.MethodDeclaration)
+	sel, ok := mi.Select.Element.(*golang.StatementExpression)
+	if !ok {
+		return g
 	}
-	if !isFuncLit {
+	if _, ok := sel.Statement.(*java.MethodDeclaration); !ok {
 		return g
 	}
 
