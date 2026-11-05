@@ -127,6 +127,5 @@ func funcLiteral(expr java.Expression) (*java.MethodDeclaration, bool) {
 		md, ok := se.Statement.(*java.MethodDeclaration)
 		return md, ok
 	}
-	md, ok := expr.(*java.MethodDeclaration)
-	return md, ok
+	return nil, false
 }

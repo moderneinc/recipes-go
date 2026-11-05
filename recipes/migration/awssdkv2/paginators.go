@@ -152,8 +152,7 @@ func funcLiteral(expr java.Expression) (*java.MethodDeclaration, bool) {
 		md, isFunc := se.Statement.(*java.MethodDeclaration)
 		return md, isFunc
 	}
-	md, isFunc := expr.(*java.MethodDeclaration)
-	return md, isFunc
+	return nil, false
 }
 
 // inputShape names the service and operation-input shape an expression carries,
