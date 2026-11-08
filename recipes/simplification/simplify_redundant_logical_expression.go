@@ -5,6 +5,7 @@
 package simplification
 
 import (
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/printer"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -29,7 +30,8 @@ func (r *SimplifyRedundantLogicalExpression) DisplayName() string {
 }
 func (r *SimplifyRedundantLogicalExpression) Description() string {
 	return "Simplify `x && x` to `x`, `x || x` to `x`, and similarly for `&` and `|`, " +
-		"where both sides of a logical or bitwise operator are identical."
+		"where both sides are identical repeatable identifiers, literals, or binary expressions. " +
+		"Calls, channel receives, and other unproven expressions are preserved."
 }
 func (r *SimplifyRedundantLogicalExpression) Tags() []string {
 	return []string{"cleanup", "simplification", "RSPEC-S1764"}
@@ -52,7 +54,8 @@ func (v *simplifyRedundantLogicalExpressionVisitor) VisitBinary(bin *java.Binary
 
 	// Compare printed representations (ignoring leading whitespace) to determine
 	// structural equality of the two operands.
-	if printExpr(bin.Left) == printExpr(bin.Right) {
+	if lstutil.IsRepeatableExpression(bin.Left) && lstutil.IsRepeatableExpression(bin.Right) &&
+		printExpr(bin.Left) == printExpr(bin.Right) {
 		// Replace the whole binary with just the left operand, preserving the
 		// outer prefix so the surrounding code keeps its whitespace. The leading
 		// whitespace lives on the outermost element (the binary), not its operand.
