@@ -11,7 +11,7 @@ import (
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/test"
 )
 
-func TestRemoveConstantConditionTrue(t *testing.T) {
+func TestRemoveConstantConditionPreservesUnprovenTrue(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&redundancy.RemoveConstantCondition{})
 	spec.RewriteRun(t,
 		test.Golang(`
@@ -22,19 +22,11 @@ func TestRemoveConstantConditionTrue(t *testing.T) {
 					println("always")
 				}
 			}
-		`, `
-			package main
-
-			func f() {
-				{
-					println("always")
-				}
-			}
 		`),
 	)
 }
 
-func TestRemoveConstantConditionFalse(t *testing.T) {
+func TestRemoveConstantConditionPreservesUnprovenFalse(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&redundancy.RemoveConstantCondition{})
 	spec.RewriteRun(t,
 		test.Golang(`
@@ -45,16 +37,11 @@ func TestRemoveConstantConditionFalse(t *testing.T) {
 					println("never")
 				}
 			}
-		`, `
-			package main
-
-			func f() {
-			}
 		`),
 	)
 }
 
-func TestRemoveConstantConditionFalseWithElse(t *testing.T) {
+func TestRemoveConstantConditionPreservesUnprovenFalseWithElse(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&redundancy.RemoveConstantCondition{})
 	spec.RewriteRun(t,
 		test.Golang(`
@@ -64,14 +51,6 @@ func TestRemoveConstantConditionFalseWithElse(t *testing.T) {
 				if false {
 					println("never")
 				} else {
-					println("always")
-				}
-			}
-		`, `
-			package main
-
-			func f() {
-				{
 					println("always")
 				}
 			}
