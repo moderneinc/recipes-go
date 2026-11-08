@@ -91,5 +91,5 @@ func f(b bool) { if b { goto L }; return; L: println(1) }`))
 func TestRemoveUnreachableCodePreservesNestedReachableLabel(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&redundancy.RemoveUnreachableCode{})
 	spec.RewriteRun(t, test.Golang(`package p
-func f(b bool) { if b { goto L }; return; { L: println(1) } }`))
+func f(b bool) { if b { goto L }; return; L: { println(1) } }`))
 }

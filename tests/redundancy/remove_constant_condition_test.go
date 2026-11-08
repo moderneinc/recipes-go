@@ -98,7 +98,7 @@ func f() { if x := 1; true { println(x) } }`))
 func TestRemoveConstantConditionPreservesReachableLabel(t *testing.T) {
 	spec := test.NewRecipeSpec().WithRecipe(&redundancy.RemoveConstantCondition{})
 	spec.RewriteRun(t, test.Golang(`package p
-func f(b bool) { if b { goto L }; if false { L: println(1) } }`))
+func f() { if false { goto L; L: println(1) } }`))
 }
 
 func TestRemoveConstantConditionPreservesShadowedConstant(t *testing.T) {
