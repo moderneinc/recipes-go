@@ -121,3 +121,10 @@ func TestRemoveConstantConditionPreservesReachableLabel(t *testing.T) {
 	spec.RewriteRun(t, test.Golang(`package p
 func f(b bool) { if b { goto L }; if false { L: println(1) } }`))
 }
+
+func TestRemoveConstantConditionPreservesShadowedConstant(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&redundancy.RemoveConstantCondition{})
+	spec.RewriteRun(t, test.Golang(`package p
+const true = false
+func f() { if true { println(1) } }`))
+}
