@@ -150,3 +150,28 @@ func TestSimplifyRedundantLogicalExpressionNoChangeComparison(t *testing.T) {
 		`),
 	)
 }
+
+// Synthetic semantic counterexample from the Sonar safety audit; not corpus evidence.
+func TestSimplifyRedundantLogicalExpressionPreservesStatefulCalls(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&simplification.SimplifyRedundantLogicalExpression{})
+	spec.RewriteRun(t, test.Golang(`package p
+var n int
+func next() bool { n++; return n == 1 }
+func f() bool { return next() && next() }`))
+}
+
+// Synthetic semantic counterexample from the Sonar safety audit; not corpus evidence.
+func TestSimplifyRedundantLogicalExpressionPreservesReceive(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&simplification.SimplifyRedundantLogicalExpression{})
+	spec.RewriteRun(t, test.Golang(`package p
+func f(c chan bool) bool { return (<-c) || (<-c) }`))
+}
+
+// Synthetic semantic counterexample from the Sonar safety audit; not corpus evidence.
+func TestSimplifyRedundantLogicalExpressionPreservesBitwiseCalls(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&simplification.SimplifyRedundantLogicalExpression{})
+	spec.RewriteRun(t, test.Golang(`package p
+var n int
+func next() int { n++; return n }
+func f() int { return next() | next() }`))
+}
