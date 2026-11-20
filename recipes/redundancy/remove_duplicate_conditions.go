@@ -30,7 +30,8 @@ func (r *RemoveDuplicateConditions) Name() string {
 func (r *RemoveDuplicateConditions) DisplayName() string { return "Remove duplicate conditions" }
 func (r *RemoveDuplicateConditions) Description() string {
 	return "Remove else-if branches whose condition duplicates an earlier branch in the " +
-		"same if/else-if chain, since the later branch is dead code."
+		"same if/else-if chain, only when all conditions are repeatable and no removed branch has labels. " +
+		"Calls, channel receives, and init-wrapped else-if branches are preserved."
 }
 func (r *RemoveDuplicateConditions) Tags() []string {
 	return []string{"cleanup", "redundancy", "RSPEC-S1862"}
@@ -69,6 +70,21 @@ func removeDuplicateBranches(ifStmt *java.If) *java.If {
 	// Collect the flat list of conditions we've seen so far.
 	if ifStmt.Condition == nil {
 		return nil
+	}
+	// Any intervening call/receive can change the value of an earlier condition.
+	// Refuse the whole chain rather than relying on textual identity across effects.
+	for current := ifStmt; ; {
+		if current.Condition == nil || !lstutil.IsRepeatableExpression(current.Condition.Tree.Element) || lstutil.HasLabel(current.ThenPart.Element) {
+			return nil
+		}
+		if current.ElsePart == nil {
+			break
+		}
+		next, ok := current.ElsePart.Body.Element.(*java.If)
+		if !ok {
+			break
+		} // Includes init-wrapped else-if statements: never splice through them.
+		current = next
 	}
 	seen := []string{printCondition(ifStmt.Condition.Tree.Element)}
 	changed := false

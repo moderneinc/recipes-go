@@ -115,8 +115,10 @@ mod run . --recipe org.openrewrite.golang.codequality.SimplifyBooleanExpression
 
 ### Redundancy
 
+`RemoveConstantCondition` preserves `true`/`false` identifier conditions: Go permits shadowing, and the current parser does not retain enough constant binding information to prove them predeclared.
+
 - **Dead code removal**: Unreachable code after return, empty loops/switches/defaults, self-assignments
-- **Control flow simplification**: `if true {body}` to `body`, `if len(s) > 0 { for range s }` to `for range s`
+- **Control flow simplification**: `if len(s) > 0 { for range s }` to `for range s`
 - **Goroutine simplification**: `go func() { f() }()` to `go f()`
 - **Map clearing**: `for k := range m { delete(m, k) }` to `clear(m)`
 

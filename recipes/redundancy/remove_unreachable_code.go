@@ -6,6 +6,7 @@ package redundancy
 
 import (
 	"github.com/moderneinc/recipes-go/diagnostic"
+	"github.com/moderneinc/recipes-go/recipes/internal/lstutil"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/recipe"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/golang"
 	"github.com/openrewrite/rewrite/rewrite-go/pkg/tree/java"
@@ -25,7 +26,9 @@ func (r *RemoveUnreachableCode) DisplayName() string { return "Remove unreachabl
 func (r *RemoveUnreachableCode) Description() string {
 	return "Remove statements after a `return` in the same block which are unreachable."
 }
-func (r *RemoveUnreachableCode) Tags() []string { return []string{"cleanup", "redundancy", "lint"} }
+func (r *RemoveUnreachableCode) Tags() []string {
+	return []string{"cleanup", "redundancy", "lint", "RSPEC-S1763"}
+}
 
 func (r *RemoveUnreachableCode) DiagnosticMappings() []diagnostic.Mapping {
 	return []diagnostic.Mapping{
@@ -58,7 +61,13 @@ func (v *removeUnreachableCodeVisitor) VisitBlock(block *java.Block, p any) java
 			continue
 		}
 
-		// Found a return that is not the last statement -- remove everything after it.
+		// A label in the suffix may be the target of a reachable goto.
+		for _, stmt := range stmts[i+1:] {
+			if lstutil.HasLabel(stmt.Element) {
+				return block
+			}
+		}
+		// Found a return with no alternative entry to the suffix.
 		return block.WithStatements(stmts[:i+1])
 	}
 

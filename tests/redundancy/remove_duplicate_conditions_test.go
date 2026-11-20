@@ -133,3 +133,28 @@ func TestRemoveDuplicateConditionsNoChangeNoElseIf(t *testing.T) {
 		`),
 	)
 }
+
+// Synthetic semantic counterexample from the Sonar safety audit; not corpus evidence.
+func TestRemoveDuplicateConditionsPreservesStatefulCalls(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&redundancy.RemoveDuplicateConditions{})
+	spec.RewriteRun(t, test.Golang(`package p
+var n int
+func next() bool { n++; return n == 2 }
+func f() { if next() { println(1) } else if next() { println(2) } }`))
+}
+
+// Synthetic semantic counterexample from the Sonar safety audit; not corpus evidence.
+func TestRemoveDuplicateConditionsPreservesInterveningCall(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&redundancy.RemoveDuplicateConditions{})
+	spec.RewriteRun(t, test.Golang(`package p
+var x int
+func next() bool { x++; return false }
+func f() { if x > 0 { println(1) } else if next() { println(2) } else if x > 0 { println(3) } }`))
+}
+
+// Synthetic semantic counterexample from the Sonar safety audit; not corpus evidence.
+func TestRemoveDuplicateConditionsPreservesShadowedInit(t *testing.T) {
+	spec := test.NewRecipeSpec().WithRecipe(&redundancy.RemoveDuplicateConditions{})
+	spec.RewriteRun(t, test.Golang(`package p
+func f(x int) { if x > 0 { println(1) } else if x := 2; x > 0 { println(x) } }`))
+}
